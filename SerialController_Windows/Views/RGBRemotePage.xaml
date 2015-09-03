@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="SerialController_Windows.RGBRemotePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SerialController_Windows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid Margin="30,0,30,30">
+
+            <ScrollViewer  VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto" HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto">
+                <StackPanel x:Name="Panel1" Margin="10">
+                    <TextBlock Text="Server address:"  Margin="10" FontSize="16"  />
+                    <TextBox x:Name="InputAddress"  Margin="10" Text="http://localhost:5544/" FontSize="16" Width="300" HorizontalAlignment="Left" />
+                    <Button x:Name="StartButton" Margin="10"  Content="Start" Click="StartButton_Click"  Width="200" Background="#FF488AE8" Foreground="#FFF5F4F4" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom">
+            <Rectangle x:Name="ColorRect" Fill="#FFF" Stroke="Black" Height="30" Width="100"/>
+            <TextBlock Text="Status:" FontSize="16" Height="20" Margin="15,0,0,0" />
+            <TextBlock x:Name="StatusText" Text="Disconnected" FontSize="16" Height="20" Margin="15,0,0,0" Width="200"/>
+        </StackPanel>
+
+    </Grid>
+</Page>

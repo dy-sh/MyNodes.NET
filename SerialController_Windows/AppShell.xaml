@@ -1,0 +1,120 @@
+﻿<Page 
+    x:Name="Root"
+    x:Class="SerialController_Windows.AppShell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SerialController_Windows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:SerialController_Windows.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="local:NavMenuItem">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <!-- Showing a ToolTip and the Label is redundant.  We put the ToolTip on the icon.
+                     It appears when the user hovers over the icon, but not the label which provides
+                     value when the SplitView is 'Compact' while reducing the likelihood of showing
+                     redundant information when the label is shown.-->
+                <FontIcon x:Name="Glyph" FontSize="16" Glyph="{x:Bind SymbolAsChar}" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind Label}"/>
+                <TextBlock x:Name="Text" Grid.Column="1" Text="{x:Bind Label}" />
+           
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+
+    
+    <Grid>
+
+        <!-- Adaptive triggers -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RootSplitView.DisplayMode" Value="CompactInline"/>
+                        <Setter Target="RootSplitView.IsPaneOpen" Value="True"/>
+                        <Setter Target="NavMenuList.BorderThickness" Value="0"/>
+                        <Setter Target="NavMenuList.BorderBrush" Value="#FFFFFFFF"/>
+                        <Setter Target="RootSplitView.IsPaneOpen" Value="True"/>
+                     
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RootSplitView.DisplayMode" Value="Overlay"/>
+                        <Setter Target="NavMenuList.BorderThickness" Value="1"/>
+                        <Setter Target="NavMenuList.BorderBrush" Value="#4C000000"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="Serial Controller" Margin="60,0,0,0" />
+        
+        <!-- Top-level navigation menu + app content -->
+        <SplitView x:Name="RootSplitView"
+                   DisplayMode="Inline"
+                   OpenPaneLength="200"
+                 Margin="0,58,0,10"
+                   IsTabStop="False">
+            <SplitView.Pane >
+                <!-- A custom ListView to display the items in the pane.  The automation Name is set in the ContainerContentChanging event. -->
+                <controls:NavMenuListView x:Name="NavMenuList"
+                                          TabIndex="3"
+                                          ContainerContentChanging="NavMenuItemContainerContentChanging"
+                                          ItemContainerStyle="{StaticResource NavMenuItemContainerStyle}"
+                                          ItemTemplate="{StaticResource NavMenuItemTemplate}"
+                                           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                           BorderBrush="#4C000000"
+                                           BorderThickness="1"
+                                          ItemInvoked="NavMenuList_ItemInvoked"  >
+                </controls:NavMenuListView>
+            </SplitView.Pane>
+
+            <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.
+                 OnNavigatedToPage we move keyboard focus to the first item on the page after it's loaded. -->
+            <Frame x:Name="frame"
+                   Navigating="OnNavigatingToPage"
+                  
+                   Navigated="OnNavigatedToPage">
+                <Frame.ContentTransitions >
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                <EntranceNavigationTransitionInfo/>
+                            </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </SplitView>
+
+
+        <!-- Declared last to have it rendered above everything else, but it needs to be the first item in the tab sequence. -->
+        <ToggleButton x:Name="TogglePaneButton"
+                      TabIndex="1"
+                      Style="{StaticResource SplitViewTogglePaneButtonStyle}"
+                      IsChecked="{Binding IsPaneOpen, ElementName=RootSplitView, Mode=TwoWay}"
+                      Unchecked="TogglePaneButton_Checked"
+                      AutomationProperties.Name="Menu"
+                      ToolTipService.ToolTip="Menu" VerticalAlignment="Top" HorizontalAlignment="Left" />
+
+
+
+    </Grid>
+
+
+</Page>
+
