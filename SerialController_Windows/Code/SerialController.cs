@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Bluetooth;
 using Windows.UI.Xaml;
 
 namespace SerialController_Windows.Code
@@ -93,44 +94,25 @@ namespace SerialController_Windows.Code
 
             if (sensor == null)
             {
-                sensor = new Sensor(mes.sensorId, node);
-
-                if (mes.messageType == MessageType.C_SET)
-                {
-                    SensorData data = new SensorData();
-                    data.dataType = (SensorDataType) mes.subType;
-                    data.state = mes.payload;
-                    sensor.sensorData.Add(data);
-                }
-                else if (mes.messageType == MessageType.C_PRESENTATION)
-                {
-                    sensor.sensorType= (SensorType)mes.subType;
-                }
-
-                node.sensors.Add(sensor);
+                sensor = node.AddSensor(mes.sensorId);
 
                 if (OnNewSensorEvent != null)
                     OnNewSensorEvent(sensor);
             }
-            else
+
+            if (mes.messageType == MessageType.C_SET)
             {
-
-                sensor = node.GetSensor(mes.sensorId);
-
-                if (mes.messageType == MessageType.C_SET)
-                {
-                    SensorDataType dataType = (SensorDataType)mes.subType;
-                    SensorData data = sensor.GetData(dataType);
-                    data.state = mes.payload;
-                }
-                else if (mes.messageType == MessageType.C_PRESENTATION)
-                {
-                    sensor.sensorType = (SensorType)mes.subType;
-                }
-
-                if (OnSensorUpdatedEvent != null)
-                    OnSensorUpdatedEvent(sensor);
+                SensorDataType dataType = (SensorDataType)mes.subType;
+                sensor.AddOrUpdateData(dataType, mes.payload);
             }
+            else if (mes.messageType == MessageType.C_PRESENTATION)
+            {
+                sensor.sensorType = (SensorType)mes.subType;
+            }
+
+            if (OnSensorUpdatedEvent != null)
+                OnSensorUpdatedEvent(sensor);
+
         }
 
 

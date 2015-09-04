@@ -49,5 +49,15 @@ namespace SerialController_Windows.Code
             Sensor sensor = sensors.FirstOrDefault(x => x.sensorId == sensorId);
             return sensor;
         }
+
+        public Sensor AddSensor(int sensorId)
+        {
+            Sensor sensor = GetSensor(sensorId);
+            if (sensor != null) return sensor;
+
+            sensor = new Sensor(sensorId, this);
+            sensors.Add(sensor);
+            return sensor;
+        }
     }
 }

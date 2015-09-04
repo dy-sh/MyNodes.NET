@@ -47,5 +47,18 @@ namespace SerialController_Windows.Code
             SensorData data = GetData(dataType);
             return data.state;
         }
+
+        public SensorData AddOrUpdateData(SensorDataType dataType, string state)
+        {
+            SensorData data = GetData(dataType);
+            if (data == null)
+            {
+                data = new SensorData();
+                sensorData.Add(data);
+            }
+            data.dataType = dataType;
+            data.state = state;
+            return data;
+        }
     }
 }
