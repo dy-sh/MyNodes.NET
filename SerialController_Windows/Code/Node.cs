@@ -35,11 +35,19 @@ namespace SerialController_Windows.Code
                 s += "Sensors:\r\n";
                 foreach (Sensor sensor in sensors)
                 {
+                    s += "-------------------\r\n";
                     s += sensor.ToString();
                 }
             }
 
             return s;
+        }
+
+
+        public Sensor GetSensor( int sensorId)
+        {
+            Sensor sensor = sensors.FirstOrDefault(x => x.sensorId == sensorId);
+            return sensor;
         }
     }
 }

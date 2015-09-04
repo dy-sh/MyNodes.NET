@@ -89,15 +89,23 @@ namespace SerialController_Windows.Code
                 return;
 
             Node node = GetNode(mes.nodeId);
-            Sensor sensor = GetSensor(node, mes.sensorId);
+            Sensor sensor = node.GetSensor(mes.sensorId);
 
             if (sensor == null)
             {
                 sensor = new Sensor(mes.sensorId, node);
-                sensor.state = mes.payload;
 
-                if (mes.messageType==MessageType.C_SET)
-                    sensor.dataType = (SensorDataType)mes.subType;
+                if (mes.messageType == MessageType.C_SET)
+                {
+                    SensorData data = new SensorData();
+                    data.dataType = (SensorDataType) mes.subType;
+                    data.state = mes.payload;
+                    sensor.sensorData.Add(data);
+                }
+                else if (mes.messageType == MessageType.C_PRESENTATION)
+                {
+                    sensor.sensorType= (SensorType)mes.subType;
+                }
 
                 node.sensors.Add(sensor);
 
@@ -106,7 +114,19 @@ namespace SerialController_Windows.Code
             }
             else
             {
-                sensor.state = mes.payload;
+
+                sensor = node.GetSensor(mes.sensorId);
+
+                if (mes.messageType == MessageType.C_SET)
+                {
+                    SensorDataType dataType = (SensorDataType)mes.subType;
+                    SensorData data = sensor.GetData(dataType);
+                    data.state = mes.payload;
+                }
+                else if (mes.messageType == MessageType.C_PRESENTATION)
+                {
+                    sensor.sensorType = (SensorType)mes.subType;
+                }
 
                 if (OnSensorUpdatedEvent != null)
                     OnSensorUpdatedEvent(sensor);
@@ -118,19 +138,6 @@ namespace SerialController_Windows.Code
         {
             Node node = nodes.FirstOrDefault(x => x.nodeId == id);
             return node;
-        }
-
-        public Sensor GetSensor(int nodeId,int sensorId)
-        {
-            Node node = GetNode(nodeId);
-            Sensor sensor = GetSensor(node,sensorId);
-            return sensor;
-        }
-
-        public Sensor GetSensor(Node node, int sensorId)
-        {
-            Sensor sensor = node.sensors.FirstOrDefault(x => x.sensorId == sensorId);
-            return sensor;
         }
 
 

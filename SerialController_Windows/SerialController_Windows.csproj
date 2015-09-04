@@ -103,6 +103,7 @@
     <Compile Include="Code\MessagesLog.cs" />
     <Compile Include="Code\Node.cs" />
     <Compile Include="Code\Sensor.cs" />
+    <Compile Include="Code\SensorData.cs" />
     <Compile Include="Code\SerialController.cs" />
     <Compile Include="Code\SerialPort.cs" />
     <Compile Include="Controls\NavMenuListView.cs" />

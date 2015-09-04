@@ -11,8 +11,7 @@ namespace SerialController_Windows.Code
         public Node ownerNode;
         public int sensorId;
         public SensorType? sensorType;
-        public SensorDataType? dataType;
-        public string state;
+        public List<SensorData> sensorData = new List<SensorData>();
 
         public Sensor(int sensorId, Node ownerNode)
         {
@@ -28,20 +27,25 @@ namespace SerialController_Windows.Code
             else
                 s += String.Format("Type: unknown\r\n");
 
-            if (dataType != null)
-                s += String.Format("Data type: {0}\r\n", dataType.ToString());
-            else
-                s += String.Format("Data type: unknown\r\n");
 
-            if (state != null)
-                s += String.Format("State: {0}\r\n", state);
-            else
-                s += String.Format("State: unknown\r\n");
-
-            
-
+            if (sensorData.Any())
+                foreach (var data in sensorData)
+                    s += data.ToString();
 
             return s;
+        }
+
+
+        public SensorData GetData(SensorDataType dataType)
+        {
+            SensorData data = sensorData.FirstOrDefault(x => x.dataType == dataType);
+            return data;
+        }
+
+        public string GetState(SensorDataType dataType)
+        {
+            SensorData data = GetData(dataType);
+            return data.state;
         }
     }
 }
