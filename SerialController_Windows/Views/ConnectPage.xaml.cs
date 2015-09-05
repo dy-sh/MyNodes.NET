@@ -40,8 +40,8 @@ namespace SerialController_Windows
             App.serialPort.OnConnectedEvent += DeviceConnected;
             App.serialPort.OnDisconnectedEvent += DeviceDisconnected;
 
-            if (!App.serialPort.IsConnected())
-                ConnectToLast();
+        //    if (!App.serialPort.IsConnected())
+         //       ConnectToLast();
         }
 
         ~ConnectPage()

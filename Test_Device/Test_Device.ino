@@ -29,7 +29,7 @@ MyMessage msg2(CHILD_ID2, V_TRIPPED);
 
 void setup()
 {
-	gw.begin(incomingMessage, AUTO, true);
+	gw.begin(incomingMessage);
 
 
 
@@ -48,10 +48,10 @@ void setup()
 	// Register binary input sensor to gw (they will be created as child devices)
 	// You can use S_DOOR, S_MOTION or S_LIGHT here depending on your usage. 
 	// If S_LIGHT is used, remember to update variable type you send in. See "msg" above.
-	gw.present(CHILD_ID1, S_DOOR, "Button1");
+	gw.present(CHILD_ID1, S_DOOR);
 
 	gw.present(CHILD_ID2, S_DOOR, "Button2");
-	gw.sendSketchInfo("Firmware1", "v1.1");
+
 
 
 
@@ -107,4 +107,6 @@ void incomingMessage(const MyMessage &message) {
 		Serial.print(", New status: ");
 		Serial.println(message.getBool());
 	}
+
+
 }

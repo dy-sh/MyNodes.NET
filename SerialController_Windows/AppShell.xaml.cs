@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SerialController_Windows.Controls;
+using SerialController_Windows.Views;
 
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -39,8 +40,14 @@ namespace SerialController_Windows
                 },
                                 new NavMenuItem()
                 {
+                    Symbol = Symbol.Home,
+                    Label = "Nodes View",
+                    DestPage = typeof(NodesPage)
+                },
+                        new NavMenuItem()
+                {
                     Symbol = Symbol.Library,
-                    Label = "Nodes",
+                    Label = "Nodes List",
                     DestPage = typeof(NodesListPage)
                 },
    /*             new NavMenuItem()

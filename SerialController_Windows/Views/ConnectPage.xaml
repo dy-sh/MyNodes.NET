@@ -21,7 +21,7 @@
 
             <TextBlock  FontSize ="22" Text= "Select device:" />
 
-            <ListBox x:Name ="listbox1"  Grid.Row="1" FontSize ="22" SelectionMode ="Single"  BorderThickness="7,0,0,0" BorderBrush="#FFCBCBCB" Background="White"/>
+            <ListBox x:Name ="listbox1"  Grid.Row="1" FontSize ="22" SelectionMode ="Single"  BorderThickness="3,0,0,0" BorderBrush="#FFCBCBCB" Background="White"/>
 
             <Grid VerticalAlignment="Bottom" Grid.Row="3">
                 <Grid.ColumnDefinitions>

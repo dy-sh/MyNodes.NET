@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SerialController_Windows.Code;
+using SerialController_Windows.Views;
 
 namespace SerialController_Windows
 {
@@ -31,7 +32,7 @@ namespace SerialController_Windows
         public static SerialPort serialPort;
         public static LedStripController ledStripController;
         public static RemoteColorClient remoteColorClient;
-        public static SerialMySensorsController serialController;
+        public static SerialController serialController;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -47,7 +48,7 @@ namespace SerialController_Windows
 
             serialPort=new SerialPort();
          //   ledStripController=new LedStripController(serialPort);
-            serialController=new SerialMySensorsController(serialPort);
+            serialController=new SerialController(serialPort);
 
         }
 
@@ -98,7 +99,7 @@ namespace SerialController_Windows
             {
                 // When the navigation stack isn't restored, navigate to the first page
                 // suppressing the initial entrance animation.
-                shell.AppFrame.Navigate(typeof(ConnectPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
+                shell.AppFrame.Navigate(typeof(NodesPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
 
             // Ensure the current window is active

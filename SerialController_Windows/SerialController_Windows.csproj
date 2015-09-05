@@ -117,6 +117,9 @@
       <DependentUpon>MessagesLogPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavMenuItem.cs" />
+    <Compile Include="Views\NodesPage.xaml.cs">
+      <DependentUpon>NodesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RGBLightAdvancedPage.xaml.cs">
       <DependentUpon>RGBLightAdvancedPage.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,7 @@
     <Compile Include="Code\MathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\RGBColors.cs" />
+    <Compile Include="Controls\WarpPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -178,6 +182,10 @@
     <Page Include="Styles\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NodesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RGBLightAdvancedPage.xaml">
       <SubType>Designer</SubType>

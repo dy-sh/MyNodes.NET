@@ -28,6 +28,7 @@ namespace SerialController_Windows
             this.InitializeComponent();
             App.serialController.OnNewNodeEvent += AddNode;
             App.serialController.OnNodeUpdatedEvent += UpdateNode;
+            App.serialController.OnSensorUpdatedEvent += UpdateSensor;
 
 
             if (App.serialController.IsConnected())
@@ -54,12 +55,12 @@ namespace SerialController_Windows
             {
                 AddNode(node);
             }
+
         }
 
         private void AddNode(Node node)
         {
             listView1.Items.Add(node.ToString());
-
 
             scrollViewer1.UpdateLayout();
 
@@ -68,6 +69,11 @@ namespace SerialController_Windows
         }
 
         private void UpdateNode(Node node)
+        {
+            ShowNodes();
+        }
+
+        private void UpdateSensor(Sensor node)
         {
             ShowNodes();
         }

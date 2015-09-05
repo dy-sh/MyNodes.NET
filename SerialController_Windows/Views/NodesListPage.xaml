@@ -15,7 +15,7 @@
 
 
                 <Grid x:Name="Panel1" Margin="10">
-                    <ListView x:Name ="listView1"  FontSize ="16" SelectionMode ="Single"  BorderThickness="7,0,0,0" BorderBrush="#FFCBCBCB" Background="White">
+                    <ListView x:Name ="listView1"  FontSize ="16" SelectionMode ="Single"  BorderThickness="3,0,0,0" BorderBrush="#FFCBCBCB" Background="White">
                         <ListView.ItemContainerTransitions>
                             <TransitionCollection>
                                 <EntranceThemeTransition/>

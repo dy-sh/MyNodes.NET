@@ -14,7 +14,7 @@ namespace SerialController_Windows.Code
     public delegate void OnNewSensorEventHandler(Sensor sensor);
     public delegate void OnSensorUpdatedEventHandler(Sensor sensor);
 
-    public class SerialMySensorsController
+    public class SerialController
     {
         private SerialPort serialPort;
         public bool enableLogging = true;
@@ -28,7 +28,7 @@ namespace SerialController_Windows.Code
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
 
-        public SerialMySensorsController(SerialPort serialPort)
+        public SerialController(SerialPort serialPort)
         {
             this.serialPort = serialPort;
             this.serialPort.ReceivedDataEvent += RecieveSerialMessage;
