@@ -7,6 +7,12 @@ namespace SerialController_Windows.Code
         public SensorDataType? dataType;
         public string state;
 
+        public SensorData(SensorDataType? dataType, string state)
+        {
+            this.dataType = dataType;
+            this.state = state;
+        }
+
         public override string ToString()
         {
             string s="";

@@ -25,11 +25,11 @@ namespace SerialController_Windows.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class NodesPage : Page
+    public sealed partial class NodesViewPage : Page
     {
 
         //    public ObservableCollection<Model> Models { get; set; }
-        public NodesPage()
+        public NodesViewPage()
         {
             this.InitializeComponent();
 
@@ -96,7 +96,7 @@ namespace SerialController_Windows.Views
             titlePanel.Height = 40;
             titlePanel.Children.Add(new TextBlock { Text = "Sensor id: " + sensor.sensorId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
 
-            string sType = (sensor.sensorType == null) ? "unknown": sensor.sensorType.ToString(); 
+            string sType = (sensor.GetSensorType() == null) ? "unknown": sensor.GetSensorType().ToString(); 
 
             sensorPanel.Children.Add(new TextBlock { Text = "Sensor type: " + sType, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
@@ -117,30 +117,9 @@ namespace SerialController_Windows.Views
             string s =String.Format("Data: {0}, State: {1}", data.dataType, data.state); 
             dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
-     /*       Button button1 = new Button();
-          //  button1.Name = String.Format("{0}", data.state);
-            button1.Width = 200;
-            button1.Height = 50;
-            button1.Margin = new Thickness(10, 10, 10, 10);
-            button1.Content = data.state;
-            button1.Click += button_Click;
-            dataPanel.Children.Add(button1);*/
             return dataPanel;
         }
 
-
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-         /*   for (int i = 0; i < 10; i++)
-            {
-                StackPanel nodePanel = CreateNode(i.ToString());
-
-                itemsControl1.Items.Add(nodePanel);
-            }*/
-        }
 
 
         private void ShowNodes()
@@ -175,11 +154,7 @@ namespace SerialController_Windows.Views
             ShowNodes();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
+ 
     }
 
 

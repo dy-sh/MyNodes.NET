@@ -10,12 +10,13 @@ namespace SerialController_Windows.Code
     {
         public Node ownerNode;
         public int sensorId;
-        public SensorType? sensorType;
+        private SensorType? sensorType;
         public List<SensorData> sensorData = new List<SensorData>();
 
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
+            this.ownerNode = ownerNode;
         }
 
         public override string ToString()
@@ -48,17 +49,124 @@ namespace SerialController_Windows.Code
             return data.state;
         }
 
-        public SensorData AddOrUpdateData(SensorDataType dataType, string state)
+
+        public void AddOrUpdateData(SensorDataType dataType, string state)
         {
             SensorData data = GetData(dataType);
             if (data == null)
             {
-                data = new SensorData();
+                data = new SensorData(dataType, state);
                 sensorData.Add(data);
             }
-            data.dataType = dataType;
-            data.state = state;
-            return data;
+            else data.state = state;
+        }
+
+        public void AddOrUpdateData(SensorData newData)
+        {
+            AddOrUpdateData(newData.dataType.Value, newData.state);
+        }
+
+        public void SetSensorType(SensorType? sensorType)
+        {
+            this.sensorType = sensorType;
+
+            switch (sensorType)
+            {
+                case SensorType.S_DOOR:
+                    AddOrUpdateData(SensorDataType.V_TRIPPED, "0");
+                    AddOrUpdateData(SensorDataType.V_ARMED, "0");
+                    break;
+                case SensorType.S_MOTION:
+                    break;
+                case SensorType.S_SMOKE:
+                    break;
+                case SensorType.S_LIGHT:
+                    AddOrUpdateData(SensorDataType.V_STATUS, "0");
+                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    break;
+                case SensorType.S_DIMMER:
+                    AddOrUpdateData(SensorDataType.V_STATUS, "0");
+                    AddOrUpdateData(SensorDataType.V_DIMMER, "0");
+                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    break;
+                case SensorType.S_COVER:
+                    break;
+                case SensorType.S_TEMP:
+                    break;
+                case SensorType.S_HUM:
+                    break;
+                case SensorType.S_BARO:
+                    break;
+                case SensorType.S_WIND:
+                    break;
+                case SensorType.S_RAIN:
+                    break;
+                case SensorType.S_UV:
+                    break;
+                case SensorType.S_WEIGHT:
+                    break;
+                case SensorType.S_POWER:
+                    break;
+                case SensorType.S_HEATER:
+                    break;
+                case SensorType.S_DISTANCE:
+                    break;
+                case SensorType.S_LIGHT_LEVEL:
+                    break;
+                case SensorType.S_ARDUINO_NODE:
+                    break;
+                case SensorType.S_ARDUINO_REPEATER_NODE:
+                    break;
+                case SensorType.S_LOCK:
+                    break;
+                case SensorType.S_IR:
+                    break;
+                case SensorType.S_WATER:
+                    break;
+                case SensorType.S_AIR_QUALITY:
+                    break;
+                case SensorType.S_CUSTOM:
+                    break;
+                case SensorType.S_DUST:
+                    break;
+                case SensorType.S_SCENE_CONTROLLER:
+                    AddOrUpdateData(SensorDataType.V_SCENE_ON, "0");
+                    AddOrUpdateData(SensorDataType.V_SCENE_OFF, "0");
+                    break;
+                case SensorType.S_RGB_LIGHT:
+                    AddOrUpdateData(SensorDataType.V_RGB, "0");
+                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    break;
+                case SensorType.S_RGBW_LIGHT:
+                    AddOrUpdateData(SensorDataType.V_RGBW, "0");
+                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    break;
+                case SensorType.S_COLOR_SENSOR:
+                    break;
+                case SensorType.S_HVAC:
+                    break;
+                case SensorType.S_MULTIMETER:
+                    break;
+                case SensorType.S_SPRINKLER:
+                    break;
+                case SensorType.S_WATER_LEAK:
+                    break;
+                case SensorType.S_SOUND:
+                    break;
+                case SensorType.S_VIBRATION:
+                    break;
+                case SensorType.S_MOISTURE:
+                    break;
+                case null:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sensorType), sensorType, null);
+            }
+        }
+
+        public SensorType? GetSensorType()
+        {
+            return sensorType;
         }
     }
 }

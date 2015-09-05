@@ -38,13 +38,19 @@ namespace SerialController_Windows
                     Label = "Connect to Device",
                     DestPage = typeof(ConnectPage)
                 },
-                                new NavMenuItem()
+                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Home,
-                    Label = "Nodes View",
-                    DestPage = typeof(NodesPage)
+                    Symbol = Symbol.Switch,
+                    Label = "Nodes Control",
+                    DestPage = typeof(NodesControlPage)
                 },
-                        new NavMenuItem()
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.View,
+                    Label = "Nodes View",
+                    DestPage = typeof(NodesViewPage)
+                },
+                 new NavMenuItem()
                 {
                     Symbol = Symbol.Library,
                     Label = "Nodes List",

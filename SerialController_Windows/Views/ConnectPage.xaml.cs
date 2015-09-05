@@ -147,7 +147,7 @@ namespace SerialController_Windows
                 return;
             }
 
-            Frame.Navigate(typeof(NodesPage));
+            Frame.Navigate(typeof(NodesControlPage));
 
         }
 

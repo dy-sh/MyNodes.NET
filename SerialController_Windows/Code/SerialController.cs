@@ -45,6 +45,18 @@ namespace SerialController_Windows.Code
             serialPort.SendMessage(message);
         }
 
+        public async void SendMessage(Message message)
+        {
+            string mes=String.Format("{0};{1};{2};{3};{4};{5};\n",
+                message.nodeId,
+                message.sensorId,
+                (int)message.messageType,
+                (message.ack)?"1":"0",
+                message.subType,
+                message.payload);
+            SendMessage(mes);
+            //2;3;1;0;2;1
+        }
 
 
         private void RecieveSerialMessage(string message)
@@ -107,7 +119,7 @@ namespace SerialController_Windows.Code
             }
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
-                sensor.sensorType = (SensorType)mes.subType;
+                sensor.SetSensorType((SensorType)mes.subType);
             }
 
             if (OnSensorUpdatedEvent != null)
@@ -157,5 +169,20 @@ namespace SerialController_Windows.Code
         }
 
 
+        public void ChangeSensorState(int nodeId, int sensorId, SensorData data)
+        {
+            GetNode(nodeId).GetSensor(sensorId).AddOrUpdateData(data);
+
+            Message message = new Message();
+            message.ack = false;
+            message.dateTime = DateTime.Now;
+            message.isValid = true;
+            message.messageType = MessageType.C_SET;
+            message.nodeId = nodeId;
+            message.payload = data.state;
+            message.sensorId = sensorId;
+            message.subType = (int)data.dataType;
+            SendMessage(message);
+        }
     }
 }

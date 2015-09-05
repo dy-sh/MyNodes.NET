@@ -110,6 +110,9 @@
     <Compile Include="Controls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NodesControlPage.xaml.cs">
+      <DependentUpon>NodesControlPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NodesListPage.xaml.cs">
       <DependentUpon>NodesListPage.xaml</DependentUpon>
     </Compile>
@@ -117,8 +120,8 @@
       <DependentUpon>MessagesLogPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavMenuItem.cs" />
-    <Compile Include="Views\NodesPage.xaml.cs">
-      <DependentUpon>NodesPage.xaml</DependentUpon>
+    <Compile Include="Views\NodesViewPage.xaml.cs">
+      <DependentUpon>NodesViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RGBLightAdvancedPage.xaml.cs">
       <DependentUpon>RGBLightAdvancedPage.xaml</DependentUpon>
@@ -171,6 +174,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NodesControlPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NodesListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,7 +190,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NodesPage.xaml">
+    <Page Include="Views\NodesViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
