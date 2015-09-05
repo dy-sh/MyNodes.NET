@@ -124,7 +124,7 @@ namespace SerialController_Windows.Code
         }
 
 
-        public async void SendMessage(string message)
+        public async Task SendMessage(string message)
         {
        
             try

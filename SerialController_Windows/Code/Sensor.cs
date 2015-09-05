@@ -134,11 +134,11 @@ namespace SerialController_Windows.Code
                     AddOrUpdateData(SensorDataType.V_SCENE_OFF, "0");
                     break;
                 case SensorType.S_RGB_LIGHT:
-                    AddOrUpdateData(SensorDataType.V_RGB, "0");
+                    AddOrUpdateData(SensorDataType.V_RGB, "000000");
                     AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_RGBW_LIGHT:
-                    AddOrUpdateData(SensorDataType.V_RGBW, "0");
+                    AddOrUpdateData(SensorDataType.V_RGBW, "00000000");
                     AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_COLOR_SENSOR:

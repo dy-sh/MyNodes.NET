@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DE0FB28F-8160-4DD7-AD76-708A7B9BECC0}</ProjectGuid>
-    <RootNamespace>Test_Device</RootNamespace>
+    <ProjectGuid>{2AFAD3AB-4EA0-4722-BDDF-A95ABB91DA17}</ProjectGuid>
+    <RootNamespace>RGBLight_device</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,10 +74,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs;C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Test_Device;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\Bounce2;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\Bounce2\utility;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\derwish\Documents\Visual Studio 2015\Projects\Test_Device\Visual Micro\.Test_Device.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs;C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Device Examples\RGBLight_device;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\derwish\Documents\Visual Studio 2015\Projects\RGBLight_device\Visual Micro\.RGBLight_device.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_NANO;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_PRO;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,12 +122,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Test_Device.ino">
+    <None Include="RGBLight_device.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.Test_Device.vsarduino.h" />
+    <ClInclude Include="Visual Micro\.RGBLight_device.vsarduino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

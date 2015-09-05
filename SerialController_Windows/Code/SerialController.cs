@@ -42,10 +42,10 @@ namespace SerialController_Windows.Code
 
         private async void SendMessage(string message)
         {
-            serialPort.SendMessage(message);
+            await serialPort.SendMessage(message);
         }
 
-        public async void SendMessage(Message message)
+        public void SendMessage(Message message)
         {
             string mes=String.Format("{0};{1};{2};{3};{4};{5};\n",
                 message.nodeId,
@@ -55,7 +55,6 @@ namespace SerialController_Windows.Code
                 message.subType,
                 message.payload);
             SendMessage(mes);
-            //2;3;1;0;2;1
         }
 
 
@@ -70,8 +69,15 @@ namespace SerialController_Windows.Code
             if (OnMessageRecievedEvent != null)
                 OnMessageRecievedEvent(mes);
 
-            UpdateNodeFromMessage(mes);
-            UpdateSensorFromMessage(mes);
+            if (mes.isValid)
+            {
+                if (mes.messageType==MessageType.C_INTERNAL
+                    && mes.subType==(int)InternalDataType.I_LOG_MESSAGE)
+                    return;
+
+                UpdateNodeFromMessage(mes);
+                UpdateSensorFromMessage(mes);
+            }
         }
 
         private void UpdateNodeFromMessage(Message mes)
