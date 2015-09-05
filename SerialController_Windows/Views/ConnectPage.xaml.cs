@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SerialController_Windows.Views;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -40,8 +41,8 @@ namespace SerialController_Windows
             App.serialPort.OnConnectedEvent += DeviceConnected;
             App.serialPort.OnDisconnectedEvent += DeviceDisconnected;
 
-        //    if (!App.serialPort.IsConnected())
-         //       ConnectToLast();
+            if (!App.serialPort.IsConnected())
+                ConnectToLast();
         }
 
         ~ConnectPage()
@@ -120,34 +121,6 @@ namespace SerialController_Windows
         }
 
 
-        private async void ConnectToLast()
-        {
-            //todo Tempoprary Implementation
-
-            await Task.Delay(100);
-            if (!App.serialPort.IsConnected())
-            {
-
-                int selection = 1;
-
-                await App.serialPort.Connect(selection, 115200);
-
-                if (!App.serialPort.IsConnected())
-                {
-                    ShowConnectionFailedDialog();
-                    return;
-                }
-
-                Frame.Navigate(typeof(MessagesLogPage));
-
-            }
-            else
-            {
-                App.serialPort.Disconnect();
-            }
-            //  RefrashInterface();
-        }
-
         private async void ShowConnectionFailedDialog()
         {
             ContentDialog dialog = new ContentDialog();
@@ -156,5 +129,28 @@ namespace SerialController_Windows
             dialog.PrimaryButtonText = "OK";
             await dialog.ShowAsync();
         }
+
+
+        private async void ConnectToLast()
+        {
+            //todo Tempoprary Implementation
+
+            await Task.Delay(100);
+
+            int selection = 1;
+
+            await App.serialPort.Connect(selection, 115200);
+
+            if (!App.serialPort.IsConnected())
+            {
+                ShowConnectionFailedDialog();
+                return;
+            }
+
+            Frame.Navigate(typeof(NodesPage));
+
+        }
+
+
     }
 }

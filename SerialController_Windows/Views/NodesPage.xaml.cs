@@ -53,7 +53,7 @@ namespace SerialController_Windows.Views
         }
 
 
-        private StackPanel CreateNode(int nodeId)
+        private StackPanel CreateNode(Node node)
         {
             StackPanel nodePanel = new StackPanel();
             nodePanel.Orientation = Orientation.Vertical;
@@ -66,18 +66,66 @@ namespace SerialController_Windows.Views
             titlePanel.Background = new SolidColorBrush(Colors.Gainsboro);
             titlePanel.Height = 40;
 
-            titlePanel.Children.Add(new TextBlock { Text = "Node id:" + nodeId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
+            titlePanel.Children.Add(new TextBlock { Text = "Node id: " + node.nodeId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
 
             nodePanel.Children.Add(titlePanel);
 
+            nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + node.lastSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush( Colors.Gainsboro) });
 
-            Button button2 = new Button();
-            button2.Width = 200;
-            button2.Height = 50;
-            button2.Margin = new Thickness(10, 10, 10, 10);
-            button2.Content = "Кнопка2";
-            nodePanel.Children.Add(button2);
+            foreach (Sensor sensor in node.sensors)
+            {
+                StackPanel sensorPanel = CreateSensor(sensor);
+                nodePanel.Children.Add(sensorPanel);
+            }
             return nodePanel;
+
+        }
+
+        private StackPanel CreateSensor(Sensor sensor)
+        {
+            StackPanel sensorPanel = new StackPanel();
+
+            sensorPanel.Orientation = Orientation.Vertical;
+            sensorPanel.Margin = new Thickness(10);
+            sensorPanel.BorderThickness = new Thickness(1);
+            sensorPanel.BorderBrush = new SolidColorBrush(Colors.Black);
+            sensorPanel.Background = new SolidColorBrush(Colors.Gray);
+
+            StackPanel titlePanel = new StackPanel();
+            titlePanel.Background = new SolidColorBrush(Colors.Gainsboro);
+            titlePanel.Height = 40;
+            titlePanel.Children.Add(new TextBlock { Text = "Sensor id: " + sensor.sensorId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
+
+            string sType = (sensor.sensorType == null) ? "unknown": sensor.sensorType.ToString(); 
+
+            sensorPanel.Children.Add(new TextBlock { Text = "Sensor type: " + sType, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
+
+            foreach (SensorData data in sensor.sensorData)
+            {
+                StackPanel dataPanel = CreateSensorData(data);
+                sensorPanel.Children.Add(dataPanel);
+            }
+            return sensorPanel;
+        }
+
+
+        private StackPanel CreateSensorData(SensorData data)
+        {
+            StackPanel dataPanel = new StackPanel();
+
+            string s =String.Format("Data: {0}, State: {1}", data.dataType, data.state); 
+            dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
+     /*       Button button1 = new Button();
+          //  button1.Name = String.Format("{0}", data.state);
+            button1.Width = 200;
+            button1.Height = 50;
+            button1.Margin = new Thickness(10, 10, 10, 10);
+            button1.Content = data.state;
+            button1.Click += button_Click;
+            dataPanel.Children.Add(button1);*/
+            return dataPanel;
         }
 
 
@@ -110,7 +158,7 @@ namespace SerialController_Windows.Views
 
         private void AddNode(Node node)
         {
-            StackPanel nodePanel = CreateNode(node.nodeId);
+            StackPanel nodePanel = CreateNode(node);
 
             itemsControl1.Items.Add(nodePanel);
 
@@ -125,6 +173,11 @@ namespace SerialController_Windows.Views
         private void UpdateSensor(Sensor node)
         {
             ShowNodes();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
     }
