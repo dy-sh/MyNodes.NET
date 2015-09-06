@@ -124,13 +124,12 @@ namespace SerialController_Windows.Code
             }
 
             Sensor sensor = node.GetSensor(mes.sensorId);
+            bool isNewSensor=false;
 
             if (sensor == null)
             {
                 sensor = node.AddSensor(mes.sensorId);
-
-                if (OnNewSensorEvent != null)
-                    OnNewSensorEvent(sensor);
+                isNewSensor = true;
             }
 
             if (mes.messageType == MessageType.C_SET)
@@ -141,8 +140,15 @@ namespace SerialController_Windows.Code
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
                 sensor.SetSensorType((SensorType)mes.subType);
+
+                if (!String.IsNullOrEmpty(mes.payload))
+                    sensor.description = mes.payload;
             }
 
+
+            if (isNewSensor && OnNewSensorEvent != null)
+                    OnNewSensorEvent(sensor);
+            else 
             if (OnSensorUpdatedEvent != null)
                 OnSensorUpdatedEvent(sensor);
 

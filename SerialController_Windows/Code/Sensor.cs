@@ -11,6 +11,7 @@ namespace SerialController_Windows.Code
         public Node ownerNode;
         public int sensorId;
         private SensorType? sensorType;
+        public string description;
         public List<SensorData> sensorData = new List<SensorData>();
 
         public Sensor(int sensorId, Node ownerNode)
@@ -27,6 +28,9 @@ namespace SerialController_Windows.Code
                 s += String.Format("Type: {0}\r\n", sensorType.ToString());
             else
                 s += String.Format("Type: unknown\r\n");
+
+            if (description != null)
+                s += String.Format("Description: {0}\r\n", description);
 
 
             if (sensorData.Any())
