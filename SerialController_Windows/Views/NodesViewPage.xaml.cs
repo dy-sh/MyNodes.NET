@@ -28,6 +28,8 @@ namespace SerialController_Windows.Views
     public sealed partial class NodesViewPage : Page
     {
 
+        private DispatcherTimer refrashTimer;
+
         //    public ObservableCollection<Model> Models { get; set; }
         public NodesViewPage()
         {
@@ -50,6 +52,17 @@ namespace SerialController_Windows.Views
                 textBlock3.Visibility = Visibility.Visible;
                 itemsControl1.Visibility = Visibility.Collapsed;
             }
+
+            refrashTimer = new DispatcherTimer();
+            refrashTimer.Interval = TimeSpan.FromMilliseconds(100);
+            refrashTimer.Tick += RefrashInfoTimer;
+            refrashTimer.Start();
+
+        }
+
+        private void RefrashInfoTimer(object sender, object e)
+        {
+            ShowNodes();
         }
 
 
@@ -71,26 +84,34 @@ namespace SerialController_Windows.Views
             nodePanel.Children.Add(titlePanel);
 
             nodePanel.Children.Add(new TextBlock { Text = "First seen: " + node.firstSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
-            nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + node.lastSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
-            if (node.isRepeatingNode != null)
-            {
-                if (node.isRepeatingNode.Value)
-                    nodePanel.Children.Add(new TextBlock
-                    {
-                        Text = "Is repeating node",
-                        Margin = new Thickness(10),
-                        Foreground = new SolidColorBrush(Colors.Gainsboro)
-                    });
-                else
-                    nodePanel.Children.Add(new TextBlock
-                    {
-                        Text = "Is not repeating node",
-                        Margin = new Thickness(10),
-                        Foreground = new SolidColorBrush(Colors.Gainsboro)
-                    });
+            string lastSeenAgo = string.Format("{0:hh\\:mm\\:ss}",  DateTime.Now.Subtract(node.lastSeen));
+            nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + lastSeenAgo+" ago", Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
-            }
+
+
+            if (node.isRepeatingNode == null)
+                nodePanel.Children.Add(new TextBlock
+                {
+                    Text = "Repeating: Unknown",
+                    Margin = new Thickness(10),
+                    Foreground = new SolidColorBrush(Colors.Gainsboro)
+                });
+            else if (node.isRepeatingNode.Value)
+                nodePanel.Children.Add(new TextBlock
+                {
+                    Text = "Repeating: Yes",
+                    Margin = new Thickness(10),
+                    Foreground = new SolidColorBrush(Colors.Gainsboro)
+                });
+            else
+                nodePanel.Children.Add(new TextBlock
+                {
+                    Text = "Repeating: No",
+                    Margin = new Thickness(10),
+                    Foreground = new SolidColorBrush(Colors.Gainsboro)
+                });
+
 
             foreach (Sensor sensor in node.sensors)
             {

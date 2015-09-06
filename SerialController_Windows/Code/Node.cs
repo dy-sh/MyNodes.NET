@@ -33,11 +33,11 @@ namespace SerialController_Windows.Code
             s += String.Format("Last seen {0}\r\n", lastSeen);
 
             if (isRepeatingNode==null)
-            s += String.Format("Repeating node: unknown\r\n");
+            s += String.Format("Repeating: unknown\r\n");
             else if (isRepeatingNode.Value)
-                s += String.Format("Repeating node: Yes\r\n");
+                s += String.Format("Repeating: Yes\r\n");
             else 
-                s += String.Format("Repeating node: No\r\n");
+                s += String.Format("Repeating: No\r\n");
 
             if (sensors.Any())
             {
