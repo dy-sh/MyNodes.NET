@@ -108,6 +108,21 @@ namespace SerialController_Windows.Code
                 return;
 
             Node node = GetNode(mes.nodeId);
+
+            if (mes.sensorId == 255)
+            {
+                if (mes.subType == (int)SensorType.S_ARDUINO_NODE)
+                {
+                    node.isRepeatingNode = false;
+                }
+                else if (mes.subType == (int)SensorType.S_ARDUINO_REPEATER_NODE)
+                {
+                    node.isRepeatingNode = true;
+                }
+
+                return;
+            }
+
             Sensor sensor = node.GetSensor(mes.sensorId);
 
             if (sensor == null)

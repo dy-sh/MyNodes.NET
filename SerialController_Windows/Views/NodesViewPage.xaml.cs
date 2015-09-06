@@ -70,7 +70,27 @@ namespace SerialController_Windows.Views
 
             nodePanel.Children.Add(titlePanel);
 
-            nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + node.lastSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush( Colors.Gainsboro) });
+            nodePanel.Children.Add(new TextBlock { Text = "First seen: " + node.firstSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+            nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + node.lastSeen, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
+            if (node.isRepeatingNode != null)
+            {
+                if (node.isRepeatingNode.Value)
+                    nodePanel.Children.Add(new TextBlock
+                    {
+                        Text = "Is repeating node",
+                        Margin = new Thickness(10),
+                        Foreground = new SolidColorBrush(Colors.Gainsboro)
+                    });
+                else
+                    nodePanel.Children.Add(new TextBlock
+                    {
+                        Text = "Is not repeating node",
+                        Margin = new Thickness(10),
+                        Foreground = new SolidColorBrush(Colors.Gainsboro)
+                    });
+
+            }
 
             foreach (Sensor sensor in node.sensors)
             {
@@ -96,7 +116,7 @@ namespace SerialController_Windows.Views
             titlePanel.Height = 40;
             titlePanel.Children.Add(new TextBlock { Text = "Sensor id: " + sensor.sensorId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
 
-            string sType = (sensor.GetSensorType() == null) ? "unknown": sensor.GetSensorType().ToString(); 
+            string sType = (sensor.GetSensorType() == null) ? "unknown" : sensor.GetSensorType().ToString();
 
             sensorPanel.Children.Add(new TextBlock { Text = "Sensor type: " + sType, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
@@ -114,7 +134,7 @@ namespace SerialController_Windows.Views
         {
             StackPanel dataPanel = new StackPanel();
 
-            string s =String.Format("Data: {0}, State: {1}", data.dataType, data.state); 
+            string s = String.Format("Data: {0}, State: {1}", data.dataType, data.state);
             dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
             return dataPanel;
@@ -154,7 +174,7 @@ namespace SerialController_Windows.Views
             ShowNodes();
         }
 
- 
+
     }
 
 

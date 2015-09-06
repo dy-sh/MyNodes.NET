@@ -12,6 +12,7 @@ namespace SerialController_Windows.Code
         public DateTime firstSeen;
         public DateTime lastSeen;
         public List<Sensor> sensors = new List<Sensor>();
+        public bool? isRepeatingNode =null;
 
         public Node(int nodeId)
         {
@@ -30,6 +31,14 @@ namespace SerialController_Windows.Code
             string s = String.Format("Node ID {0}\r\n", nodeId);
             s += String.Format("First seen {0}\r\n", firstSeen);
             s += String.Format("Last seen {0}\r\n", lastSeen);
+
+            if (isRepeatingNode==null)
+            s += String.Format("Repeating node: unknown\r\n");
+            else if (isRepeatingNode.Value)
+                s += String.Format("Repeating node: Yes\r\n");
+            else 
+                s += String.Format("Repeating node: No\r\n");
+
             if (sensors.Any())
             {
                 s += "Sensors:\r\n";

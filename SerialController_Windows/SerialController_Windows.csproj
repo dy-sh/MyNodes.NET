@@ -99,6 +99,7 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Code\ColorUtils.cs" />
     <Compile Include="Code\Message.cs" />
     <Compile Include="Code\MessagesLog.cs" />
     <Compile Include="Code\Node.cs" />

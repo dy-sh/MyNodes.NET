@@ -45,7 +45,7 @@ void setup()
 	gw.present(BUTTON1_ID, S_DOOR);
 	gw.present(BUTTON2_ID, S_DOOR, "Button2");
 
-	gw.present(LED1_ID, S_RGB_LIGHT);
+	gw.present(LED1_ID, S_DIMMER);
 
 }
 
@@ -83,7 +83,7 @@ void incomingMessage(const MyMessage &message) {
 		Serial.println("Received ack from gateway");
 	}
 
-	if (message.type == V_RGB) {
+	if (message.type == V_DIMMER) {
 		if (message.sensor == LED1_ID) {
 			int state = message.getByte();
 			state = map(state, 0, 100, 0, 255);

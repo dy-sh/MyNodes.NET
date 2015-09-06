@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
@@ -81,7 +82,7 @@ namespace SerialController_Windows
                     return;
                 }
 
-                Frame.Navigate(typeof(MessagesLogPage));
+                Frame.Navigate(typeof (MessagesLogPage));
 
             }
             else
@@ -134,23 +135,30 @@ namespace SerialController_Windows
         private async void ConnectToLast()
         {
             //todo Tempoprary Implementation
-
-            await Task.Delay(100);
-
-            int selection = 1;
-
-            await App.serialPort.Connect(selection, 115200);
-
-            if (!App.serialPort.IsConnected())
+            try
             {
-                ShowConnectionFailedDialog();
-                return;
+
+                await Task.Delay(100);
+
+                int selection = 1;
+
+                await App.serialPort.Connect(selection, 115200);
+
+                if (!App.serialPort.IsConnected())
+                {
+                    ShowConnectionFailedDialog();
+                    return;
+                }
+
+                Frame.Navigate(typeof (NodesControlPage));
             }
 
-            Frame.Navigate(typeof(NodesControlPage));
+            catch
+            {
+
+            }
+
 
         }
-
-
     }
 }
