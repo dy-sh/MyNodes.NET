@@ -71,6 +71,9 @@ namespace SerialController_Windows.Code
 
             if (mes.isValid)
             {
+                if (mes.nodeId==255)
+                    return;
+
                 if (mes.messageType == MessageType.C_INTERNAL
                     && mes.subType == (int)InternalDataType.I_LOG_MESSAGE)
                     return;

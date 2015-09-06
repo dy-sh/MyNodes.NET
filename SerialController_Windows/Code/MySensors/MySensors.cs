@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SerialController_Windows.Code
 {
-
     public enum MessageType
     {
         C_PRESENTATION = 0,
@@ -110,17 +109,17 @@ namespace SerialController_Windows.Code
         V_VOLTAGE, // S_MULTIMETER 
         V_CURRENT, // S_MULTIMETER
         V_RGB, // S_RGB_LIGHT, S_COLOR_SENSOR. 
-               // Used for sending color information for multi color LED lighting or color sensors. 
-               // Sent as ASCII hex: RRGGBB (RR=red, GG=green, BB=blue component)
+        // Used for sending color information for multi color LED lighting or color sensors. 
+        // Sent as ASCII hex: RRGGBB (RR=red, GG=green, BB=blue component)
         V_RGBW, // S_RGBW_LIGHT
-                // Used for sending color information to multi color LED lighting. 
-                // Sent as ASCII hex: RRGGBBWW (WW=white component)
+        // Used for sending color information to multi color LED lighting. 
+        // Sent as ASCII hex: RRGGBBWW (WW=white component)
         V_ID, // S_TEMP
-              // Used for sending in sensors hardware ids (i.e. OneWire DS1820b). 
+        // Used for sending in sensors hardware ids (i.e. OneWire DS1820b). 
         V_UNIT_PREFIX, // S_DUST, S_AIR_QUALITY
-                       // Allows sensors to send in a string representing the 
-                       // unit prefix to be displayed in GUI, not parsed by controller! E.g. cm, m, km, inch.
-                       // Can be used for S_DISTANCE or gas concentration
+        // Allows sensors to send in a string representing the 
+        // unit prefix to be displayed in GUI, not parsed by controller! E.g. cm, m, km, inch.
+        // Can be used for S_DISTANCE or gas concentration
         V_HVAC_SETPOINT_COOL, // S_HVAC. HVAC cool setpoint (Integer between 0-100)
         V_HVAC_SETPOINT_HEAT, // S_HEATER, S_HVAC. HVAC/Heater setpoint (Integer between 0-100)
         V_HVAC_FLOW_MODE, // S_HVAC. Flow mode for HVAC ("Auto", "ContinuousOn", "PeriodicOn")
@@ -128,61 +127,110 @@ namespace SerialController_Windows.Code
     };
 
 
-    public enum InternalDataType{
-        I_BATTERY_LEVEL, I_TIME, I_VERSION, I_ID_REQUEST, I_ID_RESPONSE,
-        I_INCLUSION_MODE, I_CONFIG, I_FIND_PARENT, I_FIND_PARENT_RESPONSE,
-        I_LOG_MESSAGE, I_CHILDREN, I_SKETCH_NAME, I_SKETCH_VERSION,
-        I_REBOOT, I_GATEWAY_READY, I_REQUEST_SIGNING, I_GET_NONCE, I_GET_NONCE_RESPONSE
+    public enum InternalDataType
+    {
+        I_BATTERY_LEVEL,
+        I_TIME,
+        I_VERSION,
+        I_ID_REQUEST,
+        I_ID_RESPONSE,
+        I_INCLUSION_MODE,
+        I_CONFIG,
+        I_FIND_PARENT,
+        I_FIND_PARENT_RESPONSE,
+        I_LOG_MESSAGE,
+        I_CHILDREN,
+        I_SKETCH_NAME,
+        I_SKETCH_VERSION,
+        I_REBOOT,
+        I_GATEWAY_READY,
+        I_REQUEST_SIGNING,
+        I_GET_NONCE,
+        I_GET_NONCE_RESPONSE
     }
 
-    public class Message
+
+    public static class MySensors
     {
-        public int nodeId;
-        public int sensorId;
-        public MessageType messageType;
-        public bool ack;
-        public int subType;
-        public string payload;
-        public bool isValid;
-        public DateTime dateTime;
-
-        public override string ToString()
+        public static string GetSimpleSensorType(SensorType? sensorType)
         {
-            string s;
-
-            if (isValid)
+            switch (sensorType)
             {
-
-
-
-                s = string.Format("{0}: {1}; {2}; {3}; {4}; {5}; {6}",
-                    dateTime,
-                    nodeId,
-                    sensorId,
-                    messageType,
-                    ack,
-                    GetDecodedSubType(),
-                    payload
-                    );
+                case SensorType.S_DOOR:
+                    return "Door";
+                case SensorType.S_MOTION:
+                    return "Motion";
+                case SensorType.S_SMOKE:
+                    return "Smoke";
+                case SensorType.S_LIGHT:
+                    return "Light";
+                case SensorType.S_DIMMER:
+                    return "Dimmer";
+                case SensorType.S_COVER:
+                    return "Cover";
+                case SensorType.S_TEMP:
+                    return "Temp";
+                case SensorType.S_HUM:
+                    return "Hum";
+                case SensorType.S_BARO:
+                    return "Baro";
+                case SensorType.S_WIND:
+                    return "Wind";
+                case SensorType.S_RAIN:
+                    return "Rain";
+                case SensorType.S_UV:
+                    return "UV";
+                case SensorType.S_WEIGHT:
+                    return "Weight";
+                case SensorType.S_POWER:
+                    return "Power";
+                case SensorType.S_HEATER:
+                    return "Heater";
+                case SensorType.S_DISTANCE:
+                    return "Distance";
+                case SensorType.S_LIGHT_LEVEL:
+                    return "Light Level";
+                case SensorType.S_ARDUINO_NODE:
+                    return "Simple node";
+                case SensorType.S_ARDUINO_REPEATER_NODE:
+                    return "Repeater node";
+                case SensorType.S_LOCK:
+                    return "Lock";
+                case SensorType.S_IR:
+                    return "IR";
+                case SensorType.S_WATER:
+                    return "Water";
+                case SensorType.S_AIR_QUALITY:
+                    return "Air";
+                case SensorType.S_CUSTOM:
+                    return "Custom";
+                case SensorType.S_DUST:
+                    return "Dust";
+                case SensorType.S_SCENE_CONTROLLER:
+                    return "Scene controller";
+                case SensorType.S_RGB_LIGHT:
+                    return "RGB Light";
+                case SensorType.S_RGBW_LIGHT:
+                    return "RGMW Light";
+                case SensorType.S_COLOR_SENSOR:
+                    return "Color";
+                case SensorType.S_HVAC:
+                    return "HRAC";
+                case SensorType.S_MULTIMETER:
+                    return "Multimiter";
+                case SensorType.S_SPRINKLER:
+                    return "Sprinkler";
+                case SensorType.S_WATER_LEAK:
+                    return "Water leak";
+                case SensorType.S_SOUND:
+                    return "Sound";
+                case SensorType.S_VIBRATION:
+                    return "Vibration";
+                case SensorType.S_MOISTURE:
+                    return "Moisture";
             }
-            else
-                s = string.Format("{0}: {1}",
-                    dateTime,
-                    payload);
 
-            return s;
-        }
-
-        public string GetDecodedSubType()
-        {
-            string subTypeString = subType.ToString();
-            if (messageType == MessageType.C_PRESENTATION)
-                subTypeString = ((SensorType)subType).ToString();
-            else if (messageType == MessageType.C_SET || messageType == MessageType.C_REQ)
-                subTypeString = ((SensorDataType)subType).ToString();
-            else if (messageType == MessageType.C_INTERNAL)
-                subTypeString = ((InternalDataType)subType).ToString();
-            return subTypeString;
+            return "Unknown";
         }
     }
 }

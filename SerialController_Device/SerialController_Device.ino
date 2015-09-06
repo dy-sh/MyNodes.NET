@@ -55,8 +55,8 @@
 #define INCLUSION_MODE_TIME 1 // Number of minutes inclusion mode is enabled
 #define INCLUSION_MODE_PIN  3 // Digital pin used for inclusion mode button
 #define RADIO_ERROR_LED_PIN 4  // Error led pin
-#define RADIO_RX_LED_PIN    6  // Receive led pin
-#define RADIO_TX_LED_PIN    5  // the PCB, on board LED
+#define RADIO_RX_LED_PIN    5  // Receive led pin
+#define RADIO_TX_LED_PIN    6  // the PCB, on board LED
 
 // NRFRF24L01 radio driver (set low transmit power by default) 
 MyTransportNRF24 transport(RF24_CE_PIN, RF24_CS_PIN, RF24_PA_LEVEL_GW);

@@ -140,7 +140,7 @@ namespace SerialController_Windows
 
                 await Task.Delay(100);
 
-                int selection = 1;
+                int selection = 0;
 
                 await App.serialPort.Connect(selection, 115200);
 

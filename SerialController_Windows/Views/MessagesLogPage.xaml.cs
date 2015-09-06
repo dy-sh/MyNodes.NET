@@ -118,6 +118,10 @@ namespace SerialController_Windows
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            filterNodeId = null;
+            filterSensorId = null;
+            filterMesType = null;
+
             App.serialController.messagesLog.ClearLog();
             UpdateCombos();
             ShowFilteredMessages();

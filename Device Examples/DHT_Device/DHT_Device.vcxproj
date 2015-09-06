@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2AFAD3AB-4EA0-4722-BDDF-A95ABB91DA17}</ProjectGuid>
-    <RootNamespace>RGBLight_device</RootNamespace>
+    <ProjectGuid>{7AC4546C-B94B-4F36-B30F-7A7113341FF1}</ProjectGuid>
+    <RootNamespace>DHT_Device</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,8 +74,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Device Examples\RGBLight_device;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Device Examples\RGBLight_device\Visual Micro\.RGBLight_device.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Device Examples\DHT_Device;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\DHT;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\DHT\utility;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\r1pligby.4b0\Micro Platforms\default\debuggers;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries;C:\Users\derwish\Documents\Visual Studio 2015\Projects\libraries\MySensors\utility;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\derwish\Documents\Visual Studio 2015\Projects\MyNetSensors\Device Examples\DHT_Device\Visual Micro\.DHT_Device.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_UNO;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -122,12 +122,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="RGBLight_device.ino">
+    <None Include="DHT_Device.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.RGBLight_device.vsarduino.h" />
+    <ClInclude Include="Visual Micro\.DHT_Device.vsarduino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

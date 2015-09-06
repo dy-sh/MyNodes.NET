@@ -17,7 +17,7 @@ MySensor gw;
 void setup()
 {
 	// Initialize library and add callback for incoming messages
-	gw.begin(incomingMessage, AUTO, false);
+	gw.begin(incomingMessage);
 
 	// Send the sketch version information to the gateway and Controller
 	gw.sendSketchInfo("RGB Node", "1.0");
