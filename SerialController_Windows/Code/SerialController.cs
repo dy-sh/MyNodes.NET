@@ -47,11 +47,11 @@ namespace SerialController_Windows.Code
 
         public void SendMessage(Message message)
         {
-            string mes=String.Format("{0};{1};{2};{3};{4};{5};\n",
+            string mes = String.Format("{0};{1};{2};{3};{4};{5};\n",
                 message.nodeId,
                 message.sensorId,
                 (int)message.messageType,
-                (message.ack)?"1":"0",
+                (message.ack) ? "1" : "0",
                 message.subType,
                 message.payload);
             SendMessage(mes);
@@ -71,8 +71,8 @@ namespace SerialController_Windows.Code
 
             if (mes.isValid)
             {
-                if (mes.messageType==MessageType.C_INTERNAL
-                    && mes.subType==(int)InternalDataType.I_LOG_MESSAGE)
+                if (mes.messageType == MessageType.C_INTERNAL
+                    && mes.subType == (int)InternalDataType.I_LOG_MESSAGE)
                     return;
 
                 UpdateNodeFromMessage(mes);
@@ -84,47 +84,70 @@ namespace SerialController_Windows.Code
         {
             Node node = GetNode(mes.nodeId);
 
+            bool isNewNode=false;
+
             if (node == null)
             {
                 node = new Node(mes.nodeId);
                 nodes.Add(node);
-
-                if (OnNewNodeEvent != null)
-                    OnNewNodeEvent(node);
+                isNewNode = true;
             }
             else
             {
                 node.UpdateLastSeenNow();
-
-                if (OnNodeUpdatedEvent != null)
-                    OnNodeUpdatedEvent(node);
             }
+
+            if (mes.sensorId == 255)
+            {
+                if (mes.messageType == MessageType.C_PRESENTATION)
+                {
+                    if (mes.subType == (int) SensorType.S_ARDUINO_NODE)
+                    {
+                        node.isRepeatingNode = false;
+                    }
+                    else if (mes.subType == (int) SensorType.S_ARDUINO_REPEATER_NODE)
+                    {
+                        node.isRepeatingNode = true;
+                    }
+                }
+                else if (mes.messageType == MessageType.C_INTERNAL)
+                {
+                    if (mes.subType == (int)InternalDataType.I_SKETCH_NAME)
+                    {
+                        node.name = mes.payload;
+                    }
+                    else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
+                    {
+                        node.version = mes.payload;
+                    }
+                    else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
+                    {
+                        node.batteryLevel=Int32.Parse(mes.payload);
+                    }
+                }
+            }
+
+
+            if (isNewNode && OnNewNodeEvent != null)
+                OnNewNodeEvent(node);
+            else
+            if (OnNodeUpdatedEvent != null)
+                OnNodeUpdatedEvent(node);
         }
 
         public void UpdateSensorFromMessage(Message mes)
         {
+            if (mes.sensorId == 255)
+                return;
+
             if (mes.messageType != MessageType.C_PRESENTATION
-                 && mes.messageType != MessageType.C_SET)
+             && mes.messageType != MessageType.C_SET)
                 return;
 
             Node node = GetNode(mes.nodeId);
 
-            if (mes.sensorId == 255)
-            {
-                if (mes.subType == (int)SensorType.S_ARDUINO_NODE)
-                {
-                    node.isRepeatingNode = false;
-                }
-                else if (mes.subType == (int)SensorType.S_ARDUINO_REPEATER_NODE)
-                {
-                    node.isRepeatingNode = true;
-                }
-
-                return;
-            }
-
             Sensor sensor = node.GetSensor(mes.sensorId);
-            bool isNewSensor=false;
+            bool isNewSensor = false;
 
             if (sensor == null)
             {
@@ -147,8 +170,8 @@ namespace SerialController_Windows.Code
 
 
             if (isNewSensor && OnNewSensorEvent != null)
-                    OnNewSensorEvent(sensor);
-            else 
+                OnNewSensorEvent(sensor);
+            else
             if (OnSensorUpdatedEvent != null)
                 OnSensorUpdatedEvent(sensor);
 

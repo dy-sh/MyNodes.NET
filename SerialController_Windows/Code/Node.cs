@@ -11,8 +11,11 @@ namespace SerialController_Windows.Code
         public int nodeId;
         public DateTime firstSeen;
         public DateTime lastSeen;
-        public List<Sensor> sensors = new List<Sensor>();
         public bool? isRepeatingNode =null;
+        public string name;
+        public string version;
+        public int? batteryLevel;
+        public List<Sensor> sensors = new List<Sensor>();
 
         public Node(int nodeId)
         {
@@ -29,6 +32,14 @@ namespace SerialController_Windows.Code
         public override string ToString()
         {
             string s = String.Format("Node ID {0}\r\n", nodeId);
+
+
+            if (!String.IsNullOrEmpty(name))
+                s += String.Format("Name: {0}\r\n", name);
+
+            if (!String.IsNullOrEmpty(version))
+                s += String.Format("Version: {0}\r\n", version);
+
             s += String.Format("First seen {0}\r\n", firstSeen);
             s += String.Format("Last seen {0}\r\n", lastSeen);
 
@@ -39,9 +50,11 @@ namespace SerialController_Windows.Code
             else 
                 s += String.Format("Repeating: No\r\n");
 
+            if (batteryLevel!=null)
+                s += String.Format("Battery: {0} %\r\n", batteryLevel.Value);
+
             if (sensors.Any())
             {
-                s += "Sensors:\r\n";
                 foreach (Sensor sensor in sensors)
                 {
                     s += "-------------------\r\n";

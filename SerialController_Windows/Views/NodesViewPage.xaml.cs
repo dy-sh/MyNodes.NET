@@ -83,6 +83,12 @@ namespace SerialController_Windows.Views
 
             nodePanel.Children.Add(titlePanel);
 
+            if (node.name != null)
+                nodePanel.Children.Add(new TextBlock { Text = node.name, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
+            if (node.version != null)
+                nodePanel.Children.Add(new TextBlock { Text = "Version: " + node.version, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
             nodePanel.Children.Add(new TextBlock { Text = "First seen: " + node.firstSeen, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
             string lastSeenAgo = string.Format("{0:hh\\:mm\\:ss}",  DateTime.Now.Subtract(node.lastSeen));
@@ -111,6 +117,10 @@ namespace SerialController_Windows.Views
                     Margin = new Thickness(5),
                     Foreground = new SolidColorBrush(Colors.Gainsboro)
                 });
+
+            if (node.batteryLevel != null)
+                nodePanel.Children.Add(new TextBlock { Text = "Battery: " + node.batteryLevel.Value, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+
 
 
             foreach (Sensor sensor in node.sensors)

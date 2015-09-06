@@ -46,10 +46,10 @@ void setup()
 	gw.present(BUTTON2_ID, S_DOOR, "Button2");
 
 	gw.present(LED1_ID, S_DIMMER);
-
 }
 
-
+int battery = 100;
+unsigned long batteryTimer;
 
 void loop()
 {
@@ -71,6 +71,14 @@ void loop()
 
 	//	val = !val;
 	//	gw.send(msg2.set(val));
+
+	if (millis() - batteryTimer > 500) {
+		battery--;
+		if (battery < 0) battery = 0;
+		gw.sendBatteryLevel((int)battery);
+		batteryTimer = millis();
+	}
+
 }
 
 
