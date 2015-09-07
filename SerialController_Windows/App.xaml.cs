@@ -50,29 +50,11 @@ namespace SerialController_Windows
             serialPort=new SerialPort();
          //   ledStripController=new LedStripController(serialPort);
             serialController=new SerialController(serialPort);
-
-            InitDB();
+            db = new SQLiteRepository(serialController);
+  
         }
 
-        public void InitDB()
-        {
-            db = new SQLiteRepository();
 
-            List<Message> messages = db.GetMessages();
-            foreach (var message in messages)
-                serialController.messagesLog.AddNewMessage(message);
-
-            List<Node> nodes = db.GetNodes();
-            foreach (var node in nodes)
-                serialController.AddNode(node);
-
-            serialController.OnMessageRecievedEvent += db.AddMessage;
-            serialController.OnMessageSendEvent += db.AddMessage;
-            serialController.OnNewNodeEvent += db.AddNode;
-            serialController.OnNodeUpdatedEvent += db.AddNode;
-            serialController.OnNewSensorEvent += db.AddSensor;
-            serialController.OnSensorUpdatedEvent += db.AddSensor;
-        }
 
         public AppShell shell;
 
@@ -128,28 +110,6 @@ namespace SerialController_Windows
             Window.Current.Activate();
 
             // Ensure the current window is active
-
-            /*
-            //COLORIZE TITLE BAR---------------------------------------------------------------------------
-           ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.BackgroundColor = new Color() { A = 255, R = 54, G = 60, B = 116 };
-            titleBar.ForegroundColor = new Color() { A = 255, R = 232, G = 211, B = 162 };
-            titleBar.InactiveBackgroundColor = new Color() { A = 255, R = 135, G = 141, B = 199 };
-            titleBar.InactiveForegroundColor = new Color() { A = 255, R = 232, G = 211, B = 162 };
-
-
-            titleBar.ButtonBackgroundColor = new Color() { A = 0, R = 54, G = 60, B = 116 };
-            titleBar.ButtonHoverBackgroundColor = new Color() { A = 0, R = 19, G = 21, B = 40 };
-            titleBar.ButtonPressedBackgroundColor = new Color() { A = 0, R = 232, G = 211, B = 162 };
-            titleBar.ButtonInactiveBackgroundColor = new Color() { A = 0, R = 135, G = 141, B = 199 };
-
-            // Title bar button foreground colors. Alpha must be 255.
-            titleBar.ButtonForegroundColor = new Color() { A = 255, R = 232, G = 211, B = 162 };
-            titleBar.ButtonHoverForegroundColor = new Color() { A = 255, R = 255, G = 255, B = 255 };
-            titleBar.ButtonPressedForegroundColor = new Color() { A = 255, R = 54, G = 60, B = 116 };
-            titleBar.ButtonInactiveForegroundColor = new Color() { A = 255, R = 232, G = 211, B = 162 };
-            ////////////////////////////////////////////////////////////////////////////////////////////////
-            */
 
 
 

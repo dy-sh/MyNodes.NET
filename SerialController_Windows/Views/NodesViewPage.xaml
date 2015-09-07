@@ -13,7 +13,7 @@
 
     <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
 
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
             <ItemsControl x:Name="itemsControl1" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

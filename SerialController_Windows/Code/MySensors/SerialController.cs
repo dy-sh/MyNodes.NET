@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace SerialController_Windows.Code
         public event OnNodeUpdatedEventHandler OnNodeUpdatedEvent;
         public event OnNewSensorEventHandler OnNewSensorEvent;
         public event OnSensorUpdatedEventHandler OnSensorUpdatedEvent;
+        public event EventHandler OnClearNodesList;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -189,11 +191,15 @@ namespace SerialController_Windows.Code
             }
 
 
+
+
             if (isNewNode && OnNewNodeEvent != null)
                 OnNewNodeEvent(node);
             else
             if (OnNodeUpdatedEvent != null)
                 OnNodeUpdatedEvent(node);
+
+
         }
 
         public void UpdateSensorFromMessage(Message mes)
@@ -231,11 +237,13 @@ namespace SerialController_Windows.Code
             }
 
 
+
             if (isNewSensor && OnNewSensorEvent != null)
                 OnNewSensorEvent(sensor);
             else
             if (OnSensorUpdatedEvent != null)
                 OnSensorUpdatedEvent(sensor);
+
 
         }
 
@@ -352,6 +360,14 @@ namespace SerialController_Windows.Code
             mess.payload = "M";
             mess.isValid = true;
             SendMessage(mess);
+        }
+
+        public void ClearNodesList()
+        {
+            if (OnClearNodesList != null)
+                OnClearNodesList(this, null);
+
+            nodes.Clear();
         }
     }
 }

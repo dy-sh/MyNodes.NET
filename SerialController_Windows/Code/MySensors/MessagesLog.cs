@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace SerialController_Windows.Code
 {
+    public delegate void OnNewMessageLoggedEventHandler(Message message);
+
     public class MessagesLog
     {
         private List<Message> messages = new List<Message>();
+
+        public event OnNewMessageLoggedEventHandler OnNewMessageLogged;
+        public event EventHandler OnClearMessages;
+
 
         public List<Message> GetAllMessages()
         {
@@ -26,10 +32,16 @@ namespace SerialController_Windows.Code
         public void AddNewMessage(Message message)
         {
             messages.Add(message);
+
+            if (OnNewMessageLogged != null)
+                OnNewMessageLogged(message);
         }
 
         public void ClearLog()
         {
+            if (OnClearMessages != null)
+                OnClearMessages(this,null);
+
             messages.Clear();
         }
 
