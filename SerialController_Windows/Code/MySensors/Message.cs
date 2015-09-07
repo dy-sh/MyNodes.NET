@@ -15,7 +15,13 @@ namespace SerialController_Windows.Code
         public int subType;
         public string payload;
         public bool isValid;
+        public bool incoming;//or outgoing
         public DateTime dateTime;
+
+        public Message()
+        {
+            dateTime = DateTime.Now;
+        }
 
         public override string ToString()
         {
@@ -23,11 +29,9 @@ namespace SerialController_Windows.Code
 
             if (isValid)
             {
-
-
-
-                s = string.Format("{0}: {1}; {2}; {3}; {4}; {5}; {6}",
+                s = string.Format("{0}: {1}: {2}; {3}; {4}; {5}; {6}; {7}",
                     dateTime,
+                    incoming ? "RX" : "TX",
                     nodeId,
                     sensorId,
                     messageType,
@@ -37,8 +41,9 @@ namespace SerialController_Windows.Code
                     );
             }
             else
-                s = string.Format("{0}: {1}",
+                s = string.Format("{0}: {1}: {2}",
                     dateTime,
+                    incoming ? "RX" : "TX",
                     payload);
 
             return s;

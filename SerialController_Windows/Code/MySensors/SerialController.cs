@@ -9,6 +9,7 @@ using Windows.UI.Xaml;
 namespace SerialController_Windows.Code
 {
     public delegate void OnMessageRecievedEventHandler(Message message);
+    public delegate void OnMessageSendEventHandler(Message message);
     public delegate void OnNewNodeEventHandler(Node node);
     public delegate void OnNodeUpdatedEventHandler(Node node);
     public delegate void OnNewSensorEventHandler(Sensor sensor);
@@ -18,8 +19,10 @@ namespace SerialController_Windows.Code
     {
         private SerialPort serialPort;
         public bool enableLogging = true;
+        public bool enableAutoAssignId=true;
 
         public event OnMessageRecievedEventHandler OnMessageRecievedEvent;
+        public event OnMessageSendEventHandler OnMessageSendEvent;
         public event OnNewNodeEventHandler OnNewNodeEvent;
         public event OnNodeUpdatedEventHandler OnNodeUpdatedEvent;
         public event OnNewSensorEventHandler OnNewSensorEvent;
@@ -47,14 +50,23 @@ namespace SerialController_Windows.Code
 
         public void SendMessage(Message message)
         {
-            string mes = String.Format("{0};{1};{2};{3};{4};{5};\n",
+            message.incoming = false;
+
+            if (OnMessageSendEvent != null)
+                OnMessageSendEvent(message);
+
+            string mes = String.Format("{0};{1};{2};{3};{4};{5}\n",
                 message.nodeId,
                 message.sensorId,
                 (int)message.messageType,
                 (message.ack) ? "1" : "0",
                 message.subType,
                 message.payload);
+
             SendMessage(mes);
+
+            if (enableLogging)
+                messagesLog.AddNewMessage(message);
         }
 
 
@@ -62,6 +74,7 @@ namespace SerialController_Windows.Code
         {
 
             Message mes = ParseMessageFromString(message);
+            mes.incoming = true;
 
             if (enableLogging)
                 messagesLog.AddNewMessage(mes);
@@ -71,17 +84,39 @@ namespace SerialController_Windows.Code
 
             if (mes.isValid)
             {
-                if (mes.nodeId==255)
+                //Gateway ready
+                if (mes.messageType == MessageType.C_INTERNAL
+                    && mes.subType == (int)InternalDataType.I_GATEWAY_READY)
                     return;
 
+
+                //Gateway log message
                 if (mes.messageType == MessageType.C_INTERNAL
                     && mes.subType == (int)InternalDataType.I_LOG_MESSAGE)
                     return;
+
+                //New ID request
+                if (mes.nodeId == 255)
+                {
+                    if (mes.messageType == MessageType.C_INTERNAL
+                        && mes.subType == (int)InternalDataType.I_ID_REQUEST)
+                        SendNewIdResponse();
+
+                    return;
+                }
+
+                //Metric system request
+                if (mes.messageType == MessageType.C_INTERNAL
+                    && mes.subType == (int) InternalDataType.I_CONFIG)
+                    SendMetricResponse(mes.nodeId);
+
 
                 UpdateNodeFromMessage(mes);
                 UpdateSensorFromMessage(mes);
             }
         }
+
+
 
         private void UpdateNodeFromMessage(Message mes)
         {
@@ -140,6 +175,7 @@ namespace SerialController_Windows.Code
 
         public void UpdateSensorFromMessage(Message mes)
         {
+            //if internal node message
             if (mes.sensorId == 255)
                 return;
 
@@ -196,7 +232,6 @@ namespace SerialController_Windows.Code
             try
             {
                 string[] arguments = message.Split(new char[] { ';' }, 6);
-                mes.dateTime = DateTime.Now;
                 mes.nodeId = Int32.Parse(arguments[0]);
                 mes.sensorId = Int32.Parse(arguments[1]);
                 mes.messageType = (MessageType)Int32.Parse(arguments[2]);
@@ -208,7 +243,6 @@ namespace SerialController_Windows.Code
             catch
             {
                 mes = new Message();
-                mes.dateTime = DateTime.Now;
                 mes.isValid = false;
                 mes.payload = message;
             }
@@ -228,14 +262,64 @@ namespace SerialController_Windows.Code
 
             Message message = new Message();
             message.ack = false;
-            message.dateTime = DateTime.Now;
-            message.isValid = true;
             message.messageType = MessageType.C_SET;
             message.nodeId = nodeId;
             message.payload = data.state;
             message.sensorId = sensorId;
             message.subType = (int)data.dataType;
+            message.isValid = true;
             SendMessage(message);
+        }
+
+        public int GetFreeNodeId()
+        {
+            for (int i = 1; i < 254; i++)
+            {
+                bool found = false;
+
+                foreach (var node in nodes)
+                {
+                    if (node.nodeId == i)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    return i;
+                }
+            }
+
+            return 255;
+        }
+
+        public void SendNewIdResponse()
+        {
+            int freeId = GetFreeNodeId();
+
+            Message mess=new Message();
+            mess.nodeId = 255;
+            mess.sensorId = 255;
+            mess.messageType=MessageType.C_INTERNAL;
+            mess.ack = false;
+            mess.subType = (int)InternalDataType.I_ID_RESPONSE;
+            mess.payload = freeId.ToString();
+            mess.isValid = true;
+            SendMessage(mess);
+        }
+
+        private void SendMetricResponse(int nodeId)
+        {
+            Message mess = new Message();
+            mess.nodeId = nodeId;
+            mess.sensorId = 255;
+            mess.messageType = MessageType.C_INTERNAL;
+            mess.ack = false;
+            mess.subType = (int)InternalDataType.I_CONFIG;
+            mess.payload = "M";
+            mess.isValid = true;
+            SendMessage(mess);
         }
     }
 }

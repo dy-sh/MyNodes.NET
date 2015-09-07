@@ -37,6 +37,7 @@ namespace SerialController_Windows
 
 
             App.serialController.OnMessageRecievedEvent += AddMessageEvent;
+            App.serialController.OnMessageSendEvent += AddMessageEvent;
 
             if (App.serialController.IsConnected())
             {
