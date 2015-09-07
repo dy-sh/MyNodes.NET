@@ -112,12 +112,33 @@ namespace SerialController_Windows.Code
                     && mes.subType == (int)InternalDataType.I_CONFIG)
                     SendMetricResponse(mes.nodeId);
 
+                //Sensor request
+                if (mes.messageType == MessageType.C_REQ)
+                    ProceedRequestMessage(mes);
+
 
                 UpdateNodeFromMessage(mes);
                 UpdateSensorFromMessage(mes);
             }
         }
 
+        private void ProceedRequestMessage(Message mes)
+        {
+            if (mes.messageType != MessageType.C_REQ)
+                return;
+
+            Node node = GetNode(mes.nodeId);
+            if (node == null) return;
+
+            Sensor sensor = node.GetSensor(mes.sensorId);
+            if (sensor == null) return;
+
+            SensorDataType dataType = (SensorDataType)mes.subType;
+            SensorData data = sensor.GetData(dataType);
+            if (data == null) return;
+
+            SendSensorState(mes.nodeId, mes.sensorId, data);
+        }
 
 
         private void UpdateNodeFromMessage(Message mes)

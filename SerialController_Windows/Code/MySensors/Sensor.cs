@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Notifications;
 using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 
@@ -88,6 +89,8 @@ namespace SerialController_Windows.Code
 
         public void SetSensorType(SensorType? sensorType)
         {
+            if (this.sensorType==sensorType) return;
+
             this.sensorType = sensorType;
 
             switch (sensorType)

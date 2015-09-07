@@ -46,6 +46,7 @@ void setup()
 	gw.present(BUTTON2_ID, S_DOOR, "Button2");
 
 	gw.present(LED1_ID, S_DIMMER);
+	gw.request(LED1_ID, V_DIMMER);
 }
 
 int battery = 100;
