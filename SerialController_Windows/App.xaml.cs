@@ -33,6 +33,7 @@ namespace SerialController_Windows
         public static LedStripController ledStripController;
         public static RemoteColorClient remoteColorClient;
         public static SerialController serialController;
+        public SQLiteRepository db;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -50,6 +51,27 @@ namespace SerialController_Windows
          //   ledStripController=new LedStripController(serialPort);
             serialController=new SerialController(serialPort);
 
+            InitDB();
+        }
+
+        public void InitDB()
+        {
+            db = new SQLiteRepository();
+
+            List<Message> messages = db.GetMessages();
+            foreach (var message in messages)
+                serialController.messagesLog.AddNewMessage(message);
+
+            List<Node> nodes = db.GetNodes();
+            foreach (var node in nodes)
+                serialController.AddNode(node);
+
+            serialController.OnMessageRecievedEvent += db.AddMessage;
+            serialController.OnMessageSendEvent += db.AddMessage;
+            serialController.OnNewNodeEvent += db.AddNode;
+            serialController.OnNodeUpdatedEvent += db.AddNode;
+            serialController.OnNewSensorEvent += db.AddSensor;
+            serialController.OnSensorUpdatedEvent += db.AddSensor;
         }
 
         public AppShell shell;

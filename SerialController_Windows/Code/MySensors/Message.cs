@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite.Net.Attributes;
 
 namespace SerialController_Windows.Code
 {
     public class Message
     {
-        public int nodeId;
-        public int sensorId;
-        public MessageType messageType;
-        public bool ack;
-        public int subType;
-        public string payload;
-        public bool isValid;
-        public bool incoming;//or outgoing
-        public DateTime dateTime;
+        //DB Propertys
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+
+        public int nodeId { get; set; }
+        public int sensorId { get; set; }
+        public MessageType messageType { get; set; }
+        public bool ack { get; set; }
+        public int subType { get; set; }
+        public string payload { get; set; }
+        public bool isValid { get; set; }
+        public bool incoming { get; set; }//or outgoing
+        public DateTime dateTime { get; set; }
+
+
 
         public Message()
         {

@@ -1,11 +1,29 @@
 ﻿using System;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace SerialController_Windows.Code
 {
     public class SensorData
     {
-        public SensorDataType? dataType;
-        public string state;
+        //DB Propertys
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        [ForeignKey(typeof(Sensor))]
+        public int SensorId { get; set; }
+
+
+
+        public SensorDataType? dataType { get; set; }
+        public string state { get; set; }
+
+
+        public SensorData()
+        {
+
+        }
+
+
 
         public SensorData(SensorDataType? dataType, string state)
         {

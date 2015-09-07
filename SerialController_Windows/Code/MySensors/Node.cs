@@ -3,25 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
+
 
 namespace SerialController_Windows.Code
 {
     public class Node
     {
-        public int nodeId;
-        public DateTime firstSeen;
-        public DateTime lastSeen;
-        public bool? isRepeatingNode =null;
-        public string name;
-        public string version;
-        public int? batteryLevel;
-        public List<Sensor> sensors = new List<Sensor>();
+
+        //DB Propertys
+        [PrimaryKey, AutoIncrement]        public int Id { get; set; }
+
+
+        public int nodeId { get; set; }
+        public DateTime firstSeen { get; set; }
+        public DateTime lastSeen { get; set; }
+        public bool? isRepeatingNode { get; set; }
+        public string name { get; set; }
+        public string version { get; set; }
+        public int? batteryLevel { get; set; }
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<Sensor> sensors { get; set; }
+
+
+
+
+        public Node()
+        {
+            sensors = new List<Sensor>();
+        }
 
         public Node(int nodeId)
         {
             this.nodeId = nodeId;
             firstSeen = DateTime.Now;
             lastSeen = DateTime.Now;
+            sensors=new List<Sensor>();
         }
 
         public void UpdateLastSeenNow()
@@ -43,14 +61,14 @@ namespace SerialController_Windows.Code
             s += String.Format("First seen {0}\r\n", firstSeen);
             s += String.Format("Last seen {0}\r\n", lastSeen);
 
-            if (isRepeatingNode==null)
-            s += String.Format("Repeating: unknown\r\n");
+            if (isRepeatingNode == null)
+                s += String.Format("Repeating: unknown\r\n");
             else if (isRepeatingNode.Value)
                 s += String.Format("Repeating: Yes\r\n");
-            else 
+            else
                 s += String.Format("Repeating: No\r\n");
 
-            if (batteryLevel!=null)
+            if (batteryLevel != null)
                 s += String.Format("Battery: {0} %\r\n", batteryLevel.Value);
 
             if (sensors.Any())
@@ -66,7 +84,7 @@ namespace SerialController_Windows.Code
         }
 
 
-        public Sensor GetSensor( int sensorId)
+        public Sensor GetSensor(int sensorId)
         {
             Sensor sensor = sensors.FirstOrDefault(x => x.sensorId == sensorId);
             return sensor;

@@ -75,7 +75,7 @@ void loop()
 	if (millis() - batteryTimer > 500) {
 		battery--;
 		if (battery < 0) battery = 0;
-		gw.sendBatteryLevel((int)battery);
+//		gw.sendBatteryLevel((int)battery);
 		batteryTimer = millis();
 	}
 

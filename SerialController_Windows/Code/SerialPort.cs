@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -194,7 +195,7 @@ namespace SerialController_Windows.Code
                 }
                 else
                 {
-
+                    throw ex;
                 }
             }
             finally
@@ -209,23 +210,30 @@ namespace SerialController_Windows.Code
         }
 
 
+
         private async Task ReadAsync(CancellationToken cancellationToken)
         {
-            Task<UInt32> loadAsyncTask;
+            UInt32 bytesRead=0;
+            try
+            {
+                Task<UInt32> loadAsyncTask;
 
-            uint ReadBufferLength = 1024;
+                uint ReadBufferLength = 1024;
 
-            // If task cancellation was requested, comply
-            cancellationToken.ThrowIfCancellationRequested();
+                // If task cancellation was requested, comply
+                cancellationToken.ThrowIfCancellationRequested();
 
-            // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
-            dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
+                // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
+                dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
 
-            // Create a task object to wait for data on the serialPort.InputStream
-            loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
+                // Create a task object to wait for data on the serialPort.InputStream
+                loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
 
-            // Launch the task and wait
-            UInt32 bytesRead = await loadAsyncTask;
+                // Launch the task and wait
+                bytesRead = await loadAsyncTask;
+            }
+            catch { }
+
             if (bytesRead > 0)
             {
                 SendDataRecievedEvents(dataReaderObject.ReadString(bytesRead));

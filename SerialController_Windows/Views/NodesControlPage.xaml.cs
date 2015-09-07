@@ -228,7 +228,7 @@ namespace SerialController_Windows.Views
         {
             ToggleButton button = new ToggleButton();
             button.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNode.nodeId,
+                sensor.ownerNodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
@@ -247,7 +247,7 @@ namespace SerialController_Windows.Views
         {
             Slider slider = new Slider();
             slider.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNode.nodeId,
+                sensor.ownerNodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
@@ -271,7 +271,7 @@ namespace SerialController_Windows.Views
             {
                 Slider slider = new Slider();
                 slider.Tag = String.Format("{0};{1};{2};{3}",
-                    sensor.ownerNode.nodeId,
+                    sensor.ownerNodeId,
                     sensor.sensorId,
                     data.dataType.ToString(),
                     i);
@@ -298,7 +298,7 @@ namespace SerialController_Windows.Views
             {
                 Slider slider = new Slider();
                 slider.Tag = String.Format("{0};{1};{2};{3}",
-                    sensor.ownerNode.nodeId,
+                    sensor.ownerNodeId,
                     sensor.sensorId,
                     data.dataType.ToString(),
                     i);
@@ -362,7 +362,7 @@ namespace SerialController_Windows.Views
 
             button.Content = (button.IsChecked.Value) ? "ON" : "OFF";
 
-            App.serialController.ChangeSensorState(nodeId, sensorId, data);
+            App.serialController.SendSensorState(nodeId, sensorId, data);
         }
 
         private void slider_ValueChanged(object sender, RoutedEventArgs e)
@@ -377,7 +377,7 @@ namespace SerialController_Windows.Views
             string state = slider.Value.ToString();
             SensorData data = new SensorData(dataType, state);
 
-            App.serialController.ChangeSensorState(nodeId, sensorId, data);
+            App.serialController.SendSensorState(nodeId, sensorId, data);
         }
 
         private void sliderRGB_ValueChanged(object sender, RoutedEventArgs e)
@@ -402,7 +402,7 @@ namespace SerialController_Windows.Views
             data.state = ColorUtils.ConvertRGBIntArrayToHexString(rgb);
 
 
-            App.serialController.ChangeSensorState(nodeId, sensorId, data);
+            App.serialController.SendSensorState(nodeId, sensorId, data);
         }
 
         private void sliderRGBW_ValueChanged(object sender, RoutedEventArgs e)
@@ -427,7 +427,7 @@ namespace SerialController_Windows.Views
             data.state = ColorUtils.ConvertRGBWIntArrayToHexString(rgbw);
 
 
-            App.serialController.ChangeSensorState(nodeId, sensorId, data);
+            App.serialController.SendSensorState(nodeId, sensorId, data);
         }
     }
 

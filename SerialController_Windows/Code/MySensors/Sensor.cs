@@ -3,21 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace SerialController_Windows.Code
 {
     public class Sensor
     {
-        public Node ownerNode;
-        public int sensorId;
-        private SensorType? sensorType;
-        public string description;
-        public List<SensorData> sensorData = new List<SensorData>();
+        //DB Propertys
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        [ForeignKey(typeof(Node))]
+        public int NodeId { get; set; }
+
+
+        public int ownerNodeId { get; set; }
+        public int sensorId { get; set; }
+        public SensorType? sensorType { get; set; }
+        public string description { get; set; }
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<SensorData> sensorData { get; set; }
+
+
+        public Sensor()
+        {
+        }
 
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
-            this.ownerNode = ownerNode;
+            this.ownerNodeId = ownerNode.nodeId;
+            sensorData = new List<SensorData>();
         }
 
         public override string ToString()

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.UI.Xaml;
 
+
 namespace SerialController_Windows.Code
 {
     public delegate void OnMessageRecievedEventHandler(Message message);
@@ -19,7 +20,7 @@ namespace SerialController_Windows.Code
     {
         private SerialPort serialPort;
         public bool enableLogging = true;
-        public bool enableAutoAssignId=true;
+        public bool enableAutoAssignId = true;
 
         public event OnMessageRecievedEventHandler OnMessageRecievedEvent;
         public event OnMessageSendEventHandler OnMessageSendEvent;
@@ -35,6 +36,7 @@ namespace SerialController_Windows.Code
         {
             this.serialPort = serialPort;
             this.serialPort.ReceivedDataEvent += RecieveSerialMessage;
+
         }
 
         public bool IsConnected()
@@ -107,7 +109,7 @@ namespace SerialController_Windows.Code
 
                 //Metric system request
                 if (mes.messageType == MessageType.C_INTERNAL
-                    && mes.subType == (int) InternalDataType.I_CONFIG)
+                    && mes.subType == (int)InternalDataType.I_CONFIG)
                     SendMetricResponse(mes.nodeId);
 
 
@@ -122,7 +124,7 @@ namespace SerialController_Windows.Code
         {
             Node node = GetNode(mes.nodeId);
 
-            bool isNewNode=false;
+            bool isNewNode = false;
 
             if (node == null)
             {
@@ -139,11 +141,11 @@ namespace SerialController_Windows.Code
             {
                 if (mes.messageType == MessageType.C_PRESENTATION)
                 {
-                    if (mes.subType == (int) SensorType.S_ARDUINO_NODE)
+                    if (mes.subType == (int)SensorType.S_ARDUINO_NODE)
                     {
                         node.isRepeatingNode = false;
                     }
-                    else if (mes.subType == (int) SensorType.S_ARDUINO_REPEATER_NODE)
+                    else if (mes.subType == (int)SensorType.S_ARDUINO_REPEATER_NODE)
                     {
                         node.isRepeatingNode = true;
                     }
@@ -160,7 +162,7 @@ namespace SerialController_Windows.Code
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
-                        node.batteryLevel=Int32.Parse(mes.payload);
+                        node.batteryLevel = Int32.Parse(mes.payload);
                     }
                 }
             }
@@ -255,10 +257,16 @@ namespace SerialController_Windows.Code
             return nodes;
         }
 
-
-        public void ChangeSensorState(int nodeId, int sensorId, SensorData data)
+        public void AddNode(Node node)
         {
-            GetNode(nodeId).GetSensor(sensorId).AddOrUpdateData(data);
+            nodes.Add(node);
+        }
+
+
+        public void SendSensorState(int nodeId, int sensorId, SensorData data)
+        {
+            Sensor sensor = GetNode(nodeId).GetSensor(sensorId);
+            sensor.AddOrUpdateData(data);
 
             Message message = new Message();
             message.ack = false;
@@ -269,6 +277,9 @@ namespace SerialController_Windows.Code
             message.subType = (int)data.dataType;
             message.isValid = true;
             SendMessage(message);
+
+            if (OnSensorUpdatedEvent != null)
+                OnSensorUpdatedEvent(sensor);
         }
 
         public int GetFreeNodeId()
@@ -298,10 +309,10 @@ namespace SerialController_Windows.Code
         {
             int freeId = GetFreeNodeId();
 
-            Message mess=new Message();
+            Message mess = new Message();
             mess.nodeId = 255;
             mess.sensorId = 255;
-            mess.messageType=MessageType.C_INTERNAL;
+            mess.messageType = MessageType.C_INTERNAL;
             mess.ack = false;
             mess.subType = (int)InternalDataType.I_ID_RESPONSE;
             mess.payload = freeId.ToString();
