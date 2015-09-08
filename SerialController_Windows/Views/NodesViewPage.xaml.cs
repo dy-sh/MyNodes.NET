@@ -38,7 +38,7 @@ namespace SerialController_Windows.Views
             App.serialController.OnNewNodeEvent += AddNode;
             App.serialController.OnNodeUpdatedEvent += UpdateNode;
             App.serialController.OnSensorUpdatedEvent += UpdateSensor;
-
+            App.serialController.OnClearNodesList += OnClearNodesList;
 
             if (App.serialController.IsConnected())
             {
@@ -58,6 +58,11 @@ namespace SerialController_Windows.Views
             refrashTimer.Tick += RefrashInfoTimer;
             refrashTimer.Start();
 
+        }
+
+        private void OnClearNodesList(object sender, EventArgs e)
+        {
+            ShowNodes();
         }
 
         private void RefrashInfoTimer(object sender, object e)

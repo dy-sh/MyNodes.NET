@@ -13,6 +13,9 @@
 
     <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
 
+        
+        
+        
         <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
             <ItemsControl x:Name="itemsControl1" >
                 <ItemsControl.ItemsPanel>
@@ -25,5 +28,5 @@
         <TextBlock  x:Name="textBlock3" HorizontalAlignment="Center"  Text="Device is not connected" VerticalAlignment="Center" FontSize="21.333" />
 
     </Grid>
-
+  
 </Page>

@@ -9,7 +9,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+        <Grid x:Name="panel1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
             <ItemsControl x:Name="itemsControl1" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -18,7 +19,22 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#00000000" Width="50" Height="50" Margin="0,0,10,0">
+            <Button.Content>
+                <SymbolIcon Symbol="Setting"/>
+            </Button.Content>
+            <Button.Flyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Reset all nodes" Click="MenuFlyoutItem_Click"/>
+                    <MenuFlyoutItem Text="Delete all nodes" Click="MenuFlyoutItem_Click_1"/>
+                </MenuFlyout>
+            </Button.Flyout>
+        </Button>
+        </Grid>
+        
         <TextBlock  x:Name="textBlock3" HorizontalAlignment="Center"  Text="Device is not connected" VerticalAlignment="Center" FontSize="21.333" />
-
+     
     </Grid>
+
+  
 </Page>

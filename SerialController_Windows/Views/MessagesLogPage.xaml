@@ -9,7 +9,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid Margin="30,0,30,20">
+        <Grid Margin="30,0,30,20" x:Name="Panel1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="10"/>
@@ -40,7 +40,7 @@
             <ScrollViewer Grid.Row="2" x:Name="scrollViewer1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto" HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto">
 
 
-                <Grid x:Name="Panel1" >
+                <Grid  >
                     <ListView x:Name ="listView1"  FontSize ="16" SelectionMode ="Single"  BorderThickness="3,0,0,0" BorderBrush="#FFCBCBCB" Background="White">
                         <ListView.ItemContainerTransitions>
                             <TransitionCollection>

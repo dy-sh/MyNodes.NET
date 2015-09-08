@@ -36,21 +36,27 @@ namespace SerialController_Windows.Views
             App.serialController.OnNewNodeEvent += AddNode;
             App.serialController.OnNodeUpdatedEvent += UpdateNode;
             App.serialController.OnSensorUpdatedEvent += UpdateSensor;
+            App.serialController.OnClearNodesList += OnClearNodesList;
 
 
             if (App.serialController.IsConnected())
             {
                 textBlock3.Visibility = Visibility.Collapsed;
-                itemsControl1.Visibility = Visibility.Visible;
+                panel1.Visibility = Visibility.Visible;
                 ShowNodes();
             }
             else
             {
                 textBlock3.Text = "Device is not connected";
                 textBlock3.Visibility = Visibility.Visible;
-                itemsControl1.Visibility = Visibility.Collapsed;
+                panel1.Visibility = Visibility.Collapsed;
             }
 
+        }
+
+        private void OnClearNodesList(object sender, EventArgs e)
+        {
+            ShowNodes();
         }
 
 
@@ -428,6 +434,62 @@ namespace SerialController_Windows.Views
 
 
             App.serialController.SendSensorState(nodeId, sensorId, data);
+        }
+
+        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            App.serialController.ResetAllNodes();
+        }
+
+        private async void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var dialog = new ContentDialog()
+            {
+                Title = "Delete nodes",
+                //RequestedTheme = ElementTheme.Dark,
+                //FullSizeDesired = true,
+                MaxWidth = this.ActualWidth // Required for Mobile!
+            };
+
+            // Setup Content
+            var panel = new StackPanel();
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = "\r\n"
+                +"Deleting nodes from the database will release their ID. "
+                + "After that, you will need to turn on all "
+                +"previously registered nodes to reinitialize the database. "
+                +"If this is not done, any new node will take the ID "
+                + "of the other device, and there is a conflict! \r\n\r\n"
+                + "If there is a conflict, you should: "
+                +"1. Turn off all nodes. "
+                +"2. Delete all nodes from the database. "
+                +"3. Erase EEPROM on conflicty nodes and reflash again firmwares. "
+                +"4. Turn on all non-conflicting nodes. "
+                + "5. Turn on conflicty nodes.\r\n\r\n"
+                + "Again. After deleting nodes from the database, "
+                + "do not run the new nodes (which has not received the ID previously) "
+                + "before turn on all known nodes! ",
+                TextWrapping = TextWrapping.Wrap,
+            });
+
+            dialog.Content = panel;
+
+            // Add Buttons
+            dialog.PrimaryButtonText = "OK";
+            dialog.PrimaryButtonClick += delegate {
+                App.serialController.ClearNodesList();
+            };
+
+            dialog.SecondaryButtonText = "Cancel";
+ 
+
+            // Show Dialog
+            var result = await dialog.ShowAsync();
+
+            
         }
     }
 

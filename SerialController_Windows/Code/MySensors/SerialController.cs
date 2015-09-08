@@ -364,10 +364,15 @@ namespace SerialController_Windows.Code
 
         public void ClearNodesList()
         {
+            nodes.Clear();
+
             if (OnClearNodesList != null)
                 OnClearNodesList(this, null);
+        }
 
-            nodes.Clear();
+        public void ResetAllNodes()
+        {
+            throw new NotImplementedException();
         }
     }
 }

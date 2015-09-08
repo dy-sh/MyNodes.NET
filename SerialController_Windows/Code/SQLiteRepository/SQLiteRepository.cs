@@ -21,7 +21,7 @@ namespace SerialController_Windows.Code
         private int storeTimeInterval = 3000;
 
         //slows down the performance
-        private bool storeLogMessages = false;
+        private bool storeLogMessages = true;
 
 
 
@@ -101,6 +101,8 @@ namespace SerialController_Windows.Code
         public void DropMessages()
         {
             conn.DropTable<Message>();
+
+            conn.CreateTable<Message>();
         }
 
         public void DropNodes()
@@ -108,6 +110,10 @@ namespace SerialController_Windows.Code
             conn.DropTable<Node>();
             conn.DropTable<Sensor>();
             conn.DropTable<SensorData>();
+
+            conn.CreateTable<Node>();
+            conn.CreateTable<Sensor>();
+            conn.CreateTable<SensorData>();
         }
 
 
