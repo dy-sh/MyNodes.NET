@@ -10,12 +10,9 @@ using Windows.UI.Xaml;
 
 namespace SerialController_Windows.Code
 {
-    public delegate void OnMessageRecievedEventHandler(Message message);
-    public delegate void OnMessageSendEventHandler(Message message);
-    public delegate void OnNewNodeEventHandler(Node node);
-    public delegate void OnNodeUpdatedEventHandler(Node node);
-    public delegate void OnNewSensorEventHandler(Sensor sensor);
-    public delegate void OnSensorUpdatedEventHandler(Sensor sensor);
+    public delegate void MessageEventHandler(Message message);
+    public delegate void NodeEventHandler(Node node);
+    public delegate void SensorEventHandler(Sensor sensor);
 
     public class SerialController
     {
@@ -23,12 +20,14 @@ namespace SerialController_Windows.Code
         public bool enableLogging = true;
         public bool enableAutoAssignId = true;
 
-        public event OnMessageRecievedEventHandler OnMessageRecievedEvent;
-        public event OnMessageSendEventHandler OnMessageSendEvent;
-        public event OnNewNodeEventHandler OnNewNodeEvent;
-        public event OnNodeUpdatedEventHandler OnNodeUpdatedEvent;
-        public event OnNewSensorEventHandler OnNewSensorEvent;
-        public event OnSensorUpdatedEventHandler OnSensorUpdatedEvent;
+        public event MessageEventHandler OnMessageRecievedEvent;
+        public event MessageEventHandler OnMessageSendEvent;
+        public event NodeEventHandler OnNewNodeEvent;
+        public event NodeEventHandler OnNodeUpdatedEvent;
+        public event NodeEventHandler OnNodeLastSeenUpdatedEvent;
+        public event NodeEventHandler OnNodeBatteryUpdatedEvent;
+        public event SensorEventHandler OnNewSensorEvent;
+        public event SensorEventHandler OnSensorUpdatedEvent;
         public event EventHandler OnClearNodesList;
 
         public MessagesLog messagesLog = new MessagesLog();
@@ -147,18 +146,19 @@ namespace SerialController_Windows.Code
         {
             Node node = GetNode(mes.nodeId);
 
-            bool isNewNode = false;
-
             if (node == null)
             {
                 node = new Node(mes.nodeId);
                 nodes.Add(node);
-                isNewNode = true;
+
+                if (OnNewNodeEvent != null)
+                    OnNewNodeEvent(node);
             }
-            else
-            {
-                node.UpdateLastSeenNow();
-            }
+
+            node.UpdateLastSeenNow();
+            if (OnNodeLastSeenUpdatedEvent != null)
+                OnNodeLastSeenUpdatedEvent(node);
+
 
             if (mes.sensorId == 255)
             {
@@ -172,33 +172,36 @@ namespace SerialController_Windows.Code
                     {
                         node.isRepeatingNode = true;
                     }
+
+
+                    if (OnNodeUpdatedEvent != null)
+                        OnNodeUpdatedEvent(node);
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
                     if (mes.subType == (int)InternalDataType.I_SKETCH_NAME)
                     {
                         node.name = mes.payload;
+
+                        if (OnNodeUpdatedEvent != null)
+                            OnNodeUpdatedEvent(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
                         node.version = mes.payload;
+
+                        if (OnNodeUpdatedEvent != null)
+                            OnNodeUpdatedEvent(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
                         node.batteryLevel = Int32.Parse(mes.payload);
+                        if (OnNodeBatteryUpdatedEvent != null)
+                            OnNodeBatteryUpdatedEvent(node);
+                        return;
                     }
                 }
             }
-
-
-
-
-            if (isNewNode && OnNewNodeEvent != null)
-                OnNewNodeEvent(node);
-            else
-            if (OnNodeUpdatedEvent != null)
-                OnNodeUpdatedEvent(node);
-
 
         }
 

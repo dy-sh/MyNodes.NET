@@ -36,14 +36,22 @@ namespace SerialController_Windows.Views
 
         private DispatcherTimer refrashTimer;
 
+        List<SymbolIcon> activityIcons = new List<SymbolIcon>();
+        List<TextBlock> batteryPanels = new List<TextBlock>();
+        List<StackPanel> nodePanels = new List<StackPanel>();
+        List<StackPanel> sensorPanels = new List<StackPanel>();
+
+
 
         public NodesControlPage()
         {
             this.InitializeComponent();
 
             App.serialController.OnNewNodeEvent += AddNode;
+            App.serialController.OnNewSensorEvent += AddSensor;
             App.serialController.OnNodeUpdatedEvent += UpdateNode;
             App.serialController.OnSensorUpdatedEvent += UpdateSensor;
+            App.serialController.OnNodeBatteryUpdatedEvent += UpdateBattery;
             App.serialController.OnClearNodesList += OnClearNodesList;
 
 
@@ -51,7 +59,7 @@ namespace SerialController_Windows.Views
             {
                 textBlock3.Visibility = Visibility.Collapsed;
                 panel1.Visibility = Visibility.Visible;
-                ShowNodes();
+                RedrawAllNodes();
             }
             else
             {
@@ -67,6 +75,37 @@ namespace SerialController_Windows.Views
 
         }
 
+        private void AddSensor(Sensor sensor)
+        {
+            StackPanel oldPanel = GetSensorPanel(sensor.ownerNodeId,sensor.sensorId);
+            if (oldPanel != null)
+                sensorPanels.Remove(oldPanel);
+
+            StackPanel nodePanel = GetNodePanel(sensor.ownerNodeId);
+            StackPanel sensorPanel = CreateSensorPanel(sensor);
+            nodePanel.Children.Add(sensorPanel);
+            sensorPanels.Add(sensorPanel);
+        }
+
+        private void UpdateBattery(Node node)
+        {
+            TextBlock text = GetBatteryPanel(node.nodeId);
+            if (text == null)
+            {
+                TextBlock oldPanel = GetBatteryPanel(node.nodeId);
+                if (oldPanel != null)
+                    batteryPanels.Remove(oldPanel);
+
+                text = CreateBatteryPanel(node);
+                StackPanel nodePanel = GetNodePanel(node.nodeId);
+                nodePanel.Children.Add(text);
+                batteryPanels.Add(text);
+            }
+
+            text.Text = "Battery " + node.batteryLevel.Value;
+        }
+
+
         private void RefrashTimer(object sender, object e)
         {
             foreach (var button in activityIcons)
@@ -76,31 +115,48 @@ namespace SerialController_Windows.Views
                 float lastSeen = (float)DateTime.Now.Subtract(node.lastSeen).TotalSeconds;
                 if (lastSeen < 1)
                 {
-                    int color = (int)MathUtils.Map(lastSeen, 0, 1,50, 220);
+                    int color = (int)MathUtils.Map(lastSeen, 0, 1, 50, 220);
                     button.Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)color, (byte)color, (byte)color));
                 }
+                else button.Foreground = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
+
             }
         }
 
         private void OnClearNodesList(object sender, EventArgs e)
         {
-            ShowNodes();
+
+            RedrawAllNodes();
         }
 
 
-        private StackPanel CreateNode(Node node)
+        private StackPanel CreateNodePanel(Node node)
         {
-            StackPanel nodePanel = new StackPanel();
-            nodePanel.MinWidth = 200;
-            nodePanel.Orientation = Orientation.Vertical;
-            nodePanel.Margin = new Thickness(10);
-            nodePanel.BorderThickness = new Thickness(1);
-            nodePanel.BorderBrush = new SolidColorBrush(Colors.Black);
-            //          nodePanel.Background = new SolidColorBrush(Colors.Gray);
+            StackPanel nodePanel = new StackPanel
+            {
+                MinWidth = 200,
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(10),
+                BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                Tag = node.nodeId
+            };
 
-            StackPanel titlePanel = new StackPanel();
-            titlePanel.Background = new SolidColorBrush(Colors.Gainsboro);
-            titlePanel.Height = 30;
+            UpdateNodePanel(node, nodePanel);
+
+            return nodePanel;
+
+        }
+
+        private void UpdateNodePanel(Node node, StackPanel nodePanel)
+        {
+            nodePanel.Children.Clear();
+
+            StackPanel titlePanel = new StackPanel()
+            {
+                Background = new SolidColorBrush(Colors.Gainsboro),
+                Height = 30
+            };
 
             Grid titleGrid = CreateNodeTitle(node);
             titlePanel.Children.Add(titleGrid);
@@ -110,22 +166,41 @@ namespace SerialController_Windows.Views
             if (node.name != null)
                 nodePanel.Children.Add(new TextBlock { Text = node.name, Margin = new Thickness(5) });
 
-
-
             foreach (Sensor sensor in node.sensors)
             {
-                StackPanel sensorPanel = CreateSensor(sensor);
+                StackPanel oldPanel = GetSensorPanel(node.nodeId, sensor.sensorId);
+                if (oldPanel != null)
+                    sensorPanels.Remove(oldPanel);
+
+                StackPanel sensorPanel = CreateSensorPanel(sensor);
                 nodePanel.Children.Add(sensorPanel);
+                sensorPanels.Add(sensorPanel);
             }
 
             if (node.batteryLevel != null)
-                nodePanel.Children.Add(new TextBlock { Text = "Battery " + node.batteryLevel.Value, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gray) });
+            {
+                TextBlock oldPanel = GetBatteryPanel(node.nodeId);
+                if (oldPanel != null)
+                    batteryPanels.Remove(oldPanel);
 
-            return nodePanel;
-
+                TextBlock text = CreateBatteryPanel(node);
+                nodePanel.Children.Add(text);
+                batteryPanels.Add(text);
+            }
         }
 
-        List<SymbolIcon> activityIcons = new List<SymbolIcon>();
+        private TextBlock CreateBatteryPanel(Node node)
+        {
+            TextBlock text = new TextBlock
+            {
+                Text = "Battery " + node.batteryLevel.Value,
+                Margin = new Thickness(5),
+                Foreground = new SolidColorBrush(Colors.Gray),
+                Tag = node.nodeId
+            };
+            return text;
+        }
+
         private Grid CreateNodeTitle(Node node)
         {
             Grid grid = new Grid
@@ -140,7 +215,7 @@ namespace SerialController_Windows.Views
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(5),
-                Foreground = new SolidColorBrush(Color.FromArgb(255,220,220,220)),
+                Foreground = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220)),
                 Tag = node.nodeId
             };
             activityIcons.Add(activityIcon);
@@ -221,17 +296,26 @@ namespace SerialController_Windows.Views
         }
 
 
-        private StackPanel CreateSensor(Sensor sensor)
+        private StackPanel CreateSensorPanel(Sensor sensor)
         {
-            StackPanel sensorPanel = new StackPanel();
+            StackPanel sensorPanel = new StackPanel()
+            {
 
-            sensorPanel.Orientation = Orientation.Vertical;
-            sensorPanel.Margin = new Thickness(5);
-            sensorPanel.BorderThickness = new Thickness(1);
-            sensorPanel.BorderBrush = new SolidColorBrush(Colors.Black);
-            //        sensorPanel.Background = new SolidColorBrush(Colors.Gray);
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(5),
+                BorderThickness = new Thickness(1),
+                BorderBrush = new SolidColorBrush(Colors.Black),
+                Tag = String.Format("{0};{1}", sensor.ownerNodeId, sensor.sensorId)
+            };
 
+            UpdateSensorPanel(sensor, sensorPanel);
 
+            return sensorPanel;
+        }
+
+        private void UpdateSensorPanel(Sensor sensor, StackPanel sensorPanel)
+        {
+            sensorPanel.Children.Clear();
 
             string sType = MySensors.GetSimpleSensorType(sensor.GetSensorType());
 
@@ -240,17 +324,33 @@ namespace SerialController_Windows.Views
 
             sensorPanel.Children.Add(new TextBlock { Text = sType, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gray) });
 
-
-
             foreach (SensorData data in sensor.sensorData)
             {
                 StackPanel dataPanel = CreateSensorData(data, sensor);
                 sensorPanel.Children.Add(dataPanel);
             }
-            return sensorPanel;
         }
 
+        private StackPanel GetSensorPanel(int nodeId, int sensorId)
+        {
+            string tag = String.Format("{0};{1}", nodeId, sensorId);
+            StackPanel panel = sensorPanels.FirstOrDefault(x => (string)x.Tag == tag);
+            return panel;
 
+        }
+
+        private StackPanel GetNodePanel(int nodeId)
+        {
+            StackPanel panel = nodePanels.FirstOrDefault(x => (int)x.Tag == nodeId);
+            return panel;
+
+        }
+
+        private TextBlock GetBatteryPanel(int nodeId)
+        {
+            TextBlock panel = batteryPanels.FirstOrDefault(x => (int)x.Tag == nodeId);
+            return panel;
+        }
 
 
         private StackPanel CreateSensorData(SensorData data, Sensor sensor)
@@ -448,14 +548,17 @@ namespace SerialController_Windows.Views
         }
 
 
-        private void ShowNodes()
+        private void RedrawAllNodes()
         {
             itemsControl1.Items.Clear();
             activityIcons.Clear();
+            nodePanels.Clear();
+            sensorPanels.Clear();
+            batteryPanels.Clear();
 
-            List<Node> nodes = App.serialController.GetNodes();
+            List<Node> nodesList = App.serialController.GetNodes();
 
-            foreach (var node in nodes)
+            foreach (var node in nodesList)
             {
                 AddNode(node);
             }
@@ -464,26 +567,32 @@ namespace SerialController_Windows.Views
 
         private void AddNode(Node node)
         {
-            StackPanel nodePanel = CreateNode(node);
+            StackPanel oldPanel = GetNodePanel(node.nodeId);
+            if (oldPanel != null)
+                nodePanels.Remove(oldPanel);
 
+            StackPanel nodePanel = CreateNodePanel(node);
             itemsControl1.Items.Add(nodePanel);
-
-
+            nodePanels.Add(nodePanel);
         }
 
         private void UpdateNode(Node node)
         {
-            ShowNodes();
+            StackPanel panel = GetNodePanel(node.nodeId);
+            UpdateNodePanel(node, panel);
         }
 
-        private void UpdateSensor(Sensor node)
+
+
+        private void UpdateSensor(Sensor sensor)
         {
             //prevent slidres update when drug
-            if (node.NodeId == lastSendedNodeId
-                && node.sensorId == lastSendedSensorId)
+            if (sensor.ownerNodeId == lastSendedNodeId
+                && sensor.sensorId == lastSendedSensorId)
                 return;
 
-            ShowNodes();
+            StackPanel panel = GetSensorPanel(sensor.ownerNodeId, sensor.sensorId);
+            UpdateSensorPanel(sensor, panel);
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
