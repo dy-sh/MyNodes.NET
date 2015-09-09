@@ -62,10 +62,6 @@ namespace SerialController_Windows
         {
             listView1.Items.Add(node.ToString());
 
-            scrollViewer1.UpdateLayout();
-
-            scrollViewer1.ChangeView(0.0f, double.MaxValue, 1.0f);
-            // scrollViewer1.ScrollToVerticalOffset(scrollViewer1.ScrollableHeight);
         }
 
         private void UpdateNode(Node node)

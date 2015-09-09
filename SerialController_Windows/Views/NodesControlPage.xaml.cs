@@ -34,6 +34,9 @@ namespace SerialController_Windows.Views
         private int lastSendedNodeId;
         private int lastSendedSensorId;
 
+        private DispatcherTimer refrashTimer;
+
+
         public NodesControlPage()
         {
             this.InitializeComponent();
@@ -57,6 +60,16 @@ namespace SerialController_Windows.Views
                 panel1.Visibility = Visibility.Collapsed;
             }
 
+            refrashTimer = new DispatcherTimer();
+            refrashTimer.Interval = TimeSpan.FromMilliseconds(100);
+            refrashTimer.Tick += RefrashTimer;
+            refrashTimer.Start();
+
+        }
+
+        private void RefrashTimer(object sender, object e)
+        {
+            ShowNodes();
         }
 
         private void OnClearNodesList(object sender, EventArgs e)
@@ -102,7 +115,7 @@ namespace SerialController_Windows.Views
 
         }
 
-
+        List<Button> titleButtons = new List<Button>();
         private Grid CreateNodeTitle(Node node)
         {
             Button button = new Button
@@ -117,17 +130,28 @@ namespace SerialController_Windows.Views
 
             button.Tag = node.nodeId;
             button.Click += buttonNodeMenu_Click;
-           /*
-            MenuFlyout menu = new MenuFlyout();
-            MenuFlyoutItem item1 = new MenuFlyoutItem {Text = "Reboot Node"};
-            item1.Click += buttonNodeMenu_Click;
-            menu.Items.Add(item1);
-            menu.Items[0].Tag = node.nodeId;
 
-            menu.Items.Add(new MenuFlyoutItem { Text = "Delete Node" });
-            MenuFlyoutItem n=new MenuFlyoutItem();
-            button.Flyout = menu;
-            */
+    
+            float lastSeen = (float)DateTime.Now.Subtract(node.lastSeen).TotalSeconds;
+            if (lastSeen < 5)
+            {
+                int color = 255-(int)MathUtils.Map(lastSeen, 0, 5, 0, 255);
+                button.Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)color, 0, 0));
+            }
+
+            titleButtons.Add(button);
+
+            /*
+             MenuFlyout menu = new MenuFlyout();
+             MenuFlyoutItem item1 = new MenuFlyoutItem {Text = "Reboot Node"};
+             item1.Click += buttonNodeMenu_Click;
+             menu.Items.Add(item1);
+             menu.Items[0].Tag = node.nodeId;
+
+             menu.Items.Add(new MenuFlyoutItem { Text = "Delete Node" });
+             MenuFlyoutItem n=new MenuFlyoutItem();
+             button.Flyout = menu;
+             */
 
             Grid grid = new Grid
             {
@@ -139,8 +163,10 @@ namespace SerialController_Windows.Views
             {
                 Text = "Node " + node.nodeId,
                 Margin = new Thickness(5),
-                FontWeight = FontWeights.SemiBold
+                FontWeight = FontWeights.SemiBold,
             });
+
+
             grid.Children.Add(button);
 
 
@@ -406,6 +432,7 @@ namespace SerialController_Windows.Views
         private void ShowNodes()
         {
             itemsControl1.Items.Clear();
+            titleButtons.Clear();
 
             List<Node> nodes = App.serialController.GetNodes();
 

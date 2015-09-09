@@ -153,6 +153,11 @@ namespace SerialController_Windows.Code
         {
 
             List<Node> list = conn.GetAllWithChildren<Node>(null, true);
+            foreach (var node in list)
+            {
+                node.registered = node.registered.ToLocalTime();
+                node.lastSeen = node.lastSeen.ToLocalTime();
+            }
             return list;
         }
 

@@ -96,6 +96,7 @@ namespace SerialController_Windows
 
         private void AddMessageEvent(Message message)
         {
+
             UpdateCombos();
 
             if (filterNodeId != null
@@ -115,6 +116,12 @@ namespace SerialController_Windows
 
             scrollViewer1.UpdateLayout();
             scrollViewer1.ChangeView(0.0f, double.MaxValue, 1.0f);
+
+            if (listView1.Items.Count > App.serialController.messagesLog.maxMessaages + 100)
+            {
+                foreach (var item in listView1.Items.Take(100))
+                    listView1.Items.Remove(item);
+            }
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)

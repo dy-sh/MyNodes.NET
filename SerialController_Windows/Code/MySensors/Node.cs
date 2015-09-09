@@ -17,7 +17,7 @@ namespace SerialController_Windows.Code
 
 
         public int nodeId { get; set; }
-        public DateTime firstSeen { get; set; }
+        public DateTime registered { get; set; }
         public DateTime lastSeen { get; set; }
         public bool? isRepeatingNode { get; set; }
         public string name { get; set; }
@@ -37,7 +37,7 @@ namespace SerialController_Windows.Code
         public Node(int nodeId)
         {
             this.nodeId = nodeId;
-            firstSeen = DateTime.Now;
+            registered = DateTime.Now;
             lastSeen = DateTime.Now;
             sensors=new List<Sensor>();
         }
@@ -58,7 +58,7 @@ namespace SerialController_Windows.Code
             if (!String.IsNullOrEmpty(version))
                 s += String.Format("Version: {0}\r\n", version);
 
-            s += String.Format("First seen {0}\r\n", firstSeen);
+            s += String.Format("Registered {0}\r\n", registered);
             s += String.Format("Last seen {0}\r\n", lastSeen);
 
             if (isRepeatingNode == null)

@@ -94,7 +94,7 @@ namespace SerialController_Windows.Views
             if (node.version != null)
                 nodePanel.Children.Add(new TextBlock { Text = "Version: " + node.version, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
-            nodePanel.Children.Add(new TextBlock { Text = "First seen: " + node.firstSeen, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
+            nodePanel.Children.Add(new TextBlock { Text = "Registered: " + node.registered, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });
 
             string lastSeenAgo = string.Format("{0:hh\\:mm\\:ss}",  DateTime.Now.Subtract(node.lastSeen));
             nodePanel.Children.Add(new TextBlock { Text = "Last seen: " + lastSeenAgo+" ago", Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gainsboro) });

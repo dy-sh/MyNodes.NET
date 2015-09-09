@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Store.Preview;
 
 namespace SerialController_Windows.Code
 {
@@ -10,6 +11,9 @@ namespace SerialController_Windows.Code
 
     public class MessagesLog
     {
+        //store last N messages
+        public int maxMessaages=100;
+
         private List<Message> messages = new List<Message>();
 
         public event OnNewMessageLoggedEventHandler OnNewMessageLogged;
@@ -31,6 +35,9 @@ namespace SerialController_Windows.Code
 
         public void AddNewMessage(Message message)
         {
+            if (messages.Count >= maxMessaages)
+                messages.Remove(messages.First());
+
             messages.Add(message);
 
             if (OnNewMessageLogged != null)
