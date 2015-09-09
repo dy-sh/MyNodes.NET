@@ -50,31 +50,13 @@ namespace SerialController_Windows
                     Label = "Nodes View",
                     DestPage = typeof(NodesViewPage)
                 },
-                 new NavMenuItem()
+   /*              new NavMenuItem()
                 {
                     Symbol = Symbol.Library,
                     Label = "Nodes List",
                     DestPage = typeof(NodesListPage)
                 },
-   /*             new NavMenuItem()
-                {
-                    Symbol = Symbol.Stop,
-                    Label = "RGB Basic",
-                    DestPage = typeof(RGBLightPage)
-                },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Admin,
-                    Label = "RGB Advanced",
-                    DestPage = typeof(RGBLightAdvancedPage)
-                },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.MapDrive,
-                    Label = "RGB Remote",
-                    DestPage = typeof(RGBRemotePage)
-                },
-     */           new NavMenuItem()
+      */          new NavMenuItem()
                 {
                     Symbol = Symbol.Message,
                     Label = "Messages Log",

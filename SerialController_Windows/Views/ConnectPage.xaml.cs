@@ -135,7 +135,7 @@ namespace SerialController_Windows
         private async void ConnectToLast()
         {
             return;
-            //todo Tempoprary Implementation
+            //todo connect to last device
             try
             {
 

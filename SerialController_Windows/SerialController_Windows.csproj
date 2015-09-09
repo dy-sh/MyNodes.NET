@@ -129,23 +129,12 @@
     <Compile Include="Views\NodesViewPage.xaml.cs">
       <DependentUpon>NodesViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RGBLightAdvancedPage.xaml.cs">
-      <DependentUpon>RGBLightAdvancedPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RGBRemotePage.xaml.cs">
-      <DependentUpon>RGBRemotePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\Light Controller\RemoteColorClient.cs" />
     <Compile Include="Views\ConnectPage.xaml.cs">
       <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RGBLightPage.xaml.cs">
-      <DependentUpon>RGBLightPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Code\Light Controller\LedStripController.cs" />
     <Compile Include="Code\Utils\MathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\Utils\RGBColors.cs" />
@@ -204,21 +193,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RGBLightAdvancedPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RGBRemotePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ConnectPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RGBLightPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

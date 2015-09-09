@@ -43,6 +43,8 @@ namespace SerialController_Windows.Views
         List<StackPanel> nodePanels = new List<StackPanel>();
         List<StackPanel> sensorPanels = new List<StackPanel>();
 
+        //Queue list of sensors to sending
+        List<Sensor> sendSensorsList = new List<Sensor>();
 
 
         public NodesControlPage()
@@ -134,7 +136,7 @@ namespace SerialController_Windows.Views
 
         private void OnClearNodesList(object sender, EventArgs e)
         {
-
+            sendSensorsList.Clear();
             RedrawAllNodes();
         }
 
@@ -230,7 +232,7 @@ namespace SerialController_Windows.Views
             activityIcons.Add(activityIcon);
             grid.Children.Add(activityIcon);
 
-            Button button = new Button
+     /*       Button button = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -242,7 +244,7 @@ namespace SerialController_Windows.Views
 
             button.Tag = node.nodeId;
             button.Click += buttonNodeMenu_Click;
-
+*/
 
 
 
@@ -270,7 +272,7 @@ namespace SerialController_Windows.Views
             });
 
 
-            grid.Children.Add(button);
+          //  grid.Children.Add(button);
 
 
             return grid;
@@ -454,6 +456,20 @@ namespace SerialController_Windows.Views
                 dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
+            //IR Send
+            else if (data.dataType == SensorDataType.V_IR_SEND)
+            {
+                StackPanel textEdit = CreateTextBox(sensor, data);
+                dataPanel.Children.Add(textEdit);
+            }
+
+            //IR Received
+            else if (data.dataType == SensorDataType.V_IR_RECEIVE)
+            {
+                string s = String.Format("Received: {0}", data.state);
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
+            }
+
             //SIMPLE TEXT
             else
             {
@@ -465,21 +481,92 @@ namespace SerialController_Windows.Views
             return dataPanel;
         }
 
+        private StackPanel CreateTextBox(Sensor sensor, SensorData data)
+        {
+            StackPanel textBoxGrid = new StackPanel();
+
+            TextBox box = new TextBox()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(5,0, 5,0)
+            };
+
+            box.TextChanged += textBoxChanged;
+            box.Tag = String.Format("{0};{1};{2}",
+                sensor.ownerNodeId,
+                sensor.sensorId,
+                data.dataType.ToString());
+
+            Button button = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(5),
+                Content = "Send"
+            };
+
+            button.Tag = String.Format("{0};{1};{2}",
+                sensor.ownerNodeId,
+                sensor.sensorId,
+                data.dataType.ToString());
+            button.Click += textBoxClick;
+
+
+
+            textBoxGrid.Children.Add(box);
+            textBoxGrid.Children.Add(button);
+
+            return textBoxGrid;
+        }
+
+        private void textBoxClick(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            string tag = button.Tag.ToString();
+            string[] args = tag.Split(';');
+            int nodeId = Int32.Parse(args[0]);
+            int sensorId = Int32.Parse(args[1]);
+            SensorDataType dataType;
+            SensorDataType.TryParse(args[2], true, out dataType);
+
+            Node node = App.serialController.GetNode(nodeId);
+            Sensor sensor = node.GetSensor(sensorId);
+            SensorData data = sensor.GetData(dataType);
+
+            SendSensorState(nodeId, sensorId, data);
+        }
+
+        private void textBoxChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+            string tag = box.Tag.ToString();
+            string[] args = tag.Split(';');
+            int nodeId = Int32.Parse(args[0]);
+            int sensorId = Int32.Parse(args[1]);
+            SensorDataType dataType;
+            SensorDataType.TryParse(args[2], true, out dataType);
+            string state = box.Text;
+
+            Node node = App.serialController.GetNode(nodeId);
+            Sensor sensor = node.GetSensor(sensorId);
+            sensor.AddOrUpdateData(dataType, state);
+        }
+
         private ToggleButton CreateButton(Sensor sensor, SensorData data)
         {
-            ToggleButton button = new ToggleButton();
+            ToggleButton button = new ToggleButton
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Margin = new Thickness(5),
+               
+            };
             button.Tag = String.Format("{0};{1};{2}",
                 sensor.ownerNodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
-            button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.Margin = new Thickness(5);
-
             button.Click += button_Click;
-            button.IsChecked = data.state == "1";
-
             button.Content = (button.IsChecked.Value) ? "ON" : "OFF";
+            button.IsChecked = data.state == "1";
 
             return button;
         }
@@ -742,8 +829,7 @@ namespace SerialController_Windows.Views
         }
 
 
-        //Queue list of sensors to sending
-        List<Sensor> sendSensorsList = new List<Sensor>();
+
 
         private void DelayedSendSensorState(int nodeId, int sensorId, SensorData data)
         {
@@ -752,12 +838,12 @@ namespace SerialController_Windows.Views
                 .FirstOrDefault(x => x.sensorId == sensorId);
             if (sensor == null)
             {
-                sensor = new Sensor {sensorId = sensorId, ownerNodeId = nodeId};
+                sensor = new Sensor { sensorId = sensorId, ownerNodeId = nodeId };
                 sendSensorsList.Add(sensor);
             }
 
             sensor.AddOrUpdateData(data);
-            
+
         }
 
         private void SendSensorState(int nodeId, int sensorId, SensorData data)
@@ -775,7 +861,7 @@ namespace SerialController_Windows.Views
                 return;
 
             //for prevent update from another thread
-            Sensor[] sendSensors=new Sensor[sendSensorsList.Count];
+            Sensor[] sendSensors = new Sensor[sendSensorsList.Count];
             sendSensorsList.CopyTo(sendSensors);
             sendSensorsList.Clear();
 

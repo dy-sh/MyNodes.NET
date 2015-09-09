@@ -144,6 +144,7 @@ namespace SerialController_Windows.Code
                 case SensorType.S_LOCK:
                     break;
                 case SensorType.S_IR:
+                    AddOrUpdateData(SensorDataType.V_IR_SEND, "");
                     break;
                 case SensorType.S_WATER:
                     break;

@@ -30,8 +30,6 @@ namespace SerialController_Windows
     {
 
         public static SerialPort serialPort;
-        public static LedStripController ledStripController;
-        public static RemoteColorClient remoteColorClient;
         public static SerialController serialController;
         public SQLiteRepository db;
 

@@ -42,8 +42,8 @@ void setup()
 	debouncer2.interval(50);
 
 
-	gw.present(BUTTON1_ID, S_DOOR);
-	gw.present(BUTTON2_ID, S_DOOR, "Button2");
+	gw.present(BUTTON1_ID, S_DOOR, "Button 1");
+	gw.present(BUTTON2_ID, S_DOOR, "Button 2");
 
 	gw.present(LED1_ID, S_DIMMER);
 	gw.request(LED1_ID, V_DIMMER);
@@ -73,10 +73,10 @@ void loop()
 	//	val = !val;
 	//	gw.send(msg2.set(val));
 
-	if (millis() - batteryTimer > 500) {
+	if (millis() - batteryTimer > 2000) {
 		battery--;
 		if (battery < 0) battery = 0;
-//		gw.sendBatteryLevel((int)battery);
+		gw.sendBatteryLevel((int)battery);
 		batteryTimer = millis();
 	}
 
