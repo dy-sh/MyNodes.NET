@@ -61,7 +61,7 @@ namespace SerialController_Windows.Views
             }
 
             refrashTimer = new DispatcherTimer();
-            refrashTimer.Interval = TimeSpan.FromMilliseconds(100);
+            refrashTimer.Interval = TimeSpan.FromMilliseconds(50);
             refrashTimer.Tick += RefrashTimer;
             refrashTimer.Start();
 
@@ -69,7 +69,17 @@ namespace SerialController_Windows.Views
 
         private void RefrashTimer(object sender, object e)
         {
-            ShowNodes();
+            foreach (var button in activityIcons)
+            {
+                int nodeId = (int)button.Tag;
+                Node node = App.serialController.GetNode(nodeId);
+                float lastSeen = (float)DateTime.Now.Subtract(node.lastSeen).TotalSeconds;
+                if (lastSeen < 1)
+                {
+                    int color = (int)MathUtils.Map(lastSeen, 0, 1,50, 220);
+                    button.Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)color, (byte)color, (byte)color));
+                }
+            }
         }
 
         private void OnClearNodesList(object sender, EventArgs e)
@@ -115,9 +125,27 @@ namespace SerialController_Windows.Views
 
         }
 
-        List<Button> titleButtons = new List<Button>();
+        List<SymbolIcon> activityIcons = new List<SymbolIcon>();
         private Grid CreateNodeTitle(Node node)
         {
+            Grid grid = new Grid
+            {
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+            SymbolIcon activityIcon = new SymbolIcon
+            {
+                Symbol = Symbol.Remove,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(5),
+                Foreground = new SolidColorBrush(Color.FromArgb(255,220,220,220)),
+                Tag = node.nodeId
+            };
+            activityIcons.Add(activityIcon);
+            grid.Children.Add(activityIcon);
+
             Button button = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
@@ -131,15 +159,8 @@ namespace SerialController_Windows.Views
             button.Tag = node.nodeId;
             button.Click += buttonNodeMenu_Click;
 
-    
-            float lastSeen = (float)DateTime.Now.Subtract(node.lastSeen).TotalSeconds;
-            if (lastSeen < 5)
-            {
-                int color = 255-(int)MathUtils.Map(lastSeen, 0, 5, 0, 255);
-                button.Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)color, 0, 0));
-            }
 
-            titleButtons.Add(button);
+
 
             /*
              MenuFlyout menu = new MenuFlyout();
@@ -153,17 +174,15 @@ namespace SerialController_Windows.Views
              button.Flyout = menu;
              */
 
-            Grid grid = new Grid
-            {
-                VerticalAlignment = VerticalAlignment.Stretch,
-                HorizontalAlignment = HorizontalAlignment.Stretch
-            };
+
 
             grid.Children.Add(new TextBlock
             {
                 Text = "Node " + node.nodeId,
-                Margin = new Thickness(5),
+                Margin = new Thickness(5, 5, 5, 5),
                 FontWeight = FontWeights.SemiBold,
+                HorizontalAlignment = HorizontalAlignment.Center,
+
             });
 
 
@@ -175,12 +194,12 @@ namespace SerialController_Windows.Views
 
         private async void buttonNodeMenu_Click(object sender, RoutedEventArgs e)
         {
-            int nodeId = (int)((ButtonBase) sender).Tag;
+            int nodeId = (int)((ButtonBase)sender).Tag;
 
 
             var newCoreAppView = CoreApplication.CreateNewView();
             var appView = ApplicationView.GetForCurrentView();
-            await newCoreAppView.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async() =>
+            await newCoreAppView.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
             {
                 var window = Window.Current;
                 var newAppView = ApplicationView.GetForCurrentView();
@@ -432,7 +451,7 @@ namespace SerialController_Windows.Views
         private void ShowNodes()
         {
             itemsControl1.Items.Clear();
-            titleButtons.Clear();
+            activityIcons.Clear();
 
             List<Node> nodes = App.serialController.GetNodes();
 
@@ -460,10 +479,10 @@ namespace SerialController_Windows.Views
         private void UpdateSensor(Sensor node)
         {
             //prevent slidres update when drug
-            if (node.NodeId==lastSendedNodeId 
-                && node.sensorId==lastSendedSensorId)
+            if (node.NodeId == lastSendedNodeId
+                && node.sensorId == lastSendedSensorId)
                 return;
-            
+
             ShowNodes();
         }
 
