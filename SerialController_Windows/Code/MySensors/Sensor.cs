@@ -97,7 +97,7 @@ namespace SerialController_Windows.Code
             {
                 case SensorType.S_DOOR:
                     AddOrUpdateData(SensorDataType.V_TRIPPED, "0");
-                    AddOrUpdateData(SensorDataType.V_ARMED, "0");
+                    //AddOrUpdateData(SensorDataType.V_ARMED, "0");
                     break;
                 case SensorType.S_MOTION:
                     break;
@@ -105,12 +105,12 @@ namespace SerialController_Windows.Code
                     break;
                 case SensorType.S_LIGHT:
                     AddOrUpdateData(SensorDataType.V_STATUS, "0");
-                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_DIMMER:
                     AddOrUpdateData(SensorDataType.V_STATUS, "0");
                     AddOrUpdateData(SensorDataType.V_DIMMER, "0");
-                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_COVER:
                     break;
@@ -153,16 +153,14 @@ namespace SerialController_Windows.Code
                 case SensorType.S_DUST:
                     break;
                 case SensorType.S_SCENE_CONTROLLER:
-                    AddOrUpdateData(SensorDataType.V_SCENE_ON, "0");
-                    AddOrUpdateData(SensorDataType.V_SCENE_OFF, "0");
                     break;
                 case SensorType.S_RGB_LIGHT:
                     AddOrUpdateData(SensorDataType.V_RGB, "000000");
-                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_RGBW_LIGHT:
                     AddOrUpdateData(SensorDataType.V_RGBW, "00000000");
-                    AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SensorType.S_COLOR_SENSOR:
                     break;

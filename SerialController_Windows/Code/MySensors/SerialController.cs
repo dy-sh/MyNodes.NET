@@ -370,9 +370,26 @@ namespace SerialController_Windows.Code
                 OnClearNodesList(this, null);
         }
 
-        public void ResetAllNodes()
+        public async Task SendRebootToAllNodes()
         {
-            throw new NotImplementedException();
+            for (int i = 1; i <= 254; i++)
+            {
+                SendReboot(i);
+                await Task.Delay(10);
+            }
+        }
+
+        public void SendReboot(int nodeId)
+        {
+            Message message = new Message();
+            message.ack = false;
+            message.messageType = MessageType.C_INTERNAL;
+            message.nodeId = nodeId;
+            message.payload = "0";
+            message.sensorId = 0;
+            message.subType = (int)InternalDataType.I_REBOOT;
+            message.isValid = true;
+            SendMessage(message);
         }
     }
 }

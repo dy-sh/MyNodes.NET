@@ -32,7 +32,8 @@ void setup()
 
 void loop()
 {
-	gw.sleep(SLEEP_TIME); //sleep a bit
+	delay(dht.getMinimumSamplingPeriod());
+	
 
 	float temperature = dht.getTemperature();
 	if (isnan(temperature)) {
@@ -59,6 +60,6 @@ void loop()
 		Serial.println(humidity);
 	}
 
-
+	gw.sleep(SLEEP_TIME); //sleep a bit
 }
 

@@ -17,11 +17,11 @@ namespace SerialController_Windows.Code
         //but this greatly slows down the performance.
         //If you set the interval, the state of all sensors will be recorded
         //to base with given interval.
-        //the interval should be large enough (>10000)
+        //the interval should be large enough (>5000 ms)
         private int storeTimeInterval = 3000;
 
         //slows down the performance
-        private bool storeLogMessages = true;
+        private bool storeLogMessages = false;
 
 
 
@@ -34,6 +34,10 @@ namespace SerialController_Windows.Code
         private SerialController serialController;
 
         private DispatcherTimer updateDbTimer;
+
+        //store id-s of updated nodes, to write to db by timer
+        private List<int> updatedNodesId = new List<int>();
+
 
         public SQLiteRepository(SerialController serialController)
         {
@@ -107,6 +111,8 @@ namespace SerialController_Windows.Code
 
         public void DropNodes()
         {
+            updatedNodesId.Clear();
+
             conn.DropTable<Node>();
             conn.DropTable<Sensor>();
             conn.DropTable<SensorData>();
@@ -193,7 +199,6 @@ namespace SerialController_Windows.Code
 
 
 
-        private List<int> updatedNodesId=new List<int>();
 
 
         private void OnNodeUpdated(Node node)

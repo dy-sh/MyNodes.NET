@@ -25,7 +25,7 @@
             </Button.Content>
             <Button.Flyout>
                 <MenuFlyout>
-                    <MenuFlyoutItem Text="Reset all nodes" Click="MenuFlyoutItem_Click"/>
+                    <MenuFlyoutItem Text="Reboot all nodes" Click="MenuFlyoutItem_Click"/>
                     <MenuFlyoutItem Text="Delete all nodes" Click="MenuFlyoutItem_Click_1"/>
                 </MenuFlyout>
             </Button.Flyout>

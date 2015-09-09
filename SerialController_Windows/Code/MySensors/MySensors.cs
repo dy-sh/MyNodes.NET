@@ -171,7 +171,7 @@ namespace SerialController_Windows.Code
                 case SensorType.S_TEMP:
                     return "Temp";
                 case SensorType.S_HUM:
-                    return "Hum";
+                    return "Humidity";
                 case SensorType.S_BARO:
                     return "Baro";
                 case SensorType.S_WIND:

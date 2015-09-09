@@ -113,6 +113,9 @@
     <Compile Include="Controls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NodePage.xaml.cs">
+      <DependentUpon>NodePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NodesControlPage.xaml.cs">
       <DependentUpon>NodesControlPage.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PageHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

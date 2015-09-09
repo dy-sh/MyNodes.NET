@@ -82,7 +82,7 @@ namespace SerialController_Windows
                     return;
                 }
 
-                Frame.Navigate(typeof (MessagesLogPage));
+                Frame.Navigate(typeof (NodesControlPage));
 
             }
             else

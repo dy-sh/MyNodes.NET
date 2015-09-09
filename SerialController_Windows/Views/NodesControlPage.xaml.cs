@@ -5,10 +5,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Text;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,7 +30,9 @@ namespace SerialController_Windows.Views
     /// </summary>
     public sealed partial class NodesControlPage : Page
     {
-
+        //store node id when for which is sending, to prevent slidres update when drug from event
+        private int lastSendedNodeId;
+        private int lastSendedSensorId;
 
         public NodesControlPage()
         {
@@ -72,13 +77,15 @@ namespace SerialController_Windows.Views
 
             StackPanel titlePanel = new StackPanel();
             titlePanel.Background = new SolidColorBrush(Colors.Gainsboro);
-            titlePanel.Height = 40;
-            titlePanel.Children.Add(new TextBlock { Text = "Node " + node.nodeId, Margin = new Thickness(10), FontWeight = FontWeights.SemiBold });
+            titlePanel.Height = 30;
+
+            Grid titleGrid = CreateNodeTitle(node);
+            titlePanel.Children.Add(titleGrid);
 
             nodePanel.Children.Add(titlePanel);
 
             if (node.name != null)
-                nodePanel.Children.Add(new TextBlock { Text = node.name, Margin = new Thickness(10) });
+                nodePanel.Children.Add(new TextBlock { Text = node.name, Margin = new Thickness(5) });
 
 
 
@@ -89,18 +96,92 @@ namespace SerialController_Windows.Views
             }
 
             if (node.batteryLevel != null)
-                nodePanel.Children.Add(new TextBlock { Text = "Battery " + node.batteryLevel.Value, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                nodePanel.Children.Add(new TextBlock { Text = "Battery " + node.batteryLevel.Value, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gray) });
 
             return nodePanel;
 
         }
+
+
+        private Grid CreateNodeTitle(Node node)
+        {
+            Button button = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
+                Content = new SymbolIcon { Symbol = Symbol.More },
+                Height = 30
+                // Margin = new Thickness(5)
+            };
+
+            button.Tag = node.nodeId;
+            button.Click += buttonNodeMenu_Click;
+           /*
+            MenuFlyout menu = new MenuFlyout();
+            MenuFlyoutItem item1 = new MenuFlyoutItem {Text = "Reboot Node"};
+            item1.Click += buttonNodeMenu_Click;
+            menu.Items.Add(item1);
+            menu.Items[0].Tag = node.nodeId;
+
+            menu.Items.Add(new MenuFlyoutItem { Text = "Delete Node" });
+            MenuFlyoutItem n=new MenuFlyoutItem();
+            button.Flyout = menu;
+            */
+
+            Grid grid = new Grid
+            {
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+            grid.Children.Add(new TextBlock
+            {
+                Text = "Node " + node.nodeId,
+                Margin = new Thickness(5),
+                FontWeight = FontWeights.SemiBold
+            });
+            grid.Children.Add(button);
+
+
+            return grid;
+        }
+
+        private async void buttonNodeMenu_Click(object sender, RoutedEventArgs e)
+        {
+            int nodeId = (int)((ButtonBase) sender).Tag;
+
+
+            var newCoreAppView = CoreApplication.CreateNewView();
+            var appView = ApplicationView.GetForCurrentView();
+            await newCoreAppView.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async() =>
+            {
+                var window = Window.Current;
+                var newAppView = ApplicationView.GetForCurrentView();
+
+#if WINDOWS_UAP
+                newAppView.SetPreferredMinSize(new Windows.Foundation.Size(400, 300));
+#endif
+                var frame = new Frame();
+                window.Content = frame;
+                frame.Navigate(typeof(NodePage), nodeId);
+                window.Activate();
+
+                await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newAppView.Id, ViewSizePreference.UseMore, appView.Id, ViewSizePreference.Default);
+
+#if WINDOWS_UAP
+                var success = newAppView.TryResizeView(new Windows.Foundation.Size(400, 400));
+#endif
+            });
+        }
+
 
         private StackPanel CreateSensor(Sensor sensor)
         {
             StackPanel sensorPanel = new StackPanel();
 
             sensorPanel.Orientation = Orientation.Vertical;
-            sensorPanel.Margin = new Thickness(10);
+            sensorPanel.Margin = new Thickness(5);
             sensorPanel.BorderThickness = new Thickness(1);
             sensorPanel.BorderBrush = new SolidColorBrush(Colors.Black);
             //        sensorPanel.Background = new SolidColorBrush(Colors.Gray);
@@ -110,9 +191,9 @@ namespace SerialController_Windows.Views
             string sType = MySensors.GetSimpleSensorType(sensor.GetSensorType());
 
             if (sensor.description != null)
-                sType = String.Format("{0} [{1}]", sType, sensor.description);
+                sType = String.Format("{0} {1}", sType, sensor.description);
 
-            sensorPanel.Children.Add(new TextBlock { Text = sType, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+            sensorPanel.Children.Add(new TextBlock { Text = sType, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Gray) });
 
 
 
@@ -148,7 +229,7 @@ namespace SerialController_Windows.Views
                 Slider slider = CreateSlider(sensor, data);
                 dataPanel.Children.Add(slider);
             }
-             
+
             //RGB/RGBW SLIDERS
             else if (data.dataType == SensorDataType.V_RGB)
             {
@@ -167,63 +248,63 @@ namespace SerialController_Windows.Views
             else if (data.dataType == SensorDataType.V_HUM)
             {
                 string s = String.Format("{0} %", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //TEMPERATURE
             else if (data.dataType == SensorDataType.V_TEMP)
             {
                 string s = String.Format("{0} C", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //WATT
             else if (data.dataType == SensorDataType.V_WATT)
             {
                 string s = String.Format("{0} Watt", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //KWH
             else if (data.dataType == SensorDataType.V_KWH)
             {
                 string s = String.Format("{0} KWH", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //Volt
             else if (data.dataType == SensorDataType.V_VOLTAGE)
             {
                 string s = String.Format("{0} V", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //Current
             else if (data.dataType == SensorDataType.V_CURRENT)
             {
                 string s = String.Format("{0} ma", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //Armed/Bypassed
             else if (data.dataType == SensorDataType.V_ARMED)
             {
                 string s = data.state == "1" ? "Armed" : "Bypassed";
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
-           }
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
+            }
 
             //Locked/Unlocked
             else if (data.dataType == SensorDataType.V_LOCK_STATUS)
             {
                 string s = data.state == "1" ? "Locked" : "Unlocked";
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
             }
 
             //SIMPLE TEXT
             else
             {
                 string s = String.Format("{0}", data.state);
-                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(10), Foreground = new SolidColorBrush(Colors.Gray) });
+                dataPanel.Children.Add(new TextBlock { Text = s, Margin = new Thickness(5), Foreground = new SolidColorBrush(Colors.Black) });
 
             }
 
@@ -239,7 +320,7 @@ namespace SerialController_Windows.Views
                 data.dataType.ToString());
 
             button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.Margin = new Thickness(10);
+            button.Margin = new Thickness(5);
 
             button.Click += button_Click;
             button.IsChecked = data.state == "1";
@@ -258,7 +339,7 @@ namespace SerialController_Windows.Views
                 data.dataType.ToString());
 
             slider.HorizontalAlignment = HorizontalAlignment.Stretch;
-            slider.Margin = new Thickness(10, 0, 10, 0);
+            slider.Margin = new Thickness(5, 0, 5, 0);
 
             slider.Maximum = 100;
             slider.Value = Int32.Parse(data.state);
@@ -283,7 +364,7 @@ namespace SerialController_Windows.Views
                     i);
 
                 slider.HorizontalAlignment = HorizontalAlignment.Stretch;
-                slider.Margin = new Thickness(10, 0, 10, 0);
+                slider.Margin = new Thickness(5, 0, 5, 0);
 
                 slider.Maximum = 255;
                 slider.Value = rgb[i];
@@ -310,7 +391,7 @@ namespace SerialController_Windows.Views
                     i);
 
                 slider.HorizontalAlignment = HorizontalAlignment.Stretch;
-                slider.Margin = new Thickness(10, 0, 10, 0);
+                slider.Margin = new Thickness(5, 0, 5, 0);
 
                 slider.Maximum = 255;
                 slider.Value = rgbw[i];
@@ -351,6 +432,11 @@ namespace SerialController_Windows.Views
 
         private void UpdateSensor(Sensor node)
         {
+            //prevent slidres update when drug
+            if (node.NodeId==lastSendedNodeId 
+                && node.sensorId==lastSendedSensorId)
+                return;
+            
             ShowNodes();
         }
 
@@ -368,7 +454,7 @@ namespace SerialController_Windows.Views
 
             button.Content = (button.IsChecked.Value) ? "ON" : "OFF";
 
-            App.serialController.SendSensorState(nodeId, sensorId, data);
+            SendSensorState(nodeId, sensorId, data);
         }
 
         private void slider_ValueChanged(object sender, RoutedEventArgs e)
@@ -383,7 +469,7 @@ namespace SerialController_Windows.Views
             string state = slider.Value.ToString();
             SensorData data = new SensorData(dataType, state);
 
-            App.serialController.SendSensorState(nodeId, sensorId, data);
+            SendSensorState(nodeId, sensorId, data);
         }
 
         private void sliderRGB_ValueChanged(object sender, RoutedEventArgs e)
@@ -407,8 +493,7 @@ namespace SerialController_Windows.Views
             rgb[sliderIndex] = (int)slider.Value;
             data.state = ColorUtils.ConvertRGBIntArrayToHexString(rgb);
 
-
-            App.serialController.SendSensorState(nodeId, sensorId, data);
+            SendSensorState(nodeId, sensorId, data);
         }
 
         private void sliderRGBW_ValueChanged(object sender, RoutedEventArgs e)
@@ -433,12 +518,12 @@ namespace SerialController_Windows.Views
             data.state = ColorUtils.ConvertRGBWIntArrayToHexString(rgbw);
 
 
-            App.serialController.SendSensorState(nodeId, sensorId, data);
+            SendSensorState(nodeId, sensorId, data);
         }
 
         private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            App.serialController.ResetAllNodes();
+            App.serialController.SendRebootToAllNodes();
         }
 
         private async void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
@@ -458,16 +543,16 @@ namespace SerialController_Windows.Views
             panel.Children.Add(new TextBlock
             {
                 Text = "\r\n"
-                +"Deleting nodes from the database will release their ID. "
+                + "Deleting nodes from the database will release their ID. "
                 + "After that, you will need to turn on all "
-                +"previously registered nodes to reinitialize the database. "
-                +"If this is not done, any new node will take the ID "
+                + "previously registered nodes to reinitialize the database. "
+                + "If this is not done, any new node will take the ID "
                 + "of the other device, and there is a conflict! \r\n\r\n"
                 + "If there is a conflict, you should: "
-                +"1. Turn off all nodes. "
-                +"2. Delete all nodes from the database. "
-                +"3. Erase EEPROM on conflicty nodes and reflash again firmwares. "
-                +"4. Turn on all non-conflicting nodes. "
+                + "1. Turn off all nodes. "
+                + "2. Delete all nodes from the database. "
+                + "3. Erase EEPROM on conflicty nodes and reflash again firmwares. "
+                + "4. Turn on all non-conflicting nodes. "
                 + "5. Turn on conflicty nodes.\r\n\r\n"
                 + "Again. After deleting nodes from the database, "
                 + "do not run the new nodes (which has not received the ID previously) "
@@ -479,17 +564,25 @@ namespace SerialController_Windows.Views
 
             // Add Buttons
             dialog.PrimaryButtonText = "OK";
-            dialog.PrimaryButtonClick += delegate {
+            dialog.PrimaryButtonClick += delegate
+            {
                 App.serialController.ClearNodesList();
             };
 
             dialog.SecondaryButtonText = "Cancel";
- 
+
 
             // Show Dialog
             var result = await dialog.ShowAsync();
+        }
 
-            
+        private void SendSensorState(int nodeId, int sensorId, SensorData data)
+        {
+            lastSendedNodeId = nodeId;
+            lastSendedSensorId = sensorId;
+            App.serialController.SendSensorState(nodeId, sensorId, data);
+            lastSendedNodeId = -1;
+            lastSendedSensorId = -1;
         }
     }
 
