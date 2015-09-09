@@ -28,6 +28,7 @@ namespace SerialController_Windows.Code
 
         public Sensor()
         {
+            sensorData = new List<SensorData>();
         }
 
         public Sensor(int sensorId, Node ownerNode)

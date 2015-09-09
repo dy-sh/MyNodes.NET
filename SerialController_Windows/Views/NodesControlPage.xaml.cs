@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -34,7 +35,8 @@ namespace SerialController_Windows.Views
         private int lastSendedNodeId;
         private int lastSendedSensorId;
 
-        private DispatcherTimer refrashTimer;
+        private DispatcherTimer interfaceRefrashTimer;
+        private DispatcherTimer delayedSendTimer;
 
         List<SymbolIcon> activityIcons = new List<SymbolIcon>();
         List<TextBlock> batteryPanels = new List<TextBlock>();
@@ -68,16 +70,23 @@ namespace SerialController_Windows.Views
                 panel1.Visibility = Visibility.Collapsed;
             }
 
-            refrashTimer = new DispatcherTimer();
-            refrashTimer.Interval = TimeSpan.FromMilliseconds(50);
-            refrashTimer.Tick += RefrashTimer;
-            refrashTimer.Start();
+            interfaceRefrashTimer = new DispatcherTimer();
+            interfaceRefrashTimer.Interval = TimeSpan.FromMilliseconds(50);
+            interfaceRefrashTimer.Tick += InterfaceRefrashTimer;
+            interfaceRefrashTimer.Start();
+
+            delayedSendTimer = new DispatcherTimer();
+            delayedSendTimer.Interval = TimeSpan.FromMilliseconds(10);
+            delayedSendTimer.Tick += DelayedSendTimer;
+            delayedSendTimer.Start();
 
         }
 
+
+
         private void AddSensor(Sensor sensor)
         {
-            StackPanel oldPanel = GetSensorPanel(sensor.ownerNodeId,sensor.sensorId);
+            StackPanel oldPanel = GetSensorPanel(sensor.ownerNodeId, sensor.sensorId);
             if (oldPanel != null)
                 sensorPanels.Remove(oldPanel);
 
@@ -106,7 +115,7 @@ namespace SerialController_Windows.Views
         }
 
 
-        private void RefrashTimer(object sender, object e)
+        private void InterfaceRefrashTimer(object sender, object e)
         {
             foreach (var button in activityIcons)
             {
@@ -624,8 +633,9 @@ namespace SerialController_Windows.Views
             string state = slider.Value.ToString();
             SensorData data = new SensorData(dataType, state);
 
-            SendSensorState(nodeId, sensorId, data);
+            DelayedSendSensorState(nodeId, sensorId, data);
         }
+
 
         private void sliderRGB_ValueChanged(object sender, RoutedEventArgs e)
         {
@@ -648,7 +658,7 @@ namespace SerialController_Windows.Views
             rgb[sliderIndex] = (int)slider.Value;
             data.state = ColorUtils.ConvertRGBIntArrayToHexString(rgb);
 
-            SendSensorState(nodeId, sensorId, data);
+            DelayedSendSensorState(nodeId, sensorId, data);
         }
 
         private void sliderRGBW_ValueChanged(object sender, RoutedEventArgs e)
@@ -673,7 +683,7 @@ namespace SerialController_Windows.Views
             data.state = ColorUtils.ConvertRGBWIntArrayToHexString(rgbw);
 
 
-            SendSensorState(nodeId, sensorId, data);
+            DelayedSendSensorState(nodeId, sensorId, data);
         }
 
         private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -731,6 +741,25 @@ namespace SerialController_Windows.Views
             var result = await dialog.ShowAsync();
         }
 
+
+        //Queue list of sensors to sending
+        List<Sensor> sendSensorsList = new List<Sensor>();
+
+        private void DelayedSendSensorState(int nodeId, int sensorId, SensorData data)
+        {
+            Sensor sensor = sendSensorsList
+                .Where(x => x.ownerNodeId == nodeId)
+                .FirstOrDefault(x => x.sensorId == sensorId);
+            if (sensor == null)
+            {
+                sensor = new Sensor {sensorId = sensorId, ownerNodeId = nodeId};
+                sendSensorsList.Add(sensor);
+            }
+
+            sensor.AddOrUpdateData(data);
+            
+        }
+
         private void SendSensorState(int nodeId, int sensorId, SensorData data)
         {
             lastSendedNodeId = nodeId;
@@ -739,6 +768,27 @@ namespace SerialController_Windows.Views
             lastSendedNodeId = -1;
             lastSendedSensorId = -1;
         }
+
+        private void DelayedSendTimer(object sender, object e)
+        {
+            if (!sendSensorsList.Any())
+                return;
+
+            //for prevent update from another thread
+            Sensor[] sendSensors=new Sensor[sendSensorsList.Count];
+            sendSensorsList.CopyTo(sendSensors);
+            sendSensorsList.Clear();
+
+            foreach (var sensor in sendSensors)
+            {
+                foreach (var data in sensor.sensorData)
+                {
+                    SendSensorState(sensor.ownerNodeId, sensor.sensorId, data);
+                }
+            }
+
+        }
+
     }
 
 }
