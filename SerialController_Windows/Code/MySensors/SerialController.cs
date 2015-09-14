@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+  MyNetSensors
+ 
+  Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+  License: http://opensource.org/licenses/MIT
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

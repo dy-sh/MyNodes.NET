@@ -18,10 +18,10 @@
     <None Include="SerialController_Device.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.SerialController_Device.vsarduino.h">
+    <ClInclude Include="GatewayUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GatewayUtil.h">
+    <ClInclude Include="__vm\.SerialController_Device.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
