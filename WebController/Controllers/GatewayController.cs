@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.WebController.Code.Hubs;
+using MyNetSensors.SerialGateway;
 
 /*  MyNetSensors 
     Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
@@ -17,6 +18,8 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class GatewayController : Controller
     {
+        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+
         // GET: Gateway
         public ActionResult Index()
         {
@@ -30,8 +33,12 @@ namespace MyNetSensors.WebController.Controllers
 
         public void ClearLog()
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
             context.Clients.All.clearLog();
+        }
+
+        public void GetLog()
+        {
+            context.Clients.All.getLog();
         }
 
     }

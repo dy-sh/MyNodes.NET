@@ -10,6 +10,7 @@ using System.Threading;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.SerialGateway;
+using System.Threading.Tasks;
 
 namespace MyNetSensors.WebController.Code.Hubs
 {
@@ -26,5 +27,23 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.All.onMessageSendEvent(message.ToString());
         }
+
+        public void OnClearMessages()
+        {
+            Clients.All.onClearMessages();
+        }
+
+        public void ReturnLog(List<Message> log)
+        {
+            string sLog="";
+            foreach (var message in log)
+            {
+                sLog += message.ToString()+"<br/>";
+            }
+            Clients.All.returnLog(sLog);
+        }
+
+ 
     }
+
 }

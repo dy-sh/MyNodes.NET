@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,11 +31,20 @@ namespace MyNetSensors.SerialController_Console
             this.gateway = gateway;
             gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             gateway.OnMessageSendEvent += OnMessageSendEvent;
+            gateway.messagesLog.OnClearMessages += OnClearMessages;
         }
+
+
 
         public bool IsConnected()
         {
             return hubConnection.State == ConnectionState.Connected;
+        }
+
+        private void Log(string message)
+        {
+            if (OnLogMessageEvent != null)
+                OnLogMessageEvent(message);
         }
 
         public bool Connect(string serverUrl)
@@ -44,6 +58,7 @@ namespace MyNetSensors.SerialController_Console
             {
                 hubConnection.Start().Wait();
                 hubProxy.On("clearLog", ClearLog);
+                hubProxy.On("getLog", GetLog);
             }
             catch { }
 
@@ -62,16 +77,20 @@ namespace MyNetSensors.SerialController_Console
         private void OnMessageRecievedEvent(Message message)
         {
             if (!IsConnected()) return;
+
             if (logGatewayMessages)
                 Log(String.Format("RX: {0}\n", message.ToString()));
+
             hubProxy.Invoke("OnMessageRecievedEvent", message);
         }
 
         private void OnMessageSendEvent(Message message)
         {
             if (!IsConnected()) return;
+
             if (logGatewayMessages)
                 Log(String.Format("TX: {0}\n", message.ToString()));
+
             hubProxy.Invoke("OnMessageSendEvent", message);
         }
 
@@ -89,10 +108,31 @@ namespace MyNetSensors.SerialController_Console
             }
         }
 
-        private void Log(string message)
+        private void GetLog()
         {
-            if (OnLogMessageEvent != null)
-                OnLogMessageEvent(message);
+            List<Message> log = null;
+
+            Log("Get log... ");
+            try
+            {
+                log = gateway.messagesLog.GetAllMessages();
+                Log("OK\n");
+            }
+            catch
+            {
+                Log("FAILED\n");
+            }
+
+            hubProxy.Invoke("ReturnLog", log);
         }
+
+
+        private void OnClearMessages(object sender, EventArgs e)
+        {
+            hubProxy.Invoke("OnClearMessages");
+        }
+
+
+
     }
 }
