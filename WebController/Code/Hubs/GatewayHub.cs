@@ -43,7 +43,10 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.All.returnLog(sLog);
         }
 
- 
+        public void ReturnNodes(List<Node> nodes)
+        {
+            Clients.All.returnNodes(nodes);
+        }
     }
 
 }

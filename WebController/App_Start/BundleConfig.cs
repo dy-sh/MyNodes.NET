@@ -29,6 +29,8 @@ namespace MyNetSensors.WebController
             bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
                       "~/Scripts/jquery.signalR-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+                      "~/Scripts/moment.js"));
         }
     }
 }

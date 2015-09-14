@@ -1,0 +1,80 @@
+﻿
+
+<h2>Nodes View</h2>
+
+
+
+<div id="nodesContainer">
+
+</div>
+
+<div class="panel panel-default" id="nodeTemplate" style="display: none;">
+    <div class="panel-heading" id="nodeTitle">
+        Node title
+    </div>
+    <div class="panel-body">
+        <span id="nodeBody">Node body</span>
+    </div>
+</div>
+
+
+@section scripts
+        {
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+
+    @Scripts.Render("~/bundles/moment")
+
+    <script>
+        $(function () {
+            var gatewayHub = $.connection.gatewayHub;
+
+            gatewayHub.client.returnNodes = function (nodes) {
+                console.log(nodes);
+
+                for (var i = 0; i < nodes.length; i++) {
+                    createNode(nodes[i]);
+                }
+            };
+
+            $.connection.hub.start().done(function () {
+                $.get('@Url.Action( "GetNodes", "Gateway" )');
+
+            });
+
+        });
+
+        function createNode(node) {
+            var id = node.nodeId;
+            $('#nodeTemplate')
+                .clone()
+                .attr("id", "nodePanel" + id)
+                .css('display', 'block')
+                .appendTo('#nodesContainer');
+
+            $('#nodePanel' + id)
+                .find('#nodeTitle')
+                .attr("id", "nodeTitle" + id)
+                .html("Node id: " + id)
+
+            $('#nodePanel' + id)
+                .find('#nodeBody')
+                .attr("id", "nodeBody" + id)
+                .html(null);
+
+            if (node.name != null)
+                $('#nodeBody' + id)
+                    .append("Name: " + node.name + "<br/>");
+
+            if (node.version != null)
+                $('#nodeBody' + id)
+                    .append("Version: " + node.version + "<br/>");
+
+            $('#nodeBody' + id)
+                .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
+                .append("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss") + "<br/>");
+        }
+    </script>
+}
+
+

@@ -59,6 +59,7 @@ namespace MyNetSensors.SerialController_Console
                 hubConnection.Start().Wait();
                 hubProxy.On("clearLog", ClearLog);
                 hubProxy.On("getLog", GetLog);
+                hubProxy.On("getNodes", GetNodes);
             }
             catch { }
 
@@ -132,7 +133,23 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("OnClearMessages");
         }
 
+        private void GetNodes()
+        {
+            List<Node> nodes = null;
 
+            Log("Get nodes... ");
+            try
+            {
+                nodes = gateway.GetNodes();
+                Log("OK\n");
+            }
+            catch
+            {
+                Log("FAILED\n");
+            }
+
+            hubProxy.Invoke("ReturnNodes", nodes);
+        }
 
     }
 }

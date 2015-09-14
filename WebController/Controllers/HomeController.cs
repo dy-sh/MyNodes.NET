@@ -6,15 +6,13 @@ namespace MyNetSensors.WebController.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Log", "Gateway");
-            return View();
+            return RedirectToAction("NodesView", "Gateway");
+          //  return View();
         }
 
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
 

@@ -31,6 +31,11 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
+        public ActionResult NodesView()
+        {
+            return View();
+        }
+
         public void ClearLog()
         {
             context.Clients.All.clearLog();
@@ -39,6 +44,11 @@ namespace MyNetSensors.WebController.Controllers
         public void GetLog()
         {
             context.Clients.All.getLog();
+        }
+
+        public void GetNodes()
+        {
+            context.Clients.All.getNodes();
         }
 
     }
