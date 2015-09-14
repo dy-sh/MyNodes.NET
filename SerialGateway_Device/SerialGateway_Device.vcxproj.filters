@@ -21,6 +21,9 @@
     <ClInclude Include="__vm\.SerialController_Device.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.SerialGateway_Device.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SerialGateway_Device.ino" />
