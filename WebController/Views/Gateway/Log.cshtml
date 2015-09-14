@@ -1,0 +1,51 @@
+﻿<br/>
+
+<p>
+
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Messages log
+        <button type="button" class="btn btn-default pull-right" id="clear-log">
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Clear Log
+        </button><br><br>
+
+
+    </div>
+    <div class="panel-body">
+        <span id="log"></span>
+    </div>
+   
+</div>
+
+
+@section scripts
+        {
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            $('#clear-log').on('click', function () {
+                $.get('@Url.Action( "ClearLog", "Gateway" )');
+                $('#log').html(null);
+            });
+
+
+            var gatewayHub = $.connection.gatewayHub;
+
+            gatewayHub.client.onMessageRecievedEvent = function (message) {
+                $('#log').append(message + "<br/>");
+            };
+
+            gatewayHub.client.onMessageSendEvent = function (message) {
+                $('#log').append(message + "<br/>");
+            };
+
+            $.connection.hub.start();
+        });
+    </script>
+}
+
+

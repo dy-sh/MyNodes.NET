@@ -15,14 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SerialController_Device.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="GatewayUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="__vm\.SerialController_Device.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SerialGateway_Device.ino" />
   </ItemGroup>
 </Project>

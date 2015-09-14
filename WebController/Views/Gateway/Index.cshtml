@@ -1,0 +1,21 @@
+﻿    Service: <span id="progress"></span>
+
+@section scripts
+        {
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+            $( function () {
+                var simpleHub = $.connection.simpleHub;
+
+                simpleHub.client.showPercent = function (percent) {
+                    $( '#progress').html(percent);
+                };
+
+                $.connection.hub.start();
+            });
+    </script>
+}
+
+
