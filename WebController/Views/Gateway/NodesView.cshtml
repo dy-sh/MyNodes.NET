@@ -53,6 +53,14 @@
                 updateBattery(node);
             };
 
+            gatewayHub.client.onSensorUpdatedEvent = function (sensor) {
+                createOrUpdateSensor(sensor);
+            };
+
+            gatewayHub.client.onNewSensorEvent = function (sensor) {
+                createOrUpdateSensor(sensor);
+            };
+
             $.connection.hub.start().done(function () {
                 $.get('@Url.Action( "GetNodes", "Gateway" )');
 
@@ -137,6 +145,8 @@
                 .html("Battery: " + node.batteryLevel);
         }
 
+
+
         function createOrUpdateSensor(sensor) {
             var id = sensor.ownerNodeId + "-" + sensor.sensorId;
 
@@ -149,19 +159,42 @@
 
             //update body
             $('#sensorPanel' + id)
-                .html(null);
-
-            $('#sensorPanel' + id)
-                .append("Sensor Id: " + sensor.sensorId + "<br/>");
+                .html("Sensor Id: " + sensor.sensorId + "<br/>");
 
             var sensorType = sensor.sensorType;
             if (sensorType == null) sensorType = "Unknown";
             $('#sensorPanel' + id)
                 .append("Type: " + sensorType + "<br/>");
-            console.log(sensor);
+
             if (sensor.description != null)
                 $('#sensorPanel' + id)
                     .append("Description: " + sensor.description + "<br/>");
+
+            for (var i = 0; i < sensor.sensorData.length; i++) {
+                createOrUpdateSensorData(sensor, sensor.sensorData[i]);
+            }
+        }
+
+
+
+        function createOrUpdateSensorData(sensor, data) {
+            var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
+            var id = sensor.ownerNodeId + "-" + sensor.sensorId+"-" + data.dataType;
+
+            if ($('#dataPanel' + id).length == 0) {
+                //create new
+                $('#sensorPanel' + sensorId)
+                    .append("<div id='dataPanel" + id + "'>"
+                         + "</div>");
+            }
+
+            var dataState = data.state;
+            if (dataState == "" || dataState == null)
+                dataState = "null";
+
+            //update body
+            $('#dataPanel' + id)
+                .html("Data: " + data.dataType + " State: " + dataState + "<br/>");
         }
     </script>
 }

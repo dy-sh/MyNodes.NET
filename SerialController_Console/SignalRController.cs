@@ -36,9 +36,9 @@ namespace MyNetSensors.SerialController_Console
             gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
             gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
+            gateway.OnNewSensorEvent += OnNewSensorEvent;
+            gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
         }
-
-
 
         public bool IsConnected()
         {
@@ -188,6 +188,23 @@ namespace MyNetSensors.SerialController_Console
             if (!IsConnected()) return;
 
             hubProxy.Invoke("OnNodeBatteryUpdatedEvent", node);
+        }
+
+        private void OnSensorUpdatedEvent(Sensor sensor)
+        {
+            if (!IsConnected()) return;
+
+            hubProxy.Invoke("OnSensorUpdatedEvent", sensor);
+        }
+
+        private void OnNewSensorEvent(Sensor sensor)
+        {
+            if (!IsConnected()) return;
+
+            if (logGatewayMessages)
+                Log(String.Format("New sensor registered - node id {0}, sensor id: {1}\n", sensor.ownerNodeId, sensor.sensorId));
+
+            hubProxy.Invoke("OnNewSensorEvent", sensor);
         }
     }
 }

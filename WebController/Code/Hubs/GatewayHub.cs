@@ -67,6 +67,16 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.Others.onNodeBatteryUpdatedEvent(node);
         }
+
+        public void OnSensorUpdatedEvent(Sensor sensor)
+        {
+            Clients.Others.onSensorUpdatedEvent(sensor);
+        }
+
+        public void OnNewSensorEvent(Sensor sensor)
+        {
+            Clients.Others.onNewSensorEvent(sensor);
+        }
     }
 
 }
