@@ -570,8 +570,8 @@ namespace SerialController_Windows.Views
                 data.dataType.ToString());
 
             button.Click += button_Click;
-            button.Content = (button.IsChecked.Value) ? "ON" : "OFF";
             button.IsChecked = data.state == "1";
+            button.Content = (button.IsChecked.Value) ? "ON" : "OFF";
 
             return button;
         }

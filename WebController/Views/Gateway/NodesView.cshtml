@@ -49,6 +49,10 @@
                 updateLastSeen(node);
             };
 
+            gatewayHub.client.onNodeBatteryUpdatedEvent = function (node) {
+                updateBattery(node);
+            };
+
             $.connection.hub.start().done(function () {
                 $.get('@Url.Action( "GetNodes", "Gateway" )');
 
@@ -92,8 +96,24 @@
             $('#nodeBody' + id)
                 .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
                 .append("<div id='nodeLastSeen" + id + "'>"
-                + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
-                + "</div><br/>");
+                    + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
+                    + "</div>");
+
+            if (node.isRepeatingNode == null)
+                $('#nodeBody' + id)
+                    .append("Repeating: Unknown <br/>");
+            else if (node.isRepeatingNode)
+                $('#nodeBody' + id)
+                    .append("Repeating: Yes <br/>");
+            else if (!node.isRepeatingNode)
+                $('#nodeBody' + id)
+                    .append("Repeating: No <br/>");
+
+            if (node.batteryLevel != null)
+                $('#nodeBody' + id)
+                    .append("<div id='nodeBattery" + id + "'>"
+                        + "Battery: " + node.batteryLevel
+                        + "</div>");
         }
 
 
@@ -101,6 +121,12 @@
             var id = node.nodeId;
             $('#nodeLastSeen' + id)
                 .html("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
+        }
+
+        function updateBattery(node) {
+            var id = node.nodeId;
+            $('#nodeBattery' + id)
+                .html("Battery: " + node.batteryLevel);
         }
     </script>
 }

@@ -58,9 +58,14 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Others.onNodeLastSeenUpdatedEvent(node);
         }
 
-        public void onNewNodeEvent(Node node)
+        public void OnNewNodeEvent(Node node)
         {
             Clients.Others.onNewNodeEvent(node);
+        }
+
+        public void OnNodeBatteryUpdatedEvent(Node node)
+        {
+            Clients.Others.onNodeBatteryUpdatedEvent(node);
         }
     }
 
