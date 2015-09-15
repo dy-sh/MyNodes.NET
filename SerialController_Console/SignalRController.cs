@@ -38,7 +38,10 @@ namespace MyNetSensors.SerialController_Console
             gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
             gateway.OnNewSensorEvent += OnNewSensorEvent;
             gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
+            gateway.OnClearNodesList += OnClearNodesList;
         }
+
+
 
         public bool IsConnected()
         {
@@ -205,6 +208,17 @@ namespace MyNetSensors.SerialController_Console
                 Log(String.Format("New sensor registered - node id {0}, sensor id: {1}\n", sensor.ownerNodeId, sensor.sensorId));
 
             hubProxy.Invoke("OnNewSensorEvent", sensor);
+        }
+
+        private void OnClearNodesList(object sender, EventArgs e)
+        {
+            if (!IsConnected()) return;
+
+            if (logGatewayMessages)
+                Log("Clear node list");
+
+
+            hubProxy.Invoke("OnClearNodesList");
         }
     }
 }

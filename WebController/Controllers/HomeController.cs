@@ -6,12 +6,12 @@ namespace MyNetSensors.WebController.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("NodesView", "Gateway");
+            return RedirectToAction("NodesControl", "Gateway");
           //  return View();
         }
 
 
-        public ActionResult Contact()
+        public ActionResult About()
         {
             return View();
         }

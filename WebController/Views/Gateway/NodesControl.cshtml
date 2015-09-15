@@ -1,12 +1,12 @@
 ﻿
 
-<h2>Nodes View</h2>
+<h2>Nodes Control</h2>
 
 <div class="row" id="nodesContainer">
 </div>
 
-<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">    
-    <div class="panel panel-default" >
+<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">
+    <div class="panel panel-default">
         <div class="panel-heading" id="nodeTitle">
             Node title
         </div>
@@ -26,7 +26,6 @@
     @Scripts.Render("~/bundles/moment")
 
 <script src="~/Scripts/MySensors.js" type="text/javascript" encoding="UTF-8"></script>
-
 
     <script>
         $(function () {
@@ -89,7 +88,7 @@
                 $('#nodePanel' + id)
                     .find('#nodeTitle')
                     .attr("id", "nodeTitle" + id)
-                    .html("Node id: " + id);
+                    .html("Node " + id);
 
                 $('#nodePanel' + id)
                     .find('#nodeBody')
@@ -106,27 +105,7 @@
 
             if (node.name != null)
                 $('#nodeBody' + id)
-                    .append("Name: " + node.name + "<br/>");
-
-            if (node.version != null)
-                $('#nodeBody' + id)
-                    .append("Version: " + node.version + "<br/>");
-
-            $('#nodeBody' + id)
-                .append("Reg.: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
-                .append("<div id='nodeLastSeen" + id + "'>"
-                    + "Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
-                    + "</div>");
-
-            if (node.isRepeatingNode == null)
-                $('#nodeBody' + id)
-                    .append("Repeating: Unknown <br/>");
-            else if (node.isRepeatingNode)
-                $('#nodeBody' + id)
-                    .append("Repeating: Yes <br/>");
-            else if (!node.isRepeatingNode)
-                $('#nodeBody' + id)
-                    .append("Repeating: No <br/>");
+                    .append(node.name + "<br/>");
 
             if (node.batteryLevel != null)
                 $('#nodeBody' + id)
@@ -141,9 +120,7 @@
 
 
         function updateLastSeen(node) {
-            var id = node.nodeId;
-            $('#nodeLastSeen' + id)
-                .html("Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
+
         }
 
         function updateBattery(node) {
@@ -166,26 +143,23 @@
 
             //update body
             $('#sensorPanel' + id)
-                .html("Sensor Id: " + sensor.sensorId + "<br/>");
+                .html(null);
 
-            var sensorType = Object.keys(mySensors.sensorType)[sensor.sensorType];
+            var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
             if (sensorType == null) sensorType = "Unknown";
             $('#sensorPanel' + id)
-                .append("Type: " + sensorType + "<br/>");
+                .append(sensorType + "<br/>");
 
             if (sensor.description != null)
                 $('#sensorPanel' + id)
-                    .append("Description: " + sensor.description + "<br/>");
-
-            $('#sensorPanel' + id)
-                   .append("<hr/>");
+                    .append(sensor.description + "<br/>");
 
             for (var i = 0; i < sensor.sensorData.length; i++) {
                 createOrUpdateSensorData(sensor, sensor.sensorData[i]);
             }
         }
 
-
+      
 
         function createOrUpdateSensorData(sensor, data) {
             var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
@@ -198,16 +172,21 @@
                          + "</div>");
             }
 
-            var dataState = data.state;
-            if (dataState == "" || dataState == null)
-                dataState = "null";
-
             //update body
+
+            
+
+            //ON-OFF BUTTON
+            if (data.dataType == mySensors.sensorDataType.V_TRIPPED
+                || data.dataType == mySensors.sensorDataType.V_STATUS)
+            {
+                console.log("ok");
+            }
 
             var dataType = Object.keys(mySensors.sensorDataType)[data.dataType];
 
             $('#dataPanel' + id)
-                .html(dataType + " : " + dataState + "<br/>");
+                .html(data.state + "<br/>");
         }
     </script>
 }

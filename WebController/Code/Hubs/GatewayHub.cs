@@ -77,6 +77,11 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.Others.onNewSensorEvent(sensor);
         }
+
+        public void OnClearNodesList()
+        {
+            Clients.Others.onClearNodesList();
+        }
     }
 
 }
