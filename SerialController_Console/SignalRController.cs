@@ -32,6 +32,9 @@ namespace MyNetSensors.SerialController_Console
             gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             gateway.OnMessageSendEvent += OnMessageSendEvent;
             gateway.messagesLog.OnClearMessages += OnClearMessages;
+            gateway.OnNewNodeEvent += OnNewNodeEvent;
+            gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
+            gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
         }
 
 
@@ -151,5 +154,32 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("ReturnNodes", nodes);
         }
 
+
+        private void OnNodeUpdatedEvent(Node node)
+        {
+            if (!IsConnected()) return;
+
+            if (logGatewayMessages)
+                Log(String.Format("Node {0} updated\n", node.nodeId));
+
+            hubProxy.Invoke("OnNodeUpdatedEvent", node);
+        }
+
+        private void OnNodeLastSeenUpdatedEvent(Node node)
+        {
+            if (!IsConnected()) return;
+
+            hubProxy.Invoke("OnNodeLastSeenUpdatedEvent", node);
+        }
+
+        private void OnNewNodeEvent(Node node)
+        {
+            if (!IsConnected()) return;
+
+            if (logGatewayMessages)
+                Log(String.Format("New node (id: {0}) registered\n", node.nodeId));
+
+            hubProxy.Invoke("OnNewNodeEvent", node);
+        }
     }
 }

@@ -30,11 +30,23 @@
             var gatewayHub = $.connection.gatewayHub;
 
             gatewayHub.client.returnNodes = function (nodes) {
-                console.log(nodes);
+                $('#nodesContainer').html(null);
 
                 for (var i = 0; i < nodes.length; i++) {
-                    createNode(nodes[i]);
+                    createOrUpdateNode(nodes[i]);
                 }
+            };
+
+            gatewayHub.client.onNewNodeEvent = function (node) {
+                createOrUpdateNode(node);
+            };
+
+            gatewayHub.client.onNodeUpdatedEvent = function (node) {
+                createOrUpdateNode(node);
+            };
+
+            gatewayHub.client.onNodeLastSeenUpdatedEvent = function (node) {
+                updateLastSeen(node);
             };
 
             $.connection.hub.start().done(function () {
@@ -44,22 +56,29 @@
 
         });
 
-        function createNode(node) {
+        function createOrUpdateNode(node) {
             var id = node.nodeId;
-            $('#nodeTemplate')
-                .clone()
-                .attr("id", "nodePanel" + id)
-                .css('display', 'block')
-                .appendTo('#nodesContainer');
 
-            $('#nodePanel' + id)
-                .find('#nodeTitle')
-                .attr("id", "nodeTitle" + id)
-                .html("Node id: " + id)
+            if ($('#nodePanel' + id).length == 0) {
+                //create new
+                $('#nodeTemplate')
+                    .clone()
+                    .attr("id", "nodePanel" + id)
+                    .css('display', 'block')
+                    .appendTo('#nodesContainer');
 
-            $('#nodePanel' + id)
-                .find('#nodeBody')
-                .attr("id", "nodeBody" + id)
+                $('#nodePanel' + id)
+                    .find('#nodeTitle')
+                    .attr("id", "nodeTitle" + id)
+                    .html("Node id: " + id);
+
+                $('#nodePanel' + id)
+                    .find('#nodeBody')
+                    .attr("id", "nodeBody" + id);
+            }
+
+            //update body
+            $('#nodeBody' + id)
                 .html(null);
 
             if (node.name != null)
@@ -72,7 +91,16 @@
 
             $('#nodeBody' + id)
                 .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
-                .append("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss") + "<br/>");
+                .append("<div id='nodeLastSeen" + id + "'>"
+                + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
+                + "</div><br/>");
+        }
+
+
+        function updateLastSeen(node) {
+            var id = node.nodeId;
+            $('#nodeLastSeen' + id)
+                .html("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
         }
     </script>
 }

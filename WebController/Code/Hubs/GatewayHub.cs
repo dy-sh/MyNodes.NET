@@ -20,17 +20,17 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public void OnMessageRecievedEvent(Message message)
         {
-            Clients.All.onMessageRecievedEvent(message.ToString());
+            Clients.Others.onMessageRecievedEvent(message.ToString());
         }
 
         public void OnMessageSendEvent(Message message)
         {
-            Clients.All.onMessageSendEvent(message.ToString());
+            Clients.Others.onMessageSendEvent(message.ToString());
         }
 
         public void OnClearMessages()
         {
-            Clients.All.onClearMessages();
+            Clients.Others.onClearMessages();
         }
 
         public void ReturnLog(List<Message> log)
@@ -40,12 +40,27 @@ namespace MyNetSensors.WebController.Code.Hubs
             {
                 sLog += message.ToString()+"<br/>";
             }
-            Clients.All.returnLog(sLog);
+            Clients.Others.returnLog(sLog);
         }
 
         public void ReturnNodes(List<Node> nodes)
         {
-            Clients.All.returnNodes(nodes);
+            Clients.Others.returnNodes(nodes);
+        }
+
+        public void OnNodeUpdatedEvent(Node node)
+        {
+            Clients.Others.onNodeUpdatedEvent(node);
+        }
+
+        public void OnNodeLastSeenUpdatedEvent(Node node)
+        {
+            Clients.Others.onNodeLastSeenUpdatedEvent(node);
+        }
+
+        public void onNewNodeEvent(Node node)
+        {
+            Clients.Others.onNewNodeEvent(node);
         }
     }
 
