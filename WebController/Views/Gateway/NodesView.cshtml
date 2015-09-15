@@ -2,21 +2,21 @@
 
 <h2>Nodes View</h2>
 
-
-
-<div id="nodesContainer">
-
+<div class="row" id="nodesContainer">
 </div>
 
-<div class="panel panel-default" id="nodeTemplate" style="display: none;">
-    <div class="panel-heading" id="nodeTitle">
-        Node title
-    </div>
-    <div class="panel-body">
-        <span id="nodeBody">Node body</span>
+<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">    
+    <div class="panel panel-default" >
+        <div class="panel-heading" id="nodeTitle">
+            Node title
+        </div>
+        <div class="panel-body">
+            <span id="nodeBody">Node body</span>
+            <br />
+            <ul class="list-group" id="sensorsContainer"></ul>
+        </div>
     </div>
 </div>
-
 
 @section scripts
         {
@@ -79,6 +79,10 @@
                 $('#nodePanel' + id)
                     .find('#nodeBody')
                     .attr("id", "nodeBody" + id);
+
+                $('#nodePanel' + id)
+                    .find('#sensorsContainer')
+                    .attr("id", "sensorsContainer" + id);
             }
 
             //update body
@@ -94,9 +98,9 @@
                     .append("Version: " + node.version + "<br/>");
 
             $('#nodeBody' + id)
-                .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
+                .append("Reg.: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
                 .append("<div id='nodeLastSeen" + id + "'>"
-                    + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
+                    + "Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
                     + "</div>");
 
             if (node.isRepeatingNode == null)
@@ -114,19 +118,50 @@
                     .append("<div id='nodeBattery" + id + "'>"
                         + "Battery: " + node.batteryLevel
                         + "</div>");
+
+            for (var i = 0; i < node.sensors.length; i++) {
+                createOrUpdateSensor(node.sensors[i]);
+            }
         }
 
 
         function updateLastSeen(node) {
             var id = node.nodeId;
             $('#nodeLastSeen' + id)
-                .html("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
+                .html("Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
         }
 
         function updateBattery(node) {
             var id = node.nodeId;
             $('#nodeBattery' + id)
                 .html("Battery: " + node.batteryLevel);
+        }
+
+        function createOrUpdateSensor(sensor) {
+            var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+
+            if ($('#sensorPanel' + id).length == 0) {
+                //create new
+                $('#sensorsContainer' + sensor.ownerNodeId)
+                    .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
+                         + "</li>");
+            }
+
+            //update body
+            $('#sensorPanel' + id)
+                .html(null);
+
+            $('#sensorPanel' + id)
+                .append("Sensor Id: " + sensor.sensorId + "<br/>");
+
+            var sensorType = sensor.sensorType;
+            if (sensorType == null) sensorType = "Unknown";
+            $('#sensorPanel' + id)
+                .append("Type: " + sensorType + "<br/>");
+            console.log(sensor);
+            if (sensor.description != null)
+                $('#sensorPanel' + id)
+                    .append("Description: " + sensor.description + "<br/>");
         }
     </script>
 }
