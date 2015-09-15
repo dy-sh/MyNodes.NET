@@ -1,3 +1,5 @@
+<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/icons/MyNetSensorsLogo.png" >
+
 # MyNetSensors
 
 Home automation controller compatible with <a href="http://www.mysensors.org/">MySensors</a> devices.
