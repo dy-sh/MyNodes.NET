@@ -24,4 +24,6 @@ textarea {
 }
 
 
-.ui-slider { margin-top: 20px }
+.ui-slider { margin-top: 30px }
+
+.pull-up { margin-top: -20px }

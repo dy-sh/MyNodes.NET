@@ -147,22 +147,22 @@
                 $('#sensorsContainer' + sensor.ownerNodeId)
                     .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
                         + "</li>");
+
+                $('#sensorPanel' + id)
+                    .append("<div id='sensorTitle" + id + "'></div>");
             }
 
             //update body
-            $('#sensorPanel' + id)
-                .html(null);
 
             var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
             if (sensorType == null) sensorType = "Unknown";
 
-
             if (sensor.description != null)
-                $('#sensorPanel' + id)
-                    .append(sensor.description);
+                $('#sensorTitle' + id)
+                    .html(sensor.description);
             else
-                $('#sensorPanel' + id)
-                    .append(sensorType);
+                $('#sensorTitle' + id)
+                    .html(sensorType);
 
             for (var i = 0; i < sensor.sensorData.length; i++) {
                 createOrUpdateSensorData(sensor, sensor.sensorData[i]);
@@ -177,7 +177,7 @@
             if ($('#dataPanel' + id).length == 0) {
                 //create new
                 $('#sensorPanel' + sensorId)
-                    .append('<div class="pull-right" id="dataPanel' + id + '">' + '</div>');
+                    .append('<div class="pull-right pull-up" id="dataPanel' + id + '">' + '</div>');
 
                 if (sensor.sensorData.length > 1)
                     $('#sensorPanel' + sensorId)
@@ -189,45 +189,19 @@
             //ON-OFF BUTTON
             if (data.dataType == mySensors.sensorDataType.V_TRIPPED
                 || data.dataType == mySensors.sensorDataType.V_STATUS) {
-                $('#dataPanel' + id)
-                    .html("<input type='checkbox' name='toggle-" + id + "' data-label-width='0' data-size='small'>");
+                if ($("[name='toggle-" + id + "']").length == 0) {
+                    //create new
+                    $('#dataPanel' + id)
+                        .html("<input type='checkbox' name='toggle-" + id + "' data-label-width='0' data-size='small'>");
 
-                $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
+                    $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
 
-                $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function(event, state) {
-                    var toggle = this.name.split("-");
-                    var nodeId = toggle[1];
-                    var sensorId = toggle[2];
-                    var dataType = toggle[3];
-                    var val = state == true ? 1 : 0;
-
-                    var message = "" +
-                        nodeId + ";"
-                        + sensorId + ";"
-                        + mySensors.messageType.C_SET + ";"
-                        + "0" + ";"
-                        + dataType + ";"
-                        + val;
-
-                    gatewayHub.server.sendMessage(message);
-
-                });
-            }
-
-            //0-100% SLIDER
-            else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
-                || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
-
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "'></div>");
-
-                $("[name='slider-" + id + "']").slider({
-                    value: data.state,
-                    slide: function(event, ui) {
-                        var nodeId = sensor.ownerNodeId;
-                        var sensorId = sensor.sensorId;
-                        var dataType = data.dataType;
-                        var val = ui.value;
+                    $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function(event, state) {
+                        var toggle = this.name.split("-");
+                        var nodeId = toggle[1];
+                        var sensorId = toggle[2];
+                        var dataType = toggle[3];
+                        var val = state == true ? 1 : 0;
 
                         var message = "" +
                             nodeId + ";"
@@ -236,15 +210,80 @@
                             + "0" + ";"
                             + dataType + ";"
                             + val;
-                        console.log(message);
 
                         gatewayHub.server.sendMessage(message);
+
+                    });
+                } else {
+                    //update
+                    $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
+                }
+            }
+//0-100% SLIDER
+            else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
+                || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
+                if ($("[name='slider-" + id + "']").length == 0) {
+                    //create new
+                    console.log("create");
+                    $('#dataPanel' + id)
+                        .html("<div id='slider' name='slider-" + id + "'></div>");
+
+                    $("[name='slider-" + id + "']").slider({
+                        value: data.state,
+                        slide: function(event, ui) {
+                            var nodeId = sensor.ownerNodeId;
+                            var sensorId = sensor.sensorId;
+                            var dataType = data.dataType;
+                            var val = ui.value;
+
+                            var message = "" +
+                                nodeId + ";"
+                                + sensorId + ";"
+                                + mySensors.messageType.C_SET + ";"
+                                + "0" + ";"
+                                + dataType + ";"
+                                + val;
+                            console.log(message);
+
+                            gatewayHub.server.sendMessage(message);
+                        }
+                    });
+
+                    $('#dataPanel' + id).removeClass("pull-right");
+                } else {
+                    console.log("update");
+
+                    $("[name='slider-" + id + "']").slider("value", data.state);
+                }
+            }
+//RGB SLIDERS
+            else if (data.dataType == mySensors.sensorDataType.V_RGB) {
+
+
+                /*
+                $('#dataPanel' + id)
+                    .html("<div id='slider' name='slider-" + id + "-r'></div>");
+                $('#dataPanel' + id)
+                    .html("<div id='slider' name='slider-" + id + "-g'></div>");
+                $('#dataPanel' + id)
+                    .html("<div id='slider' name='slider-" + id + "-b'></div>");
+
+                $("[name='slider-" + id + "-r'] ~ *").slider({
+                    range: "min",
+                    max: 255,
+                    value: 127,
+                    //value: data.state,
+                    slide: function (event, ui) {
+                        var red = $("[name='slider-" + id + "-r']").slider("value"),
+                          green = $("[name='slider-" + id + "-g']").slider("value"),
+                          blue = $("[name='slider-" + id + "-b']").slider("value"),
+                          hex = hexFromRGB(red, green, blue);
+                        $("#swatch").css("background-color", "#" + hex);
                     }
                 });
                 //  $("[name='slider-" + id + "']").slider("value", data.state);
 
-                $('#dataPanel' + id).removeClass("pull-right");
-
+                $('#dataPanel' + id).removeClass("pull-right");*/
             }
 //Simple text
             else {
@@ -253,9 +292,7 @@
             }
         }
 
-        function sendMessage() {
 
-        }
     </script>
 }
 
