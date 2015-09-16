@@ -1,5 +1,6 @@
 ﻿
 
+
 <h2>Nodes Control</h2>
 
 <div class="row" id="nodesContainer">
@@ -19,13 +20,17 @@
 </div>
 
 @section scripts
-        {
+{
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs"></script>
 
     @Scripts.Render("~/bundles/moment")
 
-<script src="~/Scripts/MySensors.js" type="text/javascript" encoding="UTF-8"></script>
+    <script src="~/Scripts/mysensors.js" type="text/javascript" encoding="UTF-8"></script>
+
+    <link href="~/Content/bootstrap-switch.css" rel="stylesheet">
+
+    <script src="~/Scripts/bootstrap-switch.js"></script>
 
     <script>
         $(function () {
@@ -68,7 +73,7 @@
             };
 
             $.connection.hub.start().done(function () {
-                $.get('@Url.Action( "GetNodes", "Gateway" )');
+                $.get('@Url.Action("GetNodes", "Gateway")');
 
             });
 
@@ -130,7 +135,6 @@
         }
 
 
-
         function createOrUpdateSensor(sensor) {
             var id = sensor.ownerNodeId + "-" + sensor.sensorId;
 
@@ -138,7 +142,7 @@
                 //create new
                 $('#sensorsContainer' + sensor.ownerNodeId)
                     .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
-                         + "</li>");
+                        + "</li>");
             }
 
             //update body
@@ -147,48 +151,55 @@
 
             var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
             if (sensorType == null) sensorType = "Unknown";
-            $('#sensorPanel' + id)
-                .append(sensorType + "<br/>");
+
 
             if (sensor.description != null)
                 $('#sensorPanel' + id)
-                    .append(sensor.description + "<br/>");
+                    .append(sensor.description);
+            else
+                $('#sensorPanel' + id)
+                    .append(sensorType);
 
             for (var i = 0; i < sensor.sensorData.length; i++) {
                 createOrUpdateSensorData(sensor, sensor.sensorData[i]);
             }
         }
 
-      
 
         function createOrUpdateSensorData(sensor, data) {
             var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
-            var id = sensor.ownerNodeId + "-" + sensor.sensorId+"-" + data.dataType;
+            var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
 
             if ($('#dataPanel' + id).length == 0) {
                 //create new
                 $('#sensorPanel' + sensorId)
-                    .append("<div id='dataPanel" + id + "'>"
-                         + "</div>");
+                    .append('<div class="pull-right" id="dataPanel' + id + '">' + '</div>');
+
+                if (sensor.sensorData.length>1)
+                    $('#sensorPanel' + sensorId)
+                    .append('<br/><br/>');
             }
 
             //update body
 
-            
-
             //ON-OFF BUTTON
             if (data.dataType == mySensors.sensorDataType.V_TRIPPED
-                || data.dataType == mySensors.sensorDataType.V_STATUS)
-            {
-                console.log("ok");
+                || data.dataType == mySensors.sensorDataType.V_STATUS) {
+                $('#dataPanel' + id)
+                    .html('<input type="checkbox" name="my-checkbox' + id + '" data-label-width="0" data-size="small" >');
+
+                $("[name='my-checkbox" + id + "']").bootstrapSwitch('state', data.state == "1");
             }
 
-            var dataType = Object.keys(mySensors.sensorDataType)[data.dataType];
-
-            $('#dataPanel' + id)
-                .html(data.state + "<br/>");
+                //Simple text
+            else {
+                $('#dataPanel' + id)
+                    .html(data.state);
+            }
         }
+
+
+
     </script>
 }
-
 
