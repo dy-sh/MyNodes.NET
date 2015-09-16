@@ -67,6 +67,7 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On("clearLog", ClearLog);
                 hubProxy.On("getLog", GetLog);
                 hubProxy.On("getNodes", GetNodes);
+                hubProxy.On<string>("sendMessage", SendMessage);
             }
             catch { }
 
@@ -80,7 +81,12 @@ namespace MyNetSensors.SerialController_Console
             return result;
         }
 
-
+        private void SendMessage(string message)
+        {
+            Message mess = gateway.ParseMessageFromString(message);
+            gateway.SendMessage(mess);
+            gateway.UpdateSensorFromMessage(mess);
+        }
 
         private void OnMessageRecievedEvent(Message message)
         {

@@ -82,6 +82,11 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.Others.onClearNodesList();
         }
+
+        public void SendMessage(string message)
+        {
+            Clients.Others.sendMessage(message);
+        }
     }
 
 }
