@@ -24,6 +24,24 @@ textarea {
 }
 
 
-.ui-slider { margin-top: 30px }
-
 .pull-up { margin-top: -20px }
+
+
+.ui-slider { margin-top: 30px }
+.ui-slider-range.ui-widget-header {
+    background: #729fcf;
+}
+
+.ui-slider .ui-slider-handle {
+    background: url("/Content/images/handle.png") no-repeat center center scroll #fff!important;
+    background-position: 50% 50%;
+    background-size: 18px 18px!important;
+    width: 22px;
+    height: 22px;
+    margin-left: -10px;
+    top: -6px;
+}
+
+.ui-slider-handle:focus {
+    outline-width: 0;
+}

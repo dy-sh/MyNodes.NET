@@ -31,6 +31,16 @@ namespace MyNetSensors.WebController
 
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
                       "~/Scripts/moment.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+              "~/Scripts/jquery-ui-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mysensors").Include(
+             "~/Scripts/mysensors.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/switch").Include(
+   "~/Scripts/bootstrap-switch.js"));
+
         }
     }
 }
