@@ -6,7 +6,7 @@
 <div class="row" id="nodesContainer">
 </div>
 
-<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">
+<div class="col-xs-12 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">
     <div class="panel panel-default">
         <div class="panel-heading" id="nodeTitle">
             Node title
@@ -324,6 +324,44 @@
                 }
 
             }
+                
+            //IR SEND
+            else if (data.dataType == mySensors.sensorDataType.V_IR_SEND)
+            {
+
+  
+                if ($("[name='textbox-" + id + "']").length == 0) {
+                    //create new
+                    $('#dataPanel' + id)
+                        .html("<div class='input-group'>"
+                        + "<input type='text' class='form-control' placeholder='IR code...' name='textbox-" + id + "'>"
+                        + "<span class='input-group-btn'>"
+                        + "<button class='btn btn-default' type='button' name='button-" + id + "'>Send</button>"
+                        + "</span>"
+                        + "</div>");
+
+               
+                    $('#dataPanel' + id).removeClass("pull-right");
+
+                    $("[name='button-" + id + "']").click(function () {
+                        var code = $("[name='textbox-" + id + "']").val();
+                        sendSensor(sensor.ownerNodeId, sensor.sensorId, data.dataType, code);
+                    });
+                    
+                } else {
+                    //update
+
+                }
+            }
+
+                //IR RECEIVE
+            else if (data.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
+                $('#dataPanel' + id)
+                     .html("IR receive: "+data.state);
+
+                    $('#dataPanel' + id).removeClass("pull-right");
+            }
+            
                 //Simple text
             else {
                 $('#dataPanel' + id)
