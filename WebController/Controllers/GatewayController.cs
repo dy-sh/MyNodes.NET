@@ -49,11 +49,13 @@ namespace MyNetSensors.WebController.Controllers
         public void GetLog()
         {
             context.Clients.All.getLog();
+            //todo store if of requesting cliend, and further send respond to this id
         }
 
         public void GetNodes()
         {
             context.Clients.All.getNodes();
+            //todo store if of requesting cliend, and further send respond to this id
         }
 
     }

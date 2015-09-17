@@ -51,7 +51,8 @@ namespace MyNetSensors.SerialController_Console
                 Console.WriteLine("OK");
             }
 
-            Console.ReadKey();
+            while(true)
+            Console.ReadLine();
         }
 
 

@@ -31,52 +31,63 @@
     <link href="~/Content/bootstrap-switch.css" rel="stylesheet">
     <script src="~/Scripts/bootstrap-switch.js"></script>
 
-    <link href='@Url.Content("~/Content/themes/base/all.css")' rel="stylesheet" type="text/css" />
+    <link href='@Url.Content("~/Content/themes/base/all.css")' rel="stylesheet" type="text/css"/>
     <script src='@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")' type="text/javascript"></script>
 
     <script>
-        var gatewayHub;
+        var sliderUpdateInterval = 20; //increase this interval if you get excaption on moving slider
 
-        $(function () {
+        var gatewayHub;
+        var slidersArray = [];
+        var rgbSlidersArray = [];
+        var rgbwSlidersArray = [];
+        setInterval(sendSliders, sliderUpdateInterval);
+        var ignoreSendingSwitchId;
+
+
+        $(function() {
             gatewayHub = $.connection.gatewayHub;
 
-            gatewayHub.client.returnNodes = function (nodes) {
+            gatewayHub.client.returnNodes = function(nodes) {
                 $('#nodesContainer').html(null);
+                slidersArray.length = 0;
+                rgbSlidersArray.length = 0;
+                rgbwSlidersArray.length = 0;
 
                 for (var i = 0; i < nodes.length; i++) {
                     createOrUpdateNode(nodes[i]);
                 }
             };
 
-            gatewayHub.client.onNewNodeEvent = function (node) {
+            gatewayHub.client.onNewNodeEvent = function(node) {
                 createOrUpdateNode(node);
             };
 
-            gatewayHub.client.onNodeUpdatedEvent = function (node) {
+            gatewayHub.client.onNodeUpdatedEvent = function(node) {
                 createOrUpdateNode(node);
             };
 
-            gatewayHub.client.onNodeLastSeenUpdatedEvent = function (node) {
+            gatewayHub.client.onNodeLastSeenUpdatedEvent = function(node) {
                 updateLastSeen(node);
             };
 
-            gatewayHub.client.onNodeBatteryUpdatedEvent = function (node) {
+            gatewayHub.client.onNodeBatteryUpdatedEvent = function(node) {
                 updateBattery(node);
             };
 
-            gatewayHub.client.onSensorUpdatedEvent = function (sensor) {
+            gatewayHub.client.onSensorUpdatedEvent = function(sensor) {
                 createOrUpdateSensor(sensor);
             };
 
-            gatewayHub.client.onNewSensorEvent = function (sensor) {
+            gatewayHub.client.onNewSensorEvent = function(sensor) {
                 createOrUpdateSensor(sensor);
             };
 
-            gatewayHub.client.onClearNodesList = function (sensor) {
+            gatewayHub.client.onClearNodesList = function(sensor) {
                 $('#nodesContainer').html(null);
             };
 
-            $.connection.hub.start().done(function () {
+            $.connection.hub.start().done(function() {
                 $.get('@Url.Action("GetNodes", "Gateway")');
 
             });
@@ -169,8 +180,6 @@
             }
         }
 
-        var slidersArray = new Array();
-        setInterval(sendSliders, 10);
 
         function createOrUpdateSensorData(sensor, data) {
             var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
@@ -198,26 +207,29 @@
 
                     $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
 
-                    $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function (event, state) {
+                    $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function(event, state) {
+                        if (ignoreSendingSwitchId == id)
+                            return;
                         var toggle = this.name.split("-");
                         var val = state == true ? 1 : 0;
                         sendSensor(toggle[1], toggle[2], toggle[3], val);
                     });
                 } else {
                     //update
+                    ignoreSendingSwitchId = id;
                     $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
+                    ignoreSendingSwitchId = null;
                 }
             }
-                //0-100% SLIDER
+            //0-100% SLIDER
             else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
                 || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
                 if ($("[name='slider-" + id + "']").length == 0) {
                     //create new
-                    console.log("create");
                     $('#dataPanel' + id)
                         .html("<div id='slider' name='slider-" + id + "'></div>");
 
-                    $("[name='slider-" + id + "']").slider({value: data.state});
+                    $("[name='slider-" + id + "']").slider({ value: data.state });
 
                     $('#dataPanel' + id).removeClass("pull-right");
 
@@ -230,42 +242,86 @@
                     });
                 } else {
                     //update
-                    //console.log("update");
                     $("[name='slider-" + id + "']").slider("value", data.state);
                     updateSliderInArray(id, data.state);
-                    
+
                 }
             }
-                //RGB SLIDERS
+            //RGB SLIDERS
             else if (data.dataType == mySensors.sensorDataType.V_RGB) {
 
 
-                /*
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "-r'></div>");
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "-g'></div>");
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "-b'></div>");
+                if ($("[name='slider-" + id + "-r']").length == 0) {
+                    //create new
+                    $('#dataPanel' + id)
+                        .html("<div id='slider' name='slider-" + id + "-r'></div>")
+                        .append("<div id='slider' name='slider-" + id + "-g'></div>")
+                        .append("<div id='slider' name='slider-" + id + "-b'></div>");
 
-                $("[name='slider-" + id + "-r'] ~ *").slider({
-                    range: "min",
-                    max: 255,
-                    value: 127,
-                    //value: data.state,
-                    slide: function (event, ui) {
-                        var red = $("[name='slider-" + id + "-r']").slider("value"),
-                          green = $("[name='slider-" + id + "-g']").slider("value"),
-                          blue = $("[name='slider-" + id + "-b']").slider("value"),
-                          hex = hexFromRGB(red, green, blue);
-                        $("#swatch").css("background-color", "#" + hex);
-                    }
-                });
-                //  $("[name='slider-" + id + "']").slider("value", data.state);
+                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r, max: 255});
+                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g, max: 255});
+                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b, max: 255});
 
-                $('#dataPanel' + id).removeClass("pull-right");*/
+                    $('#dataPanel' + id).removeClass("pull-right");
+
+                    rgbSlidersArray.push({
+                        sliderId: id,
+                        nodeId: sensor.ownerNodeId,
+                        sensorId: sensor.sensorId,
+                        dataType: data.dataType,
+                        lastR: hexToRgb(data.state).r,
+                        lastG: hexToRgb(data.state).g,
+                        lastB: hexToRgb(data.state).b
+                    });
+                } else {
+                    //update
+                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
+                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
+                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                    updateRgbSlidersInArray(id, data.state);
+                }
+
             }
-                //Simple text
+
+            //RGBW SLIDERS
+            else if (data.dataType == mySensors.sensorDataType.V_RGBW) {
+
+
+                if ($("[name='slider-" + id + "-r']").length == 0) {
+                    //create new
+                    $('#dataPanel' + id)
+                        .html("<div id='slider' name='slider-" + id + "-r'></div>")
+                        .append("<div id='slider' name='slider-" + id + "-g'></div>")
+                        .append("<div id='slider' name='slider-" + id + "-b'></div>")
+                        .append("<div id='slider' name='slider-" + id + "-w'></div>");
+
+                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgbw(data.state).r, max: 255 });
+                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgbw(data.state).g, max: 255 });
+                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgbw(data.state).b, max: 255 });
+                    $("[name='slider-" + id + "-w']").slider({ value: hexToRgbw(data.state).w, max: 255 });
+
+                    $('#dataPanel' + id).removeClass("pull-right");
+
+                    rgbwSlidersArray.push({
+                        sliderId: id,
+                        nodeId: sensor.ownerNodeId,
+                        sensorId: sensor.sensorId,
+                        dataType: data.dataType,
+                        lastR: hexToRgbw(data.state).r,
+                        lastG: hexToRgbw(data.state).g,
+                        lastB: hexToRgbw(data.state).b,
+                        lastW: hexToRgbw(data.state).w
+                    });
+                } else {
+                    //update
+                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
+                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
+                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                    updateRgbSlidersInArray(id, data.state);
+                }
+
+            }
+            //Simple text
             else {
                 $('#dataPanel' + id)
                     .html(data.state);
@@ -291,7 +347,7 @@
             for (var i = 0; i < slidersArray.length; i++) {
                 var id = slidersArray[i].sliderId;
                 var currentVal = $("[name='slider-" + id + "']").slider("value");
-            
+
                 if (currentVal != slidersArray[i].lastVal) {
 
                     slidersArray[i].lastVal = currentVal;
@@ -301,12 +357,76 @@
                         slidersArray[i].lastVal);
                 }
             }
+
+            for (var i = 0; i < rgbSlidersArray.length; i++) {
+                var id = rgbSlidersArray[i].sliderId;
+                var currentR = $("[name='slider-" + id + "-r']").slider("value");
+                var currentG = $("[name='slider-" + id + "-g']").slider("value");
+                var currentB = $("[name='slider-" + id + "-b']").slider("value");
+
+                if (currentR != rgbSlidersArray[i].lastR ||
+                    currentG != rgbSlidersArray[i].lastG ||
+                    currentB != rgbSlidersArray[i].lastB) {
+
+                    var hex = RgbToHex(currentR,currentG,currentB);
+                    updateRgbSlidersInArray(id, hex);
+
+                    sendSensor(rgbSlidersArray[i].nodeId,
+                        rgbSlidersArray[i].sensorId,
+                        rgbSlidersArray[i].dataType,
+                        hex);
+                }
+            }
+
+            for (var i = 0; i < rgbwSlidersArray.length; i++) {
+                var id = rgbwSlidersArray[i].sliderId;
+                var currentR = $("[name='slider-" + id + "-r']").slider("value");
+                var currentG = $("[name='slider-" + id + "-g']").slider("value");
+                var currentB = $("[name='slider-" + id + "-b']").slider("value");
+                var currentW = $("[name='slider-" + id + "-w']").slider("value");
+
+                if (currentR != rgbwSlidersArray[i].lastR ||
+                    currentG != rgbwSlidersArray[i].lastG ||
+                    currentB != rgbwSlidersArray[i].lastB ||
+                    currentW != rgbwSlidersArray[i].lastW) {
+
+                    var hex = RgbwToHex(currentR, currentG, currentB);
+                    updateRgbwSlidersInArray(id, hex);
+
+                    sendSensor(rgbwSlidersArray[i].nodeId,
+                        rgbwSlidersArray[i].sensorId,
+                        rgbwSlidersArray[i].dataType,
+                        hex);
+                }
+            }
         }
 
         function updateSliderInArray(sliderId, lastVal) {
             for (var i = 0; i < slidersArray.length; i++) {
                 if (slidersArray[i].sliderId == sliderId)
                     slidersArray[i].lastVal = lastVal;
+            }
+        }
+
+        function updateRgbSlidersInArray(sliderId, lastHex) {
+            for (var i = 0; i < rgbSlidersArray.length; i++) {
+                if (rgbSlidersArray[i].sliderId == sliderId) {
+                    rgbSlidersArray[i].lastR = hexToRgb(lastHex).r;
+                    rgbSlidersArray[i].lastG = hexToRgb(lastHex).g;
+                    rgbSlidersArray[i].lastB = hexToRgb(lastHex).b;
+                }
+            }
+        }
+
+
+        function updateRgbwSlidersInArray(sliderId, lastHex) {
+            for (var i = 0; i < rgbwSlidersArray.length; i++) {
+                if (rgbwSlidersArray[i].sliderId == sliderId) {
+                    rgbwSlidersArray[i].lastR = hexToRgbw(lastHex).r;
+                    rgbwSlidersArray[i].lastG = hexToRgbw(lastHex).g;
+                    rgbwSlidersArray[i].lastB = hexToRgbw(lastHex).b;
+                    rgbwSlidersArray[i].lastW = hexToRgbw(lastHex).w;
+                }
             }
         }
     </script>

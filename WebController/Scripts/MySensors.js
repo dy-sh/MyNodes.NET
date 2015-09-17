@@ -170,7 +170,7 @@
     }
 }
 
-function hexFromRGB(r, g, b) {
+function RgbToHex(r, g, b) {
     var hex = [
       r.toString(16),
       g.toString(16),
@@ -182,4 +182,50 @@ function hexFromRGB(r, g, b) {
         }
     });
     return hex.join("").toUpperCase();
+}
+
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+function RgbwToHex(r, g, b, w) {
+    var hex = [
+      r.toString(16),
+      g.toString(16),
+      b.toString(16),
+      w.toString(16)
+    ];
+    $.each(hex, function (nr, val) {
+        if (val.length === 1) {
+            hex[nr] = "0" + val;
+        }
+    });
+    return hex.join("").toUpperCase();
+}
+
+function hexToRgbw(hex) {
+    // Expand shorthand form (e.g. "03FA") to full form (e.g. "0033FFAA")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b, w) {
+        return r + r + g + g + b + b + w + w;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+        w: parseInt(result[4], 16)
+    } : null;
 }
