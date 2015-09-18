@@ -9,6 +9,9 @@ namespace MyNetSensors.SerialController_Console
 
     public class ComPort: IComPort
     {
+        private bool showDebugMessages = false;
+        private bool showConsoleMessages = false;
+
         public event OnDataReceivedEventHandler OnDataReceivedEvent;
         public event EventHandler OnConnectedEvent;
         public event EventHandler OnDisconnectedEvent;
@@ -81,7 +84,7 @@ namespace MyNetSensors.SerialController_Console
 
         public void SendMessage(string message)
         {
-            Debug.WriteLine("Writing to serial: " + message);
+            Log("Writing to serial: " + message);
 
             try
             {
@@ -115,7 +118,7 @@ namespace MyNetSensors.SerialController_Console
 
             foreach (var message in messages)
             {
-                Debug.WriteLine("Readed from serial: " + message);
+                Log("Readed from serial: " + message);
 
 
                 if (OnDataReceivedEvent != null)
@@ -129,6 +132,12 @@ namespace MyNetSensors.SerialController_Console
             SendDataRecievedEvents(data);
         }
 
-
+        public void Log(string message)
+        {
+            if (showDebugMessages)
+                Debug.WriteLine(message);
+            if (showConsoleMessages)
+                Console.WriteLine(message);
+        }
     }
 }

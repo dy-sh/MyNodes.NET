@@ -38,7 +38,7 @@
 
 
     <script>
-        var sliderUpdateInterval = 20; //increase this interval if you get excaption on moving slider
+        var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
 
         var gatewayHub;
         var slidersArray = [];
@@ -52,6 +52,7 @@
             gatewayHub = $.connection.gatewayHub;
 
             gatewayHub.client.returnNodes = function (nodes) {
+
                 $('#nodesContainer').html(null);
                 slidersArray.length = 0;
                 rgbSlidersArray.length = 0;
@@ -178,194 +179,196 @@
                 $('#sensorTitle' + id)
                     .html(sensorType);
 
-            for (var i = 0; i < sensor.sensorData.length; i++) {
-                createOrUpdateSensorData(sensor, sensor.sensorData[i]);
-            }
+            createOrUpdateSensorData(sensor);
+
         }
 
 
-        function createOrUpdateSensorData(sensor, data) {
+        function createOrUpdateSensorData(sensor) {
+
+            var sensorData = JSON.parse(sensor.sensorDataJson);
+
             var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
-            var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
 
-            if ($('#dataPanel' + id).length == 0) {
-                //create new
-                $('#sensorPanel' + sensorId)
-                    .append('<div class="pull-right pull-up" id="dataPanel' + id + '">' + '</div>');
+            for (var i = 0; i < sensorData.length; i++) {
+                var data = sensorData[i];
+                var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
 
-                if (sensor.sensorData.length > 1)
+
+                if ($('#dataPanel' + id).length == 0) {
+                    //create new
                     $('#sensorPanel' + sensorId)
-                        .append('<br/><br/>');
-            }
+                        .append('<div class="pull-right pull-up" id="dataPanel' + id + '">' + '</div>');
 
-            //update body
-
-            //ON-OFF BUTTON
-            if (data.dataType == mySensors.sensorDataType.V_TRIPPED
-                || data.dataType == mySensors.sensorDataType.V_STATUS) {
-                if ($("[name='toggle-" + id + "']").length == 0) {
-                    //create new
-                    $('#dataPanel' + id)
-                        .html("<input type='checkbox' name='toggle-" + id + "' data-label-width='0' data-size='small'>");
-
-                    $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
-
-                    $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function (event, state) {
-                        if (ignoreSendingSwitchId == id)
-                            return;
-                        var toggle = this.name.split("-");
-                        var val = state == true ? 1 : 0;
-                        sendSensor(toggle[1], toggle[2], toggle[3], val);
-                    });
-                } else {
-                    //update
-                    ignoreSendingSwitchId = id;
-                    $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
-                    ignoreSendingSwitchId = null;
-                }
-            }
-                //0-100% SLIDER
-            else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
-                || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
-                if ($("[name='slider-" + id + "']").length == 0) {
-                    //create new
-                    $('#dataPanel' + id)
-                        .html("<div id='slider' name='slider-" + id + "'></div>");
-
-                    $("[name='slider-" + id + "']").slider({ value: data.state, range: "min" });
-
-                    $('#dataPanel' + id).removeClass("pull-right");
-
-                    slidersArray.push({
-                        sliderId: id,
-                        nodeId: sensor.ownerNodeId,
-                        sensorId: sensor.sensorId,
-                        dataType: data.dataType,
-                        lastVal: data.state
-                    });
-                } else {
-                    //update
-                    $("[name='slider-" + id + "']").slider("value", data.state);
-                    updateSliderInArray(id, data.state);
-
-                }
-            }
-                //RGB SLIDERS
-            else if (data.dataType == mySensors.sensorDataType.V_RGB) {
-
-
-                if ($("[name='slider-" + id + "-r']").length == 0) {
-                    //create new
-                    $('#dataPanel' + id)
-                        .html("<div id='slider' name='slider-" + id + "-r'></div>")
-                        .append("<div id='slider' name='slider-" + id + "-g'></div>")
-                        .append("<div id='slider' name='slider-" + id + "-b'></div>");
-
-                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r, range: "min", max: 255 });
-                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g, range: "min", max: 255 });
-                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b, range: "min", max: 255 });
-
-                    $('#dataPanel' + id).removeClass("pull-right");
-
-                    rgbSlidersArray.push({
-                        sliderId: id,
-                        nodeId: sensor.ownerNodeId,
-                        sensorId: sensor.sensorId,
-                        dataType: data.dataType,
-                        lastR: hexToRgb(data.state).r,
-                        lastG: hexToRgb(data.state).g,
-                        lastB: hexToRgb(data.state).b
-                    });
-                } else {
-                    //update
-                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
-                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
-                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
-                    updateRgbSlidersInArray(id, data.state);
+                    if (sensorData.length > 1)
+                        $('#sensorPanel' + sensorId)
+                            .append('<br/><br/>');
                 }
 
-            }
+                //update body
+                console.log(data);
+                //ON-OFF BUTTON
+                if (data.dataType == mySensors.sensorDataType.V_TRIPPED
+                    || data.dataType == mySensors.sensorDataType.V_STATUS) {
+                    if ($("[name='toggle-" + id + "']").length == 0) {
+                        //create new
+                        $('#dataPanel' + id)
+                            .html("<input type='checkbox' name='toggle-" + id + "' data-label-width='0' data-size='small'>");
 
-                //RGBW SLIDERS
-            else if (data.dataType == mySensors.sensorDataType.V_RGBW) {
+                        $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
 
-
-                if ($("[name='slider-" + id + "-r']").length == 0) {
-                    //create new
-                    $('#dataPanel' + id)
-                        .html("<div id='slider' name='slider-" + id + "-r'></div>")
-                        .append("<div id='slider' name='slider-" + id + "-g'></div>")
-                        .append("<div id='slider' name='slider-" + id + "-b'></div>")
-                        .append("<div id='slider' name='slider-" + id + "-w'></div>");
-
-                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgbw(data.state).r, range: "min", max: 255 });
-                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgbw(data.state).g, range: "min", max: 255 });
-                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgbw(data.state).b, range: "min", max: 255 });
-                    $("[name='slider-" + id + "-w']").slider({ value: hexToRgbw(data.state).w, range: "min", max: 255 });
-
-                    $('#dataPanel' + id).removeClass("pull-right");
-
-                    rgbwSlidersArray.push({
-                        sliderId: id,
-                        nodeId: sensor.ownerNodeId,
-                        sensorId: sensor.sensorId,
-                        dataType: data.dataType,
-                        lastR: hexToRgbw(data.state).r,
-                        lastG: hexToRgbw(data.state).g,
-                        lastB: hexToRgbw(data.state).b,
-                        lastW: hexToRgbw(data.state).w
-                    });
-                } else {
-                    //update
-                    $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
-                    $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
-                    $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
-                    updateRgbSlidersInArray(id, data.state);
+                        $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function (event, state) {
+                            if (ignoreSendingSwitchId == id)
+                                return;
+                            var toggle = this.name.split("-");
+                            var val = state == true ? 1 : 0;
+                            sendSensor(toggle[1], toggle[2], toggle[3], val);
+                        });
+                    } else {
+                        //update
+                        ignoreSendingSwitchId = id;
+                        $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
+                        ignoreSendingSwitchId = null;
+                    }
                 }
+                    //0-100% SLIDER
+                else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
+                    || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
+                    if ($("[name='slider-" + id + "']").length == 0) {
+                        //create new
+                        $('#dataPanel' + id)
+                            .html("<div id='slider' name='slider-" + id + "'></div>");
 
-            }
-                
-            //IR SEND
-            else if (data.dataType == mySensors.sensorDataType.V_IR_SEND)
-            {
+                        $("[name='slider-" + id + "']").slider({ value: data.state, range: "min" });
 
-  
-                if ($("[name='textbox-" + id + "']").length == 0) {
-                    //create new
-                    $('#dataPanel' + id)
-                        .html("<div class='input-group'>"
-                        + "<input type='text' class='form-control' placeholder='IR code...' name='textbox-" + id + "'>"
-                        + "<span class='input-group-btn'>"
-                        + "<button class='btn btn-default' type='button' name='button-" + id + "'>Send</button>"
-                        + "</span>"
-                        + "</div>");
+                        $('#dataPanel' + id).removeClass("pull-right");
 
-               
-                    $('#dataPanel' + id).removeClass("pull-right");
+                        slidersArray.push({
+                            sliderId: id,
+                            nodeId: sensor.ownerNodeId,
+                            sensorId: sensor.sensorId,
+                            dataType: data.dataType,
+                            lastVal: data.state
+                        });
+                    } else {
+                        //update
+                        $("[name='slider-" + id + "']").slider("value", data.state);
+                        updateSliderInArray(id, data.state);
 
-                    $("[name='button-" + id + "']").click(function () {
-                        var code = $("[name='textbox-" + id + "']").val();
-                        sendSensor(sensor.ownerNodeId, sensor.sensorId, data.dataType, code);
-                    });
-                    
-                } else {
-                    //update
+                    }
+                }
+                    //RGB SLIDERS
+                else if (data.dataType == mySensors.sensorDataType.V_RGB) {
+
+
+                    if ($("[name='slider-" + id + "-r']").length == 0) {
+                        //create new
+                        $('#dataPanel' + id)
+                            .html("<div id='slider' name='slider-" + id + "-r'></div>")
+                            .append("<div id='slider' name='slider-" + id + "-g'></div>")
+                            .append("<div id='slider' name='slider-" + id + "-b'></div>");
+
+                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b, range: "min", max: 255 });
+
+                        $('#dataPanel' + id).removeClass("pull-right");
+
+                        rgbSlidersArray.push({
+                            sliderId: id,
+                            nodeId: sensor.ownerNodeId,
+                            sensorId: sensor.sensorId,
+                            dataType: data.dataType,
+                            lastR: hexToRgb(data.state).r,
+                            lastG: hexToRgb(data.state).g,
+                            lastB: hexToRgb(data.state).b
+                        });
+                    } else {
+                        //update
+                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
+                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
+                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                        updateRgbSlidersInArray(id, data.state);
+                    }
 
                 }
-            }
+                    //RGBW SLIDERS
+                else if (data.dataType == mySensors.sensorDataType.V_RGBW) {
 
-                //IR RECEIVE
-            else if (data.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
-                $('#dataPanel' + id)
-                     .html("IR receive: "+data.state);
+
+                    if ($("[name='slider-" + id + "-r']").length == 0) {
+                        //create new
+                        $('#dataPanel' + id)
+                            .html("<div id='slider' name='slider-" + id + "-r'></div>")
+                            .append("<div id='slider' name='slider-" + id + "-g'></div>")
+                            .append("<div id='slider' name='slider-" + id + "-b'></div>")
+                            .append("<div id='slider' name='slider-" + id + "-w'></div>");
+
+                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgbw(data.state).r, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgbw(data.state).g, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgbw(data.state).b, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-w']").slider({ value: hexToRgbw(data.state).w, range: "min", max: 255 });
+
+                        $('#dataPanel' + id).removeClass("pull-right");
+
+                        rgbwSlidersArray.push({
+                            sliderId: id,
+                            nodeId: sensor.ownerNodeId,
+                            sensorId: sensor.sensorId,
+                            dataType: data.dataType,
+                            lastR: hexToRgbw(data.state).r,
+                            lastG: hexToRgbw(data.state).g,
+                            lastB: hexToRgbw(data.state).b,
+                            lastW: hexToRgbw(data.state).w
+                        });
+                    } else {
+                        //update
+                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
+                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
+                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                        updateRgbSlidersInArray(id, data.state);
+                    }
+
+                }
+                    //IR SEND
+                else if (data.dataType == mySensors.sensorDataType.V_IR_SEND) {
+
+
+                    if ($("[name='textbox-" + id + "']").length == 0) {
+                        //create new
+                        $('#dataPanel' + id)
+                            .html("<div class='input-group'>"
+                                + "<input type='text' class='form-control' placeholder='IR code...' name='textbox-" + id + "'>"
+                                + "<span class='input-group-btn'>"
+                                + "<button class='btn btn-default' type='button' name='button-" + id + "'>Send</button>"
+                                + "</span>"
+                                + "</div>");
+
+
+                        $('#dataPanel' + id).removeClass("pull-right");
+
+                        $("[name='button-" + id + "']").click(function () {
+                            var code = $("[name='textbox-" + id + "']").val();
+                            sendSensor(sensor.ownerNodeId, sensor.sensorId, data.dataType, code);
+                        });
+
+                    } else {
+                        //update
+
+                    }
+                }
+                    //IR RECEIVE
+                else if (data.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
+                    $('#dataPanel' + id)
+                        .html("IR receive: " + data.state);
 
                     $('#dataPanel' + id).removeClass("pull-right");
-            }
-            
-                //Simple text
-            else {
-                $('#dataPanel' + id)
-                    .html(data.state);
+                }
+                    //Simple text
+                else {
+                    $('#dataPanel' + id)
+                        .html(data.state);
+                }
             }
         }
 

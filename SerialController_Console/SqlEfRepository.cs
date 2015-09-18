@@ -15,8 +15,11 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    public class SQLRepository
+    public class SqlEfRepository:INodesRepository
     {
+        private bool showDebugMessages = true;
+        private bool showConsoleMessages = false;
+
         //if store time==0, every message will be instantly recorded to DB
         //and this will increase the reliability of the system, 
         //but this greatly slows down the performance.
@@ -26,29 +29,22 @@ namespace MyNetSensors.SerialController_Console
         private int storeTimeInterval = 5000;
 
         //slows down the performance, can cause an exception of a large flow of messages per second
-        private bool storeMessages = false;
+        public bool storeMessages = false;
 
         private MyNetSensorsDbContext db;
-
         private Gateway gateway;
-
         private Timer updateDbTimer;
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
+        //messages list, to store to db by timer
         private List<Message> newMessages = new List<Message>();
 
 
-        public SQLRepository(Gateway gateway)
+        public void Connect(Gateway gateway, string connectionString)
         {
-            InitializeDB();
-            ConnectToController(gateway);
-        }
+            InitializeDB(connectionString);
 
-
-
-        private void ConnectToController(Gateway gateway)
-        {
             this.gateway = gateway;
 
             List<Message> messages = GetMessages();
@@ -80,9 +76,9 @@ namespace MyNetSensors.SerialController_Console
 
 
 
-        private void InitializeDB()
+        private void InitializeDB(string connectionString)
         {
-            db = new MyNetSensorsDbContext();
+            db = new MyNetSensorsDbContext(connectionString);
         }
 
         public void DropMessages()
@@ -136,13 +132,8 @@ namespace MyNetSensors.SerialController_Console
         public List<Node> GetNodes()
         {
 
-            List<Node> list = db.Nodes.Include(x => x.sensors.Select(d => d.sensorData)).ToList();
-            /*     foreach (var node in list)
-                 {
-                     node.registered = node.registered.ToLocalTime();
-                     node.lastSeen = node.lastSeen.ToLocalTime();
-                 }
-          */
+            List<Node> list = db.Nodes.Include(x => x.sensors).OrderBy(x => x.nodeId).ToList();
+
             return list;
         }
 
@@ -177,7 +168,7 @@ namespace MyNetSensors.SerialController_Console
 
         }
 
-        public void StoreAllNodes()
+        private void StoreAllNodes()
         {
             List<Node> nodes = gateway.GetNodes();
             foreach (var node in nodes)
@@ -196,20 +187,31 @@ namespace MyNetSensors.SerialController_Console
 
         private void UpdateDbTimer(object sender, object e)
         {
+            int nodesCount = updatedNodesId.Count;
+            int messagesCount = newMessages.Count;
+            int messages = nodesCount + messagesCount;
+            if (messages == 0) return;
             Stopwatch sw = new Stopwatch();
             sw.Start();
+
 
             StoreUpdatedNodes();
             StoreNewMessages();
 
             sw.Stop();
-            Debug.WriteLine("Store to DB: " + sw.ElapsedMilliseconds + " ms");
+            long elapsed = sw.ElapsedMilliseconds;
+            float messagesPerSec = (float)messages / (float)elapsed * 1000;
+            Log(String.Format("Store to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages, (int)messagesPerSec));
         }
 
         private void StoreNewMessages()
         {
-            db.Messages.AddRange(newMessages);
+            //to prevent changing of collection while writing to db is not yet finished
+            Message[] messages = new Message[newMessages.Count];
+            newMessages.CopyTo(messages);
             newMessages.Clear();
+
+            db.Messages.AddRange(messages);
             db.SaveChanges();
         }
 
@@ -234,15 +236,17 @@ namespace MyNetSensors.SerialController_Console
             }
         }
 
-        public void StoreUpdatedNodes()
+        private void StoreUpdatedNodes()
         {
             if (!updatedNodesId.Any()) return;
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            //to prevent changing of collection while writing to db is not yet finished
+            int[] nodesTemp = new int[updatedNodesId.Count];
+            updatedNodesId.CopyTo(nodesTemp);
+            updatedNodesId.Clear();
 
             List<Node> nodes = gateway.GetNodes();
-            foreach (var id in updatedNodesId)
+            foreach (var id in nodesTemp)
             {
                 Node node = nodes.FirstOrDefault(x => x.nodeId == id);
 
@@ -255,7 +259,6 @@ namespace MyNetSensors.SerialController_Console
                     db.Nodes.Add(node);
                 }
             }
-            updatedNodesId.Clear();
             db.SaveChanges();
         }
 
@@ -263,6 +266,15 @@ namespace MyNetSensors.SerialController_Console
         {
             return db.Database.Exists();
         }
+
+        public void Log(string message)
+        {
+            if (showDebugMessages)
+                Debug.WriteLine(message);
+            if (showConsoleMessages)
+                Console.WriteLine(message);
+        }
     }
 
+   
 }

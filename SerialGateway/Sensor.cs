@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace MyNetSensors.SerialGateway
 {
@@ -21,19 +22,22 @@ namespace MyNetSensors.SerialGateway
         public SensorType? sensorType { get; set; }
         public string description { get; set; }
 
-        public List<SensorData> sensorData { get; set; }
-
+        public string sensorDataJson { get; set; }
+        /*
+                public bool storeToDb { get; set; }
+                //interval in ms. if 0, will store every changing
+                public int storeToDbInterval { get; set; }
+        */
 
         public Sensor()
         {
-            sensorData = new List<SensorData>();
+
         }
 
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
             this.ownerNodeId = ownerNode.nodeId;
-            sensorData = new List<SensorData>();
         }
 
         public override string ToString()
@@ -48,37 +52,53 @@ namespace MyNetSensors.SerialGateway
             if (description != null)
                 s += String.Format("Description: {0}\r\n", description);
 
-
-            if (sensorData.Any())
-                foreach (var data in sensorData)
+            List<SensorData> dataList = GetAllData();
+            if (dataList.Any())
+                foreach (var data in dataList)
                     s += data.ToString();
 
             return s;
         }
 
+        public List<SensorData> GetAllData()
+        {
+            if (sensorDataJson == null) return null;
+            List<SensorData> dataList = JsonConvert.DeserializeObject<List<SensorData>>(sensorDataJson);
+            return dataList;
+        }
 
         public SensorData GetData(SensorDataType dataType)
         {
-            SensorData data = sensorData.FirstOrDefault(x => x.dataType == dataType);
+            List<SensorData> dataList = GetAllData();
+            if (dataList == null) return null;
+            SensorData data = dataList.FirstOrDefault(x => x.dataType == dataType);
             return data;
         }
 
         public string GetState(SensorDataType dataType)
         {
             SensorData data = GetData(dataType);
+            if (data == null) return null;
             return data.state;
         }
 
 
         public void AddOrUpdateData(SensorDataType dataType, string state)
         {
-            SensorData data = GetData(dataType);
+            List<SensorData> dataList = GetAllData();
+            if (dataList == null)
+                dataList=new List<SensorData>();
+
+            SensorData data = dataList.FirstOrDefault(x => x.dataType == dataType);
+
             if (data == null)
             {
                 data = new SensorData(dataType, state);
-                sensorData.Add(data);
+                dataList.Add(data);
             }
             else data.state = state;
+
+            sensorDataJson = JsonConvert.SerializeObject(dataList);
         }
 
         public void AddOrUpdateData(SensorData newData)
@@ -88,7 +108,10 @@ namespace MyNetSensors.SerialGateway
 
         public void SetSensorType(SensorType? sensorType)
         {
-            if (this.sensorType==sensorType) return;
+            if (this.sensorType == sensorType) return;
+            if (sensorType < 0 || sensorType > Enum.GetValues(typeof (SensorType)).Cast<SensorType>().Max())
+            {throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data");}
+               
 
             this.sensorType = sensorType;
 
@@ -107,7 +130,7 @@ namespace MyNetSensors.SerialGateway
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
                 case SerialGateway.SensorType.S_DIMMER:
-                    AddOrUpdateData(SensorDataType.V_STATUS, "0");
+                    //AddOrUpdateData(SensorDataType.V_STATUS, "0");
                     AddOrUpdateData(SensorDataType.V_DIMMER, "0");
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
@@ -178,10 +201,6 @@ namespace MyNetSensors.SerialGateway
                     break;
                 case SerialGateway.SensorType.S_MOISTURE:
                     break;
-                case null:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(sensorType), sensorType, null);
             }
         }
 

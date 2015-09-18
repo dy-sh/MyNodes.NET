@@ -5,8 +5,8 @@
 <div class="row" id="nodesContainer">
 </div>
 
-<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">    
-    <div class="panel panel-default" >
+<div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">
+    <div class="panel panel-default">
         <div class="panel-heading" id="nodeTitle">
             Node title
         </div>
@@ -19,13 +19,13 @@
 </div>
 
 @section scripts
-        {
+{
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs"></script>
 
     @Scripts.Render("~/bundles/moment")
 
-<script src="~/Scripts/MySensors.js" type="text/javascript" encoding="UTF-8"></script>
+    <script src="~/Scripts/MySensors.js" type="text/javascript" encoding="UTF-8"></script>
 
 
     <script>
@@ -69,7 +69,7 @@
             };
 
             $.connection.hub.start().done(function () {
-                $.get('@Url.Action( "GetNodes", "Gateway" )');
+                $.get('@Url.Action("GetNodes", "Gateway")');
 
             });
 
@@ -153,7 +153,6 @@
         }
 
 
-
         function createOrUpdateSensor(sensor) {
             var id = sensor.ownerNodeId + "-" + sensor.sensorId;
 
@@ -161,7 +160,7 @@
                 //create new
                 $('#sensorsContainer' + sensor.ownerNodeId)
                     .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
-                         + "</li>");
+                        + "</li>");
             }
 
             //update body
@@ -178,36 +177,40 @@
                     .append("Description: " + sensor.description + "<br/>");
 
             $('#sensorPanel' + id)
-                   .append("<hr/>");
+                .append("<hr/>");
 
-            for (var i = 0; i < sensor.sensorData.length; i++) {
-                createOrUpdateSensorData(sensor, sensor.sensorData[i]);
-            }
+            createOrUpdateSensorData(sensor);
         }
 
 
+        function createOrUpdateSensorData(sensor) {
 
-        function createOrUpdateSensorData(sensor, data) {
+            var sensorData = JSON.parse(sensor.sensorDataJson);
+
             var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
-            var id = sensor.ownerNodeId + "-" + sensor.sensorId+"-" + data.dataType;
 
-            if ($('#dataPanel' + id).length == 0) {
-                //create new
-                $('#sensorPanel' + sensorId)
-                    .append("<div id='dataPanel" + id + "'>"
-                         + "</div>");
+            for (var i = 0; i < sensorData.length; i++) {
+                var data = sensorData[i];
+                var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
+
+                if ($('#dataPanel' + id).length == 0) {
+                    //create new
+                    $('#sensorPanel' + sensorId)
+                        .append("<div id='dataPanel" + id + "'>"
+                            + "</div>");
+                }
+
+                var dataState = data.state;
+                if (dataState == "" || dataState == null)
+                    dataState = "null";
+
+                //update body
+
+                var dataType = Object.keys(mySensors.sensorDataType)[data.dataType];
+
+                $('#dataPanel' + id)
+                    .html(dataType + " : " + dataState + "<br/>");
             }
-
-            var dataState = data.state;
-            if (dataState == "" || dataState == null)
-                dataState = "null";
-
-            //update body
-
-            var dataType = Object.keys(mySensors.sensorDataType)[data.dataType];
-
-            $('#dataPanel' + id)
-                .html(dataType + " : " + dataState + "<br/>");
         }
     </script>
 }

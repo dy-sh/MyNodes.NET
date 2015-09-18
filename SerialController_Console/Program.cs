@@ -20,7 +20,8 @@ namespace MyNetSensors.SerialController_Console
     {
         private static ComPort comPort=new ComPort();
         private static Gateway gateway=new Gateway();
-        private static SQLRepository db;
+        //private static SqlDapperRepository db;
+        private static INodesRepository db=new SqlDapperRepository();
         private static SignalRController signalR=new SignalRController(gateway);
 
 
@@ -85,7 +86,10 @@ namespace MyNetSensors.SerialController_Console
         private static bool ConnectToDb()
         {
             Console.Write("Connecting to database... ");
-            db = new SQLRepository(gateway);
+
+            string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            db.Connect(gateway, connectionString);
+
             bool connected = db.IsConnected();
 
             if (connected)

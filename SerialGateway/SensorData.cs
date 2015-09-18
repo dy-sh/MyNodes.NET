@@ -11,21 +11,8 @@ namespace MyNetSensors.SerialGateway
 {
     public class SensorData
     {
-        [Key]
-        public int db_Id { get; set; }
-
-
-
         public SensorDataType? dataType { get; set; }
         public string state { get; set; }
-
-
-        public SensorData()
-        {
-
-        }
-
-
 
         public SensorData(SensorDataType? dataType, string state)
         {

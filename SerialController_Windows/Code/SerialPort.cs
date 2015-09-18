@@ -28,6 +28,7 @@ namespace SerialController_Windows.Code
 
     public class SerialPort
     {
+        private bool showDebugMessages = false;
 
         private bool isConnected;
 
@@ -162,7 +163,7 @@ namespace SerialController_Windows.Code
 
         private async Task WriteAsync(string message)
         {
-            Debug.WriteLine("Writing to serial: "+ message);
+            Log("Writing to serial: "+ message);
 
             Task<UInt32> storeAsyncTask;
 
@@ -298,7 +299,7 @@ namespace SerialController_Windows.Code
 
             foreach (var message in messages)
             {
-                Debug.WriteLine("Readed from serial: " + message);
+                Log("Readed from serial: " + message);
 
 
                 if (ReceivedDataEvent != null)
@@ -306,5 +307,10 @@ namespace SerialController_Windows.Code
             }
         }
 
+        public void Log(string message)
+        {
+            if (showDebugMessages)
+                Debug.WriteLine(message);
+        }
     }
 }

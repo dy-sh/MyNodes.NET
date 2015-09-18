@@ -10,11 +10,10 @@ namespace MyNetSensors.SerialController_Console
 {
     class MyNetSensorsDbContext : DbContext
     {
-        public MyNetSensorsDbContext() : base("name=DbConnection") { }
+        public MyNetSensorsDbContext(string connectionString) : base(connectionString) { }
   
         public DbSet<Message>  Messages { get; set; }
         public DbSet<Node>  Nodes { get; set; }
         public DbSet<Sensor>  Sensors { get; set; }
-        public DbSet<SensorData>  SensorDatas{ get; set; }
     }
 }
