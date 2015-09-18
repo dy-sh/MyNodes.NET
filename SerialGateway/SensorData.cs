@@ -4,16 +4,15 @@
 */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace MyNetSensors.SerialGateway
 {
     public class SensorData
     {
-
-        public int Id { get; set; }
-
-        public int SensorId { get; set; }
+        [Key]
+        public int db_Id { get; set; }
 
 
 

@@ -4,13 +4,16 @@
 */
 
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyNetSensors.SerialGateway
 {
     public class Message
     {
-
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int db_Id { get; set; }
 
 
         public int nodeId { get; set; }

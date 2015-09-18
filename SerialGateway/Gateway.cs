@@ -32,24 +32,44 @@ namespace MyNetSensors.SerialGateway
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
+        private bool isConnected;
 
-        public Gateway(IComPort serialPort)
+
+        public void Connect(IComPort serialPort)
         {
+            if (isConnected)
+                Disconnect();
+
             this.serialPort = serialPort;
             this.serialPort.OnDataReceivedEvent += RecieveSerialMessage;
+            isConnected = true;
+        }
 
+        public void Disconnect()
+        {
+            isConnected = false;
+            serialPort.OnDataReceivedEvent -= RecieveSerialMessage;
+            serialPort = null;
         }
 
         public bool IsConnected()
         {
-            return serialPort.IsConnected();
+            return (isConnected && serialPort.IsConnected());
         }
 
 
         private void SendMessage(string message)
         {
+            if (!isConnected)
+            {
+                throw new Exception("Can`t send message. Serial port is not connected.");
+                return;
+            }
+
             serialPort.SendMessage(message);
         }
+
+ 
 
         public void SendMessage(Message message)
         {

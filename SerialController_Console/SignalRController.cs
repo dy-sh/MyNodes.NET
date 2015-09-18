@@ -211,7 +211,7 @@ namespace MyNetSensors.SerialController_Console
             if (!IsConnected()) return;
 
             if (logGatewayMessages)
-                Log(String.Format("New sensor registered - node id {0}, sensor id: {1}\n", sensor.ownerNodeId, sensor.sensorId));
+                Log(String.Format("New sensor (node id {0}, sensor id: {1}) registered\n", sensor.ownerNodeId, sensor.sensorId));
 
             hubProxy.Invoke("OnNewSensorEvent", sensor);
         }

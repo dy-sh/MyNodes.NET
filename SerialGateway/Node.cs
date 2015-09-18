@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace MyNetSensors.SerialGateway
@@ -12,8 +13,8 @@ namespace MyNetSensors.SerialGateway
     public class Node
     {
 
-
-        public int Id { get; set; }
+        [Key]
+        public int db_Id { get; set; }
 
 
         public int nodeId { get; set; }
