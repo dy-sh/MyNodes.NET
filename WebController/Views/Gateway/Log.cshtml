@@ -4,14 +4,13 @@
     <div class="panel-heading">
         Messages log
         <button type="button" class="btn btn-default pull-right" id="clear-log">
-            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> 
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
             Clear Log
         </button><br><br>
 
 
     </div>
-    <div class="panel-body">
-        <span id="log"></span>
+    <div class="panel-body" style="overflow-y: scroll;" id="log">
     </div>
 
 </div>
@@ -26,7 +25,7 @@
         $(function () {
             $('#clear-log').on('click', function () {
                 $.get('@Url.Action( "ClearLog", "Gateway" )');
-                
+
             });
 
 
@@ -34,25 +33,42 @@
 
             gatewayHub.client.onMessageRecievedEvent = function (message) {
                 $('#log').append(message + "<br/>");
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
             gatewayHub.client.onMessageSendEvent = function (message) {
                 $('#log').append(message + "<br/>");
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
             gatewayHub.client.returnLog = function (log) {
                 $('#log').html(log);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
             gatewayHub.client.onClearMessages = function (log) {
                 $('#log').html(null);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
             $.connection.hub.start().done(function () {
                 $.get('@Url.Action( "GetLog", "Gateway" )');
             });
 
+            $(function () {
+                var window_height = $(window).height(),
+                content_height = window_height - 280;
+                $('#log').height(content_height);
+            });
+
+            $(window).resize(function () {
+                var window_height = $(window).height(),
+                content_height = window_height - 280;
+                $('#log').height(content_height);
+            });
         });
+
+
     </script>
 }
 
