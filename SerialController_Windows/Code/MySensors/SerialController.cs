@@ -108,7 +108,8 @@ namespace SerialController_Windows.Code
                 {
                     if (mes.messageType == MessageType.C_INTERNAL
                         && mes.subType == (int)InternalDataType.I_ID_REQUEST)
-                        SendNewIdResponse();
+                        if (enableAutoAssignId)
+                            SendNewIdResponse();
 
                     return;
                 }

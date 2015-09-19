@@ -18,52 +18,79 @@ namespace MyNetSensors.SerialController_Console
 {
     internal class Program
     {
-        private static ComPort comPort=new ComPort();
-        private static Gateway gateway=new Gateway();
-        //private static SqlDapperRepository db;
-        private static INodesRepository db=new SqlDapperRepository();
-        private static SignalRController signalR=new SignalRController(gateway);
+        private static ComPort comPort = new ComPort();
+        private static Gateway gateway = new Gateway();
+        private static INodesRepository db = new SqlDapperRepository();
+        private static SignalRController signalR= new SignalRController();
+
+        //settings
+
 
 
         private static void Main(string[] args)
         {
-            signalR.OnLogMessageEvent += message => Console.Write(message);
 
             //connecting to DB
             bool connected = false;
-            while (!connected)
+            bool useDB = Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]);
+            if (useDB)
             {
-                connected = ConnectToDb();
-                if (!connected) Thread.Sleep(5000);
+                db.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["StoreNodesAndMessagesInDbInterval"]));
+                db.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebugMessages"]));
+                db.StoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
+                while (!connected)
+                {
+                    connected = ConnectToDb();
+                    if (!connected) Thread.Sleep(5000);
+                }
+            }
+
+            //connecting to webserver
+            connected = false;
+            bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ConnectToWebServer"]);
+            if (connectToWebServer)
+            {
+                signalR.OnLogMessageEvent += message => Console.Write(message);
+
+                while (!connected)
+                {
+                    string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
+                    connected = signalR.Connect(gateway, webServerUrl);
+                    if (!connected) Thread.Sleep(5000);
+                }
             }
 
             //connecting to serial port
             connected = false;
             while (!connected)
             {
-                string serialPort = ConfigurationManager.AppSettings["SerilPort"];
+                bool selectSerialPortOnStartup = Convert.ToBoolean(ConfigurationManager.AppSettings["SelectSerialPortOnStartup"]);
+
+                string serialPort;
+                if (selectSerialPortOnStartup)
+                    serialPort = SelectPort();
+                else
+                    serialPort = ConfigurationManager.AppSettings["SerialPort"];
+
                 connected = ConnectToPort(serialPort);
                 if (!connected) Thread.Sleep(5000);
             }
 
             //connecting to gateway
             connected = false;
+            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
+            if(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowTxRxMessagesMessages"]))
+                gateway.OnLogMessageEvent += message => Console.Write(message);
+            
             while (!connected)
             {
                 connected = ConnectToGateway();
                 if (!connected) Thread.Sleep(5000);
             }
 
-            //connecting to webserver
-            connected = false;
-            while (!connected)
-            {
-                string server = ConfigurationManager.AppSettings["WebServer"];
-                connected = signalR.Connect(server);
-                if (!connected) Thread.Sleep(5000);
 
-            }
 
+            Console.WriteLine("Startup complete");
             while (true)
                 Console.ReadLine();
         }
@@ -135,10 +162,14 @@ namespace MyNetSensors.SerialController_Console
 
             int portIndex = Int32.Parse(Console.ReadLine());
 
-            return comPorts[portIndex];
+            string port=null;
+            try {port = comPorts[portIndex];}
+            catch { }
+
+            return port;
         }
 
-   
+
 
 
     }

@@ -13,11 +13,12 @@ namespace MyNetSensors.SerialGateway
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);
     public delegate void SensorEventHandler(Sensor sensor);
+    public delegate void OnLogMessageEventHandler(string message);
 
     public class Gateway
     {
         private IComPort serialPort;
-        public bool enableLogging = true;
+        public bool storeMessagesToLog = true;
         public bool enableAutoAssignId = true;
 
         public event MessageEventHandler OnMessageRecievedEvent;
@@ -29,11 +30,17 @@ namespace MyNetSensors.SerialGateway
         public event SensorEventHandler OnNewSensorEvent;
         public event SensorEventHandler OnSensorUpdatedEvent;
         public event EventHandler OnClearNodesList;
+        public event OnLogMessageEventHandler OnLogMessageEvent;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
         private bool isConnected;
 
+        private void Log(string message)
+        {
+            if (OnLogMessageEvent != null)
+                OnLogMessageEvent(message);
+        }
 
         public void Connect(IComPort serialPort)
         {
@@ -69,7 +76,7 @@ namespace MyNetSensors.SerialGateway
             serialPort.SendMessage(message);
         }
 
- 
+
 
         public void SendMessage(Message message)
         {
@@ -77,6 +84,8 @@ namespace MyNetSensors.SerialGateway
 
             if (OnMessageSendEvent != null)
                 OnMessageSendEvent(message);
+
+            Log(String.Format("TX: {0}\n", message.ToString()));
 
             string mes = String.Format("{0};{1};{2};{3};{4};{5}\n",
                 message.nodeId,
@@ -88,7 +97,7 @@ namespace MyNetSensors.SerialGateway
 
             SendMessage(mes);
 
-            if (enableLogging)
+            if (storeMessagesToLog)
                 messagesLog.AddNewMessage(message);
         }
 
@@ -99,11 +108,13 @@ namespace MyNetSensors.SerialGateway
             Message mes = ParseMessageFromString(message);
             mes.incoming = true;
 
-            if (enableLogging)
+            if (storeMessagesToLog)
                 messagesLog.AddNewMessage(mes);
 
             if (OnMessageRecievedEvent != null)
                 OnMessageRecievedEvent(mes);
+
+            Log(String.Format("RX: {0}\n", mes.ToString()));
 
             if (mes.isValid)
             {
@@ -123,7 +134,8 @@ namespace MyNetSensors.SerialGateway
                 {
                     if (mes.messageType == MessageType.C_INTERNAL
                         && mes.subType == (int)InternalDataType.I_ID_REQUEST)
-                        SendNewIdResponse();
+                        if (enableAutoAssignId)
+                            SendNewIdResponse();
 
                     return;
                 }
@@ -173,6 +185,8 @@ namespace MyNetSensors.SerialGateway
 
                 if (OnNewNodeEvent != null)
                     OnNewNodeEvent(node);
+
+                Log(String.Format("New node (id: {0}) registered\n", node.nodeId));
             }
 
             node.UpdateLastSeenNow();
@@ -196,6 +210,8 @@ namespace MyNetSensors.SerialGateway
 
                     if (OnNodeUpdatedEvent != null)
                         OnNodeUpdatedEvent(node);
+
+                    Log(String.Format("Node {0} updated\n", node.nodeId));
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -205,6 +221,8 @@ namespace MyNetSensors.SerialGateway
 
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
+
+                        Log(String.Format("Node {0} updated\n", node.nodeId));
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -212,6 +230,8 @@ namespace MyNetSensors.SerialGateway
 
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
+
+                        Log(String.Format("Node {0} updated\n", node.nodeId));
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -232,7 +252,7 @@ namespace MyNetSensors.SerialGateway
                 return;
 
             if (mes.messageType != MessageType.C_PRESENTATION
-             && mes.messageType != MessageType.C_SET)
+                && mes.messageType != MessageType.C_SET)
                 return;
 
             Node node = GetNode(mes.nodeId);
@@ -253,8 +273,11 @@ namespace MyNetSensors.SerialGateway
             }
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
-                if ( mes.subType < 0 || mes.subType > (int)Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
-                { throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data"); }
+                if (mes.subType < 0 || mes.subType > (int)Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
+                {
+                    throw new ArgumentOutOfRangeException(
+                        "This exception occurs when the serial port does not have time to write the data");
+                }
 
                 sensor.SetSensorType((SensorType)mes.subType);
 
@@ -264,12 +287,19 @@ namespace MyNetSensors.SerialGateway
 
 
 
-            if (isNewSensor && OnNewSensorEvent != null)
-                OnNewSensorEvent(sensor);
-            else
-            if (OnSensorUpdatedEvent != null)
-                OnSensorUpdatedEvent(sensor);
+            if (isNewSensor)
+            {
+                if (OnNewSensorEvent != null)
+                    OnNewSensorEvent(sensor);
 
+                Log(String.Format("New sensor (node id {0}, sensor id: {1}) registered\n", sensor.ownerNodeId,
+                    sensor.sensorId));
+            }
+            else
+            {
+                if (OnSensorUpdatedEvent != null)
+                    OnSensorUpdatedEvent(sensor);
+            }
 
         }
 

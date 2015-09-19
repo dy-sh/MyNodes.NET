@@ -29,11 +29,11 @@ namespace MyNetSensors.SerialController_Console
         private int storeTimeInterval = 5000;
 
         //slows down the performance, can cause an exception of a large flow of messages per second
-        public bool storeMessages = false;
+        public bool storeTxRxMessages = false;
 
         private MyNetSensorsDbContext db;
         private Gateway gateway;
-        private Timer updateDbTimer;
+        private Timer updateDbTimer=new Timer();
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
@@ -65,11 +65,11 @@ namespace MyNetSensors.SerialController_Console
             gateway.OnNewSensorEvent += OnSensorUpdated;
             gateway.OnSensorUpdatedEvent += OnSensorUpdated;
 
+            updateDbTimer.Elapsed += UpdateDbTimer;
+
             if (storeTimeInterval > 0)
             {
-                updateDbTimer = new Timer();
                 updateDbTimer.Interval = storeTimeInterval;
-                updateDbTimer.Elapsed += UpdateDbTimer;
                 updateDbTimer.Start();
             }
         }
@@ -116,7 +116,7 @@ namespace MyNetSensors.SerialController_Console
 
         private void OnNewMessage(Message message)
         {
-            if (!storeMessages)return;
+            if (!storeTxRxMessages)return;
 
             if (storeTimeInterval == 0)
                 AddMessage(message);
@@ -266,6 +266,27 @@ namespace MyNetSensors.SerialController_Console
         public bool IsConnected()
         {
             return db.Database.Exists();
+        }
+
+        public void ShowDebugInConsole(bool enable)
+        {
+            showConsoleMessages = enable;
+        }
+
+        public void SetStoreInterval(int ms)
+        {
+            storeTimeInterval = ms;
+            updateDbTimer.Stop();
+            if (storeTimeInterval > 0)
+            {
+                updateDbTimer.Interval = storeTimeInterval;
+                updateDbTimer.Start();
+            }
+        }
+
+        public void StoreTxRxMessages(bool enable)
+        {
+            storeTxRxMessages = enable;
         }
 
         public void Log(string message)

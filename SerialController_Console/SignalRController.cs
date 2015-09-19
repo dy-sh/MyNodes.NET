@@ -18,28 +18,11 @@ namespace MyNetSensors.SerialController_Console
 
     public class SignalRController
     {
-        public bool logGatewayMessages = true;
-
         public event OnLogMessageEventHandler OnLogMessageEvent;
 
         private HubConnection hubConnection;
         private IHubProxy hubProxy;
         private Gateway gateway;
-
-        public SignalRController(Gateway gateway)
-        {
-            this.gateway = gateway;
-            gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
-            gateway.OnMessageSendEvent += OnMessageSendEvent;
-            gateway.messagesLog.OnClearMessages += OnClearMessages;
-            gateway.OnNewNodeEvent += OnNewNodeEvent;
-            gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
-            gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
-            gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
-            gateway.OnNewSensorEvent += OnNewSensorEvent;
-            gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
-            gateway.OnClearNodesList += OnClearNodesList;
-        }
 
 
 
@@ -54,7 +37,7 @@ namespace MyNetSensors.SerialController_Console
                 OnLogMessageEvent(message);
         }
 
-        public bool Connect(string serverUrl)
+        public bool Connect(Gateway gateway, string serverUrl)
         {
             Log(String.Format("Connecting to server {0}... ", serverUrl));
 
@@ -69,6 +52,18 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On("getLog", GetLog);
                 hubProxy.On("getNodes", GetNodes);
                 hubProxy.On<string>("sendMessage", SendMessage);
+
+                this.gateway = gateway;
+                gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
+                gateway.OnMessageSendEvent += OnMessageSendEvent;
+                gateway.messagesLog.OnClearMessages += OnClearMessages;
+                gateway.OnNewNodeEvent += OnNewNodeEvent;
+                gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
+                gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
+                gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
+                gateway.OnNewSensorEvent += OnNewSensorEvent;
+                gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
+                gateway.OnClearNodesList += OnClearNodesList;
             }
             catch { }
 
@@ -95,18 +90,12 @@ namespace MyNetSensors.SerialController_Console
         {
             if (!IsConnected()) return;
 
-            if (logGatewayMessages)
-                Log(String.Format("RX: {0}\n", message.ToString()));
-
             hubProxy.Invoke("OnMessageRecievedEvent", message);
         }
 
         private void OnMessageSendEvent(Message message)
         {
             if (!IsConnected()) return;
-
-            if (logGatewayMessages)
-                Log(String.Format("TX: {0}\n", message.ToString()));
 
             hubProxy.Invoke("OnMessageSendEvent", message);
         }
@@ -186,9 +175,6 @@ namespace MyNetSensors.SerialController_Console
         {
             if (!IsConnected()) return;
 
-            if (logGatewayMessages)
-                Log(String.Format("Node {0} updated\n", node.nodeId));
-
             hubProxy.Invoke("OnNodeUpdatedEvent", node);
         }
 
@@ -202,9 +188,6 @@ namespace MyNetSensors.SerialController_Console
         private void OnNewNodeEvent(Node node)
         {
             if (!IsConnected()) return;
-
-            if (logGatewayMessages)
-                Log(String.Format("New node (id: {0}) registered\n", node.nodeId));
 
             hubProxy.Invoke("OnNewNodeEvent", node);
         }
@@ -227,19 +210,12 @@ namespace MyNetSensors.SerialController_Console
         {
             if (!IsConnected()) return;
 
-            if (logGatewayMessages)
-                Log(String.Format("New sensor (node id {0}, sensor id: {1}) registered\n", sensor.ownerNodeId, sensor.sensorId));
-
             hubProxy.Invoke("OnNewSensorEvent", sensor);
         }
 
         private void OnClearNodesList(object sender, EventArgs e)
         {
             if (!IsConnected()) return;
-
-            if (logGatewayMessages)
-                Log("Clear nodes list");
-
 
             hubProxy.Invoke("OnClearNodesList");
         }

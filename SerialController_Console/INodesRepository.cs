@@ -26,5 +26,9 @@ namespace MyNetSensors.SerialController_Console
         void AddOrUpdateSensor(Sensor sensor);
 
         bool IsConnected();
+
+        void ShowDebugInConsole(bool enable);
+        void SetStoreInterval(int ms);
+        void StoreTxRxMessages(bool enable);
     }
 }
