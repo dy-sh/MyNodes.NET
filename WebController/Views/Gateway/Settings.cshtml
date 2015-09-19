@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Settings";
+}
+
+<h2>Settings</h2>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Database</div>
+            <div class="panel-body">
+                <p>
+
+                </p>
+
+                <ul class="list-group">
+                    @*<li class="list-group-item">
+                        Online
+                        <div class="pull-right">Yes</div>
+                    </li>
+                    <li class="list-group-item">
+                        Nodes registered
+                        <div class="pull-right">4</div>
+                    </li>
+                    <li class="list-group-item">
+                        Sensors registered
+                        <div class="pull-right">10</div>
+                    </li>*@
+                    <li class="list-group-item">
+                        Delete nodes from the database
+                        <div class="pull-right">
+                            <button class="btn btn-default" data-href="/Gateway/DropDatabase" data-toggle="modal" data-target="#confirm-delete">
+                                Delete
+                            </button>
+                        </div><br/><br/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    @*
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Serial gateway</div>
+            <div class="panel-body">
+                <p>
+
+                </p>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Online
+                        <div class="pull-right">Yes</div>
+                    </li>
+                    <li class="list-group-item">
+                        Nodes registered
+                        <div class="pull-right">4</div>
+                    </li>
+                    <li class="list-group-item">
+                        Sensors registered
+                        <div class="pull-right">10</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        *@
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete nodes from the database
+            </div>
+            <div class="modal-body">
+                Deleting nodes from the database will release their ID.
+                After that, you will need to turn on all
+                previously registered nodes to reinitialize the database.
+                If this is not done, any new node will take the ID
+                of the other device, and there is a conflict! <br/><br />
+                If there is a conflict, you should:
+                1. Turn off all nodes.
+                2. Delete all nodes from the database.
+                3. Erase EEPROM on conflicty nodes and reflash again firmwares.
+                4. Turn on all non-conflicting nodes.
+                5. Turn on conflicty nodes. <br /><br />
+                Again. After deleting nodes from the database,
+                do not run the new nodes (which has not received the ID previously)
+                before turn on all known nodes!
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+}

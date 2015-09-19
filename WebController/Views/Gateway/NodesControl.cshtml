@@ -1,5 +1,8 @@
 ﻿
 
+@{
+    ViewBag.Title = "Nodes Control";
+}
 
 <h2>Nodes Control</h2>
 
@@ -52,12 +55,12 @@
             gatewayHub = $.connection.gatewayHub;
 
             gatewayHub.client.returnNodes = function (nodes) {
-
+              
                 $('#nodesContainer').html(null);
                 slidersArray.length = 0;
                 rgbSlidersArray.length = 0;
                 rgbwSlidersArray.length = 0;
-
+                
                 for (var i = 0; i < nodes.length; i++) {
                     createOrUpdateNode(nodes[i]);
                 }
@@ -100,7 +103,7 @@
 
         function createOrUpdateNode(node) {
             var id = node.nodeId;
-
+          
             if ($('#nodePanel' + id).length == 0) {
                 //create new
                 $('#nodeTemplate')
@@ -122,7 +125,7 @@
                     .find('#sensorsContainer')
                     .attr("id", "sensorsContainer" + id);
             }
-
+           
             //update body
             $('#nodeBody' + id)
                 .html(null);
@@ -136,7 +139,7 @@
                     .append("<div id='nodeBattery" + id + "'>"
                         + "Battery: " + node.batteryLevel
                         + "</div>");
-
+            
             for (var i = 0; i < node.sensors.length; i++) {
                 createOrUpdateSensor(node.sensors[i]);
             }
@@ -155,8 +158,9 @@
 
 
         function createOrUpdateSensor(sensor) {
+   
             var id = sensor.ownerNodeId + "-" + sensor.sensorId;
-
+          
             if ($('#sensorPanel' + id).length == 0) {
                 //create new
                 $('#sensorsContainer' + sensor.ownerNodeId)
@@ -180,33 +184,36 @@
                     .html(sensorType);
 
             createOrUpdateSensorData(sensor);
-
+           
         }
 
 
         function createOrUpdateSensorData(sensor) {
-
+        
             var sensorData = JSON.parse(sensor.sensorDataJson);
 
-            var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
+            if (sensorData == null || sensorData.length == 0)
+                return;
 
+            var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
+            
             for (var i = 0; i < sensorData.length; i++) {
                 var data = sensorData[i];
                 var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
-
+                
 
                 if ($('#dataPanel' + id).length == 0) {
                     //create new
                     $('#sensorPanel' + sensorId)
                         .append('<div class="pull-right pull-up" id="dataPanel' + id + '">' + '</div>');
 
-                    if (sensorData.length > 1)
-                        $('#sensorPanel' + sensorId)
-                            .append('<br/><br/>');
+                    //if (sensorData.length > 1)
+                    //    $('#sensorPanel' + sensorId)
+                    //        .append('<br/><br/>');
                 }
 
                 //update body
-                console.log(data);
+               
                 //ON-OFF BUTTON
                 if (data.dataType == mySensors.sensorDataType.V_TRIPPED
                     || data.dataType == mySensors.sensorDataType.V_STATUS) {
@@ -234,14 +241,17 @@
                     //0-100% SLIDER
                 else if (data.dataType == mySensors.sensorDataType.V_PERCENTAGE
                     || data.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
+
+                    if (isNaN(data.state)) data.state = 0;
+
                     if ($("[name='slider-" + id + "']").length == 0) {
                         //create new
                         $('#dataPanel' + id)
                             .html("<div id='slider' name='slider-" + id + "'></div>");
-
                         $("[name='slider-" + id + "']").slider({ value: data.state, range: "min" });
 
                         $('#dataPanel' + id).removeClass("pull-right");
+                 
 
                         slidersArray.push({
                             sliderId: id,
@@ -260,6 +270,13 @@
                     //RGB SLIDERS
                 else if (data.dataType == mySensors.sensorDataType.V_RGB) {
 
+                    var r = hexToRgb(data.state).r;
+                    var g = hexToRgb(data.state).g;
+                    var b = hexToRgb(data.state).b;
+                    if (isNaN(r)) r = 0;
+                    if (isNaN(g)) g = 0;
+                    if (isNaN(b)) b = 0;
+
 
                     if ($("[name='slider-" + id + "-r']").length == 0) {
                         //create new
@@ -268,26 +285,28 @@
                             .append("<div id='slider' name='slider-" + id + "-g'></div>")
                             .append("<div id='slider' name='slider-" + id + "-b'></div>");
 
-                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r, range: "min", max: 255 });
-                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g, range: "min", max: 255 });
-                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-b']").slider({ value: b, range: "min", max: 255 });
 
                         $('#dataPanel' + id).removeClass("pull-right");
+                    
+
 
                         rgbSlidersArray.push({
                             sliderId: id,
                             nodeId: sensor.ownerNodeId,
                             sensorId: sensor.sensorId,
                             dataType: data.dataType,
-                            lastR: hexToRgb(data.state).r,
-                            lastG: hexToRgb(data.state).g,
-                            lastB: hexToRgb(data.state).b
+                            lastR: r,
+                            lastG: g,
+                            lastB: b
                         });
                     } else {
                         //update
-                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
-                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
-                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                        $("[name='slider-" + id + "-r']").slider({ value: r });
+                        $("[name='slider-" + id + "-g']").slider({ value: g });
+                        $("[name='slider-" + id + "-b']").slider({ value: b });
                         updateRgbSlidersInArray(id, data.state);
                     }
 
@@ -295,6 +314,14 @@
                     //RGBW SLIDERS
                 else if (data.dataType == mySensors.sensorDataType.V_RGBW) {
 
+                    var r = hexToRgbw(data.state).r;
+                    var g = hexToRgbw(data.state).g;
+                    var b = hexToRgbw(data.state).b;
+                    var w = hexToRgbw(data.state).w;
+                    if (isNaN(r)) r = 0;
+                    if (isNaN(g)) g = 0;
+                    if (isNaN(b)) b = 0;
+                    if (isNaN(w)) w = 0;
 
                     if ($("[name='slider-" + id + "-r']").length == 0) {
                         //create new
@@ -304,28 +331,30 @@
                             .append("<div id='slider' name='slider-" + id + "-b'></div>")
                             .append("<div id='slider' name='slider-" + id + "-w'></div>");
 
-                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgbw(data.state).r, range: "min", max: 255 });
-                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgbw(data.state).g, range: "min", max: 255 });
-                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgbw(data.state).b, range: "min", max: 255 });
-                        $("[name='slider-" + id + "-w']").slider({ value: hexToRgbw(data.state).w, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-b']").slider({ value: b, range: "min", max: 255 });
+                        $("[name='slider-" + id + "-w']").slider({ value: w, range: "min", max: 255 });
 
                         $('#dataPanel' + id).removeClass("pull-right");
+                 
+
 
                         rgbwSlidersArray.push({
                             sliderId: id,
                             nodeId: sensor.ownerNodeId,
                             sensorId: sensor.sensorId,
                             dataType: data.dataType,
-                            lastR: hexToRgbw(data.state).r,
-                            lastG: hexToRgbw(data.state).g,
-                            lastB: hexToRgbw(data.state).b,
-                            lastW: hexToRgbw(data.state).w
+                            lastR: r,
+                            lastG: g,
+                            lastB: b,
+                            lastW: w
                         });
                     } else {
                         //update
-                        $("[name='slider-" + id + "-r']").slider({ value: hexToRgb(data.state).r });
-                        $("[name='slider-" + id + "-g']").slider({ value: hexToRgb(data.state).g });
-                        $("[name='slider-" + id + "-b']").slider({ value: hexToRgb(data.state).b });
+                        $("[name='slider-" + id + "-r']").slider({ value: r });
+                        $("[name='slider-" + id + "-g']").slider({ value: g });
+                        $("[name='slider-" + id + "-b']").slider({ value: b });
                         updateRgbSlidersInArray(id, data.state);
                     }
 
@@ -337,7 +366,7 @@
                     if ($("[name='textbox-" + id + "']").length == 0) {
                         //create new
                         $('#dataPanel' + id)
-                            .html("<div class='input-group'>"
+                            .html("<br/><div class='input-group'>"
                                 + "<input type='text' class='form-control' placeholder='IR code...' name='textbox-" + id + "'>"
                                 + "<span class='input-group-btn'>"
                                 + "<button class='btn btn-default' type='button' name='button-" + id + "'>Send</button>"
@@ -346,6 +375,8 @@
 
 
                         $('#dataPanel' + id).removeClass("pull-right");
+                        $('#dataPanel' + id).removeClass("pull-up");
+
 
                         $("[name='button-" + id + "']").click(function () {
                             var code = $("[name='textbox-" + id + "']").val();
@@ -360,9 +391,11 @@
                     //IR RECEIVE
                 else if (data.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
                     $('#dataPanel' + id)
-                        .html("IR receive: " + data.state);
+                        .html("<br/>IR receive: " + data.state);
 
                     $('#dataPanel' + id).removeClass("pull-right");
+                    $('#dataPanel' + id).removeClass("pull-up");
+
                 }
                     //Simple text
                 else {
@@ -370,6 +403,7 @@
                         .html(data.state);
                 }
             }
+
         }
 
         function sendSensor(nodeId, sensorId, dataType, val) {
@@ -388,12 +422,13 @@
         }
 
         function sendSliders() {
+        
             for (var i = 0; i < slidersArray.length; i++) {
                 var id = slidersArray[i].sliderId;
                 var currentVal = $("[name='slider-" + id + "']").slider("value");
 
-                if (currentVal != slidersArray[i].lastVal) {
-
+                if (!isNaN(currentVal) && currentVal != slidersArray[i].lastVal) {
+                 
                     slidersArray[i].lastVal = currentVal;
                     sendSensor(slidersArray[i].nodeId,
                         slidersArray[i].sensorId,

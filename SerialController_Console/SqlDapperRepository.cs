@@ -143,6 +143,8 @@ namespace MyNetSensors.SerialController_Console
 
         public void DropMessages()
         {
+            newMessages.Clear();
+
             db.Query("TRUNCATE TABLE [Messages]");
         }
 
@@ -152,7 +154,6 @@ namespace MyNetSensors.SerialController_Console
 
             db.Query("TRUNCATE TABLE [Nodes]");
             db.Query("TRUNCATE TABLE [Sensors]");
-            db.Query("TRUNCATE TABLE [SensorDatas]");
         }
 
 

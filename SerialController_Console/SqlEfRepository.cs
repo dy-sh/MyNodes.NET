@@ -83,16 +83,17 @@ namespace MyNetSensors.SerialController_Console
 
         public void DropMessages()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + "Messages" + "]");
+            newMessages.Clear();
+
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE Messages");
         }
 
         public void DropNodes()
         {
             updatedNodesId.Clear();
 
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + "Nodes" + "]");
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + "Sensors" + "]");
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + "SensorDatas" + "]");
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE Nodes");
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE Sensors");
         }
 
 

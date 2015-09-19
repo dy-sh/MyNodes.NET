@@ -65,6 +65,7 @@ namespace MyNetSensors.SerialController_Console
             {
                 hubConnection.Start().Wait();
                 hubProxy.On("clearLog", ClearLog);
+                hubProxy.On("clearNodes", ClearNodes);
                 hubProxy.On("getLog", GetLog);
                 hubProxy.On("getNodes", GetNodes);
                 hubProxy.On<string>("sendMessage", SendMessage);
@@ -80,6 +81,8 @@ namespace MyNetSensors.SerialController_Console
 
             return result;
         }
+
+
 
         private void SendMessage(string message)
         {
@@ -114,6 +117,20 @@ namespace MyNetSensors.SerialController_Console
             try
             {
                 gateway.messagesLog.ClearLog();
+                Log("OK\n");
+            }
+            catch
+            {
+                Log("FAILED\n");
+            }
+        }
+
+        private void ClearNodes()
+        {
+            Log("Clear nodes... ");
+            try
+            {
+                gateway.ClearNodesList();
                 Log("OK\n");
             }
             catch
@@ -221,7 +238,7 @@ namespace MyNetSensors.SerialController_Console
             if (!IsConnected()) return;
 
             if (logGatewayMessages)
-                Log("Clear node list");
+                Log("Clear nodes list");
 
 
             hubProxy.Invoke("OnClearNodesList");

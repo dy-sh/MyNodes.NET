@@ -31,6 +31,11 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
+        public ActionResult Settings()
+        {
+            return View();
+        }
+
         public ActionResult NodesView()
         {
             return View();
@@ -58,5 +63,11 @@ namespace MyNetSensors.WebController.Controllers
             //todo store if of requesting cliend, and further send respond to this id
         }
 
+        public ActionResult DropDatabase()
+        {
+            context.Clients.All.clearLog();
+            context.Clients.All.clearNodes();
+            return RedirectToAction("Settings");
+        }
     }
 }
