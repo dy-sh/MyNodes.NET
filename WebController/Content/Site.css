@@ -33,7 +33,7 @@ textarea {
 }
 
 .ui-slider .ui-slider-handle {
-    background: url("/Content/images/handle.png") no-repeat center center scroll #fff!important;
+    background: url("../Content/images/handle.png") no-repeat center center scroll #fff!important;
     background-position: 50% 50%;
     background-size: 18px 18px!important;
     width: 22px;

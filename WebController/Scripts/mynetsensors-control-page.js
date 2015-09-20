@@ -137,6 +137,10 @@ function createOrUpdateNode(node) {
             .html("Node " + id);
 
         $('#nodePanel' + id)
+            .find('#activity')
+            .attr("id", "activity" + id);
+
+        $('#nodePanel' + id)
             .find('#nodeBody')
             .attr("id", "nodeBody" + id);
 
@@ -166,7 +170,8 @@ function createOrUpdateNode(node) {
 
 
 function updateLastSeen(node) {
-
+    var id = node.nodeId;
+    $('#activity' + id).show().fadeOut(500);
 }
 
 function updateBattery(node) {
