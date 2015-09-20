@@ -67,7 +67,7 @@ $(function () {
     };
 
     gatewayHub.client.onClearNodesListEvent = function (sensor) {
-        $('#nodesContainer').html(null);
+        onClearNodesList();
     };
 
     $.connection.hub.start().done(function () {
@@ -76,12 +76,21 @@ $(function () {
 
 });
 
+function onClearNodesList() {
+    var n = noty({
+        text: 'Nodes deleted from the database!',
+        type: 'error'
+    });
+    $('#nodesContainer').html(null);
+}
+
 function onGatewayDisconnected() {
     var n = noty({
         text: 'Gateway disconnected!',
         type: 'error',
         timeout: false
     });
+
     $('#nodesContainer').fadeOut(300);
 }
 

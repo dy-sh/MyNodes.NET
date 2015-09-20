@@ -44,11 +44,14 @@ namespace MyNetSensors.WebController
             bundles.Add(new ScriptBundle("~/bundles/mynsensors").Include(
                 "~/Scripts/mysensors.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-view").Include(
-                "~/Scripts/mynetsensors-view.js"));
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-view-page").Include(
+                "~/Scripts/mynetsensors-view-page.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-control").Include(
-                "~/Scripts/mynetsensors-control.js"));
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-control-page").Include(
+                "~/Scripts/mynetsensors-control-page.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-settings-page").Include(
+                 "~/Scripts/mynetsensors-settings-page.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/noty").Include(
                 "~/Scripts/noty/packaged/jquery.noty.packaged.min.js",

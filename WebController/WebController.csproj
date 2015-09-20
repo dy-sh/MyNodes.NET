@@ -273,8 +273,9 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\mynetsensors-control.js" />
-    <Content Include="Scripts\mynetsensors-view.js" />
+    <Content Include="Scripts\mynetsensors-control-page.js" />
+    <Content Include="Scripts\mynetsensors-settings-page.js" />
+    <Content Include="Scripts\mynetsensors-view-page.js" />
     <Content Include="Scripts\mysensors.js" />
     <Content Include="Scripts\noty\jquery.noty.js" />
     <Content Include="Scripts\noty\layouts\bottom.js" />

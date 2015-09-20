@@ -17,58 +17,55 @@
 
                 <ul class="list-group">
                     @*<li class="list-group-item">
-                        Online
-                        <div class="pull-right">Yes</div>
-                    </li>
-                    <li class="list-group-item">
-                        Nodes registered
-                        <div class="pull-right">4</div>
-                    </li>
-                    <li class="list-group-item">
-                        Sensors registered
-                        <div class="pull-right">10</div>
-                    </li>*@
+                            Online
+                            <div class="pull-right">Yes</div>
+                        </li>
+                        <li class="list-group-item">
+                            Nodes registered
+                            <div class="pull-right">4</div>
+                        </li>
+                        <li class="list-group-item">
+                            Sensors registered
+                            <div class="pull-right">10</div>
+                        </li>*@
                     <li class="list-group-item">
                         Delete nodes from the database
                         <div class="pull-right">
                             <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
                                 Delete
                             </button>
-                        </div><br/><br/>
+                        </div><br /><br />
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    @*
+
 
     <div class="col-sm-6">
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">Serial gateway</div>
             <div class="panel-body">
-                <p>
-
-                </p>
-
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        Online
-                        <div class="pull-right">Yes</div>
-                    </li>
-                    <li class="list-group-item">
-                        Nodes registered
-                        <div class="pull-right">4</div>
-                    </li>
-                    <li class="list-group-item">
-                        Sensors registered
-                        <div class="pull-right">10</div>
-                    </li>
-                </ul>
+                <div id="gateway-online">
+                    <p class='text-success'>Gateway is online</p>
+                </div>
+                <div id="gateway-info">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            Nodes registered
+                            <div class="pull-right" id="nodes-registered">Unknown</div>
+                        </li>
+                        <li class="list-group-item">
+                            Sensors registered
+                            <div class="pull-right" id="sensors-registered">Unknown</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-        *@
+
 </div>
 
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -82,7 +79,7 @@
                 After that, you will need to turn on all
                 previously registered nodes to reinitialize the database.
                 If this is not done, any new node will take the ID
-                of the other device, and there is a conflict! <br/><br />
+                of the other device, and there is a conflict! <br /><br />
                 If there is a conflict, you should:
                 1. Turn off all nodes.
                 2. Delete all nodes from the database.
@@ -101,9 +98,26 @@
     </div>
 </div>
 
-@section scripts{
+
+
+@section styles
+{
+    <link href="~/Content/animate.min.css" rel="stylesheet">
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+
+    @Scripts.Render("~/bundles/moment")
+
+    @Scripts.Render("~/bundles/noty")
+    @Scripts.Render("~/bundles/mysensors")
+    @Scripts.Render("~/bundles/mynetsensors-settings-page")
+
     <script>
-        $('#confirm-delete').on('show.bs.modal', function(e) {
+        $('#confirm-delete').on('show.bs.modal', function (e) {
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
     </script>
