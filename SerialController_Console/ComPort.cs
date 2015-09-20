@@ -12,14 +12,15 @@ using MyNetSensors.SerialGateway;
 namespace MyNetSensors.SerialController_Console
 {
 
-    public class ComPort: IComPort
+    public class ComPort : IComPort
     {
-        private bool showDebugMessages = false;
-        private bool showConsoleMessages = false;
-
         public event OnDataReceivedEventHandler OnDataReceivedEvent;
         public event EventHandler OnConnectedEvent;
         public event EventHandler OnDisconnectedEvent;
+        public event ExceptionEventHandler OnWritingError;
+        public event ExceptionEventHandler OnConnectingError;
+        public event DebugMessageEventHandler OnDebugTxRxMessage;
+        public event DebugMessageEventHandler OnDebugPortStateMessage;
 
         private bool isConnected;
         private SerialPort serialPort;
@@ -34,7 +35,6 @@ namespace MyNetSensors.SerialController_Console
 
         public List<string> GetPortsList()
         {
-
             FindDevices();
 
             return portsList;
@@ -76,10 +76,17 @@ namespace MyNetSensors.SerialController_Console
 
                 isConnected = true;
 
+                DebugPortState(String.Format("Connected to port {0}.", portName));
+
+                if (OnConnectedEvent != null)
+                    OnConnectedEvent(this,null);
             }
             catch (Exception ex)
             {
+                DebugPortState(String.Format("Can`t connect to port {0}.", portName));
 
+                if (OnConnectingError != null)
+                    OnConnectingError(ex);
             }
         }
 
@@ -89,7 +96,13 @@ namespace MyNetSensors.SerialController_Console
 
         public void SendMessage(string message)
         {
-            Log("Writing to serial: " + message);
+            if (serialPort == null || !isConnected)
+            {
+                DebugPortState("Can`t writing to serial. Port closed.");
+                return;
+            }
+
+            DebugTxRx("TX: " + message.TrimEnd('\r', '\n'));
 
             try
             {
@@ -97,7 +110,12 @@ namespace MyNetSensors.SerialController_Console
             }
             catch (Exception ex)
             {
+                DebugPortState(String.Format("Can`t writing to serial. {0}", ex.Message));
 
+                if (OnWritingError != null)
+                    OnWritingError(ex);
+
+                Disconnect();
             }
         }
 
@@ -105,13 +123,17 @@ namespace MyNetSensors.SerialController_Console
         public void Disconnect()
         {
             isConnected = false;
-            if (OnDisconnectedEvent != null) OnDisconnectedEvent(this, null);
+
+            DebugPortState(String.Format("Port disconnected."));
 
             if (serialPort != null)
             {
                 serialPort.Dispose();
             }
             serialPort = null;
+
+            if (OnDisconnectedEvent != null)
+                OnDisconnectedEvent(this, null);
         }
 
 
@@ -123,8 +145,7 @@ namespace MyNetSensors.SerialController_Console
 
             foreach (var message in messages)
             {
-                Log("Readed from serial: " + message);
-
+                DebugTxRx("RX: " + message);
 
                 if (OnDataReceivedEvent != null)
                     OnDataReceivedEvent(message);
@@ -137,12 +158,16 @@ namespace MyNetSensors.SerialController_Console
             SendDataRecievedEvents(data);
         }
 
-        public void Log(string message)
+        private void DebugTxRx(string message)
         {
-            if (showDebugMessages)
-                Debug.WriteLine(message);
-            if (showConsoleMessages)
-                Console.WriteLine(message);
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message);
+        }
+
+        private void DebugPortState(string message)
+        {
+            if (OnDebugPortStateMessage != null)
+                OnDebugPortStateMessage(message);
         }
     }
 }

@@ -14,11 +14,11 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    public delegate void OnLogMessageEventHandler(string message);
 
     public class SignalRController
     {
-        public event OnLogMessageEventHandler OnLogMessageEvent;
+        public event DebugMessageEventHandler OnDebugTxRxMessage;
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         private HubConnection hubConnection;
         private IHubProxy hubProxy;
@@ -31,15 +31,21 @@ namespace MyNetSensors.SerialController_Console
             return hubConnection.State == ConnectionState.Connected;
         }
 
-        private void Log(string message)
+        private void DebugTxRx(string message)
         {
-            if (OnLogMessageEvent != null)
-                OnLogMessageEvent(message);
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message);
+        }
+
+        private void DebugState(string message)
+        {
+            if (OnDebugStateMessage != null)
+                OnDebugStateMessage(message);
         }
 
         public bool Connect(Gateway gateway, string serverUrl)
         {
-            Log(String.Format("Connecting to server {0}... ", serverUrl));
+            DebugState(String.Format("Connecting to server {0}... ", serverUrl));
 
             hubConnection = new HubConnection(serverUrl);
             hubProxy = hubConnection.CreateHubProxy("gatewayHub");
@@ -63,28 +69,30 @@ namespace MyNetSensors.SerialController_Console
                 gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
                 gateway.OnNewSensorEvent += OnNewSensorEvent;
                 gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
-                gateway.OnClearNodesList += OnClearNodesList;
+                gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+                gateway.OnDisconnectedEvent += OnGatewayDisconnectedEvent;
             }
             catch { }
 
             bool result = IsConnected();
 
             if (result)
-                Log("OK\n");
+                DebugState("Connected.");
             else
-                Log("FAILED\n");
+                DebugState("Can`t connect.");
 
             return result;
         }
 
-
-
-        private void SendMessage(string message)
+        private void OnGatewayDisconnectedEvent(object sender, EventArgs e)
         {
-            Message mess = gateway.ParseMessageFromString(message);
-            gateway.SendMessage(mess);
-            gateway.UpdateSensorFromMessage(mess);
+            if (!IsConnected()) return;
+
+            hubProxy.Invoke("OnGatewayDisconnectedEvent");
         }
+
+
+
 
         private void OnMessageRecievedEvent(Message message)
         {
@@ -100,77 +108,7 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("OnMessageSendEvent", message);
         }
 
-        private void ClearLog()
-        {
-            Log("Clear log... ");
-            try
-            {
-                gateway.messagesLog.ClearLog();
-                Log("OK\n");
-            }
-            catch
-            {
-                Log("FAILED\n");
-            }
-        }
-
-        private void ClearNodes()
-        {
-            Log("Clear nodes... ");
-            try
-            {
-                gateway.ClearNodesList();
-                Log("OK\n");
-            }
-            catch
-            {
-                Log("FAILED\n");
-            }
-        }
-
-        private void GetLog()
-        {
-            List<Message> log = null;
-
-            Log("Get log... ");
-            try
-            {
-                log = gateway.messagesLog.GetAllMessages();
-                Log("OK\n");
-            }
-            catch
-            {
-                Log("FAILED\n");
-            }
-
-            hubProxy.Invoke("ReturnLog", log);
-        }
-
-
-        private void OnClearMessages(object sender, EventArgs e)
-        {
-            hubProxy.Invoke("OnClearMessages");
-        }
-
-        private void GetNodes()
-        {
-            List<Node> nodes = null;
-
-            Log("Get nodes... ");
-            try
-            {
-                nodes = gateway.GetNodes();
-                Log("OK\n");
-            }
-            catch
-            {
-                Log("FAILED\n");
-            }
-
-            hubProxy.Invoke("ReturnNodes", nodes);
-        }
-
-
+   
         private void OnNodeUpdatedEvent(Node node)
         {
             if (!IsConnected()) return;
@@ -213,11 +151,61 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("OnNewSensorEvent", sensor);
         }
 
-        private void OnClearNodesList(object sender, EventArgs e)
+        private void OnClearNodesListEvent(object sender, EventArgs e)
         {
             if (!IsConnected()) return;
 
-            hubProxy.Invoke("OnClearNodesList");
+            hubProxy.Invoke("OnClearNodesListEvent");
+        }
+
+        private void OnClearMessages(object sender, EventArgs e)
+        {
+            hubProxy.Invoke("OnClearMessages");
+        }
+
+
+        
+
+        private void ClearLog()
+        {
+            DebugTxRx("Clear log.");
+
+            gateway.messagesLog.ClearLog();
+        }
+
+        private void ClearNodes()
+        {
+            DebugTxRx("Clear nodes.");
+
+            gateway.ClearNodesList();
+        }
+
+        private void GetLog()
+        {
+            DebugTxRx("Get log.");
+
+            List<Message> log = gateway.messagesLog.GetAllMessages();
+
+            hubProxy.Invoke("ReturnLog", log);
+        }
+        private void GetNodes()
+        {
+            DebugTxRx("Get nodes.");
+
+            List<Node> nodes = gateway.GetNodes();
+
+            hubProxy.Invoke("ReturnNodes", nodes);
+        }
+
+        private void SendMessage(string message)
+        {
+            DebugTxRx("Send message: "+ message);
+
+            if (!gateway.IsConnected()) return;
+
+            Message mess = gateway.ParseMessageFromString(message);
+            gateway.SendMessage(mess);
+            gateway.UpdateSensorFromMessage(mess);
         }
     }
 }

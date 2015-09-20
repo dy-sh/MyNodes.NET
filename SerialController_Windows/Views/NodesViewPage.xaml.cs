@@ -43,7 +43,7 @@ namespace SerialController_Windows.Views
             App.serialController.OnNewNodeEvent += AddNode;
             App.serialController.OnNodeUpdatedEvent += UpdateNode;
             App.serialController.OnSensorUpdatedEvent += UpdateSensor;
-            App.serialController.OnClearNodesList += OnClearNodesList;
+            App.serialController.OnClearNodesListEvent += OnClearNodesListEvent;
 
             if (App.serialController.IsConnected())
             {
@@ -65,7 +65,7 @@ namespace SerialController_Windows.Views
 
         }
 
-        private void OnClearNodesList(object sender, EventArgs e)
+        private void OnClearNodesListEvent(object sender, EventArgs e)
         {
             ShowNodes();
         }

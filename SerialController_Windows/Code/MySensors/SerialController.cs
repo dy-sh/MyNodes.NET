@@ -33,7 +33,7 @@ namespace SerialController_Windows.Code
         public event NodeEventHandler OnNodeBatteryUpdatedEvent;
         public event SensorEventHandler OnNewSensorEvent;
         public event SensorEventHandler OnSensorUpdatedEvent;
-        public event EventHandler OnClearNodesList;
+        public event EventHandler OnClearNodesListEvent;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -375,8 +375,8 @@ namespace SerialController_Windows.Code
         {
             nodes.Clear();
 
-            if (OnClearNodesList != null)
-                OnClearNodesList(this, null);
+            if (OnClearNodesListEvent != null)
+                OnClearNodesListEvent(this, null);
         }
 
         public async Task SendRebootToAllNodes()

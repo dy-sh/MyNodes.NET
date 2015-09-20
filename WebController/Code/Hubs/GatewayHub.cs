@@ -78,14 +78,19 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Others.onNewSensorEvent(sensor);
         }
 
-        public void OnClearNodesList()
+        public void OnClearNodesListEvent()
         {
-            Clients.Others.onClearNodesList();
+            Clients.Others.onClearNodesListEvent();
         }
 
         public void SendMessage(string message)
         {
             Clients.Others.sendMessage(message);
+        }
+
+        public void OnGatewayDisconnectedEvent()
+        {
+            Clients.Others.onGatewayDisconnectedEvent();
         }
     }
 

@@ -21,36 +21,90 @@ namespace MyNetSensors.SerialController_Console
         private static ComPort comPort = new ComPort();
         private static Gateway gateway = new Gateway();
         private static INodesRepository db = new SqlDapperRepository();
-        private static SignalRController signalR= new SignalRController();
+        private static SignalRController signalR = new SignalRController();
 
-        //settings
-
-
+        private static string serialPortName;
 
         private static void Main(string[] args)
         {
 
             //connecting to DB
             bool connected = false;
-            bool useDB = Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]);
-            if (useDB)
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
             {
-                db.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["StoreNodesAndMessagesInDbInterval"]));
-                db.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebugMessages"]));
+                Console.WriteLine("Connecting to database... ");
+
+                db.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
+                db.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
                 db.StoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
+                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+
                 while (!connected)
                 {
-                    connected = ConnectToDb();
+                    db.Connect(gateway, connectionString);
+                    connected = db.IsConnected();
                     if (!connected) Thread.Sleep(5000);
                 }
             }
+
+
+
+            //connecting to serial port
+            Console.WriteLine("Connecting to serial port...");
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowSerialPortStateDebug"]))
+                comPort.OnDebugPortStateMessage += message => Console.WriteLine("SERIAL: " + message);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowSerialTxRxDebug"]))
+                comPort.OnDebugTxRxMessage += message => Console.WriteLine("SERIAL: " + message);
+
+
+
+            serialPortName = ConfigurationManager.AppSettings["SerialPort"];
+
+            connected = false;
+            while (!connected)
+            {
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["SelectSerialPortOnStartup"]))
+                    serialPortName = SelectPort();
+
+                comPort.Connect(serialPortName);
+                connected = comPort.IsConnected();
+                if (!connected) Thread.Sleep(5000);
+            }
+
+
+            //connecting to gateway
+            Console.WriteLine("Connecting to gateway... ");
+
+            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayTxRxDebug"]))
+                gateway.OnDebugTxRxMessage += message => Console.WriteLine("GATEWAY: " + message);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayStateDebug"]))
+                gateway.OnDebugGatewayStateMessage += message => Console.WriteLine("GATEWAY: " + message);
+
+            connected = false;
+            while (!connected)
+            {
+                gateway.Connect(comPort);
+                connected = gateway.IsConnected();
+                if (!connected) Thread.Sleep(5000);
+            }
+
+
 
             //connecting to webserver
             connected = false;
             bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ConnectToWebServer"]);
             if (connectToWebServer)
             {
-                signalR.OnLogMessageEvent += message => Console.Write(message);
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowWebServerTxRxDebug"]))
+                    signalR.OnDebugTxRxMessage += message => Console.WriteLine("WEB SERVER: " + message);
+
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowWebServerStateDebug"]))
+                    signalR.OnDebugStateMessage += message => Console.WriteLine("WEB SERVER: " + message);
 
                 while (!connected)
                 {
@@ -60,93 +114,39 @@ namespace MyNetSensors.SerialController_Console
                 }
             }
 
-            //connecting to serial port
-            connected = false;
-            while (!connected)
-            {
-                bool selectSerialPortOnStartup = Convert.ToBoolean(ConfigurationManager.AppSettings["SelectSerialPortOnStartup"]);
-
-                string serialPort;
-                if (selectSerialPortOnStartup)
-                    serialPort = SelectPort();
-                else
-                    serialPort = ConfigurationManager.AppSettings["SerialPort"];
-
-                connected = ConnectToPort(serialPort);
-                if (!connected) Thread.Sleep(5000);
-            }
-
-            //connecting to gateway
-            connected = false;
-            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
-            if(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowTxRxMessagesMessages"]))
-                gateway.OnLogMessageEvent += message => Console.Write(message);
-            
-            while (!connected)
-            {
-                connected = ConnectToGateway();
-                if (!connected) Thread.Sleep(5000);
-            }
-
-
+            //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
+            gateway.OnDisconnectedEvent += OnDisconnectedEvent;
 
             Console.WriteLine("Startup complete");
             while (true)
                 Console.ReadLine();
         }
 
-        private static bool ConnectToGateway()
+        private static void OnDisconnectedEvent(object sender, EventArgs e)
         {
-            Console.Write("Connecting to gateway... ");
-
-            gateway.Connect(comPort);
-            bool connected = gateway.IsConnected();
-
-            if (connected)
-                Console.WriteLine("OK");
-            else
-                Console.WriteLine("FAILED");
-
-            return connected;
-        }
-
-        private static bool ConnectToDb()
-        {
-            Console.Write("Connecting to database... ");
-
-            string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-            db.Connect(gateway, connectionString);
-
-            bool connected = db.IsConnected();
-
-            if (connected)
-                Console.WriteLine("OK");
-            else
-                Console.WriteLine("FAILED");
-
-            return connected;
-        }
-
-        private static bool ConnectToPort(string port)
-        {
-            Console.Write("Connecting to port {0}... ", port);
-
-            try
+            //connecting to serial port
+            bool connected = false;
+            while (!connected)
             {
-                comPort.Connect(port);
+                comPort.Connect(serialPortName);
+                connected = comPort.IsConnected();
+                if (!connected) Thread.Sleep(5000);
             }
-            catch { }
 
-
-            bool connected = comPort.IsConnected();
-
-            if (connected)
-                Console.WriteLine("OK");
-            else
-                Console.WriteLine("FAILED");
-
-            return connected;
+            //connecting to gateway
+            connected = false;
+            while (!connected)
+            {
+                gateway.Connect(comPort);
+                connected = gateway.IsConnected();
+                if (!connected) Thread.Sleep(5000);
+            }
         }
+
+
+
+
+
 
 
         private static string SelectPort()
@@ -162,8 +162,8 @@ namespace MyNetSensors.SerialController_Console
 
             int portIndex = Int32.Parse(Console.ReadLine());
 
-            string port=null;
-            try {port = comPorts[portIndex];}
+            string port = null;
+            try { port = comPorts[portIndex]; }
             catch { }
 
             return port;

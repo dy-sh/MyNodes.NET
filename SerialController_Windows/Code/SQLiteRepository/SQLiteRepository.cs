@@ -65,7 +65,7 @@ namespace SerialController_Windows.Code
                 serialController.AddNode(node);
 
             serialController.messagesLog.OnClearMessages += OnClearMessages;
-            serialController.OnClearNodesList += OnClearNodesList;
+            serialController.OnClearNodesListEvent += OnClearNodesListEvent;
 
             if (storeLogMessages)
             {
@@ -133,7 +133,7 @@ namespace SerialController_Windows.Code
             DropMessages();
         }
 
-        private void OnClearNodesList(object sender, EventArgs e)
+        private void OnClearNodesListEvent(object sender, EventArgs e)
         {
             DropNodes();
         }

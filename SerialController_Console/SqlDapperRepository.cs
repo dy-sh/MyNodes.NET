@@ -63,7 +63,7 @@ namespace MyNetSensors.SerialController_Console
             gateway.messagesLog.OnNewMessageLogged += OnNewMessage;
             gateway.messagesLog.OnClearMessages += OnClearMessages;
 
-            gateway.OnClearNodesList += OnClearNodesList;
+            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
 
             gateway.OnNewNodeEvent += OnNodeUpdated;
             gateway.OnNodeUpdatedEvent += OnNodeUpdated;
@@ -167,7 +167,7 @@ namespace MyNetSensors.SerialController_Console
             DropMessages();
         }
 
-        private void OnClearNodesList(object sender, EventArgs e)
+        private void OnClearNodesListEvent(object sender, EventArgs e)
         {
             DropNodes();
         }

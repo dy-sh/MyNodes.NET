@@ -13,7 +13,8 @@ namespace MyNetSensors.SerialGateway
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);
     public delegate void SensorEventHandler(Sensor sensor);
-    public delegate void OnLogMessageEventHandler(string message);
+    public delegate void DebugMessageEventHandler(string message);
+    public delegate void ExceptionEventHandler(Exception exception);
 
     public class Gateway
     {
@@ -29,17 +30,25 @@ namespace MyNetSensors.SerialGateway
         public event NodeEventHandler OnNodeBatteryUpdatedEvent;
         public event SensorEventHandler OnNewSensorEvent;
         public event SensorEventHandler OnSensorUpdatedEvent;
-        public event EventHandler OnClearNodesList;
-        public event OnLogMessageEventHandler OnLogMessageEvent;
+        public event EventHandler OnClearNodesListEvent;
+        public event EventHandler OnDisconnectedEvent;
+        public event DebugMessageEventHandler OnDebugTxRxMessage;
+        public event DebugMessageEventHandler OnDebugGatewayStateMessage;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
         private bool isConnected;
 
-        private void Log(string message)
+        private void DebugTxRx(string message)
         {
-            if (OnLogMessageEvent != null)
-                OnLogMessageEvent(message);
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message);
+        }
+
+        private void DebugGatewayState(string message)
+        {
+            if (OnDebugGatewayStateMessage != null)
+                OnDebugGatewayStateMessage(message);
         }
 
         public void Connect(IComPort serialPort)
@@ -49,19 +58,38 @@ namespace MyNetSensors.SerialGateway
 
             this.serialPort = serialPort;
             this.serialPort.OnDataReceivedEvent += RecieveSerialMessage;
+            this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             isConnected = true;
+
+            DebugGatewayState(String.Format("Gateway connected."));
+
         }
 
         public void Disconnect()
         {
             isConnected = false;
-            serialPort.OnDataReceivedEvent -= RecieveSerialMessage;
-            serialPort = null;
+            if (serialPort != null)
+            {
+                serialPort.OnDataReceivedEvent -= RecieveSerialMessage;
+                serialPort.OnDisconnectedEvent -= OnSerialPortDisconnectedEvent;
+                serialPort = null;
+            }
+
+            DebugGatewayState(String.Format("Gateway disconnected."));
+
+
+            if (OnDisconnectedEvent != null)
+                OnDisconnectedEvent(this,null);
         }
 
         public bool IsConnected()
         {
             return (isConnected && serialPort.IsConnected());
+        }
+
+        private void OnSerialPortDisconnectedEvent(object sender, EventArgs e)
+        {
+            Disconnect();
         }
 
 
@@ -85,7 +113,7 @@ namespace MyNetSensors.SerialGateway
             if (OnMessageSendEvent != null)
                 OnMessageSendEvent(message);
 
-            Log(String.Format("TX: {0}\n", message.ToString()));
+            DebugTxRx(String.Format("TX: {0}", message.ToString()));
 
             string mes = String.Format("{0};{1};{2};{3};{4};{5}\n",
                 message.nodeId,
@@ -114,7 +142,7 @@ namespace MyNetSensors.SerialGateway
             if (OnMessageRecievedEvent != null)
                 OnMessageRecievedEvent(mes);
 
-            Log(String.Format("RX: {0}\n", mes.ToString()));
+            DebugTxRx(String.Format("RX: {0}", mes.ToString()));
 
             if (mes.isValid)
             {
@@ -186,7 +214,7 @@ namespace MyNetSensors.SerialGateway
                 if (OnNewNodeEvent != null)
                     OnNewNodeEvent(node);
 
-                Log(String.Format("New node (id: {0}) registered\n", node.nodeId));
+                DebugGatewayState(String.Format("New node (id: {0}) registered", node.nodeId));
             }
 
             node.UpdateLastSeenNow();
@@ -211,7 +239,7 @@ namespace MyNetSensors.SerialGateway
                     if (OnNodeUpdatedEvent != null)
                         OnNodeUpdatedEvent(node);
 
-                    Log(String.Format("Node {0} updated\n", node.nodeId));
+                    DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -222,7 +250,7 @@ namespace MyNetSensors.SerialGateway
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        Log(String.Format("Node {0} updated\n", node.nodeId));
+                        DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -231,7 +259,7 @@ namespace MyNetSensors.SerialGateway
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        Log(String.Format("Node {0} updated\n", node.nodeId));
+                        DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -292,7 +320,7 @@ namespace MyNetSensors.SerialGateway
                 if (OnNewSensorEvent != null)
                     OnNewSensorEvent(sensor);
 
-                Log(String.Format("New sensor (node id {0}, sensor id: {1}) registered\n", sensor.ownerNodeId,
+                DebugGatewayState(String.Format("New sensor (node id {0}, sensor id: {1}) registered", sensor.ownerNodeId,
                     sensor.sensorId));
             }
             else
@@ -422,8 +450,8 @@ namespace MyNetSensors.SerialGateway
         {
             nodes.Clear();
 
-            if (OnClearNodesList != null)
-                OnClearNodesList(this, null);
+            if (OnClearNodesListEvent != null)
+                OnClearNodesListEvent(this, null);
         }
 
         public async Task SendRebootToAllNodes()
