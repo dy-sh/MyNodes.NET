@@ -71,6 +71,7 @@ namespace MyNetSensors.SerialController_Console
                 gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
                 gateway.OnClearNodesListEvent += OnClearNodesListEvent;
                 gateway.OnDisconnectedEvent += OnGatewayDisconnectedEvent;
+                gateway.OnConnectedEvent += OnGatewayConnectedEvent;
             }
             catch { }
 
@@ -82,6 +83,13 @@ namespace MyNetSensors.SerialController_Console
                 DebugState("Can`t connect.");
 
             return result;
+        }
+
+        private void OnGatewayConnectedEvent(object sender, EventArgs e)
+        {
+            if (!IsConnected()) return;
+
+            hubProxy.Invoke("OnGatewayConnectedEvent");
         }
 
         private void OnGatewayDisconnectedEvent(object sender, EventArgs e)

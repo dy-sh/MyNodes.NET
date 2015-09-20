@@ -32,6 +32,7 @@ namespace MyNetSensors.SerialGateway
         public event SensorEventHandler OnSensorUpdatedEvent;
         public event EventHandler OnClearNodesListEvent;
         public event EventHandler OnDisconnectedEvent;
+        public event EventHandler OnConnectedEvent;
         public event DebugMessageEventHandler OnDebugTxRxMessage;
         public event DebugMessageEventHandler OnDebugGatewayStateMessage;
 
@@ -63,6 +64,8 @@ namespace MyNetSensors.SerialGateway
 
             DebugGatewayState(String.Format("Gateway connected."));
 
+            if (OnConnectedEvent != null)
+                OnConnectedEvent(this, null);
         }
 
         public void Disconnect()

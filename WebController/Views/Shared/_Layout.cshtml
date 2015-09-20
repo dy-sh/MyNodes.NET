@@ -16,21 +16,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("MyNetSensors", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("MyNetSensors", "About", "Home", new { area = "" }, new { @class = "navbar-brand fadebefore" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Nodes Control", "NodesControl", "Gateway")</li>
-                    <li>@Html.ActionLink("Nodes View", "NodesView", "Gateway")</li>
-                    <li>@Html.ActionLink("Messages Log", "Log", "Gateway")</li>
-                    <li>@Html.ActionLink("Settings", "Settings", "Gateway")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Nodes Control", "NodesControl", "Gateway",null, new {@class= "fadebefore" })</li>
+                    <li>@Html.ActionLink("Nodes View", "NodesView", "Gateway", null, new { @class = "fadebefore" })</li>
+                    <li>@Html.ActionLink("Messages Log", "Log", "Gateway", null,new { @class = "fadebefore" })</li>
+                    <li>@Html.ActionLink("Settings", "Settings", "Gateway", null, new { @class = "fadebefore" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", null, new { @class = "fadebefore" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="display: none;">
         @RenderBody()
         <hr />
         <footer>
@@ -43,5 +43,24 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryui")
     @RenderSection("scripts", required: false)
+
+<script>
+   // $('#nodesContainer').hide();
+    $('.body-content').fadeIn(1000);
+
+    $('.fadebefore').click(function() {
+        var href = $(this).attr('href');
+
+        // do animation
+        $('.body-content').fadeOut(400, function() {
+            // go to link when animation completes
+            window.location = href;
+
+        });
+
+        // over ride browser following link when clicked
+        return false;
+    });
+</script>
 </body>
 </html>

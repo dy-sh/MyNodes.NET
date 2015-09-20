@@ -199,6 +199,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\animate.min.css" />
     <Content Include="Content\bootstrap-switch.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -271,7 +273,28 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\mynetsensors-control.js" />
+    <Content Include="Scripts\mynetsensors-view.js" />
     <Content Include="Scripts\mysensors.js" />
+    <Content Include="Scripts\noty\jquery.noty.js" />
+    <Content Include="Scripts\noty\layouts\bottom.js" />
+    <Content Include="Scripts\noty\layouts\bottomCenter.js" />
+    <Content Include="Scripts\noty\layouts\bottomLeft.js" />
+    <Content Include="Scripts\noty\layouts\bottomRight.js" />
+    <Content Include="Scripts\noty\layouts\center.js" />
+    <Content Include="Scripts\noty\layouts\centerLeft.js" />
+    <Content Include="Scripts\noty\layouts\centerRight.js" />
+    <Content Include="Scripts\noty\layouts\inline.js" />
+    <Content Include="Scripts\noty\layouts\top.js" />
+    <Content Include="Scripts\noty\layouts\topCenter.js" />
+    <Content Include="Scripts\noty\layouts\topLeft.js" />
+    <Content Include="Scripts\noty\layouts\topRight.js" />
+    <Content Include="Scripts\noty\packaged\jquery.noty.packaged.js" />
+    <Content Include="Scripts\noty\packaged\jquery.noty.packaged.min.js" />
+    <Content Include="Scripts\noty\promise.js" />
+    <Content Include="Scripts\noty\themes\bootstrap.js" />
+    <Content Include="Scripts\noty\themes\default.js" />
+    <Content Include="Scripts\noty\themes\relax.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />

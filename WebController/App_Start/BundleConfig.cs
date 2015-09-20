@@ -35,11 +35,24 @@ namespace MyNetSensors.WebController
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
               "~/Scripts/jquery-ui-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/mysensors").Include(
-             "~/Scripts/mysensors.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/switch").Include(
-   "~/Scripts/bootstrap-switch.js"));
+                "~/Scripts/bootstrap-switch.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mysensors").Include(
+                "~/Scripts/mysensors.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mynsensors").Include(
+                "~/Scripts/mysensors.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-view").Include(
+                "~/Scripts/mynetsensors-view.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-control").Include(
+                "~/Scripts/mynetsensors-control.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/noty").Include(
+                "~/Scripts/noty/packaged/jquery.noty.packaged.min.js",
+                "~/Scripts/noty/themes/relax.js"));
 
         }
     }

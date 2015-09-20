@@ -92,6 +92,11 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.Others.onGatewayDisconnectedEvent();
         }
+
+        public void OnGatewayConnectedEvent()
+        {
+            Clients.Others.onGatewayConnectedEvent();
+        }
     }
 
 }
