@@ -6,45 +6,10 @@
 <h2>Settings</h2>
 
 <div class="row">
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">Database</div>
-            <div class="panel-body">
-                <p>
-
-                </p>
-
-                <ul class="list-group">
-                    @*<li class="list-group-item">
-                            Online
-                            <div class="pull-right">Yes</div>
-                        </li>
-                        <li class="list-group-item">
-                            Nodes registered
-                            <div class="pull-right">4</div>
-                        </li>
-                        <li class="list-group-item">
-                            Sensors registered
-                            <div class="pull-right">10</div>
-                        </li>*@
-                    <li class="list-group-item">
-                        Delete nodes from the database
-                        <div class="pull-right">
-                            <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
-                                Delete
-                            </button>
-                        </div><br /><br />
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
 
 
     <div class="col-sm-6">
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">Serial gateway</div>
             <div class="panel-body">
                 <div id="gateway-service-online">
@@ -63,25 +28,50 @@
                             Sensors registered
                             <div class="pull-right" id="sensors-registered">Unknown</div>
                         </li>
+                        <li class="list-group-item">
+                            Delete nodes from the database
+                            <div class="pull-right">
+                                <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
+                                    Delete
+                                </button>
+                            </div><br /><br />
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
+    @*
     <div class="col-sm-6">
         <div class="panel panel-default">
-             Default panel contents 
+            <div class="panel-heading">Database</div>
+            <div class="panel-body">
+                <p>
+
+                </p>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Delete nodes from the database
+                        <div class="pull-right">
+                            <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
+                                Delete
+                            </button>
+                        </div><br/><br/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    *@
+    <div class="col-sm-6">
+        <div class="panel panel-default">
             <div class="panel-heading">Web server</div>
             <div class="panel-body">
                 <div id="webserver-info">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            Users registered
-                            <div class="pull-right" id="users-registered">Unknown</div>
-                        </li>
-                        <li class="list-group-item">
-                            Users online
+                            Clients connected
                             <div class="pull-right" id="users-online">Unknown</div>
                         </li>
                     </ul>
@@ -89,6 +79,9 @@
             </div>
         </div>
     </div>
+
+
+
 </div>
 
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

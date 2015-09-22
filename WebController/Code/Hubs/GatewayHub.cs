@@ -163,15 +163,20 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Client(userId).returnNodes(nodes);
         }
 
+        public void ReturnGatewayInfo(GatewayInfo info, string userId)
+        {
+            Clients.Client(userId).returnGatewayInfo(info);
+        }
+
+
 
         #endregion
 
         #region Messages from clients to hub
 
-        public string GetConnectedUsersCount()
+        public void GetConnectedUsersCount()
         {
             Clients.Caller.returnConnectedUsersCount(GatewayHubStaticData.connectedUsersId.Count);
-            return GatewayHubStaticData.connectedUsersId.Count.ToString();
         }
 
         public void GetGatewayServiceConnected()
@@ -232,6 +237,15 @@ namespace MyNetSensors.WebController.Code.Hubs
 
             string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).clearLog(clientId);
+        }
+
+        public void GetGatewayInfo()
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            string clientId = Context.ConnectionId;
+            Clients.Client(GatewayHubStaticData.gatewayId).getGatewayInfo(clientId);
         }
 
         #endregion

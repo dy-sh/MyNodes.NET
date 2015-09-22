@@ -478,5 +478,21 @@ namespace MyNetSensors.SerialGateway
             message.isValid = true;
             SendMessage(message);
         }
+
+        public GatewayInfo GetGatewayInfo()
+        {
+            GatewayInfo info =new GatewayInfo();
+
+            info.isGatewayConnected = IsConnected();
+
+            info.gatewayNodesRegistered = nodes.Count;
+
+            int sensors=0;
+            foreach (var node in nodes)
+                sensors += node.sensors.Count;
+            info.gatewaySensorsRegistered = sensors;
+
+            return info;
+        }
     }
 }

@@ -86,18 +86,29 @@ $(function () {
     };
 
  
-    gatewayHub.client.updateUsersOnlineCount = function (count) {
+    gatewayHub.client.returnConnectedUsersCount = function (count) {
         $('#users-online').text(count);
+    };
+
+    gatewayHub.client.returnGatewayInfo = function (gatewayInfo) {
+        nodesCount = gatewayInfo.gatewayNodesRegistered;
+        sensorsCount = gatewayInfo.gatewaySensorsRegistered;
+        updateNodesAndSensorsCounts();
     };
 
 
     $.connection.hub.start().done(function () {
         gatewayHub.server.getGatewayServiceConnected();
+        gatewayHub.server.getGatewayInfo();
+        setInterval(updateData, 1000);
     });
 
 });
 
 
+function updateData() {
+    gatewayHub.server.getConnectedUsersCount();
+}
 
 
 

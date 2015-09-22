@@ -72,6 +72,7 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On("clearNodes", ClearNodes);
                 hubProxy.On<string>("getLog", GetLog);
                 hubProxy.On<string>("getNodes", GetNodes);
+                hubProxy.On<string>("getGatewayInfo", GetGatewayInfo);
                 hubProxy.On<string>("getGatewayHardwareConnected", GetGatewayHardwareConnected);
                 hubProxy.On("authorizationFailed", AuthorizationFailed);
                 hubProxy.On("authorizationCompleted", AuthorizationCompleted);
@@ -111,6 +112,7 @@ namespace MyNetSensors.SerialController_Console
             }
 
         }
+
 
 
 
@@ -302,6 +304,15 @@ namespace MyNetSensors.SerialController_Console
                 return;
             }
             hubProxy.Invoke("returnGatewayHardwareConnected", userId, gateway.IsConnected());
+        }
+
+        private void GetGatewayInfo(string userId)
+        {
+            DebugTxRx(String.Format("Get gateway info ({0})", userId));
+
+            GatewayInfo info = gateway.GetGatewayInfo();
+
+            hubProxy.Invoke("returnGatewayInfo",  info, userId);
         }
     }
 }
