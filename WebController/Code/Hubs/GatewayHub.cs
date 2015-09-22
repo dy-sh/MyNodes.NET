@@ -23,7 +23,7 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             string clientId = Context.ConnectionId;
 
-            bool isGateway = Context.QueryString["IsGateway"]=="true";
+            bool isGateway = Context.QueryString["IsGateway"] == "true";
 
             if (isGateway)
             {
@@ -98,10 +98,10 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public void ReturnLog(List<Message> log)
         {
-            string sLog="";
+            string sLog = "";
             foreach (var message in log)
             {
-                sLog += message.ToString()+"<br/>";
+                sLog += message.ToString() + "<br/>";
             }
             Clients.Others.returnLog(sLog);
         }
@@ -161,6 +161,28 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Caller.returnGatewayServiceConnected(IsGatewayServiceConnected());
         }
 
+        public void GetGatewayHardwareConnected()
+        {
+            string clientId = Context.ConnectionId;
+
+            if (!IsGatewayServiceConnected())
+            {
+                Clients.Caller.returnGatewayHardwareConnected(false);
+                return;
+            }
+
+            Clients.Client(GatewayHubStaticData.gatewayId).getGatewayHardwareConnected(clientId);
+        }
+
+        public void ReturnGatewayHardwareConnected(string userId, bool isConnected)
+        {
+
+            Clients.Client(userId).returnGatewayHardwareConnected(isConnected);
+        }
+
+
+
+
         public void OnGatewayConnectedEvent()
         {
             Clients.Others.onGatewayHardwareConnected();
@@ -171,7 +193,7 @@ namespace MyNetSensors.WebController.Code.Hubs
             return !String.IsNullOrEmpty(GatewayHubStaticData.gatewayId);
         }
 
-  
+
     }
 
 }

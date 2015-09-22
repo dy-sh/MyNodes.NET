@@ -72,6 +72,7 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On("clearNodes", ClearNodes);
                 hubProxy.On("getLog", GetLog);
                 hubProxy.On("getNodes", GetNodes);
+                hubProxy.On<string>("getGatewayHardwareConnected", GetGatewayHardwareConnected);
                 hubProxy.On("authorizationFailed", AuthorizationFailed);
                 hubProxy.On("authorizationCompleted", AuthorizationCompleted);
                 hubProxy.On<string>("sendMessage", SendMessage);
@@ -97,19 +98,21 @@ namespace MyNetSensors.SerialController_Console
                 if (OnConnected != null && IsConnected())
                     OnConnected(this, null);
 
-               // DebugState("Connected.");
+                // DebugState("Connected.");
 
                 return true;
             }
             catch
             {
                 DebugState("Can`t connect.");
-                if (OnConnectionFailed!=null)
+                if (OnConnectionFailed != null)
                     OnConnectionFailed(this, null);
                 return false;
             }
-                
+
         }
+
+
 
         public void Disconnect()
         {
@@ -134,7 +137,7 @@ namespace MyNetSensors.SerialController_Console
 
             isAuthorized = false;
 
-            if(hubConnection!=null && hubConnection.State == ConnectionState.Connected)
+            if (hubConnection != null && hubConnection.State == ConnectionState.Connected)
                 hubConnection.Stop();
 
             if (OnDisconnected != null)
@@ -288,6 +291,13 @@ namespace MyNetSensors.SerialController_Console
             Message mess = gateway.ParseMessageFromString(message);
             gateway.SendMessage(mess);
             gateway.UpdateSensorFromMessage(mess);
+        }
+
+        private void GetGatewayHardwareConnected(string userId)
+        {
+            DebugTxRx(String.Format("Get gateway status ({0})", userId));
+
+            hubProxy.Invoke("returnGatewayHardwareConnected", userId, gateway.IsConnected());
         }
     }
 }

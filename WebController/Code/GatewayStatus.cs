@@ -7,9 +7,9 @@ namespace MyNetSensors.WebController.Code
 {
     public class GatewayStatus
     {
-        public bool gatewayHardwareOnline;
+  /*      public bool gatewayHardwareOnline;
         public bool gatewayServiceOnline;
         public int gatewayConectedNodes;
         public int gatewayConectedSensors;
-    }
+  */  }
 }

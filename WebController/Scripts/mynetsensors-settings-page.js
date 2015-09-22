@@ -40,11 +40,25 @@ $(function () {
         var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
         gatewayServiceConnected = true;
         gatewayStatusChanged();
+        gatewayHub.server.getGatewayHardwareConnected();
     };
 
     gatewayHub.client.onGatewayServiceDisconnected = function () {
         var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
         gatewayServiceConnected = false;
+        gatewayHardwareConnected = false;
+        gatewayStatusChanged();
+    };
+
+    gatewayHub.client.returnGatewayServiceConnected = function (isConnected) {
+        gatewayServiceConnected = isConnected;
+        gatewayStatusChanged();
+        gatewayHub.server.getGatewayHardwareConnected();
+    };
+
+
+    gatewayHub.client.returnGatewayHardwareConnected = function (isConnected) {
+        gatewayHardwareConnected = isConnected;
         gatewayStatusChanged();
     };
 
@@ -54,10 +68,7 @@ $(function () {
 
 
 
-    gatewayHub.client.returnGatewayServiceConnected = function (isConnected) {
-        gatewayServiceConnected = isConnected;
-        gatewayStatusChanged();
-    };
+   
     
 
     gatewayHub.client.returnNodes = function (nodes) {

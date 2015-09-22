@@ -37,18 +37,34 @@ $(function () {
         var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
         gatewayServiceConnected = true;
         gatewayStatusChanged();
+        gatewayHub.server.getGatewayHardwareConnected();
     };
 
     gatewayHub.client.onGatewayServiceDisconnected = function () {
         var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
         gatewayServiceConnected = false;
+        gatewayHardwareConnected = false;
         gatewayStatusChanged();
+    };
+
+    gatewayHub.client.returnGatewayServiceConnected = function (isConnected) {
+        gatewayServiceConnected = isConnected;
+        gatewayStatusChanged();
+        gatewayHub.server.getGatewayHardwareConnected();
+    };
+
+
+    gatewayHub.client.returnGatewayHardwareConnected = function (isConnected) {
+        gatewayHardwareConnected = isConnected;
+        gatewayStatusChanged();
+        $.get("GetNodes/");
     };
 
     gatewayHub.client.onClearNodesListEvent = function (sensor) {
         var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
         $('#nodesContainer').html(null);
     };
+
 
 
     gatewayHub.client.returnNodes = function (nodes) {
@@ -81,7 +97,7 @@ $(function () {
 
    
     $.connection.hub.start().done(function () {
-        $.get("GetNodes/");
+        gatewayHub.server.getGatewayServiceConnected();
     });
 
 });
