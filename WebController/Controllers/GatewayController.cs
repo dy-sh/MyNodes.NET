@@ -69,5 +69,10 @@ namespace MyNetSensors.WebController.Controllers
             context.Clients.All.clearNodes();
             return RedirectToAction("Settings");
         }
+
+        public int GetConnectedUsersCount()
+        {
+           return GatewayHubStaticData.connectedUsersId.Count;
+        }
     }
 }

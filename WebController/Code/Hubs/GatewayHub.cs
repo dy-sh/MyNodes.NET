@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -16,6 +17,62 @@ namespace MyNetSensors.WebController.Code.Hubs
 {
     public class GatewayHub : Hub
     {
+
+
+        public override Task OnConnected()
+        {
+            string clientId = Context.ConnectionId;
+
+            bool isGateway = Context.QueryString["IsGateway"]=="true";
+
+            if (isGateway)
+            {
+                string connectionPassword = ConfigurationManager.AppSettings["GateToWebConnectionPassword"];
+                string sendedPassword = Context.QueryString["ConnectionPassword"];
+                if (connectionPassword == sendedPassword)
+                {
+                    GatewayHubStaticData.gatewayId = clientId;
+                    Clients.Caller.authorizationCompleted();
+                }
+                else
+                {
+                    Clients.Caller.authorizationFailed();
+                }
+            }
+            else if (!GatewayHubStaticData.connectedUsersId.Contains(clientId))
+                GatewayHubStaticData.connectedUsersId.Add(clientId);
+
+            return base.OnConnected();
+        }
+
+
+        public override Task OnReconnected()
+        {
+            string clientId = Context.ConnectionId;
+            if (!GatewayHubStaticData.connectedUsersId.Contains(clientId))
+                GatewayHubStaticData.connectedUsersId.Add(clientId);
+
+            return base.OnReconnected();
+        }
+
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            string clientId = Context.ConnectionId; 
+
+            if (GatewayHubStaticData.connectedUsersId.Contains(clientId))
+                GatewayHubStaticData.connectedUsersId.Remove(clientId);
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+
+
+        public string GetConnectedUsersCount()
+        {
+            Clients.Caller.returnConnectedUsersCount(GatewayHubStaticData.connectedUsersId.Count);
+            return GatewayHubStaticData.connectedUsersId.Count.ToString();
+        }
 
 
         public void OnMessageRecievedEvent(Message message)

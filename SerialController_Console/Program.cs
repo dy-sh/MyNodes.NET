@@ -98,6 +98,7 @@ namespace MyNetSensors.SerialController_Console
             //connecting to webserver
             connected = false;
             bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ConnectToWebServer"]);
+            string connectionPassword = ConfigurationManager.AppSettings["GateToWebConnectionPassword"];
             if (connectToWebServer)
             {
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowWebServerTxRxDebug"]))
@@ -109,8 +110,15 @@ namespace MyNetSensors.SerialController_Console
                 while (!connected)
                 {
                     string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
-                    connected = signalR.Connect(gateway, webServerUrl);
+                    connected=signalR.Connect(gateway, webServerUrl, connectionPassword);
                     if (!connected) Thread.Sleep(5000);
+                }
+
+                bool authorized =false;
+                while (!authorized)
+                {
+                    authorized = signalR.IsAuthorized();
+                    if (!authorized) Thread.Sleep(5000);
                 }
             }
 

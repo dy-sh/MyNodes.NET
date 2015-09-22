@@ -19,16 +19,26 @@ namespace MyNetSensors.SerialController_Console
     {
         public event DebugMessageEventHandler OnDebugTxRxMessage;
         public event DebugMessageEventHandler OnDebugStateMessage;
+        public event EventHandler OnConnected;
+        public event EventHandler OnDisconnected;
+        public event EventHandler OnConnectionFailed;
+        public event EventHandler OnAuthorizationCompleted;
+        public event EventHandler OnAuthorizationFailed;
+        private bool isAuthorized;
 
         private HubConnection hubConnection;
         private IHubProxy hubProxy;
         private Gateway gateway;
 
 
-
         public bool IsConnected()
         {
-            return hubConnection.State == ConnectionState.Connected;
+            return hubConnection != null && hubConnection.State == ConnectionState.Connected;
+        }
+
+        public bool IsAuthorized()
+        {
+            return isAuthorized;
         }
 
         private void DebugTxRx(string message)
@@ -43,21 +53,31 @@ namespace MyNetSensors.SerialController_Console
                 OnDebugStateMessage(message);
         }
 
-        public bool Connect(Gateway gateway, string serverUrl)
+        public bool Connect(Gateway gateway, string serverUrl, string connectionPassword)
         {
             DebugState(String.Format("Connecting to server {0}... ", serverUrl));
 
-            hubConnection = new HubConnection(serverUrl);
+            isAuthorized = false;
+
+            var querystringData = new Dictionary<string, string>();
+            querystringData.Add("IsGateway", "true");
+            querystringData.Add("ConnectionPassword", connectionPassword);
+
+            hubConnection = new HubConnection(serverUrl, querystringData);
             hubProxy = hubConnection.CreateHubProxy("gatewayHub");
 
             try
             {
-                hubConnection.Start().Wait();
                 hubProxy.On("clearLog", ClearLog);
                 hubProxy.On("clearNodes", ClearNodes);
                 hubProxy.On("getLog", GetLog);
                 hubProxy.On("getNodes", GetNodes);
+                hubProxy.On("authorizationFailed", AuthorizationFailed);
+                hubProxy.On("authorizationCompleted", AuthorizationCompleted);
                 hubProxy.On<string>("sendMessage", SendMessage);
+
+                hubConnection.Start().Wait();
+                hubConnection.Closed += Disconnect;
 
                 this.gateway = gateway;
                 gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
@@ -72,18 +92,72 @@ namespace MyNetSensors.SerialController_Console
                 gateway.OnClearNodesListEvent += OnClearNodesListEvent;
                 gateway.OnDisconnectedEvent += OnGatewayDisconnectedEvent;
                 gateway.OnConnectedEvent += OnGatewayConnectedEvent;
+
+
+                if (OnConnected != null && IsConnected())
+                    OnConnected(this, null);
+
+               // DebugState("Connected.");
+
+                return true;
             }
-            catch { }
-
-            bool result = IsConnected();
-
-            if (result)
-                DebugState("Connected.");
-            else
+            catch
+            {
                 DebugState("Can`t connect.");
-
-            return result;
+                if (OnConnectionFailed!=null)
+                    OnConnectionFailed(this, null);
+                return false;
+            }
+                
         }
+
+        public void Disconnect()
+        {
+            DebugState("Disconnected.");
+
+            if (gateway != null)
+            {
+                gateway.OnMessageRecievedEvent -= OnMessageRecievedEvent;
+                gateway.OnMessageSendEvent -= OnMessageSendEvent;
+                gateway.messagesLog.OnClearMessages -= OnClearMessages;
+                gateway.OnNewNodeEvent -= OnNewNodeEvent;
+                gateway.OnNodeLastSeenUpdatedEvent -= OnNodeLastSeenUpdatedEvent;
+                gateway.OnNodeUpdatedEvent -= OnNodeUpdatedEvent;
+                gateway.OnNodeBatteryUpdatedEvent -= OnNodeBatteryUpdatedEvent;
+                gateway.OnNewSensorEvent -= OnNewSensorEvent;
+                gateway.OnSensorUpdatedEvent -= OnSensorUpdatedEvent;
+                gateway.OnClearNodesListEvent -= OnClearNodesListEvent;
+                gateway.OnDisconnectedEvent -= OnGatewayDisconnectedEvent;
+                gateway.OnConnectedEvent -= OnGatewayConnectedEvent;
+                gateway = null;
+            }
+
+            isAuthorized = false;
+
+            if(hubConnection!=null && hubConnection.State == ConnectionState.Connected)
+                hubConnection.Stop();
+
+            if (OnDisconnected != null)
+                OnDisconnected(this, null);
+        }
+
+
+        private void AuthorizationFailed()
+        {
+            DebugState("Authorization failed.");
+            isAuthorized = false;
+            if (OnAuthorizationFailed != null)
+                OnAuthorizationFailed(this, null);
+        }
+
+        private void AuthorizationCompleted()
+        {
+            DebugState("Connected. Authorization completed.");
+            isAuthorized = true;
+            if (OnAuthorizationCompleted != null)
+                OnAuthorizationCompleted(this, null);
+        }
+
 
         private void OnGatewayConnectedEvent(object sender, EventArgs e)
         {
@@ -116,7 +190,7 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("OnMessageSendEvent", message);
         }
 
-   
+
         private void OnNodeUpdatedEvent(Node node)
         {
             if (!IsConnected()) return;
@@ -172,7 +246,7 @@ namespace MyNetSensors.SerialController_Console
         }
 
 
-        
+
 
         private void ClearLog()
         {
@@ -207,7 +281,7 @@ namespace MyNetSensors.SerialController_Console
 
         private void SendMessage(string message)
         {
-            DebugTxRx("Send message: "+ message);
+            DebugTxRx("Send message: " + message);
 
             if (!gateway.IsConnected()) return;
 
