@@ -35,5 +35,7 @@ namespace MyNetSensors.SerialController_Console
         void ShowDebugInConsole(bool enable);
         void SetStoreInterval(int ms);
         void StoreTxRxMessages(bool enable);
+
+        List<SensorData> GetSensorDataLog(Sensor sensor);
     }
 }

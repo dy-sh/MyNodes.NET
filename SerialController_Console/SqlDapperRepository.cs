@@ -296,6 +296,49 @@ namespace MyNetSensors.SerialController_Console
                     Node_db_Id = node_db_id
                 });
             }
+
+            StoreSensorDataToLog(sensor);
+        }
+
+        private void StoreSensorDataToLog(Sensor sensor)
+        {
+        //    if (!sensor.logToDbEnabled && !sensor.logToDbWhenChanged)
+        //        return;
+
+            CreateTableForSensor(sensor);
+
+            var sqlQuery = String.Format("INSERT INTO Sensor{0} (sensorDataJson, dateTime) "
+    + "VALUES(@sensorDataJson, @dateTime); "
+    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+            db.Execute(sqlQuery, new
+            {
+                sensorDataJson = sensor.sensorDataJson,
+                dateTime = DateTime.Now,
+            });
+        }
+
+        private void CreateTableForSensor(Sensor sensor)
+        {
+            try
+            {
+                string req = String.Format(
+                    @"CREATE TABLE [dbo].[Sensor{0}](
+	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	            [sensorDataJson] [nvarchar](max) NULL,	        
+	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
+
+                db.Execute(req);
+            }
+            catch { }
+        }
+
+        public List<SensorData> GetSensorDataLog(Sensor sensor)
+        {
+            string req = String.Format( "SELECT * FROM Sensor{0}", sensor.db_Id);
+
+            List<SensorData> list = db.Query<SensorData>(req).ToList();
+
+            return list;
         }
 
         private void StoreAllNodes()

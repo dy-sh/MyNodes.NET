@@ -23,11 +23,12 @@ namespace MyNetSensors.SerialGateway
         public string description { get; set; }
 
         public string sensorDataJson { get; set; }
-        /*
-                public bool storeToDb { get; set; }
-                //interval in ms. if 0, will store every changing
-                public int storeToDbInterval { get; set; }
-        */
+
+        public bool logToDbEnabled { get; set; }
+        //interval in seconds. if 0, will not store by timer
+        public int logToDbTimerInterval { get; set; }
+        public bool logToDbWhenChanged { get; set; }
+
 
         public Sensor()
         {
@@ -87,7 +88,7 @@ namespace MyNetSensors.SerialGateway
         {
             List<SensorData> dataList = GetAllData();
             if (dataList == null)
-                dataList=new List<SensorData>();
+                dataList = new List<SensorData>();
 
             SensorData data = dataList.FirstOrDefault(x => x.dataType == dataType);
 
@@ -109,9 +110,9 @@ namespace MyNetSensors.SerialGateway
         public void SetSensorType(SensorType? sensorType)
         {
             if (this.sensorType == sensorType) return;
-            if (sensorType < 0 || sensorType > Enum.GetValues(typeof (SensorType)).Cast<SensorType>().Max())
-            {throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data");}
-               
+            if (sensorType < 0 || sensorType > Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
+            { throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data"); }
+
 
             this.sensorType = sensorType;
 

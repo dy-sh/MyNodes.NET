@@ -289,6 +289,11 @@ namespace MyNetSensors.SerialController_Console
             storeTxRxMessages = enable;
         }
 
+        public List<SensorData> GetSensorDataLog(Sensor sensor)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Log(string message)
         {
             if (showDebugMessages)
