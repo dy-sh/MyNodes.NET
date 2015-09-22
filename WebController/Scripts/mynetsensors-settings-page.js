@@ -100,6 +100,7 @@ $(function () {
     $.connection.hub.start().done(function () {
         gatewayHub.server.getGatewayServiceConnected();
         gatewayHub.server.getGatewayInfo();
+        gatewayHub.server.getConnectedUsersCount();
         setInterval(updateData, 1000);
     });
 
@@ -115,15 +116,15 @@ function updateData() {
 
 function gatewayStatusChanged() {
     if (gatewayHardwareConnected) {
-        $('#gateway-hardware-online').html("<p class='text-success'>Gateway hardware is online</p>");
+        $('#gateway-hardware-online').html("<p class='text-success'>Gateway hardware is online <span class='glyphicon glyphicon-ok' aria-hidden='true'></span></p>");
     } else {
-        $('#gateway-hardware-online').html("<p class='text-danger'>Gateway hardware is offline</p>");
+        $('#gateway-hardware-online').html("<p class='text-danger'>Gateway hardware is offline <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>");
     }
 
     if (gatewayServiceConnected) {
-        $('#gateway-service-online').html("<p class='text-success'>Gateway service is online</p>");
+        $('#gateway-service-online').html("<p class='text-success'>Gateway service is online <span class='glyphicon glyphicon-ok' aria-hidden='true'></span></p>");
     } else {
-        $('#gateway-service-online').html("<p class='text-danger'>Gateway service is offline</p>");
+        $('#gateway-service-online').html("<p class='text-danger'>Gateway service is offline <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>");
     }
 
     if (gatewayHardwareConnected && gatewayServiceConnected)
