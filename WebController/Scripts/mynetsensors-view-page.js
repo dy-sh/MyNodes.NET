@@ -58,6 +58,11 @@ $(function () {
         gatewayHardwareConnected = isConnected;
         gatewayStatusChanged();
         gatewayHub.server.getNodes();
+
+        if (!gatewayServiceConnected)
+            var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
+        else if (!gatewayHardwareConnected)
+            var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
     };
 
     gatewayHub.client.onClearNodesListEvent = function (sensor) {

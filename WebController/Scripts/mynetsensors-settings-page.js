@@ -87,13 +87,11 @@ $(function () {
 
  
     gatewayHub.client.updateUsersOnlineCount = function (count) {
-        // Add the message to the page. 
         $('#users-online').text(count);
     };
 
 
     $.connection.hub.start().done(function () {
-        //$.get("GetNodes/");
         gatewayHub.server.getGatewayServiceConnected();
     });
 
