@@ -14,7 +14,7 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    interface INodesRepository
+    interface IGatewayRepository
     {
         void Connect(Gateway gateway, string connectionString);
         void DropMessages();
@@ -36,6 +36,5 @@ namespace MyNetSensors.SerialController_Console
         void SetStoreInterval(int ms);
         void StoreTxRxMessages(bool enable);
 
-        List<SensorData> GetSensorDataLog(Sensor sensor);
     }
 }

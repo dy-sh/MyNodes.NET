@@ -50,8 +50,8 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult DropDatabase()
         {
-            context.Clients.All.clearLog();
-            context.Clients.All.clearNodes();
+            context.Clients.Client(GatewayHubStaticData.gatewayId).clearLog();
+            context.Clients.Client(GatewayHubStaticData.gatewayId).clearNodes();
             return RedirectToAction("Settings");
         }
 

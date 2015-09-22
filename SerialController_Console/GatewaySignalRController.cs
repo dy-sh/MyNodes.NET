@@ -15,7 +15,7 @@ using MyNetSensors.SerialGateway;
 namespace MyNetSensors.SerialController_Console
 {
 
-    public class SignalRController
+    public class GatewaySignalRController
     {
         public event DebugMessageEventHandler OnDebugTxRxMessage;
         public event DebugMessageEventHandler OnDebugStateMessage;

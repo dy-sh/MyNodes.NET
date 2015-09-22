@@ -218,7 +218,7 @@ function updateLastSeen(node) {
 function updateBattery(node) {
     var id = node.nodeId;
     $('#nodeBattery' + id)
-        .html("Battery: " + node.batteryLevel);
+        .html("Battery: " + node.batteryLevel + "<br/>");
 }
 
 

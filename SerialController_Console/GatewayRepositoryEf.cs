@@ -15,7 +15,7 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    public class SqlEfRepository:INodesRepository
+    public class GatewayRepositoryEf:IGatewayRepository
     {
         private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
@@ -31,7 +31,7 @@ namespace MyNetSensors.SerialController_Console
         //slows down the performance, can cause an exception of a large flow of messages per second
         public bool storeTxRxMessages = false;
 
-        private MyNetSensorsDbContext db;
+        private GatewayRepositoryEfDbContext db;
         private Gateway gateway;
         private Timer updateDbTimer=new Timer();
 
@@ -78,7 +78,7 @@ namespace MyNetSensors.SerialController_Console
 
         private void InitializeDB(string connectionString)
         {
-            db = new MyNetSensorsDbContext(connectionString);
+            db = new GatewayRepositoryEfDbContext(connectionString);
         }
 
         public void DropMessages()
@@ -289,10 +289,6 @@ namespace MyNetSensors.SerialController_Console
             storeTxRxMessages = enable;
         }
 
-        public List<SensorData> GetSensorDataLog(Sensor sensor)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Log(string message)
         {

@@ -20,8 +20,8 @@ namespace MyNetSensors.SerialController_Console
     {
         private static ComPort comPort = new ComPort();
         private static Gateway gateway = new Gateway();
-        private static INodesRepository db = new SqlDapperRepository();
-        private static SignalRController signalR = new SignalRController();
+        private static IGatewayRepository db = new GatewayRepositoryDapper();
+        private static GatewaySignalRController signalR = new GatewaySignalRController();
 
         private static string serialPortName;
 

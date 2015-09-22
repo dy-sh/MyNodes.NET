@@ -19,7 +19,31 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    class SqlDapperRepository : INodesRepository
+
+
+    public class EnittyOneToManyMapper<TP, TC, TPk>
+    {
+        private readonly IDictionary<TPk, TP> _lookup = new Dictionary<TPk, TP>();
+        public Action<TP, TC> AddChildAction { get; set; }
+        public Func<TP, TPk> ParentKey { get; set; }
+
+        public virtual TP Map(TP parent, TC child)
+        {
+            TP entity;
+            var found = true;
+            var primaryKey = ParentKey(parent);
+            if (!_lookup.TryGetValue(primaryKey, out entity))
+            {
+                _lookup.Add(primaryKey, parent);
+                entity = parent;
+                found = false;
+            }
+            AddChildAction(entity, child);
+            return !found ? entity : default(TP);
+        }
+    }
+
+    class GatewayRepositoryDapper : IGatewayRepository
     {
         private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
@@ -300,46 +324,9 @@ namespace MyNetSensors.SerialController_Console
             StoreSensorDataToLog(sensor);
         }
 
-        private void StoreSensorDataToLog(Sensor sensor)
-        {
-        //    if (!sensor.logToDbEnabled && !sensor.logToDbWhenChanged)
-        //        return;
+      
 
-            CreateTableForSensor(sensor);
 
-            var sqlQuery = String.Format("INSERT INTO Sensor{0} (sensorDataJson, dateTime) "
-    + "VALUES(@sensorDataJson, @dateTime); "
-    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
-            db.Execute(sqlQuery, new
-            {
-                sensorDataJson = sensor.sensorDataJson,
-                dateTime = DateTime.Now,
-            });
-        }
-
-        private void CreateTableForSensor(Sensor sensor)
-        {
-            try
-            {
-                string req = String.Format(
-                    @"CREATE TABLE [dbo].[Sensor{0}](
-	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
-	            [sensorDataJson] [nvarchar](max) NULL,	        
-	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
-
-                db.Execute(req);
-            }
-            catch { }
-        }
-
-        public List<SensorData> GetSensorDataLog(Sensor sensor)
-        {
-            string req = String.Format( "SELECT * FROM Sensor{0}", sensor.db_Id);
-
-            List<SensorData> list = db.Query<SensorData>(req).ToList();
-
-            return list;
-        }
 
         private void StoreAllNodes()
         {
@@ -455,37 +442,44 @@ namespace MyNetSensors.SerialController_Console
             if (showConsoleMessages)
                 Console.WriteLine(message);
         }
-    }
 
-
-
-
-    public class EnittyOneToManyMapper<TP, TC, TPk>
-    {
-        private readonly IDictionary<TPk, TP> _lookup = new Dictionary<TPk, TP>();
-
-        public Action<TP, TC> AddChildAction { get; set; }
-
-        public Func<TP, TPk> ParentKey { get; set; }
-
-
-        public virtual TP Map(TP parent, TC child)
+        private void StoreSensorDataToLog(Sensor sensor)
         {
-            TP entity;
-            var found = true;
-            var primaryKey = ParentKey(parent);
+            //    if (!sensor.logToDbEnabled && !sensor.logToDbWhenChanged)
+            //        return;
 
-            if (!_lookup.TryGetValue(primaryKey, out entity))
-            {
-                _lookup.Add(primaryKey, parent);
-                entity = parent;
-                found = false;
-            }
+            CreateTableForSensor(sensor);
 
-            AddChildAction(entity, child);
+            List<SensorData> data = sensor.GetAllData();
 
-            return !found ? entity : default(TP);
+            foreach (var sensorData in data)
+                sensorData.dateTime = DateTime.Now;
+
+            var sqlQuery = String.Format("INSERT INTO Sensor{0} (dataType, state, dateTime) "
+    + "VALUES(@dataType,@state, @dateTime); "
+    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+            db.Execute(sqlQuery, data);
+
 
         }
+
+        private void CreateTableForSensor(Sensor sensor)
+        {
+            try
+            {
+                string req = String.Format(
+                    @"CREATE TABLE [dbo].[Sensor{0}](
+	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	            [dataType] [int] NULL,	        
+	            [state] [nvarchar](max) NULL,	        
+	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
+
+                db.Execute(req);
+            }
+            catch { }
+        }
     }
+
+
+
 }

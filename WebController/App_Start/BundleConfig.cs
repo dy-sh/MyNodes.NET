@@ -57,6 +57,9 @@ namespace MyNetSensors.WebController
                 "~/Scripts/noty/packaged/jquery.noty.packaged.min.js",
                 "~/Scripts/noty/themes/relax.js"));
 
+            bundles.Add(new StyleBundle("~/Content/font-awesome")
+                .Include("~/Content/font-awesome.css"));
+
         }
     }
 }

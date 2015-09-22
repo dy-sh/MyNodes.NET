@@ -13,9 +13,9 @@ using MyNetSensors.SerialGateway;
 
 namespace MyNetSensors.SerialController_Console
 {
-    class MyNetSensorsDbContext : DbContext
+    class GatewayRepositoryEfDbContext : DbContext
     {
-        public MyNetSensorsDbContext(string connectionString) : base(connectionString) { }
+        public GatewayRepositoryEfDbContext(string connectionString) : base(connectionString) { }
   
         public DbSet<Message>  Messages { get; set; }
         public DbSet<Node>  Nodes { get; set; }

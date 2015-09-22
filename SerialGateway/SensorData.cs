@@ -12,11 +12,18 @@ namespace MyNetSensors.SerialGateway
     {
         public SensorDataType? dataType { get; set; }
         public string state { get; set; }
+        public DateTime dateTime { get; set; }
+
+        public SensorData()
+        {
+            //for DB materialization
+        }
 
         public SensorData(SensorDataType? dataType, string state)
         {
             this.dataType = dataType;
             this.state = state;
+            dateTime = DateTime.Now;
         }
 
         public override string ToString()
