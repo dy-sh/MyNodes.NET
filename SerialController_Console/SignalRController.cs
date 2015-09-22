@@ -296,7 +296,11 @@ namespace MyNetSensors.SerialController_Console
         private void GetGatewayHardwareConnected(string userId)
         {
             DebugTxRx(String.Format("Get gateway status ({0})", userId));
-
+            if (gateway == null)
+            {
+                hubProxy.Invoke("returnGatewayHardwareConnected", userId, false);
+                return;
+            }
             hubProxy.Invoke("returnGatewayHardwareConnected", userId, gateway.IsConnected());
         }
     }

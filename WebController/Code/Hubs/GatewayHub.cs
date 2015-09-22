@@ -187,6 +187,9 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public void SendMessage(string message)
         {
+            if (!IsGatewayServiceConnected())
+                return;
+
             string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).sendMessage(message, clientId);
         }
@@ -194,35 +197,40 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public void GetGatewayHardwareConnected()
         {
-            string clientId = Context.ConnectionId;
-
             if (!IsGatewayServiceConnected())
             {
                 Clients.Caller.returnGatewayHardwareConnected(false);
                 return;
             }
 
+            string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).getGatewayHardwareConnected(clientId);
         }
 
         public void GetNodes()
         {
-            string clientId = Context.ConnectionId;
+            if (!IsGatewayServiceConnected())
+                return;
 
+            string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).getNodes(clientId);
         }
 
         public void GetLog()
         {
-            string clientId = Context.ConnectionId;
+            if (!IsGatewayServiceConnected())
+                return;
 
+            string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).getLog(clientId);
         }
 
         public void ClearLog()
         {
-            string clientId = Context.ConnectionId;
+            if (!IsGatewayServiceConnected())
+                return;
 
+            string clientId = Context.ConnectionId;
             Clients.Client(GatewayHubStaticData.gatewayId).clearLog(clientId);
         }
 

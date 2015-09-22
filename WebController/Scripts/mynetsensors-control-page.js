@@ -61,6 +61,7 @@ $(function () {
         gatewayServiceConnected = isConnected;
         gatewayStatusChanged();
         gatewayHub.server.getGatewayHardwareConnected();
+        
     };
 
 

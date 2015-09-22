@@ -27,7 +27,26 @@ namespace MyNetSensors.SerialController_Console
 
         private static void Main(string[] args)
         {
+            ConnectToDb();
+            ConnectToSerialPort();
+            ConnectToWebServer();
 
+            //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
+            gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+
+            Console.WriteLine("Startup complete");
+            while (true)
+                Console.ReadLine();
+        }
+
+        private static void OnDisconnectedEvent(object sender, EventArgs e)
+        {
+            ConnectToSerialPort();
+        }
+
+
+        public async static Task ConnectToDb()
+        {
             //connecting to DB
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
@@ -43,12 +62,14 @@ namespace MyNetSensors.SerialController_Console
                 {
                     db.Connect(gateway, connectionString);
                     connected = db.IsConnected();
-                    if (!connected) Thread.Sleep(5000);
+                    if (!connected) await Task.Delay(5000);
                 }
             }
+        }
 
 
-
+        public static async Task ConnectToSerialPort()
+        {
             //connecting to serial port
             Console.WriteLine("Connecting to serial port...");
 
@@ -62,7 +83,7 @@ namespace MyNetSensors.SerialController_Console
 
             serialPortName = ConfigurationManager.AppSettings["SerialPort"];
 
-            connected = false;
+            bool connected = false;
             while (!connected)
             {
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["SelectSerialPortOnStartup"]))
@@ -70,33 +91,16 @@ namespace MyNetSensors.SerialController_Console
 
                 comPort.Connect(serialPortName);
                 connected = comPort.IsConnected();
-                if (!connected) Thread.Sleep(5000);
+                if (!connected) await Task.Delay(5000);
             }
 
+            ConnectToGateway();
+        }
 
-            //connecting to gateway
-            Console.WriteLine("Connecting to gateway... ");
-
-            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
-
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayTxRxDebug"]))
-                gateway.OnDebugTxRxMessage += message => Console.WriteLine("GATEWAY: " + message);
-
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayStateDebug"]))
-                gateway.OnDebugGatewayStateMessage += message => Console.WriteLine("GATEWAY: " + message);
-
-            connected = false;
-            while (!connected)
-            {
-                gateway.Connect(comPort);
-                connected = gateway.IsConnected();
-                if (!connected) Thread.Sleep(5000);
-            }
-
-
-
+        public static async Task ConnectToWebServer()
+        {
             //connecting to webserver
-            connected = false;
+            bool connected = false;
             bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ConnectToWebServer"]);
             string connectionPassword = ConfigurationManager.AppSettings["GateToWebConnectionPassword"];
             if (connectToWebServer)
@@ -110,52 +114,44 @@ namespace MyNetSensors.SerialController_Console
                 while (!connected)
                 {
                     string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
-                    connected=signalR.Connect(gateway, webServerUrl, connectionPassword);
+                    connected = signalR.Connect(gateway, webServerUrl, connectionPassword);
                     if (!connected) Thread.Sleep(5000);
                 }
 
-                bool authorized =false;
+                bool authorized = false;
                 while (!authorized)
                 {
                     authorized = signalR.IsAuthorized();
                     if (!authorized) Thread.Sleep(5000);
                 }
             }
-
-            //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
-            gateway.OnDisconnectedEvent += OnDisconnectedEvent;
-
-            Console.WriteLine("Startup complete");
-            while (true)
-                Console.ReadLine();
         }
 
-        private static void OnDisconnectedEvent(object sender, EventArgs e)
-        {
-            //connecting to serial port
-            bool connected = false;
-            while (!connected)
-            {
-                comPort.Connect(serialPortName);
-                connected = comPort.IsConnected();
-                if (!connected) Thread.Sleep(5000);
-            }
 
+
+        public async static Task ConnectToGateway()
+        {
             //connecting to gateway
-            connected = false;
+            Console.WriteLine("Connecting to gateway... ");
+
+            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayTxRxDebug"]))
+                gateway.OnDebugTxRxMessage += message => Console.WriteLine("GATEWAY: " + message);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowGatewayStateDebug"]))
+                gateway.OnDebugGatewayStateMessage += message => Console.WriteLine("GATEWAY: " + message);
+
+            bool connected = false;
             while (!connected)
             {
                 gateway.Connect(comPort);
                 connected = gateway.IsConnected();
                 if (!connected) Thread.Sleep(5000);
             }
+
+
         }
-
-
-
-
-
-
 
         private static string SelectPort()
         {
