@@ -3,16 +3,6 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
-var elementsFadeTime = 500;
-
-var gatewayHub;
-var slidersArray = [];
-var rgbSlidersArray = [];
-var rgbwSlidersArray = [];
-setInterval(sendSliders, sliderUpdateInterval);
-var ignoreSendingSwitchId;
-
 $.noty.defaults.layout = 'bottomRight';
 $.noty.defaults.theme = 'relax';
 $.noty.defaults.timeout = 3000;
@@ -23,14 +13,54 @@ $.noty.defaults.animation = {
     speed: 500 // unavailable - no need
 };
 
+var gatewayHub;
 var gatewayHardwareConnected = false;
 var gatewayServiceConnected = false;
 
+var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
+var elementsFadeTime = 500;
+
+
+var slidersArray = [];
+var rgbSlidersArray = [];
+var rgbwSlidersArray = [];
+setInterval(sendSliders, sliderUpdateInterval);
+var ignoreSendingSwitchId;
+
+
 $(function () {
-
-
-
     gatewayHub = $.connection.gatewayHub;
+
+    gatewayHub.client.onGatewayHardwareConnected = function () {
+        var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+        gatewayHardwareConnected = true;
+        gatewayStatusChanged();
+    };
+
+    gatewayHub.client.onGatewayHardwareDisconnected = function () {
+        var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+        gatewayHardwareConnected = false;
+        gatewayStatusChanged();
+    };
+
+    gatewayHub.client.onGatewayServiceConnected = function () {
+        var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
+        gatewayServiceConnected = true;
+        gatewayStatusChanged();
+    };
+
+    gatewayHub.client.onGatewayServiceDisconnected = function () {
+        var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
+        gatewayServiceConnected = false;
+        gatewayStatusChanged();
+    };
+
+    gatewayHub.client.onClearNodesListEvent = function (sensor) {
+        var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
+        $('#nodesContainer').html(null);
+    };
+    
+
 
     gatewayHub.client.returnNodes = function (nodes) {
         onReturnNodes(nodes);
@@ -60,81 +90,13 @@ $(function () {
         createOrUpdateSensor(sensor);
     };
 
-    gatewayHub.client.onGatewayHardwareDisconnected = function () {
-        onGatewayHardwareDisconnected();
-    };
-
-    gatewayHub.client.onGatewayHardwareConnected = function () {
-        onGatewayHardwareConnected();
-    };
-
-    gatewayHub.client.onClearNodesListEvent = function (sensor) {
-        onClearNodesList();
-    };
-
-
-    gatewayHub.client.onGatewayServiceDisconnected = function () {
-        onGatewayServiceDisconnected();
-    };
-
-    gatewayHub.client.onGatewayServiceConnected = function () {
-        onGatewayServiceConnected();
-    };
-
     $.connection.hub.start().done(function () {
         $.get("GetNodes/");
     });
 
 });
 
-function onClearNodesList() {
-    var n = noty({
-        text: 'Nodes deleted from the database!',
-        type: 'error'
-    });
-    $('#nodesContainer').html(null);
-}
 
-
-function onGatewayHardwareDisconnected() {
-    var n = noty({
-        text: 'Gateway hardware offline!',
-        type: 'error',
-        timeout: false
-    });
-    gatewayHardwareConnected = false;
-    gatewayStatusChanged();
-}
-
-function onGatewayHardwareConnected() {
-    var n = noty({
-        text: 'Gateway hardware online.',
-        type: 'alert',
-        timeout: false
-    });
-    gatewayHardwareConnected = true;
-    gatewayStatusChanged();
-}
-
-function onGatewayServiceDisconnected() {
-    var n = noty({
-        text: 'Gateway service offline!',
-        type: 'error',
-        timeout: false
-    });
-    gatewayServiceConnected = false;
-    gatewayStatusChanged();
-}
-
-function onGatewayServiceConnected() {
-    var n = noty({
-        text: 'Gateway service online.',
-        type: 'alert',
-        timeout: false
-    });
-    gatewayServiceConnected = true;
-    gatewayStatusChanged();
-}
 
 function gatewayStatusChanged() {
     if (gatewayHardwareConnected && gatewayServiceConnected)

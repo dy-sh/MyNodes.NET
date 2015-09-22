@@ -156,12 +156,17 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Others.onGatewayHardwareDisconnected();
         }
 
+        public void GetGatewayServiceConnected()
+        {
+            Clients.Caller.returnGatewayServiceConnected(IsGatewayServiceConnected());
+        }
+
         public void OnGatewayConnectedEvent()
         {
             Clients.Others.onGatewayHardwareConnected();
         }
 
-        private bool IsGatewayConnected()
+        private bool IsGatewayServiceConnected()
         {
             return !String.IsNullOrEmpty(GatewayHubStaticData.gatewayId);
         }

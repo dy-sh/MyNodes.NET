@@ -74,5 +74,7 @@ namespace MyNetSensors.WebController.Controllers
         {
            return GatewayHubStaticData.connectedUsersId.Count;
         }
+
+
     }
 }
