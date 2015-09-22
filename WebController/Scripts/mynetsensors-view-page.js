@@ -108,9 +108,9 @@ $(function () {
 
 function gatewayStatusChanged() {
     if (gatewayHardwareConnected && gatewayServiceConnected)
-        $('#nodesContainer').fadeIn(300);
+        $('#nodesContainer').fadeIn(800);
     else
-        $('#nodesContainer').fadeOut(300);
+        $('#nodesContainer').fadeOut(800);
 }
 
 function onReturnNodes(nodes) {

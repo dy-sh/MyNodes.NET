@@ -115,9 +115,9 @@ $(function () {
 
 function gatewayStatusChanged() {
     if (gatewayHardwareConnected && gatewayServiceConnected)
-        $('#nodesContainer').fadeIn(300);
+        $('#nodesContainer').fadeIn(800);
     else
-        $('#nodesContainer').fadeOut(300);
+        $('#nodesContainer').fadeOut(800);
 }
 
 
@@ -164,21 +164,39 @@ function createOrUpdateNode(node) {
         $('#nodePanel' + id)
             .find('#sensorsContainer')
             .attr("id", "sensorsContainer" + id);
+
     }
 
     //update body
-    $('#nodeBody' + id)
-        .html(null);
+
+    //update name
+    if (node.name != null && $('#nodeName' + id).length == 0)
+        $('#nodeBody' + id)
+            .append("<div></div>")
+            .attr("id", "nodeName" + id).hide().fadeIn(elementsFadeTime);
+
+    if (node.name == null && $('#nodeName' + id).length != 0)
+        $('#nodeName' + id).remove();
 
     if (node.name != null)
+        $('#nodeName' + id)
+            .html(node.name + "<br/>");
+
+
+    //update battery
+    if (node.batteryLevel != null && $('#nodeBattery' + id).length == 0)
         $('#nodeBody' + id)
-            .append(node.name + "<br/>");
+            .append("<div></div>")
+            .attr("id", "nodeBattery" + id).hide().fadeIn(elementsFadeTime);
+
+    if (node.batteryLevel == null && $('#nodeBattery' + id).length != 0)
+        $('#nodeBattery' + id).remove();
 
     if (node.batteryLevel != null)
-        $('#nodeBody' + id)
-            .append("<div id='nodeBattery" + id + "'>"
-                + "Battery: " + node.batteryLevel
-                + "</div>").hide().fadeIn(elementsFadeTime);
+        $('#nodeBattery' + id)
+            .html("Battery: " + node.batteryLevel + "<br/>");
+
+
 
     for (var i = 0; i < node.sensors.length; i++) {
         createOrUpdateSensor(node.sensors[i]);
