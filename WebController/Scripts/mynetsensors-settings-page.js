@@ -16,6 +16,9 @@ $.noty.defaults.animation = {
 var nodesCount;
 var sensorsCount;
 
+var gatewayHardwareConnected = false;
+var gatewayServiceConnected = false;
+
 $(function () {
 
 
@@ -36,12 +39,20 @@ $(function () {
         updateNodesAndSensorsCounts();
     };
 
-    gatewayHub.client.onGatewayDisconnectedEvent = function () {
-        onGatewayDisconnected();
+    gatewayHub.client.onGatewayHardwareDisconnected = function () {
+        onGatewayHardwareDisconnected();
     };
 
-    gatewayHub.client.onGatewayConnectedEvent = function () {
-        onGatewayConnected();
+    gatewayHub.client.onGatewayHardwareConnected = function () {
+        onGatewayHardwareConnected();
+    };
+
+    gatewayHub.client.onGatewayServiceDisconnected = function () {
+        onGatewayServiceDisconnected();
+    };
+
+    gatewayHub.client.onGatewayServiceConnected = function () {
+        onGatewayServiceConnected();
     };
 
     gatewayHub.client.onClearNodesListEvent = function (sensor) {
@@ -70,25 +81,56 @@ function onClearNodesList() {
     
 }
 
-function onGatewayDisconnected() {
+function onGatewayHardwareDisconnected() {
     var n = noty({
-        text: 'Gateway disconnected!',
+        text: 'Gateway hardware offline!',
         type: 'error',
         timeout: false
     });
-    $('#gateway-online').html("<p class='text-danger'>Gateway is offline</p>");
-    $('#gateway-info').fadeOut(300);
+    gatewayHardwareConnected = false;
+    gatewayStatusChanged();
 }
 
-function onGatewayConnected() {
+function onGatewayHardwareConnected() {
     var n = noty({
-        text: 'Gateway connected.',
+        text: 'Gateway hardware online.',
         type: 'alert',
         timeout: false
     });
-    $('#gateway-online').html("<p class='text-success'>Gateway is online</p>");
-    $('#gateway-info').fadeIn(300);
+    gatewayHardwareConnected = true;
+    gatewayStatusChanged();
 }
+
+function onGatewayServiceDisconnected() {
+    var n = noty({
+        text: 'Gateway service offline!',
+        type: 'error',
+        timeout: false
+    });
+    gatewayServiceConnected = false;
+    gatewayStatusChanged();
+}
+
+function onGatewayServiceConnected() {
+    var n = noty({
+        text: 'Gateway service online.',
+        type: 'alert',
+        timeout: false
+    });
+    gatewayServiceConnected = true;
+    gatewayStatusChanged();
+}
+
+function gatewayStatusChanged() {
+    if (gatewayHardwareConnected) {
+        $('#gateway-info').fadeIn(300);
+        $('#gateway-online').html("<p class='text-success'>Gateway hardware is online</p>");
+    } else {
+        $('#gateway-info').fadeOut(300);
+        $('#gateway-online').html("<p class='text-danger'>Gateway hardware is offline</p>");
+    }
+}
+
 
 
 function onReturnNodes(nodes) {

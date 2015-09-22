@@ -33,6 +33,7 @@ namespace MyNetSensors.WebController.Code.Hubs
                 {
                     GatewayHubStaticData.gatewayId = clientId;
                     Clients.Caller.authorizationCompleted();
+                    Clients.Others.onGatewayServiceConnected();
                 }
                 else
                 {
@@ -58,9 +59,14 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            string clientId = Context.ConnectionId; 
+            string clientId = Context.ConnectionId;
 
-            if (GatewayHubStaticData.connectedUsersId.Contains(clientId))
+            if (clientId == GatewayHubStaticData.gatewayId)
+            {
+                GatewayHubStaticData.gatewayId = null;
+                Clients.Others.onGatewayServiceDisconnected();
+            }
+            else if (GatewayHubStaticData.connectedUsersId.Contains(clientId))
                 GatewayHubStaticData.connectedUsersId.Remove(clientId);
 
             return base.OnDisconnected(stopCalled);
@@ -147,13 +153,20 @@ namespace MyNetSensors.WebController.Code.Hubs
 
         public void OnGatewayDisconnectedEvent()
         {
-            Clients.Others.onGatewayDisconnectedEvent();
+            Clients.Others.onGatewayHardwareDisconnected();
         }
 
         public void OnGatewayConnectedEvent()
         {
-            Clients.Others.onGatewayConnectedEvent();
+            Clients.Others.onGatewayHardwareConnected();
         }
+
+        private bool IsGatewayConnected()
+        {
+            return !String.IsNullOrEmpty(GatewayHubStaticData.gatewayId);
+        }
+
+  
     }
 
 }
