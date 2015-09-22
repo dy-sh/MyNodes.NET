@@ -33,7 +33,7 @@
     <div class="container body-content" style="display: none;">
         @RenderBody()
         <hr />
-        <footer>
+        <footer id="footer" style="display: none;">
             <p>&copy; @DateTime.Now.Year - MyNetSensors</p>
         </footer>
     </div>
@@ -45,7 +45,8 @@
     @RenderSection("scripts", required: false)
 
 <script>
-    $('.body-content').fadeIn(1000);
+    $('.body-content').fadeIn(700);
+    $('#footer').fadeIn(700);
 
     $('.fadebefore').click(function() {
         var href = $(this).attr('href');
