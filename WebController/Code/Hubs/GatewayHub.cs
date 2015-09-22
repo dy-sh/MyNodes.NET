@@ -19,6 +19,14 @@ namespace MyNetSensors.WebController.Code.Hubs
     {
 
 
+
+        private bool IsGatewayServiceConnected()
+        {
+            return !String.IsNullOrEmpty(GatewayHubStaticData.gatewayId);
+        }
+
+
+
         public override Task OnConnected()
         {
             string clientId = Context.ConnectionId;
@@ -46,7 +54,6 @@ namespace MyNetSensors.WebController.Code.Hubs
             return base.OnConnected();
         }
 
-
         public override Task OnReconnected()
         {
             string clientId = Context.ConnectionId;
@@ -55,7 +62,6 @@ namespace MyNetSensors.WebController.Code.Hubs
 
             return base.OnReconnected();
         }
-
 
         public override Task OnDisconnected(bool stopCalled)
         {
@@ -74,12 +80,8 @@ namespace MyNetSensors.WebController.Code.Hubs
 
 
 
-        public string GetConnectedUsersCount()
-        {
-            Clients.Caller.returnConnectedUsersCount(GatewayHubStaticData.connectedUsersId.Count);
-            return GatewayHubStaticData.connectedUsersId.Count.ToString();
-        }
 
+        #region Messages from gateway
 
         public void OnMessageRecievedEvent(Message message)
         {
@@ -94,21 +96,6 @@ namespace MyNetSensors.WebController.Code.Hubs
         public void OnClearMessages()
         {
             Clients.Others.onClearMessages();
-        }
-
-        public void ReturnLog(List<Message> log)
-        {
-            string sLog = "";
-            foreach (var message in log)
-            {
-                sLog += message.ToString() + "<br/>";
-            }
-            Clients.Others.returnLog(sLog);
-        }
-
-        public void ReturnNodes(List<Node> nodes)
-        {
-            Clients.Others.returnNodes(nodes);
         }
 
         public void OnNodeUpdatedEvent(Node node)
@@ -145,21 +132,65 @@ namespace MyNetSensors.WebController.Code.Hubs
         {
             Clients.Others.onClearNodesListEvent();
         }
-
-        public void SendMessage(string message)
+        
+        public void OnGatewayConnectedEvent()
         {
-            Clients.Others.sendMessage(message);
+            Clients.Others.onGatewayHardwareConnected();
         }
-
+        
         public void OnGatewayDisconnectedEvent()
         {
             Clients.Others.onGatewayHardwareDisconnected();
+        }
+
+        public void ReturnGatewayHardwareConnected(string userId, bool isConnected)
+        {
+            Clients.Client(userId).returnGatewayHardwareConnected(isConnected);
+        }
+
+        public void ReturnLog(List<Message> log, string userId)
+        {
+            string sLog = "";
+            foreach (var message in log)
+            {
+                sLog += message.ToString() + "<br/>";
+            }
+            Clients.Client(userId).returnLog(sLog);
+        }
+
+        public void ReturnNodes(List<Node> nodes, string userId)
+        {
+            Clients.Client(userId).returnNodes(nodes);
+        }
+
+
+        #endregion
+
+        #region Messages from clients to hub
+
+        public string GetConnectedUsersCount()
+        {
+            Clients.Caller.returnConnectedUsersCount(GatewayHubStaticData.connectedUsersId.Count);
+            return GatewayHubStaticData.connectedUsersId.Count.ToString();
         }
 
         public void GetGatewayServiceConnected()
         {
             Clients.Caller.returnGatewayServiceConnected(IsGatewayServiceConnected());
         }
+
+        #endregion
+
+
+
+        #region Messages from clients to gateway
+
+        public void SendMessage(string message)
+        {
+            string clientId = Context.ConnectionId;
+            Clients.Client(GatewayHubStaticData.gatewayId).sendMessage(message, clientId);
+        }
+        
 
         public void GetGatewayHardwareConnected()
         {
@@ -174,25 +205,28 @@ namespace MyNetSensors.WebController.Code.Hubs
             Clients.Client(GatewayHubStaticData.gatewayId).getGatewayHardwareConnected(clientId);
         }
 
-        public void ReturnGatewayHardwareConnected(string userId, bool isConnected)
+        public void GetNodes()
         {
+            string clientId = Context.ConnectionId;
 
-            Clients.Client(userId).returnGatewayHardwareConnected(isConnected);
+            Clients.Client(GatewayHubStaticData.gatewayId).getNodes(clientId);
         }
 
-
-
-
-        public void OnGatewayConnectedEvent()
+        public void GetLog()
         {
-            Clients.Others.onGatewayHardwareConnected();
+            string clientId = Context.ConnectionId;
+
+            Clients.Client(GatewayHubStaticData.gatewayId).getLog(clientId);
         }
 
-        private bool IsGatewayServiceConnected()
+        public void ClearLog()
         {
-            return !String.IsNullOrEmpty(GatewayHubStaticData.gatewayId);
+            string clientId = Context.ConnectionId;
+
+            Clients.Client(GatewayHubStaticData.gatewayId).clearLog(clientId);
         }
 
+        #endregion
 
     }
 

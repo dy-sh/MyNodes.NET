@@ -23,13 +23,11 @@
 
     <script>
         $(function () {
-            $('#clear-log').on('click', function () {
-                $.get('@Url.Action( "ClearLog", "Gateway" )');
-
-            });
-
-
             var gatewayHub = $.connection.gatewayHub;
+
+            $('#clear-log').on('click', function () {
+                gatewayHub.server.clearLog();
+            });
 
             gatewayHub.client.onMessageRecievedEvent = function (message) {
                 $('#log').append(message + "<br/>");
@@ -52,7 +50,7 @@
             };
 
             $.connection.hub.start().done(function () {
-                $.get('@Url.Action( "GetLog", "Gateway" )');
+                gatewayHub.server.getLog();
             });
 
             $(function () {

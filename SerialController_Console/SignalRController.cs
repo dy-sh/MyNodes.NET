@@ -68,14 +68,14 @@ namespace MyNetSensors.SerialController_Console
 
             try
             {
-                hubProxy.On("clearLog", ClearLog);
+                hubProxy.On<string>("clearLog", ClearLog);
                 hubProxy.On("clearNodes", ClearNodes);
-                hubProxy.On("getLog", GetLog);
-                hubProxy.On("getNodes", GetNodes);
+                hubProxy.On<string>("getLog", GetLog);
+                hubProxy.On<string>("getNodes", GetNodes);
                 hubProxy.On<string>("getGatewayHardwareConnected", GetGatewayHardwareConnected);
                 hubProxy.On("authorizationFailed", AuthorizationFailed);
                 hubProxy.On("authorizationCompleted", AuthorizationCompleted);
-                hubProxy.On<string>("sendMessage", SendMessage);
+                hubProxy.On<string, string>("sendMessage", SendMessage);
 
                 hubConnection.Start().Wait();
                 hubConnection.Closed += Disconnect;
@@ -251,9 +251,9 @@ namespace MyNetSensors.SerialController_Console
 
 
 
-        private void ClearLog()
+        private void ClearLog(string userId)
         {
-            DebugTxRx("Clear log.");
+            DebugTxRx(String.Format("Clear log ({0})", userId));
 
             gateway.messagesLog.ClearLog();
         }
@@ -265,26 +265,26 @@ namespace MyNetSensors.SerialController_Console
             gateway.ClearNodesList();
         }
 
-        private void GetLog()
+        private void GetLog(string userId)
         {
-            DebugTxRx("Get log.");
+            DebugTxRx(String.Format("Get log ({0})", userId));
 
             List<Message> log = gateway.messagesLog.GetAllMessages();
 
-            hubProxy.Invoke("ReturnLog", log);
+            hubProxy.Invoke("ReturnLog", log, userId);
         }
-        private void GetNodes()
+        private void GetNodes(string userId)
         {
-            DebugTxRx("Get nodes.");
+            DebugTxRx(String.Format("Get nodes ({0})", userId));
 
             List<Node> nodes = gateway.GetNodes();
 
-            hubProxy.Invoke("ReturnNodes", nodes);
+            hubProxy.Invoke("ReturnNodes", nodes, userId);
         }
 
-        private void SendMessage(string message)
+        private void SendMessage(string message, string userId)
         {
-            DebugTxRx("Send message: " + message);
+            DebugTxRx(String.Format("Send message: {0} ({1})", message, userId));
 
             if (!gateway.IsConnected()) return;
 

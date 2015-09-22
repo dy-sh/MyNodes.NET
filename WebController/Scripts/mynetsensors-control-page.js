@@ -67,7 +67,7 @@ $(function () {
     gatewayHub.client.returnGatewayHardwareConnected = function (isConnected) {
         gatewayHardwareConnected = isConnected;
         gatewayStatusChanged();
-        $.get("GetNodes/");
+        gatewayHub.server.getNodes();
     };
 
     gatewayHub.client.onClearNodesListEvent = function (sensor) {

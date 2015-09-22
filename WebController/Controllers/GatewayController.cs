@@ -46,22 +46,7 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
-        public void ClearLog()
-        {
-            context.Clients.All.clearLog();
-        }
-
-        public void GetLog()
-        {
-            context.Clients.All.getLog();
-            //todo store if of requesting cliend, and further send respond to this id
-        }
-
-        public void GetNodes()
-        {
-            context.Clients.All.getNodes();
-            //todo store if of requesting cliend, and further send respond to this id
-        }
+ 
 
         public ActionResult DropDatabase()
         {
