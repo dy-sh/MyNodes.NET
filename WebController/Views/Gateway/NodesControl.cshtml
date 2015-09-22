@@ -12,17 +12,22 @@
 <div class="col-xs-12 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <img src="~/Content/Images/activity.gif" id="activity" class="pull-right" style="display: none;"/>
+            <img src="~/Content/Images/activity.gif" id="activity" class="pull-right" style="display: none;" />
             <div id="nodeTitle">
-                
+
             </div>
         </div>
 
         <div class="panel-body">
+   
             <span id="nodeBody"></span>
-            <br />
+            <br/>
             <ul class="list-group" id="sensorsContainer"></ul>
+            <a href="#" class="btn btn-default btn-sm pull-right" role="button" id="settingsButton">
+                <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
+            </a>
         </div>
+
     </div>
 </div>
 
@@ -32,7 +37,7 @@
 
     <link href='@Url.Content("~/Content/themes/base/all.css")' rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-switch.css" rel="stylesheet">
-    <link href="~/Content/animate.min.css" rel="stylesheet" >
+    <link href="~/Content/animate.min.css" rel="stylesheet">
 
 }
 
@@ -50,7 +55,7 @@
 
 
     <script>
-      
+
     </script>
 }
 

@@ -61,7 +61,7 @@ $(function () {
         gatewayServiceConnected = isConnected;
         gatewayStatusChanged();
         gatewayHub.server.getGatewayHardwareConnected();
-        
+
     };
 
 
@@ -157,7 +157,7 @@ function createOrUpdateNode(node) {
         $('#nodePanel' + id)
             .find('#nodeTitle')
             .attr("id", "nodeTitle" + id)
-            .html("Node " + id);
+             .html(" Node " + id);
 
         $('#nodePanel' + id)
             .find('#activity')
@@ -170,6 +170,11 @@ function createOrUpdateNode(node) {
         $('#nodePanel' + id)
             .find('#sensorsContainer')
             .attr("id", "sensorsContainer" + id);
+
+        $('#nodePanel' + id)
+     .find('#settingsButton')
+     .attr("id", "settingsButton" + id)
+            .attr("href", "../Node/Settings/" +id);
 
     }
 

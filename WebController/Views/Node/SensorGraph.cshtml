@@ -1,7 +1,26 @@
-﻿
+﻿@using System.Drawing
+@model IEnumerable<SerialGateway.SensorData>
+
 @{
-    ViewBag.Title = "SensorGraph";
+    ViewBag.Title = "Sensor log";
 }
 
-<h2>SensorGraph</h2>
 
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">Node<span>@ViewBag.nodeId</span> Sensor<span>@ViewBag.sensorId</span></div>
+    <div class="panel-body">
+        <div id="chartdiv"></div>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/amcharts")
+
+
+
+}

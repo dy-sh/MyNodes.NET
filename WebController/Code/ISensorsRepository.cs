@@ -10,7 +10,9 @@ namespace MyNetSensors.WebController.Code
     interface ISensorsRepository
     {
         List<SensorData> GetSensorDataLog(int sensorDbId);
-        Node GetNode(int nodeDbId);
-        Sensor GetSensor(int sensorDbId);
+        Node GetNodeByNodeId(int nodeId);
+        Node GetNodeByDbId(int db_Id);
+        Sensor GetSensorByDbId(int db_Id);
+        Sensor GetSensorBySensorId(int ownerNodeId, int sensorId);
     }
 }

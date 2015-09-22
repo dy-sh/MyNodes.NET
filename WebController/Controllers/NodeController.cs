@@ -20,35 +20,57 @@ namespace MyNetSensors.WebController.Controllers
         }
 
         // GET: Node
-        public ActionResult Index(int id)
+        public ActionResult Settings(int id)
         {
-            return View();
+            Node node = db.GetNodeByNodeId(id);
+            return RedirectToAction("SensorLog", new { id = node.sensors[0].db_Id});
+           // return View();
         }
 
         public ActionResult SensorLog(int id)
         {
-            List<SensorData> list= db.GetSensorDataLog(id);
-            Sensor sensor = db.GetSensor(id);
+            List<SensorData> samples = db.GetSensorDataLog(id);
+            Sensor sensor = db.GetSensorByDbId(id);
 
-            if (sensor==null && list==null)
+            if (sensor==null && samples == null)
                 return new HttpNotFoundResult();
 
             ViewBag.nodeId = sensor.ownerNodeId;
             ViewBag.sensorId = sensor.sensorId;
-            return View(list);
+            return View(samples);
         }
 
         public ActionResult SensorGraph(int id)
         {
-            List<SensorData> list = db.GetSensorDataLog(id);
-            Sensor sensor = db.GetSensor(id);
+            Sensor sensor = db.GetSensorByDbId(id);
 
-            if (sensor == null && list == null)
+            if (sensor == null)
                 return new HttpNotFoundResult();
 
             ViewBag.nodeId = sensor.ownerNodeId;
             ViewBag.sensorId = sensor.sensorId;
-            return View(list);
+
+
+            return View();
+        }
+
+        public JsonResult GetSensorDataJson(int id)
+        {
+            List<SensorData> samples = db.GetSensorDataLog(id);
+
+            if (samples == null)
+                return null;
+
+            var dateTime = new List<string>();
+            var state = new List<string>();
+
+            foreach (var item in samples)
+            {
+                dateTime.Add(String.Format("{0:yyyy-MM-dd HH:mm:ss}", item.dateTime));
+                state.Add(item.state == null ? null : item.state);
+            }
+
+            return Json(new { dateTime, state }, JsonRequestBehavior.AllowGet);
         }
     }
 }
