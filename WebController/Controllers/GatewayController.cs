@@ -26,7 +26,7 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
-        public ActionResult Log()
+        public ActionResult Messages()
         {
             return View();
         }
@@ -36,12 +36,12 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
-        public ActionResult NodesView()
+        public ActionResult Observe()
         {
             return View();
         }
 
-        public ActionResult NodesControl()
+        public ActionResult Control()
         {
             return View();
         }

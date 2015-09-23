@@ -8,8 +8,25 @@
 
 <h3>
     <small>Node<span>@ViewBag.nodeId</span> Sensor<span>@ViewBag.sensorId</span></small>
+    <div class="btn-group pull-right" role="group" aria-label="...">
+        <a class='btn btn-default' href='../../../Gateway/Control'>
+            Control Nodes
+        </a>
+        <a class='btn btn-default' href='../../Log/@ViewBag.nodeId/@ViewBag.sensorId'>
+            History Log
+        </a>
+    </div>
 </h3>
-<hr/>
+<br/>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">@ViewBag.description History</div>
+    <div class="panel-body">
+        <div id="visualization"></div>
+    </div>
+</div>
+
 <p>
     <label for="strategy">Update:</label>
     <select id="strategy">
@@ -19,14 +36,6 @@
         <option value="static">Static</option>
     </select>
 </p>
-
-<div class="panel panel-default">
-    <div class="panel-heading">@ViewBag.description History</div>
-    <div class="panel-body">
-        <div id="visualization"></div>
-    </div>
-</div>
-
 
 @section styles
 {
@@ -71,7 +80,7 @@
 
 
 
-       var graph2d = new vis.Graph2d(container, dataset, groups, options);
+        var graph2d = new vis.Graph2d(container, dataset, groups, options);
 
 
         function renderStep() {
@@ -115,8 +124,8 @@
                 success: function (data) {
                     // console.log(data);
                     if (data.dataType == "V_TRIPPED")
-                   //     addFloatData(data.chartData);
-                    addBinaryData(data.chartData);
+                        //     addFloatData(data.chartData);
+                        addBinaryData(data.chartData);
                     else
                         addFloatData(data.chartData);
                 },
@@ -148,8 +157,11 @@
             var options = {
                 start: start,
                 end: end,
-                drawPoints: {style: 'circle' },
-                shaded: {orientation: 'bottom'}
+                //  drawPoints: {style: 'circle' },
+                //  shaded: {orientation: 'bottom'}
+                style : 'bar',
+                drawPoints : false,
+                barChart: {width:50, align:'right', sideBySide:false}
             };
             graph2d.setOptions(options);
 

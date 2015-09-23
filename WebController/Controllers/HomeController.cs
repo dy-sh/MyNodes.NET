@@ -6,7 +6,7 @@ namespace MyNetSensors.WebController.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("NodesControl", "Gateway");
+            return RedirectToAction("Control", "Gateway");
           //  return View();
         }
 

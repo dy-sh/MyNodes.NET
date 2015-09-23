@@ -1,0 +1,53 @@
+﻿@using WebGridBootstrapPager
+@model List<MyNetSensors.SerialGateway.SensorData>
+
+@{
+    ViewBag.Title = "Sensor log";
+}
+
+<h2>@ViewBag.description History</h2>
+
+<h3>
+    <small>Node<span>@ViewBag.nodeId</span> Sensor<span>@ViewBag.sensorId</span></small>
+    <div class="btn-group pull-right" role="group" aria-label="...">
+        <a class='btn btn-default' href='../../../Gateway/Control'>
+            Control Nodes
+        </a>
+        <a class='btn btn-default pull-right' href='../../Chart/@ViewBag.nodeId/@ViewBag.sensorId'>
+            History Chart
+        </a>
+    </div>
+</h3>
+<br />
+
+
+
+
+@{
+    var grid = new WebGrid(Model, rowsPerPage: 100, defaultSort: "dateTime");
+    grid.SortDirection = SortDirection.Descending;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">@ViewBag.description History</div>
+    <div class="panel-body">
+
+
+
+        @grid.Table(
+    tableStyle: "table table-striped table-hover",
+        columns: grid.Columns(
+             grid.Column(columnName: "dateTime", header: "Date"),
+             grid.Column(columnName: "state", header: "State")
+        ))
+
+
+        @grid.BootstrapPager()
+
+    </div>
+</div>
+
+@section styles
+{
+    @Styles.Render("~/Content/font-awesome")
+}

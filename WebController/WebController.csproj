@@ -360,12 +360,12 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Gateway\Index.cshtml" />
-    <Content Include="Views\Gateway\Log.cshtml" />
-    <Content Include="Views\Gateway\NodesView.cshtml" />
-    <Content Include="Views\Gateway\NodesControl.cshtml" />
+    <Content Include="Views\Gateway\Messages.cshtml" />
+    <Content Include="Views\Gateway\Observe.cshtml" />
+    <Content Include="Views\Gateway\Control.cshtml" />
     <Content Include="Views\Gateway\Settings.cshtml" />
-    <Content Include="Views\Node\SensorLog.cshtml" />
-    <Content Include="Views\Node\SensorGraph.cshtml" />
+    <Content Include="Views\Node\Log.cshtml" />
+    <Content Include="Views\Node\Chart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

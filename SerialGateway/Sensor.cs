@@ -209,5 +209,13 @@ namespace MyNetSensors.SerialGateway
         {
             return sensorType;
         }
+
+        public string GetDescrirtionOrType()
+        {
+            if (description != null)
+                return description;
+            else
+                return MySensors.GetSimpleSensorType(sensorType);
+        }
     }
 }
