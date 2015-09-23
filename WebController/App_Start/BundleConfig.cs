@@ -60,6 +60,8 @@ namespace MyNetSensors.WebController
             bundles.Add(new StyleBundle("~/Content/font-awesome")
                 .Include("~/Content/font-awesome.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/chartjs").Include(
+                "~/Scripts/Chart.min.js"));
         }
     }
 }

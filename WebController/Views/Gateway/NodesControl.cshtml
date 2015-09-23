@@ -23,9 +23,17 @@
             <span id="nodeBody"></span>
             <br/>
             <ul class="list-group" id="sensorsContainer"></ul>
-            <a href="#" class="btn btn-default btn-sm pull-right" role="button" id="settingsButton">
+            @*<a href="#" class="btn btn-default btn-sm pull-right" role="button" id="settingsButton">
                 <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
-            </a>
+            </a>*@
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle pull-right" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList">
+                    
+                </ul>
+            </div>
         </div>
 
     </div>

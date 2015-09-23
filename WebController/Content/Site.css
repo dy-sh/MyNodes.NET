@@ -24,18 +24,23 @@ textarea {
 }
 
 
-.pull-up { margin-top: -20px }
+.pull-up {
+    margin-top: -20px;
+}
 
 
-.ui-slider { margin-top: 30px }
+.ui-slider {
+    margin-top: 30px;
+}
+
 .ui-slider-range.ui-widget-header {
     background: #729fcf;
 }
 
 .ui-slider .ui-slider-handle {
-    background: url("../Content/images/handle.png") no-repeat center center scroll #fff!important;
+    background: url("../Content/images/handle.png") no-repeat center center scroll #fff !important;
     background-position: 50% 50%;
-    background-size: 18px 18px!important;
+    background-size: 18px 18px !important;
     width: 22px;
     height: 22px;
     margin-left: -10px;
@@ -44,4 +49,27 @@ textarea {
 
 .ui-slider-handle:focus {
     outline-width: 0;
+}
+
+
+
+/*     chart      */
+
+.chart {
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.vis-timeline {
+    border: 0px;
+}
+
+.vis-panel.vis-background.vis-horizontal .vis-grid.vis-minor {
+    border-color: #ffffff;
+}
+
+.vis-panel.vis-background.vis-horizontal .vis-grid.vis-major {
+    border-color: #e5e5e5;
 }

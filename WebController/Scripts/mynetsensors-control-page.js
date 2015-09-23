@@ -171,11 +171,23 @@ function createOrUpdateNode(node) {
             .find('#sensorsContainer')
             .attr("id", "sensorsContainer" + id);
 
-        $('#nodePanel' + id)
-     .find('#settingsButton')
-     .attr("id", "settingsButton" + id)
-            .attr("href", "../Node/Settings/" +id);
+        //$('#nodePanel' + id)
+        //.find('#settingsButton')
+        //.attr("id", "settingsButton" + id)
+        //    .attr("href", "../Node/Settings/" + id);
 
+
+        //create dropdown menu
+        $('#nodePanel' + id)
+            .find('#dropdownMenu')
+            .attr("id", "dropdownMenu" + id);
+
+        $('#nodePanel' + id)
+        .find('#dropdownMenuList')
+        .attr("id", "dropdownMenuList" + id)
+        .attr("aria-labelledby", "dropdownMenu" + id);
+
+        updateDDMenuFromNode(node);
     }
 
     //update body
@@ -577,3 +589,35 @@ function updateRgbwSlidersInArray(sliderId, lastHex) {
     }
 }
 
+
+function updateDDMenuFromNode(node) {
+    var id = node.nodeId;
+
+    $('#dropdownMenuList' + id)
+        .append("<li><a href='../Node/Settings/" + id + "'>Settings</a></li>")
+    .append("<li><a href='#'> . . .</a></li>");
+
+    for (var i = 0; i < node.sensors.length; i++) {
+        updateDDMenuFromSensor(node.sensors[i]);
+    }
+}
+
+function updateDDMenuFromSensor(sensor) {
+    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+
+    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
+
+    var sensorName;
+    if (sensor.description != null)
+        sensorName = sensor.description;
+    else
+        sensorName = sensorType;
+
+    if ($('#dropdownMenuItem' + id).length == 0) {
+        $('#dropdownMenuList' + sensor.ownerNodeId)
+            .append("<li id='dropdownMenuItem" + id + "'><a href='../Node/SensorGraph/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>")
+    } else {
+        $('#dropdownMenuItem' + id)
+            .html("<a href='../Node/SensorGraph/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
+    }
+}
