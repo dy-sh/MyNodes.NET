@@ -33,12 +33,19 @@
                     </a>
                 </div>
 
-                <label for="strategy">Update:</label>
-                <select id="strategy">
+                <label for="update">Update:</label>
+                <select id="update">
                     <option value="none" selected>None</option>
                     <option value="continuous">Continuous</option>
                     <option value="discrete">Discrete</option>
                     <option value="static">Static</option>
+                </select>
+
+                <label for="charttype">Style:</label>
+                <select id="charttype" onchange="updateCharType()">
+                    <option value="bars" selected>Bars</option>
+                    <option value="lines">Lines</option>
+                    <option value="areas">Areas</option>
                 </select>
             </p>
         </div>
@@ -78,7 +85,8 @@
 
         var DELAY = 1000; // delay in ms to add new data points
 
-        var strategy = document.getElementById('strategy');
+        var update = document.getElementById('update');
+        var charttype = document.getElementById('charttype');
 
         // create a graph2d with an (currently empty) dataset
         var container = document.getElementById('visualization');
@@ -96,34 +104,28 @@
 
 
         function renderStep() {
-            // move the window (you can think of different strategies).
             var now = vis.moment();
             var range = graph2d.getWindow();
             var interval = range.end - range.start;
-            switch (strategy.value) {
-            case 'continuous':
-                // continuously move the window
-                graph2d.setWindow(now - interval, now, { animation: false });
-                requestAnimationFrame(renderStep);
-                break;
-
-            case 'discrete':
-                graph2d.setWindow(now - interval, now, { animation: false });
-                setTimeout(renderStep, DELAY);
-                break;
-
-
-            case 'none':
-                setTimeout(renderStep, DELAY);
-                break;
-
-            default: // 'static'
-                // move the window 90% to the left when now is larger than the end of the window
-                if (now > range.end) {
-                    graph2d.setWindow(now - 0.1 * interval, now + 0.9 * interval);
-                }
-                setTimeout(renderStep, DELAY);
-                break;
+            switch (update.value) {
+                case 'continuous':
+                    graph2d.setWindow(now - interval, now, { animation: false });
+                    requestAnimationFrame(renderStep);
+                    break;
+                case 'discrete':
+                    graph2d.setWindow(now - interval, now, { animation: false });
+                    setTimeout(renderStep, DELAY);
+                    break;
+                case 'none':
+                    setTimeout(renderStep, DELAY);
+                    break;
+                default: // 'static'
+                    // move the window 90% to the left when now is larger than the end of the window
+                    if (now > range.end) {
+                        graph2d.setWindow(now - 0.1 * interval, now + 0.9 * interval);
+                    }
+                    setTimeout(renderStep, DELAY);
+                    break;
             }
         }
 
@@ -137,11 +139,7 @@
                 success: function(data) {
                     if ("chartData" in data) {
                         // console.log(data);
-                        if (data.dataType == "V_TRIPPED")
-                        //     addFloatData(data.chartData);
-                            addBinaryData(data.chartData);
-                        else
-                            addFloatData(data.chartData);
+                        addChartData(data.chartData);
                         $('#infoPanel').hide();
                         $('#chartPanel').fadeIn(1000);
                     } else {
@@ -152,39 +150,58 @@
                     $('#infoPanel').html("<p class='text-danger'>Failed to get data from server!</p>");
                 }
             });
+
+            updateCharType();
+
         });
 
-        function addBinaryData(chartData) {
+
+        function addChartData(chartData) {
             var start = vis.moment(chartData[0].x).add(-1, 'seconds');
             var end = vis.moment(chartData[chartData.length - 1].x).add(1, 'seconds');
+
             var options = {
                 start: start,
-                end: end,
-                style: 'bar',
-                drawPoints: false,
-                barChart: { width: 50, align: 'right', sideBySide: false }
+                end: end
             };
+
             graph2d.setOptions(options);
 
             dataset.add(chartData);
         }
 
-        function addFloatData(chartData) {
+        function updateCharType() {
+            var options;
+            switch (charttype.value) {
+                case 'bars':
+                    options = {
+                        style: 'bar',
+                        drawPoints: false,
+                        barChart: { width: 50, align: 'right', sideBySide: false }
+                    };
+                    graph2d.setOptions(options);
+                    break;
+                case 'lines':
+                    options = {
+                        style: 'line',
+                        drawPoints: { style: 'circle' },
+                        shaded: {enabled: false }
+                    };
+                    graph2d.setOptions(options);
+                    break;
+                case 'areas':
+                    options = {
+                        style: 'line',
+                        drawPoints: { style: 'circle' },
+                        shaded: {enabled: true , orientation: 'bottom' }
+                    };
+                    break;
+                default:
+                    break;
+            }
 
-            var start = vis.moment(chartData[0].x).add(-1, 'seconds');
-            var end = vis.moment(chartData[chartData.length - 1].x).add(1, 'seconds');
-            var options = {
-                start: start,
-                end: end,
-                //  drawPoints: {style: 'circle' },
-                //  shaded: {orientation: 'bottom'}
-                style: 'bar',
-                drawPoints: false,
-                barChart: { width: 50, align: 'right', sideBySide: false }
-            };
             graph2d.setOptions(options);
 
-            dataset.add(chartData);
         }
     </script>
 }
