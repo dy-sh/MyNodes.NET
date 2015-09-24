@@ -48,6 +48,7 @@
                     <option value="shadedsplines">Shaded Splines</option>
                     <option value="lines">Lines</option>
                     <option value="shadedlines">Shaded Lines</option>
+                    <option value="dots">Dots</option>
                 </select>
             </p>
         </div>
@@ -75,15 +76,8 @@
 
     <script type="text/javascript">
 
-
         var groups = new vis.DataSet();
         groups.add({ id: 0 });
-
-        /* groups.add({
-             id: 1,
-             //  className: 'vis-graph-group0',
-            // options: {excludeFromLegend: true}
-        });*/
 
         var DELAY = 1000; // delay in ms to add new data points
 
@@ -100,6 +94,8 @@
             drawPoints: { style: 'circle' },
             shaded: { orientation: 'bottom' }
         };
+
+
 
 
         var graph2d = new vis.Graph2d(container, dataset, groups, options);
@@ -167,13 +163,20 @@
                 end: end
             };
 
+            /* groups.add({
+                 id: 1,
+                 //  className: 'vis-graph-group0',
+                 // options: {excludeFromLegend: true}
+            });*/
+
             graph2d.setOptions(options);
 
             dataset.add(chartData);
+            graph2d.fit();
+
         }
 
         function updateCharType() {
-            var options;
             switch (charttype.value) {
                 case 'bars':
                     options = {
@@ -181,21 +184,19 @@
                         drawPoints: false,
                         barChart: { width: 50, align: 'right', sideBySide: false }
                     };
-                    graph2d.setOptions(options);
                     break;
                 case 'splines':
                     options = {
                         style: 'line',
-                        drawPoints: { style: 'circle' },
+                        drawPoints: { style: 'circle', size: 6 },
                         shaded: {enabled: false },
                         interpolation:{enabled: true}
                     };
-                    graph2d.setOptions(options);
                     break;
                 case 'shadedsplines':
                     options = {
                         style: 'line',
-                        drawPoints: { style: 'circle' },
+                        drawPoints: { style: 'circle' , size: 6},
                         shaded: {enabled: true , orientation: 'bottom' },
                         interpolation:{enabled: true}
                     };
@@ -203,7 +204,7 @@
                 case 'lines':
                     options = {
                         style: 'line',
-                        drawPoints: { style: 'circle' },
+                        drawPoints: { style: 'square' , size: 6},
                         shaded: {enabled: false  },
                         interpolation:{enabled: false}
                     };
@@ -211,17 +212,37 @@
                 case 'shadedlines':
                     options = {
                         style: 'line',
-                        drawPoints: { style: 'circle' },
+                        drawPoints: { style: 'square', size: 6},
                         shaded: {enabled: true , orientation: 'bottom' },
                         interpolation:{enabled: false}
+                    };
+                    break;
+                case 'dots':
+                    options = {
+                        style:'points',
+                        drawPoints: {style: 'circle' ,size: 10}
                     };
                     break;
                 default:
                     break;
             }
 
-            graph2d.setOptions(options);
 
+
+            //setOptions cause a bug when switching to dots!!!
+            //graph2d.setOptions(options);
+            //thats why we need redraw:
+            redrawChart(options);
+
+            
+        }
+
+        function redrawChart(options) {
+            var window = graph2d.getWindow();
+            options.start = window.start;
+            options.end = window.end;
+            graph2d.destroy();
+            graph2d = new vis.Graph2d(container, dataset, groups, options);
         }
     </script>
 }
