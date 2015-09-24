@@ -14,7 +14,7 @@
         </div>
         <div class="panel-body">
             <span id="nodeBody">Node body</span>
-            <br/>
+            <br />
             <ul class="list-group" id="sensorsContainer"></ul>
         </div>
     </div>
@@ -22,7 +22,7 @@
 
 @section styles
 {
-    <link href="~/Content/animate.min.css" rel="stylesheet">
+    @Styles.Render("~/Content/noty")
 }
 
 @section scripts
@@ -37,7 +37,7 @@
     @Scripts.Render("~/bundles/mynetsensors-view-page")
 
     <script>
-     
+
     </script>
 }
 

@@ -19,20 +19,18 @@
         </div>
 
         <div class="panel-body">
-   
+
             <span id="nodeBody"></span>
-            <br/>
+            <br />
             <ul class="list-group" id="sensorsContainer"></ul>
             @*<a href="#" class="btn btn-default btn-sm pull-right" role="button" id="settingsButton">
-                <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
-            </a>*@
+                    <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
+                </a>*@
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle pull-right" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList">
-                    
-                </ul>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList"></ul>
             </div>
         </div>
 
@@ -43,10 +41,9 @@
 @section styles
 {
 
-    <link href='@Url.Content("~/Content/themes/base/all.css")' rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap-switch.css" rel="stylesheet">
-    <link href="~/Content/animate.min.css" rel="stylesheet">
-
+    @Styles.Render("~/Content/jqueryui")
+    @Styles.Render("~/Content/noty")
+    @Styles.Render("~/Content/switch")
 }
 
 @section scripts
@@ -61,9 +58,5 @@
     @Scripts.Render("~/bundles/mysensors")
     @Scripts.Render("~/bundles/mynetsensors-control-page")
 
-
-    <script>
-
-    </script>
 }
 
