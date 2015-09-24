@@ -17,25 +17,39 @@
         </a>
     </div>
 </h3>
-<br/>
+<br />
 
 
 <div class="panel panel-default">
     <div class="panel-heading">@ViewBag.description History</div>
     <div class="panel-body">
-        <div id="visualization"></div>
+        <div id="chartPanel" style="display: none;">
+            <div id="visualization"></div>
+            <p>
+                <br />
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class='btn btn-default' href='../../ClearHistoryByDbId/@ViewBag.db_Id'>
+                        Clear History
+                    </a>
+                </div>
+
+                <label for="strategy">Update:</label>
+                <select id="strategy">
+                    <option value="none" selected>None</option>
+                    <option value="continuous">Continuous</option>
+                    <option value="discrete">Discrete</option>
+                    <option value="static">Static</option>
+                </select>
+            </p>
+        </div>
+        <div id="infoPanel">
+            There is a data request...
+        </div>
     </div>
 </div>
 
-<p>
-    <label for="strategy">Update:</label>
-    <select id="strategy">
-        <option value="none" selected>None</option>
-        <option value="continuous">Continuous</option>
-        <option value="discrete">Discrete</option>
-        <option value="static">Static</option>
-    </select>
-</p>
+
+
 
 @section styles
 {
@@ -51,7 +65,6 @@
     <script src="~/Scripts/vis.min.js"></script>
 
     <script type="text/javascript">
-
 
 
         var groups = new vis.DataSet();
@@ -74,10 +87,9 @@
         var options = {
             start: vis.moment().add(-30, 'seconds'), // changed so its faster
             end: vis.moment(),
-            drawPoints: {style: 'circle' },
-            shaded: {orientation: 'bottom' }
+            drawPoints: { style: 'circle' },
+            shaded: { orientation: 'bottom' }
         };
-
 
 
         var graph2d = new vis.Graph2d(container, dataset, groups, options);
@@ -89,48 +101,55 @@
             var range = graph2d.getWindow();
             var interval = range.end - range.start;
             switch (strategy.value) {
-                case 'continuous':
-                    // continuously move the window
-                    graph2d.setWindow(now - interval, now, { animation: false });
-                    requestAnimationFrame(renderStep);
-                    break;
+            case 'continuous':
+                // continuously move the window
+                graph2d.setWindow(now - interval, now, { animation: false });
+                requestAnimationFrame(renderStep);
+                break;
 
-                case 'discrete':
-                    graph2d.setWindow(now - interval, now, { animation: false });
-                    setTimeout(renderStep, DELAY);
-                    break;
+            case 'discrete':
+                graph2d.setWindow(now - interval, now, { animation: false });
+                setTimeout(renderStep, DELAY);
+                break;
 
 
-                case 'none':
-                    setTimeout(renderStep, DELAY);
-                    break;
+            case 'none':
+                setTimeout(renderStep, DELAY);
+                break;
 
-                default: // 'static'
-                    // move the window 90% to the left when now is larger than the end of the window
-                    if (now > range.end) {
-                        graph2d.setWindow(now - 0.1 * interval, now + 0.9 * interval);
-                    }
-                    setTimeout(renderStep, DELAY);
-                    break;
+            default: // 'static'
+                // move the window 90% to the left when now is larger than the end of the window
+                if (now > range.end) {
+                    graph2d.setWindow(now - 0.1 * interval, now + 0.9 * interval);
+                }
+                setTimeout(renderStep, DELAY);
+                break;
             }
         }
+
         renderStep();
 
 
-        $( document ).ready(function() {
+        $(document).ready(function() {
             $.ajax({
-                url: "../../GetSensorDataJson/"+@ViewBag.db_Id,
+                url: "../../GetSensorDataJsonByDbId/" + @ViewBag.db_Id,
                 dataType: "json",
-                success: function (data) {
-                    // console.log(data);
-                    if (data.dataType == "V_TRIPPED")
+                success: function(data) {
+                    if ("chartData" in data) {
+                        // console.log(data);
+                        if (data.dataType == "V_TRIPPED")
                         //     addFloatData(data.chartData);
-                        addBinaryData(data.chartData);
-                    else
-                        addFloatData(data.chartData);
+                            addBinaryData(data.chartData);
+                        else
+                            addFloatData(data.chartData);
+                        $('#infoPanel').hide();
+                        $('#chartPanel').fadeIn(1000);
+                    } else {
+                        $('#infoPanel').html("There are no entries in history");
+                    }
                 },
-                fail: function () {
-                    alert("Failed to get data from server!");
+                error: function() {
+                    $('#infoPanel').html("<p class='text-danger'>Failed to get data from server!</p>");
                 }
             });
         });
@@ -141,9 +160,9 @@
             var options = {
                 start: start,
                 end: end,
-                style : 'bar',
-                drawPoints : false,
-                barChart: {width:50, align:'right', sideBySide:false}
+                style: 'bar',
+                drawPoints: false,
+                barChart: { width: 50, align: 'right', sideBySide: false }
             };
             graph2d.setOptions(options);
 
@@ -159,9 +178,9 @@
                 end: end,
                 //  drawPoints: {style: 'circle' },
                 //  shaded: {orientation: 'bottom'}
-                style : 'bar',
-                drawPoints : false,
-                barChart: {width:50, align:'right', sideBySide:false}
+                style: 'bar',
+                drawPoints: false,
+                barChart: { width: 50, align: 'right', sideBySide: false }
             };
             graph2d.setOptions(options);
 

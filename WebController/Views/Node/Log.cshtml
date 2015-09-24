@@ -32,20 +32,34 @@
     <div class="panel-heading">@ViewBag.description History</div>
     <div class="panel-body">
 
+        @if (Model == null)
+        {
+            @:There are no entries in history
+        }
+        else
+        {
+            @grid.Table(
+                tableStyle: "table table-striped table-hover",
+                columns: grid.Columns(
+                    grid.Column(columnName: "dateTime", header: "Date"),
+                    grid.Column(columnName: "state", header: "State")
+                    ));
+
+            @grid.BootstrapPager();
 
 
-        @grid.Table(
-    tableStyle: "table table-striped table-hover",
-        columns: grid.Columns(
-             grid.Column(columnName: "dateTime", header: "Date"),
-             grid.Column(columnName: "state", header: "State")
-        ))
-
-
-        @grid.BootstrapPager()
-
+            <p>
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class='btn btn-default' href='../../ClearHistoryByDbId/@ViewBag.db_Id'>
+                        Clear History
+                    </a>
+                </div>
+            </p>
+        }
     </div>
 </div>
+
+
 
 @section styles
 {

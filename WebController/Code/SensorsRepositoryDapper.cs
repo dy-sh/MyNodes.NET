@@ -41,7 +41,7 @@ namespace MyNetSensors.WebController.Code
             db = new SqlConnection(connectionString);
         }
 
-        public List<SensorData> GetSensorDataLog(int db_Id)
+        public List<SensorData> GetSensorLog(int db_Id)
         {
             string req = String.Format("SELECT * FROM Sensor{0}", db_Id);
 
@@ -52,6 +52,13 @@ namespace MyNetSensors.WebController.Code
             }
             catch { }
 
+            return list;
+        }
+
+        public List<SensorData> GetSensorLog(int ownerNodeId, int sensorId)
+        {
+            Sensor sensor = GetSensor(ownerNodeId, sensorId);
+            List<SensorData> list = GetSensorLog(sensor.db_Id);
             return list;
         }
 
@@ -77,6 +84,7 @@ namespace MyNetSensors.WebController.Code
             return result;
         }
 
+        
         public Node GetNodeByDbId(int db_Id)
         {
             var mapper = new EnittyOneToManyMapper<Node, Sensor, int>()
@@ -99,18 +107,29 @@ namespace MyNetSensors.WebController.Code
             return result;
         }
 
-        public Sensor GetSensorByDbId(int db_Id)
+        public Sensor GetSensor(int db_Id)
         {
             Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
 
             return sensor;
         }
 
-        public Sensor GetSensorBySensorId(int ownerNodeId, int sensorId)
+        public Sensor GetSensor(int ownerNodeId, int sensorId)
         {
             Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId", new { ownerNodeId, sensorId }).FirstOrDefault();
 
             return sensor;
+        }
+
+        public void DropSensorLog(int db_Id)
+        {
+            db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+        }
+
+        public void DropSensorLog(int ownerNodeId, int sensorId)
+        {
+            Sensor sensor = GetSensor(ownerNodeId, sensorId);
+            DropSensorLog(sensor.db_Id);
         }
     }
 }
