@@ -27,7 +27,31 @@
             <div id="visualization"></div>
             <p>
                 <br />
-                <div class="btn-group pull-right" role="group" aria-label="...">
+
+
+                <div class="btn-group" role="group" >
+                    <div class="btn-group" role="group" style="padding-right: 10px;">
+                        <label for="autoscroll">Auto scroll:</label>
+                        <select id="autoscroll">
+                            <option value="none" selected>None</option>
+                            <option value="continuous">Continuous</option>
+                            <option value="discrete">Discrete</option>
+                            <option value="static">Static</option>
+                        </select>
+                    </div>
+                    <div class="btn-group" role="group" style="padding-right: 10px;">
+                        <label for="charttype">Style:</label>
+                        <select id="charttype" onchange="updateCharType()">
+                            <option value="bars" selected>Bars</option>
+                            <option value="splines">Splines</option>
+                            <option value="shadedsplines">Shaded Splines</option>
+                            <option value="lines">Lines</option>
+                            <option value="shadedlines">Shaded Lines</option>
+                            <option value="dots">Dots</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-group pull-right" role="group">
                     <button type="button" class='btn btn-default' onclick="showAll()">
                         All
                     </button>
@@ -41,24 +65,6 @@
                         Clear
                     </a>
                 </div>
-
-                <label for="autoscroll">Auto scroll:</label>
-                <select id="autoscroll">
-                    <option value="none" selected>None</option>
-                    <option value="continuous">Continuous</option>
-                    <option value="discrete">Discrete</option>
-                    <option value="static">Static</option>
-                </select>
-
-                <label for="charttype">Style:</label>
-                <select id="charttype" onchange="updateCharType()">
-                    <option value="bars" selected>Bars</option>
-                    <option value="splines">Splines</option>
-                    <option value="shadedsplines">Shaded Splines</option>
-                    <option value="lines">Lines</option>
-                    <option value="shadedlines">Shaded Lines</option>
-                    <option value="dots">Dots</option>
-                </select>
             </p>
         </div>
         <div id="infoPanel">
@@ -68,7 +74,27 @@
 </div>
 
 
-
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Share history</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="url" class="control-label" >URL:</label>
+                        <input type="text" class="form-control" id="url" style="max-width: 100%;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section styles
 {
@@ -91,8 +117,8 @@
         var sensorId = '@ViewBag.sensorId';
         var nodeId = '@ViewBag.nodeId';
 
-        var initialStart = '@ViewBag.start';
-        var initialEnd = '@ViewBag.end';
+        var urlStart = @ViewBag.start;
+        var urlEnd = @ViewBag.end;
 
         @if (@ViewBag.autoscroll != null)
         {

@@ -57,8 +57,14 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.description = sensor.GetDescrirtionOrType();
             ViewBag.autoscroll = autoscroll;
             ViewBag.style = style;
-            ViewBag.start = start;
-            ViewBag.end = end;
+            if (start != null)
+                ViewBag.start = start;
+            else
+                ViewBag.start = "0";
+            if (end != null)
+                ViewBag.end = end;
+            else 
+                ViewBag.end = "0";
             return View();
         }
 

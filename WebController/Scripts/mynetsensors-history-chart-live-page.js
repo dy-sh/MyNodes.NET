@@ -8,8 +8,8 @@ Get variables from outside the script
         var dbId = '@ViewBag.db_Id';
         var sensorId = '@ViewBag.sensorId';
         var nodeId = '@ViewBag.nodeId';
-        var initialStart = '@ViewBag.start';
-        var initialEnd = '@ViewBag.end';
+        var urlStart = '@ViewBag.start';
+        var urlEnd = '@ViewBag.end';
 */
 
 $.noty.defaults.layout = 'bottomRight';
@@ -98,14 +98,16 @@ $(document).ready(function () {
 
 
 function addChartData(chartData) {
+    dataset.add(chartData);
+    
     var start = vis.moment(chartData[0].x).add(-1, 'seconds');
     var end = vis.moment(chartData[chartData.length - 1].x).add(1, 'seconds');
 
-    if (initialStart != "")
-        start = initialStart;
+    if (urlStart != "0")
+        start = new Date(urlStart);
 
-    if (initialEnd != "")
-        end = initialEnd;
+    if (urlEnd != "0")
+        end = new Date(urlEnd);
 
     var options = {
         start: start,
@@ -121,8 +123,7 @@ function addChartData(chartData) {
     });*/
 
 
-    dataset.add(chartData);
-    graph2d.fit();
+   //graph2d.fit();
 
 }
 
@@ -275,5 +276,14 @@ function showAll() {
 }
 
 function share() {
-    
+    var url = $(location).attr('host') + $(location).attr('pathname');
+    var start = graph2d.getWindow().start;
+    var end = graph2d.getWindow().end;
+    url += "?autoscroll=" + autoscroll.value;
+    url += "&style=" + charttype.value;
+    url += "&start=" + start.getTime();
+    url += "&end=" + end.getTime();
+    $('#shareModal').modal();
+    $('#url').val(url);
+
 }
