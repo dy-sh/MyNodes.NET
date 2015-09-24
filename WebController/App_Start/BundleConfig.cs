@@ -58,8 +58,8 @@ namespace MyNetSensors.WebController
             bundles.Add(new ScriptBundle("~/bundles/mysensors").Include(
                 "~/Scripts/mysensors.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-view-page").Include(
-                "~/Scripts/mynetsensors-view-page.js"));
+            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-observe-page").Include(
+                "~/Scripts/mynetsensors-observe-page.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/mynetsensors-control-page").Include(
                 "~/Scripts/mynetsensors-control-page.js"));

@@ -73,12 +73,14 @@
 {
     @Scripts.Render("~/bundles/visjs")
     @Scripts.Render("~/bundles/noty")
-
-
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
 
 
     <script type="text/javascript">
         var dbId = '@ViewBag.db_Id';
+        var sensorId = '@ViewBag.sensorId';
+        var nodeId = '@ViewBag.nodeId';
     </script>
 
     @Scripts.Render("~/bundles/mynetsensors-history-chart-live-page")

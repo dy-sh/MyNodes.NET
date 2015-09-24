@@ -3,6 +3,13 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+/*
+Get variables from outside the script
+        var dbId = '@ViewBag.db_Id';
+        var sensorId = '@ViewBag.sensorId';
+        var nodeId = '@ViewBag.nodeId';
+*/
+
 $.noty.defaults.layout = 'bottomRight';
 $.noty.defaults.theme = 'relax';
 $.noty.defaults.timeout = 3000;
@@ -223,5 +230,21 @@ $(function () {
 });
 
 function onSensorUpdatedEvent(sensor) {
-    
+    if (sensor.ownerNodeId != nodeId || sensor.sensorId != sensorId)
+        return;
+
+    var sensorData = JSON.parse(sensor.sensorDataJson);
+
+    for (var i = 0; i < sensorData.length; i++) {
+        var state = sensorData[i].state;
+        if (sensorData[i].dataType == 16 && state == 0) //V_TRIPPED
+            state = -0.1;
+        //Add new point to chart
+        var now = vis.moment();
+        dataset.add({
+            x: now,
+            y: state,
+            group:0
+            });
+    }
 }

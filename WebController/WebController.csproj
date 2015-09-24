@@ -300,7 +300,7 @@
     <Content Include="Scripts\mynetsensors-history-chart-live-page.js" />
     <Content Include="Scripts\mynetsensors-settings-page.js" />
     <Content Include="Scripts\mynetsensors-history-chart-page.js" />
-    <Content Include="Scripts\mynetsensors-view-page.js" />
+    <Content Include="Scripts\mynetsensors-observe-page.js" />
     <Content Include="Scripts\mysensors.js" />
     <Content Include="Scripts\noty\jquery.noty.js" />
     <Content Include="Scripts\noty\layouts\bottom.js" />
