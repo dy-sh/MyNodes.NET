@@ -44,8 +44,10 @@
                 <label for="charttype">Style:</label>
                 <select id="charttype" onchange="updateCharType()">
                     <option value="bars" selected>Bars</option>
+                    <option value="splines">Splines</option>
+                    <option value="shadedsplines">Shaded Splines</option>
                     <option value="lines">Lines</option>
-                    <option value="areas">Areas</option>
+                    <option value="shadedlines">Shaded Lines</option>
                 </select>
             </p>
         </div>
@@ -181,19 +183,37 @@
                     };
                     graph2d.setOptions(options);
                     break;
+                case 'splines':
+                    options = {
+                        style: 'line',
+                        drawPoints: { style: 'circle' },
+                        shaded: {enabled: false },
+                        interpolation:{enabled: true}
+                    };
+                    graph2d.setOptions(options);
+                    break;
+                case 'shadedsplines':
+                    options = {
+                        style: 'line',
+                        drawPoints: { style: 'circle' },
+                        shaded: {enabled: true , orientation: 'bottom' },
+                        interpolation:{enabled: true}
+                    };
+                    break;
                 case 'lines':
                     options = {
                         style: 'line',
                         drawPoints: { style: 'circle' },
-                        shaded: {enabled: false }
+                        shaded: {enabled: false  },
+                        interpolation:{enabled: false}
                     };
-                    graph2d.setOptions(options);
                     break;
-                case 'areas':
+                case 'shadedlines':
                     options = {
                         style: 'line',
                         drawPoints: { style: 'circle' },
-                        shaded: {enabled: true , orientation: 'bottom' }
+                        shaded: {enabled: true , orientation: 'bottom' },
+                        interpolation:{enabled: false}
                     };
                     break;
                 default:
