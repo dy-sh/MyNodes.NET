@@ -28,13 +28,22 @@
             <p>
                 <br />
                 <div class="btn-group pull-right" role="group" aria-label="...">
+                    <button type="button" class='btn btn-default' onclick="showAll()">
+                        All
+                    </button>
+                    <button type="button" class='btn btn-default' onclick="showNow()">
+                        Now
+                    </button>
+                    <button type="button" class='btn btn-default' onclick="share()">
+                        Share
+                    </button>
                     <a class='btn btn-default' href='../../ClearHistoryByDbId/@ViewBag.db_Id'>
-                        Clear History
+                        Clear
                     </a>
                 </div>
 
-                <label for="update">Update:</label>
-                <select id="update">
+                <label for="autoscroll">Auto scroll:</label>
+                <select id="autoscroll">
                     <option value="none" selected>None</option>
                     <option value="continuous">Continuous</option>
                     <option value="discrete">Discrete</option>
@@ -81,8 +90,22 @@
         var dbId = '@ViewBag.db_Id';
         var sensorId = '@ViewBag.sensorId';
         var nodeId = '@ViewBag.nodeId';
+
+        var initialStart = '@ViewBag.start';
+        var initialEnd = '@ViewBag.end';
+
+        @if (@ViewBag.autoscroll != null)
+        {
+            @:$("#autoscroll").val('@ViewBag.autoscroll');
+        }
+
+        @if (@ViewBag.style != null)
+        {
+            @:$("#charttype").val('@ViewBag.style');
+        }
+
+
     </script>
 
     @Scripts.Render("~/bundles/mynetsensors-history-chart-live-page")
-
 }

@@ -8,6 +8,8 @@ Get variables from outside the script
         var dbId = '@ViewBag.db_Id';
         var sensorId = '@ViewBag.sensorId';
         var nodeId = '@ViewBag.nodeId';
+        var initialStart = '@ViewBag.start';
+        var initialEnd = '@ViewBag.end';
 */
 
 $.noty.defaults.layout = 'bottomRight';
@@ -29,22 +31,13 @@ groups.add({ id: 0 });
 
 var DELAY = 1000; // delay in ms to add new data points
 
-var update = document.getElementById('update');
+var autoscroll = document.getElementById('autoscroll');
 var charttype = document.getElementById('charttype');
 
 // create a graph2d with an (currently empty) dataset
 var container = document.getElementById('visualization');
 var dataset = new vis.DataSet();
-
-var options = {
-    start: vis.moment().add(-30, 'seconds'), // changed so its faster
-    end: vis.moment(),
-    drawPoints: { style: 'circle' },
-    shaded: { orientation: 'bottom' }
-};
-
-
-
+var options;
 
 var graph2d = new vis.Graph2d(container, dataset, groups, options);
 
@@ -53,7 +46,7 @@ function renderStep() {
     var now = vis.moment();
     var range = graph2d.getWindow();
     var interval = range.end - range.start;
-    switch (update.value) {
+    switch (autoscroll.value) {
         case 'continuous':
             graph2d.setWindow(now - interval, now, { animation: false });
             requestAnimationFrame(renderStep);
@@ -78,11 +71,12 @@ function renderStep() {
 renderStep();
 
 
-$(document).ready(function() {
+$(document).ready(function () {
+    //Loading data frow server
     $.ajax({
         url: "../../GetSensorDataJsonByDbId/" + dbId, //get dbId from viewbag before
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             if ("chartData" in data) {
                 // console.log(data);
                 addChartData(data.chartData);
@@ -92,12 +86,13 @@ $(document).ready(function() {
                 $('#infoPanel').html("There are no entries in history");
             }
         },
-        error: function() {
+        error: function () {
             $('#infoPanel').html("<p class='text-danger'>Failed to get data from server!</p>");
         }
     });
 
     updateCharType();
+
 
 });
 
@@ -106,10 +101,18 @@ function addChartData(chartData) {
     var start = vis.moment(chartData[0].x).add(-1, 'seconds');
     var end = vis.moment(chartData[chartData.length - 1].x).add(1, 'seconds');
 
+    if (initialStart != "")
+        start = initialStart;
+
+    if (initialEnd != "")
+        end = initialEnd;
+
     var options = {
         start: start,
         end: end
     };
+    graph2d.setOptions(options);
+    // graph2d.setWindow({ start:start,end: end });
 
     /* groups.add({
          id: 1,
@@ -117,7 +120,6 @@ function addChartData(chartData) {
          // options: {excludeFromLegend: true}
     });*/
 
-    graph2d.setOptions(options);
 
     dataset.add(chartData);
     graph2d.fit();
@@ -137,38 +139,38 @@ function updateCharType() {
             options = {
                 style: 'line',
                 drawPoints: { style: 'circle', size: 6 },
-                shaded: {enabled: false },
-                interpolation:{enabled: true}
+                shaded: { enabled: false },
+                interpolation: { enabled: true }
             };
             break;
         case 'shadedsplines':
             options = {
                 style: 'line',
-                drawPoints: { style: 'circle' , size: 6},
-                shaded: {enabled: true , orientation: 'bottom' },
-                interpolation:{enabled: true}
+                drawPoints: { style: 'circle', size: 6 },
+                shaded: { enabled: true, orientation: 'bottom' },
+                interpolation: { enabled: true }
             };
             break;
         case 'lines':
             options = {
                 style: 'line',
-                drawPoints: { style: 'square' , size: 6},
-                shaded: {enabled: false  },
-                interpolation:{enabled: false}
+                drawPoints: { style: 'square', size: 6 },
+                shaded: { enabled: false },
+                interpolation: { enabled: false }
             };
             break;
         case 'shadedlines':
             options = {
                 style: 'line',
-                drawPoints: { style: 'square', size: 6},
-                shaded: {enabled: true , orientation: 'bottom' },
-                interpolation:{enabled: false}
+                drawPoints: { style: 'square', size: 6 },
+                shaded: { enabled: true, orientation: 'bottom' },
+                interpolation: { enabled: false }
             };
             break;
         case 'dots':
             options = {
-                style:'points',
-                drawPoints: {style: 'circle' ,size: 10}
+                style: 'points',
+                drawPoints: { style: 'circle', size: 10 }
             };
             break;
         default:
@@ -182,7 +184,7 @@ function updateCharType() {
     //thats why we need redraw:
     redrawChart(options);
 
-            
+
 }
 
 function redrawChart(options) {
@@ -222,7 +224,7 @@ $(function () {
         onSensorUpdatedEvent(sensor);
     };
 
-   
+
     $.connection.hub.start().done(function () {
         gatewayHub.server.getGatewayServiceConnected();
     });
@@ -244,7 +246,34 @@ function onSensorUpdatedEvent(sensor) {
         dataset.add({
             x: now,
             y: state,
-            group:0
-            });
+            group: 0
+        });
     }
+}
+
+
+var zoomTimer;
+function showNow() {
+    clearTimeout(zoomTimer);
+    autoscroll.value = "none";
+    var window = {
+        start: vis.moment().add(-30, 'seconds'),
+        end: vis.moment()
+    };
+    graph2d.setWindow(window);
+    //timer needed for prevent zoomin freeze bug
+    zoomTimer = setTimeout(function (parameters) {
+        autoscroll.value = "continuous";
+    }, 1000);
+
+}
+
+function showAll() {
+    clearTimeout(zoomTimer);
+    autoscroll.value = "none";
+    graph2d.fit();
+}
+
+function share() {
+    
 }

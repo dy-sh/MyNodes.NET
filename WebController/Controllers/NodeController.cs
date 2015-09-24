@@ -43,7 +43,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public ActionResult Chart(int id1, int id2)
+        public ActionResult Chart(int id1, int id2,string autoscroll,string style,string start,string end)
         {
 
             Sensor sensor = db.GetSensor(id1, id2);
@@ -55,7 +55,10 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.sensorId = sensor.sensorId;
             ViewBag.db_Id = sensor.db_Id;
             ViewBag.description = sensor.GetDescrirtionOrType();
-
+            ViewBag.autoscroll = autoscroll;
+            ViewBag.style = style;
+            ViewBag.start = start;
+            ViewBag.end = end;
             return View();
         }
 
