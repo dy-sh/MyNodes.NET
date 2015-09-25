@@ -60,7 +60,7 @@ namespace MyNetSensors.SerialController_Console
         public bool storeTxRxMessages = false;
 
         private Gateway gateway;
-        private Timer updateDbTimer=new Timer();
+        private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
@@ -162,8 +162,11 @@ namespace MyNetSensors.SerialController_Console
 	                [ownerNodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
 	                [sensorType] [int] NULL,
-	                [description] [nvarchar](max) NULL,
 	                [sensorDataJson] [nvarchar](max) NULL,
+	                [description] [nvarchar](max) NULL,
+	                [logToDbEnabled] [bit] NULL,
+	                [logToDbEveryChange] [bit] NULL,
+	                [logToDbWithInterval] [int] NULL,
 	                [Node_db_Id] [int] NULL) ON [PRIMARY] ");
             }
             catch { }
@@ -286,28 +289,34 @@ namespace MyNetSensors.SerialController_Console
 
             if (oldSensor == null)
             {
-                var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, description, sensorDataJson ,Node_db_Id) "
-                    + "VALUES(@ownerNodeId, @sensorId, @sensorType, @description, @sensorDataJson, @Node_db_Id); "
+                var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, logToDbEnabled, logToDbEveryChange, logToDbWithInterval ,Node_db_Id) "
+                    + "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @logToDbEnabled, @logToDbEveryChange, @logToDbWithInterval, @Node_db_Id); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 db.Execute(sqlQuery, new
                 {
                     ownerNodeId = sensor.ownerNodeId,
                     sensorId = sensor.sensorId,
                     sensorType = sensor.sensorType,
-                    description = sensor.description,
                     sensorDataJson = sensor.sensorDataJson,
+                    description = sensor.description,
+                    logToDbEnabled = sensor.logToDbEnabled,
+                    logToDbEveryChange = sensor.logToDbEveryChange,
+                    logToDbWithInterval = sensor.logToDbWithInterval,
                     Node_db_Id = node_db_id
                 });
             }
             else
             {
                 var sqlQuery =
-                    "UPDATE Sensors " +
-                    "SET ownerNodeId = @ownerNodeId, " +
+                    "UPDATE Sensors SET " +
+                    "ownerNodeId = @ownerNodeId, " +
                     "sensorId  = @sensorId, " +
                     "sensorType = @sensorType, " +
-                    "description = @description, " +
                     "sensorDataJson = @sensorDataJson, " +
+                    "description = @description, " +
+                    "logToDbEnabled = @logToDbEnabled, " +
+                   "logToDbWithInterval = @logToDbWithInterval, " +
+                   "logToDbEveryChange = @logToDbEveryChange, " +
                     "Node_db_Id = @Node_db_Id " +
                     "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
                 db.Execute(sqlQuery, new
@@ -315,8 +324,11 @@ namespace MyNetSensors.SerialController_Console
                     ownerNodeId = sensor.ownerNodeId,
                     sensorId = sensor.sensorId,
                     sensorType = sensor.sensorType,
-                    description = sensor.description,
                     sensorDataJson = sensor.sensorDataJson,
+                    description = sensor.description,
+                    logToDbEnabled = sensor.logToDbEnabled,
+                    logToDbWithInterval = sensor.logToDbWithInterval,
+                    logToDbEveryChange = sensor.logToDbEveryChange,
                     Node_db_Id = node_db_id
                 });
             }
@@ -324,7 +336,7 @@ namespace MyNetSensors.SerialController_Console
             StoreSensorDataToLog(sensor);
         }
 
-      
+
 
 
 
@@ -445,21 +457,24 @@ namespace MyNetSensors.SerialController_Console
 
         private void StoreSensorDataToLog(Sensor sensor)
         {
-            //    if (!sensor.logToDbEnabled && !sensor.logToDbWhenChanged)
+            //    if (!sensor.logToDbEnabled && !sensor.logToDbEveryChange)
             //        return;
 
             CreateTableForSensor(sensor);
 
             List<SensorData> data = sensor.GetAllData();
 
+            if (data==null)
+                return;
+
             foreach (var sensorData in data)
                 sensorData.dateTime = DateTime.Now;
 
-            var sqlQuery = String.Format("INSERT INTO Sensor{0} (dataType, state, dateTime) "
-    + "VALUES(@dataType,@state, @dateTime); "
-    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+            var sqlQuery = String.Format(
+                "INSERT INTO Sensor{0} (dataType, state, dateTime) "
+                + "VALUES(@dataType,@state, @dateTime); "
+                + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
             db.Execute(sqlQuery, data);
-
 
         }
 

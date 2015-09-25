@@ -17,5 +17,7 @@ namespace MyNetSensors.WebController.Code
         List<SensorData> GetSensorLog(int ownerNodeId, int sensorId);
         void DropSensorLog(int db_Id);
         void DropSensorLog(int ownerNodeId, int sensorId);
+        void UpdateNodeSettings(Node node);
+        void UpdateSensorSettings(Sensor sensor);
     }
 }

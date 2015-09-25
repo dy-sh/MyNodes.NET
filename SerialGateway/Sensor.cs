@@ -26,8 +26,8 @@ namespace MyNetSensors.SerialGateway
 
         public bool logToDbEnabled { get; set; }
         //interval in seconds. if 0, will not store by timer
-        public int logToDbTimerInterval { get; set; }
-        public bool logToDbWhenChanged { get; set; }
+        public int logToDbWithInterval { get; set; }
+        public bool logToDbEveryChange { get; set; }
 
 
         public Sensor()

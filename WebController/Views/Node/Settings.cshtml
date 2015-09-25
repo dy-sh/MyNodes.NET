@@ -18,6 +18,8 @@
     <div class="panel-body">
         @using (Html.BeginForm())
         {
+            @Html.Hidden("nodeId", @Model.nodeId)
+
             foreach (var sensor in Model.sensors)
             {
                 <div class="panel panel-default">
@@ -31,19 +33,19 @@
                             <li class="list-group-item">
                                 Store history to database
                                 <div class="pull-right">
-                                    <input type='checkbox' class="switch" name='storetodb-@sensor.sensorId' data-label-width='0' data-size='small'>
+                                    @Html.CheckBox("storetodb" + sensor.sensorId, sensor.logToDbEnabled, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Store to database every change
                                 <div class="pull-right">
-                                    <input type='checkbox' class="switch" name='storechanges-@sensor.sensorId' data-label-width='0' data-size='small'>
+                                    @Html.CheckBox("storechanges" + sensor.sensorId, sensor.logToDbEveryChange, new { @class="switch", @data_size = "small", @data_label_width = "0" })
                                 </div>
                             </li>
                             <li class="list-group-item">
-                                Store to database interval
+                                Store to database interval (sec)
                                 <div class="pull-right">
-                                    <input type="text" class="form-control" placeholder="sec" name="storeinterval-@sensor.sensorId" style="width: 80px; margin-top: -7px">
+                                    @Html.TextBox("storeinterval" + sensor.sensorId, sensor.logToDbWithInterval,new {@class= "form-control" , @style = "width: 80px; margin-top: -7px" })
                                 </div>
                             </li>
                         </ul>

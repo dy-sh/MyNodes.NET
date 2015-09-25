@@ -20,12 +20,33 @@ namespace MyNetSensors.WebController.Controllers
             db = new SensorsRepositoryDapper(cs);
         }
 
-
+        [HttpGet]
         public ActionResult Settings(int id)
         {
             Node node = db.GetNodeByNodeId(id);
             return View(node);
         }
+
+        [HttpPost]
+        public ActionResult Settings()
+        {
+            int id = Int32.Parse(Request.Form["nodeId"]);
+            Node node = db.GetNodeByNodeId(id);
+            foreach (var sensor in node.sensors)
+            {
+
+                bool storetodb = Request.Form["storetodb" + sensor.sensorId] != "false";
+                bool storechanges = Request.Form["storechanges" + sensor.sensorId] != "false";
+                int storeinterval = Int32.Parse(Request.Form["storeinterval" + sensor.sensorId]);
+                sensor.logToDbEnabled = storetodb;
+                sensor.logToDbEveryChange = storechanges;
+                sensor.logToDbWithInterval = storeinterval;
+            }
+            db.UpdateNodeSettings(node);
+            return View(node);
+        }
+
+
 
         public ActionResult Log(int id1, int id2)
         {

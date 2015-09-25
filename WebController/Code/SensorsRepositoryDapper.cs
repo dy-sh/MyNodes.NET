@@ -131,5 +131,41 @@ namespace MyNetSensors.WebController.Code
             Sensor sensor = GetSensor(ownerNodeId, sensorId);
             DropSensorLog(sensor.db_Id);
         }
+
+       
+
+        public void UpdateNodeSettings(Node node)
+        {
+            var sqlQuery =
+                "UPDATE Nodes SET " +
+                "name = @name " +
+                "WHERE nodeId = @nodeId";
+            db.Execute(sqlQuery, node);
+
+            foreach (var sensor in node.sensors)
+            {
+                UpdateSensorSettings(sensor);
+            }
+        }
+
+        public void UpdateSensorSettings(Sensor sensor)
+        {
+            var sqlQuery =
+                   "UPDATE Sensors SET " +
+                   "description = @description, " +
+                   "logToDbEnabled = @logToDbEnabled, " +
+                   "logToDbEveryChange = @logToDbEveryChange, " +
+                   "logToDbWithInterval = @logToDbWithInterval " +
+                   "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+            db.Execute(sqlQuery, new
+            {
+                description = sensor.description,
+                logToDbEnabled = sensor.logToDbEnabled,
+                logToDbEveryChange = sensor.logToDbEveryChange,
+                logToDbWithInterval = sensor.logToDbWithInterval,
+                sensorId = sensor.sensorId,
+                ownerNodeId = sensor.ownerNodeId
+            });
+        }
     }
 }
