@@ -1,1 +1,86 @@
-﻿
+﻿@model MyNetSensors.SerialGateway.Node
+
+@{
+    ViewBag.Title = "Node Settings";
+}
+
+<h2>Node @Model.nodeId Settings</h2>
+
+<a href="../../Gateway/Control" class="btn btn-default pull-right">Nodes Control</a>
+<br /><br />
+
+
+<div class="panel panel-default" style="min-width: 390px; max-width: 390px">
+    <div class="panel-heading">
+        Node @Model.nodeId
+    </div>
+
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            foreach (var sensor in Model.sensors)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Sensor @sensor.sensorId - @sensor.GetDescrirtionOrType()
+                     
+                    </div>
+
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Store history to database
+                                <div class="pull-right">
+                                    <input type='checkbox' class="switch" name='storetodb-@sensor.sensorId' data-label-width='0' data-size='small'>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Store to database every change
+                                <div class="pull-right">
+                                    <input type='checkbox' class="switch" name='storechanges-@sensor.sensorId' data-label-width='0' data-size='small'>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Store to database interval
+                                <div class="pull-right">
+                                    <input type="text" class="form-control" placeholder="sec" name="storeinterval-@sensor.sensorId" style="width: 80px; margin-top: -7px">
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            }
+            <div class="btn-group pull-right" role="group" style="padding-right: 10px;">
+                <input type="submit" value="Save changes" class="btn btn-primary" />
+                <a href="javascript:window.location.href=window.location.href" class="btn btn-default">Cancel</a>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+
+@section styles
+{
+
+    @Styles.Render("~/Content/jqueryui")
+    @Styles.Render("~/Content/noty")
+    @Styles.Render("~/Content/switch")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/switch")
+
+    @Scripts.Render("~/bundles/noty")
+    @Scripts.Render("~/bundles/mysensors")
+    <script>
+        $(".switch").bootstrapSwitch();
+    </script>
+}
