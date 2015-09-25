@@ -165,9 +165,9 @@ function createOrUpdateNode(node) {
             .append("Version: " + node.version + "<br/>");
 
     $('#nodeBody' + id)
-        .append("Reg.: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
+        .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
         .append("<div id='nodeLastSeen" + id + "'>"
-            + "Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
+            + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
             + "</div>");
 
     if (node.isRepeatingNode == null)
@@ -195,7 +195,7 @@ function createOrUpdateNode(node) {
 function updateLastSeen(node) {
     var id = node.nodeId;
     $('#nodeLastSeen' + id)
-        .html("Seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
+        .html("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
 }
 
 function updateBattery(node) {

@@ -7,7 +7,8 @@
 <h2>@ViewBag.description History</h2>
 
 <h3>
-    <small>Node<span>@ViewBag.nodeId</span> Sensor<span>@ViewBag.sensorId</span></small>
+    <small>@Html.Raw("Node" + ViewBag.nodeId + " Sensor" + ViewBag.sensorId)</small>
+
     <div class="btn-group pull-right" role="group" aria-label="...">
         <a class='btn btn-default' href='../../../Gateway/Control'>
             Control Nodes

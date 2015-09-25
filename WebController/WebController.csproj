@@ -368,6 +368,7 @@
     <Content Include="Views\Gateway\Settings.cshtml" />
     <Content Include="Views\Node\Log.cshtml" />
     <Content Include="Views\Node\Chart.cshtml" />
+    <Content Include="Views\Node\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

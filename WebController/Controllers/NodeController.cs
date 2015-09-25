@@ -23,7 +23,8 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Settings(int id)
         {
-            return View();
+            Node node = db.GetNodeByNodeId(id);
+            return View(node);
         }
 
         public ActionResult Log(int id1, int id2)

@@ -37,7 +37,7 @@ var charttype = document.getElementById('charttype');
 // create a graph2d with an (currently empty) dataset
 var container = document.getElementById('visualization');
 var dataset = new vis.DataSet();
-var options;
+var options ;
 
 var graph2d = new vis.Graph2d(container, dataset, groups, options);
 
@@ -131,6 +131,7 @@ function updateCharType() {
     switch (charttype.value) {
         case 'bars':
             options = {
+                height: '370px',
                 style: 'bar',
                 drawPoints: false,
                 barChart: { width: 50, align: 'right', sideBySide: false }
@@ -138,6 +139,7 @@ function updateCharType() {
             break;
         case 'splines':
             options = {
+                height: '370px',
                 style: 'line',
                 drawPoints: { style: 'circle', size: 6 },
                 shaded: { enabled: false },
@@ -147,6 +149,7 @@ function updateCharType() {
         case 'shadedsplines':
             options = {
                 style: 'line',
+                height: '370px',
                 drawPoints: { style: 'circle', size: 6 },
                 shaded: { enabled: true, orientation: 'bottom' },
                 interpolation: { enabled: true }
@@ -154,6 +157,7 @@ function updateCharType() {
             break;
         case 'lines':
             options = {
+                height: '370px',
                 style: 'line',
                 drawPoints: { style: 'square', size: 6 },
                 shaded: { enabled: false },
@@ -162,6 +166,7 @@ function updateCharType() {
             break;
         case 'shadedlines':
             options = {
+                height: '370px',
                 style: 'line',
                 drawPoints: { style: 'square', size: 6 },
                 shaded: { enabled: true, orientation: 'bottom' },
@@ -170,6 +175,7 @@ function updateCharType() {
             break;
         case 'dots':
             options = {
+                height: '370px',
                 style: 'points',
                 drawPoints: { style: 'circle', size: 10 }
             };
