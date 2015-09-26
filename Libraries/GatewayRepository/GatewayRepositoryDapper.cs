@@ -90,7 +90,6 @@ namespace MyNetSensors.GatewayRepository
         {
             using (var db = new SqlConnection(connectionString + ";Database= master"))
             {
-                db.Open();
 
                 try
                 {
@@ -107,10 +106,11 @@ namespace MyNetSensors.GatewayRepository
 
             using (var db = new SqlConnection(connectionString))
             {
-                db.Open();
 
                 try
                 {
+                    db.Open();
+
                     db.Execute(
                         @"CREATE TABLE [dbo].[Messages](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,

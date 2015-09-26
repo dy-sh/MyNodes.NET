@@ -20,14 +20,14 @@ namespace MyNetSensors.SensorsHistoryRepository
     /// </summary>
     public class SensorsHistoryRepositoryDapper : ISensorsHistoryRepository
     {
-        //This value is interval for updateDbTimer. 
+        //This value is interval for updateDbTimer in ms. 
         //When timer will elapsed, program will check all nodes,
         //which need to store in db (sensor.storeHistoryWithInterval), and will write them.
         //If storeHistoryWithInterval will be less then writeInterval, 
         //storeHistoryWithInterval will be equal to writeInterval
         //If you have tons of data, and db perfomance decreased, increase this value,
         //and you will get less writing to db frequency 
-        private int writeInterval = 1;
+        private int writeInterval = 1000;
 
 
         private Timer updateDbTimer = new Timer();
@@ -70,8 +70,8 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private void UpdateDbTimer(object sender, ElapsedEventArgs e)
         {
+            updateDbTimer.Stop();
 
-         
 
             List<Node> nodes = gateway.GetNodes();
             foreach (var node in nodes)
@@ -79,7 +79,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                 foreach (var sensor in node.sensors)
                 {
                     if (!sensor.storeHistoryEnabled || sensor.storeHistoryWithInterval==0)
-                        break;
+                        continue;
 
                     TimeSpan elapsedTime = DateTime.Now.Subtract(sensor.storeHistoryLastDate);
                     if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
@@ -91,6 +91,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                 }
             }
 
+            updateDbTimer.Start();
         }
 
 
