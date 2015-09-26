@@ -31,7 +31,7 @@
                         <li class="list-group-item">
                             Delete nodes from the database
                             <div class="pull-right">
-                                <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
+                                <button class="btn btn-default" data-href="DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
                                     Delete
                                 </button>
                             </div><br /><br />
@@ -41,10 +41,10 @@
             </div>
         </div>
     </div>
-    @*
+    
     <div class="col-sm-6">
         <div class="panel panel-default">
-            <div class="panel-heading">Database</div>
+            <div class="panel-heading">History Database</div>
             <div class="panel-body">
                 <p>
 
@@ -52,10 +52,10 @@
 
                 <ul class="list-group">
                     <li class="list-group-item">
-                        Delete nodes from the database
+                        Clear nodes history
                         <div class="pull-right">
-                            <button class="btn btn-default" data-href="DropDatabase/" data-toggle="modal" data-target="#confirm-delete">
-                                Delete
+                            <button class="btn btn-default" data-href="DropHistory/" data-toggle="modal" data-target="#confirm-history-delete">
+                                Clear
                             </button>
                         </div><br/><br/>
                     </li>
@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-    *@
+    
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading">Web server</div>
@@ -84,7 +84,7 @@
 
 </div>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-nodes-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,14 +107,29 @@
                 before turn on all known nodes!
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok">Delete</a>
+                <a class="btn btn-danger btn-ok" href="DropNodes">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<div class="modal fade" id="confirm-history-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Clear nodes history
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all nodes history?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" href="DropHistory">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section styles
 {
@@ -132,9 +147,5 @@
     @Scripts.Render("~/bundles/mysensors")
     @Scripts.Render("~/bundles/mynetsensors-settings-page")
 
-    <script>
-        $('#confirm-delete').on('show.bs.modal', function (e) {
-            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        });
-    </script>
+
 }

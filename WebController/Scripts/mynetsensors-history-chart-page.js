@@ -83,7 +83,7 @@ $(document).ready(function () {
                 $('#infoPanel').hide();
                 $('#chartPanel').fadeIn(1000);
             } else {
-                $('#infoPanel').html("There are no entries in history");
+                $('#infoPanel').html("There are no entries in history. Check node <a href='../../Settings/"+nodeId+"'>settings</a>.");
             }
         },
         error: function () {

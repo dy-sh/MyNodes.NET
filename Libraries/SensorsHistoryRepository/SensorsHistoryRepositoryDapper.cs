@@ -64,7 +64,7 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private void OnSensorUpdatedEvent(Sensor sensor)
         {
-            if (sensor.storeHistoryEveryChange)
+            if (sensor.storeHistoryEnabled && sensor.storeHistoryEveryChange)
                 WriteSensorDataToHistory(sensor);
         }
 
@@ -123,7 +123,11 @@ namespace MyNetSensors.SensorsHistoryRepository
             {
                 db.Open();
 
-                db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+                try
+                {
+                    db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+                }
+                catch{}
             }
         }
 
