@@ -36,7 +36,7 @@ namespace SerialController_Windows.Views
     /// </summary>
     public sealed partial class NodesControlPage : Page
     {
-        //store node id when for which is sending, to prevent slidres update when drug from event
+        //store node id, to prevent slidres update when drug from event
         private int lastSendedNodeId;
         private int lastSendedSensorId;
 

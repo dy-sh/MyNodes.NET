@@ -25,10 +25,10 @@ namespace MyNetSensors.Gateway
 
         public string sensorDataJson { get; set; }
 
-        public bool logToDbEnabled { get; set; }
+        public bool storeHistoryEnabled { get; set; }
         //interval in seconds. if 0, will not store by timer
-        public int logToDbWithInterval { get; set; }
-        public bool logToDbEveryChange { get; set; }
+        public int storeHistoryWithInterval { get; set; }
+        public bool storeHistoryEveryChange { get; set; }
 
 
         public Sensor()

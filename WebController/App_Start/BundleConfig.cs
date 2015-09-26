@@ -70,8 +70,6 @@ namespace MyNetSensors.WebController
             bundles.Add(new ScriptBundle("~/bundles/mynetsensors-history-chart-page").Include(
                 "~/Scripts/mynetsensors-history-chart-page.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/mynetsensors-history-chart-live-page").Include(
-                "~/Scripts/mynetsensors-history-chart-live-page.js"));
 
 
             //noty

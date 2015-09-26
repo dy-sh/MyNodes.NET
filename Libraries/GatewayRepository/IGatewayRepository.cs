@@ -29,7 +29,7 @@ namespace MyNetSensors.GatewayRepository
         
 
         bool IsDbExist();
-        void SetStoreInterval(int ms);
+        void SetWriteInterval(int ms);
         void SetStoreTxRxMessages(bool enable);
 
         void ShowDebugInConsole(bool enable);

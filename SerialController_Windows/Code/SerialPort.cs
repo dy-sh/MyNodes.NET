@@ -165,7 +165,7 @@ namespace SerialController_Windows.Code
         {
             Log("Writing to serial: "+ message);
 
-            Task<UInt32> storeAsyncTask;
+            Task<UInt32> writeAsyncTask;
 
             if (!string.IsNullOrEmpty(message))
             {
@@ -173,9 +173,9 @@ namespace SerialController_Windows.Code
                 dataWriteObject.WriteString(message);
 
                 // Launch an async task to complete the write operation
-                storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
+                writeAsyncTask = dataWriteObject.StoreAsync().AsTask();
 
-                UInt32 bytesWritten = await storeAsyncTask;
+                UInt32 bytesWritten = await writeAsyncTask;
             }
         }
 

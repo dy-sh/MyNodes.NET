@@ -39,12 +39,12 @@ namespace MyNetSensors.WebController.Controllers
             foreach (var sensor in node.sensors)
             {
 
-                bool storetodb = Request.Form["storetodb" + sensor.sensorId] != "false";
-                bool storechanges = Request.Form["storechanges" + sensor.sensorId] != "false";
-                int storeinterval = Int32.Parse(Request.Form["storeinterval" + sensor.sensorId]);
-                sensor.logToDbEnabled = storetodb;
-                sensor.logToDbEveryChange = storechanges;
-                sensor.logToDbWithInterval = storeinterval;
+                bool storehistory = Request.Form["storehistory" + sensor.sensorId] != "false";
+                bool writeeverychange = Request.Form["writeeverychange" + sensor.sensorId] != "false";
+                int writeinterval = Int32.Parse(Request.Form["writeinterval" + sensor.sensorId]);
+                sensor.storeHistoryEnabled = storehistory;
+                sensor.storeHistoryEveryChange = writeeverychange;
+                sensor.storeHistoryWithInterval = writeinterval;
             }
             gatewayDb.UpdateNodeSettings(node);
            //todo controller.UpdateNodeSettings();
@@ -110,7 +110,7 @@ namespace MyNetSensors.WebController.Controllers
                 foreach (var item in samples)
                 {
                     ChartData sample = new ChartData();
-                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss}", item.dateTime);
+                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss:fff}", item.dateTime);
                     sample.y = item.state == "1" ? "1" : "-0.1";
                     sample.group = 0;
                     chartData.Add(sample);
@@ -120,7 +120,7 @@ namespace MyNetSensors.WebController.Controllers
                 foreach (var item in samples)
                 {
                     ChartData sample = new ChartData();
-                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss}", item.dateTime);
+                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss:fff}", item.dateTime);
                     sample.y = item.state == null ? null : item.state;
                     sample.group = 0;
                     chartData.Add(sample);
@@ -136,7 +136,7 @@ namespace MyNetSensors.WebController.Controllers
         public JsonResult GetSensorDataJson(int id1, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id1, id2);
-            return GetSensorDataJson(sensor.ownerNodeId, sensor.sensorId);
+            return GetSensorDataJsonByDbId(sensor.db_Id);
         }
 
 

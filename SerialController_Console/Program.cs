@@ -59,7 +59,7 @@ namespace MyNetSensors.SerialController_Console
                 gatewayDb = new GatewayRepositoryDapper(connectionString);
                 historyDb = new SensorsHistoryRepositoryDapper(connectionString);
 
-                gatewayDb.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
+                gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
                 gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
                 gatewayDb.SetStoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
 

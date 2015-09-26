@@ -31,21 +31,21 @@
                     <div class="panel-body">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                Store history to database
+                                Store history in database
                                 <div class="pull-right">
-                                    @Html.CheckBox("storetodb" + sensor.sensorId, sensor.logToDbEnabled, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
+                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
                                 </div>
                             </li>
                             <li class="list-group-item">
-                                Store to database every change
+                                Write every change
                                 <div class="pull-right">
-                                    @Html.CheckBox("storechanges" + sensor.sensorId, sensor.logToDbEveryChange, new { @class="switch", @data_size = "small", @data_label_width = "0" })
+                                    @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new { @class="switch", @data_size = "small", @data_label_width = "0" })
                                 </div>
                             </li>
                             <li class="list-group-item">
-                                Store to database interval (sec)
+                                Write with interval (sec)
                                 <div class="pull-right">
-                                    @Html.TextBox("storeinterval" + sensor.sensorId, sensor.logToDbWithInterval,new {@class= "form-control" , @style = "width: 80px; margin-top: -7px" })
+                                    @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval,new {@class= "form-control" , @style = "width: 80px; margin-top: -7px" })
                                 </div>
                             </li>
                         </ul>

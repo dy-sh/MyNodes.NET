@@ -11,7 +11,6 @@
 /// <reference path="moment.min.js" />
 /// <reference path="moment-with-locales.min.js" />
 /// <reference path="mynetsensors-control-page.js" />
-/// <reference path="mynetsensors-history-chart-live-page.js" />
 /// <reference path="mynetsensors-history-chart-page.js" />
 /// <reference path="mynetsensors-observe-page.js" />
 /// <reference path="mynetsensors-settings-page.js" />

@@ -17,13 +17,13 @@ namespace SerialController_Windows.Code
 {
     public class SQLiteRepository
     {
-        //if store time==0, every message will be instantly recorded to DB
+        //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
         //but this greatly slows down the performance.
-        //If you set the interval, the state of all sensors will be recorded
-        //to base with given interval.
-        //the interval should be large enough (>5000 ms)
-        private int storeTimeInterval = 3000;
+        //If you set writeInterval>0, the state of all sensors 
+        //will be writed to DB with this interval.
+        //writeInterval should be large enough (3000 ms is ok)
+        private int writeInterval = 3000;
 
         //slows down the performance
         private bool storeLogMessages = false;
@@ -72,7 +72,7 @@ namespace SerialController_Windows.Code
                 serialController.messagesLog.OnNewMessageLogged += OnNewMessage;
             }
 
-            if (storeTimeInterval == 0)
+            if (writeInterval == 0)
             {
                 serialController.OnNewNodeEvent += AddOrUpdateNode;
                 serialController.OnNodeUpdatedEvent += AddOrUpdateNode;
@@ -87,7 +87,7 @@ namespace SerialController_Windows.Code
                 serialController.OnSensorUpdatedEvent += OnSensorUpdated;
 
                 updateDbTimer = new DispatcherTimer();
-                updateDbTimer.Interval = TimeSpan.FromMilliseconds(storeTimeInterval);
+                updateDbTimer.Interval = TimeSpan.FromMilliseconds(writeInterval);
                 updateDbTimer.Tick += UpdateDbTimer;
                 updateDbTimer.Start();
             }
@@ -151,7 +151,7 @@ namespace SerialController_Windows.Code
             sw.Start();
             conn.Insert(message);
             sw.Stop();
-            Debug.WriteLine("Store to DB: " + sw.ElapsedMilliseconds + " ms");
+            Debug.WriteLine("Writing to DB: " + sw.ElapsedMilliseconds + " ms");
         }
 
         public List<Node> GetNodes()
@@ -188,7 +188,7 @@ namespace SerialController_Windows.Code
 
         }
 
-        public void StoreAllNodes()
+        public void WriteAllNodes()
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -203,7 +203,7 @@ namespace SerialController_Windows.Code
 
         private void UpdateDbTimer(object sender, object e)
         {
-            StoreUpdatedNodes();
+            WriteUpdatedNodes();
         }
 
 
@@ -223,7 +223,7 @@ namespace SerialController_Windows.Code
                 updatedNodesId.Add(sensor.ownerNodeId);
         }
 
-        public void StoreUpdatedNodes()
+        public void WriteUpdatedNodes()
         {
             if (!updatedNodesId.Any()) return;
             
@@ -239,7 +239,7 @@ namespace SerialController_Windows.Code
             updatedNodesId.Clear();
 
             sw.Stop();
-            Debug.WriteLine("Store to DB: "+sw.ElapsedMilliseconds+" ms");
+            Debug.WriteLine("Writing to DB: "+sw.ElapsedMilliseconds+" ms");
         }
     }
 

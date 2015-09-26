@@ -18,13 +18,13 @@ namespace MyNetSensors.GatewayRepository
         private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
 
-        //if store time==0, every message will be instantly recorded to DB
+        //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
         //but this greatly slows down the performance.
-        //If you set the interval, the state of all sensors will be recorded
-        //to base with given interval.
-        //the interval should be large enough (>3000 ms)
-        private int storeTimeInterval = 5000;
+        //If you set writeInterval>0, the state of all sensors 
+        //will be writed to DB with this interval.
+        //writeInterval should be large enough (3000 ms is ok)
+        private int writeInterval = 5000;
 
         //slows down the performance, can cause an exception of a large flow of messages per second
         public bool storeTxRxMessages = false;
@@ -35,7 +35,7 @@ namespace MyNetSensors.GatewayRepository
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
-        //messages list, to store to db by timer
+        //messages list, to write to db by timer
         private List<Message> newMessages = new List<Message>();
 
         public GatewayRepositoryEf(string connectionString)
@@ -68,9 +68,9 @@ namespace MyNetSensors.GatewayRepository
 
             updateDbTimer.Elapsed += UpdateDbTimer;
 
-            if (storeTimeInterval > 0)
+            if (writeInterval > 0)
             {
-                updateDbTimer.Interval = storeTimeInterval;
+                updateDbTimer.Interval = writeInterval;
                 updateDbTimer.Start();
             }
         }
@@ -124,7 +124,7 @@ namespace MyNetSensors.GatewayRepository
         {
             if (!storeTxRxMessages)return;
 
-            if (storeTimeInterval == 0)
+            if (writeInterval == 0)
                 AddMessage(message);
             else
                 newMessages.Add(message);
@@ -190,7 +190,7 @@ namespace MyNetSensors.GatewayRepository
 
         }
 
-        private void StoreAllNodes()
+        private void WriteAllNodes()
         {
             List<Node> nodes = gateway.GetNodes();
             foreach (var node in nodes)
@@ -217,16 +217,16 @@ namespace MyNetSensors.GatewayRepository
             sw.Start();
 
 
-            StoreUpdatedNodes();
-            StoreNewMessages();
+            WriteUpdatedNodes();
+            WriteNewMessages();
 
             sw.Stop();
             long elapsed = sw.ElapsedMilliseconds;
             float messagesPerSec = (float)messages / (float)elapsed * 1000;
-            Log(String.Format("Store to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages, (int)messagesPerSec));
+            Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages, (int)messagesPerSec));
         }
 
-        private void StoreNewMessages()
+        private void WriteNewMessages()
         {
             //to prevent changing of collection while writing to db is not yet finished
             Message[] messages = new Message[newMessages.Count];
@@ -240,7 +240,7 @@ namespace MyNetSensors.GatewayRepository
 
         private void OnNodeUpdated(Node node)
         {
-            if (storeTimeInterval == 0) AddOrUpdateNode(node);
+            if (writeInterval == 0) AddOrUpdateNode(node);
             else
             {
                 if (!updatedNodesId.Contains(node.nodeId))
@@ -250,7 +250,7 @@ namespace MyNetSensors.GatewayRepository
 
         private void OnSensorUpdated(Sensor sensor)
         {
-            if (storeTimeInterval == 0) AddOrUpdateSensor(sensor);
+            if (writeInterval == 0) AddOrUpdateSensor(sensor);
             else
             {
                 if (!updatedNodesId.Contains(sensor.ownerNodeId))
@@ -258,7 +258,7 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
-        private void StoreUpdatedNodes()
+        private void WriteUpdatedNodes()
         {
             if (!updatedNodesId.Any()) return;
 
@@ -304,13 +304,13 @@ namespace MyNetSensors.GatewayRepository
             throw new NotImplementedException();
         }
 
-        public void SetStoreInterval(int ms)
+        public void SetWriteInterval(int ms)
         {
-            storeTimeInterval = ms;
+            writeInterval = ms;
             updateDbTimer.Stop();
-            if (storeTimeInterval > 0)
+            if (writeInterval > 0)
             {
-                updateDbTimer.Interval = storeTimeInterval;
+                updateDbTimer.Interval = writeInterval;
                 updateDbTimer.Start();
             }
         }

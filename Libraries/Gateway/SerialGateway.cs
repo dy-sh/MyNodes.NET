@@ -19,7 +19,7 @@ namespace MyNetSensors.Gateway
     public class SerialGateway
     {
         private IComPort serialPort;
-        public bool storeMessagesToLog = true;
+        public bool storeMessages = true;
         public bool enableAutoAssignId = true;
 
         public event MessageEventHandler OnMessageRecievedEvent;
@@ -128,7 +128,7 @@ namespace MyNetSensors.Gateway
 
             SendMessage(mes);
 
-            if (storeMessagesToLog)
+            if (storeMessages)
                 messagesLog.AddNewMessage(message);
         }
 
@@ -139,7 +139,7 @@ namespace MyNetSensors.Gateway
             Message mes = ParseMessageFromString(message);
             mes.incoming = true;
 
-            if (storeMessagesToLog)
+            if (storeMessages)
                 messagesLog.AddNewMessage(mes);
 
             if (OnMessageRecievedEvent != null)
