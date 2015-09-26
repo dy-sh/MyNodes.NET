@@ -494,5 +494,18 @@ namespace MyNetSensors.Gateway
 
             return info;
         }
+
+        public void SetNodeDbId(int nodeId, int dbId)
+        {
+            Node node = GetNode(nodeId);
+            node.db_Id = dbId;
+        }
+
+        public void SetSensorDbId(int ownerNodeId,int sensorId, int dbId)
+        {
+            Node node = GetNode(ownerNodeId);
+            Sensor sensor = node.GetSensor(sensorId);
+            sensor.db_Id = dbId;
+        }
     }
 }

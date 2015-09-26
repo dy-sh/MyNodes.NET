@@ -239,7 +239,8 @@ namespace MyNetSensors.GatewayRepository
                 var sqlQuery = "INSERT INTO Nodes (nodeId, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
                     + "VALUES(@nodeId, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Execute(sqlQuery, node);
+                int dbId = db.Query<int>(sqlQuery, node).Single();
+                gateway.SetNodeDbId(node.nodeId, dbId);
             }
             else
             {
@@ -272,7 +273,7 @@ namespace MyNetSensors.GatewayRepository
                 var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
                     + "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Execute(sqlQuery, new
+                int dbId = db.Query<int>(sqlQuery, new
                 {
                     ownerNodeId = sensor.ownerNodeId,
                     sensorId = sensor.sensorId,
@@ -283,7 +284,9 @@ namespace MyNetSensors.GatewayRepository
                     storeHistoryEveryChange = sensor.storeHistoryEveryChange,
                     storeHistoryWithInterval = sensor.storeHistoryWithInterval,
                     Node_db_Id = node_db_id
-                });
+                }).Single();
+                
+                gateway.SetSensorDbId(sensor.ownerNodeId, sensor.sensorId, dbId);
             }
             else
             {
