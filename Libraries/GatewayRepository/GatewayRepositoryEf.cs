@@ -38,10 +38,13 @@ namespace MyNetSensors.GatewayRepository
         //messages list, to store to db by timer
         private List<Message> newMessages = new List<Message>();
 
-
-        public void Connect(SerialGateway gateway, string connectionString)
+        public GatewayRepositoryEf(string connectionString)
         {
             InitializeDB(connectionString);
+        }
+
+        public void ConnectToGateway(SerialGateway gateway)
+        {
 
             this.gateway = gateway;
 
@@ -84,6 +87,11 @@ namespace MyNetSensors.GatewayRepository
             newMessages.Clear();
 
             db.Database.ExecuteSqlCommand("TRUNCATE TABLE Messages");
+        }
+
+        public Sensor GetSensor(int ownerNodeId, int sensorId)
+        {
+            throw new NotImplementedException();
         }
 
         public void DropNodes()
@@ -134,6 +142,21 @@ namespace MyNetSensors.GatewayRepository
             List<Node> list = db.Nodes.Include(x => x.sensors).OrderBy(x => x.nodeId).ToList();
 
             return list;
+        }
+
+        public Node GetNodeByDbId(int db_Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Node GetNodeByNodeId(int nodeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Sensor GetSensor(int db_Id)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddOrUpdateNode(Node node)
@@ -261,7 +284,7 @@ namespace MyNetSensors.GatewayRepository
             db.SaveChanges();
         }
 
-        public bool IsConnected()
+        public bool IsDbExist()
         {
             return db.Database.Exists();
         }
@@ -269,6 +292,16 @@ namespace MyNetSensors.GatewayRepository
         public void ShowDebugInConsole(bool enable)
         {
             showConsoleMessages = enable;
+        }
+
+        public void UpdateNodeSettings(Node node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSensorSettings(Sensor sensor)
+        {
+            throw new NotImplementedException();
         }
 
         public void SetStoreInterval(int ms)
@@ -282,7 +315,7 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
-        public void StoreTxRxMessages(bool enable)
+        public void SetStoreTxRxMessages(bool enable)
         {
             storeTxRxMessages = enable;
         }

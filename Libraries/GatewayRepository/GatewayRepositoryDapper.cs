@@ -45,10 +45,14 @@ namespace MyNetSensors.GatewayRepository
 
         private IDbConnection db;
 
-
-        public void Connect(SerialGateway gateway, string connectionString)
+        public GatewayRepositoryDapper(string connectionString)
         {
             InitializeDB(connectionString);
+        }
+
+
+        public void ConnectToGateway(SerialGateway gateway)
+        {
 
             this.gateway = gateway;
 
@@ -308,8 +312,6 @@ namespace MyNetSensors.GatewayRepository
                     Node_db_Id = node_db_id
                 });
             }
-
-            StoreSensorDataToLog(sensor);
         }
 
 
@@ -396,9 +398,9 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
-        public bool IsConnected()
+        public bool IsDbExist()
         {
-            //return db.Database.Exists();
+            //todo check if db exist
             return true;
         }
 
@@ -418,7 +420,7 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
-        public void StoreTxRxMessages(bool enable)
+        public void SetStoreTxRxMessages(bool enable)
         {
             storeTxRxMessages = enable;
         }
@@ -431,43 +433,100 @@ namespace MyNetSensors.GatewayRepository
                 Console.WriteLine(message);
         }
 
-        private void StoreSensorDataToLog(Sensor sensor)
+      
+
+        public Node GetNodeByNodeId(int nodeId)
         {
-            //    if (!sensor.logToDbEnabled && !sensor.logToDbEveryChange)
-            //        return;
+            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
+            {
+                AddChildAction = (node, sensor) =>
+                {
+                    if (node.sensors == null)
+                        node.sensors = new List<Sensor>();
 
-            CreateTableForSensor(sensor);
+                    node.sensors.Add(sensor);
+                },
+                ParentKey = (node) => node.db_Id
+            };
 
-            List<SensorData> data = sensor.GetAllData();
+            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
 
-            if (data==null)
-                return;
+            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
 
-            foreach (var sensorData in data)
-                sensorData.dateTime = DateTime.Now;
 
-            var sqlQuery = String.Format(
-                "INSERT INTO Sensor{0} (dataType, state, dateTime) "
-                + "VALUES(@dataType,@state, @dateTime); "
-                + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
-            db.Execute(sqlQuery, data);
-
+            return result;
         }
 
-        private void CreateTableForSensor(Sensor sensor)
-        {
-            try
-            {
-                string req = String.Format(
-                    @"CREATE TABLE [dbo].[Sensor{0}](
-	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
-	            [dataType] [int] NULL,	        
-	            [state] [nvarchar](max) NULL,	        
-	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
 
-                db.Execute(req);
+        public Node GetNodeByDbId(int db_Id)
+        {
+            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
+            {
+                AddChildAction = (node, sensor) =>
+                {
+                    if (node.sensors == null)
+                        node.sensors = new List<Sensor>();
+
+                    node.sensors.Add(sensor);
+                },
+                ParentKey = (node) => node.db_Id
+            };
+
+            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {0}", db_Id);
+
+            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+
+
+            return result;
+        }
+
+        public Sensor GetSensor(int db_Id)
+        {
+            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
+
+            return sensor;
+        }
+
+        public Sensor GetSensor(int ownerNodeId, int sensorId)
+        {
+            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId", new { ownerNodeId, sensorId }).FirstOrDefault();
+
+            return sensor;
+        }
+
+
+        public void UpdateNodeSettings(Node node)
+        {
+            var sqlQuery =
+                "UPDATE Nodes SET " +
+                "name = @name " +
+                "WHERE nodeId = @nodeId";
+            db.Execute(sqlQuery, node);
+
+            foreach (var sensor in node.sensors)
+            {
+                UpdateSensorSettings(sensor);
             }
-            catch { }
+        }
+
+        public void UpdateSensorSettings(Sensor sensor)
+        {
+            var sqlQuery =
+                   "UPDATE Sensors SET " +
+                   "description = @description, " +
+                   "logToDbEnabled = @logToDbEnabled, " +
+                   "logToDbEveryChange = @logToDbEveryChange, " +
+                   "logToDbWithInterval = @logToDbWithInterval " +
+                   "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+            db.Execute(sqlQuery, new
+            {
+                description = sensor.description,
+                logToDbEnabled = sensor.logToDbEnabled,
+                logToDbEveryChange = sensor.logToDbEveryChange,
+                logToDbWithInterval = sensor.logToDbWithInterval,
+                sensorId = sensor.sensorId,
+                ownerNodeId = sensor.ownerNodeId
+            });
         }
     }
 

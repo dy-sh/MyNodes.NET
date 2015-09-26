@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.SensorsHistoryRepository;
 
 
 namespace MyNetSensors.SerialController_Console
@@ -20,7 +21,8 @@ namespace MyNetSensors.SerialController_Console
     {
         private static ComPort comPort = new ComPort();
         private static SerialGateway gateway = new SerialGateway();
-        private static IGatewayRepository db = new GatewayRepositoryDapper();
+        private static IGatewayRepository gatewayDb;
+        private static ISensorsHistoryRepository historyDb;
         private static GatewaySignalRController signalR = new GatewaySignalRController();
 
         private static string serialPortName;
@@ -53,15 +55,20 @@ namespace MyNetSensors.SerialController_Console
             {
                 Console.WriteLine("Connecting to database... ");
 
-                db.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
-                db.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
-                db.StoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+                gatewayDb = new GatewayRepositoryDapper(connectionString);
+                historyDb = new SensorsHistoryRepositoryDapper(connectionString);
+
+                gatewayDb.SetStoreInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
+                gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
+                gatewayDb.SetStoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
+
 
                 while (!connected)
                 {
-                    db.Connect(gateway, connectionString);
-                    connected = db.IsConnected();
+                    gatewayDb.ConnectToGateway(gateway);
+                    historyDb.ConnectToGateway(gateway);
+                    connected = (gatewayDb.IsDbExist() && historyDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
             }

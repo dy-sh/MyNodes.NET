@@ -10,25 +10,32 @@ namespace MyNetSensors.GatewayRepository
 {
     public interface IGatewayRepository
     {
-        void Connect(SerialGateway gateway, string connectionString);
-        void DropMessages();
+        void ConnectToGateway(SerialGateway gateway);
 
-        void DropNodes();
-
-        List<Message> GetMessages();
 
         void AddMessage(Message message);
+        List<Message> GetMessages();
+        void DropMessages();
 
-        List<Node> GetNodes();
+
         void AddOrUpdateNode(Node node);
-
         void AddOrUpdateSensor(Sensor sensor);
+        List<Node> GetNodes();
+        Node GetNodeByDbId(int db_Id);
+        Node GetNodeByNodeId(int nodeId);
+        Sensor GetSensor(int db_Id);
+        Sensor GetSensor(int ownerNodeId, int sensorId);
+        void DropNodes();
+        
 
-        bool IsConnected();
+        bool IsDbExist();
+        void SetStoreInterval(int ms);
+        void SetStoreTxRxMessages(bool enable);
 
         void ShowDebugInConsole(bool enable);
-        void SetStoreInterval(int ms);
-        void StoreTxRxMessages(bool enable);
 
+
+        void UpdateNodeSettings(Node node);
+        void UpdateSensorSettings(Sensor sensor);
     }
 }

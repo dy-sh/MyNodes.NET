@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyNetSensors.Gateway;
+using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
 
@@ -13,18 +14,20 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {
-        private ISensorsHistoryRepository db;
+        private ISensorsHistoryRepository historyDb;
+        private IGatewayRepository gatewayDb;
 
         public NodeController()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            db = new SensorsHistoryRepositoryDapper(cs);
+            historyDb = new SensorsHistoryRepositoryDapper(cs);
+            gatewayDb = new GatewayRepositoryDapper(cs);
         }
 
         [HttpGet]
         public ActionResult Settings(int id)
         {
-            Node node = db.GetNodeByNodeId(id);
+            Node node = gatewayDb.GetNodeByNodeId(id);
             return View(node);
         }
 
@@ -32,7 +35,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult Settings()
         {
             int id = Int32.Parse(Request.Form["nodeId"]);
-            Node node = db.GetNodeByNodeId(id);
+            Node node = gatewayDb.GetNodeByNodeId(id);
             foreach (var sensor in node.sensors)
             {
 
@@ -43,7 +46,7 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.logToDbEveryChange = storechanges;
                 sensor.logToDbWithInterval = storeinterval;
             }
-            db.UpdateNodeSettings(node);
+            gatewayDb.UpdateNodeSettings(node);
            //todo controller.UpdateNodeSettings();
             return View(node);
         }
@@ -52,7 +55,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Log(int id1, int id2)
         {
-            Sensor sensor = db.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
 
             if (sensor == null)
                 return new HttpNotFoundResult();
@@ -62,7 +65,7 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.db_Id = sensor.db_Id;
             ViewBag.description = sensor.GetDescrirtionOrType();
 
-            List<SensorData> samples = db.GetSensorLog(sensor.db_Id);
+            List<SensorData> samples = historyDb.GetSensorHistory(sensor.db_Id);
             return View(samples);
         }
 
@@ -70,7 +73,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult Chart(int id1, int id2,string autoscroll,string style,string start,string end)
         {
 
-            Sensor sensor = db.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
 
             if (sensor == null)
                 return new HttpNotFoundResult();
@@ -95,7 +98,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public JsonResult GetSensorDataJsonByDbId(int id)
         {
-            List<SensorData> samples = db.GetSensorLog(id);
+            List<SensorData> samples = historyDb.GetSensorHistory(id);
 
             if (samples == null)
                 return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -123,7 +126,7 @@ namespace MyNetSensors.WebController.Controllers
                     chartData.Add(sample);
                 }
 
-            //Sensor sensor = db.GetSensorByDbId(id);
+            //Sensor sensor = historyDb.GetSensorByDbId(id);
             string dataType = samples[0].dataType.ToString();
             JsonResult result = Json(new { chartData, dataType }, JsonRequestBehavior.AllowGet);
 
@@ -132,22 +135,23 @@ namespace MyNetSensors.WebController.Controllers
 
         public JsonResult GetSensorDataJson(int id1, int id2)
         {
-            Sensor sensor = db.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
             return GetSensorDataJson(sensor.ownerNodeId, sensor.sensorId);
         }
 
 
         public ActionResult ClearHistory(int id1, int id2)
         {
-            db.DropSensorLog(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            historyDb.DropSensorHistory(sensor.db_Id);
 
             return RedirectToAction("Chart", new { id1 = id1, id2 = id2 });
         }
 
         public ActionResult ClearHistoryByDbId(int id)
         {
-            Sensor sensor = db.GetSensor( id);
-            db.DropSensorLog(id);
+            Sensor sensor = gatewayDb.GetSensor( id);
+            historyDb.DropSensorHistory(id);
 
             return RedirectToAction("Chart", new { id1 = sensor.ownerNodeId, id2 = sensor.sensorId });
         }

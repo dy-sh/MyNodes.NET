@@ -8,9 +8,13 @@ using MyNetSensors.Gateway;
 
 namespace MyNetSensors.SensorsHistoryRepository
 {
-
+    /// <summary>
+    /// Repository can read sensors history. If gateway connected, it will store updated sensors to history.
+    /// </summary>
     public class SensorsHistoryRepositoryDapper:ISensorsHistoryRepository
     {
+        private SerialGateway gateway;
+
         private IDbConnection db;
 
         public SensorsHistoryRepositoryDapper(string connectionString)
@@ -18,7 +22,21 @@ namespace MyNetSensors.SensorsHistoryRepository
             db = new SqlConnection(connectionString);
         }
 
-        public List<SensorData> GetSensorLog(int db_Id)
+        public bool IsDbExist()
+        {
+            //todo check if db exist
+            return true;
+        }
+
+        public void ConnectToGateway(SerialGateway gateway)
+        {
+            this.gateway = gateway;
+
+            gateway.OnSensorUpdatedEvent += StoreSensorToHistory; ;
+        }
+
+ 
+        public List<SensorData> GetSensorHistory(int db_Id)
         {
             string req = String.Format("SELECT * FROM Sensor{0}", db_Id);
 
@@ -32,117 +50,50 @@ namespace MyNetSensors.SensorsHistoryRepository
             return list;
         }
 
-        public List<SensorData> GetSensorLog(int ownerNodeId, int sensorId)
-        {
-            Sensor sensor = GetSensor(ownerNodeId, sensorId);
-            List<SensorData> list = GetSensorLog(sensor.db_Id);
-            return list;
-        }
+    
 
-        public Node GetNodeByNodeId(int nodeId)
-        {
-            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            {
-                AddChildAction = (node, sensor) =>
-                {
-                    if (node.sensors == null)
-                        node.sensors = new List<Sensor>();
-
-                    node.sensors.Add(sensor);
-                },
-                ParentKey = (node) => node.db_Id
-            };
-
-            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
-
-            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-
-
-            return result;
-        }
-
-        
-        public Node GetNodeByDbId(int db_Id)
-        {
-            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            {
-                AddChildAction = (node, sensor) =>
-                {
-                    if (node.sensors == null)
-                        node.sensors = new List<Sensor>();
-
-                    node.sensors.Add(sensor);
-                },
-                ParentKey = (node) => node.db_Id
-            };
-
-            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {0}", db_Id);
-
-            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-
-
-            return result;
-        }
-
-        public Sensor GetSensor(int db_Id)
-        {
-            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
-
-            return sensor;
-        }
-
-        public Sensor GetSensor(int ownerNodeId, int sensorId)
-        {
-            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId", new { ownerNodeId, sensorId }).FirstOrDefault();
-
-            return sensor;
-        }
-
-        public void DropSensorLog(int db_Id)
+        public void DropSensorHistory(int db_Id)
         {
             db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
         }
 
-        public void DropSensorLog(int ownerNodeId, int sensorId)
+
+        private void StoreSensorToHistory(Sensor sensor)
         {
-            Sensor sensor = GetSensor(ownerNodeId, sensorId);
-            DropSensorLog(sensor.db_Id);
+            //todo check sensor settings
+
+            CreateTableForSensor(sensor);
+
+            List<SensorData> data = sensor.GetAllData();
+
+            if (data == null)
+                return;
+
+            foreach (var sensorData in data)
+                sensorData.dateTime = DateTime.Now;
+
+            var sqlQuery = String.Format(
+                "INSERT INTO Sensor{0} (dataType, state, dateTime) "
+                + "VALUES(@dataType,@state, @dateTime); "
+                + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+            db.Execute(sqlQuery, data);
+
         }
 
-       
-
-        public void UpdateNodeSettings(Node node)
+        private void CreateTableForSensor(Sensor sensor)
         {
-            var sqlQuery =
-                "UPDATE Nodes SET " +
-                "name = @name " +
-                "WHERE nodeId = @nodeId";
-            db.Execute(sqlQuery, node);
-
-            foreach (var sensor in node.sensors)
+            try
             {
-                UpdateSensorSettings(sensor);
+                string req = String.Format(
+                    @"CREATE TABLE [dbo].[Sensor{0}](
+	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	            [dataType] [int] NULL,	        
+	            [state] [nvarchar](max) NULL,	        
+	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
+
+                db.Execute(req);
             }
-        }
-
-        public void UpdateSensorSettings(Sensor sensor)
-        {
-            var sqlQuery =
-                   "UPDATE Sensors SET " +
-                   "description = @description, " +
-                   "logToDbEnabled = @logToDbEnabled, " +
-                   "logToDbEveryChange = @logToDbEveryChange, " +
-                   "logToDbWithInterval = @logToDbWithInterval " +
-                   "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
-            db.Execute(sqlQuery, new
-            {
-                description = sensor.description,
-                logToDbEnabled = sensor.logToDbEnabled,
-                logToDbEveryChange = sensor.logToDbEveryChange,
-                logToDbWithInterval = sensor.logToDbWithInterval,
-                sensorId = sensor.sensorId,
-                ownerNodeId = sensor.ownerNodeId
-            });
+            catch { }
         }
     }
 }
