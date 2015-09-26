@@ -5,15 +5,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.SignalR;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
+using MyNetSensors.WebController.Code.Hubs;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {
+        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
@@ -47,7 +51,7 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.storeHistoryWithInterval = writeinterval;
             }
             gatewayDb.UpdateNodeSettings(node);
-           //todo controller.UpdateNodeSettings();
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateNodeSettings(node);
             return View(node);
         }
 

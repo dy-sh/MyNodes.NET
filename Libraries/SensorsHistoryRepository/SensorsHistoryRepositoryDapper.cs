@@ -34,13 +34,15 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private SerialGateway gateway;
 
-        private IDbConnection db;
+        private string connectionString;
 
         public SensorsHistoryRepositoryDapper(string connectionString)
         {
-            db = new SqlConnection(connectionString);
+            this.connectionString = connectionString;
+           // db = new SqlConnection(connectionString);
         }
 
+  
         public bool IsDbExist()
         {
             //todo check if db exist
@@ -68,6 +70,9 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private void UpdateDbTimer(object sender, ElapsedEventArgs e)
         {
+
+         
+
             List<Node> nodes = gateway.GetNodes();
             foreach (var node in nodes)
             {
@@ -77,74 +82,97 @@ namespace MyNetSensors.SensorsHistoryRepository
                         break;
 
                     TimeSpan elapsedTime = DateTime.Now.Subtract(sensor.storeHistoryLastDate);
-                    if (elapsedTime.TotalMilliseconds >= sensor.storeHistoryWithInterval)
+                    if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
                     {
                         sensor.storeHistoryLastDate = DateTime.Now;
-                      Debug.WriteLine(elapsedTime.TotalMilliseconds);
+                      Debug.WriteLine(elapsedTime.TotalMilliseconds+" "+ sensor.sensorId);
                       WriteSensorDataToHistory(sensor);
                     }
                 }
             }
+
         }
 
 
         public List<SensorData> GetSensorHistory(int db_Id)
         {
-            string req = String.Format("SELECT * FROM Sensor{0}", db_Id);
-
-            List<SensorData> list = null;
-            try
+            using (var db = new SqlConnection(connectionString))
             {
-                list = db.Query<SensorData>(req).ToList();
-            }
-            catch { }
+                db.Open();
+                string req = String.Format("SELECT * FROM Sensor{0}", db_Id);
 
-            return list;
+                List<SensorData> list = null;
+                try
+                {
+                    list = db.Query<SensorData>(req).ToList();
+                }
+                catch
+                {
+                }
+
+                return list;
+            }
         }
 
 
 
         public void DropSensorHistory(int db_Id)
         {
-            db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+            }
         }
 
 
         private void WriteSensorDataToHistory(Sensor sensor)
         {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
 
-            CreateTableForSensor(sensor);
+                CreateTableForSensor(sensor);
 
-            List<SensorData> data = sensor.GetAllData();
+                List<SensorData> data = sensor.GetAllData();
 
-            if (data == null)
-                return;
+                if (data == null)
+                    return;
 
-            foreach (var sensorData in data)
-                sensorData.dateTime = DateTime.Now;
+                foreach (var sensorData in data)
+                    sensorData.dateTime = DateTime.Now;
 
-            var sqlQuery = String.Format(
-                "INSERT INTO Sensor{0} (dataType, state, dateTime) "
-                + "VALUES(@dataType,@state, @dateTime); "
-                + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
-            db.Execute(sqlQuery, data);
+                var sqlQuery = String.Format(
+                    "INSERT INTO Sensor{0} (dataType, state, dateTime) "
+                    + "VALUES(@dataType,@state, @dateTime); "
+                    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+                db.Execute(sqlQuery,data);
 
+            }
         }
 
         private void CreateTableForSensor(Sensor sensor)
         {
-            try
+            using (var db = new SqlConnection(connectionString))
             {
-                string req = String.Format(
-                    @"CREATE TABLE [dbo].[Sensor{0}](
+                db.Open();
+
+                try
+                {
+                    string req = String.Format(
+                        @"CREATE TABLE [dbo].[Sensor{0}](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	            [dataType] [int] NULL,	        
 	            [state] [nvarchar](max) NULL,	        
 	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
 
-                db.Execute(req);
+                    db.Query(req);
+                }
+                catch
+                {
+                }
             }
-            catch { }
         }
     }
 }

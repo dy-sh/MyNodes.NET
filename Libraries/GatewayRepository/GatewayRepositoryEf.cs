@@ -3,6 +3,23 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+
+/*
+
+
+        !!!!!!!!!!!!!!!!!
+
+        This class has been replaced with GatewayRepositoryDapper. 
+        In this form it is no longer functional, but I left it to finish later.
+
+        !!!!!!!!!!!!!!!!!
+
+*/
+
+
+
+
+
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

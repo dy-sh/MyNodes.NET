@@ -507,5 +507,19 @@ namespace MyNetSensors.Gateway
             Sensor sensor = node.GetSensor(sensorId);
             sensor.db_Id = dbId;
         }
+
+        public void UpdateNodeSettings(Node node)
+        {
+            Node oldNode = GetNode(node.nodeId);
+            oldNode.name = node.name;
+            foreach (var sensor in node.sensors)
+            {
+                Sensor oldSensor = oldNode.GetSensor(sensor.sensorId);
+                oldSensor.description = sensor.description;
+                oldSensor.storeHistoryEnabled = sensor.storeHistoryEnabled;
+                oldSensor.storeHistoryEveryChange = sensor.storeHistoryEveryChange;
+                oldSensor.storeHistoryWithInterval = sensor.storeHistoryWithInterval;
+            }
+        }
     }
 }

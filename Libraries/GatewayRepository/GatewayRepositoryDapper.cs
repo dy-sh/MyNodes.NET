@@ -43,11 +43,12 @@ namespace MyNetSensors.GatewayRepository
         //messages list, to write to db by timer
         private List<Message> newMessages = new List<Message>();
 
-        private IDbConnection db;
+        private string connectionString;
 
         public GatewayRepositoryDapper(string connectionString)
         {
-            InitializeDB(connectionString);
+            this.connectionString = connectionString;
+            InitializeDB();
         }
 
 
@@ -85,27 +86,33 @@ namespace MyNetSensors.GatewayRepository
 
 
 
-        private void InitializeDB(string connectionString)
+        private void InitializeDB()
         {
-            // db= new SqlConnection("Data Source=.\\sqlexpress; Database= MyNetSensors; Integrated Security=True;");
-
-            try
+            using (var db = new SqlConnection(connectionString + ";Database= master"))
             {
-                //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
-                db = new SqlConnection(connectionString + ";Database= master");
                 db.Open();
-                db.Execute("CREATE DATABASE [MyNetSensors]");
-                db.Close();
-                db.Dispose();
+
+                try
+                {
+                    //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
+                    db.Open();
+                    db.Execute("CREATE DATABASE [MyNetSensors]");
+                    db.Close();
+                    db.Dispose();
+                }
+                catch
+                {
+                }
             }
-            catch { }
 
-            db = new SqlConnection(connectionString);
-
-            try
+            using (var db = new SqlConnection(connectionString))
             {
-                db.Execute(
-            @"CREATE TABLE [dbo].[Messages](
+                db.Open();
+
+                try
+                {
+                    db.Execute(
+                        @"CREATE TABLE [dbo].[Messages](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	            [nodeId] [int] NOT NULL,
 	            [sensorId] [int] NOT NULL,
@@ -116,13 +123,15 @@ namespace MyNetSensors.GatewayRepository
 	            [isValid] [bit] NOT NULL,
 	            [incoming] [bit] NOT NULL,
 	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
-            }
-            catch { }
+                }
+                catch
+                {
+                }
 
-            try
-            {
-                db.Execute(
-            @" CREATE TABLE [dbo].[Nodes](
+                try
+                {
+                    db.Execute(
+                        @" CREATE TABLE [dbo].[Nodes](
 	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                [nodeId] [int] NOT NULL,
 	                [registered] [datetime] NOT NULL,
@@ -131,13 +140,15 @@ namespace MyNetSensors.GatewayRepository
 	                [name] [nvarchar](max) NULL,
 	                [version] [nvarchar](max) NULL,
 	                [batteryLevel] [int] NULL ) ON [PRIMARY] ");
-            }
-            catch { }
+                }
+                catch
+                {
+                }
 
-            try
-            {
-                db.Execute(
-           @" CREATE TABLE [dbo].[Sensors](
+                try
+                {
+                    db.Execute(
+                        @" CREATE TABLE [dbo].[Sensors](
 	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                [ownerNodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
@@ -148,24 +159,35 @@ namespace MyNetSensors.GatewayRepository
 	                [storeHistoryEveryChange] [bit] NULL,
 	                [storeHistoryWithInterval] [int] NULL,
 	                [Node_db_Id] [int] NULL) ON [PRIMARY] ");
+                }
+                catch
+                {
+                }
             }
-            catch { }
-
         }
 
         public void DropMessages()
         {
             newMessages.Clear();
 
-            db.Query("TRUNCATE TABLE [Messages]");
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                db.Query("TRUNCATE TABLE [Messages]");
+            }
         }
 
         public void DropNodes()
         {
             updatedNodesId.Clear();
 
-            db.Query("TRUNCATE TABLE [Nodes]");
-            db.Query("TRUNCATE TABLE [Sensors]");
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query("TRUNCATE TABLE [Nodes]");
+                db.Query("TRUNCATE TABLE [Sensors]");
+            }
         }
 
 
@@ -182,7 +204,12 @@ namespace MyNetSensors.GatewayRepository
 
         public List<Message> GetMessages()
         {
-            List<Message> messages = db.Query<Message>("SELECT * FROM Messages").ToList();
+            List<Message> messages;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                messages = db.Query<Message>("SELECT * FROM Messages").ToList();
+            }
             return messages;
         }
 
@@ -198,10 +225,15 @@ namespace MyNetSensors.GatewayRepository
 
         public void AddMessage(Message message)
         {
-            var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                + "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                + "SELECT CAST(SCOPE_IDENTITY() as int)";
-            db.Query(sqlQuery, message);
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                               +
+                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
+                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                db.Query(sqlQuery, message);
+            }
         }
 
         public List<Node> GetNodes()
@@ -218,11 +250,15 @@ namespace MyNetSensors.GatewayRepository
                 ParentKey = (node) => node.db_Id
             };
 
-            string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id ORDER BY n.nodeId";
+            List<Node> list;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id ORDER BY n.nodeId";
 
-            var list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
+               list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
                     .Where(y => y != null).ToList();
-
+            }
             return list;
         }
 
@@ -232,29 +268,36 @@ namespace MyNetSensors.GatewayRepository
 
         public void AddOrUpdateNode(Node node)
         {
-            Node oldNode = db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { node.nodeId }).SingleOrDefault();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
 
-            if (oldNode == null)
-            {
-                var sqlQuery = "INSERT INTO Nodes (nodeId, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
-                    + "VALUES(@nodeId, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel); "
-                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                int dbId = db.Query<int>(sqlQuery, node).Single();
-                gateway.SetNodeDbId(node.nodeId, dbId);
-            }
-            else
-            {
-                var sqlQuery =
-                    "UPDATE Nodes " +
-                    "SET nodeId = @nodeId, " +
-                    "registered  = @registered, " +
-                    "lastSeen = @lastSeen, " +
-                    "isRepeatingNode = @isRepeatingNode, " +
-                    "name = @name, " +
-                    "version = @version, " +
-                    "batteryLevel = @batteryLevel " +
-                    "WHERE nodeId = @nodeId";
-                db.Execute(sqlQuery, node);
+                Node oldNode =
+                    db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new {node.nodeId}).SingleOrDefault();
+
+                if (oldNode == null)
+                {
+                    var sqlQuery = "INSERT INTO Nodes (nodeId, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
+                                   +
+                                   "VALUES(@nodeId, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel); "
+                                   + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    int dbId = db.Query<int>(sqlQuery, node).Single();
+                    gateway.SetNodeDbId(node.nodeId, dbId);
+                }
+                else
+                {
+                    var sqlQuery =
+                        "UPDATE Nodes " +
+                        "SET nodeId = @nodeId, " +
+                        "registered  = @registered, " +
+                        "lastSeen = @lastSeen, " +
+                        "isRepeatingNode = @isRepeatingNode, " +
+                        "name = @name, " +
+                        "version = @version, " +
+                        "batteryLevel = @batteryLevel " +
+                        "WHERE nodeId = @nodeId";
+                    db.Execute(sqlQuery, node);
+                }
             }
 
             foreach (var sensor in node.sensors)
@@ -265,55 +308,66 @@ namespace MyNetSensors.GatewayRepository
 
         public void AddOrUpdateSensor(Sensor sensor)
         {
-            Sensor oldSensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId", new { ownerNodeId = sensor.ownerNodeId, sensorId = sensor.sensorId }).SingleOrDefault();
-            int node_db_id = db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.ownerNodeId }).SingleOrDefault().db_Id;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
 
-            if (oldSensor == null)
-            {
-                var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
-                    + "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
-                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                int dbId = db.Query<int>(sqlQuery, new
+                Sensor oldSensor =
+                    db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
+                        new {ownerNodeId = sensor.ownerNodeId, sensorId = sensor.sensorId}).SingleOrDefault();
+                int node_db_id =
+                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new {nodeId = sensor.ownerNodeId})
+                        .SingleOrDefault()
+                        .db_Id;
+
+                if (oldSensor == null)
                 {
-                    ownerNodeId = sensor.ownerNodeId,
-                    sensorId = sensor.sensorId,
-                    sensorType = sensor.sensorType,
-                    sensorDataJson = sensor.sensorDataJson,
-                    description = sensor.description,
-                    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                    Node_db_Id = node_db_id
-                }).Single();
-                
-                gateway.SetSensorDbId(sensor.ownerNodeId, sensor.sensorId, dbId);
-            }
-            else
-            {
-                var sqlQuery =
-                    "UPDATE Sensors SET " +
-                    "ownerNodeId = @ownerNodeId, " +
-                    "sensorId  = @sensorId, " +
-                    "sensorType = @sensorType, " +
-                    "sensorDataJson = @sensorDataJson, " +
-                    "description = @description, " +
-                    "storeHistoryEnabled = @storeHistoryEnabled, " +
-                   "storeHistoryWithInterval = @storeHistoryWithInterval, " +
-                   "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                    "Node_db_Id = @Node_db_Id " +
-                    "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
-                db.Execute(sqlQuery, new
+                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
+                                   +
+                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
+                                   + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    int dbId = db.Query<int>(sqlQuery, new
+                    {
+                        ownerNodeId = sensor.ownerNodeId,
+                        sensorId = sensor.sensorId,
+                        sensorType = sensor.sensorType,
+                        sensorDataJson = sensor.sensorDataJson,
+                        description = sensor.description,
+                        storeHistoryEnabled = sensor.storeHistoryEnabled,
+                        storeHistoryEveryChange = sensor.storeHistoryEveryChange,
+                        storeHistoryWithInterval = sensor.storeHistoryWithInterval,
+                        Node_db_Id = node_db_id
+                    }).Single();
+
+                    gateway.SetSensorDbId(sensor.ownerNodeId, sensor.sensorId, dbId);
+                }
+                else
                 {
-                    ownerNodeId = sensor.ownerNodeId,
-                    sensorId = sensor.sensorId,
-                    sensorType = sensor.sensorType,
-                    sensorDataJson = sensor.sensorDataJson,
-                    description = sensor.description,
-                    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                    Node_db_Id = node_db_id
-                });
+                    var sqlQuery =
+                        "UPDATE Sensors SET " +
+                        "ownerNodeId = @ownerNodeId, " +
+                        "sensorId  = @sensorId, " +
+                        "sensorType = @sensorType, " +
+                        "sensorDataJson = @sensorDataJson, " +
+                        "description = @description, " +
+                        "storeHistoryEnabled = @storeHistoryEnabled, " +
+                        "storeHistoryWithInterval = @storeHistoryWithInterval, " +
+                        "storeHistoryEveryChange = @storeHistoryEveryChange, " +
+                        "Node_db_Id = @Node_db_Id " +
+                        "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+                    db.Execute(sqlQuery, new
+                    {
+                        ownerNodeId = sensor.ownerNodeId,
+                        sensorId = sensor.sensorId,
+                        sensorType = sensor.sensorType,
+                        sensorDataJson = sensor.sensorDataJson,
+                        description = sensor.description,
+                        storeHistoryEnabled = sensor.storeHistoryEnabled,
+                        storeHistoryWithInterval = sensor.storeHistoryWithInterval,
+                        storeHistoryEveryChange = sensor.storeHistoryEveryChange,
+                        Node_db_Id = node_db_id
+                    });
+                }
             }
         }
 
@@ -351,16 +405,20 @@ namespace MyNetSensors.GatewayRepository
 
         private void WriteNewMessages()
         {
-            //to prevent changing of collection while writing to db is not yet finished
-            Message[] messages = new Message[newMessages.Count];
-            newMessages.CopyTo(messages);
-            newMessages.Clear();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                //to prevent changing of collection while writing to db is not yet finished
+                Message[] messages = new Message[newMessages.Count];
+                newMessages.CopyTo(messages);
+                newMessages.Clear();
 
-            var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-    + "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-    + "SELECT CAST(SCOPE_IDENTITY() as int)";
-            db.Execute(sqlQuery, messages);
-
+                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                               +
+                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
+                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                db.Execute(sqlQuery, messages);
+            }
         }
 
 
@@ -454,8 +512,12 @@ namespace MyNetSensors.GatewayRepository
 
             string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
 
-            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-
+            Node result;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+            }
 
             return result;
         }
@@ -477,34 +539,51 @@ namespace MyNetSensors.GatewayRepository
 
             string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {0}", db_Id);
 
-            Node result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-
+            Node result;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+            }
 
             return result;
         }
 
         public Sensor GetSensor(int db_Id)
         {
-            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
-
+            Sensor sensor;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new {db_Id}).FirstOrDefault();
+            }
             return sensor;
         }
 
         public Sensor GetSensor(int ownerNodeId, int sensorId)
         {
-            Sensor sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId", new { ownerNodeId, sensorId }).FirstOrDefault();
-
+            Sensor sensor;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
+                        new {ownerNodeId, sensorId}).FirstOrDefault();
+            }
             return sensor;
         }
 
 
         public void UpdateNodeSettings(Node node)
         {
-            var sqlQuery =
-                "UPDATE Nodes SET " +
-                "name = @name " +
-                "WHERE nodeId = @nodeId";
-            db.Execute(sqlQuery, node);
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE Nodes SET " +
+                    "name = @name " +
+                    "WHERE nodeId = @nodeId";
+                db.Execute(sqlQuery, node);
+            }
 
             foreach (var sensor in node.sensors)
             {
@@ -514,22 +593,26 @@ namespace MyNetSensors.GatewayRepository
 
         public void UpdateSensorSettings(Sensor sensor)
         {
-            var sqlQuery =
-                   "UPDATE Sensors SET " +
-                   "description = @description, " +
-                   "storeHistoryEnabled = @storeHistoryEnabled, " +
-                   "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                   "storeHistoryWithInterval = @storeHistoryWithInterval " +
-                   "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
-            db.Execute(sqlQuery, new
+            using (var db = new SqlConnection(connectionString))
             {
-                description = sensor.description,
-                storeHistoryEnabled = sensor.storeHistoryEnabled,
-                storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                sensorId = sensor.sensorId,
-                ownerNodeId = sensor.ownerNodeId
-            });
+                db.Open();
+                var sqlQuery =
+                    "UPDATE Sensors SET " +
+                    "description = @description, " +
+                    "storeHistoryEnabled = @storeHistoryEnabled, " +
+                    "storeHistoryEveryChange = @storeHistoryEveryChange, " +
+                    "storeHistoryWithInterval = @storeHistoryWithInterval " +
+                    "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+                db.Execute(sqlQuery, new
+                {
+                    description = sensor.description,
+                    storeHistoryEnabled = sensor.storeHistoryEnabled,
+                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
+                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
+                    sensorId = sensor.sensorId,
+                    ownerNodeId = sensor.ownerNodeId
+                });
+            }
         }
     }
 

@@ -74,6 +74,7 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On<string>("getNodes", GetNodes);
                 hubProxy.On<string>("getGatewayInfo", GetGatewayInfo);
                 hubProxy.On<string>("getGatewayHardwareConnected", GetGatewayHardwareConnected);
+                hubProxy.On<Node>("updateNodeSettings", UpdateNodeSettings);
                 hubProxy.On("authorizationFailed", AuthorizationFailed);
                 hubProxy.On("authorizationCompleted", AuthorizationCompleted);
                 hubProxy.On<string, string>("sendMessage", SendMessage);
@@ -113,7 +114,10 @@ namespace MyNetSensors.SerialController_Console
 
         }
 
-
+        private void UpdateNodeSettings(Node node)
+        {
+            gateway.UpdateNodeSettings(node);
+        }
 
 
         public void Disconnect()
