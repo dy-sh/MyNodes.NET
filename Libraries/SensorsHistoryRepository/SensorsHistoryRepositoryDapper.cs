@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using Dapper;
@@ -50,7 +51,7 @@ namespace MyNetSensors.SensorsHistoryRepository
         {
             this.gateway = gateway;
 
-            gateway.OnSensorUpdatedEvent += WriteSensorDataToHistory;
+            gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
 
             updateDbTimer.Elapsed += UpdateDbTimer;
 
@@ -59,9 +60,31 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         }
 
+        private void OnSensorUpdatedEvent(Sensor sensor)
+        {
+            if (sensor.storeHistoryEveryChange)
+                WriteSensorDataToHistory(sensor);
+        }
+
         private void UpdateDbTimer(object sender, ElapsedEventArgs e)
         {
-            //todo
+            List<Node> nodes = gateway.GetNodes();
+            foreach (var node in nodes)
+            {
+                foreach (var sensor in node.sensors)
+                {
+                    if (!sensor.storeHistoryEnabled || sensor.storeHistoryWithInterval==0)
+                        break;
+
+                    TimeSpan elapsedTime = DateTime.Now.Subtract(sensor.storeHistoryLastDate);
+                    if (elapsedTime.TotalMilliseconds >= sensor.storeHistoryWithInterval)
+                    {
+                        sensor.storeHistoryLastDate = DateTime.Now;
+                      Debug.WriteLine(elapsedTime.TotalMilliseconds);
+                      WriteSensorDataToHistory(sensor);
+                    }
+                }
+            }
         }
 
 
@@ -89,7 +112,6 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private void WriteSensorDataToHistory(Sensor sensor)
         {
-            //todo check sensor settings
 
             CreateTableForSensor(sensor);
 

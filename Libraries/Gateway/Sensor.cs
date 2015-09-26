@@ -29,6 +29,7 @@ namespace MyNetSensors.Gateway
         //interval in seconds. if 0, will not store by timer
         public int storeHistoryWithInterval { get; set; }
         public bool storeHistoryEveryChange { get; set; }
+        public DateTime storeHistoryLastDate { get; set; }
 
 
         public Sensor()
