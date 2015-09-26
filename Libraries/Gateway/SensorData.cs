@@ -5,8 +5,7 @@
 
 using System;
 
-
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public class SensorData
     {

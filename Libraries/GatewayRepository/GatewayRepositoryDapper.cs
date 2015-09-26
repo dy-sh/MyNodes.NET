@@ -5,45 +5,21 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using Dapper;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.GatewayRepository
 {
 
 
-    public class EnittyOneToManyMapper<TP, TC, TPk>
-    {
-        private readonly IDictionary<TPk, TP> _lookup = new Dictionary<TPk, TP>();
-        public Action<TP, TC> AddChildAction { get; set; }
-        public Func<TP, TPk> ParentKey { get; set; }
 
-        public virtual TP Map(TP parent, TC child)
-        {
-            TP entity;
-            var found = true;
-            var primaryKey = ParentKey(parent);
-            if (!_lookup.TryGetValue(primaryKey, out entity))
-            {
-                _lookup.Add(primaryKey, parent);
-                entity = parent;
-                found = false;
-            }
-            AddChildAction(entity, child);
-            return !found ? entity : default(TP);
-        }
-    }
 
-    class GatewayRepositoryDapper : IGatewayRepository
+    public class GatewayRepositoryDapper : IGatewayRepository
     {
         private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
@@ -59,7 +35,7 @@ namespace MyNetSensors.SerialController_Console
         //slows down the performance, can cause an exception of a large flow of messages per second
         public bool storeTxRxMessages = false;
 
-        private Gateway gateway;
+        private SerialGateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
@@ -70,7 +46,7 @@ namespace MyNetSensors.SerialController_Console
         private IDbConnection db;
 
 
-        public void Connect(Gateway gateway, string connectionString)
+        public void Connect(SerialGateway gateway, string connectionString)
         {
             InitializeDB(connectionString);
 
@@ -226,7 +202,7 @@ namespace MyNetSensors.SerialController_Console
 
         public List<Node> GetNodes()
         {
-            var mapper = new EnittyOneToManyMapper<Node, Sensor, int>()
+            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             {
                 AddChildAction = (node, sensor) =>
                 {

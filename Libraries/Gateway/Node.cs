@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public class Node
     {

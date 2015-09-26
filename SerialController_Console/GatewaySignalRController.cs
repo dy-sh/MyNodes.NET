@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
 
 
 namespace MyNetSensors.SerialController_Console
@@ -28,7 +28,7 @@ namespace MyNetSensors.SerialController_Console
 
         private HubConnection hubConnection;
         private IHubProxy hubProxy;
-        private Gateway gateway;
+        private SerialGateway gateway;
 
 
         public bool IsConnected()
@@ -53,7 +53,7 @@ namespace MyNetSensors.SerialController_Console
                 OnDebugStateMessage(message);
         }
 
-        public bool Connect(Gateway gateway, string serverUrl, string connectionPassword)
+        public bool Connect(SerialGateway gateway, string serverUrl, string connectionPassword)
         {
             DebugState(String.Format("Connecting to server {0}... ", serverUrl));
 

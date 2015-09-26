@@ -9,7 +9,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace MyNetSensors.SerialGateway
+
+namespace MyNetSensors.Gateway
 {
     public class Sensor
     {
@@ -118,89 +119,89 @@ namespace MyNetSensors.SerialGateway
 
             switch (sensorType)
             {
-                case SerialGateway.SensorType.S_DOOR:
+                case SensorType.S_DOOR:
                     AddOrUpdateData(SensorDataType.V_TRIPPED, "0");
                     //AddOrUpdateData(SensorDataType.V_ARMED, "0");
                     break;
-                case SerialGateway.SensorType.S_MOTION:
+                case SensorType.S_MOTION:
                     break;
-                case SerialGateway.SensorType.S_SMOKE:
+                case SensorType.S_SMOKE:
                     break;
-                case SerialGateway.SensorType.S_LIGHT:
+                case SensorType.S_LIGHT:
                     AddOrUpdateData(SensorDataType.V_STATUS, "0");
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
-                case SerialGateway.SensorType.S_DIMMER:
+                case SensorType.S_DIMMER:
                     //AddOrUpdateData(SensorDataType.V_STATUS, "0");
                     AddOrUpdateData(SensorDataType.V_DIMMER, "0");
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
-                case SerialGateway.SensorType.S_COVER:
+                case SensorType.S_COVER:
                     break;
-                case SerialGateway.SensorType.S_TEMP:
+                case SensorType.S_TEMP:
                     break;
-                case SerialGateway.SensorType.S_HUM:
+                case SensorType.S_HUM:
                     break;
-                case SerialGateway.SensorType.S_BARO:
+                case SensorType.S_BARO:
                     break;
-                case SerialGateway.SensorType.S_WIND:
+                case SensorType.S_WIND:
                     break;
-                case SerialGateway.SensorType.S_RAIN:
+                case SensorType.S_RAIN:
                     break;
-                case SerialGateway.SensorType.S_UV:
+                case SensorType.S_UV:
                     break;
-                case SerialGateway.SensorType.S_WEIGHT:
+                case SensorType.S_WEIGHT:
                     break;
-                case SerialGateway.SensorType.S_POWER:
+                case SensorType.S_POWER:
                     break;
-                case SerialGateway.SensorType.S_HEATER:
+                case SensorType.S_HEATER:
                     break;
-                case SerialGateway.SensorType.S_DISTANCE:
+                case SensorType.S_DISTANCE:
                     break;
-                case SerialGateway.SensorType.S_LIGHT_LEVEL:
+                case SensorType.S_LIGHT_LEVEL:
                     break;
-                case SerialGateway.SensorType.S_ARDUINO_NODE:
+                case SensorType.S_ARDUINO_NODE:
                     break;
-                case SerialGateway.SensorType.S_ARDUINO_REPEATER_NODE:
+                case SensorType.S_ARDUINO_REPEATER_NODE:
                     break;
-                case SerialGateway.SensorType.S_LOCK:
+                case SensorType.S_LOCK:
                     break;
-                case SerialGateway.SensorType.S_IR:
+                case SensorType.S_IR:
                     AddOrUpdateData(SensorDataType.V_IR_SEND, "");
                     break;
-                case SerialGateway.SensorType.S_WATER:
+                case SensorType.S_WATER:
                     break;
-                case SerialGateway.SensorType.S_AIR_QUALITY:
+                case SensorType.S_AIR_QUALITY:
                     break;
-                case SerialGateway.SensorType.S_CUSTOM:
+                case SensorType.S_CUSTOM:
                     break;
-                case SerialGateway.SensorType.S_DUST:
+                case SensorType.S_DUST:
                     break;
-                case SerialGateway.SensorType.S_SCENE_CONTROLLER:
+                case SensorType.S_SCENE_CONTROLLER:
                     break;
-                case SerialGateway.SensorType.S_RGB_LIGHT:
+                case SensorType.S_RGB_LIGHT:
                     AddOrUpdateData(SensorDataType.V_RGB, "000000");
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
-                case SerialGateway.SensorType.S_RGBW_LIGHT:
+                case SensorType.S_RGBW_LIGHT:
                     AddOrUpdateData(SensorDataType.V_RGBW, "00000000");
                     //AddOrUpdateData(SensorDataType.V_WATT, "0");
                     break;
-                case SerialGateway.SensorType.S_COLOR_SENSOR:
+                case SensorType.S_COLOR_SENSOR:
                     break;
-                case SerialGateway.SensorType.S_HVAC:
+                case SensorType.S_HVAC:
                     break;
-                case SerialGateway.SensorType.S_MULTIMETER:
+                case SensorType.S_MULTIMETER:
                     break;
-                case SerialGateway.SensorType.S_SPRINKLER:
+                case SensorType.S_SPRINKLER:
                     break;
-                case SerialGateway.SensorType.S_WATER_LEAK:
+                case SensorType.S_WATER_LEAK:
                     break;
-                case SerialGateway.SensorType.S_SOUND:
+                case SensorType.S_SOUND:
                     break;
-                case SerialGateway.SensorType.S_VIBRATION:
+                case SensorType.S_VIBRATION:
                     break;
-                case SerialGateway.SensorType.S_MOISTURE:
+                case SensorType.S_MOISTURE:
                     break;
             }
         }

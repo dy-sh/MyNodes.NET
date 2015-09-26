@@ -10,8 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
+using MyNetSensors.GatewayRepository;
 
 
 namespace MyNetSensors.SerialController_Console
@@ -19,7 +19,7 @@ namespace MyNetSensors.SerialController_Console
     internal class Program
     {
         private static ComPort comPort = new ComPort();
-        private static Gateway gateway = new Gateway();
+        private static SerialGateway gateway = new SerialGateway();
         private static IGatewayRepository db = new GatewayRepositoryDapper();
         private static GatewaySignalRController signalR = new GatewaySignalRController();
 

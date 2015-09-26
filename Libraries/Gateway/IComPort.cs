@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public delegate void OnDataReceivedEventHandler(string message);
 

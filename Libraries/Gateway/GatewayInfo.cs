@@ -1,4 +1,9 @@
-﻿namespace MyNetSensors.SerialGateway
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+namespace MyNetSensors.Gateway
 {
     public class GatewayInfo
     {

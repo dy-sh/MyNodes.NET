@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.SerialGateway;
+﻿using System.Collections.Generic;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.WebController.Code
+namespace MyNetSensors.SensorsHistoryRepository
 {
-    interface ISensorsRepository
+    public interface ISensorsHistoryRepository
     {
         Node GetNodeByDbId(int db_Id);
         Node GetNodeByNodeId(int nodeId);

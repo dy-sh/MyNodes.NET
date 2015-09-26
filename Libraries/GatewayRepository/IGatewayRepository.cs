@@ -3,20 +3,14 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.GatewayRepository
 {
-    interface IGatewayRepository
+    public interface IGatewayRepository
     {
-        void Connect(Gateway gateway, string connectionString);
+        void Connect(SerialGateway gateway, string connectionString);
         void DropMessages();
 
         void DropNodes();

@@ -5,19 +5,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
+using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {
-        private ISensorsRepository db;
+        private ISensorsHistoryRepository db;
 
         public NodeController()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            db = new SensorsRepositoryDapper(cs);
+            db = new SensorsHistoryRepositoryDapper(cs);
         }
 
         [HttpGet]
@@ -43,6 +44,7 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.logToDbWithInterval = storeinterval;
             }
             db.UpdateNodeSettings(node);
+           //todo controller.UpdateNodeSettings();
             return View(node);
         }
 

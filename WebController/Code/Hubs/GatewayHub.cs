@@ -10,8 +10,8 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using Microsoft.AspNet.SignalR;
-using MyNetSensors.SerialGateway;
 using System.Threading.Tasks;
+using MyNetSensors.Gateway;
 
 namespace MyNetSensors.WebController.Code.Hubs
 {

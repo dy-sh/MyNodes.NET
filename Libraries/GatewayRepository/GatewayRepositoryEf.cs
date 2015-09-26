@@ -7,13 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Timers;
-using System.IO;
 using System.Linq;
-using MyNetSensors.SerialGateway;
+using System.Timers;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.GatewayRepository
 {
     public class GatewayRepositoryEf:IGatewayRepository
     {
@@ -32,7 +30,7 @@ namespace MyNetSensors.SerialController_Console
         public bool storeTxRxMessages = false;
 
         private GatewayRepositoryEfDbContext db;
-        private Gateway gateway;
+        private SerialGateway gateway;
         private Timer updateDbTimer=new Timer();
 
         //store id-s of updated nodes, to write to db by timer
@@ -41,7 +39,7 @@ namespace MyNetSensors.SerialController_Console
         private List<Message> newMessages = new List<Message>();
 
 
-        public void Connect(Gateway gateway, string connectionString)
+        public void Connect(SerialGateway gateway, string connectionString)
         {
             InitializeDB(connectionString);
 

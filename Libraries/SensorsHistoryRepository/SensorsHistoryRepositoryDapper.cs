@@ -3,40 +3,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
 using Dapper;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.WebController.Code
+namespace MyNetSensors.SensorsHistoryRepository
 {
-    public class EnittyOneToManyMapper<TP, TC, TPk>
-    {
-        private readonly IDictionary<TPk, TP> _lookup = new Dictionary<TPk, TP>();
-        public Action<TP, TC> AddChildAction { get; set; }
-        public Func<TP, TPk> ParentKey { get; set; }
 
-        public virtual TP Map(TP parent, TC child)
-        {
-            TP entity;
-            var found = true;
-            var primaryKey = ParentKey(parent);
-            if (!_lookup.TryGetValue(primaryKey, out entity))
-            {
-                _lookup.Add(primaryKey, parent);
-                entity = parent;
-                found = false;
-            }
-            AddChildAction(entity, child);
-            return !found ? entity : default(TP);
-        }
-    }
-
-
-    public class SensorsRepositoryDapper:ISensorsRepository
+    public class SensorsHistoryRepositoryDapper:ISensorsHistoryRepository
     {
         private IDbConnection db;
 
-        public SensorsRepositoryDapper(string connectionString)
+        public SensorsHistoryRepositoryDapper(string connectionString)
         {
             db = new SqlConnection(connectionString);
         }
@@ -64,7 +41,7 @@ namespace MyNetSensors.WebController.Code
 
         public Node GetNodeByNodeId(int nodeId)
         {
-            var mapper = new EnittyOneToManyMapper<Node, Sensor, int>()
+            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             {
                 AddChildAction = (node, sensor) =>
                 {
@@ -87,7 +64,7 @@ namespace MyNetSensors.WebController.Code
         
         public Node GetNodeByDbId(int db_Id)
         {
-            var mapper = new EnittyOneToManyMapper<Node, Sensor, int>()
+            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             {
                 AddChildAction = (node, sensor) =>
                 {

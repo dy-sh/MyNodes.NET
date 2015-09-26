@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);
@@ -16,7 +16,7 @@ namespace MyNetSensors.SerialGateway
     public delegate void DebugMessageEventHandler(string message);
     public delegate void ExceptionEventHandler(Exception exception);
 
-    public class Gateway
+    public class SerialGateway
     {
         private IComPort serialPort;
         public bool storeMessagesToLog = true;

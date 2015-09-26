@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public class Message
     {

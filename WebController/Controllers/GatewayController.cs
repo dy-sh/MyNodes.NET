@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.WebController.Code.Hubs;
-using MyNetSensors.SerialGateway;
 
 /*  MyNetSensors 
     Copyright (C) 2015 Derwish <derwish.pro@gmail.com>

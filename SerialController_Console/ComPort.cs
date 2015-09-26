@@ -7,7 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using MyNetSensors.SerialGateway;
+using MyNetSensors.Gateway;
+
 
 namespace MyNetSensors.SerialController_Console
 {

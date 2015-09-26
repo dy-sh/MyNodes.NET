@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyNetSensors.SerialGateway
+namespace MyNetSensors.Gateway
 {
     public delegate void OnNewMessageLoggedEventHandler(Message message);
 
