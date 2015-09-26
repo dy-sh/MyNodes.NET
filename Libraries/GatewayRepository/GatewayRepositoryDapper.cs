@@ -256,8 +256,8 @@ namespace MyNetSensors.GatewayRepository
                 db.Open();
                 string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id ORDER BY n.nodeId";
 
-               list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
-                    .Where(y => y != null).ToList();
+                list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
+                     .Where(y => y != null).ToList();
             }
             return list;
         }
@@ -273,7 +273,7 @@ namespace MyNetSensors.GatewayRepository
                 db.Open();
 
                 Node oldNode =
-                    db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new {node.nodeId}).SingleOrDefault();
+                    db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { node.nodeId }).SingleOrDefault();
 
                 if (oldNode == null)
                 {
@@ -314,9 +314,9 @@ namespace MyNetSensors.GatewayRepository
 
                 Sensor oldSensor =
                     db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
-                        new {ownerNodeId = sensor.ownerNodeId, sensorId = sensor.sensorId}).SingleOrDefault();
+                        new { ownerNodeId = sensor.ownerNodeId, sensorId = sensor.sensorId }).SingleOrDefault();
                 int node_db_id =
-                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new {nodeId = sensor.ownerNodeId})
+                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.ownerNodeId })
                         .SingleOrDefault()
                         .db_Id;
 
@@ -494,7 +494,7 @@ namespace MyNetSensors.GatewayRepository
                 Console.WriteLine(message);
         }
 
-      
+
 
         public Node GetNodeByNodeId(int nodeId)
         {
@@ -510,13 +510,18 @@ namespace MyNetSensors.GatewayRepository
                 ParentKey = (node) => node.db_Id
             };
 
-            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
 
             Node result;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
+                string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
                 result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+                if (result == null)
+                {
+                    joinQuery = String.Format("SELECT * FROM Nodes WHERE nodeId = {0}", nodeId);
+                    result = db.Query<Node>(joinQuery).FirstOrDefault();
+                }
             }
 
             return result;
@@ -555,7 +560,7 @@ namespace MyNetSensors.GatewayRepository
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new {db_Id}).FirstOrDefault();
+                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
             }
             return sensor;
         }
@@ -567,7 +572,7 @@ namespace MyNetSensors.GatewayRepository
             {
                 db.Open();
                 sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
-                        new {ownerNodeId, sensorId}).FirstOrDefault();
+                        new { ownerNodeId, sensorId }).FirstOrDefault();
             }
             return sensor;
         }

@@ -4,10 +4,11 @@
     ViewBag.Title = "Node Settings";
 }
 
-<h2>Node @Model.nodeId Settings</h2>
-
-<a href="../../Gateway/Control" class="btn btn-default pull-right">Nodes Control</a>
-<br /><br />
+<h2>
+    Node @Model.nodeId Settings
+    <a href="../../Gateway/Control" class="btn btn-default pull-right">Nodes Control</a>
+</h2>
+<br />
 
 
 <div class="panel panel-default" style="min-width: 390px; max-width: 390px">
@@ -20,48 +21,66 @@
         {
             @Html.Hidden("nodeId", @Model.nodeId)
 
+            <div class="form-group">
+                <div  class="col-xs-4 ">Node name:</div>
+                <div class="col-xs-8">
+                    @Html.TextBox("nodename", Model.name, new { @class = "form-control" , @style = "margin-top: -7px" })
+                </div>
+            </div>
+
+
+            <br />
+            <br/>
             foreach (var sensor in Model.sensors)
             {
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Sensor @sensor.sensorId - @sensor.GetDescrirtionOrType()
-                     
+                        Sensor @sensor.sensorId @*- @sensor.GetDescrirtionOrType()*@
                     </div>
 
                     <div class="panel-body">
-                        <ul class="list-group">
+                        <div class="form-group">
+                            <div class="col-xs-4 ">Description:</div>
+                            <div class="col-xs-8">
+                                @Html.TextBox("sensordescription" + sensor.sensorId, sensor.description, new { @class = "form-control", @style = "margin-top: -7px" })
+                            </div>
+                        </div>
+                        <br />
+                        <ul class="list-group" style="margin-bottom: -7px">
                             <li class="list-group-item">
                                 Store history in database
                                 <div class="pull-right">
-                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
+                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Write every change
                                 <div class="pull-right">
-                                    @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new { @class="switch", @data_size = "small", @data_label_width = "0" })
+                                    @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 Write with interval (sec)
                                 <div class="pull-right">
-                                    @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval,new {@class= "form-control" , @style = "width: 80px; margin-top: -7px" })
+                                    @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new {@class = "form-control", @style = "width: 80px; margin-top: -7px"})
                                 </div>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             }
             <div class="btn-group pull-right" role="group" style="padding-right: 10px;">
                 <input type="submit" value="Save changes" class="btn btn-primary" />
-                <a href="javascript:window.location.href=window.location.href" class="btn btn-default">Cancel</a>
+                @* <a href="javascript:window.location.href=window.location.href" class="btn btn-default">Cancel</a>*@
+                @Html.ActionLink("Cancel", "Control", "Gateway",null, new {@class = "btn btn-default"})
             </div>
         }
 
 
     </div>
 </div>
+
+
 
 
 @section styles

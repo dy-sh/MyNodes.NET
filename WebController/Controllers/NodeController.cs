@@ -32,6 +32,9 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult Settings(int id)
         {
             Node node = gatewayDb.GetNodeByNodeId(id);
+            if (node == null)
+                return HttpNotFound();
+
             return View(node);
         }
 
@@ -40,19 +43,28 @@ namespace MyNetSensors.WebController.Controllers
         {
             int id = Int32.Parse(Request.Form["nodeId"]);
             Node node = gatewayDb.GetNodeByNodeId(id);
+            string nodename = Request.Form["nodename"];
+            if (nodename == "")
+                nodename = null;
+            node.name = nodename;
             foreach (var sensor in node.sensors)
             {
 
                 bool storehistory = Request.Form["storehistory" + sensor.sensorId] != "false";
                 bool writeeverychange = Request.Form["writeeverychange" + sensor.sensorId] != "false";
                 int writeinterval = Int32.Parse(Request.Form["writeinterval" + sensor.sensorId]);
+                string sensordescription = Request.Form["sensordescription" + sensor.sensorId];
+                if (sensordescription == "")
+                    sensordescription = null;
                 sensor.storeHistoryEnabled = storehistory;
                 sensor.storeHistoryEveryChange = writeeverychange;
                 sensor.storeHistoryWithInterval = writeinterval;
+                sensor.description = sensordescription;
             }
             gatewayDb.UpdateNodeSettings(node);
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateNodeSettings(node);
-            return View(node);
+            return RedirectToAction("Control", "Gateway");
+            // return View(node);
         }
 
 
