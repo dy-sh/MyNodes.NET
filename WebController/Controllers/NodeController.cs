@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.Code.Hubs;
@@ -20,12 +21,14 @@ namespace MyNetSensors.WebController.Controllers
 
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
+        private ISensorsTasksRepository tasksDb;
 
         public NodeController()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             historyDb = new SensorsHistoryRepositoryDapper(cs);
             gatewayDb = new GatewayRepositoryDapper(cs);
+            tasksDb = new SensorsTasksRepositoryDapper(cs);
         }
 
         [HttpGet]
@@ -172,5 +175,39 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Chart", new { id1 = sensor.ownerNodeId, id2 = sensor.sensorId });
         }
 
+
+        public ActionResult Tasks(int id1, int id2)
+        {
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            ViewBag.nodeId = sensor.ownerNodeId;
+            ViewBag.sensorId = sensor.sensorId;
+            ViewBag.db_Id = sensor.db_Id;
+            ViewBag.description = sensor.GetDescrirtionOrType();
+
+            List<SensorTask> tasks = tasksDb.GetTasks(id1, id2);
+            return View(tasks);
+        }
+
+        public ActionResult NewTask(int id1, int id2)
+        {
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            ViewBag.description = sensor.GetDescrirtionOrType();
+
+            SensorTask task=new SensorTask
+            {
+                sensorId = id1,
+                nodeId = id2
+            };
+
+            return View(task);
+        }
     }
 }

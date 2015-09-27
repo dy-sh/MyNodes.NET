@@ -366,6 +366,8 @@
     <Content Include="Views\Node\Log.cshtml" />
     <Content Include="Views\Node\Chart.cshtml" />
     <Content Include="Views\Node\Settings.cshtml" />
+    <Content Include="Views\Node\Tasks.cshtml" />
+    <Content Include="Views\Node\NewTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -382,6 +384,10 @@
     <ProjectReference Include="..\Libraries\Gateway\Gateway.csproj">
       <Project>{3b0868ea-3030-43e2-b2b5-5e76dcb7ecb8}</Project>
       <Name>Gateway</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\NodeTasks\NodeTasks.csproj">
+      <Project>{c147c1c1-eb18-49fc-b4c9-18e03c57f636}</Project>
+      <Name>NodeTasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
       <Project>{cf02abeb-af45-4207-b9e1-7a758221c3ba}</Project>

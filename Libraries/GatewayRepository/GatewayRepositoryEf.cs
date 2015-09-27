@@ -226,6 +226,7 @@ namespace MyNetSensors.GatewayRepository
 
         private void UpdateDbTimer(object sender, object e)
         {
+            updateDbTimer.Stop();
             int nodesCount = updatedNodesId.Count;
             int messagesCount = newMessages.Count;
             int messages = nodesCount + messagesCount;
@@ -241,6 +242,8 @@ namespace MyNetSensors.GatewayRepository
             long elapsed = sw.ElapsedMilliseconds;
             float messagesPerSec = (float)messages / (float)elapsed * 1000;
             Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages, (int)messagesPerSec));
+            updateDbTimer.Start();
+
         }
 
         private void WriteNewMessages()

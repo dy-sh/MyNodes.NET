@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 
 
@@ -24,14 +25,17 @@ namespace MyNetSensors.SerialController_Console
         private static IGatewayRepository gatewayDb;
         private static ISensorsHistoryRepository historyDb;
         private static GatewaySignalRController signalR = new GatewaySignalRController();
+        private static ISensorsTasksRepository sensorsTasks;
 
         private static string serialPortName;
 
         private static void Main(string[] args)
         {
-            ConnectToDb();
+            ConnectToGatewayDb();
+            ConnectToSensorsHistoryDb();
             ConnectToSerialPort();
             ConnectToWebServer();
+            ConnectSensorsTasks();
 
             //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
@@ -41,23 +45,24 @@ namespace MyNetSensors.SerialController_Console
                 Console.ReadLine();
         }
 
+ 
+
         private static void OnDisconnectedEvent(object sender, EventArgs e)
         {
             ConnectToSerialPort();
         }
 
 
-        public async static Task ConnectToDb()
+        public async static Task ConnectToGatewayDb()
         {
             //connecting to DB
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
             {
-                Console.WriteLine("Connecting to database... ");
+                Console.WriteLine("Connecting to gateway database... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 gatewayDb = new GatewayRepositoryDapper(connectionString);
-                historyDb = new SensorsHistoryRepositoryDapper(connectionString);
 
                 gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
                 gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
@@ -67,13 +72,51 @@ namespace MyNetSensors.SerialController_Console
                 while (!connected)
                 {
                     gatewayDb.ConnectToGateway(gateway);
-                    historyDb.ConnectToGateway(gateway);
-                    connected = (gatewayDb.IsDbExist() && historyDb.IsDbExist());
+                    connected = (gatewayDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
             }
         }
 
+        public async static Task ConnectToSensorsHistoryDb()
+        {
+            //connecting to DB
+            bool connected = false;
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            {
+                Console.WriteLine("Connecting to sensors history database... ");
+
+                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+                historyDb = new SensorsHistoryRepositoryDapper(connectionString);
+                
+                while (!connected)
+                {
+                    historyDb.ConnectToGateway(gateway);
+                    connected = (historyDb.IsDbExist());
+                    if (!connected) await Task.Delay(5000);
+                }
+            }
+        }
+
+        private async static Task ConnectSensorsTasks()
+        {
+            //connecting tasks
+            bool connected = false;
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            {
+                Console.WriteLine("Connecting sensors tasks... ");
+
+                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+                sensorsTasks = new SensorsTasksRepositoryDapper(connectionString);
+                
+                while (!connected)
+                {
+                    sensorsTasks.ConnectToGateway(gateway);
+                    connected = (sensorsTasks.IsDbExist());
+                    if (!connected) await Task.Delay(5000);
+                }
+            }
+        }
 
         public static async Task ConnectToSerialPort()
         {

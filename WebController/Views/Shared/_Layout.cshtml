@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @RenderSection("styles", required: false)
+    @Styles.Render("~/Content/jqueryui")
+    @Styles.Render("~/Content/noty")
+    @Styles.Render("~/Content/switch")
     @Styles.Render("~/Content/css")
 </head>
 <body>
@@ -42,6 +45,8 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/switch")
+    @Scripts.Render("~/bundles/noty")
     @RenderSection("scripts", required: false)
 
 <script>

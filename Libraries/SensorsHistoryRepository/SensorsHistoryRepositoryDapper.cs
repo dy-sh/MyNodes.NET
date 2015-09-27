@@ -100,7 +100,7 @@ namespace MyNetSensors.SensorsHistoryRepository
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string req = String.Format("SELECT * FROM Sensor{0}", db_Id);
+                string req = String.Format("SELECT * FROM SensorHistory{0}", db_Id);
 
                 List<SensorData> list = null;
                 try
@@ -125,7 +125,7 @@ namespace MyNetSensors.SensorsHistoryRepository
 
                 try
                 {
-                    db.Query(String.Format("DROP TABLE [Sensor{0}]", db_Id));
+                    db.Query(String.Format("DROP TABLE [SensorHistory{0}]", db_Id));
                 }
                 catch{}
             }
@@ -142,7 +142,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                     db.Query(
                         @"  declare @sql varchar(8000) 
                             set @sql='' 
-                            select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'sensor%[0-9.]' 
+                            select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'SensorHistory%[0-9.]' 
                             exec(@sql)");
                 }
                 catch { }
@@ -167,7 +167,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                     sensorData.dateTime = DateTime.Now;
 
                 var sqlQuery = String.Format(
-                    "INSERT INTO Sensor{0} (dataType, state, dateTime) "
+                    "INSERT INTO SensorHistory{0} (dataType, state, dateTime) "
                     + "VALUES(@dataType,@state, @dateTime); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
                 db.Execute(sqlQuery,data);
@@ -184,7 +184,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                 try
                 {
                     string req = String.Format(
-                        @"CREATE TABLE [dbo].[Sensor{0}](
+                        @"CREATE TABLE [dbo].[SensorHistory{0}](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	            [dataType] [int] NULL,	        
 	            [state] [nvarchar](max) NULL,	        

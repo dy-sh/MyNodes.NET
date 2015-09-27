@@ -1,0 +1,129 @@
+﻿@model MyNetSensors.NodeTasks.SensorTask
+
+@{
+    ViewBag.Title = "NewTask";
+}
+
+<h2>New Task</h2>
+<h4>@ViewBag.description</h4>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.nodeId)
+    @Html.HiddenFor(model => model.sensorId)
+    @*@Html.HiddenFor(model => model.db_Id)*@
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2">Task description</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2" >Execution date</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2" >Repeat task</label>
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.isRepeating, new { @class = "switch", @data_size = "small", @data_label_width = "0" , @id = "repeatTask" })
+            </div>
+        </div>
+
+
+        <div id="nonRepeatingPanel" >
+            <div class="form-group">
+                <label class="control-label col-md-2" >Set value</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.executionValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div id="repeatingPanel" style="display:none">
+            <div class="form-group">
+                <label class="control-label col-md-2">Repeat A value</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.repeatingAValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" >Repeat B value</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.repeatingBValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" >Repeat interval (ms)</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Repeat count<br/> (0 for infinity)</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.repeatingCount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.repeatingCount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to tasks list", "Tasks", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId })
+</div>
+
+
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/mysensors")
+    <script>
+        var fade = 500;
+
+        $(".switch").bootstrapSwitch();
+
+        $("#repeatTask").on('switchChange.bootstrapSwitch', function (event, state) {
+            if (state) {
+                $('#repeatingPanel').fadeIn(fade);
+                $('#nonRepeatingPanel').hide();
+            } else {
+                $('#repeatingPanel').hide();
+                $('#nonRepeatingPanel').fadeIn(fade);
+            }
+        });
+
+
+    </script>
+}
