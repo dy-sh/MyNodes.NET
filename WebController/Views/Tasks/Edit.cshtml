@@ -1,10 +1,10 @@
 ﻿@model MyNetSensors.NodeTasks.SensorTask
 
 @{
-    ViewBag.Title = "New Task";
+    ViewBag.Title = "Edit Task";
 }
 
-<h2>New Task</h2>
+<h2>Edit Task</h2>
 <h4>@ViewBag.description</h4>
 <hr />
 
@@ -14,7 +14,7 @@
     @Html.HiddenFor(model => model.nodeId)
     @Html.HiddenFor(model => model.sensorId)
     @Html.HiddenFor(model => model.dataType)
-    @*@Html.HiddenFor(model => model.db_Id)*@
+    @Html.HiddenFor(model => model.db_Id)
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -31,7 +31,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Execution date</label>
             <div class="col-sm-10">
-                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" , @id = "datetimepicker1" } })
+                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control", @id = "datetimepicker1" } })
                 @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -94,7 +94,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <div class="btn-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Save" class="btn btn-primary" />
                     @Html.ActionLink("Cancel", "List", new { id1 = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
                 </div>
             </div>
@@ -132,6 +132,12 @@
                 $('#nonRepeatingPanel').fadeIn(fade);
             }
         });
+
+        if ($("#repeatTask").attr("checked"))
+        {
+            $('#repeatingPanel').show();
+            $('#nonRepeatingPanel').hide();
+        }
 
         $(function () {
             $('#datetimepicker1').datetimepicker({

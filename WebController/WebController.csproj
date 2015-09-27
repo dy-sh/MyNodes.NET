@@ -370,6 +370,7 @@
     <Content Include="Views\Node\Settings.cshtml" />
     <Content Include="Views\Tasks\New.cshtml" />
     <Content Include="Views\Tasks\List.cshtml" />
+    <Content Include="Views\Tasks\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

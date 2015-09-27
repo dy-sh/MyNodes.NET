@@ -598,11 +598,15 @@ function updateDDMenuFromNode(node) {
     .append("<li><a href='#'> . . .</a></li>");
 
     for (var i = 0; i < node.sensors.length; i++) {
-        updateDDMenuFromSensor(node.sensors[i]);
+        addHistoryToDDMenu(node.sensors[i]);
+    }
+
+    for (var i = 0; i < node.sensors.length; i++) {
+        addTasksToDDMenu(node.sensors[i]);
     }
 }
 
-function updateDDMenuFromSensor(sensor) {
+function addHistoryToDDMenu(sensor) {
     var id = sensor.ownerNodeId + "-" + sensor.sensorId;
 
     var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
@@ -613,11 +617,31 @@ function updateDDMenuFromSensor(sensor) {
     else
         sensorName = sensorType;
 
-    if ($('#dropdownMenuItem' + id).length == 0) {
+    if ($('#dropdownMenuHistory' + id).length == 0) {
         $('#dropdownMenuList' + sensor.ownerNodeId)
-            .append("<li id='dropdownMenuItem" + id + "'><a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>")
+            .append("<li id='dropdownMenuHistory" + id + "'><a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>");
     } else {
-        $('#dropdownMenuItem' + id)
+        $('#dropdownMenuHistory' + id)
             .html("<a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
+    }
+}
+
+function addTasksToDDMenu(sensor) {
+    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+
+    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
+
+    var sensorName;
+    if (sensor.description != null)
+        sensorName = sensor.description;
+    else
+        sensorName = sensorType;
+
+    if ($('#dropdownMenuTasks' + id).length == 0) {
+        $('#dropdownMenuList' + sensor.ownerNodeId)
+            .append("<li id='dropdownMenuTasks" + id + "'><a href='../Tasks/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a></li>");
+    } else {
+        $('#dropdownMenuTasks' + id)
+            .html("<a href='../Tasks/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a>");
     }
 }

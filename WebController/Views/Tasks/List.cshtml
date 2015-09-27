@@ -38,9 +38,10 @@
                         <h4 class="list-group-item-heading">@task.description</h4>
                         <p class="list-group-item-text">
                             <div class="btn-group pull-right">
-                                @Html.ActionLink("Details", "Details", new {id1 = task.nodeId, id2 = task.sensorId}) |
-                                @Html.ActionLink("Edit", "Edit", new {id1 = task.nodeId, id2 = task.sensorId}) |
-                                @Html.ActionLink("Delete", "Delete", new {id1 = task.nodeId, id2 = task.sensorId})
+                                @*@Html.ActionLink("Start Now", "StartNow", new { id = task.db_Id }) |
+                                @Html.ActionLink("Cancel", "Cancel", new {id = task.db_Id}) |*@
+                                @Html.ActionLink("Edit", "Edit", new {id = task.db_Id }) |
+                                @Html.ActionLink("Delete", "Delete", new {id = task.db_Id })
                             </div>
                             @if (task.isCompleted)
                             {
@@ -55,10 +56,16 @@
                                 }
                                 else
                                 {
-                                    @:Interval: @task.repeatingInterval<br>
                                     @:Next value:@task.executionValue<br>
+                                    @:Interval: @task.repeatingInterval<br>
+                                    @:Executions done:@task.executionsDoneCount<br>
+                                    if (task.repeatingCount > 0)
+                                    {
+                                        @:Executions left:@task.repeatingCount<br>
+                                    }
+
                                 }
-                            }
+}
 
                         </p>
                     </li>

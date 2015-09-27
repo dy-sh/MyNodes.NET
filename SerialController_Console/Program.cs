@@ -35,8 +35,8 @@ namespace MyNetSensors.SerialController_Console
             ConnectToGatewayDb();
             ConnectToSensorsHistoryDb();
             ConnectToSerialPort();
-            ConnectToWebServer();
             ConnectSensorsTasks();
+            ConnectToWebServer();
 
             //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
@@ -165,7 +165,7 @@ namespace MyNetSensors.SerialController_Console
                 while (!connected)
                 {
                     string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
-                    connected = signalR.Connect(gateway, webServerUrl, connectionPassword);
+                    connected = signalR.Connect(gateway, sensorsTasksEngine, webServerUrl, connectionPassword);
                     if (!connected) Thread.Sleep(5000);
                 }
 

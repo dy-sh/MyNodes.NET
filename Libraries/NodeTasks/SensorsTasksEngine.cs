@@ -56,16 +56,20 @@ namespace MyNetSensors.NodeTasks
         {
             updateTasksTimer.Stop();
 
-            //to prevent changing of collection while writing to db is not yet finished
-            SensorTask[] tasksTemp = new SensorTask[tasks.Count];
-            tasks.CopyTo(tasksTemp);
-            tasks.Clear();
-
-            foreach (var task in tasksTemp)
+            try
             {
-                if (!task.isCompleted && task.executionDate <= DateTime.Now)
-                    Execute(task);
+                //to prevent changing of collection while writing to db is not yet finished
+                SensorTask[] tasksTemp = new SensorTask[tasks.Count];
+                tasks.CopyTo(tasksTemp);
+
+                foreach (var task in tasksTemp)
+                {
+                    if (!task.isCompleted && task.executionDate <= DateTime.Now)
+                        Execute(task);
+                }
             }
+            catch{}
+
             updateTasksTimer.Start();
         }
 
@@ -83,11 +87,11 @@ namespace MyNetSensors.NodeTasks
                 task.isCompleted = true;
             else
             {
+                if (task.repeatingCount == 1)
+                    task.isCompleted = true;
+
                 if (task.repeatingCount > 0)
                     task.repeatingCount--;
-
-                if (task.repeatingCount == 0)
-                    task.isCompleted = true;
 
                 if (task.executionValue == task.repeatingAValue)
                     task.executionValue = task.repeatingBValue;

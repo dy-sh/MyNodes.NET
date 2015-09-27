@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using MyNetSensors.Gateway;
+using MyNetSensors.NodeTasks;
 
 
 namespace MyNetSensors.SerialController_Console
@@ -29,6 +30,7 @@ namespace MyNetSensors.SerialController_Console
         private HubConnection hubConnection;
         private IHubProxy hubProxy;
         private SerialGateway gateway;
+        private SensorsTasksEngine tasksEngine;
 
 
         public bool IsConnected()
@@ -53,10 +55,11 @@ namespace MyNetSensors.SerialController_Console
                 OnDebugStateMessage(message);
         }
 
-        public bool Connect(SerialGateway gateway, string serverUrl, string connectionPassword)
+        public bool Connect(SerialGateway gateway, SensorsTasksEngine tasksEngine, string serverUrl, string connectionPassword)
         {
             DebugState(String.Format("Connecting to server {0}... ", serverUrl));
 
+            this.tasksEngine = tasksEngine;
             isAuthorized = false;
 
             var querystringData = new Dictionary<string, string>();
@@ -77,6 +80,7 @@ namespace MyNetSensors.SerialController_Console
                 hubProxy.On<Node>("updateNodeSettings", UpdateNodeSettings);
                 hubProxy.On("authorizationFailed", AuthorizationFailed);
                 hubProxy.On("authorizationCompleted", AuthorizationCompleted);
+                hubProxy.On("updateSensorsTasks", UpdateSensorsTasks);
                 hubProxy.On<string, string>("sendMessage", SendMessage);
 
                 hubConnection.Start().Wait();
@@ -112,6 +116,11 @@ namespace MyNetSensors.SerialController_Console
                 return false;
             }
 
+        }
+
+        private void UpdateSensorsTasks()
+        {
+            tasksEngine.GetTasksFromRepository();
         }
 
         private void UpdateNodeSettings(Node node)

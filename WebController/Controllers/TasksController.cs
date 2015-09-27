@@ -107,12 +107,98 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult New(SensorTask task)
         {
-            //for infinity
-            if (task.repeatingCount == 0)
-                task.repeatingCount = -1;
+            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
 
-            tasksDb.AddOrUpdateTask(task);
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            if (task.isRepeating)
+                task.executionValue = task.repeatingBValue;
+
+            tasksDb.AddTask(task);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
             return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
+        }
+
+        public ActionResult Delete(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.DeleteTask(id);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
+
+            ViewBag.description = sensor.GetDescrirtionOrType();
+
+            return View(task);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(SensorTask task)
+        {
+            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
+
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            if (task.isRepeating)
+                task.executionValue = task.repeatingBValue;
+
+            tasksDb.UpdateTask(task);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+        }
+
+        public ActionResult Details(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
+
+            ViewBag.description = sensor.GetDescrirtionOrType();
+
+            return View(task);
+        }
+
+        public ActionResult DeleteAll(int id1, int id2)
+        {
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.DeleteTasks(id1,id2);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1, id2});
+        }
+
+        public ActionResult DeleteCompleted(int id1, int id2)
+        {
+            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+
+            if (sensor == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.DeleteCompleted(id1, id2);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1, id2 });
         }
     }
 }

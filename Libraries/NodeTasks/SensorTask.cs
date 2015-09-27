@@ -23,7 +23,7 @@ namespace MyNetSensors.NodeTasks
         public int repeatingInterval { get; set; }
         public string repeatingAValue { get; set; }
         public string repeatingBValue { get; set; }
-        //if repeatingCount==-1, then will run indefinitely
+        //if repeatingCount==0, then will run indefinitely
         public int repeatingCount { get; set; }
         public int executionsDoneCount { get; set; }
 
