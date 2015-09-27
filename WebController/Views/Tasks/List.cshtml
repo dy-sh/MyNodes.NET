@@ -1,86 +1,60 @@
 ﻿@model IEnumerable<MyNetSensors.NodeTasks.SensorTask>
 
+
 @{
     ViewBag.Title = "Tasks";
 }
 
 <h2>Tasks</h2>
+<h4>@ViewBag.description</h4>
+<hr />
 
 <p>
-    @Html.ActionLink("New task", "New")
+    <div class="btn-group pull-right" style="margin-top: -10px">
+        @Html.ActionLink("New task", "New",new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
+    </div>
+    @Html.ActionLink("Back to control nodes", "Control", "Gateway")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.nodeId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sensorId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sensorDbId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.executionDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isCompleted)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isRepeating)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.repeatingInterval)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.repeatingCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.executionsDoneCount)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.nodeId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sensorId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sensorDbId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.executionDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isCompleted)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isRepeating)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.repeatingInterval)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.repeatingCount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.executionsDoneCount)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.db_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.db_Id })
-        </td>
-    </tr>
-}
 
-</table>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Tasks
+    </div>
+
+    <div class="panel-body">
+        <ul class="list-group">
+            @if (Model == null || Model.Count()==0)
+            {
+                @:No scheduled tasks.
+            }
+            else
+            {
+                foreach (var task in Model)
+                {
+                    <li class="list-group-item">
+                        <h4 class="list-group-item-heading">@task.description</h4>
+                        <p class="list-group-item-text">
+                            <div class="btn-group pull-right">
+                                @*@Html.ActionLink("Details", "Details", new {id1 = task.nodeId, id2 = task.sensorId}) |*@
+                                @Html.ActionLink("Edit", "Edit", new {id1 = task.nodeId, id2 = task.sensorId}) |
+                                @Html.ActionLink("Delete", "Delete", new {id1 = task.nodeId, id2 = task.sensorId})
+                            </div>
+                            Execution date: @task.executionDate<br>
+                            @if (!task.isRepeating)
+                            {
+                                @:Set value:@task.executionValue.state<br>
+                            }
+                            else
+                            {
+                                @:Interval: @task.repeatingInterval<br>
+                                @:Next value:@task.executionValue.state<br>
+                            }
+                        </p>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>

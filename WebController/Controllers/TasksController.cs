@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -42,7 +47,7 @@ namespace MyNetSensors.WebController.Controllers
 
             List<SensorTask> tasks = tasksDb.GetTasks(id1, id2);
 
-            tasks.Add(new SensorTask
+        /*    tasks.Add(new SensorTask
             {
                 executionValue = new SensorData(SensorDataType.V_DIMMER, "100"),
                 sensorId = 3,
@@ -57,21 +62,21 @@ namespace MyNetSensors.WebController.Controllers
             });
             tasks.Add(new SensorTask
             {
-                executionValue = new SensorData(SensorDataType.V_DIMMER, "100"),
+                executionValue = new SensorData(SensorDataType.V_DIMMER, "90"),
                 sensorId = 3,
                 nodeId = 2,
-                description = "Task1",
+                description = "Task2",
                 db_Id = 1,
                 executionDate = new DateTime(2015, 9, 27, 19, 30, 5),
                 isCompleted = false,
                 isRepeating = true,
-                repeatingAValue = new SensorData(SensorDataType.V_DIMMER, "0"),
-                repeatingBValue = new SensorData(SensorDataType.V_DIMMER, "100"),
+                repeatingAValue = new SensorData(SensorDataType.V_DIMMER, "10"),
+                repeatingBValue = new SensorData(SensorDataType.V_DIMMER, "90"),
                 repeatingInterval = 1000,
                 executionsDoneCount = 20,
                 repeatingCount = -1
             });
-            return View(tasks);
+        */    return View(tasks);
         }
 
 
@@ -87,8 +92,8 @@ namespace MyNetSensors.WebController.Controllers
 
             SensorTask task = new SensorTask
             {
-                sensorId = id1,
-                nodeId = id2,
+                nodeId = id1,
+                sensorId = id2,
                 executionDate = DateTime.Now.AddMinutes(1),
                 repeatingInterval = 1000,
 
