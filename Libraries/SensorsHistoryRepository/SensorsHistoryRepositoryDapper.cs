@@ -131,6 +131,24 @@ namespace MyNetSensors.SensorsHistoryRepository
             }
         }
 
+        public void DropAllSensorsHistory()
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                try
+                {
+                    db.Query(
+                        @"  declare @sql varchar(8000) 
+                            set @sql='' 
+                            select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'sensor%[0-9.]' 
+                            exec(@sql)");
+                }
+                catch { }
+            }
+        }
+
 
         private void WriteSensorDataToHistory(Sensor sensor)
         {

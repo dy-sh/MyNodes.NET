@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,50 +51,60 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public ActionResult DropNodes()
+        public async Task<ActionResult> DropNodes()
         {
-            DropHistoryDatabase();
+            await DropHistoryDatabase();
             context.Clients.Client(GatewayHubStaticData.gatewayId).clearLog();
             context.Clients.Client(GatewayHubStaticData.gatewayId).clearNodes();
             return RedirectToAction("Settings");
         }
 
-        public ActionResult DropHistory()
+        public async Task<ActionResult> DropHistory()
         {
-            DropHistoryDatabase();
+            await DropHistoryDatabase();
 
             return RedirectToAction("Settings");
         }
 
-        private void DropHistoryDatabase()
+        public async Task<ActionResult> StopRecordingHistory()
         {
+            await StopRecordingNodesHistory();
+
+            return RedirectToAction("Settings");
+        }
+
+        private async Task DropHistoryDatabase()
+        {
+            await StopRecordingNodesHistory();
+            //waiting for all history writings finished
+            await Task.Delay(2000);
+            
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsHistoryRepository historyDb = new SensorsHistoryRepositoryDapper(cs);
+            historyDb.DropAllSensorsHistory();
+
+
+            //todo check dropped
+        }
+
+
+        private async Task StopRecordingNodesHistory()
+        {
+            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             IGatewayRepository gatewayDb = new GatewayRepositoryDapper(cs);
 
             var nodes = gatewayDb.GetNodes();
             //turn off writing history in nodes settings
             foreach (var node in nodes)
             {
+                    Debug.WriteLine(node.nodeId);
                 foreach (var sensor in node.sensors)
                 {
                     sensor.storeHistoryEnabled = false;
                 }
                 gatewayDb.UpdateNodeSettings(node);
                 context.Clients.Client(GatewayHubStaticData.gatewayId).updateNodeSettings(node);
-                Task.Delay(100);
-            }
-
-            //waiting for all history writings finished
-            Task.Delay(2000);
-
-            //drop tables
-            foreach (var node in nodes)
-            {
-                foreach (var sensor in node.sensors)
-                {
-                    historyDb.DropSensorHistory(sensor.db_Id);
-                }
+                await Task.Delay(100);
             }
         }
 
