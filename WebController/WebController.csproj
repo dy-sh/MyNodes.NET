@@ -196,10 +196,12 @@
     <Compile Include="Code\Hubs\GatewayHub.cs" />
     <Compile Include="Code\Hubs\GatewayHubStaticData.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\GatewayController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -363,11 +365,11 @@
     <Content Include="Views\Gateway\Observe.cshtml" />
     <Content Include="Views\Gateway\Control.cshtml" />
     <Content Include="Views\Gateway\Settings.cshtml" />
-    <Content Include="Views\Node\Log.cshtml" />
-    <Content Include="Views\Node\Chart.cshtml" />
+    <Content Include="Views\History\Log.cshtml" />
+    <Content Include="Views\History\Chart.cshtml" />
     <Content Include="Views\Node\Settings.cshtml" />
-    <Content Include="Views\Node\Tasks.cshtml" />
-    <Content Include="Views\Node\NewTask.cshtml" />
+    <Content Include="Views\Tasks\New.cshtml" />
+    <Content Include="Views\Tasks\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

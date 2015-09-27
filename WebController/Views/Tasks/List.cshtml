@@ -1,0 +1,86 @@
+﻿@model IEnumerable<MyNetSensors.NodeTasks.SensorTask>
+
+@{
+    ViewBag.Title = "Tasks";
+}
+
+<h2>Tasks</h2>
+
+<p>
+    @Html.ActionLink("New task", "New")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nodeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sensorId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sensorDbId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.executionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isCompleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isRepeating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.repeatingInterval)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.repeatingCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.executionsDoneCount)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nodeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sensorId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sensorDbId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.executionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isCompleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isRepeating)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.repeatingInterval)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.repeatingCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.executionsDoneCount)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.db_Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.db_Id })
+        </td>
+    </tr>
+}
+
+</table>

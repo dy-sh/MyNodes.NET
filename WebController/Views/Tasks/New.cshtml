@@ -30,7 +30,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Execution date</label>
             <div class="col-md-10">
-                    <input type='text' class="form-control" id='datetimepicker1'/>
+                <input type='text' class="form-control" id='datetimepicker1' />
                 @*@Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
             </div>
@@ -89,20 +89,22 @@
                     @Html.ValidationMessageFor(model => model.repeatingCount, "", new { @class = "text-danger" })
                 </div>
             </div>
-
         </div>
-
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <div class="btn-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    @Html.ActionLink("Cancel", "List", new { id1 = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
+                </div>
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to tasks list", "Tasks", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId })
+    @Html.ActionLink("Back to tasks list", "List", new { id1 = Model.nodeId, id2 = Model.sensorId })
+
 </div>
 
 

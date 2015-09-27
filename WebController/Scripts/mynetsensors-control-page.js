@@ -615,9 +615,9 @@ function updateDDMenuFromSensor(sensor) {
 
     if ($('#dropdownMenuItem' + id).length == 0) {
         $('#dropdownMenuList' + sensor.ownerNodeId)
-            .append("<li id='dropdownMenuItem" + id + "'><a href='../Node/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>")
+            .append("<li id='dropdownMenuItem" + id + "'><a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>")
     } else {
         $('#dropdownMenuItem' + id)
-            .html("<a href='../Node/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
+            .html("<a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
     }
 }
