@@ -121,7 +121,7 @@ namespace MyNetSensors.NodeTasks
                     task.executionValue = task.repeatingAValue;
 
                 if (!task.isCompleted)
-                    task.executionDate = task.executionDate.AddMilliseconds(task.repeatingInterval);
+                    task.executionDate = DateTime.Now.AddMilliseconds(task.repeatingInterval);
             }
 
             task.executionValue.dateTime = DateTime.Now;

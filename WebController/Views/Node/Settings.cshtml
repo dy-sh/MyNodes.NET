@@ -22,15 +22,15 @@
             @Html.Hidden("nodeId", @Model.nodeId)
 
             <div class="form-group">
-                <div  class="col-xs-4 ">Node name:</div>
+                <div class="col-xs-4 ">Node name:</div>
                 <div class="col-xs-8">
-                    @Html.TextBox("nodename", Model.name, new { @class = "form-control" , @style = "margin-top: -7px" })
+                    @Html.TextBox("nodename", Model.name, new { @class = "form-control", @style = "margin-top: -7px" })
                 </div>
             </div>
 
 
             <br />
-            <br/>
+            <br />
             foreach (var sensor in Model.sensors)
             {
                 <div class="panel panel-default">
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <div class="col-xs-4 ">Description:</div>
                             <div class="col-xs-8">
-                                @Html.TextBox("sensordescription" + sensor.sensorId, sensor.description, new { @class = "form-control", @style = "margin-top: -7px" })
+                                @Html.TextBox("sensordescription" + sensor.sensorId, sensor.description, new { @class = "form-control", @style = "margin-top: -7px"})
                             </div>
                         </div>
                         <br />
@@ -50,21 +50,23 @@
                             <li class="list-group-item">
                                 Store history in database
                                 <div class="pull-right">
-                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
+                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new { @class = "switch storehistory-switch", @data_size = "small", @data_label_width = "0" , @panel_id = @sensor.sensorId })
                                 </div>
                             </li>
-                            <li class="list-group-item">
-                                Write every change
-                                <div class="pull-right">
-                                    @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                Write with interval (sec)
-                                <div class="pull-right">
-                                    @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new {@class = "form-control", @style = "width: 80px; margin-top: -7px"})
-                                </div>
-                            </li>
+                            <div id="historyPanel-@sensor.sensorId" style="display:none">
+                                <li class="list-group-item">
+                                    Write every change
+                                    <div class="pull-right">
+                                        @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Write with interval (sec)
+                                    <div class="pull-right">
+                                        @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                    </div>
+                                </li>
+                            </div>
                         </ul>
                     </div>
                 </div>
@@ -72,7 +74,7 @@
             <div class="btn-group pull-right" role="group" style="padding-right: 10px;">
                 <input type="submit" value="Save changes" class="btn btn-primary" />
                 @* <a href="javascript:window.location.href=window.location.href" class="btn btn-default">Cancel</a>*@
-                @Html.ActionLink("Cancel", "Control", "Gateway",null, new {@class = "btn btn-default"})
+                @Html.ActionLink("Cancel", "Control", "Gateway", null, new { @class = "btn btn-default" })
             </div>
         }
 
@@ -95,5 +97,26 @@
     @Scripts.Render("~/bundles/mysensors")
     <script>
         $(".switch").bootstrapSwitch();
+
+        var fade = 300;
+
+        $(".storehistory-switch").on('switchChange.bootstrapSwitch', function(event, state) {
+            var id = this.getAttribute("panel-id");
+            if (state) {
+                $('#historyPanel-' + id).fadeIn(fade);
+            } else {
+                $('#historyPanel-' + id).fadeOut(fade);
+            }
+        });
+
+        var switches = $(".switch");
+        for (var i = 0; i < switches.length; i++) {
+            if (switches[i].checked) {
+                var id = switches[i].getAttribute("panel-id");
+                if (id!=null)
+                    $('#historyPanel-' + id).show(fade);
+            }
+        }
+
     </script>
 }
