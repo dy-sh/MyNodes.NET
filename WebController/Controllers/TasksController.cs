@@ -47,36 +47,7 @@ namespace MyNetSensors.WebController.Controllers
 
             List<SensorTask> tasks = tasksDb.GetTasks(id1, id2);
 
-        /*    tasks.Add(new SensorTask
-            {
-                executionValue = new SensorData(SensorDataType.V_DIMMER, "100"),
-                sensorId = 3,
-                nodeId = 2,
-                description = "Task1",
-                db_Id = 1,
-                executionDate = new DateTime(2015, 9, 27, 19, 30, 5),
-                isCompleted = false,
-                isRepeating = false,
-                repeatingCount = 0,
-                executionsDoneCount = 0
-            });
-            tasks.Add(new SensorTask
-            {
-                executionValue = new SensorData(SensorDataType.V_DIMMER, "90"),
-                sensorId = 3,
-                nodeId = 2,
-                description = "Task2",
-                db_Id = 1,
-                executionDate = new DateTime(2015, 9, 27, 19, 30, 5),
-                isCompleted = false,
-                isRepeating = true,
-                repeatingAValue = new SensorData(SensorDataType.V_DIMMER, "10"),
-                repeatingBValue = new SensorData(SensorDataType.V_DIMMER, "90"),
-                repeatingInterval = 1000,
-                executionsDoneCount = 20,
-                repeatingCount = -1
-            });
-        */    return View(tasks);
+            return View(tasks);
         }
 
 
@@ -96,38 +67,39 @@ namespace MyNetSensors.WebController.Controllers
                 sensorId = id2,
                 executionDate = DateTime.Now.AddMinutes(1),
                 repeatingInterval = 1000,
-
             };
 
             SensorDataType? dataType = sensor.GetAllData()[0].dataType;
+            task.dataType = dataType;
+
             if (dataType == SensorDataType.V_ARMED ||
                 dataType == SensorDataType.V_TRIPPED)
             {
-                task.repeatingAValue = new SensorData(SensorDataType.V_TRIPPED, "1");
-                task.repeatingBValue = new SensorData(SensorDataType.V_TRIPPED, "0");
-                task.executionValue = new SensorData(SensorDataType.V_TRIPPED, "1");
+                task.executionValue="1";
+                task.repeatingAValue="0";
+                task.repeatingBValue = "1";
             }
             else
                if (dataType == SensorDataType.V_RGB)
             {
-                task.repeatingAValue = new SensorData(SensorDataType.V_RGB, "#FFFFFF");
-                task.repeatingBValue = new SensorData(SensorDataType.V_RGB, "#000000");
-                task.executionValue = new SensorData(SensorDataType.V_RGB, "#FFFFFF");
+                task.executionValue = "#FFFFFF";
+                task.repeatingAValue = "#000000";
+                task.repeatingBValue = "#FFFFFF";
             }
             else
                if (dataType == SensorDataType.V_RGBW)
             {
-                task.repeatingAValue = new SensorData(SensorDataType.V_RGBW, "#FFFFFFFF");
-                task.repeatingBValue = new SensorData(SensorDataType.V_RGBW, "#FFFFFF00");
-                task.executionValue = new SensorData(SensorDataType.V_RGBW, "#FFFFFFFF");
+                task.executionValue = "#FFFFFFFF";
+                task.repeatingAValue = "#FFFFFF00";
+                task.repeatingBValue = "#FFFFFFFF";
             }
             else
                if (dataType == SensorDataType.V_PERCENTAGE ||
                     dataType == SensorDataType.V_DIMMER)
             {
-                task.repeatingAValue = new SensorData(SensorDataType.V_DIMMER, "100");
-                task.repeatingBValue = new SensorData(SensorDataType.V_DIMMER, "0");
-                task.executionValue = new SensorData(SensorDataType.V_DIMMER, "100");
+                task.executionValue = "100";
+                task.repeatingAValue = "0";
+                task.repeatingBValue = "100";
             }
             return View(task);
         }
@@ -140,7 +112,7 @@ namespace MyNetSensors.WebController.Controllers
                 task.repeatingCount = -1;
 
             tasksDb.AddOrUpdateTask(task);
-            return RedirectToAction("List");
+            return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
         }
     }
 }

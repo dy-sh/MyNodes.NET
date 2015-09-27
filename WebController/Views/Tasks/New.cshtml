@@ -13,6 +13,7 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.nodeId)
     @Html.HiddenFor(model => model.sensorId)
+    @Html.HiddenFor(model => model.dataType)
     @*@Html.HiddenFor(model => model.db_Id)*@
 
     <div class="form-horizontal">
@@ -30,8 +31,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Execution date</label>
             <div class="col-sm-10">
-                <input type='text' class="form-control" id='datetimepicker1' />
-                @*@Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" , @id = "datetimepicker1" } })
                 @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -51,7 +51,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Set value</label>
                 <div class="col-sm-10">
-                    @Html.EditorFor(model => model.executionValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.executionValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -61,7 +61,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Repeat A value</label>
                 <div class="col-sm-10">
-                    @Html.EditorFor(model => model.repeatingAValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.repeatingAValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Repeat B value</label>
                 <div class="col-sm-10">
-                    @Html.EditorFor(model => model.repeatingBValue.state, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.repeatingBValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
                 </div>
             </div>

@@ -10,9 +10,7 @@
 <hr />
 
 <p>
-    <div class="btn-group pull-right" style="margin-top: -10px">
-        @Html.ActionLink("New task", "New",new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
-    </div>
+ 
     @Html.ActionLink("Back to control nodes", "Control", "Gateway")
 </p>
 
@@ -20,41 +18,59 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
+        <div class="btn-group pull-right" style="margin-top: -7px">
+            @Html.ActionLink("New task", "New", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+        </div>
         Tasks
     </div>
 
     <div class="panel-body">
-        <ul class="list-group">
-            @if (Model == null || Model.Count()==0)
+        @if (Model == null || Model.Count() == 0)
             {
-                @:No scheduled tasks.
+            @:No scheduled tasks.
             }
             else
             {
-                foreach (var task in Model)
-                {
+                <ul class="list-group">
+                    @foreach (var task in Model)
+                    {
                     <li class="list-group-item">
                         <h4 class="list-group-item-heading">@task.description</h4>
                         <p class="list-group-item-text">
                             <div class="btn-group pull-right">
-                                @*@Html.ActionLink("Details", "Details", new {id1 = task.nodeId, id2 = task.sensorId}) |*@
+                                @Html.ActionLink("Details", "Details", new {id1 = task.nodeId, id2 = task.sensorId}) |
                                 @Html.ActionLink("Edit", "Edit", new {id1 = task.nodeId, id2 = task.sensorId}) |
                                 @Html.ActionLink("Delete", "Delete", new {id1 = task.nodeId, id2 = task.sensorId})
                             </div>
-                            Execution date: @task.executionDate<br>
-                            @if (!task.isRepeating)
+                            @if (task.isCompleted)
                             {
-                                @:Set value:@task.executionValue.state<br>
+                                @:Completed
                             }
                             else
                             {
-                                @:Interval: @task.repeatingInterval<br>
-                                @:Next value:@task.executionValue.state<br>
+                                @:Execution date: @task.executionDate<br>
+                                if (!task.isRepeating)
+                                {
+                                    @:Set value:@task.executionValue<br>
+                                }
+                                else
+                                {
+                                    @:Interval: @task.repeatingInterval<br>
+                                    @:Next value:@task.executionValue<br>
+                                }
                             }
+
                         </p>
                     </li>
-                }
-            }
-        </ul>
+                    }
+                </ul>
+                <div class="btn-group pull-right" style="margin-top: -10px">
+                    @Html.ActionLink("Delete completed", "DeleteCompleted", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete all", "DeleteAll", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
+                </div>
+        }
+
+        <br />
     </div>
+
 </div>

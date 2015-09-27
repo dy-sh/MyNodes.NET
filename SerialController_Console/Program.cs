@@ -25,7 +25,8 @@ namespace MyNetSensors.SerialController_Console
         private static IGatewayRepository gatewayDb;
         private static ISensorsHistoryRepository historyDb;
         private static GatewaySignalRController signalR = new GatewaySignalRController();
-        private static ISensorsTasksRepository sensorsTasks;
+        private static ISensorsTasksRepository sensorsTasksDb;
+        private static SensorsTasksEngine sensorsTasksEngine;
 
         private static string serialPortName;
 
@@ -104,15 +105,15 @@ namespace MyNetSensors.SerialController_Console
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
             {
-                Console.WriteLine("Connecting sensors tasks... ");
+                Console.WriteLine("Starting sensors tasks engine... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                sensorsTasks = new SensorsTasksRepositoryDapper(connectionString);
                 
                 while (!connected)
                 {
-                    sensorsTasks.ConnectToGateway(gateway);
-                    connected = (sensorsTasks.IsDbExist());
+                    sensorsTasksDb = new SensorsTasksRepositoryDapper(connectionString);
+                    sensorsTasksEngine=new SensorsTasksEngine(gateway,sensorsTasksDb);
+                    connected = (sensorsTasksDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
             }

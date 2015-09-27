@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Timers;
+using Dapper;
 using MyNetSensors.Gateway;
 
 namespace MyNetSensors.NodeTasks
 {
-    public class SensorsTasksRepositoryDapper: ISensorsTasksRepository
+    public class SensorsTasksRepositoryDapper : ISensorsTasksRepository
     {
-        private int updateTasksInterval = 10;
-
-
-        private Timer updateTasksTimer = new Timer();
-
-        private SerialGateway gateway;
 
         private string connectionString;
-
-        private List<SensorTask> tasks=new List<SensorTask>();
 
         public SensorsTasksRepositoryDapper(string connectionString)
         {
@@ -26,107 +20,171 @@ namespace MyNetSensors.NodeTasks
         }
 
 
+        public void CreateDb()
+        {
+            CreateSensorsTasksTable();
+        }
+
         public bool IsDbExist()
         {
             //todo check if db exist
             return true;
         }
 
-        public void ConnectToGateway(SerialGateway gateway)
+
+        public int AddOrUpdateTask(SensorTask task)
         {
-            this.gateway = gateway;
+            int db_Id=task.db_Id;
 
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            SensorTask oldTask = GetTask(task.db_Id);
 
-            updateTasksTimer.Elapsed += UpdateTasks;
+            if (oldTask == null)
+                db_Id= AddTask(task);
+            else
+                UpdateTask(task);
 
-            updateTasksTimer.Interval = updateTasksInterval;
-            updateTasksTimer.Start();
-
+            return db_Id;
         }
 
-        private void UpdateTasks(object sender, ElapsedEventArgs e)
+        public int AddTask(SensorTask task)
         {
-            updateTasksTimer.Stop();
-            foreach (var task in tasks)
+            int db_Id;
+            using (var db = new SqlConnection(connectionString))
             {
-                if (!task.isCompleted && task.executionDate<=DateTime.Now)
-                    Execute(task);
+                db.Open();
+
+                var sqlQuery = "INSERT INTO SensorsTasks (description, nodeId, sensorId, sensorDbId, executionDate,dataType, executionValue, isCompleted, isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingCount,executionsDoneCount) "
+                             + "VALUES(@description, @nodeId, @sensorId, @sensorDbId, @executionDate, @dataType, @executionValue, @isCompleted, @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingCount,@executionsDoneCount); "
+                            + "SELECT CAST(SCOPE_IDENTITY() as int)";
+
+                db_Id = db.Query<int>(sqlQuery, task).Single();
             }
-            updateTasksTimer.Start();
-
+            return db_Id;
         }
 
-
-
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        public void UpdateTask(SensorTask task)
         {
-            DropAllTasks();
-        }
-
-        public void AddOrUpdateTask(SensorTask task)
-        {
-            tasks.Add(task);
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE SensorsTasks SET " +
+                    "description = @description, " +
+                    "executionDate = @executionDate, " +
+                    "dataType = @dataType, " +
+                    "executionValue = @executionValue, " +
+                    "isCompleted = @isCompleted, " +
+                    "isRepeating = @isRepeating, " +
+                    "repeatingInterval = @repeatingInterval, " +
+                    "repeatingAValue = @repeatingAValue, " +
+                    "repeatingBValue = @repeatingBValue, " +
+                    "repeatingCount = @repeatingCount, " +
+                    "executionsDoneCount = @executionsDoneCount " +
+                    "WHERE db_Id = @db_Id";
+                db.Execute(sqlQuery, task);
+            }
         }
 
         public SensorTask GetTask(int db_Id)
         {
-            SensorTask task = tasks.FirstOrDefault(x => x.db_Id == db_Id);
+            SensorTask task;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                task = db.Query<SensorTask>("SELECT * FROM SensorsTasks WHERE db_Id=@db_Id",
+                    new { db_Id }).SingleOrDefault();
+            }
+
             return task;
+        }
+
+        public List<SensorTask> GetAllTasks()
+        {
+            List<SensorTask> tasks;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                tasks = db.Query<SensorTask>("SELECT * FROM SensorsTasks").ToList();
+            }
+
+            return tasks;
         }
 
         public List<SensorTask> GetTasks(int nodeId, int sensorId)
         {
-            return tasks;
+            List<SensorTask> list;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                list = db.Query<SensorTask>("SELECT * FROM SensorsTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
+                    new { nodeId, sensorId }).ToList();
+            }
+
+            return list;
         }
 
         public void DeleteTask(int db_Id)
         {
-            tasks.RemoveAll(x => x.db_Id == db_Id);
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query("DELETE FROM SensorsTasks WHERE db_Id=@db_Id",
+                    new { db_Id });
+            }
         }
 
         public void DeleteTasks(int nodeId, int sensorId)
         {
-            tasks.RemoveAll(x => x.nodeId == nodeId && x.sensorId==sensorId);
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query("DELETE FROM SensorsTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
+                    new { nodeId, sensorId });
+            }
         }
 
         public void DropAllTasks()
         {
-            tasks.Clear();
-        }
-
-        public void ExecuteNow(int db_Id)
-        {
-            SensorTask task = GetTask(db_Id);
-            Execute(task);
-        }
-
-        private void Execute(SensorTask task)
-        {
-            task.executionsDoneCount++;
-
-            if (!task.isRepeating)
-                task.isCompleted = true;
-            else
+            using (var db = new SqlConnection(connectionString))
             {
-                if (task.repeatingCount > 0)
-                    task.repeatingCount--;
-
-                if (task.repeatingCount == 0)
-                    task.isCompleted = true;
-
-                if (task.executionValue.state == task.repeatingAValue.state)
-                    task.executionValue = task.repeatingBValue;
-                else 
-                    task.executionValue = task.repeatingAValue;
-
-                if (!task.isCompleted)
-                    task.executionDate = DateTime.Now.AddMilliseconds(task.repeatingInterval);
+                db.Open();
+                db.Query("TRUNCATE TABLE [SensorsTasks]");
             }
+        }
 
-            task.executionValue.dateTime = DateTime.Now;
+        private void CreateSensorsTasksTable()
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
 
-            gateway.SendSensorState(task.nodeId,task.sensorId, task.executionValue);
+                try
+                {
+                    string req = String.Format(
+                        @"CREATE TABLE [dbo].[SensorsTasks](
+	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                    [description] [nvarchar](max) NULL,	        
+	                    [nodeId] [int] NULL,
+	                    [sensorId] [int] NULL,
+	                    [sensorDbId] [int] NULL,
+	                    [executionDate] [datetime] NULL,
+	                    [dataType] [int] NULL,
+	                    [executionValue] [nvarchar](max) NULL,
+	                    [isCompleted] [bit] NULL,       
+	                    [isRepeating] [bit] NULL,       
+	                    [repeatingInterval] [int] NULL,       
+	                    [repeatingAValue] [nvarchar](max) NULL,       
+	                    [repeatingBValue] [nvarchar](max) NULL,       
+	                    [repeatingCount] [int] NULL,       
+	                    [executionsDoneCount] [int] NULL
+                        ) ON [PRIMARY] ");
+
+                    db.Query(req);
+                }
+                catch
+                {
+                }
+            }
         }
     }
 }

@@ -71,26 +71,28 @@ namespace MyNetSensors.SensorsHistoryRepository
         private void UpdateDbTimer(object sender, ElapsedEventArgs e)
         {
             updateDbTimer.Stop();
-
-
-            List<Node> nodes = gateway.GetNodes();
-            foreach (var node in nodes)
+            try
             {
-                foreach (var sensor in node.sensors)
-                {
-                    if (!sensor.storeHistoryEnabled || sensor.storeHistoryWithInterval==0)
-                        continue;
 
-                    TimeSpan elapsedTime = DateTime.Now.Subtract(sensor.storeHistoryLastDate);
-                    if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
+                List<Node> nodes = gateway.GetNodes();
+                foreach (var node in nodes)
+                {
+                    foreach (var sensor in node.sensors)
                     {
-                        sensor.storeHistoryLastDate = DateTime.Now;
-                      Debug.WriteLine(elapsedTime.TotalMilliseconds+" "+ sensor.sensorId);
-                      WriteSensorDataToHistory(sensor);
+                        if (!sensor.storeHistoryEnabled || sensor.storeHistoryWithInterval == 0)
+                            continue;
+
+                        TimeSpan elapsedTime = DateTime.Now.Subtract(sensor.storeHistoryLastDate);
+                        if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
+                        {
+                            sensor.storeHistoryLastDate = DateTime.Now;
+                            Debug.WriteLine(elapsedTime.TotalMilliseconds + " " + sensor.sensorId);
+                            WriteSensorDataToHistory(sensor);
+                        }
                     }
                 }
             }
-
+            catch { }
             updateDbTimer.Start();
         }
 

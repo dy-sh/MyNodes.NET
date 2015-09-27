@@ -381,6 +381,8 @@ namespace MyNetSensors.Gateway
 
         public void SendSensorState(int nodeId, int sensorId, SensorData data)
         {
+            data.dateTime = DateTime.Now;
+
             Sensor sensor = GetNode(nodeId).GetSensor(sensorId);
             sensor.AddOrUpdateData(data);
 

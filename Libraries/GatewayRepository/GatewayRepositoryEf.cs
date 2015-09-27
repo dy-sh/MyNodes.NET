@@ -30,7 +30,7 @@ using MyNetSensors.Gateway;
 
 namespace MyNetSensors.GatewayRepository
 {
-    public class GatewayRepositoryEf:IGatewayRepository
+    public class GatewayRepositoryEf : IGatewayRepository
     {
         private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
@@ -48,7 +48,7 @@ namespace MyNetSensors.GatewayRepository
 
         private GatewayRepositoryEfDbContext db;
         private SerialGateway gateway;
-        private Timer updateDbTimer=new Timer();
+        private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
@@ -139,7 +139,7 @@ namespace MyNetSensors.GatewayRepository
 
         private void OnNewMessage(Message message)
         {
-            if (!storeTxRxMessages)return;
+            if (!storeTxRxMessages) return;
 
             if (writeInterval == 0)
                 AddMessage(message);
@@ -227,21 +227,31 @@ namespace MyNetSensors.GatewayRepository
         private void UpdateDbTimer(object sender, object e)
         {
             updateDbTimer.Stop();
-            int nodesCount = updatedNodesId.Count;
-            int messagesCount = newMessages.Count;
-            int messages = nodesCount + messagesCount;
-            if (messages == 0) return;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            try
+            {
+
+                int nodesCount = updatedNodesId.Count;
+                int messagesCount = newMessages.Count;
+                int messages = nodesCount + messagesCount;
+                if (messages == 0)
+                {
+                    updateDbTimer.Start();
+                    return;
+                }
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
 
 
-            WriteUpdatedNodes();
-            WriteNewMessages();
+                WriteUpdatedNodes();
+                WriteNewMessages();
 
-            sw.Stop();
-            long elapsed = sw.ElapsedMilliseconds;
-            float messagesPerSec = (float)messages / (float)elapsed * 1000;
-            Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages, (int)messagesPerSec));
+                sw.Stop();
+                long elapsed = sw.ElapsedMilliseconds;
+                float messagesPerSec = (float)messages / (float)elapsed * 1000;
+                Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages,
+                    (int)messagesPerSec));
+            }
+            catch { }
             updateDbTimer.Start();
 
         }
@@ -350,5 +360,5 @@ namespace MyNetSensors.GatewayRepository
         }
     }
 
-   
+
 }

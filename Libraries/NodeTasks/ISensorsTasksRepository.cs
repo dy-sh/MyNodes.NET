@@ -9,15 +9,16 @@ namespace MyNetSensors.NodeTasks
 {
     public interface ISensorsTasksRepository
     {
-        void ConnectToGateway(SerialGateway gateway);
-
-        void AddOrUpdateTask(SensorTask task);
+        void CreateDb();
+        bool IsDbExist();
+        int AddOrUpdateTask(SensorTask task);
+        int AddTask(SensorTask task);
+        void UpdateTask(SensorTask task);
         SensorTask GetTask(int db_Id);
         List<SensorTask> GetTasks(int nodeId, int sensorId);
+        List<SensorTask> GetAllTasks();
         void DeleteTask(int db_Id);
         void DeleteTasks(int nodeId,int sensorId);
         void DropAllTasks();
-        bool IsDbExist();
-        void ExecuteNow(int db_Id);
     }
 }
