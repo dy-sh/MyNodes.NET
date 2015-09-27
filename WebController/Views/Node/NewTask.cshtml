@@ -28,26 +28,28 @@
 
 
         <div class="form-group">
-            <label class="control-label col-md-2" >Execution date</label>
+            <label class="control-label col-md-2">Execution date</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" } })
+                    <input type='text' class="form-control" id='datetimepicker1'/>
+                @*@Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
 
 
+
         <div class="form-group">
-            <label class="control-label col-md-2" >Repeat task</label>
+            <label class="control-label col-md-2">Repeat task</label>
             <div class="col-md-10">
-                @Html.CheckBoxFor(model => model.isRepeating, new { @class = "switch", @data_size = "small", @data_label_width = "0" , @id = "repeatTask" })
+                @Html.CheckBoxFor(model => model.isRepeating, new { @class = "switch", @data_size = "small", @data_label_width = "0", @id = "repeatTask" })
             </div>
         </div>
 
 
-        <div id="nonRepeatingPanel" >
+        <div id="nonRepeatingPanel">
             <div class="form-group">
-                <label class="control-label col-md-2" >Set value</label>
+                <label class="control-label col-md-2">Set value</label>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.executionValue.state, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
@@ -65,7 +67,7 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-2" >Repeat B value</label>
+                <label class="control-label col-md-2">Repeat B value</label>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.repeatingBValue.state, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
@@ -73,7 +75,7 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-2" >Repeat interval (ms)</label>
+                <label class="control-label col-md-2">Repeat interval (ms)</label>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
@@ -81,7 +83,7 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-2">Repeat count<br/> (0 for infinity)</label>
+                <label class="control-label col-md-2">Repeat count<br /> (0 for infinity)</label>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.repeatingCount, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingCount, "", new { @class = "text-danger" })
@@ -104,11 +106,16 @@
 </div>
 
 
-
+@section styles
+{
+    @Styles.Render("~/Content/datetimepicker")
+}
 
 @section scripts
 {
-    @Scripts.Render("~/bundles/mysensors")
+
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/datetimepicker")
     <script>
         var fade = 500;
 
@@ -124,6 +131,10 @@
             }
         });
 
-
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+        });
     </script>
 }

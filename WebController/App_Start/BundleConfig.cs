@@ -91,6 +91,13 @@ namespace MyNetSensors.WebController
 
             bundles.Add(new StyleBundle("~/Content/visjs")
                 .Include("~/Content/vis.min.css"));
+
+            //bootstrap-datetimepicker
+            bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
+                "~/Scripts/bootstrap-datetimepicker.min.js"));
+
+            bundles.Add(new StyleBundle("~/Content/datetimepicker")
+                .Include("~/Content/bootstrap-datetimepicker.css"));
         }
     }
 }
