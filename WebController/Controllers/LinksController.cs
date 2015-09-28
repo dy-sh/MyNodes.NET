@@ -121,6 +121,12 @@ namespace MyNetSensors.WebController.Controllers
             if (fromSensor == null || toSensor == null)
                 return new HttpNotFoundResult();
 
+            bool linkPossible = CheckLinkPossible(fromSensor, toSensor);
+            if (!linkPossible)
+            {
+                ModelState.AddModelError("", "Link impossible");
+                return RedirectToAction("New");
+            }
 
             Node fromNode = gatewayDb.GetNodeByNodeId(fromSensor.ownerNodeId);
             Node toNode = gatewayDb.GetNodeByNodeId(toSensor.ownerNodeId);
@@ -150,8 +156,34 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
         }
 
+        private bool CheckLinkPossible(Sensor fromSensor, Sensor toSensor)
+        {
+            //if it's the same sensor
+            if (fromSensor.ownerNodeId == toSensor.ownerNodeId
+                && fromSensor.sensorId == toSensor.sensorId)
+                return false;
 
+            
+            List<SensorLink> links = linksDb.GetAllLinks();
+            foreach (var link in links)
+            {
+                //prevent infinite loop 
+                if (link.fromNodeId == toSensor.ownerNodeId
+                    && link.fromSensorId == toSensor.sensorId
+                    && link.toNodeId == fromSensor.ownerNodeId
+                    && link.toSensorId == fromSensor.sensorId)
+                    return false;
 
+                //prevend duplicates
+                if (link.fromNodeId == fromSensor.ownerNodeId
+                    && link.fromSensorId == fromSensor.sensorId
+                    && link.toNodeId == toSensor.ownerNodeId
+                    && link.toSensorId == toSensor.sensorId)
+                    return false;
+            }
+
+            return true;
+        }
 
 
         public ActionResult Delete(int id)
