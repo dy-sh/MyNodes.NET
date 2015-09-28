@@ -7,17 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 
-namespace NodesLinks
+namespace MyNetSensors.NodesLinks
 {
-    public class NodesLinksRepositoryDapper: INodesLinksRepository
+    public class SensorsLinksRepositoryDapper: ISensorsLinksRepository
     {
         private string connectionString;
 
-        public NodesLinksRepositoryDapper(string connectionString)
+        public SensorsLinksRepositoryDapper(string connectionString)
         {
             this.connectionString = connectionString;
         }
@@ -40,9 +38,11 @@ namespace NodesLinks
 	                    [inSensorDbId] [int] NULL,       
 	                    [inNodeId] [int] NULL,       
 	                    [inSensorId] [int] NULL,       
+	                    [inDataType] [int] NULL,       
 	                    [outSensorDbId] [int] NULL,       
 	                    [outNodeId] [int] NULL,       
-	                    [outSensorId] [int] NULL 
+	                    [outSensorId] [int] NULL,
+	                    [outDataType] [int] NULL 
                         ) ON [PRIMARY] ");
 
                     db.Query(req);
@@ -59,11 +59,11 @@ namespace NodesLinks
             return true;
         }
 
-        public int AddOrUpdateLink(NodeLink link)
+        public int AddOrUpdateLink(SensorLink link)
         {
             int db_Id = link.db_Id;
 
-            NodeLink oldLink = GetLink(link.db_Id);
+            SensorLink oldLink = GetLink(link.db_Id);
 
             if (oldLink == null)
                 db_Id = AddLink(link);
@@ -73,15 +73,15 @@ namespace NodesLinks
             return db_Id;
         }
 
-        public int AddLink(NodeLink link)
+        public int AddLink(SensorLink link)
         {
             int db_Id;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO NodesLinks (inSensorDbId,inNodeId,inSensorId, outSensorDbId, outNodeId, outSensorId) "
-                                          + "VALUES(@inSensorDbId,@inNodeId,@inSensorId, @outSensorDbId, @outNodeId, @outSensorId); "
+                var sqlQuery = "INSERT INTO NodesLinks (inSensorDbId,inNodeId,inSensorId,inDataType, outSensorDbId, outNodeId, outSensorId,outDataType) "
+                                          + "VALUES(@inSensorDbId,@inNodeId,@inSensorId,@inDataType, @outSensorDbId, @outNodeId, @outSensorId,@outDataType); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 db_Id = db.Query<int>(sqlQuery, link).Single();
@@ -89,7 +89,7 @@ namespace NodesLinks
             return db_Id;
         }
 
-        public void UpdateLink(NodeLink link)
+        public void UpdateLink(SensorLink link)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -99,73 +99,75 @@ namespace NodesLinks
                     "inSensorDbId = @inSensorDbId, " +
                     "inNodeId = @inNodeId, " +
                     "inSensorId = @inSensorId, " +
+                    "inDataType = @inDataType, " +
                     "outSensorDbId = @outSensorDbId, " +
                     "outNodeId = @outNodeId, " +
                     "outSensorId = @outSensorId " +
+                    "outDataType = @outDataType " +
                     "WHERE db_Id = @db_Id";
                 db.Execute(sqlQuery, link);
             }
         }
 
-        public NodeLink GetLink(int db_Id)
+        public SensorLink GetLink(int db_Id)
         {
-            NodeLink link;
+            SensorLink link;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                link = db.Query<NodeLink>("SELECT * FROM NodesLinks WHERE db_Id=@db_Id",
+                link = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE db_Id=@db_Id",
                     new { db_Id }).SingleOrDefault();
             }
 
             return link;
         }
 
-        public List<NodeLink> GetIncomingLinks(int nodeId, int sensorId)
+        public List<SensorLink> GetIncomingLinks(int nodeId, int sensorId)
         {
-            List<NodeLink> links;
+            List<SensorLink> links;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<NodeLink>("SELECT * FROM NodesLinks WHERE inNodeId=@nodeId AND inSensorId=@sensorId",
+                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE inNodeId=@nodeId AND inSensorId=@sensorId",
                     new { nodeId, sensorId }).ToList();
             }
 
             return links;
         }
 
-        public List<NodeLink> GetOutgoingLinks(int nodeId, int sensorId)
+        public List<SensorLink> GetOutgoingLinks(int nodeId, int sensorId)
         {
-            List<NodeLink> links;
+            List<SensorLink> links;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<NodeLink>("SELECT * FROM NodesLinks WHERE outNodeId=@nodeId AND outSensorId=@sensorId",
+                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE outNodeId=@nodeId AND outSensorId=@sensorId",
                     new { nodeId, sensorId }).ToList();
             }
 
             return links;
         }
 
-        public List<NodeLink> GetIncomingLinks(int sensorDbId)
+        public List<SensorLink> GetIncomingLinks(int sensorDbId)
         {
-            List<NodeLink> links;
+            List<SensorLink> links;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<NodeLink>("SELECT * FROM NodesLinks WHERE inSensorDbId=@sensorDbId",
+                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE inSensorDbId=@sensorDbId",
                     new { sensorDbId }).ToList();
             }
 
             return links;
         }
 
-        public List<NodeLink> GetOutgoingLinks(int sensorDbId)
+        public List<SensorLink> GetOutgoingLinks(int sensorDbId)
         {
-            List<NodeLink> links;
+            List<SensorLink> links;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<NodeLink>("SELECT * FROM NodesLinks WHERE outSensorDbId=@sensorDbId",
+                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE outSensorDbId=@sensorDbId",
                     new { sensorDbId }).ToList();
             }
 
@@ -173,13 +175,13 @@ namespace NodesLinks
         }
 
 
-        public List<NodeLink> GetAllLinks()
+        public List<SensorLink> GetAllLinks()
         {
-            List<NodeLink> links;
+            List<SensorLink> links;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<NodeLink>("SELECT * FROM NodesLinks").ToList();
+                links = db.Query<SensorLink>("SELECT * FROM NodesLinks").ToList();
             }
 
             return links;

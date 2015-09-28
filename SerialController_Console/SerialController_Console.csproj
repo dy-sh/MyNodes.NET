@@ -87,6 +87,10 @@
       <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
       <Name>Gateway</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\NodesLinks\NodesLinks.csproj">
+      <Project>{708bdac4-b2aa-4a10-bf7b-3441763ecc72}</Project>
+      <Name>NodesLinks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\NodeTasks\NodeTasks.csproj">
       <Project>{c147c1c1-eb18-49fc-b4c9-18e03c57f636}</Project>
       <Name>NodeTasks</Name>

@@ -7,7 +7,7 @@
     <ProjectGuid>{708BDAC4-B2AA-4A10-BF7B-3441763ECC72}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NodesLinks</RootNamespace>
+    <RootNamespace>MyNetSensors.NodesLinks</RootNamespace>
     <AssemblyName>NodesLinks</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,14 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INodesLinksRepository.cs" />
-    <Compile Include="NodeLink.cs" />
-    <Compile Include="NodesLinksEngine.cs" />
-    <Compile Include="NodesLinksRepositoryDapper.cs" />
+    <Compile Include="ISensorsLinksRepository.cs" />
+    <Compile Include="SensorLink.cs" />
+    <Compile Include="SensorsLinksEngine.cs" />
+    <Compile Include="SensorsLinksRepositoryDapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gateway\Gateway.csproj">
+      <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
+      <Name>Gateway</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

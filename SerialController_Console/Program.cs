@@ -12,8 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
+
 
 
 namespace MyNetSensors.SerialController_Console
@@ -27,6 +29,8 @@ namespace MyNetSensors.SerialController_Console
         private static GatewaySignalRController signalR = new GatewaySignalRController();
         private static ISensorsTasksRepository sensorsTasksDb;
         private static SensorsTasksEngine sensorsTasksEngine;
+        private static ISensorsLinksRepository sensorsLinksDb;
+        private static SensorsLinksEngine sensorsLinksEngine;
 
         private static string serialPortName;
 
@@ -36,6 +40,7 @@ namespace MyNetSensors.SerialController_Console
             ConnectToSensorsHistoryDb();
             ConnectToSerialPort();
             ConnectSensorsTasks();
+            ConnectSensorsLinks();
             ConnectToWebServer();
 
             //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
@@ -46,7 +51,8 @@ namespace MyNetSensors.SerialController_Console
                 Console.ReadLine();
         }
 
- 
+
+
 
         private static void OnDisconnectedEvent(object sender, EventArgs e)
         {
@@ -89,7 +95,7 @@ namespace MyNetSensors.SerialController_Console
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 historyDb = new SensorsHistoryRepositoryDapper(connectionString);
-                
+
                 while (!connected)
                 {
                     historyDb.ConnectToGateway(gateway);
@@ -108,15 +114,37 @@ namespace MyNetSensors.SerialController_Console
                 Console.WriteLine("Starting sensors tasks engine... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                
+
                 while (!connected)
                 {
                     sensorsTasksDb = new SensorsTasksRepositoryDapper(connectionString);
-                    sensorsTasksEngine=new SensorsTasksEngine(gateway,sensorsTasksDb);
+                    sensorsTasksEngine = new SensorsTasksEngine(gateway, sensorsTasksDb);
                     connected = (sensorsTasksDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
             }
+        }
+
+        private async static Task ConnectSensorsLinks()
+        {
+            //connecting tasks
+            bool connected = false;
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            {
+                Console.WriteLine("Starting nodes links engine... ");
+
+                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+
+                while (!connected)
+                {
+                    sensorsLinksDb = new SensorsLinksRepositoryDapper(connectionString);
+                    sensorsLinksEngine = new SensorsLinksEngine(gateway, sensorsLinksDb);
+                    connected = (sensorsTasksDb.IsDbExist());
+                    if (!connected) await Task.Delay(5000);
+                }
+            }
+
+            sensorsLinksEngine.GetLinksFromRepository();
         }
 
         public static async Task ConnectToSerialPort()
@@ -165,7 +193,12 @@ namespace MyNetSensors.SerialController_Console
                 while (!connected)
                 {
                     string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
-                    connected = signalR.Connect(gateway, sensorsTasksEngine, webServerUrl, connectionPassword);
+                    connected = signalR.Connect(
+                        gateway,
+                        sensorsTasksEngine,
+                        sensorsLinksEngine,
+                        webServerUrl,
+                        connectionPassword);
                     if (!connected) Thread.Sleep(5000);
                 }
 
