@@ -64,7 +64,7 @@ namespace MyNetSensors.NodeTasks
 
                 foreach (var task in tasksTemp)
                 {
-                    if (!task.isCompleted && task.executionDate <= DateTime.Now)
+                    if (!task.isCompleted && task.enabled && task.executionDate <= DateTime.Now)
                         Execute(task);
                 }
             }
@@ -81,17 +81,15 @@ namespace MyNetSensors.NodeTasks
 
         private void Execute(SensorTask task)
         {
-            task.executionsDoneCount++;
+            task.repeatingDoneCount++;
 
             if (!task.isRepeating)
                 task.isCompleted = true;
             else
             {
-                if (task.repeatingCount == 1)
+                if (task.repeatingNeededCount!=0 
+                    && task.repeatingDoneCount >= task.repeatingNeededCount)
                     task.isCompleted = true;
-
-                if (task.repeatingCount > 0)
-                    task.repeatingCount--;
 
                 if (task.executionValue == task.repeatingAValue)
                     task.executionValue = task.repeatingBValue;
@@ -102,7 +100,13 @@ namespace MyNetSensors.NodeTasks
                     task.executionDate = DateTime.Now.AddMilliseconds(task.repeatingInterval);
             }
 
-            db.UpdateTask(task);
+            //we should not update the whole record, because other parts of the record can be updated from outside
+            db.UpdateTask(
+                task.db_Id,
+                task.isCompleted,
+                task.executionDate,
+                task.executionValue,
+                task.repeatingDoneCount);
 
             gateway.SendSensorState(task.nodeId, task.sensorId, task.GetExecutionSensorData());
         }

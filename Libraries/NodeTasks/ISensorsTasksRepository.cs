@@ -14,6 +14,9 @@ namespace MyNetSensors.NodeTasks
         int AddOrUpdateTask(SensorTask task);
         int AddTask(SensorTask task);
         void UpdateTask(SensorTask task);
+        void UpdateTask(int db_Id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount);
+        void UpdateTask(int db_Id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount);
+        void UpdateTaskEnabled(int db_Id, bool enabled);
         SensorTask GetTask(int db_Id);
         List<SensorTask> GetTasks(int nodeId, int sensorId);
         List<SensorTask> GetAllTasks();

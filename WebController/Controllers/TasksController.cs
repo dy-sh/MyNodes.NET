@@ -65,8 +65,9 @@ namespace MyNetSensors.WebController.Controllers
             {
                 nodeId = id1,
                 sensorId = id2,
-                executionDate = DateTime.Now.AddMinutes(1),
+                executionDate = DateTime.Now,
                 repeatingInterval = 1000,
+                enabled = true
             };
 
             SensorDataType? dataType = sensor.GetAllData()[0].dataType;
@@ -120,17 +121,7 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
         }
 
-        public ActionResult Delete(int id)
-        {
-            SensorTask task = tasksDb.GetTask(id);
 
-            if (task == null)
-                return new HttpNotFoundResult();
-
-            tasksDb.DeleteTask(id);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
-            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
-        }
 
         [HttpGet]
         public ActionResult Edit(int id)
@@ -163,20 +154,58 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Delete(int id)
         {
             SensorTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
 
-            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
-
-            ViewBag.description = sensor.GetDescrirtionOrType();
-
-            return View(task);
+            tasksDb.DeleteTask(id);
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
+        public ActionResult Enable(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.UpdateTaskEnabled(task.db_Id,true);
+
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+        }
+
+        public ActionResult Disable(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.UpdateTaskEnabled(task.db_Id, false);
+
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+        }
+
+        public ActionResult ExecuteNow(int id)
+        {
+            SensorTask task = tasksDb.GetTask(id);
+
+            if (task == null)
+                return new HttpNotFoundResult();
+
+            tasksDb.UpdateTask(task.db_Id,true,false,DateTime.Now,0);
+
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+        }
+
+  
         public ActionResult DeleteAll(int id1, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id1, id2);
@@ -200,5 +229,7 @@ namespace MyNetSensors.WebController.Controllers
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
             return RedirectToAction("List", new { id1, id2 });
         }
+
+
     }
 }

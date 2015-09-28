@@ -14,7 +14,7 @@
     @Html.HiddenFor(model => model.nodeId)
     @Html.HiddenFor(model => model.sensorId)
     @Html.HiddenFor(model => model.dataType)
-    @*@Html.HiddenFor(model => model.db_Id)*@
+    @Html.HiddenFor(model => model.enabled)
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -85,8 +85,8 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Repeat count<br /> (0 for infinity)</label>
                 <div class="col-sm-10">
-                    @Html.EditorFor(model => model.repeatingCount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.repeatingCount, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.repeatingNeededCount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.repeatingNeededCount, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>

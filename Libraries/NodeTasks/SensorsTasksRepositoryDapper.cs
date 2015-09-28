@@ -53,8 +53,8 @@ namespace MyNetSensors.NodeTasks
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO SensorsTasks (description, nodeId, sensorId, sensorDbId, executionDate,dataType, executionValue, isCompleted, isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingCount,executionsDoneCount) "
-                             + "VALUES(@description, @nodeId, @sensorId, @sensorDbId, @executionDate, @dataType, @executionValue, @isCompleted, @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingCount,@executionsDoneCount); "
+                var sqlQuery = "INSERT INTO SensorsTasks (enabled,isCompleted,description, nodeId, sensorId, sensorDbId, executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
+                             + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 db_Id = db.Query<int>(sqlQuery, task).Single();
@@ -69,21 +69,27 @@ namespace MyNetSensors.NodeTasks
                 db.Open();
                 var sqlQuery =
                     "UPDATE SensorsTasks SET " +
+                    "enabled = @enabled, " +
+                    "isCompleted = @isCompleted, " +
                     "description = @description, " +
+                    //"nodeId = @nodeId, " +
+                    //"sensorId = @sensorId, " +
+                    //"sensorDbId = @sensorDbId, " +
                     "executionDate = @executionDate, " +
                     "dataType = @dataType, " +
                     "executionValue = @executionValue, " +
-                    "isCompleted = @isCompleted, " +
                     "isRepeating = @isRepeating, " +
                     "repeatingInterval = @repeatingInterval, " +
                     "repeatingAValue = @repeatingAValue, " +
                     "repeatingBValue = @repeatingBValue, " +
-                    "repeatingCount = @repeatingCount, " +
-                    "executionsDoneCount = @executionsDoneCount " +
+                    "repeatingNeededCount = @repeatingNeededCount, " +
+                    "repeatingDoneCount = @repeatingDoneCount " +
                     "WHERE db_Id = @db_Id";
                 db.Execute(sqlQuery, task);
             }
         }
+
+
 
         public SensorTask GetTask(int db_Id)
         {
@@ -162,6 +168,70 @@ namespace MyNetSensors.NodeTasks
             }
         }
 
+        public void UpdateTask(int db_Id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE SensorsTasks SET " +
+                    "isCompleted = @isCompleted, " +
+                    "executionDate = @executionDate, " +
+                    "executionValue = @executionValue, " +
+                    "repeatingDoneCount = @repeatingDoneCount " +
+                    "WHERE db_Id = @db_Id";
+                db.Execute(sqlQuery, new {
+                    db_Id,
+                    isCompleted,
+                    repeatingDoneCount,
+                    executionDate,
+                    executionValue
+                });
+            }
+        }
+
+        public void UpdateTask(int db_Id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE SensorsTasks SET " +
+                    "enabled = @enabled, " +
+                    "isCompleted = @isCompleted, " +
+                    "executionDate = @executionDate, " +
+                    "repeatingDoneCount = @repeatingDoneCount " +
+                    "WHERE db_Id = @db_Id";
+                db.Execute(sqlQuery, new
+                {
+                    db_Id,
+                    enabled,
+                    isCompleted,
+                    executionDate,
+                    repeatingDoneCount
+                });
+            }
+        }
+
+        public void UpdateTaskEnabled(int db_Id, bool enabled)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE SensorsTasks SET " +
+                    "enabled = @enabled " +
+                    "WHERE db_Id = @db_Id";
+                db.Execute(sqlQuery, new
+                {
+                    db_Id,
+                    enabled
+                });
+            }
+        }
+
+
+
         private void CreateSensorsTasksTable()
         {
             using (var db = new SqlConnection(connectionString))
@@ -173,6 +243,8 @@ namespace MyNetSensors.NodeTasks
                     string req = String.Format(
                         @"CREATE TABLE [dbo].[SensorsTasks](
 	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                    [enabled] [bit] NULL,       
+	                    [isCompleted] [bit] NULL,       
 	                    [description] [nvarchar](max) NULL,	        
 	                    [nodeId] [int] NULL,
 	                    [sensorId] [int] NULL,
@@ -180,13 +252,12 @@ namespace MyNetSensors.NodeTasks
 	                    [executionDate] [datetime] NULL,
 	                    [dataType] [int] NULL,
 	                    [executionValue] [nvarchar](max) NULL,
-	                    [isCompleted] [bit] NULL,       
 	                    [isRepeating] [bit] NULL,       
 	                    [repeatingInterval] [int] NULL,       
 	                    [repeatingAValue] [nvarchar](max) NULL,       
 	                    [repeatingBValue] [nvarchar](max) NULL,       
-	                    [repeatingCount] [int] NULL,       
-	                    [executionsDoneCount] [int] NULL
+	                    [repeatingNeededCount] [int] NULL,
+	                    [repeatingDoneCount] [int] NULL
                         ) ON [PRIMARY] ");
 
                     db.Query(req);
