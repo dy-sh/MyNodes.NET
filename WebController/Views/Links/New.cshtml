@@ -10,6 +10,11 @@
 <h4>@ViewBag.description</h4>
 <hr />
 
+<div>
+    @Html.ActionLink("Back to links list", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
+</div></br>
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -49,7 +54,7 @@
                 <select class="selectpicker" name="to">
                     @foreach (SensorData data in ViewBag.sensorDatas)
                     {
-                        <option value="@Model.toNodeId-@Model.toSensorId-@((int)data.dataType)">[@data.dataType]</option>
+                        <option value="@Model.toNodeId-@Model.toSensorId-@((int)data.dataType)">@ViewBag.description [@data.dataType]</option>
                     }
                 </select>
             </div>
@@ -67,14 +72,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to links list", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
 
-</div>
-
-<div id="target">
-    Click here
-</div>
 
 @section styles
 {
@@ -90,10 +88,6 @@
     <script>
 
         $('.selectpicker').selectpicker();
-        $("#target").click(function () {
-            alert($('from').find(":selected").attr("value"));
-            alert($('to').find(":selected").attr("value"));
-        });
         
     </script>
 }

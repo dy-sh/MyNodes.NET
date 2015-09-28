@@ -604,6 +604,10 @@ function updateDDMenuFromNode(node) {
     for (var i = 0; i < node.sensors.length; i++) {
         addTasksToDDMenu(node.sensors[i]);
     }
+
+    for (var i = 0; i < node.sensors.length; i++) {
+        addLinksToDDMenu(node.sensors[i]);
+    }
 }
 
 function addHistoryToDDMenu(sensor) {
@@ -643,5 +647,25 @@ function addTasksToDDMenu(sensor) {
     } else {
         $('#dropdownMenuTasks' + id)
             .html("<a href='../Tasks/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a>");
+    }
+}
+
+function addLinksToDDMenu(sensor) {
+    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+
+    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
+
+    var sensorName;
+    if (sensor.description != null)
+        sensorName = sensor.description;
+    else
+        sensorName = sensorType;
+
+    if ($('#dropdownMenuLinks' + id).length == 0) {
+        $('#dropdownMenuList' + sensor.ownerNodeId)
+            .append("<li id='dropdownMenuLinks" + id + "'><a href='../Links/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a></li>");
+    } else {
+        $('#dropdownMenuLinks' + id)
+            .html("<a href='../Links/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a>");
     }
 }

@@ -56,7 +56,7 @@ namespace MyNetSensors.WebController.Controllers
 
             ViewBag.nodes = gatewayDb.GetNodes();
             ViewBag.sensorDatas = sensor.GetAllData();
-            ViewBag.description = sensor.GetSimpleName1();
+            ViewBag.description = sensor.GetSimpleName2();
 
             SensorLink link = new SensorLink()
             {
@@ -100,14 +100,14 @@ namespace MyNetSensors.WebController.Controllers
                 fromSensorDbId = fromSensor.db_Id,
                 fromSensorDescription = String.Format("{0} {1}",
                     fromNode.GetSimpleName1(),
-                    fromSensor.GetSimpleName2()),
+                    fromSensor.GetSimpleName1()),
                 toNodeId = toNodeId,
                 toSensorId = toSensorId,
                 toDataType = toDataType,
                 toSensorDbId = toSensor.db_Id,
                 toSensorDescription = String.Format("{0} {1}",
                     toNode.GetSimpleName1(),
-                    toSensor.GetSimpleName2())
+                    toSensor.GetSimpleName1())
             };
 
 
