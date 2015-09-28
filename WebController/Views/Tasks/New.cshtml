@@ -7,6 +7,11 @@
 <h2>New Task</h2>
 <h4>@ViewBag.description</h4>
 <hr />
+<div>
+    @Html.ActionLink("Back to Tasks List", "List", new { id1 = Model.nodeId, id2 = Model.sensorId })
+</div>
+<br />
+<br/>
 
 @using (Html.BeginForm())
 {
@@ -21,8 +26,8 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            <label class="control-label col-sm-2">Task description</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3">Task description</label>
+            <div class="col-sm-9">
                 @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
             </div>
@@ -31,8 +36,8 @@
 
 
         <div class="form-group">
-            <label class="control-label col-sm-2">Execution date</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3">Execution date</label>
+            <div class="col-sm-9">
                 @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control" , @id = "datetimepicker1" } })
                 @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
             </div>
@@ -42,8 +47,8 @@
 
 
         <div class="form-group">
-            <label class="control-label col-sm-2">Repeat task</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3">Repeat task</label>
+            <div class="col-sm-9">
                 @Html.CheckBoxFor(model => model.isRepeating, new { @class = "switch", @data_size = "small", @data_label_width = "0", @id = "repeatTask" })
             </div>
         </div>
@@ -51,8 +56,8 @@
 
         <div id="nonRepeatingPanel">
             <div class="form-group">
-                <label class="control-label col-sm-2">Set value</label>
-                <div class="col-sm-10">
+                <label class="control-label col-sm-3">Set value</label>
+                <div class="col-sm-9">
                     @Html.EditorFor(model => model.executionValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
                 </div>
@@ -61,32 +66,32 @@
 
         <div id="repeatingPanel" style="display:none">
             <div class="form-group">
-                <label class="control-label col-sm-2">Repeat A value</label>
-                <div class="col-sm-10">
+                <label class="control-label col-sm-3">Repeat A value</label>
+                <div class="col-sm-9">
                     @Html.EditorFor(model => model.repeatingAValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Repeat B value</label>
-                <div class="col-sm-10">
+                <label class="control-label col-sm-3">Repeat B value</label>
+                <div class="col-sm-9">
                     @Html.EditorFor(model => model.repeatingBValue, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Repeat interval (ms)</label>
-                <div class="col-sm-10">
+                <label class="control-label col-sm-3">Repeat interval (ms)</label>
+                <div class="col-sm-9">
                     @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Repeat count<br /> (0 for infinity)</label>
-                <div class="col-sm-10">
+                <label class="control-label col-sm-3">Repeat count<br /> (0 for infinity)</label>
+                <div class="col-sm-9">
                     @Html.EditorFor(model => model.repeatingNeededCount, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.repeatingNeededCount, "", new { @class = "text-danger" })
                 </div>
@@ -94,7 +99,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-3 col-sm-9">
                 <div class="btn-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     @Html.ActionLink("Cancel", "List", new { id1 = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
@@ -104,10 +109,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to tasks list", "List", new { id1 = Model.nodeId, id2 = Model.sensorId })
 
-</div>
 
 
 @section styles

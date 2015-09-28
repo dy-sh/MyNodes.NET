@@ -11,6 +11,10 @@
 
 <p>
     @Html.ActionLink("Back to Control Nodes", "Control", "Gateway")
+    @if (ViewBag.description!=null)
+    {
+       @: | @Html.ActionLink("Show tasks for all nodes", "Index", "Tasks")
+    }
 </p>
 
 

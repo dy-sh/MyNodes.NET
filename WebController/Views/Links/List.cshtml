@@ -13,6 +13,10 @@
 
 <p>
     @Html.ActionLink("Back to Control Nodes", "Control", "Gateway")
+    @if (ViewBag.description != null)
+    {
+        @: | @Html.ActionLink("Show links for all nodes", "Index", "Links")
+    }
 </p>
 
 

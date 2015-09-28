@@ -33,18 +33,26 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            <label class="control-label col-sm-2">From</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3">From</label>
+            <div class="col-sm-9">
                 <select class="selectpicker" name="from">
                     @foreach (Node node in ViewBag.from)
                     {
-                        <optgroup label="@node.GetSimpleName2()">
+                        <optgroup label="@node.GetSimpleName1()">
                             @foreach (Sensor sensor in node.sensors)
                             {
                                 List<SensorData> datas = sensor.GetAllData();
-                                foreach (SensorData data in datas)
+
+                                if (datas.Count == 1)
                                 {
-                                    <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName2() [@data.dataType]</option>
+                                    <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
+                                }
+                                else
+                                {
+                                    foreach (SensorData data in datas)
+                                    {
+                                        <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                    }
                                 }
                             }
                         </optgroup>
@@ -54,18 +62,25 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-sm-2">To</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3">To</label>
+            <div class="col-sm-9">
                 <select class="selectpicker" name="to">
                     @foreach (Node node in ViewBag.to)
                     {
-                        <optgroup label="@node.GetSimpleName2()">
+                        <optgroup label="@node.GetSimpleName1()">
                             @foreach (Sensor sensor in node.sensors)
                             {
                                 List<SensorData> datas = sensor.GetAllData();
-                                foreach (SensorData data in datas)
+                                if (datas.Count == 1)
                                 {
-                                    <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName2() [@data.dataType]</option>
+                                    <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
+                                }
+                                else
+                                {
+                                    foreach (SensorData data in datas)
+                                    {
+                                        <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                    }
                                 }
                             }
                         </optgroup>
@@ -76,7 +91,7 @@
 
 
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-3 col-sm-9">
                 <div class="btn-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     @if (Model != null)
@@ -85,7 +100,7 @@
                     }
                     else
                     {
-                        @Html.ActionLink("Cancel", "List",null, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Cancel", "List", null, new { @class = "btn btn-default" })
                     }
                 </div>
             </div>
