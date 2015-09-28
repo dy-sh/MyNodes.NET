@@ -215,6 +215,11 @@
   <ItemGroup>
     <Content Include="Content\animate.css" />
     <Content Include="Content\animate.min.css" />
+    <Content Include="Content\bootstrap-datetimepicker-standalone.css" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-select.css" />
+    <Content Include="Content\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap-switch.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -271,6 +276,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-select.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap-switch.js" />
     <Content Include="Scripts\bootstrap-switch.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -279,6 +288,8 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\bootstrap-select.css.map" />
+    <Content Include="Scripts\bootstrap-select.js.map" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -372,10 +383,11 @@
     <Content Include="Views\Tasks\New.cshtml" />
     <Content Include="Views\Tasks\List.cshtml" />
     <Content Include="Views\Tasks\Edit.cshtml" />
+    <Content Include="Views\Links\List.cshtml" />
+    <Content Include="Views\Links\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Links\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -389,6 +401,10 @@
     <ProjectReference Include="..\Libraries\Gateway\Gateway.csproj">
       <Project>{3b0868ea-3030-43e2-b2b5-5e76dcb7ecb8}</Project>
       <Name>Gateway</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\NodesLinks\NodesLinks.csproj">
+      <Project>{708bdac4-b2aa-4a10-bf7b-3441763ecc72}</Project>
+      <Name>NodesLinks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\NodeTasks\NodeTasks.csproj">
       <Project>{c147c1c1-eb18-49fc-b4c9-18e03c57f636}</Project>

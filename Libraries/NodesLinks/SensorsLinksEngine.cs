@@ -43,13 +43,12 @@ namespace MyNetSensors.NodesLinks
         {
             foreach (var link in links)
             {
-                if (link.inNodeId == sensor.ownerNodeId
-                    && link.inSensorId == sensor.sensorId)
+                if (link.fromNodeId == sensor.ownerNodeId
+                    && link.fromSensorId == sensor.sensorId)
                 {
-                    SensorData oldData = sensor.GetData(link.inDataType.Value);
-                    SensorData newData = ConvertSensorData(oldData,link.outDataType);
-                    gateway.SendSensorState(link.outNodeId, link.outSensorId, newData);
-                  
+                    SensorData oldData = sensor.GetData(link.fromDataType.Value);
+                    SensorData newData = ConvertSensorData(oldData,link.toDataType);
+                    gateway.SendSensorState(link.toNodeId, link.toSensorId, newData);
                 }
             }
         }

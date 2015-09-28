@@ -100,5 +100,21 @@ namespace MyNetSensors.Gateway
             sensors.Add(sensor);
             return sensor;
         }
+
+        public string GetSimpleName1()
+        {
+            if (!String.IsNullOrEmpty(name))
+                return name;
+
+            return "Node "+nodeId;
+        }
+
+        public string GetSimpleName2()
+        {
+            if (!String.IsNullOrEmpty(name))
+                return String.Format("Node {0} ({1})", nodeId,name);
+
+            return "Node " + nodeId;
+        }
     }
 }

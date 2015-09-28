@@ -13,15 +13,15 @@ namespace MyNetSensors.NodesLinks
         [Key]
         public int db_Id { get; set; }
 
-        public int inSensorDbId { get; set; }
-        public int inNodeId { get; set; }
-        public int inSensorId { get; set; }
-        public SensorDataType? inDataType { get; set; }
+        public int fromSensorDbId { get; set; }
+        public int fromNodeId { get; set; }
+        public int fromSensorId { get; set; }
+        public SensorDataType? fromDataType { get; set; }
 
-        public int outSensorDbId { get; set; }
-        public int outNodeId { get; set; }
-        public int outSensorId { get; set; }
-        public SensorDataType? outDataType { get; set; }
+        public int toSensorDbId { get; set; }
+        public int toNodeId { get; set; }
+        public int toSensorId { get; set; }
+        public SensorDataType? toDataType { get; set; }
 
     }
 }

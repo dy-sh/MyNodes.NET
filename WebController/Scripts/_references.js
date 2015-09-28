@@ -1,5 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="bootstrap.js" />
+/// <reference path="bootstrap-datetimepicker.js" />
+/// <reference path="bootstrap-select.js" />
 /// <reference path="bootstrap-switch.js" />
 /// <reference path="jquery.signalR-2.2.0.js" />
 /// <reference path="jquery.validate.js" />

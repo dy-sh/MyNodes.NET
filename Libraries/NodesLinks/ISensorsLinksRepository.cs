@@ -15,16 +15,16 @@ namespace MyNetSensors.NodesLinks
         int AddLink(SensorLink link);
         void UpdateLink(SensorLink link);
         SensorLink GetLink(int db_Id);
-        List<SensorLink> GetIncomingLinks(int nodeId, int sensorId);
-        List<SensorLink> GetOutgoingLinks(int nodeId, int sensorId);
-        List<SensorLink> GetIncomingLinks(int sensorDbId);
-        List<SensorLink> GetOutgoingLinks(int sensorDbId);
+        List<SensorLink> GetLinksFrom(int nodeId, int sensorId);
+        List<SensorLink> GetLinksTo(int nodeId, int sensorId);
+        List<SensorLink> GetLinksFrom(int sensorDbId);
+        List<SensorLink> GetLinksTo(int sensorDbId);
         List<SensorLink> GetAllLinks();
         void DeleteLink(int db_Id);
-        void DeleteIncomingLinks(int nodeId, int sensorId);
-        void DeleteOutgoingLinks(int nodeId, int sensorId);
-        void DeleteIncomingLinks(int sensorDbId);
-        void DeleteOutgoingLinks(int sensorDbId);
+        void DeleteLinksFrom(int nodeId, int sensorId);
+        void DeleteLinksTo(int nodeId, int sensorId);
+        void DeleteLinksFrom(int sensorDbId);
+        void DeleteLinksTo(int sensorDbId);
         void DropAllLinks();
     }
 }

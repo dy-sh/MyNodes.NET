@@ -212,12 +212,17 @@ namespace MyNetSensors.Gateway
             return sensorType;
         }
 
-        public string GetDescrirtionOrType()
+        public string GetSimpleName1()
         {
             if (description != null)
                 return description;
             else
                 return MySensors.GetSimpleSensorType(sensorType);
+        }
+
+        public string GetSimpleName2()
+        {
+                return String.Format("Sensor {0} ({1})", sensorId, GetSimpleName1());
         }
     }
 }

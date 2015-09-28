@@ -43,7 +43,7 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.nodeId = sensor.ownerNodeId;
             ViewBag.sensorId = sensor.sensorId;
             ViewBag.db_Id = sensor.db_Id;
-            ViewBag.description = sensor.GetDescrirtionOrType();
+            ViewBag.description = sensor.GetSimpleName1();
 
             List<SensorData> samples = historyDb.GetSensorHistory(sensor.db_Id);
             return View(samples);
@@ -61,7 +61,7 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.nodeId = sensor.ownerNodeId;
             ViewBag.sensorId = sensor.sensorId;
             ViewBag.db_Id = sensor.db_Id;
-            ViewBag.description = sensor.GetDescrirtionOrType();
+            ViewBag.description = sensor.GetSimpleName1();
             ViewBag.autoscroll = autoscroll;
             ViewBag.style = style;
             if (start != null)
