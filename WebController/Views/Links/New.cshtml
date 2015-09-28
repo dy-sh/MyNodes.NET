@@ -11,8 +11,16 @@
 <hr />
 
 <div>
-    @Html.ActionLink("Back to links list", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
-</div></br>
+    @if (Model != null)
+    {
+        @Html.ActionLink("Back to Links List", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
+    }
+    else
+    {
+        @Html.ActionLink("Back to Links List", "List")
+    }
+</div>
+<br />
 
 
 @using (Html.BeginForm())
@@ -28,7 +36,7 @@
             <label class="control-label col-sm-2">From</label>
             <div class="col-sm-10">
                 <select class="selectpicker" name="from">
-                    @foreach (Node node in ViewBag.nodes)
+                    @foreach (Node node in ViewBag.from)
                     {
                         <optgroup label="@node.GetSimpleName2()">
                             @foreach (Sensor sensor in node.sensors)
@@ -36,10 +44,7 @@
                                 List<SensorData> datas = sensor.GetAllData();
                                 foreach (SensorData data in datas)
                                 {
-                                    if (node.nodeId!= Model.toNodeId|| sensor.sensorId!= Model.toSensorId)
-                                    {
-                                        <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName2() [@data.dataType]</option>
-                                    }
+                                    <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName2() [@data.dataType]</option>
                                 }
                             }
                         </optgroup>
@@ -52,9 +57,18 @@
             <label class="control-label col-sm-2">To</label>
             <div class="col-sm-10">
                 <select class="selectpicker" name="to">
-                    @foreach (SensorData data in ViewBag.sensorDatas)
+                    @foreach (Node node in ViewBag.to)
                     {
-                        <option value="@Model.toNodeId-@Model.toSensorId-@((int)data.dataType)">@ViewBag.description [@data.dataType]</option>
+                        <optgroup label="@node.GetSimpleName2()">
+                            @foreach (Sensor sensor in node.sensors)
+                            {
+                                List<SensorData> datas = sensor.GetAllData();
+                                foreach (SensorData data in datas)
+                                {
+                                    <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName2() [@data.dataType]</option>
+                                }
+                            }
+                        </optgroup>
                     }
                 </select>
             </div>
@@ -65,7 +79,14 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <div class="btn-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
-                    @Html.ActionLink("Cancel", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId }, new { @class = "btn btn-default" })
+                    @if (Model != null)
+                    {
+                        @Html.ActionLink("Cancel", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId }, new { @class = "btn btn-default" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Cancel", "List",null, new { @class = "btn btn-default" })
+                    }
                 </div>
             </div>
         </div>
@@ -88,6 +109,6 @@
     <script>
 
         $('.selectpicker').selectpicker();
-        
+
     </script>
 }

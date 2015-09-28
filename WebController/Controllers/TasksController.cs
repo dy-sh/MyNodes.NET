@@ -31,7 +31,10 @@ namespace MyNetSensors.WebController.Controllers
             tasksDb = new SensorsTasksRepositoryDapper(cs);
         }
 
-
+        public ActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
 
         public ActionResult List(int id1, int id2)
         {

@@ -592,18 +592,22 @@ function updateRgbwSlidersInArray(sliderId, lastHex) {
 
 function updateDDMenuFromNode(node) {
     var id = node.nodeId;
-
+    
     $('#dropdownMenuList' + id)
         .append("<li><a href='../Node/Settings/" + id + "'>Settings</a></li>")
-    .append("<li><a href='#'> . . .</a></li>");
+        .append("<li><a href='#'> . . .</a></li>");
 
     for (var i = 0; i < node.sensors.length; i++) {
         addHistoryToDDMenu(node.sensors[i]);
     }
 
+    $('#dropdownMenuList' + id).append("<li><a href='#'> . . .</a></li>");
+
     for (var i = 0; i < node.sensors.length; i++) {
         addTasksToDDMenu(node.sensors[i]);
     }
+
+    $('#dropdownMenuList' + id).append("<li><a href='#'> . . .</a></li>");
 
     for (var i = 0; i < node.sensors.length; i++) {
         addLinksToDDMenu(node.sensors[i]);

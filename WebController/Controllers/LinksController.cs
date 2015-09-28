@@ -26,45 +26,80 @@ namespace MyNetSensors.WebController.Controllers
             linksDb = new SensorsLinksRepositoryDapper(cs);
         }
 
-
-
-        public ActionResult List(int id1, int id2)
+        public ActionResult Index()
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            return RedirectToAction("List");
+        }
 
-            if (sensor == null)
-                return new HttpNotFoundResult();
+        public ActionResult List(int? id1 = null, int? id2 = null)
+        {
+            List<SensorLink> links;
 
-            ViewBag.nodeId = sensor.ownerNodeId;
-            ViewBag.sensorId = sensor.sensorId;
-            ViewBag.db_Id = sensor.db_Id;
-            ViewBag.description = sensor.GetSimpleName1();
+            if (id1 != null && id2 != null)
+            {
+                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
 
-            List<SensorLink> links = linksDb.GetLinksTo(id1, id2);
+                if (sensor == null)
+                    return new HttpNotFoundResult();
 
-            return View(links);
+                ViewBag.nodeId = sensor.ownerNodeId;
+                ViewBag.sensorId = sensor.sensorId;
+                ViewBag.db_Id = sensor.db_Id;
+                ViewBag.description = sensor.GetSimpleName1();
+
+                links = linksDb.GetLinksTo(id1.Value, id2.Value);
+                return View(links);
+
+            }
+            else if (RouteData.Values.Count<=2)
+            {
+                links = linksDb.GetAllLinks();
+                return View(links);
+            }
+
+            return new HttpNotFoundResult();
         }
 
 
         [HttpGet]
-        public ActionResult New(int id1, int id2)
+        public ActionResult New(int? id1 = null, int? id2 = null)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
-
-            if (sensor == null)
-                return new HttpNotFoundResult();
-
-            ViewBag.nodes = gatewayDb.GetNodes();
-            ViewBag.sensorDatas = sensor.GetAllData();
-            ViewBag.description = sensor.GetSimpleName2();
-
-            SensorLink link = new SensorLink()
+            if (id1 != null && id2 != null)
             {
-                toNodeId = sensor.ownerNodeId,
-                toSensorId = sensor.sensorId
-            };
-            
-            return View(link);
+                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+
+                if (sensor == null)
+                    return new HttpNotFoundResult();
+
+                ViewBag.from = gatewayDb.GetNodes();
+                ViewBag.description = sensor.GetSimpleName1();
+
+                List<Node> toList=new List<Node>();
+                Node toNode = gatewayDb.GetNodeByNodeId(sensor.ownerNodeId);
+                toNode.sensors.Clear();
+                toNode.sensors.Add(sensor);
+                toList.Add(toNode);
+
+                ViewBag.to = toList;
+
+
+                SensorLink link = new SensorLink()
+                {
+                    toNodeId = sensor.ownerNodeId,
+                    toSensorId = sensor.sensorId
+                };
+
+                return View(link);
+            }
+            else if (RouteData.Values.Count <= 2)
+            {
+                ViewBag.from = gatewayDb.GetNodes();
+                ViewBag.to = ViewBag.from;
+
+                return View();
+            }
+
+            return new HttpNotFoundResult();
         }
 
         [HttpPost]
@@ -119,7 +154,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-     
+
 
         public ActionResult Delete(int id)
         {
@@ -130,21 +165,48 @@ namespace MyNetSensors.WebController.Controllers
 
             linksDb.DeleteLink(id);
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
-            return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
+
+            if (Request.UrlReferrer != null)
+                return Redirect(Request.UrlReferrer.ToString());
+            else return RedirectToAction("List");
         }
 
-     
-        public ActionResult DeleteAll(int id1, int id2)
+
+        public ActionResult DeleteAll(int? id1 = null, int? id2 = null)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            if (id1 != null && id2 != null)
+            {
+                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
 
-            if (sensor == null)
-                return new HttpNotFoundResult();
+                if (sensor == null)
+                    return new HttpNotFoundResult();
 
-            linksDb.DeleteLinksTo(id1, id2);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
-            return RedirectToAction("List", new { id1, id2 });
+                linksDb.DeleteLinksTo(id1.Value, id2.Value);
+
+                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+
+                if (Request.UrlReferrer != null)
+                    return Redirect(Request.UrlReferrer.ToString());
+                else return RedirectToAction("List");
+            }
+            else if (RouteData.Values.Count <= 2)
+            {
+                linksDb.DropAllLinks();
+
+                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+
+                if (Request.UrlReferrer != null)
+                    return Redirect(Request.UrlReferrer.ToString());
+                else return RedirectToAction("List");
+            }
+
+            return new HttpNotFoundResult();
         }
+
+
+
+
+
 
 
 

@@ -25,10 +25,10 @@ namespace MyNetSensors.WebController.Controllers
     {
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
 
-        // GET: Gateway
+
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Control");
         }
 
         public ActionResult Messages()
