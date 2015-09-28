@@ -24,5 +24,6 @@ namespace MyNetSensors.NodeTasks
         void DeleteTasks(int nodeId,int sensorId);
         void DeleteCompleted(int nodeId, int sensorId);
         void DropAllTasks();
+        void DisableAllTasks();
     }
 }

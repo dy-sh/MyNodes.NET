@@ -19,7 +19,7 @@
                     <p class='text-success'></p>
                 </div>
                 <div id="gateway-info" style="display: none;">
-                    <ul class="list-group">
+                    <ul class="list-group small-margin">
                         <li class="list-group-item">
                             Nodes registered
                             <div class="pull-right" id="nodes-registered">Unknown</div>
@@ -29,55 +29,77 @@
                             <div class="pull-right" id="sensors-registered">Unknown</div>
                         </li>
                         <li class="list-group-item">
-                            Stop recording history for all nodes
-                            <div class="pull-right">
+                            Stop recording all nodes history
+                            <div class="pull-right pull-up-button">
                                 <a class="btn btn-default" href="StopRecordingHistory/">
                                     Stop
                                 </a>
-                            </div><br /><br />
+                            </div>
                         </li>
                         <li class="list-group-item">
-                            Delete nodes from the database
-                            <div class="pull-right">
+                            Delete all nodes
+                            <div class="pull-right pull-up-button">
                                 <button class="btn btn-default" data-href="DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
                                     Delete
                                 </button>
-                            </div><br /><br />
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading">History Database</div>
             <div class="panel-body">
-                <p>
-
-                </p>
-
-                <ul class="list-group">
+                <ul class="list-group small-margin">
                     <li class="list-group-item">
-                        Clear nodes history
-                        <div class="pull-right">
+                        Delete all nodes history
+                        <div class="pull-right pull-up-button">
                             <button class="btn btn-default" data-href="DropHistory/" data-toggle="modal" data-target="#confirm-history-delete">
-                                Clear
+                                Delete
                             </button>
-                        </div><br/><br/>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Tasks Database</div>
+            <div class="panel-body">
+                <ul class="list-group small-margin">
+                    <li class="list-group-item">
+                        Disable all tasks
+                        <div class="pull-right pull-up-button">
+                            <a class="btn btn-default" href="DisableTasks/">
+                                Disable
+                            </a>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        Delete all tasks
+                        <div class="pull-right pull-up-button">
+                            <button class="btn btn-default" data-href="DropTasks/" data-toggle="modal" data-target="#confirm-tasks-delete">
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading">Web server</div>
             <div class="panel-body">
                 <div id="webserver-info">
-                    <ul class="list-group">
+                    <ul class="list-group small-margin">
                         <li class="list-group-item">
                             Clients connected
                             <div class="pull-right" id="users-online">Unknown</div>
@@ -126,13 +148,30 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                Clear nodes history
+                Delete all nodes history
             </div>
             <div class="modal-body">
                 Are you sure you want to delete all nodes history?
             </div>
             <div class="modal-footer">
                 <a class="btn btn-danger btn-ok" href="DropHistory">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-tasks-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete all nodes tasks
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all nodes tasks?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" href="DropTasks">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

@@ -230,6 +230,17 @@ namespace MyNetSensors.NodeTasks
             }
         }
 
+        public void DisableAllTasks()
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE SensorsTasks SET " +
+                    "enabled = 0 ";
+                db.Execute(sqlQuery);
+            }
+        }
 
 
         private void CreateSensorsTasksTable()

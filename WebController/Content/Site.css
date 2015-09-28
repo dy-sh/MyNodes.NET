@@ -73,3 +73,12 @@ textarea {
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-major {
     border-color: #e5e5e5;
 }
+
+.small-margin {
+    margin-bottom: -5px;
+    margin-top: -5px;
+}
+
+.pull-up-button {
+    margin-top: -7px;
+}
