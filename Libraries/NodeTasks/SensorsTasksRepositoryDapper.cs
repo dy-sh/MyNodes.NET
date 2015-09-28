@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -23,6 +28,42 @@ namespace MyNetSensors.NodeTasks
         public void CreateDb()
         {
             CreateSensorsTasksTable();
+        }
+
+        private void CreateSensorsTasksTable()
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                try
+                {
+                    string req = String.Format(
+                        @"CREATE TABLE [dbo].[SensorsTasks](
+	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                    [enabled] [bit] NULL,       
+	                    [isCompleted] [bit] NULL,       
+	                    [description] [nvarchar](max) NULL,	        
+	                    [nodeId] [int] NULL,
+	                    [sensorId] [int] NULL,
+	                    [sensorDbId] [int] NULL,
+	                    [executionDate] [datetime] NULL,
+	                    [dataType] [int] NULL,
+	                    [executionValue] [nvarchar](max) NULL,
+	                    [isRepeating] [bit] NULL,       
+	                    [repeatingInterval] [int] NULL,       
+	                    [repeatingAValue] [nvarchar](max) NULL,       
+	                    [repeatingBValue] [nvarchar](max) NULL,       
+	                    [repeatingNeededCount] [int] NULL,
+	                    [repeatingDoneCount] [int] NULL
+                        ) ON [PRIMARY] ");
+
+                    db.Query(req);
+                }
+                catch
+                {
+                }
+            }
         }
 
         public bool IsDbExist()
@@ -243,40 +284,6 @@ namespace MyNetSensors.NodeTasks
         }
 
 
-        private void CreateSensorsTasksTable()
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                try
-                {
-                    string req = String.Format(
-                        @"CREATE TABLE [dbo].[SensorsTasks](
-	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
-	                    [enabled] [bit] NULL,       
-	                    [isCompleted] [bit] NULL,       
-	                    [description] [nvarchar](max) NULL,	        
-	                    [nodeId] [int] NULL,
-	                    [sensorId] [int] NULL,
-	                    [sensorDbId] [int] NULL,
-	                    [executionDate] [datetime] NULL,
-	                    [dataType] [int] NULL,
-	                    [executionValue] [nvarchar](max) NULL,
-	                    [isRepeating] [bit] NULL,       
-	                    [repeatingInterval] [int] NULL,       
-	                    [repeatingAValue] [nvarchar](max) NULL,       
-	                    [repeatingBValue] [nvarchar](max) NULL,       
-	                    [repeatingNeededCount] [int] NULL,
-	                    [repeatingDoneCount] [int] NULL
-                        ) ON [PRIMARY] ");
-
-                    db.Query(req);
-                }
-                catch
-                {
-                }
-            }
-        }
+     
     }
 }
