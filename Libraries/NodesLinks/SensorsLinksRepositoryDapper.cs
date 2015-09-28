@@ -21,10 +21,10 @@ namespace MyNetSensors.NodesLinks
         }
         public void CreateDb()
         {
-            CreateNodesLinksTable();
+            CreateSensorsLinksTable();
         }
 
-        private void CreateNodesLinksTable()
+        private void CreateSensorsLinksTable()
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -33,16 +33,18 @@ namespace MyNetSensors.NodesLinks
                 try
                 {
                     string req = String.Format(
-                        @"CREATE TABLE [dbo].[NodesLinks](
+                        @"CREATE TABLE [dbo].[SensorsLinks](
 	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [fromSensorDbId] [int] NULL,       
 	                    [fromNodeId] [int] NULL,       
 	                    [fromSensorId] [int] NULL,       
 	                    [fromDataType] [int] NULL,       
+	                    [fromSensorDescription] [nvarchar](max) NULL,       
 	                    [toSensorDbId] [int] NULL,       
 	                    [toNodeId] [int] NULL,       
 	                    [toSensorId] [int] NULL,
-	                    [toDataType] [int] NULL 
+	                    [toDataType] [int] NULL, 
+	                    [toSensorDescription] [nvarchar](max) NULL 
                         ) ON [PRIMARY] ");
 
                     db.Query(req);
@@ -80,8 +82,8 @@ namespace MyNetSensors.NodesLinks
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO NodesLinks (fromSensorDbId,fromNodeId,fromSensorId,fromDataType, toSensorDbId, toNodeId, toSensorId,toDataType) "
-                                          + "VALUES(@fromSensorDbId,@fromNodeId,@fromSensorId,@fromDataType, @toSensorDbId, @toNodeId, @toSensorId,@toDataType); "
+                var sqlQuery = "INSERT INTO SensorsLinks (fromSensorDbId,fromNodeId,fromSensorId,fromDataType,fromSensorDescription, toSensorDbId, toNodeId, toSensorId,toDataType,toSensorDescription) "
+                                          + "VALUES(@fromSensorDbId,@fromNodeId,@fromSensorId,@fromDataType,@fromSensorDescription, @toSensorDbId, @toNodeId, @toSensorId,@toDataType,@toSensorDescription); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 db_Id = db.Query<int>(sqlQuery, link).Single();
@@ -95,15 +97,17 @@ namespace MyNetSensors.NodesLinks
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesLinks SET " +
+                    "UPDATE SensorsLinks SET " +
                     "fromSensorDbId = @fromSensorDbId, " +
                     "fromNodeId = @fromNodeId, " +
                     "fromSensorId = @fromSensorId, " +
                     "fromDataType = @fromDataType, " +
+                    "fromSensorDescription = @fromSensorDescription, " +
                     "toSensorDbId = @toSensorDbId, " +
                     "toNodeId = @toNodeId, " +
                     "toSensorId = @toSensorId " +
                     "toDataType = @toDataType " +
+                    "toSensorDescription = @toSensorDescription " +
                     "WHERE db_Id = @db_Id";
                 db.Execute(sqlQuery, link);
             }
@@ -115,7 +119,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                link = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE db_Id=@db_Id",
+                link = db.Query<SensorLink>("SELECT * FROM SensorsLinks WHERE db_Id=@db_Id",
                     new { db_Id }).SingleOrDefault();
             }
 
@@ -128,7 +132,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE fromNodeId=@nodeId AND fromSensorId=@sensorId",
+                links = db.Query<SensorLink>("SELECT * FROM SensorsLinks WHERE fromNodeId=@nodeId AND fromSensorId=@sensorId",
                     new { nodeId, sensorId }).ToList();
             }
 
@@ -141,7 +145,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE toNodeId=@nodeId AND toSensorId=@sensorId",
+                links = db.Query<SensorLink>("SELECT * FROM SensorsLinks WHERE toNodeId=@nodeId AND toSensorId=@sensorId",
                     new { nodeId, sensorId }).ToList();
             }
 
@@ -154,7 +158,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE fromSensorDbId=@sensorDbId",
+                links = db.Query<SensorLink>("SELECT * FROM SensorsLinks WHERE fromSensorDbId=@sensorDbId",
                     new { sensorDbId }).ToList();
             }
 
@@ -167,7 +171,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<SensorLink>("SELECT * FROM NodesLinks WHERE toSensorDbId=@sensorDbId",
+                links = db.Query<SensorLink>("SELECT * FROM SensorsLinks WHERE toSensorDbId=@sensorDbId",
                     new { sensorDbId }).ToList();
             }
 
@@ -181,7 +185,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                links = db.Query<SensorLink>("SELECT * FROM NodesLinks").ToList();
+                links = db.Query<SensorLink>("SELECT * FROM SensorsLinks").ToList();
             }
 
             return links;
@@ -192,7 +196,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesLinks WHERE db_Id=@db_Id",
+                db.Query("DELETE FROM SensorsLinks WHERE db_Id=@db_Id",
                     new { db_Id });
             }
         }
@@ -202,7 +206,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesLinks WHERE fromNodeId=@nodeId AND fromSensorId=@sensorId",
+                db.Query("DELETE FROM SensorsLinks WHERE fromNodeId=@nodeId AND fromSensorId=@sensorId",
                     new { nodeId, sensorId });
             }
 
@@ -213,7 +217,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesLinks WHERE toNodeId=@nodeId AND toSensorId=@sensorId",
+                db.Query("DELETE FROM SensorsLinks WHERE toNodeId=@nodeId AND toSensorId=@sensorId",
                     new { nodeId, sensorId });
             }
 
@@ -224,7 +228,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesLinks WHERE fromSensorDbId=@sensorDbId",
+                db.Query("DELETE FROM SensorsLinks WHERE fromSensorDbId=@sensorDbId",
                     new { sensorDbId });
             }
 
@@ -235,7 +239,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesLinks WHERE toSensorDbId=@sensorDbId",
+                db.Query("DELETE FROM SensorsLinks WHERE toSensorDbId=@sensorDbId",
                     new { sensorDbId });
             }
 
@@ -248,7 +252,7 @@ namespace MyNetSensors.NodesLinks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("TRUNCATE TABLE [NodesLinks]");
+                db.Query("TRUNCATE TABLE [SensorsLinks]");
             }
         }
     }

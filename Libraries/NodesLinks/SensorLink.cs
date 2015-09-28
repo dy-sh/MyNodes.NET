@@ -17,11 +17,14 @@ namespace MyNetSensors.NodesLinks
         public int fromNodeId { get; set; }
         public int fromSensorId { get; set; }
         public SensorDataType? fromDataType { get; set; }
+        public string fromSensorDescription { get; set; }
 
         public int toSensorDbId { get; set; }
         public int toNodeId { get; set; }
         public int toSensorId { get; set; }
         public SensorDataType? toDataType { get; set; }
+        public string toSensorDescription { get; set; }
+
 
     }
 }

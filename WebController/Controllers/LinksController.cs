@@ -82,21 +82,35 @@ namespace MyNetSensors.WebController.Controllers
             SensorDataType toDataType;
             SensorDataType.TryParse(args[2], true, out toDataType);
 
+            Sensor fromSensor = gatewayDb.GetSensor(fromNodeId, fromSensorId);
+            Sensor toSensor = gatewayDb.GetSensor(toNodeId, toSensorId);
+
+            if (fromSensor == null || toSensor == null)
+                return new HttpNotFoundResult();
+
+
+            Node fromNode = gatewayDb.GetNodeByNodeId(fromSensor.ownerNodeId);
+            Node toNode = gatewayDb.GetNodeByNodeId(toSensor.ownerNodeId);
+
             SensorLink link = new SensorLink()
             {
                 fromNodeId = fromNodeId,
                 fromSensorId = fromSensorId,
                 fromDataType = fromDataType,
+                fromSensorDbId = fromSensor.db_Id,
+                fromSensorDescription = String.Format("{0} {1}",
+                    fromNode.GetSimpleName1(),
+                    fromSensor.GetSimpleName2()),
                 toNodeId = toNodeId,
                 toSensorId = toSensorId,
-                toDataType = toDataType
+                toDataType = toDataType,
+                toSensorDbId = toSensor.db_Id,
+                toSensorDescription = String.Format("{0} {1}",
+                    toNode.GetSimpleName1(),
+                    toSensor.GetSimpleName2())
             };
 
-            Sensor fromSensor = gatewayDb.GetSensor(link.toNodeId,link.toSensorId);
-            Sensor toSensor = gatewayDb.GetSensor(link.toNodeId,link.toSensorId);
 
-            if (fromSensor == null || toSensor==null)
-                return new HttpNotFoundResult();
 
             linksDb.AddLink(link);
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
