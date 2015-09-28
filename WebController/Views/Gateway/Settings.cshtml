@@ -52,7 +52,25 @@
 
     <div class="col-sm-6">
         <div class="panel panel-default">
-            <div class="panel-heading">History Database</div>
+            <div class="panel-heading">Links</div>
+            <div class="panel-body">
+                <ul class="list-group small-margin">
+                    <li class="list-group-item">
+                        Delete all sensors links
+                        <div class="pull-right pull-up-button">
+                            <button class="btn btn-default" data-href="DropLinks/" data-toggle="modal" data-target="#confirm-links-delete">
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">History</div>
             <div class="panel-body">
                 <ul class="list-group small-margin">
                     <li class="list-group-item">
@@ -68,9 +86,29 @@
         </div>
     </div>
 
+
+
+   
+
     <div class="col-sm-6">
         <div class="panel panel-default">
-            <div class="panel-heading">Tasks Database</div>
+            <div class="panel-heading">Web server</div>
+            <div class="panel-body">
+                <div id="webserver-info">
+                    <ul class="list-group small-margin">
+                        <li class="list-group-item">
+                            Clients connected
+                            <div class="pull-right" id="users-online">Unknown</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Tasks</div>
             <div class="panel-body">
                 <ul class="list-group small-margin">
                     <li class="list-group-item">
@@ -94,31 +132,13 @@
         </div>
     </div>
 
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Web server</div>
-            <div class="panel-body">
-                <div id="webserver-info">
-                    <ul class="list-group small-margin">
-                        <li class="list-group-item">
-                            Clients connected
-                            <div class="pull-right" id="users-online">Unknown</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
 </div>
 
 <div class="modal fade" id="confirm-nodes-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                Delete nodes from the database
+                Delete all nodes
             </div>
             <div class="modal-body">
                 Deleting nodes from the database will release their ID.
@@ -172,6 +192,23 @@
             </div>
             <div class="modal-footer">
                 <a class="btn btn-danger btn-ok" href="DropTasks">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-links-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete all sensors links
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all sensors links?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" href="DropLinks">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

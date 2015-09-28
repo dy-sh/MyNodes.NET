@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code.Hubs;
@@ -68,6 +69,14 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Settings");
         }
 
+        public async Task<ActionResult> DropLinks()
+        {
+            await DropLinksDatabase();
+
+            return RedirectToAction("Settings");
+        }
+
+
         public async Task<ActionResult> DropTasks()
         {
             await DisableAllTasks();
@@ -98,8 +107,8 @@ namespace MyNetSensors.WebController.Controllers
             await Task.Delay(2000);
             
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            ISensorsHistoryRepository historyDb = new SensorsHistoryRepositoryDapper(cs);
-            historyDb.DropAllSensorsHistory();
+            ISensorsHistoryRepository db = new SensorsHistoryRepositoryDapper(cs);
+            db.DropAllSensorsHistory();
 
 
             //todo check dropped
@@ -109,17 +118,25 @@ namespace MyNetSensors.WebController.Controllers
         private async Task DisableAllTasks()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            ISensorsTasksRepository tasksDb = new SensorsTasksRepositoryDapper(cs);
-            tasksDb.DisableAllTasks();
+            ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
+            db.DisableAllTasks();
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
         }
 
         private async Task DropTasksDatabase()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            ISensorsTasksRepository tasksDb = new SensorsTasksRepositoryDapper(cs);
-            tasksDb.DropAllTasks();
+            ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
+            db.DropAllTasks();
             context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+        }
+
+        private async Task DropLinksDatabase()
+        {
+            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
+            ISensorsLinksRepository db = new SensorsLinksRepositoryDapper(cs);
+            db.DropAllLinks();
+            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
         }
 
         private async Task StopRecordingNodesHistory()
