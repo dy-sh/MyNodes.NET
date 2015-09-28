@@ -33,8 +33,6 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult List(int? id1 = null, int? id2 = null)
         {
-            List<SensorLink> links;
-
             if (id1 != null && id2 != null)
             {
                 Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
@@ -47,13 +45,13 @@ namespace MyNetSensors.WebController.Controllers
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
 
-                links = linksDb.GetLinksTo(id1.Value, id2.Value);
+                List<SensorLink> links = linksDb.GetLinksTo(id1.Value, id2.Value);
                 return View(links);
 
             }
             else if (RouteData.Values.Count<=2)
             {
-                links = linksDb.GetAllLinks();
+                List<SensorLink> links = linksDb.GetAllLinks();
                 return View(links);
             }
 

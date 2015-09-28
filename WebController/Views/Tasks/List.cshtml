@@ -10,7 +10,6 @@
 <hr />
 
 <p>
-
     @Html.ActionLink("Back to Control Nodes", "Control", "Gateway")
 </p>
 
@@ -27,7 +26,7 @@
     <div class="panel-body">
         @if (Model == null || Model.Count() == 0)
             {
-            @:No scheduled tasks
+            @:No tasks
             }
             else
             {
@@ -35,30 +34,36 @@
                 @foreach (var task in Model)
                 {
                     <li class="list-group-item">
-                        <h4 class="list-group-item-heading">@task.description</h4>
                         <p class="list-group-item-text">
+                            <h4 class="list-group-item-heading">
+                                Task @task.db_Id
+                                @if (task.description != null)
+                                {
+                                    @: : @task.description
+                                }
+                            </h4>
                             <div class="btn-group pull-right">
                                 @if (!task.isCompleted)
                                 {
                                     if (task.enabled)
                                     {
-                                        @Html.ActionLink("Disable", "Disable", new { id = task.db_Id })
+                                        @Html.ActionLink("Disable", "Disable", new {id = task.db_Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Enable", "Enable", new { id = task.db_Id })
+                                        @Html.ActionLink("Enable", "Enable", new {id = task.db_Id})
                                         @: |
                                     }
 
                                     if (task.isRepeating)
                                     {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new { id = task.db_Id })
+                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.db_Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new { id = task.db_Id })
+                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.db_Id})
                                         @: |
                                     }
                                 }
@@ -66,48 +71,52 @@
                                 {
                                     if (task.isRepeating)
                                     {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new { id = task.db_Id })
+                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.db_Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new { id = task.db_Id })
+                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.db_Id})
                                         @: |
                                     }
                                 }
-                                @Html.ActionLink("Edit", "Edit", new { id = task.db_Id }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = task.db_Id })
+                                @Html.ActionLink("Edit", "Edit", new {id = task.db_Id}) |
+                                @Html.ActionLink("Delete", "Delete", new {id = task.db_Id})
                             </div>
+
+
+
                             @if (task.isCompleted)
                             {
-                                @:Completed
+                                <h5><span class="label label-success">Completed</span></h5>
+                            }
+                            else if (!task.enabled)
+                            {
+                                <h5><span class="label label-default">Disabled</span></h5>
                             }
                             else
                             {
-                                if (!task.enabled)
-                                {
-                                <p class="text-danger"> Task disabled <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></p>
-                                }
-                                @:Execution date: @task.executionDate<br>
-                                if (!task.isRepeating)
-                                {
-                                    @:Set value:@task.executionValue<br>
-                                }
-                                else
-                                {
-                                    @:Next value:@task.executionValue<br>
-                                    @:Interval: @task.repeatingInterval<br>
-                                    @:Executions done:@task.repeatingDoneCount<br>
-                                    if (task.repeatingNeededCount > 0)
-                                    {
-                                        @:Executions left:@(task.repeatingNeededCount - task.repeatingDoneCount)<br>
-                                    }
-
-                                }
+                                <h5><span class="label label-primary">Active</span></h5>
                             }
 
-                            </p>
-                        </li>
+
+                            @task.sensorDescription<br>
+
+                            Execution date: @task.executionDate<br>
+                            Set value:@task.executionValue<br>
+                            @if (task.isRepeating)
+                            {
+                                @:Repeat values: @task.repeatingAValue / @task.repeatingBValue<br>
+                                @:Repeat interval: @task.repeatingInterval<br>
+                                @:Executions done:@task.repeatingDoneCount<br>
+                                if (task.repeatingNeededCount > 0)
+                                {
+                                    @:Executions left:@(task.repeatingNeededCount - task.repeatingDoneCount)<br>
+                                }
+
+                            }
+                        </p>
+                    </li>
                 }
             </ul>
             <div class="btn-group pull-right" style="margin-top: -10px">

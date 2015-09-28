@@ -21,6 +21,7 @@ namespace MyNetSensors.NodeTasks
         public int nodeId { get; set; }
         public int sensorId { get; set; }
         public int sensorDbId { get; set; }
+        public string sensorDescription { get; set; }
         public DateTime executionDate { get; set; }
         public SensorDataType? dataType { get; set; }
         public string executionValue { get; set; }

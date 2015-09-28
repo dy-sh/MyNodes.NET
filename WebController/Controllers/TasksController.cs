@@ -36,21 +36,32 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List");
         }
 
-        public ActionResult List(int id1, int id2)
+        public ActionResult List(int? id1 = null, int? id2 = null)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            if (id1 != null && id2 != null)
+            {
+                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
 
-            if (sensor == null)
-                return new HttpNotFoundResult();
+                if (sensor == null)
+                    return new HttpNotFoundResult();
 
-            ViewBag.nodeId = sensor.ownerNodeId;
-            ViewBag.sensorId = sensor.sensorId;
-            ViewBag.db_Id = sensor.db_Id;
-            ViewBag.description = sensor.GetSimpleName1();
+                ViewBag.nodeId = sensor.ownerNodeId;
+                ViewBag.sensorId = sensor.sensorId;
+                ViewBag.db_Id = sensor.db_Id;
+                ViewBag.description = sensor.GetSimpleName1();
 
-            List<SensorTask> tasks = tasksDb.GetTasks(id1, id2);
+                List<SensorTask> tasks = tasksDb.GetTasks(id1.Value, id2.Value);
 
-            return View(tasks);
+                return View(tasks);
+            }
+
+            else if (RouteData.Values.Count <= 2)
+            {
+                List<SensorTask> tasks = tasksDb.GetAllTasks();
+                return View(tasks);
+            }
+
+            return new HttpNotFoundResult();
         }
 
 
@@ -62,12 +73,15 @@ namespace MyNetSensors.WebController.Controllers
             if (sensor == null)
                 return new HttpNotFoundResult();
 
+            Node node = gatewayDb.GetNodeByNodeId(sensor.ownerNodeId);
             ViewBag.description = sensor.GetSimpleName1();
 
             SensorTask task = new SensorTask
             {
                 nodeId = id1,
                 sensorId = id2,
+                sensorDbId = sensor.db_Id,
+                sensorDescription = string.Format("{0} {1}", node.GetSimpleName1(),sensor.GetSimpleName1()),
                 executionDate = DateTime.Now,
                 repeatingInterval = 1000,
                 enabled = true

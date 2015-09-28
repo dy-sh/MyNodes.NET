@@ -35,7 +35,7 @@ namespace MyNetSensors.NodeTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-
+                
                 try
                 {
                     string req = String.Format(
@@ -47,6 +47,7 @@ namespace MyNetSensors.NodeTasks
 	                    [nodeId] [int] NULL,
 	                    [sensorId] [int] NULL,
 	                    [sensorDbId] [int] NULL,
+	                    [sensorDescription] [nvarchar](max) NULL,
 	                    [executionDate] [datetime] NULL,
 	                    [dataType] [int] NULL,
 	                    [executionValue] [nvarchar](max) NULL,
@@ -94,8 +95,8 @@ namespace MyNetSensors.NodeTasks
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO SensorsTasks (enabled,isCompleted,description, nodeId, sensorId, sensorDbId, executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
-                             + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
+                var sqlQuery = "INSERT INTO SensorsTasks (enabled,isCompleted,description, nodeId, sensorId, sensorDbId,sensorDescription, executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
+                             + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId,@sensorDescription, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 db_Id = db.Query<int>(sqlQuery, task).Single();
@@ -116,6 +117,7 @@ namespace MyNetSensors.NodeTasks
                     //"nodeId = @nodeId, " +
                     //"sensorId = @sensorId, " +
                     //"sensorDbId = @sensorDbId, " +
+                    //"sensorDescription = @sensorDescription, " +
                     "executionDate = @executionDate, " +
                     "dataType = @dataType, " +
                     "executionValue = @executionValue, " +

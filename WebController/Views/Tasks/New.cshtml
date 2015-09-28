@@ -13,6 +13,8 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.nodeId)
     @Html.HiddenFor(model => model.sensorId)
+    @Html.HiddenFor(model => model.sensorDbId)
+    @Html.HiddenFor(model => model.sensorDescription)
     @Html.HiddenFor(model => model.dataType)
     @Html.HiddenFor(model => model.enabled)
 
