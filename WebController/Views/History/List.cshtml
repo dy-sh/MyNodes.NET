@@ -1,0 +1,27 @@
+﻿@using MyNetSensors.Gateway
+@model IEnumerable<MyNetSensors.Gateway.Node>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>History</h2>
+
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+</p>
+<hr />
+
+<div style="padding-left: 20px">
+    @foreach (Node node in Model)
+    {
+        <h4>@node.GetSimpleName1()</h4>
+        <div style="padding-left: 20px">
+            @foreach (Sensor sensor in node.sensors)
+            {
+            @Html.ActionLink(sensor.GetSimpleName1(), "Chart", new { id1 = sensor.ownerNodeId, id2 = sensor.sensorId })
+            <br />
+            }
+        </div>
+    }
+</div>

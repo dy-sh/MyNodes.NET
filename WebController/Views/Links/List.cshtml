@@ -1,23 +1,27 @@
-﻿@using Antlr.Runtime.Tree
-@using MyNetSensors.Gateway
-@model IEnumerable<MyNetSensors.NodesLinks.SensorLink>
+﻿@model IEnumerable<MyNetSensors.NodesLinks.SensorLink>
 
 
 @{
     ViewBag.Title = "Links";
 }
 
-<h2>Links</h2>
-<h4>@ViewBag.description</h4>
-<hr />
+@if (@ViewBag.description == null)
+{
+    <h2>Links</h2>
+}
+else
+{
+    <h2>Links for @ViewBag.description</h2>
+}
 
 <p>
-    @Html.ActionLink("Back to Control Nodes", "Control", "Gateway")
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
     @if (ViewBag.description != null)
     {
         @: | @Html.ActionLink("Show links for all nodes", "Index", "Links")
     }
 </p>
+<hr />
 
 
 

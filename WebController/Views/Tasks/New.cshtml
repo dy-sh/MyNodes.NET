@@ -4,13 +4,12 @@
     ViewBag.Title = "New Task";
 }
 
-<h2>New Task</h2>
-<h4>@ViewBag.description</h4>
-<hr />
+<h2>New Task for @ViewBag.description</h2>
 <div>
-    @Html.ActionLink("Back to Tasks List", "List", new { id1 = Model.nodeId, id2 = Model.sensorId })
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+    < @Html.ActionLink("Tasks List", "List", new {id1 = Model.nodeId, id2 = Model.sensorId})
 </div>
-<br />
+<hr />
 <br/>
 
 @using (Html.BeginForm())

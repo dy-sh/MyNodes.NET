@@ -6,20 +6,12 @@
 }
 
 <h2>@ViewBag.description History</h2>
-
-<h3>
-    <small>@Html.Raw("Node" + ViewBag.nodeId + " Sensor" + ViewBag.sensorId)</small>
-    
-    <div class="btn-group pull-right" role="group" aria-label="...">
-        <a class='btn btn-default' href='../../../Gateway/Control'>
-            Control Nodes
-        </a>
-        <a class='btn btn-default pull-right' href='../../Chart/@ViewBag.nodeId/@ViewBag.sensorId'>
-            History Chart
-        </a>
-    </div>
-</h3>
-<br />
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+    < @Html.ActionLink("History", "List", "History")
+    @Html.ActionLink("Show Chart", "Chart", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId },new {@class="btn btn-default pull-right"})
+</p>
+<hr />
 
 
 

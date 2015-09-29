@@ -6,20 +6,28 @@
     ViewBag.Title = "New Link";
 }
 
-<h2>New Link</h2>
-<h4>@ViewBag.description</h4>
-<hr />
+@if (@ViewBag.description == null)
+{
+    <h2>New Link</h2>
+}
+else
+{
+    <h2>New Link for @ViewBag.description</h2>
+}
 
-<div>
-    @if (Model != null)
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+    @if (ViewBag.description != null)
     {
-        @Html.ActionLink("Back to Links List", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
+        @: < @Html.ActionLink("Links", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
     }
     else
     {
-        @Html.ActionLink("Back to Links List", "List")
+        @: < @Html.ActionLink("Links", "List")
     }
-</div>
+</p>
+<hr />
+
 <br />
 
 
