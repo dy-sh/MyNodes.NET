@@ -4,12 +4,12 @@
     ViewBag.Title = "Node Settings";
 }
 
-<h2>
-    Node @Model.nodeId Settings
-    <a href="../../Gateway/Control" class="btn btn-default pull-right">Nodes Control</a>
-</h2>
-<br />
-
+<h2>Node @Model.nodeId Settings</h2>
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+    < @Html.ActionLink("Nodes Settings", "Index", "Node")
+</p>
+<hr/>
 
 <div class="panel panel-default" style="min-width: 390px; max-width: 390px">
     <div class="panel-heading">

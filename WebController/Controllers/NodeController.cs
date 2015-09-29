@@ -33,6 +33,17 @@ namespace MyNetSensors.WebController.Controllers
             gatewayDb = new GatewayRepositoryDapper(cs);
         }
 
+        public ActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
+
+        public ActionResult List()
+        {
+            var nodes = gatewayDb.GetNodes();
+            return View(nodes);
+        }
+
         [HttpGet]
         public ActionResult Settings(int id)
         {

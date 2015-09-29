@@ -387,6 +387,7 @@
     <Content Include="Views\Links\New.cshtml" />
     <Content Include="Views\Tasks\NewSelect.cshtml" />
     <Content Include="Views\History\List.cshtml" />
+    <Content Include="Views\Node\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

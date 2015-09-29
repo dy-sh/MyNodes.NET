@@ -1,0 +1,22 @@
+﻿@using MyNetSensors.Gateway
+@model IEnumerable<MyNetSensors.Gateway.Node>
+
+@{
+    ViewBag.Title = "Nodes Settings";
+}
+
+<h2>Nodes Settings</h2>
+
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+</p>
+<hr />
+
+<h4>Nodes:</h4>
+<div style="padding-left: 20px">
+    @foreach (Node node in Model)
+    {
+        @Html.ActionLink(node.GetSimpleName1(), "Settings", new { id = node.nodeId })
+        <br/>
+    }
+</div>
