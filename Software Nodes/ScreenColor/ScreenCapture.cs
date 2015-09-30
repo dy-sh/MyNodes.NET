@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using Microsoft.SqlServer.Server;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
 
-namespace ScreenColorServer
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+
+namespace ScreenColor
 {
     public class ScreenCapture
     {

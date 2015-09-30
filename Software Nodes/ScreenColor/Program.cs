@@ -1,5 +1,11 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
@@ -11,7 +17,6 @@ using System.Threading.Tasks;
 using MyNetSensors.Gateway;
 using MyNetSensors.SoftNodes;
 using MyNetSensors.SoftNodesSignalRClient;
-using ScreenColorServer;
 
 
 namespace ScreenColor
@@ -19,8 +24,10 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        const int CAPTURE_UPDATE_DELAY = 0;
-        const float HEIGHT_FROM_TOP = 0.4f;
+        private static string serverURL= "http://localhost:13122/";
+
+        static int captureUpdateDelay = 0;
+        static float heightFromTop = 0.4f;
 
         static float rTune = 1f;
         static float gTune = 0.5f;
@@ -40,9 +47,11 @@ namespace ScreenColor
 
         static void Main(string[] args)
         {
+            ReadSettings();
+
             softNodeClient = new SoftNodeClient();
             softNode = new SoftNode(softNodeClient);
-            softNode.ConnectToServer();
+            softNode.ConnectToServer(serverURL);
             StartScreenCapture();
             Console.WriteLine("Screen capture started");
 
@@ -50,6 +59,22 @@ namespace ScreenColor
             {
                 Console.ReadLine();
             }
+        }
+
+        static void ReadSettings()
+        {
+            //Set up dot instead of comma in float values
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
+            //read app.config
+            rTune = float.Parse(ConfigurationManager.AppSettings["RTune"]);
+            gTune= float.Parse(ConfigurationManager.AppSettings["GTune"]);
+            bTune= float.Parse(ConfigurationManager.AppSettings["BTune"]);
+            heightFromTop = float.Parse(ConfigurationManager.AppSettings["ScreenHeightFromTop"]);
+            captureUpdateDelay = int.Parse(ConfigurationManager.AppSettings["CapturingDelay"]);
+            serverURL = ConfigurationManager.AppSettings["ServerURL"];
         }
 
         private static String ColorToHex(Color color)
@@ -71,13 +96,13 @@ namespace ScreenColor
 
             while (isWorking)
             {
-                await Task.Delay(CAPTURE_UPDATE_DELAY);
+                await Task.Delay(captureUpdateDelay);
 
                 await Task.Run(() =>
                 {
                     CalculateCapturesPerSec();
 
-                    Color newScreenColor = ScreenCapture.GetScreenAverageColor(HEIGHT_FROM_TOP);
+                    Color newScreenColor = ScreenCapture.GetScreenAverageColor(heightFromTop);
 
                     newScreenColor = TuneColor(newScreenColor);
 
