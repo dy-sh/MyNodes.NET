@@ -50,9 +50,9 @@ namespace ScreenColor
             ReadSettings();
 
             softNodeClient = new SoftNodeClient();
-            softNode = new SoftNode(softNodeClient);
+            softNode = new SoftNode(softNodeClient,"Screen Color","1.0");
             softNode.ConnectToServer(serverURL);
-            StartScreenCapture();
+      //      StartScreenCapture();
             Console.WriteLine("Screen capture started");
 
             while (true)

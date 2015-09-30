@@ -31,6 +31,7 @@ namespace MyNetSensors.Gateway
         public Message()
         {
             dateTime = DateTime.Now;
+            isValid = true;
         }
 
         public override string ToString()

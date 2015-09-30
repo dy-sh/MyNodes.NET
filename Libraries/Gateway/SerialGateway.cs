@@ -136,12 +136,13 @@ namespace MyNetSensors.Gateway
         public void RecieveMessage(string message)
         {
             Message mes = ParseMessageFromString(message);
-            mes.incoming = true;
             RecieveMessage(mes);
         }
 
         public void RecieveMessage(Message message)
         {
+            message.incoming = true;
+
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
@@ -359,7 +360,6 @@ namespace MyNetSensors.Gateway
                 mes.ack = arguments[3] == "1";
                 mes.subType = Int32.Parse(arguments[4]);
                 mes.payload = arguments[5];
-                mes.isValid = true;
             }
             catch
             {
@@ -396,7 +396,6 @@ namespace MyNetSensors.Gateway
             message.payload = data.state;
             message.sensorId = sensorId;
             message.subType = (int)data.dataType;
-            message.isValid = true;
             SendMessage(message);
 
             if (OnSensorUpdatedEvent != null)
@@ -437,7 +436,6 @@ namespace MyNetSensors.Gateway
             mess.ack = false;
             mess.subType = (int)InternalDataType.I_ID_RESPONSE;
             mess.payload = freeId.ToString();
-            mess.isValid = true;
             SendMessage(mess);
         }
 
@@ -450,7 +448,6 @@ namespace MyNetSensors.Gateway
             mess.ack = false;
             mess.subType = (int)InternalDataType.I_CONFIG;
             mess.payload = "M";
-            mess.isValid = true;
             SendMessage(mess);
         }
 
@@ -480,7 +477,6 @@ namespace MyNetSensors.Gateway
             message.payload = "0";
             message.sensorId = 0;
             message.subType = (int)InternalDataType.I_REBOOT;
-            message.isValid = true;
             SendMessage(message);
         }
 

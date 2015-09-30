@@ -16,13 +16,24 @@ namespace MyNetSensors.SoftNodes
     {
         private ISoftNodeClient client;
 
-        public int nodeId = 100;//todo get nodeid from controller
+        private int nodeId = 100;//todo get nodeid from controller
+        private int sensorId;
+        private string nodeName;
+        private string nodeVersion;
+        private SensorType sensorType;
 
 
-        public SoftNode(ISoftNodeClient client)
+        public SoftNode(ISoftNodeClient client,string nodeName=null,string nodeVersion=null)
         {
             this.client = client;
+            this.nodeName = nodeName;
+            this.nodeVersion = nodeVersion;
+
             client.OnReceivedMessageEvent += OnReceivedSoftNodeMessage;
+            client.OnConnected += OnConnected;
+
+            if (client.IsConnected())
+                OnConnected();
         }
 
 
@@ -39,12 +50,9 @@ namespace MyNetSensors.SoftNodes
                 nodeId = nodeId,
                 sensorId = sensorId,
                 messageType = MessageType.C_SET,
-                subType = (int)data.dataType,
-                payload = data.state,
-                dateTime = DateTime.Now,
-                incoming = true,
                 ack = false,
-                isValid = true
+                subType = (int)data.dataType,
+                payload = data.state
             };
 
             client.SendMessage(message);
@@ -63,6 +71,95 @@ namespace MyNetSensors.SoftNodes
         public bool IsConnected()
         {
             return client.IsConnected();
+        }
+
+        public void OnConnected()
+        {
+            SendNodePresentation();
+
+            if (nodeName!=null)
+                SendNodeName();
+
+            if (nodeVersion!=null)
+                SendNodeVersion();
+
+            //SendSensorsPresentation();
+        }
+
+        public void SendNodePresentation()
+        {
+            Message message = new Message
+            {
+                nodeId = nodeId,
+                sensorId = 255,
+                messageType = MessageType.C_PRESENTATION,
+                ack = false,
+                subType = (int)SensorType.S_ARDUINO_NODE,
+                //payload = 
+                dateTime = DateTime.Now
+            };
+
+            client.SendMessage(message);
+        }
+
+
+        public void SendNodeName()
+        {
+            Message message = new Message
+            {
+                nodeId = nodeId,
+                sensorId = 255,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int)InternalDataType.I_SKETCH_NAME,
+                payload = nodeName,
+            };
+
+            client.SendMessage(message);
+        }
+
+        public void SendNodeVersion()
+        {
+            Message message = new Message
+            {
+                nodeId = nodeId,
+                sensorId = 255,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int)InternalDataType.I_SKETCH_VERSION,
+                payload = nodeVersion,
+            };
+
+            client.SendMessage(message);
+        }
+
+        public void SendSensorsPresentation()
+        {
+            Message message = new Message
+            {
+                nodeId = nodeId,
+                sensorId = sensorId,
+                messageType = MessageType.C_PRESENTATION,
+                ack = false,
+                subType = (int)sensorType,
+                //payload = 
+            };
+
+            client.SendMessage(message);
+        }
+
+        public void SetNodeName(string nodeName)
+        {
+            this.nodeName = nodeName;
+            if (IsConnected())
+                SendNodeName();
+        }
+
+        public void SetNodeVersion(string nodeVersion)
+        {
+            this.nodeVersion = nodeVersion;
+            if (IsConnected())
+                SendNodeName();
         }
     }
 }
