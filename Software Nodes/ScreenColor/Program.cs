@@ -36,6 +36,11 @@ namespace ScreenColor
         static bool isWorking;
         static Color screenColor;
 
+        private static int sensorId=1;
+        private static string nodeName= "Screen Color";
+        private static string nodeVersion= "1.0";
+        private static string sensorDescription= "Average Screen Color";
+
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
 
@@ -50,9 +55,16 @@ namespace ScreenColor
             ReadSettings();
 
             softNodeClient = new SoftNodeClient();
-            softNode = new SoftNode(softNodeClient,"Screen Color","1.0");
+            softNode = new SoftNode(softNodeClient,nodeName,nodeVersion);
             softNode.ConnectToServer(serverURL);
-      //      StartScreenCapture();
+
+            Sensor sensor = new Sensor();
+            sensor.sensorId = sensorId;
+            sensor.sensorType = SensorType.S_RGB_LIGHT;
+            sensor.description = sensorDescription;
+            softNode.AddSensor(sensor);
+
+            StartScreenCapture();
             Console.WriteLine("Screen capture started");
 
             while (true)
@@ -75,6 +87,8 @@ namespace ScreenColor
             heightFromTop = float.Parse(ConfigurationManager.AppSettings["ScreenHeightFromTop"]);
             captureUpdateDelay = int.Parse(ConfigurationManager.AppSettings["CapturingDelay"]);
             serverURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
+            nodeName = ConfigurationManager.AppSettings["NodeName"];
+            nodeVersion = ConfigurationManager.AppSettings["NodeVersion"];
         }
 
         private static String ColorToHex(Color color)
@@ -85,7 +99,7 @@ namespace ScreenColor
         public static void SendColor(Color color)
         {
             SensorData data = new SensorData(SensorDataType.V_RGB, ColorToHex(color));
-            softNode.SendSensorData(1, data);
+            softNode.SendSensorData(sensorId, data);
         }
 
         private static async void StartScreenCapture()
