@@ -24,7 +24,7 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        private static string serverURL= "http://localhost:13122/";
+        private static string serverURL = "http://localhost:13122/";
 
         static int captureUpdateDelay = 0;
         static float heightFromTop = 0.4f;
@@ -36,10 +36,11 @@ namespace ScreenColor
         static bool isWorking;
         static Color screenColor;
 
-        private static int sensorId=1;
-        private static string nodeName= "Screen Color";
-        private static string nodeVersion= "1.0";
-        private static string sensorDescription= "Average Screen Color";
+        private static int sensorId = 1;
+        private static int nodeId = 255;
+        private static string nodeName = "Screen Color";
+        private static string nodeVersion = "1.0";
+        private static string sensorDescription = "Average Screen Color";
 
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
@@ -55,8 +56,10 @@ namespace ScreenColor
             ReadSettings();
 
             softNodeClient = new SoftNodeClient();
-            softNode = new SoftNode(softNodeClient,nodeName,nodeVersion);
+            softNode = new SoftNode(softNodeClient, nodeId, nodeName, nodeVersion);
+            softNode.OnIdResponseReceived += OnIdResponseReceived;
             softNode.ConnectToServer(serverURL);
+
 
             Sensor sensor = new Sensor();
             sensor.sensorId = sensorId;
@@ -73,6 +76,17 @@ namespace ScreenColor
             }
         }
 
+        private static void OnIdResponseReceived(int nodeid)
+        {
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings.Remove("NodeId");
+            config.AppSettings.Settings.Add("NodeId", nodeid.ToString());
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+
+        }
+
         static void ReadSettings()
         {
             //Set up dot instead of comma in float values
@@ -82,11 +96,12 @@ namespace ScreenColor
 
             //read app.config
             rTune = float.Parse(ConfigurationManager.AppSettings["RTune"]);
-            gTune= float.Parse(ConfigurationManager.AppSettings["GTune"]);
-            bTune= float.Parse(ConfigurationManager.AppSettings["BTune"]);
+            gTune = float.Parse(ConfigurationManager.AppSettings["GTune"]);
+            bTune = float.Parse(ConfigurationManager.AppSettings["BTune"]);
             heightFromTop = float.Parse(ConfigurationManager.AppSettings["ScreenHeightFromTop"]);
             captureUpdateDelay = int.Parse(ConfigurationManager.AppSettings["CapturingDelay"]);
             serverURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
+            nodeId = Int32.Parse(ConfigurationManager.AppSettings["NodeId"]);
             nodeName = ConfigurationManager.AppSettings["NodeName"];
             nodeVersion = ConfigurationManager.AppSettings["NodeVersion"];
         }
@@ -164,8 +179,8 @@ namespace ScreenColor
             captureStartDate = DateTime.Now;
             screensCount = 0;
 
-            if(capturesPerSecond>1)
-            Console.WriteLine("Captured " + (int)capturesPerSecond + " screens/second");
+            if (capturesPerSecond > 1)
+                Console.WriteLine("Captured " + (int)capturesPerSecond + " screens/second");
             else
                 Console.WriteLine("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
 

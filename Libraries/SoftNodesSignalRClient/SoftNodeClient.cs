@@ -72,7 +72,16 @@ namespace MyNetSensors.SoftNodesSignalRClient
         public void SendMessage(Message message)
         {
             if (IsConnected())
-            hubProxy.Invoke("ReceiveMessage", message).Wait();
+            {
+                try
+                {
+                    hubProxy.Invoke("ReceiveMessage", message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Sending message failed: "+e);
+                }
+            }
         }
 
         public void OnReceivedMessage(Message message)

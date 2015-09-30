@@ -12,17 +12,29 @@ using MyNetSensors.Gateway;
 
 namespace MyNetSensors.SoftNodes
 {
+    public delegate void OnIdResponseReceivedHandler (int nodeId);
     public class SoftNode
     {
         private ISoftNodeClient client;
         private Node node;
 
-        public SoftNode(ISoftNodeClient client,string nodeName=null,string nodeVersion=null)
+        public event OnIdResponseReceivedHandler OnIdResponseReceived;
+        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client">client for connection</param>
+        /// <param name="nodeId">if nodeId==255, node will ask id from gateway</param>
+        /// <param name="nodeName">node name for node presentation</param>
+        /// <param name="nodeVersion">node version for node presentation</param>
+        public SoftNode(ISoftNodeClient client,int nodeId=255,string nodeName = null, string nodeVersion = null)
         {
             this.client = client;
             node = new Node();
             node.name = nodeName;
             node.version = nodeVersion;
+            node.nodeId = nodeId;
 
             client.OnReceivedMessageEvent += OnReceivedSoftNodeMessage;
             client.OnConnected += OnConnected;
@@ -34,8 +46,26 @@ namespace MyNetSensors.SoftNodes
 
         private void OnReceivedSoftNodeMessage(Message message)
         {
-            if (message.nodeId== node.nodeId)
-                 Console.WriteLine(message.ToString());
+            if (message.nodeId == node.nodeId)
+            {
+                Console.WriteLine(message.ToString());
+
+
+                //if ID_RESPONSE
+                if (message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_ID_RESPONSE)
+                {
+                    node.nodeId = Int32.Parse(message.payload);
+
+                    if (OnIdResponseReceived != null)
+                        OnIdResponseReceived(node.nodeId);
+
+                    SendPresentation();
+                }
+
+                if (OnReceivedMessageEvent != null)
+                    OnReceivedMessageEvent(message);
+            }
         }
 
         public void SendSensorData(int sensorId, SensorData data)
@@ -53,7 +83,7 @@ namespace MyNetSensors.SoftNodes
             client.SendMessage(message);
         }
 
-        public void ConnectToServer(string url= "http://localhost:13122/")
+        public void ConnectToServer(string url = "http://localhost:13122/")
         {
             client.ConnectToServer(url);
         }
@@ -70,22 +100,30 @@ namespace MyNetSensors.SoftNodes
 
         private void OnConnected()
         {
+            if (node.nodeId == 255)
+                SendIdRequest();
+            else
+                SendPresentation();
+        }
+
+        private void SendPresentation()
+        {
             SendNodePresentation();
 
-            if (node.name!=null)
+            if (node.name != null)
                 SendNodeName();
 
             if (node.version != null)
                 SendNodeVersion();
 
-            if (node.sensors!=null)
+            if (node.sensors != null)
                 foreach (var sensor in node.sensors)
                 {
                     SendSensorPresentation(sensor);
                 }
         }
 
-        public void SendNodePresentation()
+        private void SendNodePresentation()
         {
             Message message = new Message
             {
@@ -102,7 +140,7 @@ namespace MyNetSensors.SoftNodes
         }
 
 
-        public void SendNodeName()
+        private void SendNodeName()
         {
             Message message = new Message
             {
@@ -117,7 +155,7 @@ namespace MyNetSensors.SoftNodes
             client.SendMessage(message);
         }
 
-        public void SendNodeVersion()
+        private void SendNodeVersion()
         {
             Message message = new Message
             {
@@ -134,14 +172,14 @@ namespace MyNetSensors.SoftNodes
 
 
 
-        public void SetNodeName(string nodeName)
+        private void SetNodeName(string nodeName)
         {
             node.name = nodeName;
             if (IsConnected())
                 SendNodeName();
         }
 
-        public void SetNodeVersion(string nodeVersion)
+        private void SetNodeVersion(string nodeVersion)
         {
             node.version = nodeVersion;
             if (IsConnected())
@@ -165,6 +203,21 @@ namespace MyNetSensors.SoftNodes
                 ack = false,
                 subType = (int)sensor.sensorType,
                 payload = sensor.description
+            };
+
+            client.SendMessage(message);
+        }
+
+        private void SendIdRequest()
+        {
+            Message message = new Message
+            {
+                nodeId = 255,
+                sensorId = 255,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int)InternalDataType.I_ID_REQUEST,
+                payload = node.version,
             };
 
             client.SendMessage(message);
