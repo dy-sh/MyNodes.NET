@@ -32,7 +32,8 @@ namespace MyNetSensors.SerialController_Console
         private static SensorsTasksEngine sensorsTasksEngine;
         private static ISensorsLinksRepository sensorsLinksDb;
         private static SensorsLinksEngine sensorsLinksEngine;
-        private static ISoftNodesServer _softNodesServer;
+        private static ISoftNodesServer softNodesServer;
+        private static SoftNodesController softNodesController;
 
         private static string serialPortName;
 
@@ -242,8 +243,9 @@ namespace MyNetSensors.SerialController_Console
         {
             Console.WriteLine("Starting soft nodes controller... ");
 
-            _softNodesServer = new SoftNodesServer();
-            _softNodesServer.StartServer();
+            softNodesServer = new SoftNodesServer();
+            softNodesController=new SoftNodesController(softNodesServer,gateway);
+            softNodesServer.StartServer();
         }
 
         private static string SelectPort()

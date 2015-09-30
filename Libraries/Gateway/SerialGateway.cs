@@ -58,7 +58,7 @@ namespace MyNetSensors.Gateway
                 Disconnect();
 
             this.serialPort = serialPort;
-            this.serialPort.OnDataReceivedEvent += RecieveSerialMessage;
+            this.serialPort.OnDataReceivedEvent += RecieveMessage;
             this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             isConnected = true;
 
@@ -73,7 +73,7 @@ namespace MyNetSensors.Gateway
             isConnected = false;
             if (serialPort != null)
             {
-                serialPort.OnDataReceivedEvent -= RecieveSerialMessage;
+                serialPort.OnDataReceivedEvent -= RecieveMessage;
                 serialPort.OnDisconnectedEvent -= OnSerialPortDisconnectedEvent;
                 serialPort = null;
             }
@@ -133,38 +133,41 @@ namespace MyNetSensors.Gateway
         }
 
 
-        private void RecieveSerialMessage(string message)
+        public void RecieveMessage(string message)
         {
-
             Message mes = ParseMessageFromString(message);
             mes.incoming = true;
+            RecieveMessage(mes);
+        }
 
+        public void RecieveMessage(Message message)
+        {
             if (storeMessages)
-                messagesLog.AddNewMessage(mes);
+                messagesLog.AddNewMessage(message);
 
             if (OnMessageRecievedEvent != null)
-                OnMessageRecievedEvent(mes);
+                OnMessageRecievedEvent(message);
 
-            DebugTxRx(String.Format("RX: {0}", mes.ToString()));
+            DebugTxRx(String.Format("RX: {0}", message.ToString()));
 
-            if (mes.isValid)
+            if (message.isValid)
             {
                 //Gateway ready
-                if (mes.messageType == MessageType.C_INTERNAL
-                    && mes.subType == (int)InternalDataType.I_GATEWAY_READY)
+                if (message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_GATEWAY_READY)
                     return;
 
 
                 //Gateway log message
-                if (mes.messageType == MessageType.C_INTERNAL
-                    && mes.subType == (int)InternalDataType.I_LOG_MESSAGE)
+                if (message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_LOG_MESSAGE)
                     return;
 
                 //New ID request
-                if (mes.nodeId == 255)
+                if (message.nodeId == 255)
                 {
-                    if (mes.messageType == MessageType.C_INTERNAL
-                        && mes.subType == (int)InternalDataType.I_ID_REQUEST)
+                    if (message.messageType == MessageType.C_INTERNAL
+                        && message.subType == (int)InternalDataType.I_ID_REQUEST)
                         if (enableAutoAssignId)
                             SendNewIdResponse();
 
@@ -172,17 +175,17 @@ namespace MyNetSensors.Gateway
                 }
 
                 //Metric system request
-                if (mes.messageType == MessageType.C_INTERNAL
-                    && mes.subType == (int)InternalDataType.I_CONFIG)
-                    SendMetricResponse(mes.nodeId);
+                if (message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_CONFIG)
+                    SendMetricResponse(message.nodeId);
 
                 //Sensor request
-                if (mes.messageType == MessageType.C_REQ)
-                    ProceedRequestMessage(mes);
+                if (message.messageType == MessageType.C_REQ)
+                    ProceedRequestMessage(message);
 
 
-                UpdateNodeFromMessage(mes);
-                UpdateSensorFromMessage(mes);
+                UpdateNodeFromMessage(message);
+                UpdateSensorFromMessage(message);
             }
         }
 

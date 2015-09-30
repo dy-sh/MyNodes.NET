@@ -42,12 +42,9 @@ namespace MyNetSensors.SoftNodesSignalRServer
 
         public void OnReceivedMessage(Message message)
         {
-            Console.WriteLine(message.ToString());
+            //Console.WriteLine(message.ToString());
             if(OnReceivedMessageEvent!=null)
                 OnReceivedMessageEvent(message);
-
-            message.payload = "ok";
-            SendMessage(message);
         }
 
     }
