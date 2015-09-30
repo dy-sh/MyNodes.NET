@@ -139,7 +139,7 @@ namespace SerialController_Windows.Views
             }
         }
 
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        private void OnClearNodesListEvent()
         {
             sendSensorsList.Clear();
             RedrawAllNodes();

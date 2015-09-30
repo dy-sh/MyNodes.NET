@@ -78,7 +78,7 @@ namespace MyNetSensors.NodeTasks
             updateTasksTimer.Start();
         }
 
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        private void OnClearNodesListEvent()
         {
             tasks.Clear();
             db.DropAllTasks();

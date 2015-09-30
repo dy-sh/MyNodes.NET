@@ -33,8 +33,8 @@ namespace SerialController_Windows.Code
         private bool isConnected;
 
         public event ReceivedDataEventHandler ReceivedDataEvent;
-        public event EventHandler OnConnectedEvent;
-        public event EventHandler OnDisconnectedEvent;
+        public event Action OnConnectedEvent;
+        public event Action OnDisconnectedEvent;
 
         private SerialDevice serialPort = null;
         DataWriter dataWriteObject = null;
@@ -122,7 +122,7 @@ namespace SerialController_Windows.Code
                 ReadCancellationTokenSource = new CancellationTokenSource();
                 StartReading();
 
-                if (OnConnectedEvent != null) OnConnectedEvent(this,null);
+                if (OnConnectedEvent != null) OnConnectedEvent();
             }
             catch (Exception ex)
             {
@@ -267,7 +267,7 @@ namespace SerialController_Windows.Code
         private void CloseDevice()
         {
             isConnected = false;
-            if (OnDisconnectedEvent != null) OnDisconnectedEvent(this, null);
+            if (OnDisconnectedEvent != null) OnDisconnectedEvent();
 
             if (serialPort != null)
             {

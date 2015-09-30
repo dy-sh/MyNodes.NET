@@ -13,8 +13,8 @@ namespace MyNetSensors.Gateway
     public interface IComPort
     {
         event OnDataReceivedEventHandler OnDataReceivedEvent;
-        event EventHandler OnConnectedEvent;
-        event EventHandler OnDisconnectedEvent;
+        event Action OnConnectedEvent;
+        event Action OnDisconnectedEvent;
 
         List<string> GetPortsList();
         void Connect(int portIndex, int baudRate);

@@ -33,7 +33,7 @@ namespace MyNetSensors.NodesLinks
             links = db.GetAllLinks();
         }
 
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        private void OnClearNodesListEvent()
         {
             links.Clear();
             db.DropAllLinks();

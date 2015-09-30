@@ -128,12 +128,12 @@ namespace SerialController_Windows.Code
         }
 
 
-        private void OnClearMessages(object sender, EventArgs e)
+        private void OnClearMessages()
         {
             DropMessages();
         }
 
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        private void OnClearNodesListEvent()
         {
             DropNodes();
         }

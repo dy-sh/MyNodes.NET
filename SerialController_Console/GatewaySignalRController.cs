@@ -21,11 +21,11 @@ namespace MyNetSensors.SerialController_Console
     {
         public event DebugMessageEventHandler OnDebugTxRxMessage;
         public event DebugMessageEventHandler OnDebugStateMessage;
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
-        public event EventHandler OnConnectionFailed;
-        public event EventHandler OnAuthorizationCompleted;
-        public event EventHandler OnAuthorizationFailed;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
+        public event Action OnConnectionFailed;
+        public event Action OnAuthorizationCompleted;
+        public event Action OnAuthorizationFailed;
         private bool isAuthorized;
 
         private HubConnection hubConnection;
@@ -111,7 +111,7 @@ namespace MyNetSensors.SerialController_Console
 
 
                 if (OnConnected != null && IsConnected())
-                    OnConnected(this, null);
+                    OnConnected();
 
                 // DebugState("Connected.");
 
@@ -121,7 +121,7 @@ namespace MyNetSensors.SerialController_Console
             {
                 DebugState("Can`t connect.");
                 if (OnConnectionFailed != null)
-                    OnConnectionFailed(this, null);
+                    OnConnectionFailed();
                 return false;
             }
 
@@ -170,7 +170,7 @@ namespace MyNetSensors.SerialController_Console
                 hubConnection.Stop();
 
             if (OnDisconnected != null)
-                OnDisconnected(this, null);
+                OnDisconnected();
         }
 
 
@@ -179,7 +179,7 @@ namespace MyNetSensors.SerialController_Console
             DebugState("Authorization failed.");
             isAuthorized = false;
             if (OnAuthorizationFailed != null)
-                OnAuthorizationFailed(this, null);
+                OnAuthorizationFailed();
         }
 
         private void AuthorizationCompleted()
@@ -187,18 +187,18 @@ namespace MyNetSensors.SerialController_Console
             DebugState("Connected. Authorization completed.");
             isAuthorized = true;
             if (OnAuthorizationCompleted != null)
-                OnAuthorizationCompleted(this, null);
+                OnAuthorizationCompleted();
         }
 
 
-        private void OnGatewayConnectedEvent(object sender, EventArgs e)
+        private void OnGatewayConnectedEvent()
         {
             if (!IsConnected()) return;
 
             hubProxy.Invoke("OnGatewayConnectedEvent");
         }
 
-        private void OnGatewayDisconnectedEvent(object sender, EventArgs e)
+        private void OnGatewayDisconnectedEvent()
         {
             if (!IsConnected()) return;
 
@@ -265,14 +265,14 @@ namespace MyNetSensors.SerialController_Console
             hubProxy.Invoke("OnNewSensorEvent", sensor);
         }
 
-        private void OnClearNodesListEvent(object sender, EventArgs e)
+        private void OnClearNodesListEvent()
         {
             if (!IsConnected()) return;
 
             hubProxy.Invoke("OnClearNodesListEvent");
         }
 
-        private void OnClearMessages(object sender, EventArgs e)
+        private void OnClearMessages()
         {
             hubProxy.Invoke("OnClearMessages");
         }

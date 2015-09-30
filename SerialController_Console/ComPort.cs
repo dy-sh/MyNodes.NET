@@ -16,8 +16,8 @@ namespace MyNetSensors.SerialController_Console
     public class ComPort : IComPort
     {
         public event OnDataReceivedEventHandler OnDataReceivedEvent;
-        public event EventHandler OnConnectedEvent;
-        public event EventHandler OnDisconnectedEvent;
+        public event Action OnConnectedEvent;
+        public event Action OnDisconnectedEvent;
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
         public event DebugMessageEventHandler OnDebugTxRxMessage;
@@ -80,7 +80,7 @@ namespace MyNetSensors.SerialController_Console
                 DebugPortState(String.Format("Connected to port {0}.", portName));
 
                 if (OnConnectedEvent != null)
-                    OnConnectedEvent(this,null);
+                    OnConnectedEvent();
             }
             catch (Exception ex)
             {
@@ -134,7 +134,7 @@ namespace MyNetSensors.SerialController_Console
             serialPort = null;
 
             if (OnDisconnectedEvent != null)
-                OnDisconnectedEvent(this, null);
+                OnDisconnectedEvent();
         }
 
 

@@ -22,7 +22,7 @@ namespace SerialController_Windows.Code
         private List<Message> messages = new List<Message>();
 
         public event OnNewMessageLoggedEventHandler OnNewMessageLogged;
-        public event EventHandler OnClearMessages;
+        public event Action OnClearMessages;
 
 
         public List<Message> GetAllMessages()
@@ -52,7 +52,7 @@ namespace SerialController_Windows.Code
         public void ClearLog()
         {
             if (OnClearMessages != null)
-                OnClearMessages(this,null);
+                OnClearMessages();
 
             messages.Clear();
         }

@@ -116,12 +116,12 @@ namespace SerialController_Windows
             }
         }
 
-        public void DeviceConnected(object sender, object e)
+        public void DeviceConnected()
         {
             RefrashInterface();
         }
 
-        public void DeviceDisconnected(object sender, object e)
+        public void DeviceDisconnected()
         {
             RefrashInterface();
         }

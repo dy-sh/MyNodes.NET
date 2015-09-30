@@ -58,7 +58,7 @@ namespace MyNetSensors.SerialController_Console
 
 
 
-        private static void OnDisconnectedEvent(object sender, EventArgs e)
+        private static void OnDisconnectedEvent()
         {
             ConnectToSerialPort();
         }

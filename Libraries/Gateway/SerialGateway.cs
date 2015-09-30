@@ -30,9 +30,9 @@ namespace MyNetSensors.Gateway
         public event NodeEventHandler OnNodeBatteryUpdatedEvent;
         public event SensorEventHandler OnNewSensorEvent;
         public event SensorEventHandler OnSensorUpdatedEvent;
-        public event EventHandler OnClearNodesListEvent;
-        public event EventHandler OnDisconnectedEvent;
-        public event EventHandler OnConnectedEvent;
+        public event Action OnClearNodesListEvent;
+        public event Action OnDisconnectedEvent;
+        public event Action OnConnectedEvent;
         public event DebugMessageEventHandler OnDebugTxRxMessage;
         public event DebugMessageEventHandler OnDebugGatewayStateMessage;
 
@@ -65,7 +65,7 @@ namespace MyNetSensors.Gateway
             DebugGatewayState(String.Format("Gateway connected."));
 
             if (OnConnectedEvent != null)
-                OnConnectedEvent(this, null);
+                OnConnectedEvent();
         }
 
         public void Disconnect()
@@ -82,7 +82,7 @@ namespace MyNetSensors.Gateway
 
 
             if (OnDisconnectedEvent != null)
-                OnDisconnectedEvent(this,null);
+                OnDisconnectedEvent();
         }
 
         public bool IsConnected()
@@ -90,7 +90,7 @@ namespace MyNetSensors.Gateway
             return (isConnected && serialPort.IsConnected());
         }
 
-        private void OnSerialPortDisconnectedEvent(object sender, EventArgs e)
+        private void OnSerialPortDisconnectedEvent()
         {
             Disconnect();
         }
@@ -459,7 +459,7 @@ namespace MyNetSensors.Gateway
             nodes.Clear();
 
             if (OnClearNodesListEvent != null)
-                OnClearNodesListEvent(this, null);
+                OnClearNodesListEvent();
         }
 
         public async Task SendRebootToAllNodes()

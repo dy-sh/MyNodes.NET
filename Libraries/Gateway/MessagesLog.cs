@@ -19,7 +19,7 @@ namespace MyNetSensors.Gateway
         private List<Message> messages = new List<Message>();
 
         public event OnNewMessageLoggedEventHandler OnNewMessageLogged;
-        public event EventHandler OnClearMessages;
+        public event Action OnClearMessages;
 
 
         public List<Message> GetAllMessages()
@@ -49,7 +49,7 @@ namespace MyNetSensors.Gateway
         public void ClearLog()
         {
             if (OnClearMessages != null)
-                OnClearMessages(this,null);
+                OnClearMessages();
 
             messages.Clear();
         }
