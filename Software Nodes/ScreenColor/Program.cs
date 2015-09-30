@@ -19,7 +19,7 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        const int CAPTURE_UPDATE_DELAY = 0;
+        const int CAPTURE_UPDATE_DELAY = 1000;
         const float HEIGHT_FROM_TOP = 0.4f;
 
 
@@ -50,7 +50,7 @@ namespace ScreenColor
         public static void SendColor(Color color)
         {
             SensorData data=new SensorData(SensorDataType.V_RGB, ColorToHex(color));
-            softNode.Send(data.state);
+            softNode.SendSensorData(1,data);
         }
 
         private static async void StartScreenCapture()

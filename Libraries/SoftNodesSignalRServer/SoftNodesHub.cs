@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
+using MyNetSensors.Gateway;
+
 
 namespace MyNetSensors.SoftNodesSignalRServer
 {
     public class SoftNodesHub:Hub
     {
-        public void DetermineLength(string message)
+        public void SendMessage(Message message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine(message.ToString());
 
-            string newMessage = string.Format(@"{0} has a length of: {1}", message, message.Length);
-            Clients.All.ReceiveLength(newMessage);
+            //temporary callback
+           // Clients.Caller.SendMessage(message);
         }
     }
 }

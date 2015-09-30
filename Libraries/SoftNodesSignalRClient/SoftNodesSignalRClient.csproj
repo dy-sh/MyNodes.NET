@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gateway\Gateway.csproj">
+      <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
+      <Name>Gateway</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SoftNodes\SoftNodes.csproj">
       <Project>{fbd59e7d-89b2-4e7e-af13-301253601781}</Project>
       <Name>SoftNodes</Name>

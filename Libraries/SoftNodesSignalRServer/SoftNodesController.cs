@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Microsoft.Owin.Hosting;
+using MyNetSensors.Gateway;
 using MyNetSensors.SoftNodes;
 
 namespace MyNetSensors.SoftNodesSignalRServer
@@ -18,6 +20,17 @@ namespace MyNetSensors.SoftNodesSignalRServer
                 Console.ReadLine();
             }
         }
+
+        public void SendMessage(Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnReceivedMessage(Message message)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
 
