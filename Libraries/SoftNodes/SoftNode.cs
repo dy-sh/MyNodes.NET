@@ -23,7 +23,8 @@ namespace MyNetSensors.SoftNodes
 
         private void OnReceivedSoftNodeMessage(Message message)
         {
-            Console.WriteLine(message.ToString());
+            if (message.nodeId== nodeId)
+                 Console.WriteLine(message.ToString());
         }
 
         public void SendSensorData(int sensorId, SensorData data)

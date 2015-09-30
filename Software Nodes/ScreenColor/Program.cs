@@ -19,12 +19,15 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        const int CAPTURE_UPDATE_DELAY = 2000;
+        const int CAPTURE_UPDATE_DELAY = 0;
         const float HEIGHT_FROM_TOP = 0.4f;
 
+        static float rTune = 1f;
+        static float gTune = 0.5f;
+        static float bTune = 0.3f;
 
         static bool isWorking;
-        static Color screenAvarageColor;
+        static Color screenColor;
 
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
@@ -32,10 +35,13 @@ namespace ScreenColor
         private static ISoftNodeClient softNodeClient;
         private static SoftNode softNode;
 
+        private static DateTime messageStartDate = DateTime.Now;
+        private static int messagesCount;
+
         static void Main(string[] args)
         {
             softNodeClient = new SoftNodeClient();
-            softNode=new SoftNode(softNodeClient);
+            softNode = new SoftNode(softNodeClient);
             softNode.ConnectToServer();
             StartScreenCapture();
             Console.WriteLine("Screen capture started");
@@ -48,13 +54,13 @@ namespace ScreenColor
 
         private static String ColorToHex(Color color)
         {
-            return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
+            return /* "#" + */ color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
 
         public static void SendColor(Color color)
         {
-            SensorData data=new SensorData(SensorDataType.V_RGB, ColorToHex(color));
-            softNode.SendSensorData(1,data);
+            SensorData data = new SensorData(SensorDataType.V_RGB, ColorToHex(color));
+            softNode.SendSensorData(1, data);
         }
 
         private static async void StartScreenCapture()
@@ -71,11 +77,32 @@ namespace ScreenColor
                 {
                     CalculateCapturesPerSec();
 
-                    screenAvarageColor = ScreenCapture.GetScreenAverageColor(HEIGHT_FROM_TOP);
-                    SendColor(screenAvarageColor);
+                    Color newScreenColor = ScreenCapture.GetScreenAverageColor(HEIGHT_FROM_TOP);
+
+                    newScreenColor = TuneColor(newScreenColor);
+
+                    if (newScreenColor != screenColor)
+                    {
+                        screenColor = newScreenColor;
+                        SendColor(screenColor);
+                        CalculateMessagesPerSec();
+                    }
                 });
             }
 
+        }
+
+        private static Color TuneColor(Color newScreenColor)
+        {
+            int r = newScreenColor.R;
+            int g = newScreenColor.G;
+            int b = newScreenColor.B;
+
+            r = (int)((float)(r) * rTune);
+            g = (int)((float)(g) * gTune);
+            b = (int)((float)(b) * bTune);
+
+            return Color.FromArgb(r, g, b);
         }
 
         private static void StopScreenCapture()
@@ -98,7 +125,33 @@ namespace ScreenColor
             captureStartDate = DateTime.Now;
             screensCount = 0;
 
-            Console.WriteLine("Capture " + (int)capturesPerSecond + " screens/second");
+            if(capturesPerSecond>1)
+            Console.WriteLine("Captured " + (int)capturesPerSecond + " screens/second");
+            else
+                Console.WriteLine("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
+
+        }
+
+        private static void CalculateMessagesPerSec()
+        {
+            messagesCount++;
+
+            DateTime now = DateTime.Now;
+            TimeSpan elapsed = now.Subtract(messageStartDate);
+
+            if (elapsed.TotalSeconds < 1)
+                return;
+
+            float messagesPerSecond = messagesCount / (float)elapsed.TotalSeconds;
+
+            messageStartDate = DateTime.Now;
+            messagesCount = 0;
+
+            if (messagesPerSecond > 1)
+                Console.WriteLine("                               Sended " + (int)messagesPerSecond + " messages/second");
+            else
+                Console.WriteLine("                               Sended " + messagesPerSecond.ToString("0.00") + " messages/second");
+
         }
 
     }
