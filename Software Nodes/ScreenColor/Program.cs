@@ -74,7 +74,7 @@ namespace ScreenColor
             bTune= float.Parse(ConfigurationManager.AppSettings["BTune"]);
             heightFromTop = float.Parse(ConfigurationManager.AppSettings["ScreenHeightFromTop"]);
             captureUpdateDelay = int.Parse(ConfigurationManager.AppSettings["CapturingDelay"]);
-            serverURL = ConfigurationManager.AppSettings["ServerURL"];
+            serverURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
         }
 
         private static String ColorToHex(Color color)

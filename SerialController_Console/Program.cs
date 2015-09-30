@@ -187,19 +187,19 @@ namespace MyNetSensors.SerialController_Console
         {
             //connecting to webserver
             bool connected = false;
-            bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ConnectToWebServer"]);
-            string connectionPassword = ConfigurationManager.AppSettings["GateToWebConnectionPassword"];
+            bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["UseWebServer"]);
+            string connectionPassword = ConfigurationManager.AppSettings["WebServerGateConnectionPassword"];
             if (connectToWebServer)
             {
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowWebServerTxRxDebug"]))
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["WebServerShowTxRxDebug"]))
                     signalR.OnDebugTxRxMessage += message => Console.WriteLine("WEB SERVER: " + message);
 
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowWebServerStateDebug"]))
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["WebServerShowStateDebug"]))
                     signalR.OnDebugStateMessage += message => Console.WriteLine("WEB SERVER: " + message);
 
                 while (!connected)
                 {
-                    string webServerUrl = ConfigurationManager.AppSettings["WebServerUrl"];
+                    string webServerUrl = ConfigurationManager.AppSettings["WebServerURL"];
                     connected = signalR.Connect(
                         gateway,
                         sensorsTasksEngine,
@@ -244,11 +244,15 @@ namespace MyNetSensors.SerialController_Console
 
         private async static Task ConnectToSoftNodesController()
         {
-            Console.WriteLine("Starting SoftNodes controller... ");
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSoftNodes"]))
+            {
+                Console.WriteLine("Starting SoftNodes controller... ");
 
-            softNodesServer = new SoftNodesServer();
-            softNodesController=new SoftNodesController(softNodesServer,gateway);
-            softNodesController.StartServer();
+                string softNodesServerURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
+                softNodesServer = new SoftNodesServer();
+                softNodesController = new SoftNodesController(softNodesServer, gateway);
+                softNodesController.StartServer(softNodesServerURL);
+            }
         }
 
         private static string SelectPort()

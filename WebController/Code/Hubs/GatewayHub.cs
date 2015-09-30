@@ -35,7 +35,7 @@ namespace MyNetSensors.WebController.Code.Hubs
 
             if (isGateway)
             {
-                string connectionPassword = ConfigurationManager.AppSettings["GateToWebConnectionPassword"];
+                string connectionPassword = ConfigurationManager.AppSettings["WebServerGateConnectionPassword"];
                 string sendedPassword = Context.QueryString["ConnectionPassword"];
                 if (connectionPassword == sendedPassword)
                 {
