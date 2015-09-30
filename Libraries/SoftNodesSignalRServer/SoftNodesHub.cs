@@ -13,7 +13,7 @@ namespace MyNetSensors.SoftNodesSignalRServer
     {
         public void ReceiveMessage(Message message)
         {
-            SoftNodesController.softNodesController.OnReceivedMessage(message);
+            SoftNodesServer.softNodesServer.OnReceivedMessage(message);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace MyNetSensors.SerialController_Console
         private static SensorsTasksEngine sensorsTasksEngine;
         private static ISensorsLinksRepository sensorsLinksDb;
         private static SensorsLinksEngine sensorsLinksEngine;
-        private static ISoftNodesController softNodesController;
+        private static ISoftNodesServer _softNodesServer;
 
         private static string serialPortName;
 
@@ -41,10 +41,10 @@ namespace MyNetSensors.SerialController_Console
             ConnectToGatewayDb();
             ConnectToSensorsHistoryDb();
             ConnectToSerialPort();
-            ConnectToSoftNodesController();
             ConnectSensorsTasks();
             ConnectSensorsLinks();
             ConnectToWebServer();
+            ConnectToSoftNodesController();
 
             //reconnect if disconnected. THIS MUST BE AFTER connecting to webserver, to send signalR message before 
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
@@ -242,8 +242,8 @@ namespace MyNetSensors.SerialController_Console
         {
             Console.WriteLine("Starting soft nodes controller... ");
 
-            softNodesController = new SoftNodesController();
-            softNodesController.StartServer();
+            _softNodesServer = new SoftNodesServer();
+            _softNodesServer.StartServer();
         }
 
         private static string SelectPort()

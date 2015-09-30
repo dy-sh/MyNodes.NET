@@ -8,16 +8,19 @@ using MyNetSensors.SoftNodes;
 namespace MyNetSensors.SoftNodesSignalRServer
 {
 
-    public class SoftNodesController : ISoftNodesController
+    public class SoftNodesServer : ISoftNodesServer
     {
         private IHubContext hub = GlobalHost.ConnectionManager.GetHubContext<SoftNodesHub>();
 
-        public static SoftNodesController softNodesController;
+        public static SoftNodesServer softNodesServer;
+
+        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+
 
         string url;
-        public SoftNodesController()
+        public SoftNodesServer()
         {
-            softNodesController = this;
+            softNodesServer = this;
         }
 
         public void StartServer(string url)
@@ -36,9 +39,13 @@ namespace MyNetSensors.SoftNodesSignalRServer
             hub.Clients.All.ReceiveMessage(message);
         }
 
+
         public void OnReceivedMessage(Message message)
         {
             Console.WriteLine(message.ToString());
+            if(OnReceivedMessageEvent!=null)
+                OnReceivedMessageEvent(message);
+
             message.payload = "ok";
             SendMessage(message);
         }

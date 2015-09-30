@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ISoftNode.cs" />
-    <Compile Include="ISoftNodesController.cs" />
+    <Compile Include="ISoftNodesServer.cs" />
+    <Compile Include="SoftNodesController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gateway\Gateway.csproj">

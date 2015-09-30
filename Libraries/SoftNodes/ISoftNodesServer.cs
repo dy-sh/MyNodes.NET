@@ -2,10 +2,12 @@
 
 namespace MyNetSensors.SoftNodes
 {
-    public interface ISoftNodesController
+    public delegate void OnReceivedMessageHandler(Message message);
+
+    public interface ISoftNodesServer
     {
         void StartServer(string url = "http://localhost:13122/");
         void SendMessage(Message message);
-        void OnReceivedMessage(Message message);
+        event OnReceivedMessageHandler OnReceivedMessageEvent;
     }
 }
