@@ -27,7 +27,7 @@ namespace MyNetSensors.SensorsHistoryRepository
         //storeHistoryWithInterval will be equal to writeInterval
         //If you have tons of data, and db perfomance decreased, increase this value,
         //and you will get less writing to db frequency 
-        private int writeInterval = 1000;
+        public int writeInterval = 1000;
 
 
         private Timer updateDbTimer = new Timer();
@@ -39,10 +39,10 @@ namespace MyNetSensors.SensorsHistoryRepository
         public SensorsHistoryRepositoryDapper(string connectionString)
         {
             this.connectionString = connectionString;
-           // db = new SqlConnection(connectionString);
+            // db = new SqlConnection(connectionString);
         }
 
-  
+
         public bool IsDbExist()
         {
             //todo check if db exist
@@ -60,6 +60,14 @@ namespace MyNetSensors.SensorsHistoryRepository
             updateDbTimer.Interval = writeInterval;
             updateDbTimer.Start();
 
+        }
+
+        public void SetWriteInterval(int ms)
+        {
+            writeInterval = ms;
+            updateDbTimer.Stop();
+            updateDbTimer.Interval = writeInterval;
+            updateDbTimer.Start();
         }
 
         private void OnSensorUpdatedEvent(Sensor sensor)
@@ -129,7 +137,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                 {
                     db.Query(String.Format("DROP TABLE [SensorHistory{0}]", db_Id));
                 }
-                catch{}
+                catch { }
             }
         }
 
@@ -172,7 +180,7 @@ namespace MyNetSensors.SensorsHistoryRepository
                     "INSERT INTO SensorHistory{0} (dataType, state, dateTime) "
                     + "VALUES(@dataType,@state, @dateTime); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
-                db.Execute(sqlQuery,data);
+                db.Execute(sqlQuery, data);
 
             }
         }

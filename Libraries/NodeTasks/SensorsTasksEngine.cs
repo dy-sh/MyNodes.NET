@@ -17,6 +17,8 @@ namespace MyNetSensors.NodeTasks
 {
     public class SensorsTasksEngine
     {
+        //If you have tons of tasks, and system perfomance decreased, increase this value,
+        //and you will get less tasks updating frequency 
         private int updateTasksInterval = 10;
 
 
@@ -114,6 +116,14 @@ namespace MyNetSensors.NodeTasks
                 task.repeatingDoneCount);
 
             gateway.SendSensorState(task.nodeId, task.sensorId, task.GetExecutionSensorData());
+        }
+
+        public void SetUpdateInterval(int ms)
+        {
+            updateTasksInterval = ms;
+            updateTasksTimer.Stop();
+            updateTasksTimer.Interval = updateTasksInterval;
+            updateTasksTimer.Start();
         }
     }
 }

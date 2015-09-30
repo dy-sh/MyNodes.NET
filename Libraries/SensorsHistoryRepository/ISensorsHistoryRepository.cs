@@ -10,12 +10,12 @@ namespace MyNetSensors.SensorsHistoryRepository
 {
     public interface ISensorsHistoryRepository
     {
-
         List<SensorData> GetSensorHistory(int db_Id);
         void DropSensorHistory(int db_Id);
         void DropAllSensorsHistory();
 
         void ConnectToGateway(SerialGateway gateway);
         bool IsDbExist();
+        void SetWriteInterval(int ms);
     }
 }

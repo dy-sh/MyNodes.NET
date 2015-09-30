@@ -40,7 +40,7 @@ namespace MyNetSensors.SerialController_Console
         private static void Main(string[] args)
         {
             ConnectToGatewayDb();
-            ConnectToSensorsHistoryDb();
+            ConnectToHistoryDb();
             ConnectToSerialPort();
             ConnectSensorsTasks();
             ConnectSensorsLinks();
@@ -68,16 +68,16 @@ namespace MyNetSensors.SerialController_Console
         {
             //connecting to DB
             bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseGatewayDB"]))
             {
                 Console.WriteLine("Connecting to gateway database... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 gatewayDb = new GatewayRepositoryDapper(connectionString);
 
-                gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["WritingToDbInterwal"]));
-                gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["ShowDBDebug"]));
-                gatewayDb.SetStoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["StoreTxRxMessagesInDB"]));
+                gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["GatewayDBWriteInterval"]));
+                gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayDBShowDebug"]));
+                gatewayDb.SetStoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayDBStoreTxRxMessages"]));
 
 
                 while (!connected)
@@ -89,16 +89,17 @@ namespace MyNetSensors.SerialController_Console
             }
         }
 
-        public async static Task ConnectToSensorsHistoryDb()
+        public async static Task ConnectToHistoryDb()
         {
             //connecting to DB
             bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseHistory"]))
             {
                 Console.WriteLine("Connecting to sensors history database... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 historyDb = new SensorsHistoryRepositoryDapper(connectionString);
+                gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["HistoryDBWriteInterval"]));
 
                 while (!connected)
                 {
@@ -113,7 +114,7 @@ namespace MyNetSensors.SerialController_Console
         {
             //connecting tasks
             bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsTasks"]))
             {
                 Console.WriteLine("Starting sensors tasks engine... ");
 
@@ -123,6 +124,7 @@ namespace MyNetSensors.SerialController_Console
                 {
                     sensorsTasksDb = new SensorsTasksRepositoryDapper(connectionString);
                     sensorsTasksEngine = new SensorsTasksEngine(gateway, sensorsTasksDb);
+                    sensorsTasksEngine.SetUpdateInterval(Convert.ToInt32(ConfigurationManager.AppSettings["SensorsTasksUpdateInterval"]));
                     connected = (sensorsTasksDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
@@ -133,9 +135,9 @@ namespace MyNetSensors.SerialController_Console
         {
             //connecting tasks
             bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseDB"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsLinks"]))
             {
-                Console.WriteLine("Starting nodes links engine... ");
+                Console.WriteLine("Starting sensors links engine... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
@@ -146,9 +148,10 @@ namespace MyNetSensors.SerialController_Console
                     connected = (sensorsTasksDb.IsDbExist());
                     if (!connected) await Task.Delay(5000);
                 }
+
+                sensorsLinksEngine.GetLinksFromRepository();
             }
 
-            sensorsLinksEngine.GetLinksFromRepository();
         }
 
         public static async Task ConnectToSerialPort()
@@ -241,7 +244,7 @@ namespace MyNetSensors.SerialController_Console
 
         private async static Task ConnectToSoftNodesController()
         {
-            Console.WriteLine("Starting soft nodes controller... ");
+            Console.WriteLine("Starting SoftNodes controller... ");
 
             softNodesServer = new SoftNodesServer();
             softNodesController=new SoftNodesController(softNodesServer,gateway);
