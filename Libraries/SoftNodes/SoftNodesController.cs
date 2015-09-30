@@ -17,7 +17,7 @@ namespace MyNetSensors.SoftNodes
         {
             this.server = server;
             this.gateway = gateway;
-            server.OnReceivedMessageEvent+= OnReceiverSoftSerialMessage;
+            server.OnReceivedMessageEvent+= OnReceivedSoftNodeMessage;
             gateway.OnMessageSendEvent+= OnSendGatewayMessage;
         }
 
@@ -26,10 +26,14 @@ namespace MyNetSensors.SoftNodes
             server.SendMessage(message);
         }
 
-        private void OnReceiverSoftSerialMessage(Message message)
+        private void OnReceivedSoftNodeMessage(Message message)
         {
             gateway.RecieveMessage(message);
         }
 
+        public void StartServer(string url = "http://localhost:13122/")
+        {
+            server.StartServer(url);
+        }
     }
 }

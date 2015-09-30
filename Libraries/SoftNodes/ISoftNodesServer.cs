@@ -1,4 +1,5 @@
-﻿using MyNetSensors.Gateway;
+﻿using System;
+using MyNetSensors.Gateway;
 
 namespace MyNetSensors.SoftNodes
 {
@@ -9,5 +10,7 @@ namespace MyNetSensors.SoftNodes
         void StartServer(string url = "http://localhost:13122/");
         void SendMessage(Message message);
         event OnReceivedMessageHandler OnReceivedMessageEvent;
+        event Action OnConnected;
+        event Action OnDisconnected;
     }
 }

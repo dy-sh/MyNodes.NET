@@ -1,14 +1,16 @@
-﻿using MyNetSensors.Gateway;
+﻿using System;
+using MyNetSensors.Gateway;
 
 namespace MyNetSensors.SoftNodes
 {
-    public interface ISoftNode
+    public interface ISoftNodeClient
     {
         void ConnectToServer(string url = "http://localhost:13122/");
         void Disconnect();
         bool IsConnected();
         void SendMessage(Message message);
-        void OnReceivedMessage(Message message);
-        void SendSensorData(int sensorId, SensorData data);
+        event OnReceivedMessageHandler OnReceivedMessageEvent;
+        event Action OnConnected;
+        event Action OnDisconnected;
     }
 }

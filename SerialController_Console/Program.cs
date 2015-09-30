@@ -245,7 +245,7 @@ namespace MyNetSensors.SerialController_Console
 
             softNodesServer = new SoftNodesServer();
             softNodesController=new SoftNodesController(softNodesServer,gateway);
-            softNodesServer.StartServer();
+            softNodesController.StartServer();
         }
 
         private static string SelectPort()

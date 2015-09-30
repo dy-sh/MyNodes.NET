@@ -29,11 +29,13 @@ namespace ScreenColor
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
 
-        private static ISoftNode softNode;
+        private static ISoftNodeClient softNodeClient;
+        private static SoftNode softNode;
 
         static void Main(string[] args)
         {
-            softNode = new SoftNode();
+            softNodeClient = new SoftNodeClient();
+            softNode=new SoftNode(softNodeClient);
             softNode.ConnectToServer();
             StartScreenCapture();
             Console.WriteLine("Screen capture started");

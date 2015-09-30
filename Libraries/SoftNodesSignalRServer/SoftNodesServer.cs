@@ -15,6 +15,8 @@ namespace MyNetSensors.SoftNodesSignalRServer
         public static SoftNodesServer softNodesServer;
 
         public event OnReceivedMessageHandler OnReceivedMessageEvent;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
 
 
         string url;
@@ -27,11 +29,19 @@ namespace MyNetSensors.SoftNodesSignalRServer
         {
             this.url = url;
 
-            using (WebApp.Start<Startup>(url))
+            try
             {
+                WebApp.Start<Startup>(url);
+
                 Console.WriteLine(string.Format("Soft nodes server started at {0}", url));
-                Console.ReadLine();
+                if (OnConnected != null)
+                    OnConnected();
             }
+            catch(Exception e)
+            {
+                throw e;
+            }
+
         }
 
         public void SendMessage(Message message)

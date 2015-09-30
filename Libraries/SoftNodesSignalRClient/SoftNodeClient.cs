@@ -5,13 +5,16 @@ using MyNetSensors.SoftNodes;
 
 namespace MyNetSensors.SoftNodesSignalRClient
 {
-    public class SoftNode:ISoftNode
+    public class SoftNodeClient:ISoftNodeClient
     {
         private IHubProxy hubProxy;
         private HubConnection hubConnection;
         private string url;
 
-        public int nodeId=100;//todo get nodeid from controller
+        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
+
 
         public void ConnectToServer(string url)
         {
@@ -27,18 +30,25 @@ namespace MyNetSensors.SoftNodesSignalRClient
                 try
                 {
                     hubConnection.Start().Wait();
+                    hubConnection.Closed += OnHubConnectionClosed;
                     hubProxy.On<Message>("ReceiveMessage", OnReceivedMessage);
                     Console.WriteLine("Connection established");
                     isConnected = true;
+                    if (OnConnected != null)
+                        OnConnected();
                 }
-                catch
+                catch (Exception e)
                 {
-                    Console.WriteLine("Connection failed");
+                    Console.WriteLine("Connection failed: "+e.Message);
                 }
             }
         }
 
-
+        private void OnHubConnectionClosed()
+        {
+            if (OnDisconnected != null)
+                OnDisconnected();
+        }
 
 
         public bool IsConnected()
@@ -49,6 +59,8 @@ namespace MyNetSensors.SoftNodesSignalRClient
         public void Disconnect()
         {
             hubConnection.Stop();
+            if (OnDisconnected != null)
+                OnDisconnected();
         }
 
 
@@ -58,29 +70,11 @@ namespace MyNetSensors.SoftNodesSignalRClient
             hubProxy.Invoke("ReceiveMessage", message).Wait();
         }
 
-        public void SendSensorData(int sensorId, SensorData data)
-        {
-            Message message=new Message
-            {
-                nodeId = nodeId,
-                sensorId = sensorId,
-                messageType = MessageType.C_SET,
-                subType = (int)data.dataType,
-                payload = data.state,
-                dateTime = DateTime.Now,
-                incoming = true,
-                ack = false,
-                isValid = true
-            };
-
-            SendMessage(message);
-        }
-
         public void OnReceivedMessage(Message message)
         {
-            Console.WriteLine(message.ToString());
+            //Console.WriteLine(message.ToString());
+            if (OnReceivedMessageEvent != null)
+                OnReceivedMessageEvent(message);
         }
-
- 
     }
 }
