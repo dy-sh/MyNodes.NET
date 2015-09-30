@@ -243,6 +243,7 @@ namespace MyNetSensors.SerialController_Console
             Console.WriteLine("Starting soft nodes controller... ");
 
             softNodesController = new SoftNodesController();
+            softNodesController.StartServer();
         }
 
         private static string SelectPort()

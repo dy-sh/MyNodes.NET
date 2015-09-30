@@ -7,24 +7,55 @@ namespace MyNetSensors.SoftNodesSignalRClient
 {
     public class SoftNode:ISoftNode
     {
-        IHubProxy hub;
-        string url;
+        private IHubProxy hubProxy;
+        private HubConnection hubConnection;
+        private string url;
+
         public int nodeId=100;//todo get nodeid from controller
 
-        public SoftNode(string url = "http://localhost:8080/")
+        public void ConnectToServer(string url)
         {
             this.url = url;
 
-            var connection = new HubConnection(url);
-            hub = connection.CreateHubProxy("SoftNodesHub");
-            connection.Start().Wait();
+            Console.WriteLine("Connecting to server " + url);
 
-            hub.On<Message>("SendMessage", OnReceivedMessage);
+            hubConnection = new HubConnection(url);
+            hubProxy = hubConnection.CreateHubProxy("SoftNodesHub");
+            bool isConnected=false;
+            while (!isConnected)
+            {
+                try
+                {
+                    hubConnection.Start().Wait();
+                    hubProxy.On<Message>("ReceiveMessage", OnReceivedMessage);
+                    Console.WriteLine("Connection established");
+                    isConnected = true;
+                }
+                catch
+                {
+                    Console.WriteLine("Connection failed");
+                }
+            }
         }
+
+
+
+
+        public bool IsConnected()
+        {
+            return hubConnection != null && hubConnection.State == ConnectionState.Connected;
+        }
+
+        public void Disconnect()
+        {
+            hubConnection.Stop();
+        }
+
 
         public void SendMessage(Message message)
         {
-            hub.Invoke("SendMessage", message).Wait();
+            if (IsConnected())
+            hubProxy.Invoke("ReceiveMessage", message).Wait();
         }
 
         public void SendSensorData(int sensorId, SensorData data)

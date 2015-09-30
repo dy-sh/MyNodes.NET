@@ -11,12 +11,9 @@ namespace MyNetSensors.SoftNodesSignalRServer
 {
     public class SoftNodesHub:Hub
     {
-        public void SendMessage(Message message)
+        public void ReceiveMessage(Message message)
         {
-            Console.WriteLine(message.ToString());
-
-            //temporary callback
-           // Clients.Caller.SendMessage(message);
+            SoftNodesController.softNodesController.OnReceivedMessage(message);
         }
     }
 }

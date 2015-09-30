@@ -19,7 +19,7 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        const int CAPTURE_UPDATE_DELAY = 1000;
+        const int CAPTURE_UPDATE_DELAY = 2000;
         const float HEIGHT_FROM_TOP = 0.4f;
 
 
@@ -29,10 +29,12 @@ namespace ScreenColor
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
 
-        private static ISoftNode softNode=new SoftNode();
+        private static ISoftNode softNode;
 
         static void Main(string[] args)
         {
+            softNode = new SoftNode();
+            softNode.ConnectToServer();
             StartScreenCapture();
             Console.WriteLine("Screen capture started");
 
