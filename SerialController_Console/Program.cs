@@ -15,7 +15,8 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-
+using MyNetSensors.SoftNodes;
+using MyNetSensors.SoftNodesSignalRServer;
 
 
 namespace MyNetSensors.SerialController_Console
@@ -31,6 +32,7 @@ namespace MyNetSensors.SerialController_Console
         private static SensorsTasksEngine sensorsTasksEngine;
         private static ISensorsLinksRepository sensorsLinksDb;
         private static SensorsLinksEngine sensorsLinksEngine;
+        private static ISoftNodesController softNodesController;
 
         private static string serialPortName;
 
@@ -39,6 +41,7 @@ namespace MyNetSensors.SerialController_Console
             ConnectToGatewayDb();
             ConnectToSensorsHistoryDb();
             ConnectToSerialPort();
+            ConnectToSoftNodesController();
             ConnectSensorsTasks();
             ConnectSensorsLinks();
             ConnectToWebServer();
@@ -233,8 +236,13 @@ namespace MyNetSensors.SerialController_Console
                 connected = gateway.IsConnected();
                 if (!connected) Thread.Sleep(5000);
             }
+        }
 
+        private async static Task ConnectToSoftNodesController()
+        {
+            Console.WriteLine("Starting soft nodes controller... ");
 
+            softNodesController = new SoftNodesController();
         }
 
         private static string SelectPort()

@@ -50,6 +50,10 @@
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +102,14 @@
     <ProjectReference Include="..\Libraries\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
       <Project>{cf02abeb-af45-4207-b9e1-7a758221c3ba}</Project>
       <Name>SensorsHistoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\SoftNodesSignalRServer\SoftNodesSignalRServer.csproj">
+      <Project>{0648da99-9635-4a51-814a-118349bfebda}</Project>
+      <Name>SoftNodesSignalRServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\SoftNodes\SoftNodes.csproj">
+      <Project>{fbd59e7d-89b2-4e7e-af13-301253601781}</Project>
+      <Name>SoftNodes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

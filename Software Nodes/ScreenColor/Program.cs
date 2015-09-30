@@ -8,7 +8,11 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MyNetSensors.Gateway;
+using MyNetSensors.SoftNodes;
+using MyNetSensors.SoftNodesSignalRClient;
 using ScreenColorServer;
+
 
 namespace ScreenColor
 {
@@ -24,6 +28,8 @@ namespace ScreenColor
 
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
+
+        private static ISoftNode softNode=new SoftNode();
 
         static void Main(string[] args)
         {
@@ -43,7 +49,8 @@ namespace ScreenColor
 
         public static void SendColor(Color color)
         {
-            Console.WriteLine(ColorToHex(color));
+            SensorData data=new SensorData(SensorDataType.V_RGB, ColorToHex(color));
+            softNode.Send(data.state);
         }
 
         private static async void StartScreenCapture()
