@@ -19,6 +19,7 @@ namespace MyNetSensors.SoftNodes
     {
         private ISoftNodeClient client;
         private Node node;
+        private bool isPresentationCompleted;
 
         public event OnIdResponseReceivedHandler OnIdResponseReceived;
         public event OnReceivedMessageHandler OnReceivedMessage;
@@ -51,7 +52,12 @@ namespace MyNetSensors.SoftNodes
             client.OnSendingMessageFailed += OnClientSendingMessageFailed;
 
             if (client.IsConnected())
-                OnConnected();
+                OnClientConnected();
+        }
+
+        public bool IsPresentationCompleted()
+        {
+            return isPresentationCompleted;
         }
 
         private void OnClientSendingMessageFailed(string message)
@@ -112,6 +118,8 @@ namespace MyNetSensors.SoftNodes
 
         public void SendSensorData(int sensorId, SensorData data)
         {
+            if (!IsConnected() || !IsPresentationCompleted()) return;
+
             Message message = new Message
             {
                 nodeId = node.nodeId,
@@ -146,7 +154,7 @@ namespace MyNetSensors.SoftNodes
 
         public bool IsConnected()
         {
-            return client.IsConnected();
+            return client.IsConnected() && node.nodeId != 255;
         }
 
         private void OnClientConnected()
@@ -157,7 +165,12 @@ namespace MyNetSensors.SoftNodes
             if (node.nodeId == 255)
                 SendIdRequest();
             else
+            {
+                if (OnDebugNodeStateMessage != null)
+                    OnDebugNodeStateMessage("Node ID: "+node.nodeId);
+
                 SendPresentation();
+            }
 
             if (OnConnected != null)
                 OnConnected();
@@ -165,6 +178,8 @@ namespace MyNetSensors.SoftNodes
 
         private void SendPresentation()
         {
+            if (!IsConnected()) return;
+
             SendNodePresentation();
 
             if (node.name != null)
@@ -178,10 +193,14 @@ namespace MyNetSensors.SoftNodes
                 {
                     SendSensorPresentation(sensor);
                 }
+
+            isPresentationCompleted = true;
         }
 
         private void SendNodePresentation()
         {
+            if (!IsConnected()) return;
+
             Message message = new Message
             {
                 nodeId = node.nodeId,
@@ -205,6 +224,8 @@ namespace MyNetSensors.SoftNodes
 
         private void SendNodeName()
         {
+            if (!IsConnected()) return;
+
             Message message = new Message
             {
                 nodeId = node.nodeId,
@@ -226,6 +247,8 @@ namespace MyNetSensors.SoftNodes
 
         private void SendNodeVersion()
         {
+            if (!IsConnected()) return;
+
             Message message = new Message
             {
                 nodeId = node.nodeId,
@@ -270,6 +293,8 @@ namespace MyNetSensors.SoftNodes
 
         private void SendSensorPresentation(Sensor sensor)
         {
+            if (!IsConnected()) return;
+
             Message message = new Message
             {
                 nodeId = node.nodeId,

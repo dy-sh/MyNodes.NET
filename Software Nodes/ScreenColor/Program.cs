@@ -75,7 +75,7 @@ namespace ScreenColor
             softNode.AddSensor(sensor);
 
             StartScreenCapture();
-            Console.WriteLine("Screen capture started");
+            ShowMessage("Screen capture started");
 
             while (true)
             {
@@ -121,7 +121,11 @@ namespace ScreenColor
         public static void SendColor(Color color)
         {
             SensorData data = new SensorData(SensorDataType.V_RGB, ColorToHex(color));
-            softNode.SendSensorData(sensorId, data);
+            if (softNode.IsPresentationCompleted())
+            {
+                softNode.SendSensorData(sensorId, data);
+                CalculateMessagesPerSec();
+            }
         }
 
         private static async void StartScreenCapture()
@@ -146,7 +150,6 @@ namespace ScreenColor
                     {
                         screenColor = newScreenColor;
                         SendColor(screenColor);
-                        CalculateMessagesPerSec();
                     }
                 });
             }
@@ -187,9 +190,9 @@ namespace ScreenColor
             screensCount = 0;
 
             if (capturesPerSecond > 1)
-                Console.WriteLine("Captured " + (int)capturesPerSecond + " screens/second");
+                ShowMessage("Captured " + (int)capturesPerSecond + " screens/second");
             else
-                Console.WriteLine("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
+                ShowMessage("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
 
         }
 
@@ -209,10 +212,15 @@ namespace ScreenColor
             messagesCount = 0;
 
             if (messagesPerSecond > 1)
-                Console.WriteLine("                               Sended " + (int)messagesPerSecond + " messages/second");
+                ShowMessage("                               Sended " + (int)messagesPerSecond + " messages/second");
             else
-                Console.WriteLine("                               Sended " + messagesPerSecond.ToString("0.00") + " messages/second");
+                ShowMessage("                               Sended " + messagesPerSecond.ToString("0.00") + " messages/second");
 
+        }
+
+        private static void ShowMessage(string message)
+        {
+            Console.WriteLine("CAPTURE: " + message);
         }
 
     }
