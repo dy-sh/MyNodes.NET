@@ -13,18 +13,23 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
+using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.WebController.Code.Hubs;
+using MyNetSensors.WebController.Code;
 
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class GatewayController : Controller
     {
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+
+
+        IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
+        
+
 
 
         public ActionResult Index()
@@ -57,8 +62,8 @@ namespace MyNetSensors.WebController.Controllers
         public async Task<ActionResult> DropNodes()
         {
             await DropHistoryDatabase();
-            context.Clients.Client(GatewayHubStaticData.gatewayId).clearLog();
-            context.Clients.Client(GatewayHubStaticData.gatewayId).clearNodes();
+            clientsHub.Clients.All.clearLog();
+            clientsHub.Clients.All.clearNodes();
             return RedirectToAction("Settings");
         }
 
@@ -120,7 +125,7 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
             db.DisableAllTasks();
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
         }
 
         private async Task DropTasksDatabase()
@@ -128,7 +133,7 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
             db.DropAllTasks();
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
         }
 
         private async Task DropLinksDatabase()
@@ -136,7 +141,7 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsLinksRepository db = new SensorsLinksRepositoryDapper(cs);
             db.DropAllLinks();
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+            clientsHub.Clients.All.updateSensorsLinks();
         }
 
         private async Task StopRecordingNodesHistory()
@@ -154,16 +159,12 @@ namespace MyNetSensors.WebController.Controllers
                     sensor.storeHistoryEnabled = false;
                 }
                 gatewayDb.UpdateNodeSettings(node);
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateNodeSettings(node);
+                clientsHub.Clients.All.updateNodeSettings(node);
                 await Task.Delay(100);
             }
         }
 
-        public int GetConnectedUsersCount()
-        {
-            return GatewayHubStaticData.connectedUsersId.Count;
-        }
-
+   
 
     }
 }

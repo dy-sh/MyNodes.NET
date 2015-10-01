@@ -14,13 +14,13 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.WebController.Code.Hubs;
+using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class TasksController : Controller
     {
-        private IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+        private IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
         private ISensorsTasksRepository tasksDb;
         private IGatewayRepository gatewayDb;
 
@@ -160,7 +160,7 @@ namespace MyNetSensors.WebController.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.AddTask(task);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
             return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
         }
 
@@ -193,7 +193,7 @@ namespace MyNetSensors.WebController.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.UpdateTask(task);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
             return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
@@ -205,7 +205,7 @@ namespace MyNetSensors.WebController.Controllers
                 return new HttpNotFoundResult();
 
             tasksDb.DeleteTask(id);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -221,7 +221,7 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTaskEnabled(task.db_Id,true);
 
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -237,7 +237,7 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTaskEnabled(task.db_Id, false);
 
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -253,7 +253,7 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTask(task.db_Id,true,false,DateTime.Now,0);
 
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+            clientsHub.Clients.All.updateSensorsTasks();
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -271,7 +271,7 @@ namespace MyNetSensors.WebController.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteTasks(id1.Value, id2.Value);
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+                clientsHub.Clients.All.updateSensorsTasks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -280,7 +280,7 @@ namespace MyNetSensors.WebController.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DropAllTasks();
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+                clientsHub.Clients.All.updateSensorsTasks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -300,7 +300,7 @@ namespace MyNetSensors.WebController.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteCompleted(id1.Value, id2.Value);
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+                clientsHub.Clients.All.updateSensorsTasks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -309,7 +309,7 @@ namespace MyNetSensors.WebController.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DeleteCompleted();
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsTasks();
+                clientsHub.Clients.All.updateSensorsTasks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());

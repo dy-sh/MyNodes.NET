@@ -14,13 +14,11 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.Code.Hubs;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class HistoryController : Controller
     {
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 

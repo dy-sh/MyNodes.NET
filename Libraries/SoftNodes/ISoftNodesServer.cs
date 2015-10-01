@@ -17,5 +17,8 @@ namespace MyNetSensors.SoftNodes
         event OnReceivedMessageHandler OnReceivedMessage;
         event Action OnConnected;
         event Action OnDisconnected;
+
+        event DebugMessageEventHandler OnDebugTxRxMessage;
+        event DebugMessageEventHandler OnDebugStateMessage;
     }
 }

@@ -22,7 +22,7 @@ $.noty.defaults.animation = {
     speed: 500 // unavailable - no need
 };
 
-var gatewayHub;
+var clientsHub;
 var gatewayHardwareConnected = false;
 var gatewayServiceConnected = false;
 
@@ -208,37 +208,37 @@ function redrawChart(options) {
 
 
 $(function () {
-    gatewayHub = $.connection.gatewayHub;
+    clientsHub = $.connection.clientsHub;
 
-    gatewayHub.client.onGatewayHardwareConnected = function () {
+    clientsHub.client.onGatewayHardwareConnected = function () {
         var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: 3000 });
     };
 
-    gatewayHub.client.onGatewayHardwareDisconnected = function () {
+    clientsHub.client.onGatewayHardwareDisconnected = function () {
         var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: 3000 });
     };
 
-    gatewayHub.client.onGatewayServiceConnected = function () {
+    clientsHub.client.onGatewayServiceConnected = function () {
         var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: 3000 });
     };
 
-    gatewayHub.client.onGatewayServiceDisconnected = function () {
+    clientsHub.client.onGatewayServiceDisconnected = function () {
         var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: 3000 });
     };
 
 
-    gatewayHub.client.onSensorUpdatedEvent = function (sensor) {
-        onSensorUpdatedEvent(sensor);
+    clientsHub.client.onSensorUpdated = function (sensor) {
+        onSensorUpdated(sensor);
     };
 
 
     $.connection.hub.start().done(function () {
-        gatewayHub.server.getGatewayServiceConnected();
+        clientsHub.server.getGatewayServiceConnected();
     });
 
 });
 
-function onSensorUpdatedEvent(sensor) {
+function onSensorUpdated(sensor) {
     if (sensor.ownerNodeId != nodeId || sensor.sensorId != sensorId)
         return;
 

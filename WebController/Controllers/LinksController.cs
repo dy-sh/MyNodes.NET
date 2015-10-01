@@ -9,13 +9,13 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
-using MyNetSensors.WebController.Code.Hubs;
+using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class LinksController : Controller
     {
-        private IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+        private IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
         private ISensorsLinksRepository linksDb;
         private IGatewayRepository gatewayDb;
 
@@ -152,7 +152,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
             linksDb.AddLink(link);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+            clientsHub.Clients.All.updateSensorsLinks();
             return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
         }
 
@@ -194,7 +194,7 @@ namespace MyNetSensors.WebController.Controllers
                 return new HttpNotFoundResult();
 
             linksDb.DeleteLink(id);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+            clientsHub.Clients.All.updateSensorsLinks();
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -213,7 +213,7 @@ namespace MyNetSensors.WebController.Controllers
 
                 linksDb.DeleteLinksTo(id1.Value, id2.Value);
 
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+                clientsHub.Clients.All.updateSensorsLinks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -223,7 +223,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 linksDb.DropAllLinks();
 
-                context.Clients.Client(GatewayHubStaticData.gatewayId).updateSensorsLinks();
+                clientsHub.Clients.All.updateSensorsLinks();
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());

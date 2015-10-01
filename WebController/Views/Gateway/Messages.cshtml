@@ -23,34 +23,34 @@
 
     <script>
         $(function () {
-            var gatewayHub = $.connection.gatewayHub;
+            var clientsHub = $.connection.clientsHub;
 
             $('#clear-log').on('click', function () {
-                gatewayHub.server.clearLog();
+                clientsHub.server.clearLog();
             });
 
-            gatewayHub.client.onMessageRecievedEvent = function (message) {
+            clientsHub.client.onMessageRecievedEvent = function (message) {
                 $('#log').append(message + "<br/>");
                 $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
-            gatewayHub.client.onMessageSendEvent = function (message) {
+            clientsHub.client.onMessageSendEvent = function (message) {
                 $('#log').append(message + "<br/>");
                 $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
-            gatewayHub.client.returnLog = function (log) {
+            clientsHub.client.returnLog = function (log) {
                 $('#log').html(log);
                 $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
-            gatewayHub.client.onClearMessages = function (log) {
+            clientsHub.client.onClearMessages = function (log) {
                 $('#log').html(null);
                 $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
             };
 
             $.connection.hub.start().done(function () {
-                gatewayHub.server.getLog();
+                clientsHub.server.getLog();
             });
 
             $(function () {

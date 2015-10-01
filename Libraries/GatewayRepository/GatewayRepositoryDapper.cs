@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Dapper;
 using MyNetSensors.Gateway;
@@ -21,7 +22,6 @@ namespace MyNetSensors.GatewayRepository
 
     public class GatewayRepositoryDapper : IGatewayRepository
     {
-        private bool showDebugMessages = true;
         private bool showConsoleMessages = false;
 
         //if writeInterval==0, every message will be instantly writing to DB
@@ -47,6 +47,8 @@ namespace MyNetSensors.GatewayRepository
 
         public GatewayRepositoryDapper(string connectionString)
         {
+            updateDbTimer.Elapsed += UpdateDbTimerEvent;
+
             this.connectionString = connectionString;
             InitializeDB();
         }
@@ -75,7 +77,6 @@ namespace MyNetSensors.GatewayRepository
             gateway.OnNewSensorEvent += OnSensorUpdated;
             gateway.OnSensorUpdatedEvent += OnSensorUpdated;
 
-            updateDbTimer.Elapsed += UpdateDbTimer;
 
             if (writeInterval > 0)
             {
@@ -382,37 +383,6 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
-        private void UpdateDbTimer(object sender, object e)
-        {
-            updateDbTimer.Stop();
-            try
-            {
-                int nodesCount = updatedNodesId.Count;
-                int messagesCount = newMessages.Count;
-                int messages = nodesCount + messagesCount;
-                if (messages == 0)
-                {
-                    updateDbTimer.Start();
-                    return;
-                };
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
-
-                WriteUpdatedNodes();
-                WriteNewMessages();
-
-                sw.Stop();
-                long elapsed = sw.ElapsedMilliseconds;
-                float messagesPerSec = (float)messages / (float)elapsed * 1000;
-                Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages,
-                    (int)messagesPerSec));
-            }
-            catch { }
-
-            updateDbTimer.Start();
-
-        }
 
         private void WriteNewMessages()
         {
@@ -481,29 +451,14 @@ namespace MyNetSensors.GatewayRepository
             showConsoleMessages = enable;
         }
 
-        public void SetWriteInterval(int ms)
-        {
-            writeInterval = ms;
-            updateDbTimer.Stop();
-            if (writeInterval > 0)
-            {
-                updateDbTimer.Interval = writeInterval;
-                updateDbTimer.Start();
-            }
-        }
+
 
         public void SetStoreTxRxMessages(bool enable)
         {
             storeTxRxMessages = enable;
         }
 
-        public void Log(string message)
-        {
-            if (showDebugMessages)
-                Debug.WriteLine(message);
-            if (showConsoleMessages)
-                Console.WriteLine(message);
-        }
+
 
 
 
@@ -630,6 +585,59 @@ namespace MyNetSensors.GatewayRepository
                 });
             }
         }
+
+
+
+
+        private void UpdateDbTimerEvent(object sender, object e)
+        {
+            updateDbTimer.Stop();
+            try
+            {
+                int nodesCount = updatedNodesId.Count;
+                int messagesCount = newMessages.Count;
+                int messages = nodesCount + messagesCount;
+                if (messages == 0)
+                {
+                    updateDbTimer.Start();
+                    return;
+                };
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+
+                WriteUpdatedNodes();
+                WriteNewMessages();
+
+                sw.Stop();
+                long elapsed = sw.ElapsedMilliseconds;
+                float messagesPerSec = (float)messages / (float)elapsed * 1000;
+                Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages,
+                    (int)messagesPerSec));
+            }
+            catch { }
+
+            updateDbTimer.Start();
+        }
+
+        public void SetWriteInterval(int ms)
+        {
+            writeInterval = ms;
+            updateDbTimer.Stop();
+            if (writeInterval > 0)
+            {
+                updateDbTimer.Interval = writeInterval;
+                if (gateway != null)
+                    updateDbTimer.Start();
+            }
+        }
+
+        public void Log(string message)
+        {
+            if (showConsoleMessages)
+                Console.WriteLine(message);
+        }
+
     }
 
 

@@ -8,6 +8,7 @@ using Microsoft.AspNet.SignalR.Client;
 using MyNetSensors.Gateway;
 using MyNetSensors.SoftNodes;
 using DebugMessageEventHandler = MyNetSensors.SoftNodes.DebugMessageEventHandler;
+using OnReceivedMessageHandler = MyNetSensors.SoftNodes.OnReceivedMessageHandler;
 
 namespace MyNetSensors.SoftNodesSignalRClient
 {

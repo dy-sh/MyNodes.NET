@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
+﻿using Microsoft.AspNet.SignalR;
 using MyNetSensors.Gateway;
 
-
-namespace MyNetSensors.SoftNodesSignalRServer
+namespace MyNetSensors.SerialController_Console
 {
     public class SoftNodesHub:Hub
     {

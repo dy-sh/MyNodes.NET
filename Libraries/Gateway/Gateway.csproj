@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="GatewayInfo.cs" />
     <Compile Include="IComPort.cs" />
+    <Compile Include="IGatewayClient.cs" />
+    <Compile Include="IGatewayServer.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessagesLog.cs" />
     <Compile Include="MySensors.cs" />

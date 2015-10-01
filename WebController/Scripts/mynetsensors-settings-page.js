@@ -13,7 +13,7 @@ $.noty.defaults.animation = {
     speed: 500 // unavailable - no need
 };
 
-var gatewayHub;
+var clientsHub;
 var gatewayHardwareConnected = false;
 var gatewayServiceConnected = false;
 
@@ -22,47 +22,47 @@ var sensorsCount;
 
 
 $(function () {
-    gatewayHub = $.connection.gatewayHub;
+    clientsHub = $.connection.clientsHub;
 
-    gatewayHub.client.onGatewayHardwareConnected = function () {
+    clientsHub.client.onGatewayHardwareConnected = function () {
         var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
         gatewayHardwareConnected = true;
         gatewayStatusChanged();
     };
 
-    gatewayHub.client.onGatewayHardwareDisconnected = function () {
+    clientsHub.client.onGatewayHardwareDisconnected = function () {
         var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
         gatewayHardwareConnected = false;
         gatewayStatusChanged();
     };
 
-    gatewayHub.client.onGatewayServiceConnected = function () {
+    clientsHub.client.onGatewayServiceConnected = function () {
         var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
         gatewayServiceConnected = true;
         gatewayStatusChanged();
-        gatewayHub.server.getGatewayHardwareConnected();
+        clientsHub.server.getGatewayHardwareConnected();
     };
 
-    gatewayHub.client.onGatewayServiceDisconnected = function () {
+    clientsHub.client.onGatewayServiceDisconnected = function () {
         var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
         gatewayServiceConnected = false;
         gatewayHardwareConnected = false;
         gatewayStatusChanged();
     };
 
-    gatewayHub.client.returnGatewayServiceConnected = function (isConnected) {
+    clientsHub.client.returnGatewayServiceConnected = function (isConnected) {
         gatewayServiceConnected = isConnected;
         gatewayStatusChanged();
-        gatewayHub.server.getGatewayHardwareConnected();
+        clientsHub.server.getGatewayHardwareConnected();
     };
 
 
-    gatewayHub.client.returnGatewayHardwareConnected = function (isConnected) {
+    clientsHub.client.returnGatewayHardwareConnected = function (isConnected) {
         gatewayHardwareConnected = isConnected;
         gatewayStatusChanged();
     };
 
-    gatewayHub.client.onClearNodesListEvent = function (sensor) {
+    clientsHub.client.onClearNodesList = function () {
         var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
     };
 
@@ -71,26 +71,26 @@ $(function () {
    
     
 
-    gatewayHub.client.returnNodes = function (nodes) {
+    clientsHub.client.returnNodes = function (nodes) {
         onReturnNodes(nodes);
     };
 
-    gatewayHub.client.onNewNodeEvent = function (node) {
+    clientsHub.client.onNewNode = function (node) {
         nodesCount++;
         updateNodesAndSensorsCounts();
     };
     
-    gatewayHub.client.onNewSensorEvent = function (sensor) {
+    clientsHub.client.onNewSensor = function (sensor) {
         sensorsCount++;
         updateNodesAndSensorsCounts();
     };
 
  
-    gatewayHub.client.returnConnectedUsersCount = function (count) {
+    clientsHub.client.returnConnectedUsersCount = function (count) {
         $('#users-online').text(count);
     };
 
-    gatewayHub.client.returnGatewayInfo = function (gatewayInfo) {
+    clientsHub.client.returnGatewayInfo = function (gatewayInfo) {
         nodesCount = gatewayInfo.gatewayNodesRegistered;
         sensorsCount = gatewayInfo.gatewaySensorsRegistered;
         updateNodesAndSensorsCounts();
@@ -98,9 +98,9 @@ $(function () {
 
 
     $.connection.hub.start().done(function () {
-        gatewayHub.server.getGatewayServiceConnected();
-        gatewayHub.server.getGatewayInfo();
-        gatewayHub.server.getConnectedUsersCount();
+        clientsHub.server.getGatewayServiceConnected();
+        clientsHub.server.getGatewayInfo();
+        clientsHub.server.getConnectedUsersCount();
         setInterval(updateData, 1000);
     });
 
@@ -108,7 +108,7 @@ $(function () {
 
 
 function updateData() {
-    gatewayHub.server.getConnectedUsersCount();
+    clientsHub.server.getConnectedUsersCount();
 }
 
 

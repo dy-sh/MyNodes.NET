@@ -16,18 +16,21 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.Code.Hubs;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GatewayHub>();
+  
+
+        IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
         public NodeController()
         {
+
+
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             historyDb = new SensorsHistoryRepositoryDapper(cs);
             gatewayDb = new GatewayRepositoryDapper(cs);
@@ -78,7 +81,7 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.description = sensordescription;
             }
             gatewayDb.UpdateNodeSettings(node);
-            context.Clients.Client(GatewayHubStaticData.gatewayId).updateNodeSettings(node);
+            clientsHub.Clients.All.updateNodeSettings(node);
             return RedirectToAction("Control", "Gateway");
             // return View(node);
         }

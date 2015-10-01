@@ -4,13 +4,14 @@
 */
 
 using System;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using MyNetSensors.Gateway;
 using MyNetSensors.SoftNodes;
+using DebugMessageEventHandler = MyNetSensors.SoftNodes.DebugMessageEventHandler;
+using OnReceivedMessageHandler = MyNetSensors.SoftNodes.OnReceivedMessageHandler;
 
-namespace MyNetSensors.SoftNodesSignalRServer
+namespace MyNetSensors.SerialController_Console
 {
 
     public class SoftNodesServer : ISoftNodesServer
@@ -22,7 +23,8 @@ namespace MyNetSensors.SoftNodesSignalRServer
         public event OnReceivedMessageHandler OnReceivedMessage;
         public event Action OnConnected;
         public event Action OnDisconnected;
-
+        public event DebugMessageEventHandler OnDebugTxRxMessage;
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         string url;
         public SoftNodesServer()
@@ -36,30 +38,40 @@ namespace MyNetSensors.SoftNodesSignalRServer
 
             try
             {
+  
                 WebApp.Start<Startup>(url);
 
-                Console.WriteLine(string.Format("Soft nodes server started at {0}", url));
+                if (OnDebugStateMessage!=null)
+                    OnDebugStateMessage(string.Format("Server started at {0}", url));
+
                 if (OnConnected != null)
                     OnConnected();
             }
             catch(Exception e)
             {
-                throw e;
+                if (OnDebugStateMessage != null)
+                    OnDebugStateMessage(string.Format("Failed to start server: {0}",e.Message ));
             }
 
         }
 
         public void SendMessage(Message message)
         {
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(string.Format("TX: {0}", message.ToString()));
+
             hub.Clients.All.ReceiveMessage(message);
         }
 
 
         public void ReceiveMessage(Message message)
         {
-            //Console.WriteLine(message.ToString());
             if(OnReceivedMessage!=null)
                 OnReceivedMessage(message);
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(string.Format("RX: {0}", message.ToString()));
         }
 
     }
