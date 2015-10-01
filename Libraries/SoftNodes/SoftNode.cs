@@ -13,13 +13,21 @@ using MyNetSensors.Gateway;
 namespace MyNetSensors.SoftNodes
 {
     public delegate void OnIdResponseReceivedHandler (int nodeId);
+
+
     public class SoftNode
     {
         private ISoftNodeClient client;
         private Node node;
 
         public event OnIdResponseReceivedHandler OnIdResponseReceived;
-        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+        public event OnReceivedMessageHandler OnReceivedMessage;
+        public event DebugMessageEventHandler OnDebugTxRxMessage;
+        public event DebugMessageEventHandler OnDebugNodeStateMessage;
+        public event DebugMessageEventHandler OnConnectionFailed;
+        public event DebugMessageEventHandler OnSendingMessageFailed;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
 
         /// <summary>
         /// 
@@ -36,19 +44,50 @@ namespace MyNetSensors.SoftNodes
             node.version = nodeVersion;
             node.nodeId = nodeId;
 
-            client.OnReceivedMessageEvent += OnReceivedSoftNodeMessage;
-            client.OnConnected += OnConnected;
+            client.OnReceivedMessage += OnClientReceivedMessage;
+            client.OnConnected += OnClientConnected;
+            client.OnDisconnected += OnClientDisconnected;
+            client.OnConnectionFailed += OnClientConnectionFailed;
+            client.OnSendingMessageFailed += OnClientSendingMessageFailed;
 
             if (client.IsConnected())
                 OnConnected();
         }
 
+        private void OnClientSendingMessageFailed(string message)
+        {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending message failed: " + message);
 
-        private void OnReceivedSoftNodeMessage(Message message)
+            if (OnSendingMessageFailed != null)
+                OnSendingMessageFailed(message);
+        }
+
+        private void OnClientConnectionFailed(string message)
+        {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Connection failed: " + message);
+
+            if (OnConnectionFailed != null)
+                OnConnectionFailed(message);
+        }
+
+        private void OnClientDisconnected()
+        {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Disconnected");
+
+            if (OnDisconnected != null)
+                OnDisconnected();
+        }
+
+
+        private void OnClientReceivedMessage(Message message)
         {
             if (message.nodeId == node.nodeId)
             {
-                Console.WriteLine(message.ToString());
+                if (OnDebugTxRxMessage != null)
+                    OnDebugTxRxMessage(message.ToString());
 
 
                 //if ID_RESPONSE
@@ -57,14 +96,17 @@ namespace MyNetSensors.SoftNodes
                 {
                     node.nodeId = Int32.Parse(message.payload);
 
+                    if (OnDebugNodeStateMessage != null)
+                        OnDebugNodeStateMessage("Received new ID: "+ node.nodeId);
+
                     if (OnIdResponseReceived != null)
                         OnIdResponseReceived(node.nodeId);
 
                     SendPresentation();
                 }
 
-                if (OnReceivedMessageEvent != null)
-                    OnReceivedMessageEvent(message);
+                if (OnReceivedMessage != null)
+                    OnReceivedMessage(message);
             }
         }
 
@@ -80,16 +122,25 @@ namespace MyNetSensors.SoftNodes
                 payload = data.state
             };
 
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
+
             client.SendMessage(message);
         }
 
         public void ConnectToServer(string url = "http://localhost:13122/")
         {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Connecting to server: " + url);
+
             client.ConnectToServer(url);
         }
 
         public void Disconnect()
         {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Disconnected");
+
             client.Disconnect();
         }
 
@@ -98,12 +149,18 @@ namespace MyNetSensors.SoftNodes
             return client.IsConnected();
         }
 
-        private void OnConnected()
+        private void OnClientConnected()
         {
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Connected");
+
             if (node.nodeId == 255)
                 SendIdRequest();
             else
                 SendPresentation();
+
+            if (OnConnected != null)
+                OnConnected();
         }
 
         private void SendPresentation()
@@ -136,6 +193,12 @@ namespace MyNetSensors.SoftNodes
                 dateTime = DateTime.Now
             };
 
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending node presentation");
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
+
             client.SendMessage(message);
         }
 
@@ -152,6 +215,12 @@ namespace MyNetSensors.SoftNodes
                 payload = node.name,
             };
 
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending node name");
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
+
             client.SendMessage(message);
         }
 
@@ -167,19 +236,25 @@ namespace MyNetSensors.SoftNodes
                 payload = node.version,
             };
 
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending node version");
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
+
             client.SendMessage(message);
         }
 
 
 
-        private void SetNodeName(string nodeName)
+        public void SetNodeName(string nodeName)
         {
             node.name = nodeName;
             if (IsConnected())
                 SendNodeName();
         }
 
-        private void SetNodeVersion(string nodeVersion)
+        public void SetNodeVersion(string nodeVersion)
         {
             node.version = nodeVersion;
             if (IsConnected())
@@ -205,6 +280,12 @@ namespace MyNetSensors.SoftNodes
                 payload = sensor.description
             };
 
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending sensor "+sensor.sensorId+" presentation");
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
+
             client.SendMessage(message);
         }
 
@@ -216,9 +297,14 @@ namespace MyNetSensors.SoftNodes
                 sensorId = 255,
                 messageType = MessageType.C_INTERNAL,
                 ack = false,
-                subType = (int)InternalDataType.I_ID_REQUEST,
-                payload = node.version,
+                subType = (int)InternalDataType.I_ID_REQUEST
             };
+
+            if (OnDebugNodeStateMessage != null)
+                OnDebugNodeStateMessage("Sending ID request");
+
+            if (OnDebugTxRxMessage != null)
+                OnDebugTxRxMessage(message.ToString());
 
             client.SendMessage(message);
         }

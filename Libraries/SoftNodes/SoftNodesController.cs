@@ -22,7 +22,7 @@ namespace MyNetSensors.SoftNodes
         {
             this.server = server;
             this.gateway = gateway;
-            server.OnReceivedMessageEvent+= OnReceivedSoftNodeMessage;
+            server.OnReceivedMessage+= OnReceivedSoftNodeMessage;
             gateway.OnMessageSendEvent+= OnSendGatewayMessage;
         }
 

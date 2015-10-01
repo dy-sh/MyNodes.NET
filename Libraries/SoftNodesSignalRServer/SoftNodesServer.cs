@@ -19,7 +19,7 @@ namespace MyNetSensors.SoftNodesSignalRServer
 
         public static SoftNodesServer softNodesServer;
 
-        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+        public event OnReceivedMessageHandler OnReceivedMessage;
         public event Action OnConnected;
         public event Action OnDisconnected;
 
@@ -55,11 +55,11 @@ namespace MyNetSensors.SoftNodesSignalRServer
         }
 
 
-        public void OnReceivedMessage(Message message)
+        public void ReceiveMessage(Message message)
         {
             //Console.WriteLine(message.ToString());
-            if(OnReceivedMessageEvent!=null)
-                OnReceivedMessageEvent(message);
+            if(OnReceivedMessage!=null)
+                OnReceivedMessage(message);
         }
 
     }

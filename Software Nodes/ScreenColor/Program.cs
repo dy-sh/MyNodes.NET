@@ -57,6 +57,13 @@ namespace ScreenColor
 
             softNodeClient = new SoftNodeClient();
             softNode = new SoftNode(softNodeClient, nodeId, nodeName, nodeVersion);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowNodeTxRxDebug"]))
+                softNode.OnDebugTxRxMessage += message => Console.WriteLine("NODE: " + message);
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowNodeStateDebug"]))
+                softNode.OnDebugNodeStateMessage += message => Console.WriteLine("NODE: " + message);
+
             softNode.OnIdResponseReceived += OnIdResponseReceived;
             softNode.ConnectToServer(serverURL);
 

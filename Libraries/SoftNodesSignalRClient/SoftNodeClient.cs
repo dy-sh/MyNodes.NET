@@ -7,6 +7,7 @@ using System;
 using Microsoft.AspNet.SignalR.Client;
 using MyNetSensors.Gateway;
 using MyNetSensors.SoftNodes;
+using DebugMessageEventHandler = MyNetSensors.SoftNodes.DebugMessageEventHandler;
 
 namespace MyNetSensors.SoftNodesSignalRClient
 {
@@ -16,16 +17,16 @@ namespace MyNetSensors.SoftNodesSignalRClient
         private HubConnection hubConnection;
         private string url;
 
-        public event OnReceivedMessageHandler OnReceivedMessageEvent;
+        public event OnReceivedMessageHandler OnReceivedMessage;
         public event Action OnConnected;
         public event Action OnDisconnected;
+        public event DebugMessageEventHandler OnConnectionFailed;
+        public event DebugMessageEventHandler OnSendingMessageFailed;
 
 
         public void ConnectToServer(string url)
         {
             this.url = url;
-
-            Console.WriteLine("Connecting to server " + url);
 
             hubConnection = new HubConnection(url);
             hubProxy = hubConnection.CreateHubProxy("SoftNodesHub");
@@ -36,15 +37,16 @@ namespace MyNetSensors.SoftNodesSignalRClient
                 {
                     hubConnection.Start().Wait();
                     hubConnection.Closed += OnHubConnectionClosed;
-                    hubProxy.On<Message>("ReceiveMessage", OnReceivedMessage);
-                    Console.WriteLine("Connection established");
+                    hubProxy.On<Message>("ReceiveMessage", ReceiveMessage);
+
                     isConnected = true;
                     if (OnConnected != null)
                         OnConnected();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Connection failed: "+e.Message);
+                    if (OnConnectionFailed != null)
+                        OnConnectionFailed(e.Message);
                 }
             }
         }
@@ -79,16 +81,19 @@ namespace MyNetSensors.SoftNodesSignalRClient
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Sending message failed: "+e);
+                    if (OnConnectionFailed != null)
+                        OnConnectionFailed(e.Message);
                 }
             }
         }
 
-        public void OnReceivedMessage(Message message)
+        public void ReceiveMessage(Message message)
         {
+            message.incoming = true;
+
             //Console.WriteLine(message.ToString());
-            if (OnReceivedMessageEvent != null)
-                OnReceivedMessageEvent(message);
+            if (OnReceivedMessage != null)
+                OnReceivedMessage(message);
         }
     }
 }

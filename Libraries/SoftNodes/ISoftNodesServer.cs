@@ -14,7 +14,7 @@ namespace MyNetSensors.SoftNodes
     {
         void StartServer(string url = "http://localhost:13122/");
         void SendMessage(Message message);
-        event OnReceivedMessageHandler OnReceivedMessageEvent;
+        event OnReceivedMessageHandler OnReceivedMessage;
         event Action OnConnected;
         event Action OnDisconnected;
     }
