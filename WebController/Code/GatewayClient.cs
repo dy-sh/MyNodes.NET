@@ -6,6 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Timers;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client;
 using MyNetSensors.Gateway;
@@ -41,10 +43,17 @@ namespace MyNetSensors.WebController.Code
         public event StringString ReturnLog;
         public event StringListNode ReturnNodes;
         public event StringGatewayInfo ReturnGatewayInfo;
-   
+
+
+
+
+
+    
 
         public void ConnectToServer(string url)
         {
+            Debug.WriteLine("Trying to connect to gateway");
+
             this.url = url;
 
             hubConnection = new HubConnection(url);
@@ -78,13 +87,14 @@ namespace MyNetSensors.WebController.Code
                 if (OnConnectionFailed != null)
                     OnConnectionFailed(e.Message);
             }
-
         }
 
         public void OnHubConnectionClosed()
         {
             if (OnDisconnected != null)
                 OnDisconnected();
+
+            Reconnect();
         }
 
 
@@ -98,6 +108,15 @@ namespace MyNetSensors.WebController.Code
             hubConnection.Stop();
             if (OnDisconnected != null)
                 OnDisconnected();
+        }
+
+        private async void Reconnect()
+        {
+            while (!IsConnected())
+            {
+                ConnectToServer(url);
+                await Task.Delay(1000);
+            }
         }
 
         public bool IsGatewayServiceConnected()
@@ -266,6 +285,14 @@ namespace MyNetSensors.WebController.Code
                 return;
 
             hubProxy.Invoke("clearLog", clientId);
+        }
+
+        public void ClearNodes(string clientId)
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            hubProxy.Invoke("clearNodes", clientId);
         }
 
         public void GetGatewayInfo(string clientId)

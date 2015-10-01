@@ -61,7 +61,10 @@ namespace MyNetSensors.Gateway
         void GetLog(string clientId);
         void GetGatewayInfo(string clientId);
         void ClearLog(string clientId);
+        void ClearNodes(string clientId);
 
         #endregion
+
+
     }
 }

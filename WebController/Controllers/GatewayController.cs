@@ -28,7 +28,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
         IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
-        
+
 
 
 
@@ -62,8 +62,9 @@ namespace MyNetSensors.WebController.Controllers
         public async Task<ActionResult> DropNodes()
         {
             await DropHistoryDatabase();
-            clientsHub.Clients.All.clearLog();
-            clientsHub.Clients.All.clearNodes();
+            string clientId = "";   //todo get client id
+            GatewayClientStatic.gatewayClient.ClearNodes(clientId);
+
             return RedirectToAction("Settings");
         }
 
@@ -110,7 +111,7 @@ namespace MyNetSensors.WebController.Controllers
             await StopRecordingNodesHistory();
             //waiting for all history writings finished
             await Task.Delay(2000);
-            
+
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsHistoryRepository db = new SensorsHistoryRepositoryDapper(cs);
             db.DropAllSensorsHistory();
@@ -153,7 +154,7 @@ namespace MyNetSensors.WebController.Controllers
             //turn off writing history in nodes settings
             foreach (var node in nodes)
             {
-                    Debug.WriteLine(node.nodeId);
+                Debug.WriteLine(node.nodeId);
                 foreach (var sensor in node.sensors)
                 {
                     sensor.storeHistoryEnabled = false;
@@ -164,7 +165,7 @@ namespace MyNetSensors.WebController.Controllers
             }
         }
 
-   
+
 
     }
 }
