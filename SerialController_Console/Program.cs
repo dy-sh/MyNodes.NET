@@ -62,8 +62,8 @@ namespace MyNetSensors.SerialController_Console
             Console.WriteLine("WEB SERVER: Starting...");
 
             bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["UseWebServer"]);
-            string webServerURL = ConfigurationManager.AppSettings["WebServerURL"];
-            string connectionPassword = ConfigurationManager.AppSettings["WebServerGateConnectionPassword"];
+            string webServerURL = ConfigurationManager.AppSettings["WebServerGatewayServiceURL"];
+            //string connectionPassword = ConfigurationManager.AppSettings["WebServerGateConnectionPassword"];
             if (connectToWebServer)
             {
 
@@ -75,7 +75,7 @@ namespace MyNetSensors.SerialController_Console
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["WebServerStateDebug"]))
                     gatewayWebServer.OnDebugStateMessage += message => Console.WriteLine("WEB SERVER: " + message);
 
-                gatewayWebServer.StartServer(gateway, webServerURL, connectionPassword);
+                gatewayWebServer.StartServer(gateway, webServerURL);
             }
         }
 

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
@@ -26,7 +27,9 @@ namespace MyNetSensors.WebController.Code
                 if (gatewayClient != null) return;
                 gatewayClient = new GatewayClient();
 
-                gatewayClient.ConnectToServer();
+                string url = ConfigurationManager.AppSettings["WebServerGatewayServiceURL"];
+
+                gatewayClient.ConnectToServer(url);
             }
         }
     }
