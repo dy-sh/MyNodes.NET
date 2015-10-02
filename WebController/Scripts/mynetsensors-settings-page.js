@@ -24,13 +24,13 @@ var sensorsCount;
 $(function () {
     clientsHub = $.connection.clientsHub;
 
-    clientsHub.client.onGatewayHardwareConnected = function () {
+    clientsHub.client.onGatewayConnected = function () {
         var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
         gatewayHardwareConnected = true;
         gatewayStatusChanged();
     };
 
-    clientsHub.client.onGatewayHardwareDisconnected = function () {
+    clientsHub.client.onGatewayDisconnected = function () {
         var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
         gatewayHardwareConnected = false;
         gatewayStatusChanged();

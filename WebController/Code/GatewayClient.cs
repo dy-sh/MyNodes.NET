@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.AspNet.SignalR;
@@ -46,12 +47,20 @@ namespace MyNetSensors.WebController.Code
 
 
 
+        private bool stayConnected;
+        private bool wasConnected;
 
+
+        public GatewayClient()
+        {
+            Reconnect();
+        }
 
     
 
         public void ConnectToServer(string url)
         {
+            stayConnected = true;
             Debug.WriteLine("Trying to connect to gateway");
 
             this.url = url;
@@ -80,6 +89,12 @@ namespace MyNetSensors.WebController.Code
                 hubProxy.On<string, List<Node>>("ReturnNodesEvent", ReturnNodesEvent);
                 hubProxy.On<string, GatewayInfo>("ReturnGatewayInfoEvent", ReturnGatewayInfoEvent);
 
+                wasConnected = true;
+
+                if (OnConnected != null)
+                    OnConnected();
+
+                clientsHub.Clients.All.onGatewayServiceConnected();
 
             }
             catch (Exception e)
@@ -89,12 +104,32 @@ namespace MyNetSensors.WebController.Code
             }
         }
 
+        private async void Reconnect()
+        {
+            while (true)
+            {
+                if (!IsConnected())
+                {
+                    if (wasConnected)
+                    {
+                        clientsHub.Clients.All.onGatewayServiceDisconnected();
+                        wasConnected = false;
+                    }
+
+                    if (stayConnected)
+                        ConnectToServer(url);
+                }
+
+                await Task.Delay(1000);
+            }
+        }
+
         public void OnHubConnectionClosed()
         {
             if (OnDisconnected != null)
                 OnDisconnected();
 
-            Reconnect();
+           // clientsHub.Clients.All.onGatewayServiceDisconnected();
         }
 
 
@@ -105,19 +140,16 @@ namespace MyNetSensors.WebController.Code
 
         public void Disconnect()
         {
+            stayConnected = false;
+
             hubConnection.Stop();
             if (OnDisconnected != null)
                 OnDisconnected();
+
+            clientsHub.Clients.All.onGatewayServiceDisconnected();
         }
 
-        private async void Reconnect()
-        {
-            while (!IsConnected())
-            {
-                ConnectToServer(url);
-                await Task.Delay(1000);
-            }
-        }
+
 
         public bool IsGatewayServiceConnected()
         {
@@ -176,7 +208,6 @@ namespace MyNetSensors.WebController.Code
         {
             clientsHub.Clients.All.OnSensorUpdated(sensor);
             OnSensorUpdated?.Invoke(sensor);
-            Debug.WriteLine("OnSensorUpdated");
         }
 
         public void OnNewSensorEvent(Sensor sensor)
