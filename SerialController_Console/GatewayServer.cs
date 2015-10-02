@@ -58,7 +58,6 @@ namespace MyNetSensors.SerialController_Console
 
 
 
-
         public void DebugTxRx(string message)
         {
             if (OnDebugTxRxMessage != null)
@@ -247,6 +246,11 @@ namespace MyNetSensors.SerialController_Console
         public void UpdateSensorsTasks(string userId)
         {
             Program.sensorsTasksEngine.GetTasksFromRepository();
+        }
+
+        public void UpdateNodeSettings(string userId, Node node)
+        {
+            gateway.UpdateNodeSettings(node);
         }
     }
 }

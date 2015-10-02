@@ -62,5 +62,10 @@ namespace MyNetSensors.SerialController_Console
             GatewayServer.gatewayServer.UpdateSensorsTasks(userId);
         }
 
+        public void UpdateNodeSettings(string userId,Node node)
+        {
+            GatewayServer.gatewayServer.UpdateNodeSettings(userId,node);
+        }
+
     }
 }

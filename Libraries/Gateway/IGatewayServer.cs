@@ -25,7 +25,6 @@ namespace MyNetSensors.Gateway
         void DebugTxRx(string message);
         void DebugState(string message);
 
-        void UpdateNodeSettings(Node node);
         void OnGatewayConnectedEvent();
         void OnGatewayDisconnectedEvent();
         void OnMessageRecievedEvent(Message message);
@@ -49,6 +48,7 @@ namespace MyNetSensors.Gateway
         void SendMessage(string userId, string message);
         void UpdateSensorsLinks(string userId);
         void UpdateSensorsTasks(string userId);
+        void UpdateNodeSettings(Node node);
     }
 
 }

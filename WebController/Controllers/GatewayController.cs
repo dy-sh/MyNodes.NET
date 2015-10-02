@@ -126,7 +126,10 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
             db.DisableAllTasks();
-            clientsHub.Clients.All.updateSensorsTasks();
+
+            string clientId = "";   //todo get client id
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
+
         }
 
         private async Task DropTasksDatabase()
@@ -134,7 +137,9 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsTasksRepository db = new SensorsTasksRepositoryDapper(cs);
             db.DropAllTasks();
-            clientsHub.Clients.All.updateSensorsTasks();
+
+            string clientId = "";   //todo get client id
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
         }
 
         private async Task DropLinksDatabase()
@@ -142,7 +147,9 @@ namespace MyNetSensors.WebController.Controllers
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             ISensorsLinksRepository db = new SensorsLinksRepositoryDapper(cs);
             db.DropAllLinks();
-            clientsHub.Clients.All.updateSensorsLinks();
+
+            string clientId = "";   //todo get client id
+            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
         }
 
         private async Task StopRecordingNodesHistory()
@@ -159,8 +166,11 @@ namespace MyNetSensors.WebController.Controllers
                 {
                     sensor.storeHistoryEnabled = false;
                 }
+
                 gatewayDb.UpdateNodeSettings(node);
-                clientsHub.Clients.All.updateNodeSettings(node);
+
+                string clientId = "";   //todo get client id
+                GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
                 await Task.Delay(100);
             }
         }

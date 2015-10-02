@@ -64,9 +64,9 @@ namespace MyNetSensors.Gateway
         void ClearNodes(string clientId);
         void UpdateSensorsLinks(string clientId);
         void UpdateSensorsTasks(string clientId);
+        void UpdateNodeSettings(string clientId, Node node);
 
         #endregion
-
 
     }
 }

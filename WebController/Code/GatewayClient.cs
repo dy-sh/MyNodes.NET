@@ -317,6 +317,14 @@ namespace MyNetSensors.WebController.Code
             hubProxy.Invoke("UpdateSensorsTasks", clientId);
         }
 
+        public void UpdateNodeSettings(string clientId, Node node)
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            hubProxy.Invoke("UpdateNodeSettings", clientId, node);
+        }
+
         #endregion
     }
 }

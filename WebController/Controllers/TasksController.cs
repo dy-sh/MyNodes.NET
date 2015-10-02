@@ -122,15 +122,15 @@ namespace MyNetSensors.WebController.Controllers
                 }
                 else if (dataType == SensorDataType.V_RGB)
                 {
-                    task.executionValue = "#FFFFFF";
-                    task.repeatingAValue = "#000000";
-                    task.repeatingBValue = "#FFFFFF";
+                    task.executionValue = "FFFFFF";
+                    task.repeatingAValue = "000000";
+                    task.repeatingBValue = "FFFFFF";
                 }
                 else if (dataType == SensorDataType.V_RGBW)
                 {
-                    task.executionValue = "#FFFFFFFF";
-                    task.repeatingAValue = "#FFFFFF00";
-                    task.repeatingBValue = "#FFFFFFFF";
+                    task.executionValue = "FFFFFFFF";
+                    task.repeatingAValue = "FFFFFF00";
+                    task.repeatingBValue = "FFFFFFFF";
                 }
                 else if (dataType == SensorDataType.V_PERCENTAGE ||
                          dataType == SensorDataType.V_DIMMER)

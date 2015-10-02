@@ -81,7 +81,8 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.description = sensordescription;
             }
             gatewayDb.UpdateNodeSettings(node);
-            clientsHub.Clients.All.updateNodeSettings(node);
+            string clientId = "";//todo get client id
+            GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId,node);
             return RedirectToAction("Control", "Gateway");
             // return View(node);
         }
