@@ -47,6 +47,8 @@ namespace MyNetSensors.Gateway
         bool GetGatewayHardwareConnected(string userId);
         GatewayInfo GetGatewayInfo(string userId);
         void SendMessage(string userId, string message);
+        void UpdateSensorsLinks(string userId);
+        void UpdateSensorsTasks(string userId);
     }
 
 }

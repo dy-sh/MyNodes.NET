@@ -21,16 +21,16 @@ using MyNetSensors.SoftNodes;
 
 namespace MyNetSensors.SerialController_Console
 {
-    internal class Program
+    internal static class Program
     {
         private static ComPort comPort = new ComPort();
         private static SerialGateway gateway = new SerialGateway();
         private static IGatewayRepository gatewayDb;
         private static ISensorsHistoryRepository historyDb;
         private static ISensorsTasksRepository sensorsTasksDb;
-        private static SensorsTasksEngine sensorsTasksEngine;
+        public static SensorsTasksEngine sensorsTasksEngine;
         private static ISensorsLinksRepository sensorsLinksDb;
-        private static SensorsLinksEngine sensorsLinksEngine;
+        public static SensorsLinksEngine sensorsLinksEngine;
         private static ISoftNodesServer softNodesServer;
         private static SoftNodesController softNodesController;
         private static IGatewayServer gatewayWebServer;

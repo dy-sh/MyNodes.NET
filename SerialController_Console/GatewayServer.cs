@@ -238,5 +238,15 @@ namespace MyNetSensors.SerialController_Console
         }
 
         #endregion
+
+        public void UpdateSensorsLinks(string userId)
+        {
+            Program.sensorsLinksEngine.GetLinksFromRepository();
+        }
+
+        public void UpdateSensorsTasks(string userId)
+        {
+            Program.sensorsTasksEngine.GetTasksFromRepository();
+        }
     }
 }

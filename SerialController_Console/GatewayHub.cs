@@ -52,5 +52,15 @@ namespace MyNetSensors.SerialController_Console
             GatewayServer.gatewayServer.SendMessage(userId, message);
         }
 
+        public void UpdateSensorsLinks(string userId)
+        {
+            GatewayServer.gatewayServer.UpdateSensorsLinks(userId);
+        }
+
+        public void UpdateSensorsTasks(string userId)
+        {
+            GatewayServer.gatewayServer.UpdateSensorsTasks(userId);
+        }
+
     }
 }

@@ -152,7 +152,8 @@ namespace MyNetSensors.WebController.Controllers
 
 
             linksDb.AddLink(link);
-            clientsHub.Clients.All.updateSensorsLinks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
             return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
         }
 
@@ -194,7 +195,8 @@ namespace MyNetSensors.WebController.Controllers
                 return new HttpNotFoundResult();
 
             linksDb.DeleteLink(id);
-            clientsHub.Clients.All.updateSensorsLinks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -213,7 +215,8 @@ namespace MyNetSensors.WebController.Controllers
 
                 linksDb.DeleteLinksTo(id1.Value, id2.Value);
 
-                clientsHub.Clients.All.updateSensorsLinks();
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -223,7 +226,9 @@ namespace MyNetSensors.WebController.Controllers
             {
                 linksDb.DropAllLinks();
 
-                clientsHub.Clients.All.updateSensorsLinks();
+
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());

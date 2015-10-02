@@ -160,7 +160,8 @@ namespace MyNetSensors.WebController.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.AddTask(task);
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
             return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
         }
 
@@ -193,7 +194,8 @@ namespace MyNetSensors.WebController.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.UpdateTask(task);
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
             return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
@@ -205,7 +207,8 @@ namespace MyNetSensors.WebController.Controllers
                 return new HttpNotFoundResult();
 
             tasksDb.DeleteTask(id);
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -221,7 +224,8 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTaskEnabled(task.db_Id,true);
 
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -237,7 +241,8 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTaskEnabled(task.db_Id, false);
 
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -253,7 +258,8 @@ namespace MyNetSensors.WebController.Controllers
 
             tasksDb.UpdateTask(task.db_Id,true,false,DateTime.Now,0);
 
-            clientsHub.Clients.All.updateSensorsTasks();
+            string usedId = "";//todo get userid
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
@@ -271,7 +277,8 @@ namespace MyNetSensors.WebController.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteTasks(id1.Value, id2.Value);
-                clientsHub.Clients.All.updateSensorsTasks();
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -280,7 +287,8 @@ namespace MyNetSensors.WebController.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DropAllTasks();
-                clientsHub.Clients.All.updateSensorsTasks();
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -300,7 +308,8 @@ namespace MyNetSensors.WebController.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteCompleted(id1.Value, id2.Value);
-                clientsHub.Clients.All.updateSensorsTasks();
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());
@@ -309,7 +318,8 @@ namespace MyNetSensors.WebController.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DeleteCompleted();
-                clientsHub.Clients.All.updateSensorsTasks();
+                string usedId = "";//todo get userid
+                GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
                 if (Request.UrlReferrer != null)
                     return Redirect(Request.UrlReferrer.ToString());

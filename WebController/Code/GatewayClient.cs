@@ -301,6 +301,22 @@ namespace MyNetSensors.WebController.Code
             hubProxy.Invoke("GetGatewayInfo", clientId);
         }
 
+        public void UpdateSensorsLinks(string clientId)
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            hubProxy.Invoke("UpdateSensorsLinks", clientId);
+        }
+
+        public void UpdateSensorsTasks(string clientId)
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            hubProxy.Invoke("UpdateSensorsTasks", clientId);
+        }
+
         #endregion
     }
 }
