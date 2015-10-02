@@ -132,16 +132,14 @@ namespace MyNetSensors.WebController.Code
 
         public void OnMessageRecievedEvent(Message message)
         {
-            clientsHub.Clients.All.OnMessageRecieved(message);
+            clientsHub.Clients.All.OnMessageRecieved(message.ToString());
             OnMessageRecieved?.Invoke(message.ToString());
-            Debug.WriteLine("OnMessageRecieved");
         }
 
         public void OnMessageSendEvent(Message message)
         {
-            clientsHub.Clients.All.OnMessageSend(message);
+            clientsHub.Clients.All.OnMessageSend(message.ToString());
             OnMessageSend?.Invoke(message.ToString());
-            Debug.WriteLine("OnMessageSend");
         }
 
         public void OnClearMessagesEvent()

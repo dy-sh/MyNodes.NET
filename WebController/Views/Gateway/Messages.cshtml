@@ -29,24 +29,24 @@
                 clientsHub.server.clearLog();
             });
 
-            clientsHub.client.onMessageRecievedEvent = function (message) {
+            clientsHub.client.onMessageRecieved = function (message) {
                 $('#log').append(message + "<br/>");
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
             };
 
-            clientsHub.client.onMessageSendEvent = function (message) {
+            clientsHub.client.onMessageSend = function (message) {
                 $('#log').append(message + "<br/>");
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
             };
 
             clientsHub.client.returnLog = function (log) {
                 $('#log').html(log);
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
             };
 
             clientsHub.client.onClearMessages = function (log) {
                 $('#log').html(null);
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 200);
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
             };
 
             $.connection.hub.start().done(function () {
