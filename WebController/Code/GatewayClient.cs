@@ -56,51 +56,56 @@ namespace MyNetSensors.WebController.Code
             Reconnect();
         }
 
-    
+
+        private static Object lock1 = new Object();
+
 
         public void ConnectToServer(string url)
         {
-            stayConnected = true;
-            Debug.WriteLine("Trying to connect to gateway");
-
-            this.url = url;
-
-            hubConnection = new HubConnection(url);
-            hubProxy = hubConnection.CreateHubProxy("GatewayHub");
-
-            try
+            lock (lock1)
             {
-                hubConnection.Start().Wait();
-                hubConnection.Closed += OnHubConnectionClosed;
-                hubProxy.On<Message>("OnMessageRecievedEvent", OnMessageRecievedEvent);
-                hubProxy.On<Message>("OnMessageSendEvent", OnMessageSendEvent);
-                hubProxy.On("OnClearMessagesEvent", OnClearMessagesEvent);
-                hubProxy.On<Node>("OnNodeUpdatedEvent", OnNodeUpdatedEvent);
-                hubProxy.On<Node>("OnNodeLastSeenUpdatedEvent", OnNodeLastSeenUpdatedEvent);
-                hubProxy.On<Node>("OnNewNodeEvent", OnNewNodeEvent);
-                hubProxy.On<Node>("OnNodeBatteryUpdatedEvent", OnNodeBatteryUpdatedEvent);
-                hubProxy.On<Sensor>("OnSensorUpdatedEvent", OnSensorUpdatedEvent);
-                hubProxy.On<Sensor>("OnNewSensorEvent", OnNewSensorEvent);
-                hubProxy.On("OnClearNodesListEvent", OnClearNodesListEvent);
-                hubProxy.On("OnGatewayConnectedEvent", OnGatewayConnectedEvent);
-                hubProxy.On("OnGatewayDisconnectedEvent", OnGatewayDisconnectedEvent);
-                hubProxy.On<string, bool>("ReturnGatewayHardwareConnectedEvent", ReturnGatewayHardwareConnectedEvent);
-                hubProxy.On<string, List<Message>>("ReturnLogEvent", ReturnLogEvent);
-                hubProxy.On<string, List<Node>>("ReturnNodesEvent", ReturnNodesEvent);
-                hubProxy.On<string, GatewayInfo>("ReturnGatewayInfoEvent", ReturnGatewayInfoEvent);
+                stayConnected = true;
+                Debug.WriteLine("Trying to connect to gateway");
 
-                wasConnected = true;
+                this.url = url;
 
-                if (OnConnected != null)
-                    OnConnected();
+                hubConnection = new HubConnection(url);
+                hubProxy = hubConnection.CreateHubProxy("GatewayHub");
 
-                clientsHub.Clients.All.onGatewayServiceConnected();
+                try
+                {
+                    hubConnection.Start().Wait();
+                    hubConnection.Closed += OnHubConnectionClosed;
+                    hubProxy.On<Message>("OnMessageRecievedEvent", OnMessageRecievedEvent);
+                    hubProxy.On<Message>("OnMessageSendEvent", OnMessageSendEvent);
+                    hubProxy.On("OnClearMessagesEvent", OnClearMessagesEvent);
+                    hubProxy.On<Node>("OnNodeUpdatedEvent", OnNodeUpdatedEvent);
+                    hubProxy.On<Node>("OnNodeLastSeenUpdatedEvent", OnNodeLastSeenUpdatedEvent);
+                    hubProxy.On<Node>("OnNewNodeEvent", OnNewNodeEvent);
+                    hubProxy.On<Node>("OnNodeBatteryUpdatedEvent", OnNodeBatteryUpdatedEvent);
+                    hubProxy.On<Sensor>("OnSensorUpdatedEvent", OnSensorUpdatedEvent);
+                    hubProxy.On<Sensor>("OnNewSensorEvent", OnNewSensorEvent);
+                    hubProxy.On("OnClearNodesListEvent", OnClearNodesListEvent);
+                    hubProxy.On("OnGatewayConnectedEvent", OnGatewayConnectedEvent);
+                    hubProxy.On("OnGatewayDisconnectedEvent", OnGatewayDisconnectedEvent);
+                    hubProxy.On<string, bool>("ReturnGatewayHardwareConnectedEvent", ReturnGatewayHardwareConnectedEvent);
+                    hubProxy.On<string, List<Message>>("ReturnLogEvent", ReturnLogEvent);
+                    hubProxy.On<string, List<Node>>("ReturnNodesEvent", ReturnNodesEvent);
+                    hubProxy.On<string, GatewayInfo>("ReturnGatewayInfoEvent", ReturnGatewayInfoEvent);
 
-            }
-            catch (Exception e)
-            {
-                if (OnConnectionFailed != null)
-                    OnConnectionFailed(e.Message);
+                    wasConnected = true;
+
+                    if (OnConnected != null)
+                        OnConnected();
+
+                    clientsHub.Clients.All.onGatewayServiceConnected();
+
+                }
+                catch (Exception e)
+                {
+                    if (OnConnectionFailed != null)
+                        OnConnectionFailed(e.Message);
+                }
             }
         }
 
