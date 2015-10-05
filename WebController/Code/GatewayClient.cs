@@ -329,6 +329,14 @@ namespace MyNetSensors.WebController.Code
             hubProxy.Invoke("clearNodes", clientId);
         }
 
+        public void DeleteNode(string clientId, int nodeId)
+        {
+            if (!IsGatewayServiceConnected())
+                return;
+
+            hubProxy.Invoke("deleteNode", clientId, nodeId);
+        }
+
         public void GetGatewayInfo(string clientId)
         {
             if (!IsGatewayServiceConnected())

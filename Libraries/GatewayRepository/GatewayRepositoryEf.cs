@@ -334,6 +334,16 @@ namespace MyNetSensors.GatewayRepository
             throw new NotImplementedException();
         }
 
+        public void DeleteNodeByDbId(int db_Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteNodeByNodeId(int nodeId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetWriteInterval(int ms)
         {
             writeInterval = ms;

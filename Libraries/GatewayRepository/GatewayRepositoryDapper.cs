@@ -586,6 +586,44 @@ namespace MyNetSensors.GatewayRepository
             }
         }
 
+        public void DeleteNodeByDbId(int db_Id)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "Delete FROM Nodes " +
+                    "WHERE db_Id = @db_Id";
+                db.Execute(sqlQuery,new { db_Id });
+
+                sqlQuery =
+                    "Delete FROM Sensors " +
+                    "WHERE Node_db_Id = @Node_db_Id";
+                db.Execute(sqlQuery, new { Node_db_Id= db_Id });
+            }
+        }
+
+        public void DeleteNodeByNodeId(int nodeId)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "Delete FROM Nodes " +
+                    "WHERE nodeId = @nodeId";
+                db.Execute(sqlQuery, new { nodeId });
+
+
+                sqlQuery =
+                    "Delete FROM Sensors " +
+                    "WHERE ownerNodeId = @ownerNodeId";
+                db.Execute(sqlQuery, new { ownerNodeId = nodeId });
+            }
+        }
+
+
+
+
 
 
 

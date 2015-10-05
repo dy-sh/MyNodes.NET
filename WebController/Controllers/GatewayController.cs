@@ -161,7 +161,6 @@ namespace MyNetSensors.WebController.Controllers
             //turn off writing history in nodes settings
             foreach (var node in nodes)
             {
-                Debug.WriteLine(node.nodeId);
                 foreach (var sensor in node.sensors)
                 {
                     sensor.storeHistoryEnabled = false;

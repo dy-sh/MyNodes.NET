@@ -8,6 +8,9 @@
 <p>
     < @Html.ActionLink("Control Nodes", "Control", "Gateway")
     < @Html.ActionLink("Nodes Settings", "Index", "Node")
+    @Html.ActionLink("Delete node", "Delete", new { id = Model.nodeId}, new { @class = "btn btn-primary pull-right" })
+
+
 </p>
 <hr/>
 

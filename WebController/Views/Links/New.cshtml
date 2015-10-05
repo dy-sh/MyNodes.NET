@@ -51,15 +51,18 @@ else
                             {
                                 List<SensorData> datas = sensor.GetAllData();
 
-                                if (datas.Count == 1)
+                                if (datas != null)
                                 {
-                                    <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
-                                }
-                                else
-                                {
-                                    foreach (SensorData data in datas)
+                                    if (datas.Count == 1)
                                     {
-                                        <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                        <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
+                                    }
+                                    else
+                                    {
+                                        foreach (SensorData data in datas)
+                                        {
+                                            <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                        }
                                     }
                                 }
                             }
@@ -79,15 +82,19 @@ else
                             @foreach (Sensor sensor in node.sensors)
                             {
                                 List<SensorData> datas = sensor.GetAllData();
-                                if (datas.Count == 1)
+
+                                if (datas != null)
                                 {
-                                    <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
-                                }
-                                else
-                                {
-                                    foreach (SensorData data in datas)
+                                    if (datas.Count == 1)
                                     {
-                                        <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                        <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
+                                    }
+                                    else
+                                    {
+                                        foreach (SensorData data in datas)
+                                        {
+                                            <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
+                                        }
                                     }
                                 }
                             }

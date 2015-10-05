@@ -37,5 +37,7 @@ namespace MyNetSensors.GatewayRepository
 
         void UpdateNodeSettings(Node node);
         void UpdateSensorSettings(Sensor sensor);
+        void DeleteNodeByDbId(int db_Id);
+        void DeleteNodeByNodeId(int nodeId);
     }
 }

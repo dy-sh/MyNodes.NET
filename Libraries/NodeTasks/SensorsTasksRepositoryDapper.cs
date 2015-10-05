@@ -192,6 +192,16 @@ namespace MyNetSensors.NodeTasks
             }
         }
 
+        public void DeleteTasks(int sensorDbId)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query("DELETE FROM SensorsTasks WHERE sensorDbId=@sensorDbId",
+                    new { sensorDbId });
+            }
+        }
+
         public void DeleteCompleted()
         {
             using (var db = new SqlConnection(connectionString))

@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
@@ -21,7 +22,7 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {
-  
+
 
         IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
         private ISensorsHistoryRepository historyDb;
@@ -82,12 +83,45 @@ namespace MyNetSensors.WebController.Controllers
             }
             gatewayDb.UpdateNodeSettings(node);
             string clientId = "";//todo get client id
-            GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId,node);
+            GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
             return RedirectToAction("Control", "Gateway");
             // return View(node);
         }
 
+        public ActionResult Delete(int id)
+        {
+            Node node = gatewayDb.GetNodeByNodeId(id);
+            if (node == null)
+                return HttpNotFound();
 
-    
+
+            string clientId = "";//todo get client id
+            GatewayClientStatic.gatewayClient.DeleteNode(clientId, node.nodeId);
+
+            gatewayDb.DeleteNodeByDbId(node.db_Id);
+
+
+
+            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
+            ISensorsLinksRepository linksDb = new SensorsLinksRepositoryDapper(cs);
+            ISensorsTasksRepository tasksDb = new SensorsTasksRepositoryDapper(cs);
+
+            foreach (var sensor in node.sensors)
+            {
+                historyDb.DropSensorHistory(sensor.db_Id);
+                linksDb.DeleteLinksTo(sensor.db_Id);
+                linksDb.DeleteLinksFrom(sensor.db_Id);
+                tasksDb.DeleteTasks(sensor.db_Id);
+            }
+
+            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
+            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
+
+
+
+
+            return RedirectToAction("Control", "Gateway");
+        }
+
     }
 }

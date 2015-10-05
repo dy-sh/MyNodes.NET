@@ -16,6 +16,11 @@ namespace MyNetSensors.SerialController_Console
             GatewayServer.gatewayServer.ClearNodes(userId);
         }
 
+        public void DeleteNode(string userId,int nodeId)
+        {
+            GatewayServer.gatewayServer.DeleteNode(userId, nodeId);
+        }
+
         public void GetLog(string userId)
         {
             List<Message> log = GatewayServer.gatewayServer.GetLog(userId);

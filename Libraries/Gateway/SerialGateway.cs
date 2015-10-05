@@ -522,5 +522,13 @@ namespace MyNetSensors.Gateway
                 oldSensor.storeHistoryWithInterval = sensor.storeHistoryWithInterval;
             }
         }
+
+        public void DeleteNode(int nodeId)
+        {
+            Node oldNode = GetNode(nodeId);
+
+            if (oldNode!=null) 
+                nodes.Remove(oldNode);
+        }
     }
 }

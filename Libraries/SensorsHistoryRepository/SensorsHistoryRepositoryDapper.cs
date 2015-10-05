@@ -94,7 +94,6 @@ namespace MyNetSensors.SensorsHistoryRepository
                         if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
                         {
                             sensor.storeHistoryLastDate = DateTime.Now;
-                            Debug.WriteLine(elapsedTime.TotalMilliseconds + " " + sensor.sensorId);
                             WriteSensorDataToHistory(sensor);
                         }
                     }

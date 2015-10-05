@@ -252,5 +252,12 @@ namespace MyNetSensors.SerialController_Console
         {
             gateway.UpdateNodeSettings(node);
         }
+
+        public void DeleteNode(string userId, int nodeId)
+        {
+            DebugTxRx(String.Format("Clear log ({0})", userId));
+
+            gateway.DeleteNode(nodeId);
+        }
     }
 }

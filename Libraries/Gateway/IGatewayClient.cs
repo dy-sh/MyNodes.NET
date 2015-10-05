@@ -62,6 +62,7 @@ namespace MyNetSensors.Gateway
         void GetGatewayInfo(string clientId);
         void ClearLog(string clientId);
         void ClearNodes(string clientId);
+        void DeleteNode(string clientId, int nodeId);
         void UpdateSensorsLinks(string clientId);
         void UpdateSensorsTasks(string clientId);
         void UpdateNodeSettings(string clientId, Node node);
