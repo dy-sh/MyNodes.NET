@@ -56,7 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensor.cs" />
     <Compile Include="SensorData.cs" />
-    <Compile Include="SensorDataRemapSettings.cs" />
     <Compile Include="SerialGateway.cs" />
   </ItemGroup>
   <ItemGroup>

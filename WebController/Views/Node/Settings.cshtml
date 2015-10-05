@@ -50,33 +50,73 @@
                         </div>
                         <br />
                         <ul class="list-group" style="margin-bottom: -7px">
+
+                            <li class="list-group-item">
+                                Invert data
+                                <div class="pull-right">
+                                    @Html.CheckBox("invertData" + sensor.sensorId, sensor.invertData, new { @class = "switch invertData-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId })
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Remap data
+                                <div class="pull-right">
+                                    @Html.CheckBox("remapData" + sensor.sensorId, sensor.remapEnabled, new { @class = "switch remapData-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId })
+                                </div>
+                            </li>
+                            <div id="remapPanel-@sensor.sensorId" style="display:none">
+                                <li class="list-group-item">
+                                    Remap from min
+                                    <div class="pull-right">
+                                        @Html.TextBox("remapFromMin" + sensor.sensorId, sensor.remapFromMin, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Remap from max
+                                    <div class="pull-right">
+                                        @Html.TextBox("remapFromMax" + sensor.sensorId, sensor.remapFromMax, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Remap to min
+                                    <div class="pull-right">
+                                        @Html.TextBox("remapToMin" + sensor.sensorId, sensor.remapToMin, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Remap to max
+                                    <div class="pull-right">
+                                        @Html.TextBox("remapToMax" + sensor.sensorId, sensor.remapToMax, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                    </div>
+                                </li>
+                            </div>
+
                             <li class="list-group-item">
                                 Store history in database
                                 <div class="pull-right">
-                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new { @class = "switch storehistory-switch", @data_size = "small", @data_label_width = "0" , @panel_id = @sensor.sensorId })
+                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new {@class = "switch storehistory-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId})
                                 </div>
                             </li>
-                            <div id="historyPanel-@sensor.sensorId" style="display:none">
+                            <div id="historyPanel-@sensor.sensorId" style="display: none">
                                 <li class="list-group-item">
                                     Write every change
                                     <div class="pull-right">
-                                        @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new { @class = "switch", @data_size = "small", @data_label_width = "0" })
+                                        @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     Write with interval (sec)
                                     <div class="pull-right">
-                                        @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
+                                        @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new {@class = "form-control", @style = "width: 80px; margin-top: -7px"})
                                     </div>
                                 </li>
                             </div>
+
                         </ul>
                     </div>
                 </div>
             }
             <div class="btn-group pull-right" role="group" style="padding-right: 10px;">
                 <input type="submit" value="Save changes" class="btn btn-primary" />
-                @* <a href="javascript:window.location.href=window.location.href" class="btn btn-default">Cancel</a>*@
                 @Html.ActionLink("Cancel", "Control", "Gateway", null, new { @class = "btn btn-default" })
             </div>
         }
@@ -112,12 +152,30 @@
             }
         });
 
-        var switches = $(".switch");
+        $(".remapData-switch").on('switchChange.bootstrapSwitch', function (event, state) {
+            var id = this.getAttribute("panel-id");
+            if (state) {
+                $('#remapPanel-' + id).fadeIn(fade);
+            } else {
+                $('#remapPanel-' + id).fadeOut(fade);
+            }
+        });
+
+        var switches = $(".storehistory-switch");
         for (var i = 0; i < switches.length; i++) {
             if (switches[i].checked) {
                 var id = switches[i].getAttribute("panel-id");
                 if (id!=null)
-                    $('#historyPanel-' + id).show(fade);
+                    $('#historyPanel-' + id).show();
+            }
+        }
+
+        switches = $(".remapData-switch");
+        for (var i = 0; i < switches.length; i++) {
+            if (switches[i].checked) {
+                var id = switches[i].getAttribute("panel-id");
+                if (id != null)
+                    $('#remapPanel-' + id).show();
             }
         }
 

@@ -153,11 +153,16 @@ namespace MyNetSensors.GatewayRepository
 	                [sensorId] [int] NOT NULL,
 	                [sensorType] [int] NULL,
 	                [sensorDataJson] [nvarchar](max) NULL,
-	                [sensorDataRemapSettingsJson] [nvarchar](max) NULL,
 	                [description] [nvarchar](max) NULL,
 	                [storeHistoryEnabled] [bit] NULL,
 	                [storeHistoryEveryChange] [bit] NULL,
 	                [storeHistoryWithInterval] [int] NULL,
+	                [invertData] [bit] NULL,
+	                [remapEnabled] [bit] NULL,
+	                [remapFromMin] [nvarchar](max) NULL,
+	                [remapFromMax] [nvarchar](max) NULL,
+	                [remapToMin] [nvarchar](max) NULL,
+	                [remapToMax] [nvarchar](max) NULL,
 	                [Node_db_Id] [int] NULL) ON [PRIMARY] ");
                 }
                 catch
@@ -322,9 +327,9 @@ namespace MyNetSensors.GatewayRepository
 
                 if (oldSensor == null)
                 {
-                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson,sensorDataRemapSettingsJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
+                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
                                    +
-                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson,@sensorDataRemapSettingsJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
+                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int dbId = db.Query<int>(sqlQuery, new
                     {
@@ -332,11 +337,16 @@ namespace MyNetSensors.GatewayRepository
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
-                        sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryEveryChange = sensor.storeHistoryEveryChange,
                         storeHistoryWithInterval = sensor.storeHistoryWithInterval,
+                        invertData = sensor.invertData,
+                        remapEnabled = sensor.remapEnabled,
+                        remapFromMin = sensor.remapFromMin,
+                        remapFromMax = sensor.remapFromMax,
+                        remapToMin = sensor.remapToMin,
+                        remapToMax = sensor.remapToMax,
                         Node_db_Id = node_db_id
                     }).Single();
 
@@ -350,11 +360,16 @@ namespace MyNetSensors.GatewayRepository
                         "sensorId  = @sensorId, " +
                         "sensorType = @sensorType, " +
                         "sensorDataJson = @sensorDataJson, " +
-                        "sensorDataRemapSettingsJson = @sensorDataRemapSettingsJson, " +
                         "description = @description, " +
                         "storeHistoryEnabled = @storeHistoryEnabled, " +
                         "storeHistoryWithInterval = @storeHistoryWithInterval, " +
                         "storeHistoryEveryChange = @storeHistoryEveryChange, " +
+                        "invertData = @invertData, " +
+                        "remapEnabled = @remapEnabled, " +
+                        "remapFromMin = @remapFromMin, " +
+                        "remapFromMax = @remapFromMax, " +
+                        "remapToMin = @remapToMin, " +
+                        "remapToMax = @remapToMax, " +
                         "Node_db_Id = @Node_db_Id " +
                         "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
                     db.Execute(sqlQuery, new
@@ -363,11 +378,16 @@ namespace MyNetSensors.GatewayRepository
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
-                        sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryWithInterval = sensor.storeHistoryWithInterval,
                         storeHistoryEveryChange = sensor.storeHistoryEveryChange,
+                        invertData = sensor.invertData,
+                        remapEnabled = sensor.remapEnabled,
+                        remapFromMin = sensor.remapFromMin,
+                        remapFromMax = sensor.remapFromMax,
+                        remapToMin = sensor.remapToMin,
+                        remapToMax = sensor.remapToMax,
                         Node_db_Id = node_db_id
                     });
                 }
@@ -574,18 +594,28 @@ namespace MyNetSensors.GatewayRepository
                 var sqlQuery =
                     "UPDATE Sensors SET " +
                     "description = @description, " +
-                    "sensorDataRemapSettingsJson = @sensorDataRemapSettingsJson, " +
                     "storeHistoryEnabled = @storeHistoryEnabled, " +
                     "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                    "storeHistoryWithInterval = @storeHistoryWithInterval " +
+                    "storeHistoryWithInterval = @storeHistoryWithInterval, " +
+                    "invertData = @invertData, " +
+                    "remapEnabled = @remapEnabled, " +
+                    "remapFromMin = @remapFromMin, " +
+                    "remapFromMax = @remapFromMax, " +
+                    "remapToMin = @remapToMin, " +
+                    "remapToMax = @remapToMax " +
                     "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
                 db.Execute(sqlQuery, new
                 {
                     description = sensor.description,
-                    sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                     storeHistoryEnabled = sensor.storeHistoryEnabled,
                     storeHistoryEveryChange = sensor.storeHistoryEveryChange,
                     storeHistoryWithInterval = sensor.storeHistoryWithInterval,
+                    invertData = sensor.invertData,
+                    remapEnabled = sensor.remapEnabled,
+                    remapFromMin = sensor.remapFromMin,
+                    remapFromMax = sensor.remapFromMax,
+                    remapToMin = sensor.remapToMin,
+                    remapToMax = sensor.remapToMax,
                     sensorId = sensor.sensorId,
                     ownerNodeId = sensor.ownerNodeId
                 });

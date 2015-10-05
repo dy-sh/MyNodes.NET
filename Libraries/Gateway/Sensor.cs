@@ -24,7 +24,6 @@ namespace MyNetSensors.Gateway
         public string description { get; set; }
 
         public string sensorDataJson { get; set; }
-        public string sensorDataRemapSettingsJson { get; set; }
 
 
         public bool storeHistoryEnabled { get; set; }
@@ -33,6 +32,13 @@ namespace MyNetSensors.Gateway
         public bool storeHistoryEveryChange { get; set; }
         public DateTime storeHistoryLastDate { get; set; }
 
+
+        public bool invertData { get; set; }
+        public bool remapEnabled { get; set; }
+        public string remapFromMin { get; set; }
+        public string remapFromMax { get; set; }
+        public string remapToMin { get; set; }
+        public string remapToMax { get; set; }
 
         public Sensor()
         {

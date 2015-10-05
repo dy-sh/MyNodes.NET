@@ -70,16 +70,30 @@ namespace MyNetSensors.WebController.Controllers
             foreach (var sensor in node.sensors)
             {
 
-                bool storehistory = Request.Form["storehistory" + sensor.sensorId] != "false";
-                bool writeeverychange = Request.Form["writeeverychange" + sensor.sensorId] != "false";
-                int writeinterval = Int32.Parse(Request.Form["writeinterval" + sensor.sensorId]);
                 string sensordescription = Request.Form["sensordescription" + sensor.sensorId];
                 if (sensordescription == "")
                     sensordescription = null;
+                sensor.description = sensordescription;
+
+                bool storehistory = Request.Form["storehistory" + sensor.sensorId] != "false";
+                bool writeeverychange = Request.Form["writeeverychange" + sensor.sensorId] != "false";
+                int writeinterval = Int32.Parse(Request.Form["writeinterval" + sensor.sensorId]);
                 sensor.storeHistoryEnabled = storehistory;
                 sensor.storeHistoryEveryChange = writeeverychange;
                 sensor.storeHistoryWithInterval = writeinterval;
-                sensor.description = sensordescription;
+
+                bool invertData = Request.Form["invertData" + sensor.sensorId] != "false";
+                bool remapEnabled = Request.Form["remapData" + sensor.sensorId] != "false";
+                string remapFromMin = Request.Form["remapFromMin" + sensor.sensorId];
+                string remapFromMax = Request.Form["remapFromMax" + sensor.sensorId];
+                string remapToMin = Request.Form["remapToMin" + sensor.sensorId];
+                string remapToMax = Request.Form["remapToMax" + sensor.sensorId];
+                sensor.invertData = invertData;
+                sensor.remapEnabled = remapEnabled;
+                sensor.remapFromMin = remapFromMin;
+                sensor.remapFromMax = remapFromMax;
+                sensor.remapToMin = remapToMin;
+                sensor.remapToMax = remapToMax;
             }
             gatewayDb.UpdateNodeSettings(node);
             string clientId = "";//todo get client id
