@@ -229,7 +229,7 @@ function createOrUpdateSensor(sensor) {
             .append("Description: " + sensor.description + "<br/>");
 
     $('#sensorPanel' + id)
-        .append("<hr/>");
+        .append("<br/>");
 
     createOrUpdateSensorData(sensor);
 }
@@ -238,6 +238,9 @@ function createOrUpdateSensor(sensor) {
 function createOrUpdateSensorData(sensor) {
 
     var sensorData = JSON.parse(sensor.sensorDataJson);
+
+    if (sensorData == null || sensorData.length == 0)
+        return;
 
     var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
 
