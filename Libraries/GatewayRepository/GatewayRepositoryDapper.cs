@@ -153,6 +153,7 @@ namespace MyNetSensors.GatewayRepository
 	                [sensorId] [int] NOT NULL,
 	                [sensorType] [int] NULL,
 	                [sensorDataJson] [nvarchar](max) NULL,
+	                [sensorDataRemapSettingsJson] [nvarchar](max) NULL,
 	                [description] [nvarchar](max) NULL,
 	                [storeHistoryEnabled] [bit] NULL,
 	                [storeHistoryEveryChange] [bit] NULL,
@@ -321,9 +322,9 @@ namespace MyNetSensors.GatewayRepository
 
                 if (oldSensor == null)
                 {
-                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
+                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson,sensorDataRemapSettingsJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval ,Node_db_Id) "
                                    +
-                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
+                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson,@sensorDataRemapSettingsJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @Node_db_Id); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int dbId = db.Query<int>(sqlQuery, new
                     {
@@ -331,6 +332,7 @@ namespace MyNetSensors.GatewayRepository
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
+                        sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryEveryChange = sensor.storeHistoryEveryChange,
@@ -348,6 +350,7 @@ namespace MyNetSensors.GatewayRepository
                         "sensorId  = @sensorId, " +
                         "sensorType = @sensorType, " +
                         "sensorDataJson = @sensorDataJson, " +
+                        "sensorDataRemapSettingsJson = @sensorDataRemapSettingsJson, " +
                         "description = @description, " +
                         "storeHistoryEnabled = @storeHistoryEnabled, " +
                         "storeHistoryWithInterval = @storeHistoryWithInterval, " +
@@ -360,6 +363,7 @@ namespace MyNetSensors.GatewayRepository
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
+                        sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryWithInterval = sensor.storeHistoryWithInterval,
@@ -570,6 +574,7 @@ namespace MyNetSensors.GatewayRepository
                 var sqlQuery =
                     "UPDATE Sensors SET " +
                     "description = @description, " +
+                    "sensorDataRemapSettingsJson = @sensorDataRemapSettingsJson, " +
                     "storeHistoryEnabled = @storeHistoryEnabled, " +
                     "storeHistoryEveryChange = @storeHistoryEveryChange, " +
                     "storeHistoryWithInterval = @storeHistoryWithInterval " +
@@ -577,6 +582,7 @@ namespace MyNetSensors.GatewayRepository
                 db.Execute(sqlQuery, new
                 {
                     description = sensor.description,
+                    sensorDataRemapSettingsJson = sensor.sensorDataRemapSettingsJson,
                     storeHistoryEnabled = sensor.storeHistoryEnabled,
                     storeHistoryEveryChange = sensor.storeHistoryEveryChange,
                     storeHistoryWithInterval = sensor.storeHistoryWithInterval,
