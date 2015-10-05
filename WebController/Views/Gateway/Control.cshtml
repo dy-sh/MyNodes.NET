@@ -9,10 +9,10 @@
     @Html.ActionLink("History", "List", "History") |
     @Html.ActionLink("Tasks", "List", "Tasks") |
     @Html.ActionLink("Links", "List", "Links") |
-    @Html.ActionLink("Settings", "List", "Node") 
+    @Html.ActionLink("Settings", "List", "Node")
 
 </p>
-<hr/>
+<hr />
 <div class="container">
     <div class="row" id="nodesContainer" style="display: none;">
     </div>
@@ -28,17 +28,16 @@
 
             <div class="panel-body">
 
-                <span id="nodeBody"></span>
+                <div id="nodeBody"></div>
                 <br />
                 <ul class="list-group" id="sensorsContainer"></ul>
-                @*<a href="#" class="btn btn-default btn-sm pull-right" role="button" id="settingsButton">
-                        <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
-                    </a>*@
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle pull-right" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList"></ul>
+                <div id="footer">
+                    <div class="dropdown pull-right">
+                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList"></ul>
+                    </div>
                 </div>
             </div>
 

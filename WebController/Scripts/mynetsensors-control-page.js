@@ -171,6 +171,10 @@ function createOrUpdateNode(node) {
             .find('#sensorsContainer')
             .attr("id", "sensorsContainer" + id);
 
+        $('#nodePanel' + id)
+            .find('#footer')
+            .attr("id", "footer" + id);
+
         //$('#nodePanel' + id)
         //.find('#settingsButton')
         //.attr("id", "settingsButton" + id)
@@ -192,11 +196,12 @@ function createOrUpdateNode(node) {
 
     //update body
 
+
     //update name
     if (node.name != null && $('#nodeName' + id).length == 0)
-        $('#nodeBody' + id)
-            .append("<div></div>")
-            .attr("id", "nodeName" + id).hide().fadeIn(elementsFadeTime);
+        $("<div></div>")
+            .attr("id", "nodeName" + id).hide().fadeIn(elementsFadeTime)
+            .appendTo('#nodeBody' + id);
 
     if (node.name == null && $('#nodeName' + id).length != 0)
         $('#nodeName' + id).remove();
@@ -208,9 +213,9 @@ function createOrUpdateNode(node) {
 
     //update battery
     if (node.batteryLevel != null && $('#nodeBattery' + id).length == 0)
-        $('#nodeBody' + id)
-            .append("<div></div>")
-            .attr("id", "nodeBattery" + id).hide().fadeIn(elementsFadeTime);
+        $("<div></div>")
+            .attr("id", "nodeBattery" + id).hide().fadeIn(elementsFadeTime)
+            .appendTo('#footer' + id);
 
     if (node.batteryLevel == null && $('#nodeBattery' + id).length != 0)
         $('#nodeBattery' + id).remove();
@@ -222,7 +227,7 @@ function createOrUpdateNode(node) {
 
 
     for (var i = 0; i < node.sensors.length; i++) {
-        createOrUpdateSensor(node.sensors[i]);
+            createOrUpdateSensor(node.sensors[i]);
     }
 }
 
@@ -592,7 +597,7 @@ function updateRgbwSlidersInArray(sliderId, lastHex) {
 
 function updateDDMenuFromNode(node) {
     var id = node.nodeId;
-    
+
     $('#dropdownMenuList' + id)
         .append("<li><a href='../Node/Settings/" + id + "'>Settings</a></li>")
         .append("<li><a href='#'> . . .</a></li>");
