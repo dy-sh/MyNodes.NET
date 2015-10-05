@@ -24,6 +24,8 @@ namespace MyNetSensors.Gateway
         public string description { get; set; }
 
         public string sensorDataJson { get; set; }
+        public string sensorDataRemapSettingsJson { get; set; }
+
 
         public bool storeHistoryEnabled { get; set; }
         //interval in seconds. if 0, will not store by timer
