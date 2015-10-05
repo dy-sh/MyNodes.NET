@@ -43,7 +43,7 @@ namespace MyNetSensors.WebController
               "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new StyleBundle("~/Content/jqueryui")
-              .Include("~/Content/themes/base/all.css"));
+              .Include("~/Content/themes/base/*.css"));
 
 
             //bootstrap-switch

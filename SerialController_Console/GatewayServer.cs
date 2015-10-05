@@ -211,7 +211,7 @@ namespace MyNetSensors.SerialController_Console
         
         public bool GetGatewayHardwareConnected(string userId)
         {
-            DebugTxRx(String.Format("Get gateway status ({0})", userId));
+            DebugTxRx(String.Format("Get gateway hardware status ({0})", userId));
 
             if (gateway == null)
                 return false;

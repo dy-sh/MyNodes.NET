@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftNodes", "Libraries\Soft
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftNodesSignalRClient", "Libraries\SoftNodesSignalRClient\SoftNodesSignalRClient.csproj", "{7FCFD6A9-EF19-4D28-A9BD-6D6DE59D4CA8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Weather_Device", "Device Examples\Weather_Device\Weather_Device.vcxproj", "{F1E322E1-5DE4-482B-8036-52CDE170123B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -323,6 +325,18 @@ Global
 		{7FCFD6A9-EF19-4D28-A9BD-6D6DE59D4CA8}.Release|x64.Build.0 = Release|Any CPU
 		{7FCFD6A9-EF19-4D28-A9BD-6D6DE59D4CA8}.Release|x86.ActiveCfg = Release|Any CPU
 		{7FCFD6A9-EF19-4D28-A9BD-6D6DE59D4CA8}.Release|x86.Build.0 = Release|Any CPU
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|ARM.ActiveCfg = Debug|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|x64.ActiveCfg = Debug|x64
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|x64.Build.0 = Debug|x64
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|x86.ActiveCfg = Debug|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Debug|x86.Build.0 = Debug|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|ARM.ActiveCfg = Release|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|x64.ActiveCfg = Release|x64
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|x64.Build.0 = Release|x64
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|x86.ActiveCfg = Release|Win32
+		{F1E322E1-5DE4-482B-8036-52CDE170123B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -342,5 +356,6 @@ Global
 		{7A2EAAEA-6C8A-4D18-83B6-7ED44FCC3A5A} = {7906F6A0-8260-422F-BDAF-B1D7E5D6C744}
 		{FBD59E7D-89B2-4E7E-AF13-301253601781} = {9E0E1429-17EF-4803-A446-DC191EA521B6}
 		{7FCFD6A9-EF19-4D28-A9BD-6D6DE59D4CA8} = {9E0E1429-17EF-4803-A446-DC191EA521B6}
+		{F1E322E1-5DE4-482B-8036-52CDE170123B} = {502097CC-B0FC-47DE-A6D5-45468A1D830A}
 	EndGlobalSection
 EndGlobal

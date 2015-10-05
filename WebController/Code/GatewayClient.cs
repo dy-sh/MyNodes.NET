@@ -290,7 +290,7 @@ namespace MyNetSensors.WebController.Code
         {
             if (!IsGatewayServiceConnected())
             {
-                //todo Clients.Caller.returnGatewayHardwareConnected(false);
+                clientsHub.Clients.Client(clientId).returnGatewayHardwareConnected(false);
                 return;
             }
 

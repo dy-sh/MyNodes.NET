@@ -23,10 +23,18 @@ int oldValue2 = -1;
 MyMessage msg1(BUTTON1_ID, V_TRIPPED);
 MyMessage msg2(BUTTON2_ID, V_TRIPPED);
 
+int BATTERY_SENSE_PIN = A0;  // select the input pin for the battery sense point
 
 
 void setup()
 {
+	// use the 1.1 V internal reference
+#if defined(__AVR_ATmega2560__)
+	analogReference(INTERNAL1V1);
+#else
+	analogReference(INTERNAL);
+#endif
+
 	pinMode(LED1_PIN, OUTPUT);
 	
 	gw.begin(incomingMessage);
@@ -49,7 +57,7 @@ void setup()
 	gw.request(LED1_ID, V_DIMMER);
 }
 
-int battery = 100;
+int batteryLast = 100;
 unsigned long batteryTimer;
 
 void loop()
@@ -73,11 +81,26 @@ void loop()
 	//	val = !val;
 	//	gw.send(msg2.set(val));
 
-	if (millis() - batteryTimer > 2000) {
-		battery--;
-		if (battery < 0) battery = 0;
-		gw.sendBatteryLevel((int)battery);
+	if (millis() - batteryTimer > 10000) {
 		batteryTimer = millis();
+		int sensorValue = analogRead(BATTERY_SENSE_PIN);
+
+		// 1M, 470K divider across battery and using internal ADC ref of 1.1V
+		// Sense point is bypassed with 0.1 uF cap to reduce noise at that point
+		// ((1e6+470e3)/470e3)*1.1 = Vmax = 3.44 Volts
+		// 3.44/1023 = Volts per bit = 0.003363075
+		float batteryV = sensorValue * 0.003363075;
+		int batteryPcnt = sensorValue / 10;
+
+		//to prevent noise
+		if (batteryPcnt - batteryLast>0 && batteryPcnt - batteryLast<5)
+			batteryPcnt = batteryLast;
+
+		if (batteryLast != batteryPcnt) {
+			// Power up radio after sleep
+			gw.sendBatteryLevel(batteryPcnt);
+			batteryLast = batteryPcnt;
+		}
 	}
 
 }
