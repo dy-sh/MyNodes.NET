@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using MyNetSensors.Utils;
 using Newtonsoft.Json;
 
 
@@ -109,8 +110,11 @@ namespace MyNetSensors.Gateway
             }
             else data.state = state;
 
+            RemapData(data);
+
             sensorDataJson = JsonConvert.SerializeObject(dataList);
         }
+
 
         public void AddOrUpdateData(SensorData newData)
         {
@@ -230,7 +234,121 @@ namespace MyNetSensors.Gateway
 
         public string GetSimpleName2()
         {
-                return String.Format("Sensor {0} ({1})", sensorId, GetSimpleName1());
+            return String.Format("Sensor {0} ({1})", sensorId, GetSimpleName1());
         }
+
+
+        private void RemapData(SensorData data)
+        {
+            try
+            {
+                if (data.IsBinary())
+                {
+                    if (invertData)
+                    {
+                        if (data.state == "0")
+                            data.state = "1";
+                        else data.state = "0";
+                    }
+                }
+
+                if (data.IsPercentage())
+                {
+                    int val = Int32.Parse(data.state);
+
+                    if (remapEnabled)
+                    {
+                        int fromMin = Int32.Parse(remapFromMin);
+                        int fromMax = Int32.Parse(remapFromMax);
+                        int toMin = Int32.Parse(remapToMin);
+                        int toMax = Int32.Parse(remapToMax);
+
+                        val = MathUtils.Map(val, fromMin, fromMax, toMin, toMax);
+                    }
+
+                    val = MathUtils.Clamp(val, 0, 100);
+
+                    if (invertData)
+                    {
+                        val = 100 - val;
+                    }
+
+                    data.state = val.ToString();
+                }
+
+                if (data.dataType == SensorDataType.V_RGB)
+                {
+                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(data.state);
+
+                    if (remapEnabled)
+                    {
+                        int[] fromMin = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMin);
+                        int[] fromMax = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMax);
+                        int[] toMin = ColorUtils.ConvertRGBHexStringToIntArray(remapToMin);
+                        int[] toMax = ColorUtils.ConvertRGBHexStringToIntArray(remapToMax);
+
+                        for (int i = 0; i < val.Length; i++)
+                        {
+                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
+                        }
+                    }
+
+                    for (int i = 0; i < val.Length; i++)
+                    {
+                        val[i] = MathUtils.Clamp(val[i], 0, 255);
+                    }
+
+                    if (invertData)
+                    {
+                        for (int i = 0; i < val.Length; i++)
+                        {
+                            val[i] = 255 - val[i];
+                        }
+                    }
+
+                    data.state = ColorUtils.ConvertRGBIntArrayToHexString(val);
+
+                }
+
+
+                if (data.dataType == SensorDataType.V_RGBW)
+                {
+                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(data.state);
+
+                    if (remapEnabled)
+                    {
+                        int[] fromMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMin);
+                        int[] fromMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMax);
+                        int[] toMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMin);
+                        int[] toMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMax);
+
+                        for (int i = 0; i < val.Length; i++)
+                        {
+                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
+                        }
+                    }
+
+                    for (int i = 0; i < val.Length; i++)
+                    {
+                        val[i] = MathUtils.Clamp(val[i], 0, 255);
+                    }
+
+                    if (invertData)
+                    {
+                        for (int i = 0; i < val.Length; i++)
+                        {
+                            val[i] = 255 - val[i];
+                        }
+                    }
+
+                    data.state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
+
+                }
+            }
+            catch
+            {
+            }
+        }
+
     }
 }

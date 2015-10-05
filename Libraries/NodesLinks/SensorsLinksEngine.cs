@@ -47,7 +47,7 @@ namespace MyNetSensors.NodesLinks
                     && link.fromSensorId == sensor.sensorId)
                 {
                     SensorData oldData = sensor.GetData(link.fromDataType.Value);
-                    SensorData newData = ConvertSensorData(oldData,link.toDataType);
+                    SensorData newData = ConvertSensorData(oldData, link.toDataType);
                     gateway.SendSensorState(link.toNodeId, link.toSensorId, newData);
                 }
             }
@@ -55,19 +55,11 @@ namespace MyNetSensors.NodesLinks
 
         private SensorData ConvertSensorData(SensorData oldData, SensorDataType? newDataType)
         {
-            SensorData newData=new SensorData(newDataType,oldData.state);
-            SensorDataType oldDataType = oldData.dataType.Value;
-           
+            SensorData newData = new SensorData(newDataType, oldData.state);
+
             //convert binary to percentage 
-            if ((oldDataType == SensorDataType.V_STATUS ||
-                 oldDataType == SensorDataType.V_LIGHT ||
-                 oldDataType == SensorDataType.V_ARMED ||
-                 oldDataType == SensorDataType.V_TRIPPED ||
-                 oldDataType == SensorDataType.V_LOCK_STATUS)
-                &&
-                (newDataType == SensorDataType.V_PERCENTAGE ||
-                 newDataType == SensorDataType.V_DIMMER ||
-                 newDataType == SensorDataType.V_LIGHT_LEVEL))
+            if ((oldData.IsBinary())
+                && (newData.IsPercentage()))
             {
                 if (oldData.state == "0")
                     newData.state = "0";
@@ -76,15 +68,8 @@ namespace MyNetSensors.NodesLinks
             }
 
             //convert  percentage to binary
-            if ((newDataType == SensorDataType.V_STATUS ||
-                 newDataType == SensorDataType.V_LIGHT ||
-                 newDataType == SensorDataType.V_ARMED ||
-                 newDataType == SensorDataType.V_TRIPPED ||
-                 newDataType == SensorDataType.V_LOCK_STATUS)
-                &&
-                (oldDataType == SensorDataType.V_PERCENTAGE ||
-                 oldDataType == SensorDataType.V_DIMMER ||
-                 oldDataType == SensorDataType.V_LIGHT_LEVEL))
+            if ((newData.IsBinary())
+                && (oldData.IsPercentage()))
             {
                 if (oldData.state == "0")
                     newData.state = "0";

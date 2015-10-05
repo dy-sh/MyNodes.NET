@@ -520,6 +520,12 @@ namespace MyNetSensors.Gateway
                 oldSensor.storeHistoryEnabled = sensor.storeHistoryEnabled;
                 oldSensor.storeHistoryEveryChange = sensor.storeHistoryEveryChange;
                 oldSensor.storeHistoryWithInterval = sensor.storeHistoryWithInterval;
+                oldSensor.invertData = sensor.invertData;
+                oldSensor.remapEnabled = sensor.remapEnabled;
+                oldSensor.remapFromMin = sensor.remapFromMin;
+                oldSensor.remapFromMax = sensor.remapFromMax;
+                oldSensor.remapToMin = sensor.remapToMin;
+                oldSensor.remapToMax = sensor.remapToMax;
             }
         }
 

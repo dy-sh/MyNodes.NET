@@ -41,5 +41,21 @@ namespace MyNetSensors.Gateway
 
             return s;
         }
+
+        public bool IsBinary()
+        {
+            return (dataType == SensorDataType.V_STATUS ||
+                    dataType == SensorDataType.V_LIGHT ||
+                    dataType == SensorDataType.V_ARMED ||
+                    dataType == SensorDataType.V_TRIPPED ||
+                    dataType == SensorDataType.V_LOCK_STATUS);
+        }
+
+        public bool IsPercentage()
+        {
+            return (dataType == SensorDataType.V_PERCENTAGE ||
+                 dataType == SensorDataType.V_DIMMER ||
+                 dataType == SensorDataType.V_LIGHT_LEVEL);
+        }
     }
 }
