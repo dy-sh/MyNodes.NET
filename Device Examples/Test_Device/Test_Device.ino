@@ -3,6 +3,9 @@
 #include <SPI.h>
 #include <Bounce2.h>
 
+bool debugEnabled = false;
+
+
 #define BUTTON1_ID 3
 #define BUTTON2_ID 4
 #define LED1_ID 1
@@ -10,6 +13,7 @@
 #define BUTTON_PIN1  3  // Arduino Digital I/O pin for button/reed switch
 #define BUTTON_PIN2  4  // Arduino Digital I/O pin for button/reed switch
 #define LED1_PIN 9
+#define BATTERY_PIN A0
 
 MySensor gw;
 Bounce debouncer1 = Bounce();
@@ -22,8 +26,6 @@ int oldValue2 = -1;
 // Change to V_LIGHT if you use S_LIGHT in presentation below
 MyMessage msg1(BUTTON1_ID, V_TRIPPED);
 MyMessage msg2(BUTTON2_ID, V_TRIPPED);
-
-int BATTERY_SENSE_PIN = A0;  // select the input pin for the battery sense point
 
 
 void setup()
@@ -83,24 +85,7 @@ void loop()
 
 	if (millis() - batteryTimer > 10000) {
 		batteryTimer = millis();
-		int sensorValue = analogRead(BATTERY_SENSE_PIN);
-
-		// 1M, 470K divider across battery and using internal ADC ref of 1.1V
-		// Sense point is bypassed with 0.1 uF cap to reduce noise at that point
-		// ((1e6+470e3)/470e3)*1.1 = Vmax = 3.44 Volts
-		// 3.44/1023 = Volts per bit = 0.003363075
-		float batteryV = sensorValue * 0.003363075;
-		int batteryPcnt = sensorValue / 10;
-
-		//to prevent noise
-		if (batteryPcnt - batteryLast>0 && batteryPcnt - batteryLast<5)
-			batteryPcnt = batteryLast;
-
-		if (batteryLast != batteryPcnt) {
-			// Power up radio after sleep
-			gw.sendBatteryLevel(batteryPcnt);
-			batteryLast = batteryPcnt;
-		}
+		SendBattery();
 	}
 
 }
@@ -121,12 +106,46 @@ void incomingMessage(const MyMessage &message) {
 			state = map(state, 0, 100, 0, 255);
 			analogWrite(LED1_PIN, state);
 		}
-
-
 	}
 
-	Serial.print("Received change steate for sensor ");
+	Serial.print("Received change value for sensor ");
 	Serial.print(message.sensor);
-	Serial.print(", new state: ");
+	Serial.print(", new value: ");
 	Serial.println(message.data);
 }
+
+
+
+void SendBattery()
+{
+	int val = analogRead(BATTERY_PIN);
+
+	// 1M, 470K divider across battery and using internal ADC ref of 1.1V
+	// Sense point is bypassed with 0.1 uF cap to reduce noise at that point
+	// ((1e6+470e3)/470e3)*1.1 = Vmax = 3.44 Volts
+	// 3.44/1023 = Volts per bit = 0.003363075
+	float batteryV = val * 0.003363075;
+	//int batteryPcnt = val / 10;
+
+	//remap from min/max voltage
+	int batteryPcnt = map(val, 500, 900, 0, 100);
+	batteryPcnt = constrain(batteryPcnt, 0, 100);
+
+
+
+
+	//to prevent noise
+	if (batteryPcnt - batteryLast > 0 && batteryPcnt - batteryLast < 5)
+		batteryPcnt = batteryLast;
+
+	//if (batteryLast != batteryPcnt) {
+	gw.sendBatteryLevel(batteryPcnt);
+	batteryLast = batteryPcnt;
+	//}
+
+	if (debugEnabled) {
+		Serial.print("Battery: ");
+		Serial.println(batteryLast);
+	}
+}
+

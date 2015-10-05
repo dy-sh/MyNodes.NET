@@ -2,6 +2,8 @@
 #include <MySensor.h>  
 #include <DHT.h>  
 
+bool debugEnabled = false;
+
 #define DHT_PIN 2
 #define PHOTORESISTOR_PIN A1
 #define BATTERY_PIN A0
@@ -25,7 +27,7 @@ MyMessage msgLight(PHOTORESISTOR_ID, V_LIGHT_LEVEL);
 
 int batteryLast = 0;
 
-bool debugEnabled = false;
+
 
 
 void setup()
@@ -119,7 +121,14 @@ void SendBattery()
 	// ((1e6+470e3)/470e3)*1.1 = Vmax = 3.44 Volts
 	// 3.44/1023 = Volts per bit = 0.003363075
 	float batteryV = val * 0.003363075;
-	int batteryPcnt = val / 10;
+	//int batteryPcnt = val / 10;
+
+	//remap from min/max voltage
+	int batteryPcnt = map(val, 500, 900, 0, 100);
+	batteryPcnt = constrain(batteryPcnt, 0, 100);
+
+
+
 
 	//to prevent noise
 	if (batteryPcnt - batteryLast > 0 && batteryPcnt - batteryLast < 5)

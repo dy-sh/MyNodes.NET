@@ -17,6 +17,7 @@ var clientsHub;
 var gatewayHardwareConnected = false;
 var gatewayServiceConnected = false;
 
+var lastSeens;
 
 $(function () {
     clientsHub = $.connection.clientsHub;
@@ -85,7 +86,8 @@ $(function () {
     };
 
     clientsHub.client.onNodeLastSeenUpdated = function (node) {
-        updateLastSeen(node);
+        lastSeens[node.nodeId] = node.lastSeen;
+        updateLastSeen(node.nodeId, node.lastSeen);
     };
 
     clientsHub.client.onNodeBatteryUpdated = function (node) {
@@ -105,6 +107,7 @@ $(function () {
         clientsHub.server.getGatewayServiceConnected();
     });
 
+    setInterval(updateAllLastSeens, 1000);
 });
 
 
@@ -123,6 +126,12 @@ function onReturnNodes(nodes) {
 
     for (var i = 0; i < nodes.length; i++) {
         createOrUpdateNode(nodes[i]);
+    }
+
+    lastSeens = {};
+
+    for (var i = 0; i < nodes.length; i++) {
+        lastSeens[nodes[i].nodeId]=nodes[i].lastSeen;
     }
 }
 
@@ -192,11 +201,7 @@ function createOrUpdateNode(node) {
 }
 
 
-function updateLastSeen(node) {
-    var id = node.nodeId;
-    $('#nodeLastSeen' + id)
-        .html("Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss"));
-}
+
 
 function updateBattery(node) {
     var id = node.nodeId;
@@ -267,3 +272,43 @@ function createOrUpdateSensorData(sensor) {
             .html(dataType + " : " + dataState + "<br/>");
     }
 }
+
+function updateLastSeen(nodeId,lastSeen) {
+
+    var date1 = new Date(lastSeen);
+    var date2 = new Date();
+    var diff = Math.abs( date2.getTime() - date1.getTime());
+    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    diff -= days * (1000 * 60 * 60 * 24);
+
+    var hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * (1000 * 60 * 60);
+
+    var mins = Math.floor(diff / (1000 * 60));
+    diff -= mins * (1000 * 60);
+
+    var seconds = Math.floor(diff / (1000));
+    diff -= seconds * (1000);
+
+    var elspsed;
+    if (days != 0)
+        elapsed = days + "d " + hours + "h " + mins + "m " + seconds + "s";
+    else if (hours != 0)
+        elapsed = hours + "h " + mins + "m " + seconds + "s";
+    else if (mins != 0)
+        elapsed = mins + "m " + seconds + "s";
+    else 
+        elapsed = seconds + "s";
+
+    $('#nodeLastSeen' + nodeId)
+        .html("Last seen: " + elapsed);
+
+}
+
+function updateAllLastSeens(sensor) {
+    for (var key in lastSeens) {
+        updateLastSeen(key, lastSeens[key]);
+    }
+}
+
