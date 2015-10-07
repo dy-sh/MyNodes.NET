@@ -233,7 +233,6 @@ namespace MyNetSensors.SerialController_Console
 
             Message mess = gateway.ParseMessageFromString(message);
             gateway.SendMessage(mess);
-            gateway.UpdateSensorFromMessage(mess);
         }
 
         #endregion

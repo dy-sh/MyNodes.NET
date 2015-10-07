@@ -7,7 +7,7 @@ using System;
 
 namespace MyNetSensors.Gateway
 {
-    public class SensorData
+    public class SensorData:ICloneable
     {
         public SensorDataType? dataType { get; set; }
         public string state { get; set; }
@@ -40,6 +40,11 @@ namespace MyNetSensors.Gateway
                 s += String.Format("State: unknown\r\n");
 
             return s;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
         public bool IsBinary()

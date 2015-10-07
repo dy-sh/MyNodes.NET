@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyNetSensors.Gateway
 {
-    public class Message
+    public class Message:ICloneable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -58,6 +58,11 @@ namespace MyNetSensors.Gateway
                     payload);
 
             return s;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
         public string GetDecodedSubType()
