@@ -163,13 +163,15 @@ Handlebars.registerHelper("sensordata-id", function (data) {
 });
 
 Handlebars.registerHelper("sensor-type", function (sensor) {
+    return getSensorType(sensor);
+});
+
+function getSensorType(sensor) {
     var type = Object.keys(mySensors.sensorType)[sensor.sensorType];
     if (type == null)
         type = "Unknown";
     return type;
-});
-
-
+}
 
 
 function createOrUpdateNode(node) {
@@ -200,10 +202,14 @@ function updateBattery(node) {
 
 function createOrUpdateSensor(sensor) {
     var id = sensor.nodeId + "-" + sensor.sensorId;
-
-    if ($('#sensorPanel' + id).length == 0) {
+    
+    if ( $('#sensorPanel' + id).length == 0) {
         //create new
         $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(1000);
+    }
+    else {
+        //update
+        $('#sensorType' + id).html(getSensorType(sensor));
     }
 
     //update body
