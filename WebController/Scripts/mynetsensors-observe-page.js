@@ -173,9 +173,7 @@ Handlebars.registerHelper("sensor-type", function (sensor) {
 
 
 function createOrUpdateNode(node) {
-    var id = node.nodeId;
-
-    var nodePanel = $('#nodePanel' + id);
+    var nodePanel = $('#nodePanel' + node.nodeId);
 
     if (nodePanel.length == 0) {
         //create new

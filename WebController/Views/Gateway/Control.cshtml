@@ -16,34 +16,102 @@
 <div class="container">
     <div class="row" id="nodesContainer" style="display: none;">
     </div>
+</div>
 
-    <div class="col-xs-6 col-sm-4 col-md-3" id="nodeTemplate" style="display: none;  min-width: 290px; max-width: 500px">
+
+
+<script id="nodeTemplate" type="text/x-handlebars-template">
+    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{nodeId}}" style="min-width: 290px; max-width: 500px">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <img src="~/Content/Images/activity.gif" id="activity" class="pull-right" style="display: none;" />
-                <div id="nodeTitle">
-
+                <img src="@Url.Content("~/Content/Images/activity.gif")" id="activity{{nodeId}}" class="pull-right" style="display: none;" />
+                <div id="nodeTitle{{nodeId}}">
+                    Node {{nodeId}}
                 </div>
             </div>
 
             <div class="panel-body">
+                {{#if name}} {{name}} <br /> {{/if}}
 
-                <div id="nodeBody"></div>
+                <div id="nodeBody{{nodeId}}"></div>
                 <br />
-                <ul class="list-group" id="sensorsContainer"></ul>
-                <div id="footer">
+                <ul class="list-group" id="sensorsContainer{{nodeId}}"></ul>
+                <div id="footer{{nodeId}}">
+                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{nodeId}}"> {{batteryLevel}} </span>{{/if}}
                     <div class="dropdown pull-right">
-                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu{{nodeId}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="dropdownMenuList"></ul>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="nodeMenu{{nodeId}}"></ul>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
-</div>
+</script>
+
+
+
+
+<script id="sensorTemplate" type="text/x-handlebars-template">
+    <li class="list-group-item" id="sensorPanel{{sensor-id this}}">
+        <span id="sensorTitle{{sensor-id this}}">{{sensor-title this}}</span><br />
+    </li>
+</script>
+
+<script id="dataTemplate" type="text/x-handlebars-template">
+    <div class="pull-right pull-up" id="dataPanel{{sensordata-id this}}">
+    </div>
+</script>
+
+<script id="toggleTemplate" type="text/x-handlebars-template">
+    <input type="checkbox" name="toggle-{{sensordata-id this}}" data-label-width="0" data-size="small">
+</script>
+
+<script id="sliderTemplate" type="text/x-handlebars-template">
+    <div id="slider" name="slider-{{sensordata-id this}}"></div>
+</script>
+
+<script id="rgbSlidersTemplate" type="text/x-handlebars-template">
+    <div id="slider" name="slider-{{sensordata-id this}}-r"></div>
+    <div id="slider" name="slider-{{sensordata-id this}}-g"></div>
+    <div id="slider" name="slider-{{sensordata-id this}}-b"></div>
+</script>
+
+<script id="rgbwSlidersTemplate" type="text/x-handlebars-template">
+    <div id="slider" name="slider-{{sensordata-id this}}-r"></div>
+    <div id="slider" name="slider-{{sensordata-id this}}-g"></div>
+    <div id="slider" name="slider-{{sensordata-id this}}-b"></div>
+    <div id="slider" name="slider-{{sensordata-id this}}-w"></div>
+</script>
+
+<script id="irSendTemplate" type="text/x-handlebars-template">
+    <br />
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="IR code..." name="textbox-{{sensordata-id this}}">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" name="button-{{sensordata-id this}}">Send</button>
+        </span>
+    </div>
+</script>
+
+<script id="nodeMenuTemplate" type="text/x-handlebars-template">
+    <li><a href="../Node/Settings/{{nodeId}}">Settings</a></li>
+    <li> &nbsp </li>
+    {{#each sensors}}
+    <li id="dropdownMenuHistory{{sensor-id this}}"><a href="../History/Chart/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} History</a></li>
+    {{/each}}
+    <li> &nbsp </li>
+    {{#each sensors}}
+    <li id="dropdownMenuTasks{{sensor-id this}}"><a href="../Tasks/List/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} Tasks</a></li>
+    {{/each}}
+    <li> &nbsp </li>
+    {{#each sensors}}
+    <li id="dropdownMenuLinks{{sensor-id this}}"><a href="../Links/List/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} Links</a></li>
+    {{/each}}
+</script>
+
 
 
 @section scripts
@@ -52,6 +120,8 @@
     <script src="~/signalr/hubs"></script>
 
     @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/handlebars")
+
     @Scripts.Render("~/bundles/mysensors")
     @Scripts.Render("~/bundles/mynetsensors-control-page")
 

@@ -20,6 +20,7 @@ var gatewayServiceConnected = false;
 var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 500;
 
+var nodes;
 
 var slidersArray = [];
 var rgbSlidersArray = [];
@@ -142,89 +143,58 @@ function onReturnNodes(nodes) {
 
 }
 
+
+
+
+var nodeTemplate = Handlebars.compile($('#nodeTemplate').html());
+var sensorTemplate = Handlebars.compile($('#sensorTemplate').html());
+var dataTemplate = Handlebars.compile($('#dataTemplate').html());
+var toggleTemplate = Handlebars.compile($('#toggleTemplate').html());
+var sliderTemplate = Handlebars.compile($('#sliderTemplate').html());
+var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
+var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
+var irSendTemplate = Handlebars.compile($('#irSendTemplate').html());
+var nodeMenuTemplate = Handlebars.compile($('#nodeMenuTemplate').html());
+
+
+Handlebars.registerHelper("sensor-id", function (sensor) {
+    return sensor.nodeId + "-" + sensor.sensorId;
+});
+
+Handlebars.registerHelper("sensor-title", function (sensor) {
+    return getSensorTitle(sensor);
+});
+
+Handlebars.registerHelper("sensordata-id", function (data) {
+    return data.nodeId + "-" + data.sensorId + "-" + data.dataType;
+});
+
+
+function getSensorTitle(sensor) {
+    if (sensor.description != null)
+        return sensor.description;
+    else {
+        var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
+        if (sensorType == null) sensorType = "Unknown";
+        return sensorType;
+    }
+}
+
+
 function createOrUpdateNode(node) {
     var id = node.nodeId;
 
-    if ($('#nodePanel' + id).length == 0) {
+    var nodePanel = $('#nodePanel' + node.nodeId);
+
+    if (nodePanel.length == 0) {
         //create new
-        $('#nodeTemplate')
-            .clone()
-            .attr("id", "nodePanel" + id)
-            //.css('display', 'block')
-            .fadeIn(elementsFadeTime)
-            .appendTo('#nodesContainer');
-
-        $('#nodePanel' + id)
-            .find('#nodeTitle')
-            .attr("id", "nodeTitle" + id)
-             .html(" Node " + id);
-
-        $('#nodePanel' + id)
-            .find('#activity')
-            .attr("id", "activity" + id);
-
-        $('#nodePanel' + id)
-            .find('#nodeBody')
-            .attr("id", "nodeBody" + id);
-
-        $('#nodePanel' + id)
-            .find('#sensorsContainer')
-            .attr("id", "sensorsContainer" + id);
-
-        $('#nodePanel' + id)
-            .find('#footer')
-            .attr("id", "footer" + id);
-
-        //$('#nodePanel' + id)
-        //.find('#settingsButton')
-        //.attr("id", "settingsButton" + id)
-        //    .attr("href", "../Node/Settings/" + id);
-
-
-        //create dropdown menu
-        $('#nodePanel' + id)
-            .find('#dropdownMenu')
-            .attr("id", "dropdownMenu" + id);
-
-        $('#nodePanel' + id)
-        .find('#dropdownMenuList')
-        .attr("id", "dropdownMenuList" + id)
-        .attr("aria-labelledby", "dropdownMenu" + id);
-
-        updateDDMenuFromNode(node);
+        $(nodeTemplate(node)).hide().appendTo("#nodesContainer").fadeIn(elementsFadeTime);
+    } else {
+        //update
+        nodePanel.html(nodeTemplate(node));
     }
 
-    //update body
-
-
-    //update name
-    if (node.name != null && $('#nodeName' + id).length == 0)
-        $("<div></div>")
-            .attr("id", "nodeName" + id).hide().fadeIn(elementsFadeTime)
-            .appendTo('#nodeBody' + id);
-
-    if (node.name == null && $('#nodeName' + id).length != 0)
-        $('#nodeName' + id).remove();
-
-    if (node.name != null)
-        $('#nodeName' + id)
-            .html(node.name + "<br/>");
-
-
-    //update battery
-    if (node.batteryLevel != null && $('#nodeBattery' + id).length == 0)
-        $("<div></div>")
-            .attr("id", "nodeBattery" + id).hide().fadeIn(elementsFadeTime)
-            .appendTo('#footer' + id);
-
-    if (node.batteryLevel == null && $('#nodeBattery' + id).length != 0)
-        $('#nodeBattery' + id).remove();
-
-    if (node.batteryLevel != null)
-        $('#nodeBattery' + id)
-            .html("Battery: " + node.batteryLevel + "<br/>");
-
-
+    updateNodeMenu(node);
 
     for (var i = 0; i < node.sensors.length; i++) {
             createOrUpdateSensor(node.sensors[i]);
@@ -233,45 +203,36 @@ function createOrUpdateNode(node) {
 
 
 function updateLastSeen(node) {
-    var id = node.nodeId;
-    $('#activity' + id).show().fadeOut(500);
+    $('#activity' + node.nodeId).show().fadeOut(500);
 }
 
 function updateBattery(node) {
-    var id = node.nodeId;
-    $('#nodeBattery' + id)
-        .html("Battery: " + node.batteryLevel + "<br/>");
+    var nodeBattery = $('#nodeBattery' + node.nodeId);
+
+    if (nodeBattery.length == 0)
+        createOrUpdateNode(node);
+    else nodeBattery.html(node.batteryLevel);
+}
+
+function updateNodeMenu(node) {
+    var nodeMenu = $('#nodeMenu' + node.nodeId);
+    nodeMenu.html(nodeMenuTemplate(node));
 }
 
 
 function createOrUpdateSensor(sensor) {
-
     var id = sensor.nodeId + "-" + sensor.sensorId;
 
     if ($('#sensorPanel' + id).length == 0) {
         //create new
-        $('#sensorsContainer' + sensor.nodeId)
-            .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
-                + "</li>").hide().fadeIn(elementsFadeTime);
-
-        $('#sensorPanel' + id)
-            .append("<div id='sensorTitle" + id + "'></div>");
+        $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(elementsFadeTime);
+    }
+    else {
+        //update
+        $('#sensorTitle' + id).html(getSensorTitle(sensor));
     }
 
-    //update body
-
-    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
-    if (sensorType == null) sensorType = "Unknown";
-
-    if (sensor.description != null)
-        $('#sensorTitle' + id)
-            .html(sensor.description);
-    else
-        $('#sensorTitle' + id)
-            .html(sensorType);
-
     createOrUpdateSensorData(sensor);
-
 }
 
 
@@ -286,17 +247,11 @@ function createOrUpdateSensorData(sensor) {
 
     for (var i = 0; i < sensorData.length; i++) {
         var data = sensorData[i];
-        var id = sensor.nodeId + "-" + sensor.sensorId + "-" + data.dataType;
-
+        var id = data.nodeId + "-" + data.sensorId + "-" + data.dataType;
 
         if ($('#dataPanel' + id).length == 0) {
             //create new
-            $('#sensorPanel' + sensorId)
-                .append('<div class="pull-right pull-up" id="dataPanel' + id + '">' + '</div>').hide().fadeIn(elementsFadeTime);
-
-            //if (sensorData.length > 1)
-            //    $('#sensorPanel' + sensorId)
-            //        .append('<br/><br/>');
+            $(dataTemplate(data)).hide().appendTo("#sensorPanel" + sensorId).fadeIn(elementsFadeTime);
         }
 
         //update body
@@ -306,8 +261,7 @@ function createOrUpdateSensorData(sensor) {
             || data.dataType == mySensors.sensorDataType.V_STATUS) {
             if ($("[name='toggle-" + id + "']").length == 0) {
                 //create new
-                $('#dataPanel' + id)
-                    .html("<input type='checkbox' name='toggle-" + id + "' data-label-width='0' data-size='small'>");
+                $(toggleTemplate(data)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
 
                 $("[name='toggle-" + id + "']").bootstrapSwitch('state', data.state == "1");
 
@@ -333,8 +287,8 @@ function createOrUpdateSensorData(sensor) {
 
             if ($("[name='slider-" + id + "']").length == 0) {
                 //create new
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "'></div>");
+                $(sliderTemplate(data)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+
                 $("[name='slider-" + id + "']").slider({ value: data.state, range: "min" });
 
                 $('#dataPanel' + id).removeClass("pull-right");
@@ -367,10 +321,8 @@ function createOrUpdateSensorData(sensor) {
 
             if ($("[name='slider-" + id + "-r']").length == 0) {
                 //create new
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "-r'></div>")
-                    .append("<div id='slider' name='slider-" + id + "-g'></div>")
-                    .append("<div id='slider' name='slider-" + id + "-b'></div>");
+                $(rgbSlidersTemplate(data)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+
 
                 $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
                 $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
@@ -411,11 +363,8 @@ function createOrUpdateSensorData(sensor) {
 
             if ($("[name='slider-" + id + "-r']").length == 0) {
                 //create new
-                $('#dataPanel' + id)
-                    .html("<div id='slider' name='slider-" + id + "-r'></div>")
-                    .append("<div id='slider' name='slider-" + id + "-g'></div>")
-                    .append("<div id='slider' name='slider-" + id + "-b'></div>")
-                    .append("<div id='slider' name='slider-" + id + "-w'></div>");
+                $(rgbwSlidersTemplate(data)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+
 
                 $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
                 $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
@@ -450,18 +399,10 @@ function createOrUpdateSensorData(sensor) {
 
             if ($("[name='textbox-" + id + "']").length == 0) {
                 //create new
-                $('#dataPanel' + id)
-                    .html("<br/><div class='input-group'>"
-                        + "<input type='text' class='form-control' placeholder='IR code...' name='textbox-" + id + "'>"
-                        + "<span class='input-group-btn'>"
-                        + "<button class='btn btn-default' type='button' name='button-" + id + "'>Send</button>"
-                        + "</span>"
-                        + "</div>");
-
+                $(irSendTemplate(data)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
 
                 $('#dataPanel' + id).removeClass("pull-right");
                 $('#dataPanel' + id).removeClass("pull-up");
-
 
                 $("[name='button-" + id + "']").click(function () {
                     var code = $("[name='textbox-" + id + "']").val();
@@ -594,87 +535,3 @@ function updateRgbwSlidersInArray(sliderId, lastHex) {
     }
 }
 
-
-function updateDDMenuFromNode(node) {
-    var id = node.nodeId;
-
-    $('#dropdownMenuList' + id)
-        .append("<li><a href='../Node/Settings/" + id + "'>Settings</a></li>")
-        .append("<li><a href='#'> . . .</a></li>");
-
-    for (var i = 0; i < node.sensors.length; i++) {
-        addHistoryToDDMenu(node.sensors[i]);
-    }
-
-    $('#dropdownMenuList' + id).append("<li><a href='#'> . . .</a></li>");
-
-    for (var i = 0; i < node.sensors.length; i++) {
-        addTasksToDDMenu(node.sensors[i]);
-    }
-
-    $('#dropdownMenuList' + id).append("<li><a href='#'> . . .</a></li>");
-
-    for (var i = 0; i < node.sensors.length; i++) {
-        addLinksToDDMenu(node.sensors[i]);
-    }
-}
-
-function addHistoryToDDMenu(sensor) {
-    var id = sensor.nodeId + "-" + sensor.sensorId;
-
-    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
-
-    var sensorName;
-    if (sensor.description != null)
-        sensorName = sensor.description;
-    else
-        sensorName = sensorType;
-
-    if ($('#dropdownMenuHistory' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.nodeId)
-            .append("<li id='dropdownMenuHistory" + id + "'><a href='../History/Chart/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>");
-    } else {
-        $('#dropdownMenuHistory' + id)
-            .html("<a href='../History/Chart/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
-    }
-}
-
-function addTasksToDDMenu(sensor) {
-    var id = sensor.nodeId + "-" + sensor.sensorId;
-
-    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
-
-    var sensorName;
-    if (sensor.description != null)
-        sensorName = sensor.description;
-    else
-        sensorName = sensorType;
-
-    if ($('#dropdownMenuTasks' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.nodeId)
-            .append("<li id='dropdownMenuTasks" + id + "'><a href='../Tasks/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a></li>");
-    } else {
-        $('#dropdownMenuTasks' + id)
-            .html("<a href='../Tasks/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a>");
-    }
-}
-
-function addLinksToDDMenu(sensor) {
-    var id = sensor.nodeId + "-" + sensor.sensorId;
-
-    var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
-
-    var sensorName;
-    if (sensor.description != null)
-        sensorName = sensor.description;
-    else
-        sensorName = sensorType;
-
-    if ($('#dropdownMenuLinks' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.nodeId)
-            .append("<li id='dropdownMenuLinks" + id + "'><a href='../Links/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a></li>");
-    } else {
-        $('#dropdownMenuLinks' + id)
-            .html("<a href='../Links/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a>");
-    }
-}
