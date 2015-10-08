@@ -43,7 +43,7 @@ namespace MyNetSensors.NodesLinks
         {
             foreach (var link in links)
             {
-                if (link.fromNodeId == sensor.ownerNodeId
+                if (link.fromNodeId == sensor.nodeId
                     && link.fromSensorId == sensor.sensorId)
                 {
                     SensorData oldData = sensor.GetData(link.fromDataType.Value);
@@ -55,7 +55,8 @@ namespace MyNetSensors.NodesLinks
 
         private SensorData ConvertSensorData(SensorData oldData, SensorDataType? newDataType)
         {
-            SensorData newData = new SensorData(newDataType, oldData.state);
+            SensorData newData = (SensorData)oldData.Clone();
+            newData.dataType = newDataType;
 
             //convert binary to percentage 
             if ((oldData.IsBinary())

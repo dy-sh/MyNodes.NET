@@ -106,7 +106,7 @@ namespace MyNetSensors.GatewayRepository
             db.Database.ExecuteSqlCommand("TRUNCATE TABLE Messages");
         }
 
-        public Sensor GetSensor(int ownerNodeId, int sensorId)
+        public Sensor GetSensor(int nodeId, int sensorId)
         {
             throw new NotImplementedException();
         }
@@ -195,7 +195,7 @@ namespace MyNetSensors.GatewayRepository
         {
             //   Sensor oldSensor = conn.Table<Sensor>().Where(x => x.nodeId == sensor.nodeId).FirstOrDefault(x => x.sensorId == sensor.sensorId);
 
-            if (db.Sensors.Any(x => x.ownerNodeId == sensor.ownerNodeId && x.sensorId == sensor.sensorId))
+            if (db.Sensors.Any(x => x.nodeId == sensor.nodeId && x.sensorId == sensor.sensorId))
             {
                 db.Entry(sensor).State = EntityState.Modified;
             }
@@ -283,8 +283,8 @@ namespace MyNetSensors.GatewayRepository
             if (writeInterval == 0) AddOrUpdateSensor(sensor);
             else
             {
-                if (!updatedNodesId.Contains(sensor.ownerNodeId))
-                    updatedNodesId.Add(sensor.ownerNodeId);
+                if (!updatedNodesId.Contains(sensor.nodeId))
+                    updatedNodesId.Add(sensor.nodeId);
             }
         }
 

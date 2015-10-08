@@ -40,7 +40,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                ViewBag.nodeId = sensor.ownerNodeId;
+                ViewBag.nodeId = sensor.nodeId;
                 ViewBag.sensorId = sensor.sensorId;
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
@@ -73,7 +73,7 @@ namespace MyNetSensors.WebController.Controllers
                 ViewBag.description = sensor.GetSimpleName1();
 
                 List<Node> toList=new List<Node>();
-                Node toNode = gatewayDb.GetNodeByNodeId(sensor.ownerNodeId);
+                Node toNode = gatewayDb.GetNodeByNodeId(sensor.nodeId);
                 toNode.sensors.Clear();
                 toNode.sensors.Add(sensor);
                 toList.Add(toNode);
@@ -83,7 +83,7 @@ namespace MyNetSensors.WebController.Controllers
 
                 SensorLink link = new SensorLink()
                 {
-                    toNodeId = sensor.ownerNodeId,
+                    toNodeId = sensor.nodeId,
                     toSensorId = sensor.sensorId
                 };
 
@@ -128,8 +128,8 @@ namespace MyNetSensors.WebController.Controllers
                 return RedirectToAction("New");
             }
 
-            Node fromNode = gatewayDb.GetNodeByNodeId(fromSensor.ownerNodeId);
-            Node toNode = gatewayDb.GetNodeByNodeId(toSensor.ownerNodeId);
+            Node fromNode = gatewayDb.GetNodeByNodeId(fromSensor.nodeId);
+            Node toNode = gatewayDb.GetNodeByNodeId(toSensor.nodeId);
 
             SensorLink link = new SensorLink()
             {
@@ -160,7 +160,7 @@ namespace MyNetSensors.WebController.Controllers
         private bool CheckLinkPossible(Sensor fromSensor, Sensor toSensor)
         {
             //if it's the same sensor
-            if (fromSensor.ownerNodeId == toSensor.ownerNodeId
+            if (fromSensor.nodeId == toSensor.nodeId
                 && fromSensor.sensorId == toSensor.sensorId)
                 return false;
 
@@ -169,16 +169,16 @@ namespace MyNetSensors.WebController.Controllers
             foreach (var link in links)
             {
                 //prevent infinite loop 
-                if (link.fromNodeId == toSensor.ownerNodeId
+                if (link.fromNodeId == toSensor.nodeId
                     && link.fromSensorId == toSensor.sensorId
-                    && link.toNodeId == fromSensor.ownerNodeId
+                    && link.toNodeId == fromSensor.nodeId
                     && link.toSensorId == fromSensor.sensorId)
                     return false;
 
                 //prevend duplicates
-                if (link.fromNodeId == fromSensor.ownerNodeId
+                if (link.fromNodeId == fromSensor.nodeId
                     && link.fromSensorId == fromSensor.sensorId
-                    && link.toNodeId == toSensor.ownerNodeId
+                    && link.toNodeId == toSensor.nodeId
                     && link.toSensorId == toSensor.sensorId)
                     return false;
             }

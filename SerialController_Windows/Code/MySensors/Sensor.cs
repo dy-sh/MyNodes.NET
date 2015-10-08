@@ -23,7 +23,7 @@ namespace SerialController_Windows.Code
         public int NodeId { get; set; }
 
 
-        public int ownerNodeId { get; set; }
+        public int nodeId { get; set; }
         public int sensorId { get; set; }
         public SensorType? sensorType { get; set; }
         public string description { get; set; }
@@ -39,7 +39,7 @@ namespace SerialController_Windows.Code
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
-            this.ownerNodeId = ownerNode.nodeId;
+            this.nodeId = ownerNode.nodeId;
             sensorData = new List<SensorData>();
         }
 

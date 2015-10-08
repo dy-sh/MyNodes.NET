@@ -35,17 +35,17 @@ namespace MyNetSensors.NodeTasks
 
         public SensorData GetExecutionSensorData()
         {
-            return new SensorData(dataType,executionValue);
+            return new SensorData(nodeId,sensorId,dataType,executionValue);
         }
 
         public SensorData GetRepeatingASensorData()
         {
-            return new SensorData(dataType, repeatingAValue);
+            return new SensorData(nodeId, sensorId, dataType, repeatingAValue);
         }
 
         public SensorData GetRepeatingBSensorData()
         {
-            return new SensorData(dataType, repeatingBValue);
+            return new SensorData(nodeId, sensorId, dataType, repeatingBValue);
         }
 
         public void SetExecutionValue(SensorData data)

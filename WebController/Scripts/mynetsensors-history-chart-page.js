@@ -239,7 +239,7 @@ $(function () {
 });
 
 function onSensorUpdated(sensor) {
-    if (sensor.ownerNodeId != nodeId || sensor.sensorId != sensorId)
+    if (sensor.nodeId != nodeId || sensor.sensorId != sensorId)
         return;
 
     var sensorData = JSON.parse(sensor.sensorDataJson);

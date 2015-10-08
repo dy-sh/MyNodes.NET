@@ -118,9 +118,9 @@ namespace ScreenColor
             return /* "#" + */ color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
 
-        public static void SendColor(Color color)
+        public static void SendColor( Color color)
         {
-            SensorData data = new SensorData(SensorDataType.V_RGB, ColorToHex(color));
+            SensorData data = new SensorData(nodeId, sensorId,SensorDataType.V_RGB, ColorToHex(color));
             if (softNode.IsPresentationCompleted())
             {
                 softNode.SendSensorData(sensorId, data);

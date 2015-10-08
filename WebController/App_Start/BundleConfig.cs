@@ -105,6 +105,10 @@ namespace MyNetSensors.WebController
 
             bundles.Add(new StyleBundle("~/Content/select")
                 .Include("~/Content/bootstrap-select.css"));
+
+            //handlebars
+            bundles.Add(new ScriptBundle("~/bundles/handlebars").Include(
+                "~/Scripts/handlebars.min.js"));
         }
     }
 }

@@ -93,11 +93,11 @@ namespace SerialController_Windows.Views
 
         private void AddSensor(Sensor sensor)
         {
-            StackPanel oldPanel = GetSensorPanel(sensor.ownerNodeId, sensor.sensorId);
+            StackPanel oldPanel = GetSensorPanel(sensor.nodeId, sensor.sensorId);
             if (oldPanel != null)
                 sensorPanels.Remove(oldPanel);
 
-            StackPanel nodePanel = GetNodePanel(sensor.ownerNodeId);
+            StackPanel nodePanel = GetNodePanel(sensor.nodeId);
             StackPanel sensorPanel = CreateSensorPanel(sensor);
             nodePanel.Children.Add(sensorPanel);
             sensorPanels.Add(sensorPanel);
@@ -321,7 +321,7 @@ namespace SerialController_Windows.Views
                 Margin = new Thickness(5),
                 BorderThickness = new Thickness(1),
                 BorderBrush = new SolidColorBrush(Colors.Black),
-                Tag = String.Format("{0};{1}", sensor.ownerNodeId, sensor.sensorId)
+                Tag = String.Format("{0};{1}", sensor.nodeId, sensor.sensorId)
             };
 
             UpdateSensorPanel(sensor, sensorPanel);
@@ -498,7 +498,7 @@ namespace SerialController_Windows.Views
 
             box.TextChanged += textBoxChanged;
             box.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNodeId,
+                sensor.nodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
@@ -510,7 +510,7 @@ namespace SerialController_Windows.Views
             };
 
             button.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNodeId,
+                sensor.nodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
             button.Click += textBoxClick;
@@ -565,7 +565,7 @@ namespace SerialController_Windows.Views
                
             };
             button.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNodeId,
+                sensor.nodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
@@ -580,7 +580,7 @@ namespace SerialController_Windows.Views
         {
             Slider slider = new Slider();
             slider.Tag = String.Format("{0};{1};{2}",
-                sensor.ownerNodeId,
+                sensor.nodeId,
                 sensor.sensorId,
                 data.dataType.ToString());
 
@@ -604,7 +604,7 @@ namespace SerialController_Windows.Views
             {
                 Slider slider = new Slider();
                 slider.Tag = String.Format("{0};{1};{2};{3}",
-                    sensor.ownerNodeId,
+                    sensor.nodeId,
                     sensor.sensorId,
                     data.dataType.ToString(),
                     i);
@@ -631,7 +631,7 @@ namespace SerialController_Windows.Views
             {
                 Slider slider = new Slider();
                 slider.Tag = String.Format("{0};{1};{2};{3}",
-                    sensor.ownerNodeId,
+                    sensor.nodeId,
                     sensor.sensorId,
                     data.dataType.ToString(),
                     i);
@@ -688,11 +688,11 @@ namespace SerialController_Windows.Views
         private void UpdateSensor(Sensor sensor)
         {
             //prevent slidres update when drug
-            if (sensor.ownerNodeId == lastSendedNodeId
+            if (sensor.nodeId == lastSendedNodeId
                 && sensor.sensorId == lastSendedSensorId)
                 return;
 
-            StackPanel panel = GetSensorPanel(sensor.ownerNodeId, sensor.sensorId);
+            StackPanel panel = GetSensorPanel(sensor.nodeId, sensor.sensorId);
             UpdateSensorPanel(sensor, panel);
         }
 
@@ -839,11 +839,11 @@ namespace SerialController_Windows.Views
         private void DelayedSendSensorState(int nodeId, int sensorId, SensorData data)
         {
             Sensor sensor = sendSensorsList
-                .Where(x => x.ownerNodeId == nodeId)
+                .Where(x => x.nodeId == nodeId)
                 .FirstOrDefault(x => x.sensorId == sensorId);
             if (sensor == null)
             {
-                sensor = new Sensor { sensorId = sensorId, ownerNodeId = nodeId };
+                sensor = new Sensor { sensorId = sensorId, nodeId = nodeId };
                 sendSensorsList.Add(sensor);
             }
 
@@ -874,7 +874,7 @@ namespace SerialController_Windows.Views
             {
                 foreach (var data in sensor.sensorData)
                 {
-                    SendSensorState(sensor.ownerNodeId, sensor.sensorId, data);
+                    SendSensorState(sensor.nodeId, sensor.sensorId, data);
                 }
             }
 

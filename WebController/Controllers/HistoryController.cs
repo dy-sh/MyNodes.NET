@@ -47,7 +47,7 @@ namespace MyNetSensors.WebController.Controllers
             if (sensor == null)
                 return new HttpNotFoundResult();
 
-            ViewBag.nodeId = sensor.ownerNodeId;
+            ViewBag.nodeId = sensor.nodeId;
             ViewBag.sensorId = sensor.sensorId;
             ViewBag.db_Id = sensor.db_Id;
             ViewBag.description = sensor.GetSimpleName1();
@@ -65,7 +65,7 @@ namespace MyNetSensors.WebController.Controllers
             if (sensor == null)
                 return new HttpNotFoundResult();
 
-            ViewBag.nodeId = sensor.ownerNodeId;
+            ViewBag.nodeId = sensor.nodeId;
             ViewBag.sensorId = sensor.sensorId;
             ViewBag.db_Id = sensor.db_Id;
             ViewBag.description = sensor.GetSimpleName1();
@@ -140,7 +140,7 @@ namespace MyNetSensors.WebController.Controllers
             Sensor sensor = gatewayDb.GetSensor(id);
             historyDb.DropSensorHistory(id);
 
-            return RedirectToAction("Chart", new { id1 = sensor.ownerNodeId, id2 = sensor.sensorId });
+            return RedirectToAction("Chart", new { id1 = sensor.nodeId, id2 = sensor.sensorId });
         }
 
 

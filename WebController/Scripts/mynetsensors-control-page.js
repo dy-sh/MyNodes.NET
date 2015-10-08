@@ -246,11 +246,11 @@ function updateBattery(node) {
 
 function createOrUpdateSensor(sensor) {
 
-    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var id = sensor.nodeId + "-" + sensor.sensorId;
 
     if ($('#sensorPanel' + id).length == 0) {
         //create new
-        $('#sensorsContainer' + sensor.ownerNodeId)
+        $('#sensorsContainer' + sensor.nodeId)
             .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
                 + "</li>").hide().fadeIn(elementsFadeTime);
 
@@ -282,11 +282,11 @@ function createOrUpdateSensorData(sensor) {
     if (sensorData == null || sensorData.length == 0)
         return;
 
-    var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var sensorId = sensor.nodeId + "-" + sensor.sensorId;
 
     for (var i = 0; i < sensorData.length; i++) {
         var data = sensorData[i];
-        var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
+        var id = sensor.nodeId + "-" + sensor.sensorId + "-" + data.dataType;
 
 
         if ($('#dataPanel' + id).length == 0) {
@@ -342,7 +342,7 @@ function createOrUpdateSensorData(sensor) {
 
                 slidersArray.push({
                     sliderId: id,
-                    nodeId: sensor.ownerNodeId,
+                    nodeId: sensor.nodeId,
                     sensorId: sensor.sensorId,
                     dataType: data.dataType,
                     lastVal: data.state
@@ -381,7 +381,7 @@ function createOrUpdateSensorData(sensor) {
 
                 rgbSlidersArray.push({
                     sliderId: id,
-                    nodeId: sensor.ownerNodeId,
+                    nodeId: sensor.nodeId,
                     sensorId: sensor.sensorId,
                     dataType: data.dataType,
                     lastR: r,
@@ -427,7 +427,7 @@ function createOrUpdateSensorData(sensor) {
 
                 rgbwSlidersArray.push({
                     sliderId: id,
-                    nodeId: sensor.ownerNodeId,
+                    nodeId: sensor.nodeId,
                     sensorId: sensor.sensorId,
                     dataType: data.dataType,
                     lastR: r,
@@ -465,7 +465,7 @@ function createOrUpdateSensorData(sensor) {
 
                 $("[name='button-" + id + "']").click(function () {
                     var code = $("[name='textbox-" + id + "']").val();
-                    sendSensor(sensor.ownerNodeId, sensor.sensorId, data.dataType, code);
+                    sendSensor(sensor.nodeId, sensor.sensorId, data.dataType, code);
                 });
 
             } else {
@@ -620,7 +620,7 @@ function updateDDMenuFromNode(node) {
 }
 
 function addHistoryToDDMenu(sensor) {
-    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var id = sensor.nodeId + "-" + sensor.sensorId;
 
     var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
 
@@ -631,16 +631,16 @@ function addHistoryToDDMenu(sensor) {
         sensorName = sensorType;
 
     if ($('#dropdownMenuHistory' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.ownerNodeId)
-            .append("<li id='dropdownMenuHistory" + id + "'><a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>");
+        $('#dropdownMenuList' + sensor.nodeId)
+            .append("<li id='dropdownMenuHistory" + id + "'><a href='../History/Chart/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a></li>");
     } else {
         $('#dropdownMenuHistory' + id)
-            .html("<a href='../History/Chart/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
+            .html("<a href='../History/Chart/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " History</a>");
     }
 }
 
 function addTasksToDDMenu(sensor) {
-    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var id = sensor.nodeId + "-" + sensor.sensorId;
 
     var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
 
@@ -651,16 +651,16 @@ function addTasksToDDMenu(sensor) {
         sensorName = sensorType;
 
     if ($('#dropdownMenuTasks' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.ownerNodeId)
-            .append("<li id='dropdownMenuTasks" + id + "'><a href='../Tasks/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a></li>");
+        $('#dropdownMenuList' + sensor.nodeId)
+            .append("<li id='dropdownMenuTasks" + id + "'><a href='../Tasks/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a></li>");
     } else {
         $('#dropdownMenuTasks' + id)
-            .html("<a href='../Tasks/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a>");
+            .html("<a href='../Tasks/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Tasks</a>");
     }
 }
 
 function addLinksToDDMenu(sensor) {
-    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var id = sensor.nodeId + "-" + sensor.sensorId;
 
     var sensorType = Object.keys(mySensors.sensorTypeSimple)[sensor.sensorType];
 
@@ -671,10 +671,10 @@ function addLinksToDDMenu(sensor) {
         sensorName = sensorType;
 
     if ($('#dropdownMenuLinks' + id).length == 0) {
-        $('#dropdownMenuList' + sensor.ownerNodeId)
-            .append("<li id='dropdownMenuLinks" + id + "'><a href='../Links/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a></li>");
+        $('#dropdownMenuList' + sensor.nodeId)
+            .append("<li id='dropdownMenuLinks" + id + "'><a href='../Links/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a></li>");
     } else {
         $('#dropdownMenuLinks' + id)
-            .html("<a href='../Links/List/" + sensor.ownerNodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a>");
+            .html("<a href='../Links/List/" + sensor.nodeId + "/" + sensor.sensorId + "'>" + sensorName + " Links</a>");
     }
 }

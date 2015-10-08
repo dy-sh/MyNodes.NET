@@ -102,7 +102,7 @@ $(function () {
         createOrUpdateSensor(sensor);
     };
 
-   
+
     $.connection.hub.start().done(function () {
         clientsHub.server.getGatewayServiceConnected();
     });
@@ -131,69 +131,59 @@ function onReturnNodes(nodes) {
     lastSeens = {};
 
     for (var i = 0; i < nodes.length; i++) {
-        lastSeens[nodes[i].nodeId]=nodes[i].lastSeen;
+        lastSeens[nodes[i].nodeId] = nodes[i].lastSeen;
     }
 }
+
+
+
+var nodeTemplate = Handlebars.compile($('#nodeTemplate').html());
+var sensorTemplate = Handlebars.compile($('#sensorTemplate').html());
+var dataTemplate = Handlebars.compile($('#dataTemplate').html());
+
+Handlebars.registerHelper("fullDate", function (datetime) {
+    return moment(datetime).format("DD/MM/YYYY HH:mm:ss");
+});
+
+Handlebars.registerHelper("yes-no", function (boolean) {
+    if (boolean == null)
+        return "Unknown";
+    else if (boolean)
+        return "Yes";
+    else
+        return "No";
+});
+
+Handlebars.registerHelper("sensor-id", function (sensor) {
+    return sensor.nodeId + "-" + sensor.sensorId;
+});
+
+Handlebars.registerHelper("sensordata-id", function (data) {
+    return data.nodeId + "-" + data.sensorId + "-" + data.dataType;
+});
+
+Handlebars.registerHelper("sensor-type", function (sensor) {
+    var type = Object.keys(mySensors.sensorType)[sensor.sensorType];
+    if (type == null)
+        type = "Unknown";
+    return type;
+});
+
+
+
 
 function createOrUpdateNode(node) {
     var id = node.nodeId;
 
-    if ($('#nodePanel' + id).length == 0) {
+    var nodePanel = $('#nodePanel' + id);
+
+    if (nodePanel.length == 0) {
         //create new
-        $('#nodeTemplate')
-            .clone()
-            .attr("id", "nodePanel" + id)
-            //.css('display', 'block')
-            .fadeIn(1000)
-            .appendTo('#nodesContainer');
-
-        $('#nodePanel' + id)
-            .find('#nodeTitle')
-            .attr("id", "nodeTitle" + id)
-            .html("Node id: " + id);
-
-        $('#nodePanel' + id)
-            .find('#nodeBody')
-            .attr("id", "nodeBody" + id);
-
-        $('#nodePanel' + id)
-            .find('#sensorsContainer')
-            .attr("id", "sensorsContainer" + id);
+        $(nodeTemplate(node)).hide().appendTo("#nodesContainer").fadeIn(1000);
+    } else {
+        //update
+        nodePanel.html(nodeTemplate(node));
     }
-
-    //update body
-    $('#nodeBody' + id)
-        .html(null);
-
-    if (node.name != null)
-        $('#nodeBody' + id)
-            .append("Name: " + node.name + "<br/>");
-
-    if (node.version != null)
-        $('#nodeBody' + id)
-            .append("Version: " + node.version + "<br/>");
-
-    $('#nodeBody' + id)
-        .append("Registered: " + moment(node.registered).format("DD/MM/YYYY HH:mm:ss") + "<br/>")
-        .append("<div id='nodeLastSeen" + id + "'>"
-            + "Last seen: " + moment(node.lastSeen).format("DD/MM/YYYY HH:mm:ss")
-            + "</div>");
-
-    if (node.isRepeatingNode == null)
-        $('#nodeBody' + id)
-            .append("Repeating: Unknown <br/>");
-    else if (node.isRepeatingNode)
-        $('#nodeBody' + id)
-            .append("Repeating: Yes <br/>");
-    else if (!node.isRepeatingNode)
-        $('#nodeBody' + id)
-            .append("Repeating: No <br/>");
-
-    if (node.batteryLevel != null)
-        $('#nodeBody' + id)
-            .append("<div id='nodeBattery" + id + "'>"
-                + "Battery: " + node.batteryLevel
-                + "</div>");
 
     for (var i = 0; i < node.sensors.length; i++) {
         createOrUpdateSensor(node.sensors[i]);
@@ -201,41 +191,24 @@ function createOrUpdateNode(node) {
 }
 
 
-
-
 function updateBattery(node) {
-    var id = node.nodeId;
-    $('#nodeBattery' + id)
-        .html("Battery: " + node.batteryLevel);
+    var nodeBattery = $('#nodeBattery' + node.nodeId);
+
+    if (nodeBattery.length == 0)
+        createOrUpdateNode(node);
+    else nodeBattery.html(node.batteryLevel);
 }
 
 
 function createOrUpdateSensor(sensor) {
-    var id = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var id = sensor.nodeId + "-" + sensor.sensorId;
 
     if ($('#sensorPanel' + id).length == 0) {
         //create new
-        $('#sensorsContainer' + sensor.ownerNodeId)
-            .append("<li class='list-group-item' id='sensorPanel" + id + "'>"
-                + "</li>");
+        $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(1000);
     }
 
     //update body
-    $('#sensorPanel' + id)
-        .html("Sensor Id: " + sensor.sensorId + "<br/>");
-
-    var sensorType = Object.keys(mySensors.sensorType)[sensor.sensorType];
-    if (sensorType == null) sensorType = "Unknown";
-    $('#sensorPanel' + id)
-        .append("Type: " + sensorType + "<br/>");
-
-    if (sensor.description != null)
-        $('#sensorPanel' + id)
-            .append("Description: " + sensor.description + "<br/>");
-
-    $('#sensorPanel' + id)
-        .append("<br/>");
-
     createOrUpdateSensorData(sensor);
 }
 
@@ -247,17 +220,15 @@ function createOrUpdateSensorData(sensor) {
     if (sensorData == null || sensorData.length == 0)
         return;
 
-    var sensorId = sensor.ownerNodeId + "-" + sensor.sensorId;
+    var sensorId = sensor.nodeId + "-" + sensor.sensorId;
 
     for (var i = 0; i < sensorData.length; i++) {
         var data = sensorData[i];
-        var id = sensor.ownerNodeId + "-" + sensor.sensorId + "-" + data.dataType;
+        var id = data.nodeId + "-" + data.sensorId + "-" + data.dataType;
 
         if ($('#dataPanel' + id).length == 0) {
             //create new
-            $('#sensorPanel' + sensorId)
-                .append("<div id='dataPanel" + id + "'>"
-                    + "</div>");
+            $(dataTemplate(data)).hide().appendTo("#sensorPanel" + sensorId).fadeIn(1000);
         }
 
         var dataState = data.state;
@@ -273,11 +244,11 @@ function createOrUpdateSensorData(sensor) {
     }
 }
 
-function updateLastSeen(nodeId,lastSeen) {
+function updateLastSeen(nodeId, lastSeen) {
 
     var date1 = new Date(lastSeen);
     var date2 = new Date();
-    var diff = Math.abs( date2.getTime() - date1.getTime());
+    var diff = Math.abs(date2.getTime() - date1.getTime());
     var days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
     diff -= days * (1000 * 60 * 60 * 24);
@@ -298,11 +269,11 @@ function updateLastSeen(nodeId,lastSeen) {
         elapsed = hours + "h " + mins + "m " + seconds + "s";
     else if (mins != 0)
         elapsed = mins + "m " + seconds + "s";
-    else 
+    else
         elapsed = seconds + "s";
 
     $('#nodeLastSeen' + nodeId)
-        .html("Last seen: " + elapsed);
+        .html(elapsed);
 
 }
 

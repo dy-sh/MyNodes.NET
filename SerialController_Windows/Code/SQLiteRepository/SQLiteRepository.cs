@@ -219,8 +219,8 @@ namespace SerialController_Windows.Code
 
         private void OnSensorUpdated(Sensor sensor)
         {
-            if (!updatedNodesId.Contains(sensor.ownerNodeId))
-                updatedNodesId.Add(sensor.ownerNodeId);
+            if (!updatedNodesId.Contains(sensor.nodeId))
+                updatedNodesId.Add(sensor.nodeId);
         }
 
         public void WriteUpdatedNodes()

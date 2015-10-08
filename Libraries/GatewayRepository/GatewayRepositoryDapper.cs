@@ -149,7 +149,7 @@ namespace MyNetSensors.GatewayRepository
                     db.Execute(
                         @" CREATE TABLE [dbo].[Sensors](
 	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
-	                [ownerNodeId] [int] NOT NULL,
+	                [nodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
 	                [sensorType] [int] NULL,
 	                [sensorDataJson] [nvarchar](max) NULL,
@@ -318,22 +318,22 @@ namespace MyNetSensors.GatewayRepository
                 db.Open();
 
                 Sensor oldSensor =
-                    db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
-                        new { ownerNodeId = sensor.ownerNodeId, sensorId = sensor.sensorId }).SingleOrDefault();
+                    db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
+                        new { nodeId = sensor.nodeId, sensorId = sensor.sensorId }).SingleOrDefault();
                 int node_db_id =
-                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.ownerNodeId })
+                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.nodeId })
                         .SingleOrDefault()
                         .db_Id;
 
                 if (oldSensor == null)
                 {
-                    var sqlQuery = "INSERT INTO Sensors (ownerNodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
+                    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
                                    +
-                                   "VALUES(@ownerNodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
+                                   "VALUES(@nodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int dbId = db.Query<int>(sqlQuery, new
                     {
-                        ownerNodeId = sensor.ownerNodeId,
+                        nodeId = sensor.nodeId,
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
@@ -350,13 +350,13 @@ namespace MyNetSensors.GatewayRepository
                         Node_db_Id = node_db_id
                     }).Single();
 
-                    gateway.SetSensorDbId(sensor.ownerNodeId, sensor.sensorId, dbId);
+                    gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, dbId);
                 }
                 else
                 {
                     var sqlQuery =
                         "UPDATE Sensors SET " +
-                        "ownerNodeId = @ownerNodeId, " +
+                        "nodeId = @nodeId, " +
                         "sensorId  = @sensorId, " +
                         "sensorType = @sensorType, " +
                         "sensorDataJson = @sensorDataJson, " +
@@ -371,10 +371,10 @@ namespace MyNetSensors.GatewayRepository
                         "remapToMin = @remapToMin, " +
                         "remapToMax = @remapToMax, " +
                         "Node_db_Id = @Node_db_Id " +
-                        "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+                        "WHERE nodeId = @nodeId AND sensorId = @sensorId";
                     db.Execute(sqlQuery, new
                     {
-                        ownerNodeId = sensor.ownerNodeId,
+                        nodeId = sensor.nodeId,
                         sensorId = sensor.sensorId,
                         sensorType = sensor.sensorType,
                         sensorDataJson = sensor.sensorDataJson,
@@ -442,8 +442,8 @@ namespace MyNetSensors.GatewayRepository
             if (writeInterval == 0) AddOrUpdateSensor(sensor);
             else
             {
-                if (!updatedNodesId.Contains(sensor.ownerNodeId))
-                    updatedNodesId.Add(sensor.ownerNodeId);
+                if (!updatedNodesId.Contains(sensor.nodeId))
+                    updatedNodesId.Add(sensor.nodeId);
             }
         }
 
@@ -555,14 +555,14 @@ namespace MyNetSensors.GatewayRepository
             return sensor;
         }
 
-        public Sensor GetSensor(int ownerNodeId, int sensorId)
+        public Sensor GetSensor(int nodeId, int sensorId)
         {
             Sensor sensor;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId",
-                        new { ownerNodeId, sensorId }).FirstOrDefault();
+                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
+                        new { nodeId, sensorId }).FirstOrDefault();
             }
             return sensor;
         }
@@ -603,7 +603,7 @@ namespace MyNetSensors.GatewayRepository
                     "remapFromMax = @remapFromMax, " +
                     "remapToMin = @remapToMin, " +
                     "remapToMax = @remapToMax " +
-                    "WHERE ownerNodeId = @ownerNodeId AND sensorId = @sensorId";
+                    "WHERE nodeId = @nodeId AND sensorId = @sensorId";
                 db.Execute(sqlQuery, new
                 {
                     description = sensor.description,
@@ -617,7 +617,7 @@ namespace MyNetSensors.GatewayRepository
                     remapToMin = sensor.remapToMin,
                     remapToMax = sensor.remapToMax,
                     sensorId = sensor.sensorId,
-                    ownerNodeId = sensor.ownerNodeId
+                    nodeId = sensor.nodeId
                 });
             }
         }
@@ -652,8 +652,8 @@ namespace MyNetSensors.GatewayRepository
 
                 sqlQuery =
                     "Delete FROM Sensors " +
-                    "WHERE ownerNodeId = @ownerNodeId";
-                db.Execute(sqlQuery, new { ownerNodeId = nodeId });
+                    "WHERE nodeId = @nodeId";
+                db.Execute(sqlQuery, new { nodeId = nodeId });
             }
         }
 

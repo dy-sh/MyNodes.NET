@@ -45,7 +45,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                ViewBag.nodeId = sensor.ownerNodeId;
+                ViewBag.nodeId = sensor.nodeId;
                 ViewBag.sensorId = sensor.sensorId;
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
@@ -96,7 +96,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                Node node = gatewayDb.GetNodeByNodeId(sensor.ownerNodeId);
+                Node node = gatewayDb.GetNodeByNodeId(sensor.nodeId);
                 ViewBag.description = sensor.GetSimpleName1();
 
                 SensorTask task = new SensorTask

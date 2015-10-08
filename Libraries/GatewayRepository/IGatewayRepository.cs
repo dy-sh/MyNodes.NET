@@ -24,7 +24,7 @@ namespace MyNetSensors.GatewayRepository
         Node GetNodeByDbId(int db_Id);
         Node GetNodeByNodeId(int nodeId);
         Sensor GetSensor(int db_Id);
-        Sensor GetSensor(int ownerNodeId, int sensorId);
+        Sensor GetSensor(int nodeId, int sensorId);
         void DropNodes();
         
 

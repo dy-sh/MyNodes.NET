@@ -336,7 +336,7 @@ namespace MyNetSensors.Gateway
                 if (OnNewSensorEvent != null)
                     OnNewSensorEvent(sensor);
 
-                DebugGatewayState(String.Format("New sensor (node id {0}, sensor id: {1}) registered", sensor.ownerNodeId,
+                DebugGatewayState(String.Format("New sensor (node id {0}, sensor id: {1}) registered", sensor.nodeId,
                     sensor.sensorId));
             }
             else
@@ -511,9 +511,9 @@ namespace MyNetSensors.Gateway
             node.db_Id = dbId;
         }
 
-        public void SetSensorDbId(int ownerNodeId,int sensorId, int dbId)
+        public void SetSensorDbId(int nodeId,int sensorId, int dbId)
         {
-            Node node = GetNode(ownerNodeId);
+            Node node = GetNode(nodeId);
             Sensor sensor = node.GetSensor(sensorId);
             sensor.db_Id = dbId;
         }
@@ -548,22 +548,32 @@ namespace MyNetSensors.Gateway
 
         public Message DeRemapMessage(Message message)
         {
-            Message newMes = (Message)message.Clone();
-            Sensor sensor = GetNode(newMes.nodeId).GetSensor(newMes.sensorId);
-            SensorData data =new SensorData((SensorDataType)newMes.subType, newMes.payload);
-            data = sensor.UnRemapSensorData(data);
-            newMes.payload = data.state;
-            return newMes;
+            try
+            {
+                Message newMes = (Message) message.Clone();
+                Sensor sensor = GetNode(newMes.nodeId).GetSensor(newMes.sensorId);
+                SensorData data = new SensorData(message.nodeId, message.sensorId, (SensorDataType) newMes.subType,
+                    newMes.payload);
+                data = sensor.UnRemapSensorData(data);
+                newMes.payload = data.state;
+                return newMes;
+            }
+            catch { return message; }
         }
 
         public Message RemapMessage(Message message)
         {
-            Message newMes = (Message)message.Clone();
-            Sensor sensor = GetNode(newMes.nodeId).GetSensor(newMes.sensorId);
-            SensorData data = new SensorData((SensorDataType)newMes.subType, newMes.payload);
-            data = sensor.RemapSensorData(data);
-            newMes.payload = data.state;
-            return newMes;
+            try
+            {
+                Message newMes = (Message) message.Clone();
+                Sensor sensor = GetNode(newMes.nodeId).GetSensor(newMes.sensorId);
+                SensorData data = new SensorData(message.nodeId, message.sensorId, (SensorDataType) newMes.subType,
+                    newMes.payload);
+                data = sensor.RemapSensorData(data);
+                newMes.payload = data.state;
+                return newMes;
+            }
+            catch { return message; }
         }
     }
 }

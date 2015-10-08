@@ -19,7 +19,7 @@ namespace MyNetSensors.Gateway
         public int db_Id { get; set; }
 
 
-        public int ownerNodeId { get; set; }
+        public int nodeId { get; set; }
         public int sensorId { get; set; }
         public SensorType? sensorType { get; set; }
         public string description { get; set; }
@@ -49,7 +49,7 @@ namespace MyNetSensors.Gateway
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
-            this.ownerNodeId = ownerNode.nodeId;
+            this.nodeId = ownerNode.nodeId;
         }
 
         public override string ToString()
@@ -105,7 +105,7 @@ namespace MyNetSensors.Gateway
 
             if (data == null)
             {
-                data = new SensorData(dataType, state);
+                data = new SensorData(nodeId,sensorId,dataType, state);
                 dataList.Add(data);
             }
             else data.state = state;
