@@ -23,15 +23,9 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public class GatewayController : Controller
     {
-
-
-        IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
-
-
-
-
         public ActionResult Index()
         {
             return RedirectToAction("Control");

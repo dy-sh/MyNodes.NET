@@ -297,7 +297,8 @@
     <Content Include="Scripts\bootstrap-select.js.map" />
     <None Include="Properties\PublishProfiles\Station1 VMWare.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
-    <Content Include="Scripts\handlebars-v4.0.2.js" />
+    <Content Include="Scripts\handlebars.js" />
+    <Content Include="Scripts\handlebars.min.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />

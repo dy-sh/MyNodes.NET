@@ -13,6 +13,7 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public class LinksController : Controller
     {
         private IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
