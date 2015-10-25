@@ -139,6 +139,7 @@
     <Compile Include="GatewayServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialController.cs" />
     <Compile Include="SoftNodesHub.cs" />
     <Compile Include="SoftNodesServer.cs" />
     <Compile Include="Startup.cs" />

@@ -239,12 +239,12 @@ namespace MyNetSensors.SerialController_Console
 
         public void UpdateSensorsLinks(string userId)
         {
-            Program.sensorsLinksEngine.GetLinksFromRepository();
+            SerialController.sensorsLinksEngine.GetLinksFromRepository();
         }
 
         public void UpdateSensorsTasks(string userId)
         {
-            Program.sensorsTasksEngine.GetTasksFromRepository();
+            SerialController.sensorsTasksEngine.GetTasksFromRepository();
         }
 
         public void UpdateNodeSettings(string userId, Node node)
