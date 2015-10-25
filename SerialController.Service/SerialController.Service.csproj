@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -69,6 +70,36 @@
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\GatewayRepository\GatewayRepository.csproj">
+      <Project>{C9E47C3E-850F-43E7-8C07-B59A6BC57CF8}</Project>
+      <Name>GatewayRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Gateway\Gateway.csproj">
+      <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
+      <Name>Gateway</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\NodesLinks\NodesLinks.csproj">
+      <Project>{708BDAC4-B2AA-4A10-BF7B-3441763ECC72}</Project>
+      <Name>NodesLinks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\NodeTasks\NodeTasks.csproj">
+      <Project>{C147C1C1-EB18-49FC-B4C9-18E03C57F636}</Project>
+      <Name>NodeTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
+      <Project>{CF02ABEB-AF45-4207-B9E1-7A758221C3BA}</Project>
+      <Name>SensorsHistoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\SoftNodes\SoftNodes.csproj">
+      <Project>{FBD59E7D-89B2-4E7E-AF13-301253601781}</Project>
+      <Name>SoftNodes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialController_Console\SerialController_Console.csproj">
+      <Project>{1E5983BC-C115-4DCA-9B78-1CCAF49112AC}</Project>
+      <Name>SerialController_Console</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
