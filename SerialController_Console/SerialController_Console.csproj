@@ -134,15 +134,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComPort.cs" />
-    <Compile Include="GatewayHub.cs" />
-    <Compile Include="GatewayServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialController.cs" />
-    <Compile Include="SoftNodesHub.cs" />
-    <Compile Include="SoftNodesServer.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -171,6 +164,10 @@
     <ProjectReference Include="..\Libraries\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
       <Project>{cf02abeb-af45-4207-b9e1-7a758221c3ba}</Project>
       <Name>SensorsHistoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\SerialController\SerialController.csproj">
+      <Project>{36D7DDFC-C005-436B-AB48-630A9482EE01}</Project>
+      <Name>SerialController</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\SoftNodes\SoftNodes.csproj">
       <Project>{fbd59e7d-89b2-4e7e-af13-301253601781}</Project>

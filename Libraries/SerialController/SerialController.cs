@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Configuration;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
@@ -12,7 +14,7 @@ using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SoftNodes;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.SerialController
 {
     static public class SerialController
     {

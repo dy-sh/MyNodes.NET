@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.SerialController.Service;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
 
-namespace SerialController.Service
+using System.ServiceProcess;
+
+namespace MyNetSensors.SerialController.Service
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         static void Main()
         {
             ServiceBase[] ServicesToRun;

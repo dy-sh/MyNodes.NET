@@ -1,10 +1,15 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using MyNetSensors.Gateway;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.SerialController
 {
     public class GatewayServer : IGatewayServer
     {

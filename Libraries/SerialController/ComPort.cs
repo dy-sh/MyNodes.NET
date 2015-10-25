@@ -5,12 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO.Ports;
 using MyNetSensors.Gateway;
 
-
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.SerialController
 {
 
     public class ComPort : IComPort

@@ -11,7 +11,7 @@ using MyNetSensors.SoftNodes;
 using DebugMessageEventHandler = MyNetSensors.SoftNodes.DebugMessageEventHandler;
 using OnReceivedMessageHandler = MyNetSensors.SoftNodes.OnReceivedMessageHandler;
 
-namespace MyNetSensors.SerialController_Console
+namespace MyNetSensors.SerialController
 {
 
     public class SoftNodesServer : ISoftNodesServer
