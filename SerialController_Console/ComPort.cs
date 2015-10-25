@@ -84,7 +84,7 @@ namespace MyNetSensors.SerialController_Console
             }
             catch (Exception ex)
             {
-                DebugPortState(String.Format("Can`t connect to port {0}.", portName));
+                DebugPortState(String.Format("Failed to connect to port {0}.", portName));
 
                 if (OnConnectingError != null)
                     OnConnectingError(ex);
@@ -99,7 +99,7 @@ namespace MyNetSensors.SerialController_Console
         {
             if (serialPort == null || !isConnected)
             {
-                DebugPortState("Can`t writing to serial. Port closed.");
+                DebugPortState("Failed to write to serial. Port closed.");
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace MyNetSensors.SerialController_Console
             }
             catch (Exception ex)
             {
-                DebugPortState(String.Format("Can`t writing to serial. {0}", ex.Message));
+                DebugPortState(String.Format("Failed to write to serial. {0}", ex.Message));
 
                 if (OnWritingError != null)
                     OnWritingError(ex);

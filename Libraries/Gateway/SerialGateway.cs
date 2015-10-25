@@ -100,7 +100,7 @@ namespace MyNetSensors.Gateway
         {
             if (!isConnected)
             {
-                throw new Exception("Can`t send message. Serial port is not connected.");
+                throw new Exception("Failed to send message. Serial port is not connected.");
                 return;
             }
 

@@ -37,9 +37,19 @@ namespace MyNetSensors.SerialController_Console
 
         private static string serialPortName;
 
+        private static void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         private static void Main(string[] args)
         {
-            Console.WriteLine("-------------STARTING GATEWAY--------------");
+            Start();
+        }
+
+        private static void Start()
+        {
+            Log("-------------STARTING GATEWAY--------------");
 
             ConnectToGatewayDb();
             ConnectToHistoryDb();
@@ -52,14 +62,14 @@ namespace MyNetSensors.SerialController_Console
             //reconnect if disconnected
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
 
-            Console.WriteLine("-------------SARTUP COMPLETE--------------");
+            Log("-------------SARTUP COMPLETE--------------");
             while (true)
                 Console.ReadLine();
         }
 
         private static void StartWebServer()
         {
-            Console.WriteLine("WEB SERVER: Starting...");
+            Log("WEB SERVER: Starting...");
 
             bool connectToWebServer = Convert.ToBoolean(ConfigurationManager.AppSettings["UseWebServer"]);
             string webServerURL = ConfigurationManager.AppSettings["WebServerGatewayServiceURL"];
@@ -70,10 +80,10 @@ namespace MyNetSensors.SerialController_Console
                 gatewayWebServer = new GatewayServer();
 
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["WebServerTxRxDebug"]))
-                    gatewayWebServer.OnDebugTxRxMessage += message => Console.WriteLine("WEB SERVER: " + message);
+                    gatewayWebServer.OnDebugTxRxMessage += message => Log("WEB SERVER: " + message);
 
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["WebServerStateDebug"]))
-                    gatewayWebServer.OnDebugStateMessage += message => Console.WriteLine("WEB SERVER: " + message);
+                    gatewayWebServer.OnDebugStateMessage += message => Log("WEB SERVER: " + message);
 
                 gatewayWebServer.StartServer(gateway, webServerURL);
             }
@@ -93,7 +103,7 @@ namespace MyNetSensors.SerialController_Console
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseGatewayDB"]))
             {
-                Console.WriteLine("GATEWAY DB: Connecting... ");
+                Log("GATEWAY DB: Connecting... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 gatewayDb = new GatewayRepositoryDapper(connectionString);
@@ -110,7 +120,7 @@ namespace MyNetSensors.SerialController_Console
                     if (!connected) await Task.Delay(5000);
                 }
 
-                Console.WriteLine("GATEWAY DB: Connected");
+                Log("GATEWAY DB: Connected");
             }
         }
 
@@ -120,7 +130,7 @@ namespace MyNetSensors.SerialController_Console
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseHistory"]))
             {
-                Console.WriteLine("HISTORY DB: Connecting... ");
+                Log("HISTORY DB: Connecting... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
                 historyDb = new SensorsHistoryRepositoryDapper(connectionString);
@@ -133,7 +143,7 @@ namespace MyNetSensors.SerialController_Console
                     if (!connected) await Task.Delay(5000);
                 }
 
-                Console.WriteLine("HISTORY DB: Connected");
+                Log("HISTORY DB: Connected");
 
             }
         }
@@ -144,7 +154,7 @@ namespace MyNetSensors.SerialController_Console
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsTasks"]))
             {
-                Console.WriteLine("TASK ENGINE: Starting...");
+                Log("TASK ENGINE: Starting...");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
@@ -157,7 +167,7 @@ namespace MyNetSensors.SerialController_Console
                     if (!connected) await Task.Delay(5000);
                 }
 
-                Console.WriteLine("TASK ENGINE: Started");
+                Log("TASK ENGINE: Started");
 
             }
         }
@@ -168,7 +178,7 @@ namespace MyNetSensors.SerialController_Console
             bool connected = false;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsLinks"]))
             {
-                Console.WriteLine("LINKS ENGINE: Starting... ");
+                Log("LINKS ENGINE: Starting... ");
 
                 string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
@@ -182,7 +192,7 @@ namespace MyNetSensors.SerialController_Console
 
                 sensorsLinksEngine.GetLinksFromRepository();
 
-                Console.WriteLine("LINKS ENGINE: Started");
+                Log("LINKS ENGINE: Started");
 
             }
 
@@ -191,13 +201,13 @@ namespace MyNetSensors.SerialController_Console
         public static async Task ConnectToSerialPort()
         {
             //connecting to serial port
-            Console.WriteLine("SERIAL: Connecting...");
+            Log("SERIAL: Connecting...");
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["SerialStateDebug"]))
-                comPort.OnDebugPortStateMessage += message => Console.WriteLine("SERIAL: " + message);
+                comPort.OnDebugPortStateMessage += message => Log("SERIAL: " + message);
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["SerialTxRxDebug"]))
-                comPort.OnDebugTxRxMessage += message => Console.WriteLine("SERIAL: " + message);
+                comPort.OnDebugTxRxMessage += message => Log("SERIAL: " + message);
 
 
 
@@ -221,15 +231,15 @@ namespace MyNetSensors.SerialController_Console
         public async static Task ConnectToGateway()
         {
             //connecting to gateway
-            Console.WriteLine("GATEWAY: Connecting...");
+            Log("GATEWAY: Connecting...");
 
             gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayTxRxDebug"]))
-                gateway.OnDebugTxRxMessage += message => Console.WriteLine("GATEWAY: " + message);
+                gateway.OnDebugTxRxMessage += message => Log("GATEWAY: " + message);
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayStateDebug"]))
-                gateway.OnDebugGatewayStateMessage += message => Console.WriteLine("GATEWAY: " + message);
+                gateway.OnDebugGatewayStateMessage += message => Log("GATEWAY: " + message);
 
             bool connected = false;
             while (!connected)
@@ -244,16 +254,16 @@ namespace MyNetSensors.SerialController_Console
         {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSoftNodes"]))
             {
-                Console.WriteLine("SOFT NODES SERVER: Starting...");
+                Log("SOFT NODES SERVER: Starting...");
 
                 string softNodesServerURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
                 softNodesServer = new SoftNodesServer();
 
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["SoftNodesStateDebug"]))
-                    softNodesServer.OnDebugStateMessage += message => Console.WriteLine("SOFT NODES SERVER: " + message);
+                    softNodesServer.OnDebugStateMessage += message => Log("SOFT NODES SERVER: " + message);
 
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["SoftNodesTxRxDebug"]))
-                    softNodesServer.OnDebugTxRxMessage += message => Console.WriteLine("SOFT NODES SERVER: " + message);
+                    softNodesServer.OnDebugTxRxMessage += message => Log("SOFT NODES SERVER: " + message);
 
 
 
@@ -266,11 +276,11 @@ namespace MyNetSensors.SerialController_Console
         {
             var comPorts = comPort.GetPortsList();
 
-            Console.WriteLine("Select port:");
+            Log("Select port:");
 
             for (int i = 0; i < comPorts.Count; i++)
             {
-                Console.WriteLine("{0}: {1}", i, comPorts[i]);
+                Log(String.Format("{0}: {1}", i, comPorts[i]));
             }
 
             int portIndex = Int32.Parse(Console.ReadLine());
