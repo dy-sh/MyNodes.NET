@@ -53,8 +53,7 @@ namespace MyNetSensors.SerialController
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
 
             OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
-            while (true)
-                Console.ReadLine();
+
         }
 
         private static void StartWebServer()

@@ -14,7 +14,13 @@ namespace MyNetSensors.SerialController.Service
 {
     public static class LogFile
     {
-        private static string logFileName = AppDomain.CurrentDomain.BaseDirectory + "\\log.txt";
+        private static string logFileName;
+
+        static LogFile()
+        {
+            string directory = AppDomain.CurrentDomain.BaseDirectory;
+            logFileName =  String.Format(directory+"\\log_{0}.txt", DateTime.Now.ToString("MM.dd.yyyy HH_mm_ss"));
+        }
 
         public static void WriteMessage(Exception ex)
         {

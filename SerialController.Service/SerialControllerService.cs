@@ -25,7 +25,17 @@ namespace MyNetSensors.SerialController.Service
         protected override void OnStart(string[] args)
         {
             Log("Service started");
-            SerialController.Start();
+            SerialController.OnDebugStateMessage += Log;
+            SerialController.OnDebugTxRxMessage += Log;
+            try
+            {
+                SerialController.Start();
+            }
+            catch (Exception e)
+            {
+                LogFile.WriteMessage(e);
+            }
+
         }
 
         protected override void OnStop()
