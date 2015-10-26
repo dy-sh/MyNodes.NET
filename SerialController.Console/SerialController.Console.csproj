@@ -7,8 +7,8 @@
     <ProjectGuid>{1E5983BC-C115-4DCA-9B78-1CCAF49112AC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.SerialController_Console</RootNamespace>
-    <AssemblyName>MyNetSensors.SerialController_Console</AssemblyName>
+    <RootNamespace>MyNetSensors.SerialController.Console</RootNamespace>
+    <AssemblyName>MyNetSensors.SerialController.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
