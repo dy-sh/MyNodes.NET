@@ -30,7 +30,9 @@ namespace MyNetSensors.SerialController_Console
     {
         private static void Main(string[] args)
         {
-           SerialController.SerialController.Start();
+            SerialController.SerialController.OnDebugStateMessage += message => Console.WriteLine(message);
+            SerialController.SerialController.OnDebugTxRxMessage += message => Console.WriteLine(message);
+            SerialController.SerialController.Start();
         }
     }
 }
