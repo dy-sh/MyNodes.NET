@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Foundation.Metadata;
-using Windows.UI.Core;
-using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Automation;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using SerialController_Windows.Controls;
-using SerialController_Windows.Views;
+using SerialController.Windows.Controls;
+using SerialController.Windows.Views;
+using SerialController.Windows;
+using NodesControlPage = SerialController.Windows.Views.NodesControlPage;
 
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace SerialController_Windows
+namespace SerialController.Windows
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -36,7 +27,7 @@ namespace SerialController_Windows
                 {
                     Symbol = Symbol.Link,
                     Label = "Connect to Device",
-                    DestPage = typeof(ConnectPage)
+                    DestPage = typeof(SerialController.Windows.Views.ConnectPage)
                 },
                  new NavMenuItem()
                 {
@@ -60,7 +51,7 @@ namespace SerialController_Windows
                 {
                     Symbol = Symbol.Message,
                     Label = "Messages Log",
-                    DestPage = typeof(MessagesLogPage)
+                    DestPage = typeof(SerialController.Windows.Views.MessagesLogPage)
                 },
               });
 

@@ -5,15 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.Devices.Bluetooth;
-using Windows.UI.Xaml;
 
-
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.MySensors
 {
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialController_Windows", "SerialController_Windows\SerialController_Windows.csproj", "{D6468583-4BFF-424B-B8EA-D83540570FD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialController.Windows", "SerialController_Windows\SerialController.Windows.csproj", "{D6468583-4BFF-424B-B8EA-D83540570FD3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RGBLight_device", "Device Examples\RGBLight_device\RGBLight_device.vcxproj", "{2AFAD3AB-4EA0-4722-BDDF-A95ABB91DA17}"
 EndProject
@@ -19,7 +19,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClearEEPROM_Device", "Devic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IR_Device", "Device Examples\IR_Device\IR_Device.vcxproj", "{7A7BA243-1589-4E35-88DF-D1094F6198E3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGateway_Device", "SerialGateway_Device\SerialGateway_Device.vcxproj", "{3C7AD472-B7E4-44E6-8615-998D71A9072A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGateway.Device", "SerialGateway_Device\SerialGateway_Device.vcxproj", "{3C7AD472-B7E4-44E6-8615-998D71A9072A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayRepository", "Libraries\GatewayRepository\GatewayRepository.csproj", "{C9E47C3E-850F-43E7-8C07-B59A6BC57CF8}"
 EndProject

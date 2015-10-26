@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SerialController_Windows.Controls
+namespace SerialController.Windows.Controls
 {
     public sealed partial class PageHeader : UserControl
     {
@@ -25,12 +25,12 @@ namespace SerialController_Windows.Controls
 
             this.Loaded += (s, a) =>
             {
-                AppShell.Current.TogglePaneButtonRectChanged += Current_TogglePaneButtonSizeChanged;
-                this.titleBar.Margin = new Thickness(AppShell.Current.TogglePaneButtonRect.Right, 0, 0, 0);
+                SerialController.Windows.AppShell.Current.TogglePaneButtonRectChanged += Current_TogglePaneButtonSizeChanged;
+                this.titleBar.Margin = new Thickness(SerialController.Windows.AppShell.Current.TogglePaneButtonRect.Right, 0, 0, 0);
             };
         }
 
-        private void Current_TogglePaneButtonSizeChanged(AppShell sender, Rect e)
+        private void Current_TogglePaneButtonSizeChanged(SerialController.Windows.AppShell sender, Rect e)
         {
             this.titleBar.Margin = new Thickness(e.Right, 0, 0, 0);
         }

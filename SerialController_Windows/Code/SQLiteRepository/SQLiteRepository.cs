@@ -9,11 +9,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Windows.UI.Xaml;
+using SerialController.Windows.Code.MySensors;
 using SQLite.Net;
-using SQLite.Net.Interop;
 using SQLiteNetExtensions.Extensions;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.SQLiteRepository
 {
     public class SQLiteRepository
     {
@@ -36,7 +36,7 @@ namespace SerialController_Windows.Code
         private string path;
         private SQLiteConnection conn;
 
-        private SerialController serialController;
+        private MySensors.SerialController serialController;
 
         private DispatcherTimer updateDbTimer;
 
@@ -44,7 +44,7 @@ namespace SerialController_Windows.Code
         private List<int> updatedNodesId = new List<int>();
 
 
-        public SQLiteRepository(SerialController serialController)
+        public SQLiteRepository(MySensors.SerialController serialController)
         {
             InitializeDB();
             ConnectToController(serialController);
@@ -52,7 +52,7 @@ namespace SerialController_Windows.Code
 
 
 
-        private void ConnectToController(SerialController serialController)
+        private void ConnectToController(MySensors.SerialController serialController)
         {
             this.serialController = serialController;
 
@@ -97,7 +97,7 @@ namespace SerialController_Windows.Code
 
         private void InitializeDB()
         {
-            path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
+            path = Path.Combine(global::Windows.Storage.ApplicationData.Current.LocalFolder.Path, "db.sqlite");
 
             conn = new SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), path);
 

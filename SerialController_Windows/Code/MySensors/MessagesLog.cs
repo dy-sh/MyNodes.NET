@@ -6,11 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Store.Preview;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.MySensors
 {
     public delegate void OnNewMessageLoggedEventHandler(Message message);
 

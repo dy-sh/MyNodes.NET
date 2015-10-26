@@ -7,7 +7,7 @@ using System;
 using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.MySensors
 {
     public class SensorData
     {

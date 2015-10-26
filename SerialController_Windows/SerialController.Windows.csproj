@@ -7,8 +7,8 @@
     <ProjectGuid>{D6468583-4BFF-424B-B8EA-D83540570FD3}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SerialController_Windows</RootNamespace>
-    <AssemblyName>SerialController_Windows</AssemblyName>
+    <RootNamespace>SerialController.Windows</RootNamespace>
+    <AssemblyName>SerialController.Windows</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>

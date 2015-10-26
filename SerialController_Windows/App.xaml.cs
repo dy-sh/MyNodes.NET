@@ -1,27 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Devices.SerialCommunication;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using SerialController_Windows.Code;
-using SerialController_Windows.Views;
+using SerialController.Windows.Code;
+using SerialController.Windows.Code.SQLiteRepository;
+using SerialController.Windows;
 
-namespace SerialController_Windows
+namespace SerialController.Windows
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -30,7 +16,7 @@ namespace SerialController_Windows
     {
 
         public static SerialPort serialPort;
-        public static SerialController serialController;
+        public static Code.MySensors.SerialController serialController;
         public SQLiteRepository db;
 
         /// <summary>
@@ -47,7 +33,7 @@ namespace SerialController_Windows
 
             serialPort=new SerialPort();
          //   ledStripController=new LedStripController(serialPort);
-            serialController=new SerialController(serialPort);
+            serialController=new Code.MySensors.SerialController(serialPort);
             db = new SQLiteRepository(serialController);
   
         }
@@ -81,7 +67,7 @@ namespace SerialController_Windows
                 shell = new AppShell();
 
                 // Set the default language
-                shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+                shell.Language = global::Windows.Globalization.ApplicationLanguages.Languages[0];
 
                 shell.AppFrame.NavigationFailed += OnNavigationFailed;
 
@@ -101,7 +87,7 @@ namespace SerialController_Windows
             {
                 // When the navigation stack isn't restored, navigate to the first page
                 // suppressing the initial entrance animation.
-                shell.AppFrame.Navigate(typeof(ConnectPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
+                shell.AppFrame.Navigate(typeof(SerialController.Windows.Views.ConnectPage), e.Arguments, new global::Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
 
             // Ensure the current window is active

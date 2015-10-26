@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Media.SpeechRecognition;
+﻿using System.Globalization;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.Utils
 {
     public static class ColorUtils
     {

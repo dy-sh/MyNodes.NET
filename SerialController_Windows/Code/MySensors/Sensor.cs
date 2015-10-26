@@ -6,13 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Notifications;
 using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.MySensors
 {
     public class Sensor
     {

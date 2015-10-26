@@ -3,13 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code.MySensors
 {
     public enum MessageType
     {

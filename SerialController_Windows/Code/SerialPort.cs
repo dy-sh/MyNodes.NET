@@ -7,22 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
-using Windows.UI.Popups;
-using Windows.UI.Text.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
-namespace SerialController_Windows.Code
+namespace SerialController.Windows.Code
 {
     public delegate void ReceivedDataEventHandler(string message);
 
