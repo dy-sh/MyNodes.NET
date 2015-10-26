@@ -22,7 +22,7 @@
     <ProjectGuid>{3C7AD472-B7E4-44E6-8615-998D71A9072A}</ProjectGuid>
     <RootNamespace>SerialController_Device</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>SerialGateway_Device</ProjectName>
+    <ProjectName>SerialGateway.Device</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -124,7 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="SerialGateway_Device.ino">
+    <None Include="SerialGateway.Device.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>

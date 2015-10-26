@@ -83,6 +83,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portOutputRegister(P)
 #define portInputRegister(P)
 #define portModeRegister(P)
-#include <SerialGateway_Device.ino>
+#include <SerialGateway.Device.ino>
 #include <GatewayUtil.h>
 #endif

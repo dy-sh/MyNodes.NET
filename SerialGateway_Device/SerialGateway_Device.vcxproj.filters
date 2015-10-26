@@ -26,6 +26,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SerialGateway_Device.ino" />
+    <None Include="SerialGateway.Device.ino" />
   </ItemGroup>
 </Project>
