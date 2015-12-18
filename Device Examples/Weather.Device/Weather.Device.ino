@@ -2,7 +2,7 @@
 #include <MySensor.h>  
 #include <DHT.h>  
 
-bool debugEnabled = false;
+bool debugEnabled = true;
 
 #define DHT_PIN 2
 #define PHOTORESISTOR_PIN A1

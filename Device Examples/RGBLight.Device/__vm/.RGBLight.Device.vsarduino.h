@@ -84,5 +84,5 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portOutputRegister(P)
 #define portInputRegister(P)
 #define portModeRegister(P)
-#include <..\ClearEEPROM.Device\ClearEEPROM.Device.ino>
+#include <..\RGBLight.Device\RGBLight.Device.ino>
 #endif

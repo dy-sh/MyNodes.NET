@@ -24,6 +24,9 @@
     <ClInclude Include="__vm\.ClearEEPROM_Device.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.ClearEEPROM.Device.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClearEEPROM.Device.ino" />
