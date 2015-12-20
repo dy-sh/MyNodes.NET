@@ -23,15 +23,26 @@
 <script src="~/signalr/hubs" type="text/javascript"></script>
 
     <script>
-        var clientsHub = $.connection.clientsHub;
-        clientsHub.client.OnMessageRecievedEvent = function (message) {
-            $('#log').append(message + "<br/>");
-            $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-        };
-        $.connection.hub.start();
-
         $(function () {
+            //signalr
+            var clientsHub = $.connection.clientsHub;
+
+            clientsHub.client.OnMessageRecievedEvent = function (message) {
+                $('#log').append(message + "<br/>");
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+            };
+
+            $.connection.hub.start();
+
+
+            $('#clear-log').on('click', function () {
+                $('#log').html("");
+                $.ajax({ url: "/Gateway/ClearMessages/" });
+            });
+
             getMessages();
+
+
 
             //autoscroll
             $(function () {

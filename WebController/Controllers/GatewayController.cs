@@ -74,6 +74,11 @@ namespace MyNetSensors.WebServer.Controllers
             return text;
         }
 
+        public void ClearMessages()
+        {
+            SerialController.SerialController.gateway.messagesLog.ClearLog();
+        }
+
 
         public async Task<ActionResult> DropNodes()
         {

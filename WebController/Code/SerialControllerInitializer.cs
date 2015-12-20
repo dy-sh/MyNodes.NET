@@ -16,6 +16,9 @@ namespace MyNetSensors.WebServer.Code
     public static class SerialControllerInitializer
     {
         private static bool serialControllerStarted;
+
+        private static IHubContext hub;
+
         public static async Task Start(ILoggerFactory loggerFactory, IConfigurationRoot Configuration, IConnectionManager connectionManager)
         {
             if (serialControllerStarted) return;
@@ -33,7 +36,7 @@ namespace MyNetSensors.WebServer.Code
             SerialController.SerialController.OnDebugStateMessage += logger.LogInformation;
             SerialController.SerialController.OnDebugTxRxMessage += logger.LogInformation;
 
-            _hub = connectionManager.GetHubContext<ClientsHub>();
+            hub = connectionManager.GetHubContext<ClientsHub>();
             SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
 
             //start
@@ -48,11 +51,10 @@ namespace MyNetSensors.WebServer.Code
             //}
         }
 
-        private static IHubContext _hub;
 
         private static void OnMessageRecievedEvent(Message message)
         {
-                _hub.Clients.All.OnMessageRecievedEvent(message.ToString());
+                hub.Clients.All.OnMessageRecievedEvent(message.ToString());
         }
 
     }
