@@ -2,13 +2,14 @@
   "version": "1.0.0-*",
   "frameworks": {
     "net451": {
-      "wrappedProject": "../../GatewayRepository/GatewayRepository.csproj",
+      "wrappedProject": "../../Libs/GatewayRepository/GatewayRepository.csproj",
       "bin": {
-        "assembly": "../../GatewayRepository/obj/{configuration}/GatewayRepository.dll",
-        "pdb": "../../GatewayRepository/obj/{configuration}/GatewayRepository.pdb"
+        "assembly": "../../Libs/GatewayRepository/obj/{configuration}/GatewayRepository.dll",
+        "pdb": "../../Libs/GatewayRepository/obj/{configuration}/GatewayRepository.pdb"
       },
       "dependencies": {
         "Dapper": "1.50.0-beta6",
+        "Newtonsoft.Json": "7.0.1",
         "Gateway": "1.0.0-*"
       }
     }

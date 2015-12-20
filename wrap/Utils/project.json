@@ -2,10 +2,13 @@
   "version": "1.0.0-*",
   "frameworks": {
     "net451": {
-      "wrappedProject": "../../Utils/Utils.csproj",
+      "wrappedProject": "../../Libs/Utils/Utils.csproj",
       "bin": {
-        "assembly": "../../Utils/obj/{configuration}/Utils.dll",
-        "pdb": "../../Utils/obj/{configuration}/Utils.pdb"
+        "assembly": "../../Libs/Utils/obj/{configuration}/Utils.dll",
+        "pdb": "../../Libs/Utils/obj/{configuration}/Utils.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "7.0.1"
       }
     }
   }

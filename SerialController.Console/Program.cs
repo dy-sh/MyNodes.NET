@@ -12,7 +12,7 @@ namespace MyNetSensors.SerialController.Console
         {
             SerialController.OnDebugStateMessage += System.Console.WriteLine;
             SerialController.OnDebugTxRxMessage += System.Console.WriteLine;
-            SerialController.Start();
+            SerialController.Start("COM3");
             while (true)
                 System.Console.ReadLine();
         }

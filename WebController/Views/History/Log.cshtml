@@ -1,0 +1,61 @@
+﻿@using WebGridBootstrapPager
+@model List<MyNetSensors.Gateway.SensorData>
+
+@{
+    ViewBag.Title = "Sensor log";
+}
+
+<h2>@ViewBag.description History</h2>
+<p>
+    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
+    < @Html.ActionLink("History", "List", "History")
+    @Html.ActionLink("Show Chart", "Chart", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId },new {@class="btn btn-default pull-right"})
+</p>
+<hr />
+
+
+
+
+@{
+    var grid = new WebGrid(Model, rowsPerPage: 100, defaultSort: "dateTime");
+    grid.SortDirection = SortDirection.Descending;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">@ViewBag.description History</div>
+    <div class="panel-body">
+
+        @if (Model == null)
+        {
+            @:There are no entries in history. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
+
+        }
+        else
+        {
+            @grid.Table(
+                tableStyle: "table table-striped table-hover",
+                columns: grid.Columns(
+                    grid.Column(columnName: "dateTime", header: "Date"),
+                    grid.Column(columnName: "state", header: "State")
+                    ));
+
+            @grid.BootstrapPager();
+
+
+            <p>
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class='btn btn-default' href='../../ClearHistoryByDbId/@ViewBag.db_Id'>
+                        Clear History
+                    </a>
+                </div>
+            </p>
+        }
+    </div>
+</div>
+
+
+
+@section styles
+{
+    @Styles.Render("~/font-awesome")
+}
