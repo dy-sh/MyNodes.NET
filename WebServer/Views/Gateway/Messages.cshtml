@@ -18,41 +18,13 @@
 
 @section scripts
         {
-    @Scripts.Render("~/bundles/signalr")
-    <script src="~/signalr/hubs"></script>
+
 
     <script>
         $(function () {
-            var clientsHub = $.connection.clientsHub;
+            getMessages();
 
-            $('#clear-log').on('click', function () {
-                clientsHub.server.clearLog();
-            });
-
-            clientsHub.client.onMessageRecieved = function (message) {
-                $('#log').append(message + "<br/>");
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-            };
-
-            clientsHub.client.onMessageSend = function (message) {
-                $('#log').append(message + "<br/>");
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-            };
-
-            clientsHub.client.returnLog = function (log) {
-                $('#log').html(log);
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-            };
-
-            clientsHub.client.onClearMessages = function (log) {
-                $('#log').html(null);
-                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-            };
-
-            $.connection.hub.start().done(function () {
-                clientsHub.server.getLog();
-            });
-
+            //autoscroll
             $(function () {
                 var window_height = $(window).height(),
                 content_height = window_height - 280;
@@ -66,6 +38,20 @@
             });
         });
 
+        function getMessages() {
+            $.ajax({
+                url: "/Gateway/GetMessages/",
+                type: "POST",
+                success: function (messages) {
+                    onReturnMessages(messages);
+                }
+            });
+        }
+
+        function onReturnMessages(messages) {
+            $('#log').html(messages);
+            $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+        };
 
     </script>
 }

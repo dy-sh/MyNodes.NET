@@ -3,6 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -55,6 +56,18 @@ namespace MyNetSensors.WebServer.Controllers
         {
             bool connected = SerialController.SerialController.gateway.IsConnected();
             return Json(connected);
+        }
+
+        public string GetMessages()
+        {
+            List<Message> messages = SerialController.SerialController.gateway.messagesLog.GetAllMessages();
+            string text=null;
+            foreach (var message in messages)
+            {
+                text += message.ToString();
+                text += " <br>\n";
+            }
+            return text;
         }
 
 
