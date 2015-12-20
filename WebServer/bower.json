@@ -1,0 +1,24 @@
+{
+  "name": "ASP.NET",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.5",
+    "jquery": "2.1.4",
+    "jquery-validation": "1.14.0",
+    "jquery-validation-unobtrusive": "3.2.4",
+    "jquery-ui": "1.11.4",
+    "moment": "2.10.6",
+    "vis": "~4.11.0",
+    "bootstrap-switch": "3.3.2",
+    "bootstrap-select": "1.7.3",
+    "eonasdan-bootstrap-datetimepicker": "4.17.37",
+    "noty": "~2.3.7",
+    "animate.css": "3.4.0",
+    "font-awesome": "4.4.0",
+    "signalr": "~2.2.0"
+  },
+  "resolutions": {
+    "bootstrap": ">=2.3.2",
+    "jquery": ">=1.6"
+  }
+}

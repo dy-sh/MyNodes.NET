@@ -6,8 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Web.Mvc;
+using System.Linq;
+using Microsoft.AspNet.Mvc;
+
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
@@ -15,18 +18,18 @@ using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
 {
-    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public class TasksController : Controller
     {
-        private IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
+        private IHubContext clientsHub;
         private ISensorsTasksRepository tasksDb;
         private IGatewayRepository gatewayDb;
 
-        public TasksController()
+        public TasksController(IConnectionManager connectionManager)
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             gatewayDb = new GatewayRepositoryDapper(cs);
             tasksDb = new SensorsTasksRepositoryDapper(cs);
+            clientsHub = connectionManager.GetHubContext<ClientsHub>();
         }
 
         public ActionResult Index()
@@ -208,8 +211,8 @@ namespace MyNetSensors.WebServer.Controllers
             string usedId = "";//todo get userid
             GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-            if (Request.UrlReferrer != null)
-                return Redirect(Request.UrlReferrer.ToString());
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("List");
         }
 
@@ -225,8 +228,8 @@ namespace MyNetSensors.WebServer.Controllers
             string usedId = "";//todo get userid
             GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-            if (Request.UrlReferrer != null)
-                return Redirect(Request.UrlReferrer.ToString());
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("List");
         }
 
@@ -242,8 +245,8 @@ namespace MyNetSensors.WebServer.Controllers
             string usedId = "";//todo get userid
             GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-            if (Request.UrlReferrer != null)
-                return Redirect(Request.UrlReferrer.ToString());
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("List");
         }
 
@@ -259,8 +262,8 @@ namespace MyNetSensors.WebServer.Controllers
             string usedId = "";//todo get userid
             GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-            if (Request.UrlReferrer != null)
-                return Redirect(Request.UrlReferrer.ToString());
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("List");
         }
 
@@ -278,8 +281,8 @@ namespace MyNetSensors.WebServer.Controllers
                 string usedId = "";//todo get userid
                 GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-                if (Request.UrlReferrer != null)
-                    return Redirect(Request.UrlReferrer.ToString());
+                if (Request.Headers["Referer"].Any())
+                    return Redirect(Request.Headers["Referer"].ToString());
                 else return RedirectToAction("List");
             }
             else if (RouteData.Values.Count <= 2)
@@ -288,8 +291,8 @@ namespace MyNetSensors.WebServer.Controllers
                 string usedId = "";//todo get userid
                 GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-                if (Request.UrlReferrer != null)
-                    return Redirect(Request.UrlReferrer.ToString());
+                if (Request.Headers["Referer"].Any())
+                    return Redirect(Request.Headers["Referer"].ToString());
                 else return RedirectToAction("List");
             }
 
@@ -309,8 +312,8 @@ namespace MyNetSensors.WebServer.Controllers
                 string usedId = "";//todo get userid
                 GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-                if (Request.UrlReferrer != null)
-                    return Redirect(Request.UrlReferrer.ToString());
+                if (Request.Headers["Referer"].Any())
+                    return Redirect(Request.Headers["Referer"].ToString());
                 else return RedirectToAction("List");
             }
             else if (RouteData.Values.Count <= 2)
@@ -319,8 +322,8 @@ namespace MyNetSensors.WebServer.Controllers
                 string usedId = "";//todo get userid
                 GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 
-                if (Request.UrlReferrer != null)
-                    return Redirect(Request.UrlReferrer.ToString());
+                if (Request.Headers["Referer"].Any())
+                    return Redirect(Request.Headers["Referer"].ToString());
                 else return RedirectToAction("List");
             }
 

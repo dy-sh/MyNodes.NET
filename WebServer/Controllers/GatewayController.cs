@@ -5,7 +5,8 @@
 
 using System.Configuration;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNet.Mvc;
+
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
@@ -14,7 +15,7 @@ using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
 {
-    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+
     public class GatewayController : Controller
     {
         public ActionResult Index()

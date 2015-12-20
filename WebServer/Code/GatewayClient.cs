@@ -9,13 +9,14 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateway;
 
 namespace MyNetSensors.WebServer.Code
 {
     public class GatewayClient : IGatewayClient
     {
-        IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
+        IHubContext clientsHub ;
 
         private IHubProxy hubProxy;
         private HubConnection hubConnection;
@@ -49,8 +50,10 @@ namespace MyNetSensors.WebServer.Code
         private bool wasConnected;
 
 
-        public GatewayClient()
+        public GatewayClient(IConnectionManager connectionManager)
         {
+
+            clientsHub = connectionManager.GetHubContext<ClientsHub>();
             Reconnect();
         }
 

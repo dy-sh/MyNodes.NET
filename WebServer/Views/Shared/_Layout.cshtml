@@ -1,55 +1,89 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @RenderSection("styles", required: false)
-    @Styles.Render("~/Content/jqueryui")
-    @Styles.Render("~/Content/noty")
-    @Styles.Render("~/Content/switch")
-    @Styles.Render("~/Content/css")
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <environment names="Development">
+        <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet"/> 
+        <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/lib/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+        <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
+    </environment>
+    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("MyNetSensors", "About", "Home", new { area = "" }, new { @class = "navbar-brand fadebefore" })
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">MyNetSensors</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Control", "Control", "Gateway",null, new {@class= "fadebefore" })</li>
-                    <li>@Html.ActionLink("Observe", "Observe", "Gateway", null, new { @class = "fadebefore" })</li>
-                    <li>@Html.ActionLink("Messages", "Messages", "Gateway", null,new { @class = "fadebefore" })</li>
-                    <li>@Html.ActionLink("Settings", "Settings", "Gateway", null, new { @class = "fadebefore" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", null, new { @class = "fadebefore" })</li>
+                    <li><a asp-controller="Gateway" asp-action="Control" class="fadebefore">Control</a></li>
+                    <li><a asp-controller="Gateway" asp-action="Observe" class="fadebefore">Observe</a></li>
+                    <li><a asp-controller="Gateway" asp-action="Messages" class="fadebefore">Messages</a></li>
+                    <li><a asp-controller="Gateway" asp-action="Settings" class="fadebefore">Settings</a></li>
+                    <li><a asp-controller="Gateway" asp-action="About" class = "fadebefore">About</a></li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content" style="display: none;">
+    <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer id="footer" style="display: none;">
+        <footer>
             <p>&copy; @DateTime.Now.Year - MyNetSensors</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/switch")
-    @Scripts.Render("~/bundles/noty")
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+        <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+        <script src="~/lib/noty/js/noty/jquery.noty.js"></script>
+        <script src="~/lib/noty/js/noty/themes/relax.js"></script>
+        <script src="~/lib/moment/moment.js"></script>
+        <script src="~/js/handlebars.js"></script>
+
+        <script src="~/lib/signalr/jquery.signalr.js"></script>
+        <script src="~/signalr/hubs"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+        <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+        <script src="~/lib/noty/js/noty/jquery.noty.js"></script>
+        <script src="~/lib/noty/js/noty/themes/relax.js"></script>
+        <script src="~/lib/moment/min/moment.min.js"></script>
+        <script src="~/js/handlebars.min.js"></script>
+
+        <script src="~/lib/signalr/jquery.signalr.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+    </environment>
+
     @RenderSection("scripts", required: false)
 
-<script>
+    <script>
     $('.body-content').fadeIn(700);
     $('#footer').fadeIn(700);
 
@@ -66,6 +100,6 @@
         // over ride browser following link when clicked
         return false;
     });
-</script>
+    </script>
 </body>
 </html>

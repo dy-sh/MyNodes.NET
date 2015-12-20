@@ -6,7 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Web.Mvc;
+using Microsoft.AspNet.Mvc;
+
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
@@ -14,7 +15,6 @@ using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
 {
-    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public class HistoryController : Controller
     {
         private ISensorsHistoryRepository historyDb;
@@ -86,7 +86,7 @@ namespace MyNetSensors.WebServer.Controllers
             List<SensorData> samples = historyDb.GetSensorHistory(id);
 
             if (samples == null)
-                return Json(new { }, JsonRequestBehavior.AllowGet);
+                return Json(new { });
 
             var chartData = new List<ChartData>();
 
@@ -113,7 +113,7 @@ namespace MyNetSensors.WebServer.Controllers
 
             //Sensor sensor = historyDb.GetSensorByDbId(id);
             string dataType = samples[0].dataType.ToString();
-            JsonResult result = Json(new { chartData, dataType }, JsonRequestBehavior.AllowGet);
+            JsonResult result = Json(new { chartData, dataType });
 
             return result;
         }

@@ -5,8 +5,10 @@
 
 using System;
 using System.Configuration;
-using System.Web.Mvc;
+using Microsoft.AspNet.Mvc;
+
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
@@ -16,22 +18,22 @@ using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
 {
-    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public class NodeController : Controller
     {
 
 
-        IHubContext clientsHub = GlobalHost.ConnectionManager.GetHubContext<ClientsHub>();
+        IHubContext clientsHub;
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
-        public NodeController()
+        public NodeController(IConnectionManager connectionManager)
         {
 
 
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             historyDb = new SensorsHistoryRepositoryDapper(cs);
             gatewayDb = new GatewayRepositoryDapper(cs);
+            clientsHub = connectionManager.GetHubContext<ClientsHub>();
         }
 
         public ActionResult Index()

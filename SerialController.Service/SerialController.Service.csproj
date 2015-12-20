@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyNetSensors.SerialController.Service</RootNamespace>
     <AssemblyName>MyNetSensors.SerialController.Service</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -116,36 +117,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\GatewayRepository\GatewayRepository.csproj">
-      <Project>{C9E47C3E-850F-43E7-8C07-B59A6BC57CF8}</Project>
-      <Name>GatewayRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Gateway\Gateway.csproj">
-      <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
-      <Name>Gateway</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\NodesLinks\NodesLinks.csproj">
-      <Project>{708BDAC4-B2AA-4A10-BF7B-3441763ECC72}</Project>
-      <Name>NodesLinks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\NodeTasks\NodeTasks.csproj">
-      <Project>{C147C1C1-EB18-49FC-B4C9-18E03C57F636}</Project>
-      <Name>NodeTasks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
-      <Project>{CF02ABEB-AF45-4207-B9E1-7A758221C3BA}</Project>
-      <Name>SensorsHistoryRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\SerialController\SerialController.csproj">
-      <Project>{36d7ddfc-c005-436b-ab48-630a9482ee01}</Project>
-      <Name>SerialController</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\SoftNodes\SoftNodes.csproj">
-      <Project>{FBD59E7D-89B2-4E7E-AF13-301253601781}</Project>
-      <Name>SoftNodes</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="InstallUtil.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -154,6 +125,36 @@
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GatewayRepository\GatewayRepository.csproj">
+      <Project>{92ec924f-9445-47d4-9af7-32f92f2167f0}</Project>
+      <Name>GatewayRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gateway\Gateway.csproj">
+      <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
+      <Name>Gateway</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NodesLinks\NodesLinks.csproj">
+      <Project>{5bfb692c-f96f-4f89-8b4f-c5d97b96ae60}</Project>
+      <Name>NodesLinks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NodeTasks\NodeTasks.csproj">
+      <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
+      <Name>NodeTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
+      <Project>{7fd2eb6a-32c2-4659-96c1-093fcb85fbfd}</Project>
+      <Name>SensorsHistoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialController\SerialController.csproj">
+      <Project>{8f9745b8-1141-4342-bc5c-fa6077757e23}</Project>
+      <Name>SerialController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftNodes\SoftNodes.csproj">
+      <Project>{2be6f415-576b-49a4-b844-f916fe99697e}</Project>
+      <Name>SoftNodes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

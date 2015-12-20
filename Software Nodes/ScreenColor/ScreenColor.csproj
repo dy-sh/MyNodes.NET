@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScreenColor</RootNamespace>
     <AssemblyName>ScreenColor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,16 +65,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Gateway\Gateway.csproj">
-      <Project>{3B0868EA-3030-43E2-B2B5-5E76DCB7ECB8}</Project>
+    <ProjectReference Include="..\..\Gateway\Gateway.csproj">
+      <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
       <Name>Gateway</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\SoftNodesSignalRClient\SoftNodesSignalRClient.csproj">
-      <Project>{7fcfd6a9-ef19-4d28-a9bd-6d6de59d4ca8}</Project>
+    <ProjectReference Include="..\..\SoftNodesSignalRClient\SoftNodesSignalRClient.csproj">
+      <Project>{7876bb69-f13b-40ae-bbf1-a8f1583e1468}</Project>
       <Name>SoftNodesSignalRClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\SoftNodes\SoftNodes.csproj">
-      <Project>{fbd59e7d-89b2-4e7e-af13-301253601781}</Project>
+    <ProjectReference Include="..\..\SoftNodes\SoftNodes.csproj">
+      <Project>{2be6f415-576b-49a4-b844-f916fe99697e}</Project>
       <Name>SoftNodes</Name>
     </ProjectReference>
   </ItemGroup>

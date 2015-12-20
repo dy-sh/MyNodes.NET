@@ -23,7 +23,7 @@ namespace MyNetSensors.WebServer.Code
             lock (lock1)
             {
                 if (gatewayClient != null) return;
-                gatewayClient = new GatewayClient();
+          //   gatewayClient = new GatewayClient();
 
                 string url = ConfigurationManager.AppSettings["WebServerGatewayServiceURL"];
 

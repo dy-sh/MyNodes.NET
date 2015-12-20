@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" Condition="'$(VSToolsPath)' != ''" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>d5991617-7252-4c2f-b1e2-c8504339f24c</ProjectGuid>
+    <RootNamespace>MyNetSensors.WebServer</RootNamespace>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">..\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">..\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <DnxInvisibleContent Include="bower.json" />
+    <DnxInvisibleContent Include=".bowerrc" />
+    <DnxInvisibleContent Include="package.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary2\ClassLibrary2.csproj" />
+    <ProjectReference Include="..\GatewayRepository\GatewayRepository.csproj" />
+    <ProjectReference Include="..\Gateway\Gateway.csproj" />
+    <ProjectReference Include="..\MyNetSensors.GatewayRepository\MyNetSensors.GatewayRepository.csproj" />
+    <ProjectReference Include="..\MyNetSensors.Gateway\MyNetSensors.Gateway.csproj" />
+    <ProjectReference Include="..\MyNetSensors.NodesLinks\MyNetSensors.NodesLinks.csproj" />
+    <ProjectReference Include="..\MyNetSensors.NodeTasks\MyNetSensors.NodeTasks.csproj" />
+    <ProjectReference Include="..\MyNetSensors.SensorsHistoryRepository\MyNetSensors.SensorsHistoryRepository.csproj" />
+    <ProjectReference Include="..\NodesLinks\NodesLinks.csproj" />
+    <ProjectReference Include="..\NodeTasks\NodeTasks.csproj" />
+    <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>
