@@ -3,20 +3,10 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-$.noty.defaults.layout = 'bottomRight';
-$.noty.defaults.theme = 'relax';
-$.noty.defaults.timeout = 3000;
-$.noty.defaults.animation = {
-    open: 'animated bounceInRight', // Animate.css class names
-    close: 'animated flipOutX', // Animate.css class names
-    easing: 'swing', // unavailable - no need
-    speed: 500 // unavailable - no need
-};
+
 
 var clientsHub;
 var gatewayHardwareConnected = false;
-var gatewayServiceConnected = false;
-
 var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 500;
 
@@ -30,102 +20,43 @@ var ignoreSendingSwitchId;
 
 
 $(function () {
-    clientsHub = $.connection.clientsHub;
-
-    clientsHub.client.onGatewayConnected = function () {
-        var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
-        gatewayHardwareConnected = true;
-        gatewayStatusChanged();
-    };
-
-    clientsHub.client.onGatewayDisconnected = function () {
-        var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
-        gatewayHardwareConnected = false;
-        gatewayStatusChanged();
-    };
-
-    clientsHub.client.onGatewayServiceConnected = function () {
-        var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
-        gatewayServiceConnected = true;
-        gatewayStatusChanged();
-        clientsHub.server.getGatewayHardwareConnected();
-    };
-
-    clientsHub.client.onGatewayServiceDisconnected = function () {
-        var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
-        gatewayServiceConnected = false;
-        gatewayHardwareConnected = false;
-        gatewayStatusChanged();
-    };
-
-    clientsHub.client.returnGatewayServiceConnected = function (isConnected) {
-        gatewayServiceConnected = isConnected;
-        gatewayStatusChanged();
-        clientsHub.server.getGatewayHardwareConnected();
-
-    };
-
-
-    clientsHub.client.returnGatewayHardwareConnected = function (isConnected) {
-        gatewayHardwareConnected = isConnected;
-        gatewayStatusChanged();
-        clientsHub.server.getNodes();
-
-        if (!gatewayServiceConnected)
-            var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
-        else if (!gatewayHardwareConnected)
-            var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
-    };
-
-    clientsHub.client.onClearNodesList = function () {
-        var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
-        $('#nodesContainer').html(null);
-    };
-
-
-
-    clientsHub.client.returnNodes = function (nodes) {
-        onReturnNodes(nodes);
-    };
-
-    clientsHub.client.onNewNode = function (node) {
-        createOrUpdateNode(node);
-    };
-
-    clientsHub.client.onNodeUpdated = function (node) {
-        createOrUpdateNode(node);
-    };
-
-    clientsHub.client.onNodeLastSeenUpdated = function (node) {
-        updateLastSeen(node);
-    };
-
-    clientsHub.client.onNodeBatteryUpdated = function (node) {
-        updateBattery(node);
-    };
-
-    clientsHub.client.onSensorUpdated = function (sensor) {
-        createOrUpdateSensor(sensor);
-    };
-
-    clientsHub.client.onNewSensor = function (sensor) {
-        createOrUpdateSensor(sensor);
-    };
-
-    $.connection.hub.start().done(function () {
-        clientsHub.server.getGatewayServiceConnected();
-    });
-
+    getIsGatewayHardwareConnected();
+ 
 });
 
 
+function getIsGatewayHardwareConnected() {
+    $.ajax({
+        url: "/Gateway/GetIsGatewayHardwareConnected/",
+        type: "POST",
+        success: function (connected) {
+            gatewayHardwareConnected = connected;
 
-function gatewayStatusChanged() {
-    if (gatewayHardwareConnected && gatewayServiceConnected)
-        $('#nodesContainer').fadeIn(800);
-    else
-        $('#nodesContainer').fadeOut(800);
+            if (gatewayHardwareConnected) {
+                var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+                $('#nodesContainer').fadeIn(800);
+            } else {
+                var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+                $('#nodesContainer').fadeOut(800);
+
+            }
+
+        }
+    });
 }
+
+
+function getNodes() {
+    $.ajax({
+        url: "/Gateway/GetNodes/",
+        type: "POST",
+        success: function (nodes) {
+            onReturnNodes(nodes);
+        }
+    });
+}
+
+
 
 
 function onReturnNodes(nodes) {
@@ -197,7 +128,7 @@ function createOrUpdateNode(node) {
     updateNodeMenu(node);
 
     for (var i = 0; i < node.sensors.length; i++) {
-            createOrUpdateSensor(node.sensors[i]);
+        createOrUpdateSensor(node.sensors[i]);
     }
 }
 

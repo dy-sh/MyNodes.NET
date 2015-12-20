@@ -7,10 +7,10 @@
     <title>@ViewData["Title"]</title>
 
     <environment names="Development">
-        <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
         <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet"/> 
+        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
         @RenderSection("styles", required: false)
     </environment>
@@ -42,7 +42,7 @@
                     <li><a asp-controller="Gateway" asp-action="Observe" class="fadebefore">Observe</a></li>
                     <li><a asp-controller="Gateway" asp-action="Messages" class="fadebefore">Messages</a></li>
                     <li><a asp-controller="Gateway" asp-action="Settings" class="fadebefore">Settings</a></li>
-                    <li><a asp-controller="Gateway" asp-action="About" class = "fadebefore">About</a></li>
+                    <li><a asp-controller="Gateway" asp-action="About" class="fadebefore">About</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -61,45 +61,57 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/jquery-ui/jquery-ui.js"></script>
         <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
-        <script src="~/lib/noty/js/noty/jquery.noty.js"></script>
-        <script src="~/lib/noty/js/noty/themes/relax.js"></script>
+        <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/js/handlebars.js"></script>
 
-        <script src="~/lib/signalr/jquery.signalr.js"></script>
-        <script src="~/signalr/hubs"></script>
+        @*<script src="~/lib/signalr/jquery.signalr.js"></script>
+            <script src="~/signalr/hubs"></script>*@
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
         <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-        <script src="~/lib/noty/js/noty/jquery.noty.js"></script>
-        <script src="~/lib/noty/js/noty/themes/relax.js"></script>
+        <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
         <script src="~/lib/moment/min/moment.min.js"></script>
         <script src="~/js/handlebars.min.js"></script>
 
-        <script src="~/lib/signalr/jquery.signalr.min.js"></script>
-        <script src="~/signalr/hubs"></script>
+        @*<script src="~/lib/signalr/jquery.signalr.min.js"></script>
+            <script src="~/signalr/hubs"></script>*@
     </environment>
 
     @RenderSection("scripts", required: false)
 
     <script>
-    $('.body-content').fadeIn(700);
-    $('#footer').fadeIn(700);
+        //page fade animation
+        $('.body-content').fadeIn(700);
+        $('#footer').fadeIn(700);
 
-    $('.fadebefore').click(function() {
-        var href = $(this).attr('href');
+        $('.fadebefore').click(function () {
+            var href = $(this).attr('href');
 
-        // do animation
-        $('.body-content').fadeOut(400, function() {
-            // go to link when animation completes
-            window.location = href;
+            // do animation
+            $('.body-content').fadeOut(400, function () {
+                // go to link when animation completes
+                window.location = href;
 
+            });
+
+            // over ride browser following link when clicked
+            return false;
         });
 
-        // over ride browser following link when clicked
-        return false;
-    });
+
+
+        // noty settings
+        $.noty.defaults.layout = 'bottomRight';
+        $.noty.defaults.theme = 'relax';
+        $.noty.defaults.timeout = 3000;
+        $.noty.defaults.animation = {
+            open: 'animated bounceInRight', // Animate.css class names
+            close: 'animated flipOutX', // Animate.css class names
+            easing: 'swing', // unavailable - no need
+            speed: 500 // unavailable - no need
+        };
     </script>
 </body>
 </html>

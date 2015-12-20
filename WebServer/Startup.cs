@@ -143,6 +143,9 @@ namespace WebServer
             string portName = Configuration["SerialPort:Name"];
             SerialController.serialPortDebugState =Boolean.Parse( Configuration["SerialPort:DebugState"]);
             SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
+            SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
+            SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
+            SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
 
             SerialController.OnDebugStateMessage += logger.LogInformation;
             SerialController.OnDebugTxRxMessage += logger.LogInformation;

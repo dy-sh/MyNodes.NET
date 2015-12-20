@@ -21,7 +21,7 @@ namespace MyNetSensors.SerialController
     static public class SerialController
     {
         private static ComPort comPort = new ComPort();
-        private static SerialGateway gateway = new SerialGateway();
+        public static SerialGateway gateway = new SerialGateway();
         private static IGatewayRepository gatewayDb;
         private static ISensorsHistoryRepository historyDb;
         private static ISensorsTasksRepository sensorsTasksDb;
@@ -35,9 +35,14 @@ namespace MyNetSensors.SerialController
         public static event DebugMessageEventHandler OnDebugTxRxMessage;
         public static event DebugMessageEventHandler OnDebugStateMessage;
 
-        public static string serialPortName;
+
+        public static string serialPortName="COM1";
         public static bool serialPortDebugTxRx = true;
         public static bool serialPortDebugState = true;
+        public static bool enableAutoAssignId = true;
+        public static bool gatewayDebugTxRx = true;
+        public static bool gatewayDebugState = true;
+
 
         public static void Start(string serialPortName)
         {
@@ -45,12 +50,12 @@ namespace MyNetSensors.SerialController
 
             OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-            ConnectToGatewayDb();
-            ConnectToHistoryDb();
+          //  ConnectToGatewayDb();
+          //  ConnectToHistoryDb();
             ConnectToSerialPort();
-            ConnectSensorsTasks();
-            ConnectSensorsLinks();
-            ConnectToSoftNodesController();
+        //    ConnectSensorsTasks();
+        //    ConnectSensorsLinks();
+       //     ConnectToSoftNodesController();
 
             //reconnect if disconnected
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
@@ -193,17 +198,18 @@ namespace MyNetSensors.SerialController
         }
 
 
+
         public async static Task ConnectToGateway()
         {
             //connecting to gateway
             OnDebugStateMessage("GATEWAY: Connecting...");
 
-            gateway.enableAutoAssignId = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoAssignId"]);
+            gateway.enableAutoAssignId = enableAutoAssignId;
 
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayTxRxDebug"]))
+            if (gatewayDebugTxRx)
                 gateway.OnDebugTxRxMessage += message => OnDebugTxRxMessage("GATEWAY: " + message);
 
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayStateDebug"]))
+            if (gatewayDebugState)
                 gateway.OnDebugGatewayStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
 
             bool connected = false;

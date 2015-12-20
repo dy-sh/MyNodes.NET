@@ -3,14 +3,16 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-
+using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
+using MyNetSensors.SerialController;
 
 
 namespace MyNetSensors.WebServer.Controllers
@@ -43,6 +45,17 @@ namespace MyNetSensors.WebServer.Controllers
             return View();
         }
 
+        public ActionResult GetNodes()
+        {
+            List<Node> nodes = SerialController.SerialController.gateway.GetNodes();
+            return Json(nodes);
+        }
+
+        public ActionResult GetIsGatewayHardwareConnected()
+        {
+            bool connected = SerialController.SerialController.gateway.IsConnected();
+            return Json(connected);
+        }
 
 
         public async Task<ActionResult> DropNodes()
