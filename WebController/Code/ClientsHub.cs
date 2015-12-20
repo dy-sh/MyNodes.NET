@@ -12,10 +12,7 @@ namespace MyNetSensors.WebServer.Code
 {
     public class ClientsHub : Hub
     {
-        public void Send(string message)
-        {
-            Clients.All.broadcastMessage(message);
-        }
+
     }
 
 }

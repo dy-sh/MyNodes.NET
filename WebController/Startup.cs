@@ -7,11 +7,12 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyNetSensors.SerialController;
+using MyNetSensors.WebServer.Code;
 using WebServer.Models;
 using WebServer.Services;
 
@@ -70,12 +71,11 @@ namespace WebServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConnectionManager connectionManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            StartSerialController(loggerFactory);
 
 
             app.UseApplicationInsightsRequestTelemetry();
@@ -103,7 +103,6 @@ namespace WebServer
                 catch { }
             }
 
-            //Configure SignalR
             app.UseSignalR();
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -122,6 +121,9 @@ namespace WebServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SerialControllerInitializer.Start(loggerFactory, Configuration, connectionManager);
+
         }
 
         // Entry point for the application.
@@ -131,32 +133,7 @@ namespace WebServer
         }
 
 
-        private bool serialControllerStarted;
-        public async Task StartSerialController(ILoggerFactory loggerFactory)
-        {
-            if (serialControllerStarted) return;
-            serialControllerStarted = true;
-
-            var logger = loggerFactory.CreateLogger("RequestInfoLogger");
-
-            
-            string portName = Configuration["SerialPort:Name"];
-            SerialController.serialPortDebugState =Boolean.Parse( Configuration["SerialPort:DebugState"]);
-            SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
-            SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
-            SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
-            SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
-
-            SerialController.OnDebugStateMessage += logger.LogInformation;
-            SerialController.OnDebugTxRxMessage += logger.LogInformation;
-            SerialController.Start(portName);
-
-            while (true)
-            {
-        //        logger.LogInformation(DateTime.Now);
-                await Task.Delay(1000);
-            }
-        }
+   
 
 
     }

@@ -31,23 +31,8 @@ namespace MyNetSensors.WebServer.Controllers
 
         public ActionResult Messages()
         {
-            SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             return View();
         }
-
-        private void OnMessageRecievedEvent(Message message)
-        {
-            _hub.Clients.All.OnMessageRecievedEvent(message.ToString());
-
-        }
-
-        public GatewayController([FromServices]IConnectionManager connectionManager)
-        {
-            _hub = connectionManager.GetHubContext<ClientsHub>();
-
-        }
-
-        private IHubContext _hub;
 
 
         public ActionResult Settings()
