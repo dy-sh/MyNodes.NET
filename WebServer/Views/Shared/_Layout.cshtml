@@ -11,16 +11,16 @@
         <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/css/site.css" />
         @RenderSection("styles", required: false)
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
         <link href="~/lib/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet" />
         <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/css/site.css" />
         @RenderSection("styles", required: false)
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>

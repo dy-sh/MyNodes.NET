@@ -82,3 +82,8 @@ textarea {
 .pull-up-button {
     margin-top: -7px;
 }
+
+.bootstrap-switch-handle-on.bootstrap-switch-primary {
+  color: #fff;
+    background: #729fcf !important;
+}
