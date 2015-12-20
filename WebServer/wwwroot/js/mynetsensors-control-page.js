@@ -6,7 +6,7 @@
 
 
 var clientsHub;
-var gatewayHardwareConnected = false;
+var gatewayHardwareConnected = true;
 var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 500;
 
@@ -20,8 +20,9 @@ var ignoreSendingSwitchId;
 
 
 $(function () {
+    $('#nodesContainer').fadeIn(800);
     getIsGatewayHardwareConnected();
- 
+    getNodes();
 });
 
 
@@ -30,17 +31,16 @@ function getIsGatewayHardwareConnected() {
         url: "/Gateway/GetIsGatewayHardwareConnected/",
         type: "POST",
         success: function (connected) {
-            gatewayHardwareConnected = connected;
 
-            if (gatewayHardwareConnected) {
+            if (connected && !gatewayHardwareConnected) {
                 var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
                 $('#nodesContainer').fadeIn(800);
-            } else {
+            } else if (!connected && gatewayHardwareConnected){
                 var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
                 $('#nodesContainer').fadeOut(800);
-
             }
 
+            gatewayHardwareConnected = connected;
         }
     });
 }
