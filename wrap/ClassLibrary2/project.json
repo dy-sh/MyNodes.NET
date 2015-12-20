@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../ClassLibrary2/ClassLibrary2.csproj",
+      "bin": {
+        "assembly": "../../ClassLibrary2/obj/{configuration}/ClassLibrary2.dll",
+        "pdb": "../../ClassLibrary2/obj/{configuration}/ClassLibrary2.pdb"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../Gateway/Gateway.csproj",
+      "bin": {
+        "assembly": "../../Gateway/obj/{configuration}/Gateway.dll",
+        "pdb": "../../Gateway/obj/{configuration}/Gateway.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "7.0.1",
+        "Utils": "1.0.0-*"
+      }
+    }
+  }
+}

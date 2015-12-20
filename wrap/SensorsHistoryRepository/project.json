@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../SensorsHistoryRepository/SensorsHistoryRepository.csproj",
+      "bin": {
+        "assembly": "../../SensorsHistoryRepository/obj/{configuration}/SensorsHistoryRepository.dll",
+        "pdb": "../../SensorsHistoryRepository/obj/{configuration}/SensorsHistoryRepository.pdb"
+      },
+      "dependencies": {
+        "Dapper": "1.50.0-beta6",
+        "Gateway": "1.0.0-*"
+      }
+    }
+  }
+}
