@@ -14,16 +14,16 @@ namespace MyNetSensors.WebServer.Controllers
 {
      public class LinksController : Controller
     {
-        private IHubContext clientsHub;
+        //private IHubContext clientsHub;
         private ISensorsLinksRepository linksDb;
         private IGatewayRepository gatewayDb;
 
-        public LinksController(IConnectionManager connectionManager)
+        public LinksController()
         {
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             gatewayDb = new GatewayRepositoryDapper(cs);
             linksDb = new SensorsLinksRepositoryDapper(cs);
-            clientsHub = connectionManager.GetHubContext<ClientsHub>();
+          //  clientsHub = connectionManager.GetHubContext<ClientsHub>();
         }
 
         public ActionResult Index()
@@ -153,7 +153,7 @@ namespace MyNetSensors.WebServer.Controllers
 
             linksDb.AddLink(link);
             string usedId = "";//todo get userid
-            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+           // GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
             return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
         }
 
@@ -196,7 +196,7 @@ namespace MyNetSensors.WebServer.Controllers
 
             linksDb.DeleteLink(id);
             string usedId = "";//todo get userid
-            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+          //  GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
             if (Request.Headers["Referer"].Count > 0)
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -216,7 +216,7 @@ namespace MyNetSensors.WebServer.Controllers
                 linksDb.DeleteLinksTo(id1.Value, id2.Value);
 
                 string usedId = "";//todo get userid
-                GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+             //   GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
                 if (Request.Headers["Referer"].Count > 0)
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -228,7 +228,7 @@ namespace MyNetSensors.WebServer.Controllers
 
 
                 string usedId = "";//todo get userid
-                GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+             //   GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
 
                 if (Request.Headers["Referer"].Count>0)
                     return Redirect(Request.Headers["Referer"].ToString());

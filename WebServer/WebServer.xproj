@@ -31,6 +31,7 @@
     <ProjectReference Include="..\NodesLinks\NodesLinks.csproj" />
     <ProjectReference Include="..\NodeTasks\NodeTasks.csproj" />
     <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj" />
+    <ProjectReference Include="..\SerialController\SerialController.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

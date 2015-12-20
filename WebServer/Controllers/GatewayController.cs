@@ -11,7 +11,7 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.WebServer.Code;
+
 
 namespace MyNetSensors.WebServer.Controllers
 {
@@ -49,7 +49,7 @@ namespace MyNetSensors.WebServer.Controllers
         {
             await DropHistoryDatabase();
             string clientId = "";   //todo get client id
-            GatewayClientStatic.gatewayClient.ClearNodes(clientId);
+        //    GatewayClientStatic.gatewayClient.ClearNodes(clientId);
 
             return RedirectToAction("Settings");
         }
@@ -114,7 +114,7 @@ namespace MyNetSensors.WebServer.Controllers
             db.DisableAllTasks();
 
             string clientId = "";   //todo get client id
-            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
+        //    GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
 
         }
 
@@ -125,7 +125,7 @@ namespace MyNetSensors.WebServer.Controllers
             db.DropAllTasks();
 
             string clientId = "";   //todo get client id
-            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
+         //   GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
         }
 
         private async Task DropLinksDatabase()
@@ -135,7 +135,7 @@ namespace MyNetSensors.WebServer.Controllers
             db.DropAllLinks();
 
             string clientId = "";   //todo get client id
-            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
+         //   GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
         }
 
         private async Task StopRecordingNodesHistory()
@@ -155,7 +155,7 @@ namespace MyNetSensors.WebServer.Controllers
                 gatewayDb.UpdateNodeSettings(node);
 
                 string clientId = "";   //todo get client id
-                GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
+            //    GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
                 await Task.Delay(100);
             }
         }

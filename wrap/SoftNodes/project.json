@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../SoftNodes/SoftNodes.csproj",
+      "bin": {
+        "assembly": "../../SoftNodes/obj/{configuration}/SoftNodes.dll",
+        "pdb": "../../SoftNodes/obj/{configuration}/SoftNodes.pdb"
+      },
+      "dependencies": {
+        "Gateway": "1.0.0-*"
+      }
+    }
+  }
+}

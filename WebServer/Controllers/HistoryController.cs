@@ -13,6 +13,7 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebServer.Code;
 
+
 namespace MyNetSensors.WebServer.Controllers
 {
     public class HistoryController : Controller

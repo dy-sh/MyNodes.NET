@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MyNetSensors.SerialController;
 using WebServer.Models;
 using WebServer.Services;
 
@@ -16,6 +19,8 @@ namespace WebServer
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; set; }
+
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
@@ -38,7 +43,6 @@ namespace WebServer
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -70,6 +74,9 @@ namespace WebServer
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            StartSerialController(loggerFactory);
+
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -118,6 +125,34 @@ namespace WebServer
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+            WebApplication.Run<Startup>(args);
+        }
+
+
+        private bool serialControllerStarted;
+        public async Task StartSerialController(ILoggerFactory loggerFactory)
+        {
+            if (serialControllerStarted) return;
+            serialControllerStarted = true;
+
+            var logger = loggerFactory.CreateLogger("RequestInfoLogger");
+
+            
+            string portName = Configuration["SerialPort:Name"];
+            SerialController.serialPortDebugState =Boolean.Parse( Configuration["SerialPort:DebugState"]);
+            SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
+
+            SerialController.OnDebugStateMessage += logger.LogInformation;
+            SerialController.OnDebugTxRxMessage += logger.LogInformation;
+            SerialController.Start(portName);
+
+            while (true)
+            {
+        //        logger.LogInformation(DateTime.Now);
+                await Task.Delay(1000);
+            }
+        }
     }
 }

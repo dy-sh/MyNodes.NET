@@ -14,7 +14,7 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.WebServer.Code;
+
 
 namespace MyNetSensors.WebServer.Controllers
 {
@@ -22,18 +22,18 @@ namespace MyNetSensors.WebServer.Controllers
     {
 
 
-        IHubContext clientsHub;
+      //  IHubContext clientsHub;
         private ISensorsHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
-        public NodeController(IConnectionManager connectionManager)
+        public NodeController()
         {
 
 
             string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
             historyDb = new SensorsHistoryRepositoryDapper(cs);
             gatewayDb = new GatewayRepositoryDapper(cs);
-            clientsHub = connectionManager.GetHubContext<ClientsHub>();
+         //   clientsHub = connectionManager.GetHubContext<ClientsHub>();
         }
 
         public ActionResult Index()
@@ -96,7 +96,7 @@ namespace MyNetSensors.WebServer.Controllers
             }
             gatewayDb.UpdateNodeSettings(node);
             string clientId = "";//todo get client id
-            GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
+      //      GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
             return RedirectToAction("Control", "Gateway");
             // return View(node);
         }
@@ -109,7 +109,7 @@ namespace MyNetSensors.WebServer.Controllers
 
 
             string clientId = "";//todo get client id
-            GatewayClientStatic.gatewayClient.DeleteNode(clientId, node.nodeId);
+          //  GatewayClientStatic.gatewayClient.DeleteNode(clientId, node.nodeId);
 
             gatewayDb.DeleteNodeByDbId(node.db_Id);
 
@@ -127,8 +127,8 @@ namespace MyNetSensors.WebServer.Controllers
                 tasksDb.DeleteTasks(sensor.db_Id);
             }
 
-            GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
-            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
+        //    GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
+       //     GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
 
 
 
