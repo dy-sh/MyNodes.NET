@@ -10,11 +10,12 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace MyNetSensors.WebServer.Code
 {
-    [HubName("Clients")]
     public class ClientsHub : Hub
     {
-
-
+        public void Send(string message)
+        {
+            Clients.All.broadcastMessage(message);
+        }
     }
 
 }

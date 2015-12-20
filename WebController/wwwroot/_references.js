@@ -17,4 +17,5 @@
 /// <reference path="lib/moment/moment.js" />
 /// <reference path="lib/moment-timezone/builds/moment-timezone-with-data-2010-2020.js" />
 /// <reference path="lib/noty/js/noty/packaged/jquery.noty.packaged.js" />
+/// <reference path="lib/signalr/jquery.signalr.js" />
 /// <reference path="lib/vis/dist/vis.min.js" />

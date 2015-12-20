@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SerialController;
+using MyNetSensors.WebServer.Code;
 
 
 namespace MyNetSensors.WebServer.Controllers
@@ -28,8 +31,24 @@ namespace MyNetSensors.WebServer.Controllers
 
         public ActionResult Messages()
         {
+            SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             return View();
         }
+
+        private void OnMessageRecievedEvent(Message message)
+        {
+            _hub.Clients.All.OnMessageRecievedEvent(message.ToString());
+
+        }
+
+        public GatewayController([FromServices]IConnectionManager connectionManager)
+        {
+            _hub = connectionManager.GetHubContext<ClientsHub>();
+
+        }
+
+        private IHubContext _hub;
+
 
         public ActionResult Settings()
         {
