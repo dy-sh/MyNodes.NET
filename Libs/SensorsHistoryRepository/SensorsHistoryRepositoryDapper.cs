@@ -109,7 +109,7 @@ namespace MyNetSensors.SensorsHistoryRepository
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string req = String.Format("SELECT * FROM SensorHistory{0}", db_Id);
+                string req = $"SELECT * FROM SensorHistory{db_Id}";
 
                 List<SensorData> list = null;
                 try
@@ -134,7 +134,7 @@ namespace MyNetSensors.SensorsHistoryRepository
 
                 try
                 {
-                    db.Query(String.Format("DROP TABLE [SensorHistory{0}]", db_Id));
+                    db.Query($"DROP TABLE [SensorHistory{db_Id}]");
                 }
                 catch { }
             }
@@ -175,10 +175,9 @@ namespace MyNetSensors.SensorsHistoryRepository
                 foreach (var sensorData in data)
                     sensorData.dateTime = DateTime.Now;
 
-                var sqlQuery = String.Format(
-                    "INSERT INTO SensorHistory{0} (dataType, state, dateTime) "
+                var sqlQuery = $"INSERT INTO SensorHistory{sensor.db_Id} (dataType, state, dateTime) "
                     + "VALUES(@dataType,@state, @dateTime); "
-                    + "SELECT CAST(SCOPE_IDENTITY() as int)", sensor.db_Id);
+                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 db.Execute(sqlQuery, data);
 
             }
@@ -192,12 +191,11 @@ namespace MyNetSensors.SensorsHistoryRepository
 
                 try
                 {
-                    string req = String.Format(
-                        @"CREATE TABLE [dbo].[SensorHistory{0}](
+                    string req = $@"CREATE TABLE [dbo].[SensorHistory{sensor.db_Id}](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	            [dataType] [int] NULL,	        
 	            [state] [nvarchar](max) NULL,	        
-	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ", sensor.db_Id);
+	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ";
 
                     db.Query(req);
                 }

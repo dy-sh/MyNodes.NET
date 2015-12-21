@@ -129,7 +129,7 @@ namespace ScreenColor
             else if (bitmap.PixelFormat == PixelFormat.Format32bppRgb)
                 pixelSize = 4;
             else
-                throw new Exception(String.Format("Can`t use pixel-format {0}. Use 24bppRgb or 32bppRgb.", bitmap.PixelFormat));
+                throw new Exception($"Can`t use pixel-format {bitmap.PixelFormat}. Use 24bppRgb or 32bppRgb.");
 
 
             //get summ of all pixels

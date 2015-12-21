@@ -34,28 +34,12 @@ namespace MyNetSensors.Gateway
 
         public override string ToString()
         {
-            string s;
+            string inc = incoming ? "RX" : "TX";
 
             if (isValid)
-            {
-                s = string.Format("{0}: {1}: {2}; {3}; {4}; {5}; {6}; {7}",
-                    dateTime,
-                    incoming ? "RX" : "TX",
-                    nodeId,
-                    sensorId,
-                    messageType,
-                    ack,
-                    GetDecodedSubType(),
-                    payload
-                    );
-            }
-            else
-                s = string.Format("{0}: {1}: {2}",
-                    dateTime,
-                    incoming ? "RX" : "TX",
-                    payload);
-
-            return s;
+                return
+                    $"{dateTime}: {inc}: {nodeId}; {sensorId}; {messageType}; {ack}; {GetDecodedSubType()}; {payload}";
+            else return $"{dateTime}: {inc}: {payload}";
         }
 
         public object Clone()

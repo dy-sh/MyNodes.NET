@@ -32,7 +32,7 @@ namespace MyNetSensors.NodesLinks
 
                 try
                 {
-                    string req = String.Format(
+                    string req = 
                         @"CREATE TABLE [dbo].[SensorsLinks](
 	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [fromSensorDbId] [int] NULL,       
@@ -45,7 +45,7 @@ namespace MyNetSensors.NodesLinks
 	                    [toSensorId] [int] NULL,
 	                    [toDataType] [int] NULL, 
 	                    [toSensorDescription] [nvarchar](max) NULL 
-                        ) ON [PRIMARY] ");
+                        ) ON [PRIMARY] ";
 
                     db.Query(req);
                 }

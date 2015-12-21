@@ -75,14 +75,14 @@ namespace MyNetSensors.SerialController
 
                 isConnected = true;
 
-                DebugPortState(String.Format("Connected to port {0}.", portName));
+                DebugPortState($"Connected to port {portName}.");
 
                 if (OnConnectedEvent != null)
                     OnConnectedEvent();
             }
             catch (Exception ex)
             {
-                DebugPortState(String.Format("Failed to connect to port {0}.", portName));
+                DebugPortState($"Failed to connect to port {portName}.");
 
                 if (OnConnectingError != null)
                     OnConnectingError(ex);
@@ -109,7 +109,7 @@ namespace MyNetSensors.SerialController
             }
             catch (Exception ex)
             {
-                DebugPortState(String.Format("Failed to write to serial. {0}", ex.Message));
+                DebugPortState($"Failed to write to serial. {ex.Message}");
 
                 if (OnWritingError != null)
                     OnWritingError(ex);
@@ -123,7 +123,7 @@ namespace MyNetSensors.SerialController
         {
             isConnected = false;
 
-            DebugPortState(String.Format("Port disconnected."));
+            DebugPortState("Port disconnected.");
 
             if (serialPort != null)
             {

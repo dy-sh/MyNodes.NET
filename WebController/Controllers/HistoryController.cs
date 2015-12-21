@@ -96,7 +96,7 @@ namespace MyNetSensors.WebServer.Controllers
                 foreach (var item in samples)
                 {
                     ChartData sample = new ChartData();
-                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss:fff}", item.dateTime);
+                    sample.x = $"{item.dateTime:yyyy-MM-dd HH:mm:ss:fff}";
                     sample.y = item.state == "1" ? "1" : "-0.1";
                     sample.group = 0;
                     chartData.Add(sample);
@@ -106,7 +106,7 @@ namespace MyNetSensors.WebServer.Controllers
                 foreach (var item in samples)
                 {
                     ChartData sample = new ChartData();
-                    sample.x = String.Format("{0:yyyy-MM-dd HH:mm:ss:fff}", item.dateTime);
+                    sample.x = $"{item.dateTime:yyyy-MM-dd HH:mm:ss:fff}";
                     sample.y = item.state == null ? null : item.state;
                     sample.group = 0;
                     chartData.Add(sample);

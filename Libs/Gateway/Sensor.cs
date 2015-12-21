@@ -53,15 +53,15 @@ namespace MyNetSensors.Gateway
 
         public override string ToString()
         {
-            string s = String.Format("Sensor ID: {0}\r\n", sensorId);
+            string s = $"Sensor ID: {sensorId}\r\n";
 
             if (sensorType != null)
-                s += String.Format("Type: {0}\r\n", sensorType.ToString());
+                s += $"Type: {sensorType.ToString()}\r\n";
             else
-                s += String.Format("Type: unknown\r\n");
+                s += "Type: unknown\r\n";
 
             if (description != null)
-                s += String.Format("Description: {0}\r\n", description);
+                s += $"Description: {description}\r\n";
 
             List<SensorData> dataList = GetAllData();
             if (dataList.Any())
@@ -231,7 +231,7 @@ namespace MyNetSensors.Gateway
 
         public string GetSimpleName2()
         {
-            return String.Format("Sensor {0} ({1})", sensorId, GetSimpleName1());
+            return $"Sensor {sensorId} ({GetSimpleName1()})";
         }
 
 

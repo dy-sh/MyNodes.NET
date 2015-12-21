@@ -38,7 +38,7 @@ namespace MyNetSensors.NodeTasks
                 
                 try
                 {
-                    string req = String.Format(
+                    string req = 
                         @"CREATE TABLE [dbo].[SensorsTasks](
 	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [enabled] [bit] NULL,       
@@ -57,7 +57,7 @@ namespace MyNetSensors.NodeTasks
 	                    [repeatingBValue] [nvarchar](max) NULL,       
 	                    [repeatingNeededCount] [int] NULL,
 	                    [repeatingDoneCount] [int] NULL
-                        ) ON [PRIMARY] ");
+                        ) ON [PRIMARY] ";
 
                     db.Query(req);
                 }

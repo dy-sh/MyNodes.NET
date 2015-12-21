@@ -48,27 +48,27 @@ namespace MyNetSensors.Gateway
 
         public override string ToString()
         {
-            string s = String.Format("Node ID {0}\r\n", nodeId);
+            string s = $"Node ID {nodeId}\r\n";
 
 
             if (!String.IsNullOrEmpty(name))
-                s += String.Format("Name: {0}\r\n", name);
+                s += $"Name: {name}\r\n";
 
             if (!String.IsNullOrEmpty(version))
-                s += String.Format("Version: {0}\r\n", version);
+                s += $"Version: {version}\r\n";
 
-            s += String.Format("Registered {0}\r\n", registered);
-            s += String.Format("Last seen {0}\r\n", lastSeen);
+            s += $"Registered {registered}\r\n";
+            s += $"Last seen {lastSeen}\r\n";
 
             if (isRepeatingNode == null)
-                s += String.Format("Repeating: unknown\r\n");
+                s += "Repeating: unknown\r\n";
             else if (isRepeatingNode.Value)
-                s += String.Format("Repeating: Yes\r\n");
+                s += "Repeating: Yes\r\n";
             else
-                s += String.Format("Repeating: No\r\n");
+                s += "Repeating: No\r\n";
 
             if (batteryLevel != null)
-                s += String.Format("Battery: {0} %\r\n", batteryLevel.Value);
+                s += $"Battery: {batteryLevel.Value} %\r\n";
 
             if (sensors.Any())
             {
@@ -110,7 +110,7 @@ namespace MyNetSensors.Gateway
         public string GetSimpleName2()
         {
             if (!String.IsNullOrEmpty(name))
-                return String.Format("Node {0} ({1})", nodeId,name);
+                return $"Node {nodeId} ({name})";
 
             return "Node " + nodeId;
         }

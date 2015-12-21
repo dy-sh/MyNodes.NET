@@ -136,16 +136,12 @@ namespace MyNetSensors.WebServer.Controllers
                 fromSensorId = fromSensorId,
                 fromDataType = fromDataType,
                 fromSensorDbId = fromSensor.db_Id,
-                fromSensorDescription = String.Format("{0} {1}",
-                    fromNode.GetSimpleName1(),
-                    fromSensor.GetSimpleName1()),
+                fromSensorDescription = $"{fromNode.GetSimpleName1()} {fromSensor.GetSimpleName1()}",
                 toNodeId = toNodeId,
                 toSensorId = toSensorId,
                 toDataType = toDataType,
                 toSensorDbId = toSensor.db_Id,
-                toSensorDescription = String.Format("{0} {1}",
-                    toNode.GetSimpleName1(),
-                    toSensor.GetSimpleName1())
+                toSensorDescription = $"{toNode.GetSimpleName1()} {toSensor.GetSimpleName1()}"
             };
 
 

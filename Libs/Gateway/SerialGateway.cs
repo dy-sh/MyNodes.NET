@@ -62,7 +62,7 @@ namespace MyNetSensors.Gateway
             this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             isConnected = true;
 
-            DebugGatewayState(String.Format("Gateway connected."));
+            DebugGatewayState("Gateway connected.");
 
             if (OnConnectedEvent != null)
                 OnConnectedEvent();
@@ -78,7 +78,7 @@ namespace MyNetSensors.Gateway
                 serialPort = null;
             }
 
-            DebugGatewayState(String.Format("Gateway disconnected."));
+            DebugGatewayState("Gateway disconnected.");
 
 
             if (OnDisconnectedEvent != null)
@@ -121,15 +121,11 @@ namespace MyNetSensors.Gateway
             if (message.messageType == MessageType.C_SET)
                 message = DeRemapMessage(message);
 
-            DebugTxRx(String.Format("TX: {0}", message.ToString()));
+            DebugTxRx($"TX: {message.ToString()}");
 
-            string mes = String.Format("{0};{1};{2};{3};{4};{5}\n",
-                message.nodeId,
-                message.sensorId,
-                (int)message.messageType,
-                (message.ack) ? "1" : "0",
-                message.subType,
-                message.payload);
+            string ack = (message.ack) ? "1" : "0";
+            string mes = $"{message.nodeId};{message.sensorId};{(int)message.messageType};{ack};{message.subType};{message.payload}\n";
+
 
             SendToSerial(mes);
 
@@ -151,7 +147,7 @@ namespace MyNetSensors.Gateway
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
-            DebugTxRx(String.Format("RX: {0}", message.ToString()));
+            DebugTxRx($"RX: { message.ToString()}");
 
             if (message.messageType == MessageType.C_SET)
                 message = RemapMessage(message);
@@ -230,7 +226,7 @@ namespace MyNetSensors.Gateway
                 if (OnNewNodeEvent != null)
                     OnNewNodeEvent(node);
 
-                DebugGatewayState(String.Format("New node (id: {0}) registered", node.nodeId));
+                DebugGatewayState($"New node (id: {node.nodeId}) registered");
             }
 
             node.UpdateLastSeenNow();
@@ -255,7 +251,7 @@ namespace MyNetSensors.Gateway
                     if (OnNodeUpdatedEvent != null)
                         OnNodeUpdatedEvent(node);
 
-                    DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
+                    DebugGatewayState($"Node {node.nodeId} updated");
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -266,7 +262,7 @@ namespace MyNetSensors.Gateway
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
+                        DebugGatewayState($"Node {node.nodeId} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -275,7 +271,7 @@ namespace MyNetSensors.Gateway
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        DebugGatewayState(String.Format("Node {0} updated", node.nodeId));
+                        DebugGatewayState($"Node {node.nodeId} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -336,8 +332,7 @@ namespace MyNetSensors.Gateway
                 if (OnNewSensorEvent != null)
                     OnNewSensorEvent(sensor);
 
-                DebugGatewayState(String.Format("New sensor (node id {0}, sensor id: {1}) registered", sensor.nodeId,
-                    sensor.sensorId));
+                DebugGatewayState($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
             }
             else
             {

@@ -505,11 +505,11 @@ namespace MyNetSensors.GatewayRepository
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {0}", nodeId);
+                string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {nodeId}";
                 result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
                 if (result == null)
                 {
-                    joinQuery = String.Format("SELECT * FROM Nodes WHERE nodeId = {0}", nodeId);
+                    joinQuery = $"SELECT * FROM Nodes WHERE nodeId = {nodeId}";
                     result = db.Query<Node>(joinQuery).FirstOrDefault();
                 }
             }
@@ -532,7 +532,7 @@ namespace MyNetSensors.GatewayRepository
                 ParentKey = (node) => node.db_Id
             };
 
-            string joinQuery = String.Format("SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {0}", db_Id);
+            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {db_Id}";
 
             Node result;
             using (var db = new SqlConnection(connectionString))
@@ -686,8 +686,7 @@ namespace MyNetSensors.GatewayRepository
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
                 float messagesPerSec = (float)messages / (float)elapsed * 1000;
-                Log(String.Format("Writing to DB: {0} ms ({1} inserts, {2} inserts/sec)", elapsed, messages,
-                    (int)messagesPerSec));
+                Log($"Writing to DB: {elapsed} ms ({messages} inserts, {(int)messagesPerSec} inserts/sec)");
             }
             catch { }
 

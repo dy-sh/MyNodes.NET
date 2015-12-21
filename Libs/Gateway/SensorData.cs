@@ -35,14 +35,14 @@ namespace MyNetSensors.Gateway
             string s="";
 
             if (dataType != null)
-                s += String.Format("Data type: {0}, ", dataType.ToString());
+                s += $"Data type: {dataType.ToString()}, ";
             else
-                s += String.Format("Data type: unknown, ");
+                s += "Data type: unknown, ";
 
             if (state != null)
-                s += String.Format("State: {0}\r\n", state);
+                s += $"State: {state}\r\n";
             else
-                s += String.Format("State: unknown\r\n");
+                s += "State: unknown\r\n";
 
             return s;
         }

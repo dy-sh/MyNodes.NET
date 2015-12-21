@@ -72,7 +72,7 @@ namespace MyNetSensors.WebServer.Controllers
             return Json(connected);
         }
 
-        public string GetMessages()
+        public ActionResult GetMessages()
         {
             List<Message> messages = gateway.messagesLog.GetAllMessages();
             string text=null;
@@ -81,8 +81,11 @@ namespace MyNetSensors.WebServer.Controllers
                 text += message.ToString();
                 text += " <br>\n";
             }
-            return text;
+            return Content(text);
         }
+
+     
+
 
         public void ClearMessages()
         {
@@ -98,7 +101,16 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
-
+        
+        public async Task<IActionResult> Test()
+        {
+            string s=null;
+            for (Int64 i = 0; i < 100000; i++)
+            {
+                s += "7";
+            }
+            return Content(DateTime.Now.ToString());
+        }
 
 
 

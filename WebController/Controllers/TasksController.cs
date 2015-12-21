@@ -104,7 +104,7 @@ namespace MyNetSensors.WebServer.Controllers
                     nodeId = id1.Value,
                     sensorId = id2.Value,
                     sensorDbId = sensor.db_Id,
-                    sensorDescription = string.Format("{0} {1}", node.GetSimpleName1(), sensor.GetSimpleName1()),
+                    sensorDescription = $"{node.GetSimpleName1()} {sensor.GetSimpleName1()}",
                     executionDate = DateTime.Now,
                     repeatingInterval = 1000,
                     enabled = true
