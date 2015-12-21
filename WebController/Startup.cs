@@ -76,51 +76,54 @@ namespace WebServer
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-
-
-            app.UseApplicationInsightsRequestTelemetry();
-
-            if (env.IsDevelopment())
+            if (Configuration["WebServer:Enable"] == "true")
             {
-                app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseApplicationInsightsRequestTelemetry();
 
-                // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                try
+                if (env.IsDevelopment())
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
+                    app.UseBrowserLink();
+                    app.UseDeveloperExceptionPage();
+                    app.UseDatabaseErrorPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
+
+                    // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                    try
                     {
-                        serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-                             .Database.Migrate();
+                        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                            .CreateScope())
+                        {
+                            serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
+                                .Database.Migrate();
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-                catch { }
+
+                app.UseSignalR();
+
+                app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+
+                app.UseApplicationInsightsExceptionTelemetry();
+
+                app.UseStaticFiles();
+
+                app.UseIdentity();
+
+                // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+                app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                });
             }
-
-            app.UseSignalR();
-
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-            app.UseApplicationInsightsExceptionTelemetry();
-
-            app.UseStaticFiles();
-
-            app.UseIdentity();
-
-            // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
 
             SerialControllerInitializer.Start(loggerFactory, Configuration, connectionManager);
 

@@ -20,6 +20,34 @@ namespace MyNetSensors.SerialController
 {
     static public class SerialController
     {
+
+        //SETTINGS
+        public static string serialPortName = "COM1";
+        public static bool serialPortDebugTxRx = true;
+        public static bool serialPortDebugState = true;
+        public static bool enableAutoAssignId = true;
+        public static bool gatewayDebugTxRx = true;
+        public static bool gatewayDebugState = true;
+
+        public static bool dataBaseEnabled = true;
+        public static string dataBaseConnectionString;
+        public static int dataBaseWriteInterval = 5000;
+        public static bool dataBaseDebugState = true;
+        public static bool dataBaseWriteTxRxMessages = true;
+
+        public static bool sensorsTasksEnabled = true;
+        public static int sensorsTasksUpdateInterval = 10;
+
+        public static bool sensorsLinksEnabled = true;
+
+        public static bool softNodesEnabled = true;
+        public static int softNodesPort = 13122;
+        public static bool softNodesDebugTxRx = true;
+        public static bool softNodesDebugState = true;
+
+
+
+        //VARIABLES
         private static ComPort comPort = new ComPort();
         public static SerialGateway gateway = new SerialGateway();
         private static IGatewayRepository gatewayDb;
@@ -36,26 +64,18 @@ namespace MyNetSensors.SerialController
         public static event DebugMessageEventHandler OnDebugStateMessage;
 
 
-        public static string serialPortName="COM1";
-        public static bool serialPortDebugTxRx = true;
-        public static bool serialPortDebugState = true;
-        public static bool enableAutoAssignId = true;
-        public static bool gatewayDebugTxRx = true;
-        public static bool gatewayDebugState = true;
 
-
-        public static void Start(string serialPortName)
+        public static void Start(string serialPortName, string dbConnectionString = null)
         {
             SerialController.serialPortName = serialPortName;
 
             OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-          //  ConnectToGatewayDb();
-          //  ConnectToHistoryDb();
+            ConnectToDB();
             ConnectToSerialPort();
-        //    ConnectSensorsTasks();
-        //    ConnectSensorsLinks();
-       //     ConnectToSoftNodesController();
+            ConnectSensorsTasks();
+            ConnectSensorsLinks();
+            ConnectToSoftNodesController();
 
             //reconnect if disconnected
             gateway.OnDisconnectedEvent += OnDisconnectedEvent;
@@ -71,106 +91,57 @@ namespace MyNetSensors.SerialController
         }
 
 
-        public async static Task ConnectToGatewayDb()
+
+        public async static Task ConnectToDB()
         {
 
             //connecting to DB
             bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseGatewayDB"]))
-            {
-                OnDebugStateMessage("GATEWAY DB: Connecting... ");
+            if (!dataBaseEnabled) return;
 
-                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                gatewayDb = new GatewayRepositoryDapper(connectionString);
+            OnDebugStateMessage("DATABASE: Connecting... ");
 
-                gatewayDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["GatewayDBWriteInterval"]));
-                gatewayDb.ShowDebugInConsole(Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayDBShowDebug"]));
-                gatewayDb.SetStoreTxRxMessages(Convert.ToBoolean(ConfigurationManager.AppSettings["GatewayDBStoreTxRxMessages"]));
+            gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
+            historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
+            sensorsTasksDb = new SensorsTasksRepositoryDapper(dataBaseConnectionString);
+            sensorsLinksDb = new SensorsLinksRepositoryDapper(dataBaseConnectionString);
 
+            gatewayDb.SetWriteInterval(dataBaseWriteInterval);
+            gatewayDb.ShowDebugInConsole(dataBaseDebugState);
+            gatewayDb.SetStoreTxRxMessages(dataBaseWriteTxRxMessages);
+            gatewayDb.ConnectToGateway(gateway);
 
-                while (!connected)
-                {
-                    gatewayDb.ConnectToGateway(gateway);
-                    connected = (gatewayDb.IsDbExist());
-                    if (!connected) await Task.Delay(5000);
-                }
+            historyDb.SetWriteInterval(dataBaseWriteInterval);
+            historyDb.ConnectToGateway(gateway);
 
-                OnDebugStateMessage("GATEWAY DB: Connected");
-            }
+            OnDebugStateMessage("DATABASE: Connected");
         }
 
-        public async static Task ConnectToHistoryDb()
-        {
-            //connecting to DB
-            bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseHistory"]))
-            {
-                OnDebugStateMessage("HISTORY DB: Connecting... ");
-
-                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
-                historyDb = new SensorsHistoryRepositoryDapper(connectionString);
-                historyDb.SetWriteInterval(Convert.ToInt32(ConfigurationManager.AppSettings["HistoryDBWriteInterval"]));
-
-                while (!connected)
-                {
-                    historyDb.ConnectToGateway(gateway);
-                    connected = (historyDb.IsDbExist());
-                    if (!connected) await Task.Delay(5000);
-                }
-
-                OnDebugStateMessage("HISTORY DB: Connected");
-
-            }
-        }
 
         private async static Task ConnectSensorsTasks()
         {
             //connecting tasks
-            bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsTasks"]))
-            {
-                OnDebugStateMessage("TASK ENGINE: Starting...");
+            if (!sensorsTasksEnabled) return;
 
-                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            OnDebugStateMessage("TASK ENGINE: Starting...");
 
-                while (!connected)
-                {
-                    sensorsTasksDb = new SensorsTasksRepositoryDapper(connectionString);
-                    sensorsTasksEngine = new SensorsTasksEngine(gateway, sensorsTasksDb);
-                    sensorsTasksEngine.SetUpdateInterval(Convert.ToInt32(ConfigurationManager.AppSettings["SensorsTasksUpdateInterval"]));
-                    connected = (sensorsTasksDb.IsDbExist());
-                    if (!connected) await Task.Delay(5000);
-                }
+            sensorsTasksEngine = new SensorsTasksEngine(gateway, sensorsTasksDb);
+            sensorsTasksEngine.SetUpdateInterval(sensorsTasksUpdateInterval);
 
-                OnDebugStateMessage("TASK ENGINE: Started");
-
-            }
+            OnDebugStateMessage("TASK ENGINE: Started");
         }
 
         private async static Task ConnectSensorsLinks()
         {
             //connecting tasks
-            bool connected = false;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSensorsLinks"]))
-            {
-                OnDebugStateMessage("LINKS ENGINE: Starting... ");
+            if (!sensorsLinksEnabled) return;
 
-                string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            OnDebugStateMessage("LINKS ENGINE: Starting... ");
 
-                while (!connected)
-                {
-                    sensorsLinksDb = new SensorsLinksRepositoryDapper(connectionString);
-                    sensorsLinksEngine = new SensorsLinksEngine(gateway, sensorsLinksDb);
-                    connected = (sensorsTasksDb.IsDbExist());
-                    if (!connected) await Task.Delay(5000);
-                }
+            sensorsLinksEngine = new SensorsLinksEngine(gateway, sensorsLinksDb);
+            sensorsLinksEngine.GetLinksFromRepository();
 
-                sensorsLinksEngine.GetLinksFromRepository();
-
-                OnDebugStateMessage("LINKS ENGINE: Started");
-
-            }
-
+            OnDebugStateMessage("LINKS ENGINE: Started");
         }
 
 
@@ -194,6 +165,7 @@ namespace MyNetSensors.SerialController
                 if (!connected) await Task.Delay(5000);
             }
 
+            OnDebugStateMessage("SERIAL: Connected");
             ConnectToGateway();
         }
 
@@ -219,27 +191,25 @@ namespace MyNetSensors.SerialController
                 connected = gateway.IsConnected();
                 if (!connected) Thread.Sleep(5000);
             }
+            OnDebugStateMessage("GATEWAY: Connected");
         }
 
         private async static Task ConnectToSoftNodesController()
         {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseSoftNodes"]))
-            {
-                OnDebugStateMessage("SOFT NODES SERVER: Starting...");
+            if (!softNodesEnabled) return;
 
-                string softNodesServerURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
+            OnDebugStateMessage("SOFT NODES SERVER: Starting...");
 
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["SoftNodesStateDebug"]))
-                    softNodesServer.OnDebugStateMessage += message => OnDebugStateMessage("SOFT NODES SERVER: " + message);
+            if (softNodesDebugState)
+                softNodesServer.OnDebugStateMessage += message => OnDebugStateMessage("SOFT NODES SERVER: " + message);
 
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["SoftNodesTxRxDebug"]))
-                    softNodesServer.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SOFT NODES SERVER: " + message);
+            if (softNodesDebugTxRx)
+                softNodesServer.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SOFT NODES SERVER: " + message);
 
+            softNodesController = new SoftNodesController(softNodesServer, gateway);
+            softNodesController.StartServer($"http://*:{softNodesPort}/");
+            OnDebugStateMessage("SOFT NODES SERVER: Started");
 
-
-                softNodesController = new SoftNodesController(softNodesServer, gateway);
-                softNodesController.StartServer(softNodesServerURL);
-            }
         }
 
 
