@@ -397,7 +397,11 @@ function sendSensor(nodeId, sensorId, dataType, val) {
     console.log(message);
 
 
-    clientsHub.server.sendMessage(message);
+    $.ajax({
+        url: "/Gateway/SendMessage/",
+        type: "POST",
+        data: { 'message': message }
+    });
 }
 
 function sendSliders() {

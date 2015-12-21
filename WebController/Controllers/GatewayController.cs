@@ -24,6 +24,8 @@ namespace MyNetSensors.WebServer.Controllers
 
     public class GatewayController : Controller
     {
+        private SerialGateway gateway = SerialController.SerialController.gateway;
+
         public ActionResult Index()
         {
             return RedirectToAction("Control");
@@ -50,21 +52,29 @@ namespace MyNetSensors.WebServer.Controllers
             return View();
         }
 
+
+
+
+
+
+
+
+
         public ActionResult GetNodes()
         {
-            List<Node> nodes = SerialController.SerialController.gateway.GetNodes();
+            List<Node> nodes = gateway.GetNodes();
             return Json(nodes);
         }
 
         public ActionResult IsHardwareConnected()
         {
-            bool connected = SerialController.SerialController.gateway.IsConnected();
+            bool connected = gateway.IsConnected();
             return Json(connected);
         }
 
         public string GetMessages()
         {
-            List<Message> messages = SerialController.SerialController.gateway.messagesLog.GetAllMessages();
+            List<Message> messages = gateway.messagesLog.GetAllMessages();
             string text=null;
             foreach (var message in messages)
             {
@@ -76,8 +86,21 @@ namespace MyNetSensors.WebServer.Controllers
 
         public void ClearMessages()
         {
-            SerialController.SerialController.gateway.messagesLog.ClearLog();
+            gateway.messagesLog.ClearLog();
         }
+
+        public void SendMessage(string message)
+        {
+            if (!gateway.IsConnected()) return;
+
+            Message mess = gateway.ParseMessageFromString(message);
+            gateway.SendMessage(mess);
+        }
+
+
+
+
+
 
 
         public async Task<ActionResult> DropNodes()
