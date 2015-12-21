@@ -15,7 +15,7 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.SerialController;
+using MyNetSensors.SerialControl;
 using MyNetSensors.WebServer.Code;
 
 
@@ -24,7 +24,7 @@ namespace MyNetSensors.WebServer.Controllers
 
     public class GatewayController : Controller
     {
-        private SerialGateway gateway = SerialController.SerialController.gateway;
+        private SerialGateway gateway = SerialController.gateway;
 
         public ActionResult Index()
         {

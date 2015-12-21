@@ -7,7 +7,7 @@
     <ProjectGuid>{8F9745B8-1141-4342-BC5C-FA6077757E23}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.SerialController</RootNamespace>
+    <RootNamespace>MyNetSensors.SerialControl</RootNamespace>
     <AssemblyName>SerialController</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using MyNetSensors.Gateway;
 
-namespace MyNetSensors.SerialController
+namespace MyNetSensors.SerialControl
 {
 
     public class ComPort : IComPort

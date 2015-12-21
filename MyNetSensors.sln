@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenColor", "Software Nod
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebController", "WebController\WebController.xproj", "{D5991617-7252-4C2F-B1E2-C8504339F24C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialController", "Libs\SerialController\SerialController.csproj", "{8F9745B8-1141-4342-BC5C-FA6077757E23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialControl", "Libs\SerialController\SerialControl.csproj", "{8F9745B8-1141-4342-BC5C-FA6077757E23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Libs\Gateway\Gateway.csproj", "{C323003B-AFA8-464A-B3CA-18F07DD6CDEE}"
 EndProject

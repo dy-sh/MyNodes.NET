@@ -10,7 +10,7 @@ using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Gateway;
-using MyNetSensors.SerialController;
+using MyNetSensors.SerialControl;
 
 namespace MyNetSensors.WebServer.Code
 {
@@ -32,24 +32,24 @@ namespace MyNetSensors.WebServer.Code
             string portName = null;
             try
             {
-                SerialController.SerialController.serialPortDebugState = Boolean.Parse(Configuration["SerialPort:DebugState"]);
-                SerialController.SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
-                SerialController.SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
-                SerialController.SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
-                SerialController.SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
+                SerialController.serialPortDebugState = Boolean.Parse(Configuration["SerialPort:DebugState"]);
+                SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
+                SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
+                SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
+                SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
 
-                SerialController.SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
-                SerialController.SerialController.dataBaseConnectionString = Configuration["DataBase:ConnectionString"];
-                SerialController.SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
-                SerialController.SerialController.dataBaseDebugState = Boolean.Parse(Configuration["DataBase:DebugState"]);
-                SerialController.SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);
-                SerialController.SerialController.sensorsTasksEnabled = Boolean.Parse(Configuration["SensorsTasks:Enable"]);
-                SerialController.SerialController.sensorsTasksUpdateInterval = Int32.Parse(Configuration["SensorsTasks:UpdateInterval"]);
-                SerialController.SerialController.sensorsLinksEnabled = Boolean.Parse(Configuration["SensorsLinks:Enable"]);
-                SerialController.SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
-                SerialController.SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
-                SerialController.SerialController.softNodesDebugTxRx = Boolean.Parse(Configuration["SoftNodes:DebugTxRx"]);
-                SerialController.SerialController.softNodesDebugState = Boolean.Parse(Configuration["SoftNodes:DebugState"]);
+                SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
+                SerialController.dataBaseConnectionString = Configuration["DataBase:ConnectionString"];
+                SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
+                SerialController.dataBaseDebugState = Boolean.Parse(Configuration["DataBase:DebugState"]);
+                SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);
+                SerialController.sensorsTasksEnabled = Boolean.Parse(Configuration["SensorsTasks:Enable"]);
+                SerialController.sensorsTasksUpdateInterval = Int32.Parse(Configuration["SensorsTasks:UpdateInterval"]);
+                SerialController.sensorsLinksEnabled = Boolean.Parse(Configuration["SensorsLinks:Enable"]);
+                SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
+                SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
+                SerialController.softNodesDebugTxRx = Boolean.Parse(Configuration["SoftNodes:DebugTxRx"]);
+                SerialController.softNodesDebugState = Boolean.Parse(Configuration["SoftNodes:DebugState"]);
 
                 portName = Configuration["SerialPort:Name"];
             }
@@ -62,24 +62,24 @@ namespace MyNetSensors.WebServer.Code
 
             if (portName != null)
             {
-                SerialController.SerialController.OnDebugStateMessage += logger.LogInformation;
-                SerialController.SerialController.OnDebugTxRxMessage += logger.LogInformation;
+                SerialController.OnDebugStateMessage += logger.LogInformation;
+                SerialController.OnDebugTxRxMessage += logger.LogInformation;
 
                 hub = connectionManager.GetHubContext<ClientsHub>();
-                SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
-                SerialController.SerialController.gateway.OnConnectedEvent += OnConnectedEvent;
-                SerialController.SerialController.gateway.OnDisconnectedEvent += OnDisconnectedEvent;
-                SerialController.SerialController.gateway.OnClearNodesListEvent += OnClearNodesListEvent;
-                SerialController.SerialController.gateway.OnNewNodeEvent += OnNewNodeEvent;
-                SerialController.SerialController.gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
-                SerialController.SerialController.gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
-                SerialController.SerialController.gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
-                SerialController.SerialController.gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
-                SerialController.SerialController.gateway.OnNewSensorEvent += OnNewSensorEvent;
+                SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
+                SerialController.gateway.OnConnectedEvent += OnConnectedEvent;
+                SerialController.gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+                SerialController.gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+                SerialController.gateway.OnNewNodeEvent += OnNewNodeEvent;
+                SerialController.gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
+                SerialController.gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
+                SerialController.gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
+                SerialController.gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
+                SerialController.gateway.OnNewSensorEvent += OnNewSensorEvent;
 
 
                 //start
-                SerialController.SerialController.Start(portName);
+                SerialController.Start(portName);
 
                 //while (true)
                 //{
