@@ -3,6 +3,7 @@
 /// <reference path="js/handlebars.min.js" />
 /// <reference path="js/mynetsensors-control-page.js" />
 /// <reference path="js/mynetsensors-history-chart-page.js" />
+/// <reference path="js/mynetsensors-messages-page.js" />
 /// <reference path="js/mynetsensors-observe-page.js" />
 /// <reference path="js/mynetsensors-settings-page.js" />
 /// <reference path="js/mysensors.js" />

@@ -5,8 +5,9 @@
 
 
 
-var clientsHub;
 var gatewayHardwareConnected = null;
+var signalRServerConnected = null;
+
 var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 500;
 
@@ -64,9 +65,32 @@ $(function () {
 
     $.connection.hub.start();
 
+    $.connection.hub.stateChanged(function (change) {
+        if (change.newState === $.signalR.connectionState.reconnecting) {
+            noty({ text: 'Web server is not responding!', type: 'error', timeout: false });
+            signalRServerConnected = false;
+        }
+        else if (change.newState === $.signalR.connectionState.connected) {
+            if (signalRServerConnected == false) {
+                noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
+                getIsHardwareConnected();
+                getNodes();
+            }
+            signalRServerConnected = true;
+        }
+    });
+
+    // var connection = $.connection(clientsHub);
+    // connection.stateChanged(signalrConnectionStateChanged);
+    //connection.start({ waitForPageLoad: true });
+
     getIsHardwareConnected();
     getNodes();
 });
+
+function onDisconnect() {
+    alert("bbb");
+}
 
 
 function getIsHardwareConnected() {
@@ -88,10 +112,10 @@ function hardwareStateChanged(connected) {
         $('#nodesContainer').fadeOut(800);
     }
 
-    if (connected && gatewayHardwareConnected===false) {
-       noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+    if (connected && gatewayHardwareConnected === false) {
+        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
     } else if (!connected) {
-       noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
     }
 
     gatewayHardwareConnected = connected;

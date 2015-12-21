@@ -5,8 +5,8 @@
 
 
 
-var clientsHub;
 var gatewayHardwareConnected = null;
+var signalRServerConnected = null;
 
 var lastSeens;
 
@@ -24,7 +24,7 @@ $(function () {
     };
 
 
-    
+
     clientsHub.client.OnNewNodeEvent = function (node) {
         createOrUpdateNode(node);
     };
@@ -51,6 +51,21 @@ $(function () {
     };
 
     $.connection.hub.start();
+
+    $.connection.hub.stateChanged(function (change) {
+        if (change.newState === $.signalR.connectionState.reconnecting) {
+            noty({ text: 'Web server is not responding!', type: 'error', timeout: false });
+            signalRServerConnected = false;
+        }
+        else if (change.newState === $.signalR.connectionState.connected) {
+            if (signalRServerConnected == false) {
+                noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
+                getIsHardwareConnected();
+                getNodes();
+            }
+            signalRServerConnected = true;
+        }
+    });
 
     setInterval(updateAllLastSeens, 1000);
 
@@ -181,8 +196,8 @@ function updateBattery(node) {
 
 function createOrUpdateSensor(sensor) {
     var id = sensor.nodeId + "-" + sensor.sensorId;
-    
-    if ( $('#sensorPanel' + id).length == 0) {
+
+    if ($('#sensorPanel' + id).length == 0) {
         //create new
         $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(1000);
     }
