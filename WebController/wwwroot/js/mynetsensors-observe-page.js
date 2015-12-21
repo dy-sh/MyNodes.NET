@@ -23,8 +23,36 @@ $(function () {
         hardwareStateChanged(false);
     };
 
+
+    
+    clientsHub.client.OnNewNodeEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+    clientsHub.client.OnNodeLastSeenUpdatedEvent = function (node) {
+        lastSeens[node.nodeId] = node.lastSeen;
+        updateLastSeen(node.nodeId, node.lastSeen);
+    };
+
+    clientsHub.client.OnNodeBatteryUpdatedEvent = function (node) {
+        updateBattery(node);
+    };
+
+    clientsHub.client.OnSensorUpdatedEvent = function (sensor) {
+        createOrUpdateSensor(sensor);
+    };
+
+    clientsHub.client.OnNewSensorEvent = function (sensor) {
+        createOrUpdateSensor(sensor);
+    };
+
     $.connection.hub.start();
 
+    setInterval(updateAllLastSeens, 1000);
 
     $('#nodesContainer').fadeIn(800);
     getIsHardwareConnected();
