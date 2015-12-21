@@ -2,10 +2,10 @@
   "version": "1.0.0-*",
   "frameworks": {
     "net451": {
-      "wrappedProject": "../../Libs/SerialController/SerialController.csproj",
+      "wrappedProject": "../../Libs/SerialControl/SerialControl.csproj",
       "bin": {
-        "assembly": "../../Libs/SerialController/obj/{configuration}/SerialController.dll",
-        "pdb": "../../Libs/SerialController/obj/{configuration}/SerialController.pdb"
+        "assembly": "../../Libs/SerialControl/obj/{configuration}/SerialController.dll",
+        "pdb": "../../Libs/SerialControl/obj/{configuration}/SerialController.pdb"
       },
       "dependencies": {
         "Newtonsoft.Json": "7.0.1",

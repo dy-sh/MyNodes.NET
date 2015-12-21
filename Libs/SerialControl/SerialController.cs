@@ -65,38 +65,40 @@ namespace MyNetSensors.SerialControl
 
 
 
-        public static void Start(string serialPortName, string dbConnectionString = null)
+        public static async void Start(string serialPortName, string dbConnectionString = null)
         {
             SerialController.serialPortName = serialPortName;
 
-            OnDebugStateMessage("-------------STARTING GATEWAY--------------");
+            await Task.Run(() =>
+            {
+                OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-            ConnectToDB();
-            ConnectToSerialPort();
-            ConnectSensorsTasks();
-            ConnectSensorsLinks();
-            ConnectToSoftNodesController();
 
-            //reconnect if disconnected
-            gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+                ConnectToDB();
+                ConnectToSerialPort();
+                ConnectSensorsTasks();
+                ConnectSensorsLinks();
+                ConnectToSoftNodesController();
 
-            OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
+                //reconnect if disconnected
+                gateway.OnDisconnectedEvent += OnDisconnectedEvent;
 
+                OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
+            });
         }
 
 
         private static void OnDisconnectedEvent()
         {
-            ConnectToSerialPort();
+            ReconnectToSerialPort();
         }
 
 
 
-        public async static Task ConnectToDB()
+        public static void ConnectToDB()
         {
 
             //connecting to DB
-            bool connected = false;
             if (!dataBaseEnabled) return;
 
             OnDebugStateMessage("DATABASE: Connecting... ");
@@ -118,7 +120,7 @@ namespace MyNetSensors.SerialControl
         }
 
 
-        private async static Task ConnectSensorsTasks()
+        private static void ConnectSensorsTasks()
         {
             //connecting tasks
             if (!sensorsTasksEnabled) return;
@@ -131,7 +133,7 @@ namespace MyNetSensors.SerialControl
             OnDebugStateMessage("TASK ENGINE: Started");
         }
 
-        private async static Task ConnectSensorsLinks()
+        private static void ConnectSensorsLinks()
         {
             //connecting tasks
             if (!sensorsLinksEnabled) return;
@@ -146,32 +148,37 @@ namespace MyNetSensors.SerialControl
 
 
 
-        public static async Task ConnectToSerialPort()
+        public static void ConnectToSerialPort()
+        {
+            if (serialPortDebugState)
+                comPort.OnDebugPortStateMessage += message => OnDebugStateMessage("SERIAL: " + message);
+
+            if (serialPortDebugTxRx)
+                comPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SERIAL: " + message);
+
+            ReconnectToSerialPort();
+        }
+
+        public static void ReconnectToSerialPort()
         {
             //connecting to serial port
             OnDebugStateMessage("SERIAL: Connecting...");
-
-            if (serialPortDebugTxRx)
-                comPort.OnDebugPortStateMessage += message => OnDebugStateMessage("SERIAL: " + message);
-
-            if (serialPortDebugState)
-                comPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SERIAL: " + message);
 
             bool connected = false;
             while (!connected)
             {
                 comPort.Connect(serialPortName);
                 connected = comPort.IsConnected();
-                if (!connected) await Task.Delay(5000);
+                if (!connected)
+                {
+                    Thread.Sleep(5000);
+                }
             }
 
-            OnDebugStateMessage("SERIAL: Connected");
             ConnectToGateway();
         }
 
-
-
-        public async static Task ConnectToGateway()
+        public static void ConnectToGateway()
         {
             //connecting to gateway
             OnDebugStateMessage("GATEWAY: Connecting...");
@@ -189,12 +196,14 @@ namespace MyNetSensors.SerialControl
             {
                 gateway.Connect(comPort);
                 connected = gateway.IsConnected();
-                if (!connected) Thread.Sleep(5000);
+                if (!connected)
+                {
+                    Thread.Sleep(5000);
+                }
             }
-            OnDebugStateMessage("GATEWAY: Connected");
         }
 
-        private async static Task ConnectToSoftNodesController()
+        private static void ConnectToSoftNodesController()
         {
             if (!softNodesEnabled) return;
 

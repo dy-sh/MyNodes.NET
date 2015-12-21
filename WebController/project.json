@@ -44,7 +44,6 @@
         "NodeTasks": "1.0.0-*",
         "SensorsHistoryRepository": "1.0.0-*",
         "SerialController": "1.0.0-*"
-
       }
     }
   },
