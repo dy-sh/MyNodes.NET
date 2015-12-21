@@ -96,14 +96,14 @@ $(function () {
 
 function getGatewayInfo() {
     $.ajax({
-        url: "/Gateway/GetGatewayInfo/",
+        url: "/GatewayAPI/GetGatewayInfo/",
         type: "POST",
         success: function (gatewayInfo) {
             updateInfo(gatewayInfo);
         },
         error: function () {
             $('#gateway-hardware-online').html("<p class='text-danger'>Web server is not responding <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>");
-        },
+        }
     });
 }
 

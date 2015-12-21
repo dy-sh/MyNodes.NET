@@ -46,7 +46,7 @@ $(function () {
     //clear messages button
     $('#clear-log').on('click', function () {
         $('#log').html("");
-        $.ajax({ url: "/Gateway/ClearMessages/" });
+        $.ajax({ url: "/GatewayAPI/ClearMessages/" });
     });
 
     getIsHardwareConnected();
@@ -72,7 +72,7 @@ $(function () {
 
 function getIsHardwareConnected() {
     $.ajax({
-        url: "/Gateway/IsHardwareConnected/",
+        url: "/GatewayAPI/IsHardwareConnected/",
         type: "POST",
         success: function (connected) {
             hardwareStateChanged(connected);
@@ -92,7 +92,7 @@ function hardwareStateChanged(connected) {
 
 function getMessages() {
     $.ajax({
-        url: "/Gateway/GetMessages/",
+        url: "/GatewayAPI/GetMessages/",
         type: "POST",
         success: function (messages) {
             onReturnMessages(messages);

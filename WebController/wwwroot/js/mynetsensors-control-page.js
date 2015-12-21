@@ -95,7 +95,7 @@ function onDisconnect() {
 
 function getIsHardwareConnected() {
     $.ajax({
-        url: "/Gateway/IsHardwareConnected/",
+        url: "/GatewayAPI/IsHardwareConnected/",
         type: "POST",
         success: function (connected) {
             hardwareStateChanged(connected);
@@ -125,7 +125,7 @@ function hardwareStateChanged(connected) {
 
 function getNodes() {
     $.ajax({
-        url: "/Gateway/GetNodes/",
+        url: "/GatewayAPI/GetNodes/",
         type: "POST",
         success: function (nodes) {
             onReturnNodes(nodes);
@@ -454,7 +454,7 @@ function sendSensor(nodeId, sensorId, dataType, val) {
 
 
     $.ajax({
-        url: "/Gateway/SendMessage/",
+        url: "/GatewayAPI/SendMessage/",
         type: "POST",
         data: { 'message': message }
     });

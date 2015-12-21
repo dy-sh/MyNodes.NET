@@ -48,17 +48,17 @@ namespace MyNetSensors.SerialControl
 
 
         //VARIABLES
-        private static ComPort comPort = new ComPort();
+        public static ComPort comPort = new ComPort();
         public static SerialGateway gateway = new SerialGateway();
-        private static IGatewayRepository gatewayDb;
-        private static ISensorsHistoryRepository historyDb;
-        private static ISensorsTasksRepository sensorsTasksDb;
+        public static IGatewayRepository gatewayDb;
+        public static ISensorsHistoryRepository historyDb;
+        public static ISensorsTasksRepository sensorsTasksDb;
         public static SensorsTasksEngine sensorsTasksEngine;
-        private static ISensorsLinksRepository sensorsLinksDb;
+        public static ISensorsLinksRepository sensorsLinksDb;
         public static SensorsLinksEngine sensorsLinksEngine;
-        private static ISoftNodesServer softNodesServer;
-        private static SoftNodesController softNodesController;
-        private static IGatewayServer gatewayWebServer;
+        public static ISoftNodesServer softNodesServer;
+        public static SoftNodesController softNodesController;
+        public static IGatewayServer gatewayWebServer;
 
         public static event DebugMessageEventHandler OnDebugTxRxMessage;
         public static event DebugMessageEventHandler OnDebugStateMessage;
