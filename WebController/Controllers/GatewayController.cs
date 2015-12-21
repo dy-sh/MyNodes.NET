@@ -101,15 +101,12 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
-        
-        public async Task<IActionResult> Test()
+
+
+        public ActionResult GetGatewayInfo()
         {
-            string s=null;
-            for (Int64 i = 0; i < 100000; i++)
-            {
-                s += "7";
-            }
-            return Content(DateTime.Now.ToString());
+            GatewayInfo info = gateway.GetGatewayInfo();
+            return Json(info);
         }
 
 

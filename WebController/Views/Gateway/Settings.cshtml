@@ -12,40 +12,37 @@
         <div class="panel panel-default">
             <div class="panel-heading">Serial gateway</div>
             <div class="panel-body">
-                <div id="gateway-service-online">
-                    <p class='text-success'>Trying to connect to the service...</p>
-                </div>
                 <div id="gateway-hardware-online">
-                    <p class='text-success'></p>
+                    <p class='text-success'>Loading data...</p>
                 </div>
-                <div id="gateway-info" style="display: none;">
-                    <ul class="list-group small-margin">
-                        <li class="list-group-item">
-                            Nodes registered
-                            <div class="pull-right" id="nodes-registered">Unknown</div>
-                        </li>
-                        <li class="list-group-item">
-                            Sensors registered
-                            <div class="pull-right" id="sensors-registered">Unknown</div>
-                        </li>
-                        <li class="list-group-item">
-                            Stop recording all nodes history
-                            <div class="pull-right pull-up-button">
-                                <a class="btn btn-default" href="StopRecordingHistory/">
-                                    Stop
-                                </a>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            Delete all nodes
-                            <div class="pull-right pull-up-button">
-                                <button class="btn btn-default" data-href="DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
-                                    Delete
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+
+                <ul class="list-group small-margin">
+                    <li class="list-group-item">
+                        Nodes registered
+                        <div class="pull-right" id="nodes-registered"></div>
+                    </li>
+                    <li class="list-group-item">
+                        Sensors registered
+                        <div class="pull-right" id="sensors-registered"></div>
+                    </li>
+                    <li class="list-group-item">
+                        Stop recording all nodes history
+                        <div class="pull-right pull-up-button">
+                            <a class="btn btn-default" href="StopRecordingHistory/">
+                                Stop
+                            </a>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        Delete all nodes
+                        <div class="pull-right pull-up-button">
+                            <button class="btn btn-default" data-href="DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -88,7 +85,7 @@
 
 
 
-   
+
 
     <div class="col-sm-6">
         <div class="panel panel-default">
@@ -218,13 +215,6 @@
 
 @section scripts
 {
-    @*@Scripts.Render("~/bundles/signalr")
-    <script src="~/signalr/hubs"></script>
-
-    @Scripts.Render("~/bundles/moment")
-
-    @Scripts.Render("~/bundles/mysensors")
-    @Scripts.Render("~/bundles/mynetsensors-settings-page")*@
-
-
+    <script src="~/js/mysensors.js"></script>
+    <script src="~/js/mynetsensors-settings-page.js"></script>
 }
