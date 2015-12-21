@@ -19,12 +19,9 @@
 @section scripts
         {
 
-<script asp-src-include="~/lib/signalr/**/*.js"></script>
-<script src="~/signalr/hubs" type="text/javascript"></script>
-
     <script>
         $(function () {
-            //signalr
+            //configure signalr
             var clientsHub = $.connection.clientsHub;
 
             clientsHub.client.OnMessageRecievedEvent = function (message) {
@@ -32,14 +29,24 @@
                 $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
             };
 
+            clientsHub.client.OnConnectedEvent = function () {
+                hardwareStateChanged(true);
+            };
+
+            clientsHub.client.OnDisconnectedEvent = function () {
+                hardwareStateChanged(false);
+            };
+
             $.connection.hub.start();
 
 
+            //clear messages button
             $('#clear-log').on('click', function () {
                 $('#log').html("");
                 $.ajax({ url: "/Gateway/ClearMessages/" });
             });
 
+            getIsHardwareConnected();
             getMessages();
 
 
@@ -58,6 +65,33 @@
             });
         });
 
+
+        var gatewayHardwareConnected = true;
+
+        function getIsHardwareConnected() {
+            $.ajax({
+                url: "/Gateway/IsHardwareConnected/",
+                type: "POST",
+                success: function (connected) {
+                    hardwareStateChanged(connected);
+                }
+            });
+        }
+
+        function hardwareStateChanged(connected) {
+            if (connected && !gatewayHardwareConnected) {
+                var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+                $('#log').append("Gateway hardware is online." + "<br/>");
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+            } else if (!connected && gatewayHardwareConnected) {
+                var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+                $('#log').append("Gateway hardware is offline!" + "<br/>");
+                $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+            }
+
+            gatewayHardwareConnected = connected;
+        }
+
         function getMessages() {
             $.ajax({
                 url: "/Gateway/GetMessages/",
@@ -72,6 +106,8 @@
             $('#log').html(messages);
             $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
         };
+
+
 
     </script>
 }

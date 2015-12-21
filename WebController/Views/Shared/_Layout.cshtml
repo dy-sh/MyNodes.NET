@@ -65,8 +65,9 @@
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/js/handlebars.js"></script>
 
-        @*<script src="~/lib/signalr/jquery.signalr.js"></script>
-            <script src="~/signalr/hubs"></script>*@
+        <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
+        <script src="~/signalr/hubs" type="text/javascript"></script>
+
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
@@ -75,8 +76,8 @@
         <script src="~/lib/moment/min/moment.min.js"></script>
         <script src="~/js/handlebars.min.js"></script>
 
-        @*<script src="~/lib/signalr/jquery.signalr.min.js"></script>
-            <script src="~/signalr/hubs"></script>*@
+        <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
+        <script src="~/signalr/hubs" type="text/javascript"></script>
     </environment>
 
     @RenderSection("scripts", required: false)

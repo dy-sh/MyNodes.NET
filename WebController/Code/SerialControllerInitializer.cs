@@ -38,17 +38,29 @@ namespace MyNetSensors.WebServer.Code
 
             hub = connectionManager.GetHubContext<ClientsHub>();
             SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
+            SerialController.SerialController.gateway.OnConnectedEvent += OnConnectedEvent;
+            SerialController.SerialController.gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+
 
             //start
             string portName = Configuration["SerialPort:Name"];
             SerialController.SerialController.Start(portName);
 
-            // infinite loop
             //while (true)
             //{
             //    //logger.LogInformation(DateTime.Now);
-            //    await Task.Delay(1000);
+            //    await Task.Delay(5000);
             //}
+        }
+
+        private static void OnDisconnectedEvent()
+        {
+            hub.Clients.All.OnDisconnectedEvent();
+        }
+
+        private static void OnConnectedEvent()
+        {
+            hub.Clients.All.OnConnectedEvent();
         }
 
 
