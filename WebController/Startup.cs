@@ -34,10 +34,6 @@ namespace WebServer
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
-
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-
             }
 
             builder.AddEnvironmentVariables();
@@ -48,9 +44,6 @@ namespace WebServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddEntityFramework()
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
@@ -97,8 +90,6 @@ namespace WebServer
 
             if (webServerEnable)
                 {
-                    app.UseApplicationInsightsRequestTelemetry();
-
                     if (env.IsDevelopment())
                     {
                         app.UseBrowserLink();
@@ -127,8 +118,6 @@ namespace WebServer
                     app.UseSignalR();
 
                     app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-                    app.UseApplicationInsightsExceptionTelemetry();
 
                     app.UseStaticFiles();
 

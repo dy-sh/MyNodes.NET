@@ -22,7 +22,7 @@
         @RenderSection("styles", required: false)
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
-    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -70,6 +70,8 @@
 
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
         <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
         <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>

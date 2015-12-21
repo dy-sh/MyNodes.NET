@@ -6,7 +6,7 @@
 
 
 var clientsHub;
-var gatewayHardwareConnected = true;
+var gatewayHardwareConnected = null;
 
 var lastSeens;
 
@@ -54,7 +54,6 @@ $(function () {
 
     setInterval(updateAllLastSeens, 1000);
 
-    $('#nodesContainer').fadeIn(800);
     getIsHardwareConnected();
     getNodes();
 });
@@ -72,12 +71,16 @@ function getIsHardwareConnected() {
 
 
 function hardwareStateChanged(connected) {
-    if (connected && !gatewayHardwareConnected) {
-        var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+    if (connected) {
         $('#nodesContainer').fadeIn(800);
-    } else if (!connected && gatewayHardwareConnected) {
-        var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+    } else {
         $('#nodesContainer').fadeOut(800);
+    }
+
+    if (connected && gatewayHardwareConnected === false) {
+        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+    } else if (!connected) {
+        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
     }
 
     gatewayHardwareConnected = connected;
