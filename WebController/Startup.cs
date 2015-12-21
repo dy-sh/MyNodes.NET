@@ -54,7 +54,7 @@ namespace WebServer
             services.AddEntityFramework()
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                    options.UseSqlServer(Configuration["DataBase:ConnectionString"]));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -73,57 +73,76 @@ namespace WebServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConnectionManager connectionManager)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            bool webServerDebug = false;
+            IConfigurationSection logging=null;
+            bool webServerEnable = false;
+            try
+            {
+                logging = Configuration.GetSection("WebServer:Logging");
+                webServerDebug = Boolean.Parse(Configuration["WebServer:Debug"]);
+                webServerEnable = Boolean.Parse(Configuration["WebServer:Enable"]);
+            }
+            catch
+            {
+                Console.WriteLine("Bad configuration in appsettings.json file.");
+                return;
+            }
+
+            if (webServerDebug)
+                loggerFactory.AddConsole(logging);
+            else
+                loggerFactory.AddConsole(LogLevel.Warning);
+
             loggerFactory.AddDebug();
 
-            if (Configuration["WebServer:Enable"] == "true")
-            {
-                app.UseApplicationInsightsRequestTelemetry();
-
-                if (env.IsDevelopment())
+            if (webServerEnable)
                 {
-                    app.UseBrowserLink();
-                    app.UseDeveloperExceptionPage();
-                    app.UseDatabaseErrorPage();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Home/Error");
+                    app.UseApplicationInsightsRequestTelemetry();
 
-                    // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                    try
+                    if (env.IsDevelopment())
                     {
-                        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                            .CreateScope())
+                        app.UseBrowserLink();
+                        app.UseDeveloperExceptionPage();
+                        app.UseDatabaseErrorPage();
+                    }
+                    else
+                    {
+                        app.UseExceptionHandler("/Home/Error");
+
+                        // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                        try
                         {
-                            serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-                                .Database.Migrate();
+                            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                                .CreateScope())
+                            {
+                                serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
+                                    .Database.Migrate();
+                            }
+                        }
+                        catch
+                        {
                         }
                     }
-                    catch
+
+                    app.UseSignalR();
+
+                    app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+
+                    app.UseApplicationInsightsExceptionTelemetry();
+
+                    app.UseStaticFiles();
+
+                    app.UseIdentity();
+
+                    // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+                    app.UseMvc(routes =>
                     {
-                    }
+                        routes.MapRoute(
+                            name: "default",
+                            template: "{controller=Home}/{action=Index}/{id?}");
+                    });
                 }
-
-                app.UseSignalR();
-
-                app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-                app.UseApplicationInsightsExceptionTelemetry();
-
-                app.UseStaticFiles();
-
-                app.UseIdentity();
-
-                // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
-
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-                });
-            }
 
             SerialControllerInitializer.Start(loggerFactory, Configuration, connectionManager);
 
@@ -136,7 +155,7 @@ namespace WebServer
         }
 
 
-   
+
 
 
     }

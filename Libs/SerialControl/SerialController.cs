@@ -81,16 +81,10 @@ namespace MyNetSensors.SerialControl
                 ConnectToSoftNodesController();
 
                 //reconnect if disconnected
-                gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+                gateway.OnDisconnectedEvent += ReconnectToSerialPort;
 
                 OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
             });
-        }
-
-
-        private static void OnDisconnectedEvent()
-        {
-            ReconnectToSerialPort();
         }
 
 
@@ -102,6 +96,13 @@ namespace MyNetSensors.SerialControl
             if (!dataBaseEnabled) return;
 
             OnDebugStateMessage("DATABASE: Connecting... ");
+
+            if (dataBaseConnectionString == null)
+            {
+                OnDebugStateMessage("DATABASE: Connection failed. Set ConnectionString in appsettings.json file.");
+                return;
+            }
+
 
             gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
             historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);

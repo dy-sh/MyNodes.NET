@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting.Internal;
@@ -55,15 +56,14 @@ namespace MyNetSensors.WebServer.Code
             }
             catch
             {
-                logger.LogInformation("ERROR: Bad configuration in appsettings.json file.");
+                Log("ERROR: Bad configuration in appsettings.json file.");
                 throw new Exception("Bad configuration in appsettings.json file.");
-                
             }
 
             if (portName != null)
             {
-                SerialController.OnDebugStateMessage += logger.LogInformation;
-                SerialController.OnDebugTxRxMessage += logger.LogInformation;
+                SerialController.OnDebugStateMessage += Log;
+                SerialController.OnDebugTxRxMessage += Log;
 
                 hub = connectionManager.GetHubContext<ClientsHub>();
                 SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
@@ -80,13 +80,13 @@ namespace MyNetSensors.WebServer.Code
 
                 //start
                 SerialController.Start(portName);
-
-                //while (true)
-                //{
-                //    //logger.LogInformation(DateTime.Now);
-                //    await Task.Delay(5000);
-                //}
             }
+        }
+
+        public static void Log(string message)
+        {
+            Console.WriteLine(message);
+           // logger.LogInformation(message);
         }
 
         private static void OnNewSensorEvent(Sensor sensor)
