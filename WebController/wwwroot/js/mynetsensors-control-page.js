@@ -32,6 +32,36 @@ $(function () {
         hardwareStateChanged(false);
     };
 
+    clientsHub.client.OnClearNodesListEvent = function () {
+        var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
+        $('#nodesContainer').html(null);
+    };
+
+
+    clientsHub.client.OnNewNodeEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+    clientsHub.client.OnNodeLastSeenUpdatedEvent = function (node) {
+        updateLastSeen(node);
+    };
+
+    clientsHub.client.OnNodeBatteryUpdatedEvent = function (node) {
+        updateBattery(node);
+    };
+
+    clientsHub.client.OnSensorUpdatedEvent = function (sensor) {
+        createOrUpdateSensor(sensor);
+    };
+
+    clientsHub.client.OnNewSensorEvent = function (sensor) {
+        createOrUpdateSensor(sensor);
+    };
+
     $.connection.hub.start();
 
 

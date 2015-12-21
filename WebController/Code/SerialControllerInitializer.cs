@@ -40,6 +40,13 @@ namespace MyNetSensors.WebServer.Code
             SerialController.SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             SerialController.SerialController.gateway.OnConnectedEvent += OnConnectedEvent;
             SerialController.SerialController.gateway.OnDisconnectedEvent += OnDisconnectedEvent;
+            SerialController.SerialController.gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            SerialController.SerialController.gateway.OnNewNodeEvent += OnNewNodeEvent;
+            SerialController.SerialController.gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
+            SerialController.SerialController.gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
+            SerialController.SerialController.gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
+            SerialController.SerialController.gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
+            SerialController.SerialController.gateway.OnNewSensorEvent += OnNewSensorEvent;
 
 
             //start
@@ -51,6 +58,41 @@ namespace MyNetSensors.WebServer.Code
             //    //logger.LogInformation(DateTime.Now);
             //    await Task.Delay(5000);
             //}
+        }
+
+        private static void OnNewSensorEvent(Sensor sensor)
+        {
+            hub.Clients.All.OnNewSensorEvent(sensor);
+        }
+
+        private static void OnSensorUpdatedEvent(Sensor sensor)
+        {
+            hub.Clients.All.OnSensorUpdatedEvent(sensor);
+        }
+
+        private static void OnNodeBatteryUpdatedEvent(Node node)
+        {
+            hub.Clients.All.OnNodeBatteryUpdatedEvent(node);
+        }
+
+        private static void OnNodeLastSeenUpdatedEvent(Node node)
+        {
+            hub.Clients.All.OnNodeLastSeenUpdatedEvent(node);
+        }
+
+        private static void OnNodeUpdatedEvent(Node node)
+        {
+            hub.Clients.All.OnNodeUpdatedEvent(node);
+        }
+
+        private static void OnNewNodeEvent(Node node)
+        {
+            hub.Clients.All.OnNewNodeEvent(node);
+        }
+
+        private static void OnClearNodesListEvent()
+        {
+            hub.Clients.All.OnClearNodesListEvent();
         }
 
         private static void OnDisconnectedEvent()
