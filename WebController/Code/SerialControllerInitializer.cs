@@ -72,6 +72,7 @@ namespace MyNetSensors.WebController.Code
 
                 hub = connectionManager.GetHubContext<ClientsHub>();
                 SerialController.gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
+                SerialController.gateway.OnMessageSendEvent += OnMessageSendEvent;
                 SerialController.gateway.OnConnectedEvent += OnConnectedEvent;
                 SerialController.gateway.OnDisconnectedEvent += OnDisconnectedEvent;
                 SerialController.gateway.OnClearNodesListEvent += OnClearNodesListEvent;
@@ -87,6 +88,8 @@ namespace MyNetSensors.WebController.Code
                 SerialController.Start(portName);
             }
         }
+
+
 
         public static void Log(string message)
         {
@@ -145,5 +148,10 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnMessageRecievedEvent(message.ToString());
         }
 
+        private static void OnMessageSendEvent(Message message)
+        {
+            hub.Clients.All.OnMessageSendEvent(message.ToString());
+
+        }
     }
 }

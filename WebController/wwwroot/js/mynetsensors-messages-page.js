@@ -18,6 +18,11 @@ $(function () {
         $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
     };
 
+    clientsHub.client.OnMessageSendEvent = function (message) {
+        $('#log').append(message + "<br/>");
+        $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+    };
+
     clientsHub.client.OnConnectedEvent = function () {
         hardwareStateChanged(true);
     };
