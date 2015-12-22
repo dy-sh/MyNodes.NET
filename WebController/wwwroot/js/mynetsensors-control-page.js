@@ -9,7 +9,7 @@ var gatewayHardwareConnected = null;
 var signalRServerConnected = null;
 
 var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
-var elementsFadeTime = 500;
+var elementsFadeTime = 300;
 
 var nodes;
 
@@ -107,9 +107,9 @@ function getIsHardwareConnected() {
 
 function hardwareStateChanged(connected) {
     if (connected) {
-        $('#nodesContainer').fadeIn(800);
+        $('#nodesContainer').fadeIn(elementsFadeTime);
     } else {
-        $('#nodesContainer').fadeOut(800);
+        $('#nodesContainer').fadeOut(elementsFadeTime);
     }
 
     if (connected && gatewayHardwareConnected === false) {

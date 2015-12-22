@@ -81,7 +81,7 @@ $(document).ready(function () {
                 // console.log(data);
                 addChartData(data.chartData);
                 $('#infoPanel').hide();
-                $('#chartPanel').fadeIn(1000);
+                $('#chartPanel').fadeIn(300);
             } else {
                 $('#infoPanel').html("There are no entries in history. Check node <a href='../../../Node/Settings/"+nodeId+"'>settings</a>.");
             }

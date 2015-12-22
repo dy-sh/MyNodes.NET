@@ -8,6 +8,8 @@
 var gatewayHardwareConnected = null;
 var signalRServerConnected = null;
 
+var elementsFadeTime = 300;
+
 var lastSeens;
 
 $(function () {
@@ -87,9 +89,9 @@ function getIsHardwareConnected() {
 
 function hardwareStateChanged(connected) {
     if (connected) {
-        $('#nodesContainer').fadeIn(800);
+        $('#nodesContainer').fadeIn(elementsFadeTime);
     } else {
-        $('#nodesContainer').fadeOut(800);
+        $('#nodesContainer').fadeOut(elementsFadeTime);
     }
 
     if (connected && gatewayHardwareConnected === false) {
@@ -173,7 +175,7 @@ function createOrUpdateNode(node) {
 
     if (nodePanel.length == 0) {
         //create new
-        $(nodeTemplate(node)).hide().appendTo("#nodesContainer").fadeIn(1000);
+        $(nodeTemplate(node)).hide().appendTo("#nodesContainer").fadeIn(elementsFadeTime);
     } else {
         //update
         nodePanel.html(nodeTemplate(node));
@@ -199,7 +201,7 @@ function createOrUpdateSensor(sensor) {
 
     if ($('#sensorPanel' + id).length == 0) {
         //create new
-        $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(1000);
+        $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(elementsFadeTime);
     }
     else {
         //update
@@ -226,7 +228,7 @@ function createOrUpdateSensorData(sensor) {
 
         if ($('#dataPanel' + id).length == 0) {
             //create new
-            $(dataTemplate(data)).hide().appendTo("#sensorPanel" + sensorId).fadeIn(1000);
+            $(dataTemplate(data)).hide().appendTo("#sensorPanel" + sensorId).fadeIn(elementsFadeTime);
         }
 
         var dataState = data.state;

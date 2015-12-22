@@ -63,6 +63,7 @@
         <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/js/handlebars.js"></script>
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet"/>
 
         <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
         <script src="~/signalr/hubs" type="text/javascript"></script>
@@ -77,6 +78,7 @@
         <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
         <script src="~/lib/moment/min/moment.min.js"></script>
         <script src="~/js/handlebars.min.js"></script>
+        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
         <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
         <script src="~/signalr/hubs" type="text/javascript"></script>
@@ -85,23 +87,23 @@
     @RenderSection("scripts", required: false)
 
     <script>
-        //page fade animation
-        $('.body-content').fadeIn(700);
-        $('#footer').fadeIn(700);
+        ////page fade animation
+        //$('.body-content').fadeIn(700);
+        //$('#footer').fadeIn(700);
 
-        $('.fadebefore').click(function () {
-            var href = $(this).attr('href');
+        //$('.fadebefore').click(function () {
+        //    var href = $(this).attr('href');
 
-            // do animation
-            $('.body-content').fadeOut(400, function () {
-                // go to link when animation completes
-                window.location = href;
+        //    // do animation
+        //    $('.body-content').fadeOut(400, function () {
+        //        // go to link when animation completes
+        //        window.location = href;
 
-            });
+        //    });
 
-            // over ride browser following link when clicked
-            return false;
-        });
+        //    // over ride browser following link when clicked
+        //    return false;
+        //});
 
 
 
