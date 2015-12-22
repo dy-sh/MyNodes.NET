@@ -3,28 +3,12 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-/*
-Get variables from outside the script
-        var dbId = '@ViewBag.db_Id';
-        var sensorId = '@ViewBag.sensorId';
-        var nodeId = '@ViewBag.nodeId';
-        var urlStart = '@ViewBag.start';
-        var urlEnd = '@ViewBag.end';
-*/
-
-$.noty.defaults.layout = 'bottomRight';
-$.noty.defaults.theme = 'relax';
-$.noty.defaults.timeout = 3000;
-$.noty.defaults.animation = {
-    open: 'animated bounceInRight', // Animate.css class names
-    close: 'animated flipOutX', // Animate.css class names
-    easing: 'swing', // unavailable - no need
-    speed: 500 // unavailable - no need
-};
 
 var clientsHub;
-var gatewayHardwareConnected = false;
-var gatewayServiceConnected = false;
+var gatewayHardwareConnected = null;
+var signalRServerConnected = null;
+
+var elementsFadeTime = 300;
 
 var groups = new vis.DataSet();
 groups.add({ id: 0 });
@@ -81,9 +65,11 @@ $(document).ready(function () {
                 // console.log(data);
                 addChartData(data.chartData);
                 $('#infoPanel').hide();
-                $('#chartPanel').fadeIn(300);
+                $('#chartPanel').fadeIn(elementsFadeTime);
             } else {
-                $('#infoPanel').html("There are no entries in history. Check node <a href='../../../Node/Settings/"+nodeId+"'>settings</a>.");
+                $('#infoPanel').html("There are no history. Chart shows realtime data only. Check node <a href='../../../Node/Settings/" + nodeId + "'>settings</a>.");
+                $('#chartPanel').fadeIn(elementsFadeTime);
+                showNow();
             }
         },
         error: function () {
@@ -209,36 +195,55 @@ function redrawChart(options) {
 
 $(function () {
     clientsHub = $.connection.clientsHub;
-
-    clientsHub.client.onGatewayConnected = function () {
-        var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: 3000 });
+    
+    clientsHub.client.OnSensorUpdatedEvent = function (sensor) {
+        OnSensorUpdatedEvent(sensor);
     };
 
-    clientsHub.client.onGatewayDisconnected = function () {
-        var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: 3000 });
-    };
+    $.connection.hub.start();
 
-    clientsHub.client.onGatewayServiceConnected = function () {
-        var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: 3000 });
-    };
-
-    clientsHub.client.onGatewayServiceDisconnected = function () {
-        var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: 3000 });
-    };
-
-
-    clientsHub.client.onSensorUpdated = function (sensor) {
-        onSensorUpdated(sensor);
-    };
-
-
-    $.connection.hub.start().done(function () {
-        clientsHub.server.getGatewayServiceConnected();
+    $.connection.hub.stateChanged(function (change) {
+        if (change.newState === $.signalR.connectionState.reconnecting) {
+            noty({ text: 'Web server is not responding!', type: 'error', timeout: false });
+            signalRServerConnected = false;
+        }
+        else if (change.newState === $.signalR.connectionState.connected) {
+            if (signalRServerConnected == false) {
+                noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
+                getIsHardwareConnected();
+                getNodes();
+            }
+            signalRServerConnected = true;
+        }
     });
 
+    getIsHardwareConnected();
 });
 
-function onSensorUpdated(sensor) {
+
+function getIsHardwareConnected() {
+    $.ajax({
+        url: "/GatewayAPI/IsHardwareConnected/",
+        type: "POST",
+        success: function (connected) {
+            hardwareStateChanged(connected);
+        }
+    });
+}
+
+
+function hardwareStateChanged(connected) {
+    if (connected && gatewayHardwareConnected === false) {
+        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+    } else if (!connected) {
+        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+    }
+
+    gatewayHardwareConnected = connected;
+}
+
+
+function OnSensorUpdatedEvent(sensor) {
     if (sensor.nodeId != nodeId || sensor.sensorId != sensorId)
         return;
 

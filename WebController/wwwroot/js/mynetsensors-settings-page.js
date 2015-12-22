@@ -7,7 +7,7 @@
 
 $(function () {
     getGatewayInfo();
-    setInterval(getGatewayInfo, 5000);
+    setInterval(getGatewayInfo, 2000);
 });
 
 
