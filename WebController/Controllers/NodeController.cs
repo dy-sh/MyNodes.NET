@@ -91,8 +91,11 @@ namespace MyNetSensors.WebServer.Controllers
                 sensor.remapToMax = remapToMax;
             }
             gatewayDb.UpdateNodeSettings(node);
-            string clientId = "";//todo get client id
-      //      GatewayClientStatic.gatewayClient.UpdateNodeSettings(clientId, node);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateNodeSettings(node);
+
+
             return RedirectToAction("Control", "Gateway");
             // return View(node);
         }
@@ -104,8 +107,8 @@ namespace MyNetSensors.WebServer.Controllers
                 return HttpNotFound();
 
 
-            string clientId = "";//todo get client id
-          //  GatewayClientStatic.gatewayClient.DeleteNode(clientId, node.nodeId);
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.DeleteNode(node.nodeId);
 
             gatewayDb.DeleteNodeByDbId(node.db_Id);
 
@@ -123,9 +126,8 @@ namespace MyNetSensors.WebServer.Controllers
                 tasksDb.DeleteTasks(sensor.db_Id);
             }
 
-        //    GatewayClientStatic.gatewayClient.UpdateSensorsLinks(clientId);
-       //     GatewayClientStatic.gatewayClient.UpdateSensorsTasks(clientId);
-
+            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateSensorsLinks();
 
 
 

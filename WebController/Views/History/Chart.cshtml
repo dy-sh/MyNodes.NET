@@ -26,7 +26,7 @@
                 <br />
 
 
-                <div class="btn-group" role="group" >
+                <div class="btn-group" role="group">
                     <div class="btn-group" role="group" style="padding-right: 10px;">
                         <label for="autoscroll">Auto scroll:</label>
                         <select id="autoscroll">
@@ -72,7 +72,7 @@
 </div>
 
 
-<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" >
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -82,7 +82,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="url" class="control-label" >URL:</label>
+                        <label for="url" class="control-label">URL:</label>
                         <input type="text" class="form-control" id="url" style="max-width: 100%;">
                     </div>
                 </form>
@@ -94,19 +94,14 @@
     </div>
 </div>
 
-@section styles
-{
-    @Styles.Render("~/visjs")
+
+@section styles{
+    <link href="~/lib/vis/dist/vis.min.css" rel="stylesheet" />
 }
-
-
 
 @section scripts
 {
-    @Scripts.Render("~/bundles/visjs")
-    @Scripts.Render("~/bundles/signalr")
-    <script src="~/signalr/hubs"></script>
-
+    <script src="~/lib/vis/dist/vis.min.js"></script>
 
     <script type="text/javascript">
         var dbId = '@ViewBag.db_Id';
@@ -119,15 +114,15 @@
         @if (@ViewBag.autoscroll != null)
         {
             @:$("#autoscroll").val('@ViewBag.autoscroll');
-        }
+                }
 
         @if (@ViewBag.style != null)
         {
             @:$("#charttype").val('@ViewBag.style');
-        }
+                }
 
 
     </script>
 
-    @Scripts.Render("~/bundles/mynetsensors-history-chart-page")
+    <script src="~/js/mynetsensors-history-chart-page.js"></script>
 }
