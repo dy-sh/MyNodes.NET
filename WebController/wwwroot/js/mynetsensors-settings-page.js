@@ -6,88 +6,6 @@
 
 
 $(function () {
-    //clientsHub = $.connection.clientsHub;
-
-    //clientsHub.client.onGatewayConnected = function () {
-    //    var n = noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
-    //    gatewayHardwareConnected = true;
-    //    gatewayStatusChanged();
-    //};
-
-    //clientsHub.client.onGatewayDisconnected = function () {
-    //    var n = noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
-    //    gatewayHardwareConnected = false;
-    //    gatewayStatusChanged();
-    //};
-
-    //clientsHub.client.onGatewayServiceConnected = function () {
-    //    var n = noty({ text: 'Gateway service is online.', type: 'alert', timeout: false });
-    //    gatewayServiceConnected = true;
-    //    gatewayStatusChanged();
-    //    clientsHub.server.getGatewayHardwareConnected();
-    //};
-
-    //clientsHub.client.onGatewayServiceDisconnected = function () {
-    //    var n = noty({ text: 'Gateway service is offline!', type: 'error', timeout: false });
-    //    gatewayServiceConnected = false;
-    //    gatewayHardwareConnected = false;
-    //    gatewayStatusChanged();
-    //};
-
-    //clientsHub.client.returnGatewayServiceConnected = function (isConnected) {
-    //    gatewayServiceConnected = isConnected;
-    //    gatewayStatusChanged();
-    //    clientsHub.server.getGatewayHardwareConnected();
-    //};
-
-
-    //clientsHub.client.returnGatewayHardwareConnected = function (isConnected) {
-    //    gatewayHardwareConnected = isConnected;
-    //    gatewayStatusChanged();
-    //};
-
-    //clientsHub.client.onClearNodesList = function () {
-    //    var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
-    //};
-
-
-
-   
-    
-
-    //clientsHub.client.returnNodes = function (nodes) {
-    //    onReturnNodes(nodes);
-    //};
-
-    //clientsHub.client.onNewNode = function (node) {
-    //    nodesCount++;
-    //    updateNodesAndSensorsCounts();
-    //};
-    
-    //clientsHub.client.onNewSensor = function (sensor) {
-    //    sensorsCount++;
-    //    updateNodesAndSensorsCounts();
-    //};
-
- 
-    //clientsHub.client.returnConnectedUsersCount = function (count) {
-    //    $('#users-online').text(count);
-    //};
-
-    //clientsHub.client.returnGatewayInfo = function (gatewayInfo) {
-    //    nodesCount = gatewayInfo.gatewayNodesRegistered;
-    //    sensorsCount = gatewayInfo.gatewaySensorsRegistered;
-    //    updateNodesAndSensorsCounts();
-    //};
-
-
-    //$.connection.hub.start().done(function () {
-    //    clientsHub.server.getGatewayServiceConnected();
-    //    clientsHub.server.getGatewayInfo();
-    //    clientsHub.server.getConnectedUsersCount();
-    //    
-    //});
-
     getGatewayInfo();
     setInterval(getGatewayInfo, 5000);
 });
@@ -120,3 +38,56 @@ function updateInfo(gatewayInfo) {
     $('#sensors-registered').html(gatewayInfo.gatewaySensorsRegistered);
 }
 
+$(document).ready(function(){
+    $("#dropLinks").click(function(){
+        $.ajax({type: "POST", url: "/GatewayAPI/DropLinks",
+            success:function(result) {
+                if (result) noty({ text: 'Sensors links were deleted.' });
+            }});
+    });
+
+    $("#dropHistory").click(function () {
+        $.ajax({
+            type: "POST", url: "/GatewayAPI/DropHistory",
+            success: function (result) {
+                if (result) noty({ text: 'History was deleted.' });
+            }
+        });
+    });
+
+    $("#dropTasks").click(function () {
+        $.ajax({
+            type: "POST", url: "/GatewayAPI/DropTasks",
+            success: function (result) {
+                if (result) noty({ text: 'Tasks were deleted.' });
+            }
+        });
+    });
+
+    $("#dropNodes").click(function () {
+        $.ajax({
+            type: "POST", url: "/GatewayAPI/DropNodes",
+            success: function (result) {
+                if (result) noty({ text: 'Nodes were deleted.' });
+            }
+        });
+    });
+
+    $("#stopWritingHistory").click(function () {
+        $.ajax({
+            type: "POST", url: "/GatewayAPI/StopWritingHistory",
+            success: function (result) {
+                if (result) noty({ text: 'History writing is stopped.' });
+            }
+        });
+    });
+
+    $("#disableTasks").click(function () {
+        $.ajax({
+            type: "POST", url: "/GatewayAPI/DisableTasks",
+            success: function (result) {
+                if (result) noty({ text: 'Tasks were disabled.' });
+            }
+        });
+    });
+});

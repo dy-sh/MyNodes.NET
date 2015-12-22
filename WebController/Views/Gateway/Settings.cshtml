@@ -28,9 +28,7 @@
                     <li class="list-group-item">
                         Stop writing history
                         <div class="pull-right pull-up-button">
-                            <a class="btn btn-default" href="/GatewayApi/StopWritingHistory/">
-                                Stop
-                            </a>
+                            <button type="button" class="btn btn-default" id="stopWritingHistory">Stop</button>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -111,9 +109,7 @@
                     <li class="list-group-item">
                         Disable all tasks
                         <div class="pull-right pull-up-button">
-                            <a class="btn btn-default" href="/GatewayApi/DisableTasks/">
-                                Disable
-                            </a>
+                            <button type="button" class="btn btn-default" id="disableTasks">Disable</button>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -154,7 +150,7 @@
                 before turn on all known nodes!
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropNodes/">Delete</a>
+                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropNodes">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -171,7 +167,7 @@
                 Are you sure you want to delete all nodes history?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropHistory/">Delete</a>
+                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropHistory">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -188,7 +184,7 @@
                 Are you sure you want to delete all nodes tasks?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropTasks/">Delete</a>
+                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropTasks">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -205,7 +201,7 @@
                 Are you sure you want to delete all sensors links?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropLinks/">Delete</a>
+                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropLinks">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
