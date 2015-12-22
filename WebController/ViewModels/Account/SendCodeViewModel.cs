@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace WebServer.ViewModels.Account
+namespace MyNetSensors.WebController.ViewModels.Account
 {
     public class SendCodeViewModel
     {

@@ -12,11 +12,11 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyNetSensors.WebServer.Code;
-using WebServer.Models;
-using WebServer.Services;
+using MyNetSensors.WebController.Code;
+using MyNetSensors.WebController.Models;
+using MyNetSensors.WebController.Services;
 
-namespace WebServer
+namespace MyNetSensors.WebController
 {
     public class Startup
     {

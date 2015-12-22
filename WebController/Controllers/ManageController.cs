@@ -7,11 +7,11 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using WebServer.Models;
-using WebServer.Services;
-using WebServer.ViewModels.Manage;
+using MyNetSensors.WebController.Models;
+using MyNetSensors.WebController.Services;
+using MyNetSensors.WebController.ViewModels.Manage;
 
-namespace WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     [Authorize]
     public class ManageController : Controller

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
-namespace MyNetSensors.WebServer.Code
+namespace MyNetSensors.WebController.Code
 {
     public class ClientsHub : Hub
     {

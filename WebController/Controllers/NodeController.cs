@@ -16,7 +16,7 @@ using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SerialControl;
 
 
-namespace MyNetSensors.WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     public class NodeController : Controller
     {

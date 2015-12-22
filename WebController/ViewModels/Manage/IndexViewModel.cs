@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace WebServer.ViewModels.Manage
+namespace MyNetSensors.WebController.ViewModels.Manage
 {
     public class IndexViewModel
     {

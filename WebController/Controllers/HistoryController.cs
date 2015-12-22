@@ -12,10 +12,10 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SerialControl;
-using MyNetSensors.WebServer.Code;
+using MyNetSensors.WebController.Code;
 
 
-namespace MyNetSensors.WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     public class HistoryController : Controller
     {

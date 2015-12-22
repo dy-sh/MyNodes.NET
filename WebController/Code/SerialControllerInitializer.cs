@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -13,7 +18,7 @@ using Microsoft.Extensions.Logging;
 using MyNetSensors.Gateway;
 using MyNetSensors.SerialControl;
 
-namespace MyNetSensors.WebServer.Code
+namespace MyNetSensors.WebController.Code
 {
     public static class SerialControllerInitializer
     {

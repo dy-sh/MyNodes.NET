@@ -14,9 +14,9 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SerialControl;
-using MyNetSensors.WebServer.Code;
+using MyNetSensors.WebController.Code;
 
-namespace MyNetSensors.WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     public class TasksController : Controller
     {

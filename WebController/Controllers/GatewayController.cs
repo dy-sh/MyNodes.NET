@@ -16,10 +16,10 @@ using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SerialControl;
-using MyNetSensors.WebServer.Code;
+using MyNetSensors.WebController.Code;
 
 
-namespace MyNetSensors.WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     [ResponseCache(Duration = 0)]
     public class GatewayController : Controller

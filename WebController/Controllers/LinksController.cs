@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Microsoft.AspNet.Mvc;
@@ -8,9 +13,9 @@ using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.SerialControl;
-using MyNetSensors.WebServer.Code;
+using MyNetSensors.WebController.Code;
 
-namespace MyNetSensors.WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
      public class LinksController : Controller
     {

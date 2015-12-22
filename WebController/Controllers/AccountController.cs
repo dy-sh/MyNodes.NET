@@ -9,11 +9,11 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using WebServer.Models;
-using WebServer.Services;
-using WebServer.ViewModels.Account;
+using MyNetSensors.WebController.Models;
+using MyNetSensors.WebController.Services;
+using MyNetSensors.WebController.ViewModels.Account;
 
-namespace WebServer.Controllers
+namespace MyNetSensors.WebController.Controllers
 {
     [Authorize]
     public class AccountController : Controller

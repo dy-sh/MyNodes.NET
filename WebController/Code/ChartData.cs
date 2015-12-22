@@ -1,4 +1,4 @@
-﻿namespace MyNetSensors.WebServer.Code
+﻿namespace MyNetSensors.WebController.Code
 {
     public class ChartData
     {
