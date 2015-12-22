@@ -26,9 +26,9 @@
                         <div class="pull-right" id="sensors-registered"></div>
                     </li>
                     <li class="list-group-item">
-                        Stop recording all nodes history
+                        Stop writing history
                         <div class="pull-right pull-up-button">
-                            <a class="btn btn-default" href="StopRecordingHistory/">
+                            <a class="btn btn-default" href="/GatewayApi/StopWritingHistory/">
                                 Stop
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                     <li class="list-group-item">
                         Delete all nodes
                         <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
+                            <button class="btn btn-default" data-href="/GatewayApi/DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
                                 Delete
                             </button>
                         </div>
@@ -55,7 +55,7 @@
                     <li class="list-group-item">
                         Delete all sensors links
                         <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="DropLinks/" data-toggle="modal" data-target="#confirm-links-delete">
+                            <button class="btn btn-default" data-href="/GatewayApi/DropLinks/" data-toggle="modal" data-target="#confirm-links-delete">
                                 Delete
                             </button>
                         </div>
@@ -73,7 +73,7 @@
                     <li class="list-group-item">
                         Delete all nodes history
                         <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="DropHistory/" data-toggle="modal" data-target="#confirm-history-delete">
+                            <button class="btn btn-default" data-href="/GatewayApi/DropHistory/" data-toggle="modal" data-target="#confirm-history-delete">
                                 Delete
                             </button>
                         </div>
@@ -111,7 +111,7 @@
                     <li class="list-group-item">
                         Disable all tasks
                         <div class="pull-right pull-up-button">
-                            <a class="btn btn-default" href="DisableTasks/">
+                            <a class="btn btn-default" href="/GatewayApi/DisableTasks/">
                                 Disable
                             </a>
                         </div>
@@ -119,7 +119,7 @@
                     <li class="list-group-item">
                         Delete all tasks
                         <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="DropTasks/" data-toggle="modal" data-target="#confirm-tasks-delete">
+                            <button class="btn btn-default" data-href="/GatewayApi/DropTasks/" data-toggle="modal" data-target="#confirm-tasks-delete">
                                 Delete
                             </button>
                         </div>
@@ -154,7 +154,7 @@
                 before turn on all known nodes!
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="DropNodes">Delete</a>
+                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropNodes/">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -171,7 +171,7 @@
                 Are you sure you want to delete all nodes history?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="DropHistory">Delete</a>
+                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropHistory/">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -188,7 +188,7 @@
                 Are you sure you want to delete all nodes tasks?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="DropTasks">Delete</a>
+                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropTasks/">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -205,7 +205,7 @@
                 Are you sure you want to delete all sensors links?
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-ok" href="DropLinks">Delete</a>
+                <a class="btn btn-danger btn-ok" href="/GatewayApi/DropLinks/">Delete</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

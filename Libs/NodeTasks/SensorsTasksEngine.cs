@@ -82,7 +82,7 @@ namespace MyNetSensors.NodeTasks
         private void OnClearNodesListEvent()
         {
             tasks.Clear();
-            db.DropAllTasks();
+            db.DropTasks();
         }
 
         private void Execute(SensorTask task)

@@ -219,7 +219,7 @@ namespace MyNetSensors.WebServer.Controllers
             }
             else if (RouteData.Values.Count <= 2)
             {
-                linksDb.DropAllLinks();
+                linksDb.DropLinks();
 
 
                 string usedId = "";//todo get userid

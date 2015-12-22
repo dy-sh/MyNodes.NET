@@ -36,7 +36,7 @@ namespace MyNetSensors.NodesLinks
         private void OnClearNodesListEvent()
         {
             links.Clear();
-            db.DropAllLinks();
+            db.DropLinks();
         }
 
         private void OnSensorUpdatedEvent(Sensor sensor)

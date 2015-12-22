@@ -247,7 +247,7 @@ namespace MyNetSensors.NodesLinks
 
 
 
-        public void DropAllLinks()
+        public void DropLinks()
         {
             using (var db = new SqlConnection(connectionString))
             {

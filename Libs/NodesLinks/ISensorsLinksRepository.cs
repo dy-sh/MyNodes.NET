@@ -25,6 +25,6 @@ namespace MyNetSensors.NodesLinks
         void DeleteLinksTo(int nodeId, int sensorId);
         void DeleteLinksFrom(int sensorDbId);
         void DeleteLinksTo(int sensorDbId);
-        void DropAllLinks();
+        void DropLinks();
     }
 }

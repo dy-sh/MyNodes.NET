@@ -12,7 +12,7 @@ namespace MyNetSensors.SensorsHistoryRepository
     {
         List<SensorData> GetSensorHistory(int db_Id);
         void DropSensorHistory(int db_Id);
-        void DropAllSensorsHistory();
+        void DropHistory();
 
         void ConnectToGateway(SerialGateway gateway);
         bool IsDbExist();

@@ -30,7 +30,7 @@ namespace MyNetSensors.NodeTasks
         void DeleteTasks(int sensorDbId);
         void DeleteCompleted();
         void DeleteCompleted(int nodeId, int sensorId);
-        void DropAllTasks();
-        void DisableAllTasks();
+        void DropTasks();
+        void DisableTasks();
     }
 }

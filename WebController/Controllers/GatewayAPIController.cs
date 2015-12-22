@@ -22,6 +22,9 @@ namespace MyNetSensors.WebServer.Controllers
 
         public ActionResult IsHardwareConnected()
         {
+            if (gateway == null)
+                return Json(false);
+
             return Json(gateway.IsConnected());
         }
 
@@ -36,9 +39,6 @@ namespace MyNetSensors.WebServer.Controllers
             }
             return Content(text);
         }
-
-
-
 
         public ActionResult ClearMessages()
         {
@@ -66,6 +66,116 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
+
+        public ActionResult UpdateNodeSettings(Node node)
+        {
+            gateway.UpdateNodeSettings(node);
+            return Json(true);
+        }
+
+
+        public ActionResult ClearNodes()
+        {
+            gateway.ClearNodesList();
+            return Json(true);
+        }
+
+
+        public ActionResult UpdateSensorsLinks()
+        {
+            SerialController.sensorsLinksEngine.GetLinksFromRepository();
+            return Json(true);
+        }
+
+        public ActionResult UpdateSensorsTasks()
+        {
+            SerialController.sensorsTasksEngine.GetTasksFromRepository();
+            return Json(true);
+        }
+
+        public ActionResult DeleteNode(int nodeId)
+        {
+            if (gateway.GetNode(nodeId) == null)
+                return Json(false);
+            gateway.DeleteNode(nodeId);
+            return Json(true);
+        }
+
+
+        public async Task<ActionResult> DropNodes()
+        {
+            await DropHistory();
+
+            ClearNodes();
+
+            return Json(true);
+        }
+
+
+
+
+
+
+  
+
+        public async Task<ActionResult> DropHistory()
+        {
+            await StopWritingHistory();
+            //waiting for all history writings finished
+            await Task.Delay(2000);
+
+            SerialController.historyDb.DropHistory();
+
+            return Json(true);
+
+        }
+
+
+        public ActionResult DisableTasks()
+        {
+            SerialController.sensorsTasksDb.DisableTasks();
+            
+            UpdateSensorsTasks();
+
+             return Json(true);
+        }
+
+        public async Task<ActionResult> DropTasks()
+        {
+            DisableTasks();
+            await Task.Delay(1000);
+            SerialController.sensorsTasksDb.DropTasks();
+
+            UpdateSensorsTasks();
+             return Json(true);
+        }
+
+        public ActionResult DropLinks()
+        {
+
+            SerialController.sensorsLinksDb.DropLinks();
+
+            UpdateSensorsLinks();
+             return Json(true);
+        }
+
+        public async Task<ActionResult> StopWritingHistory()
+        {
+            var nodes = gateway.GetNodes();
+            //turn off writing history in nodes settings
+            foreach (var node in nodes)
+            {
+                foreach (var sensor in node.sensors)
+                {
+                    sensor.storeHistoryEnabled = false;
+                }
+
+                UpdateNodeSettings(node);
+
+                await Task.Delay(100);
+            }
+             return Json(true);
+        }
 
     }
 }

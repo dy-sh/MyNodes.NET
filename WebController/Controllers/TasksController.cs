@@ -286,7 +286,7 @@ namespace MyNetSensors.WebServer.Controllers
             }
             else if (RouteData.Values.Count <= 2)
             {
-                tasksDb.DropAllTasks();
+                tasksDb.DropTasks();
                 string usedId = "";//todo get userid
              //   GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
 

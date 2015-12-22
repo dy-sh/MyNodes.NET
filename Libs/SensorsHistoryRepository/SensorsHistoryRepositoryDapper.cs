@@ -140,7 +140,7 @@ namespace MyNetSensors.SensorsHistoryRepository
             }
         }
 
-        public void DropAllSensorsHistory()
+        public void DropHistory()
         {
             using (var db = new SqlConnection(connectionString))
             {

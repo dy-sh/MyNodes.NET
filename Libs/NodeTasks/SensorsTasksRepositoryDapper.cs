@@ -221,7 +221,7 @@ namespace MyNetSensors.NodeTasks
             }
         }
 
-        public void DropAllTasks()
+        public void DropTasks()
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -292,7 +292,7 @@ namespace MyNetSensors.NodeTasks
             }
         }
 
-        public void DisableAllTasks()
+        public void DisableTasks()
         {
             using (var db = new SqlConnection(connectionString))
             {
