@@ -28,7 +28,7 @@ else
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="btn-group pull-right" style="margin-top: -7px">
-            @Html.ActionLink("New task", "New", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+            @Html.ActionLink("New task", "New", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
         </div>
         Tasks
     </div>
@@ -130,8 +130,8 @@ else
                 }
             </ul>
             <div class="btn-group pull-right" style="margin-top: -10px">
-                @Html.ActionLink("Delete completed", "DeleteCompleted", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Delete all", "DeleteAll", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete completed", "DeleteCompleted", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete all", "DeleteAll", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
             </div>
         }
 

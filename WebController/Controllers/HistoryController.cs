@@ -39,9 +39,9 @@ namespace MyNetSensors.WebServer.Controllers
             return View(nodes);
         }
 
-        public ActionResult Log(int id1, int id2)
+        public ActionResult Log(int id, int id2)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id, id2);
 
             if (sensor == null)
                 return new HttpNotFoundResult();
@@ -56,10 +56,10 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
-        public ActionResult Chart(int id1, int id2, string autoscroll, string style, string start, string end)
+        public ActionResult Chart(int id, int id2, string autoscroll, string style, string start, string end)
         {
 
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id, id2);
 
             if (sensor == null)
                 return new HttpNotFoundResult();
@@ -119,19 +119,19 @@ namespace MyNetSensors.WebServer.Controllers
             return result;
         }
 
-        public JsonResult GetSensorDataJson(int id1, int id2)
+        public JsonResult GetSensorDataJson(int id, int id2)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id, id2);
             return GetSensorDataJsonByDbId(sensor.db_Id);
         }
 
 
-        public ActionResult ClearHistory(int id1, int id2)
+        public ActionResult ClearHistory(int id, int id2)
         {
-            Sensor sensor = gatewayDb.GetSensor(id1, id2);
+            Sensor sensor = gatewayDb.GetSensor(id, id2);
             historyDb.DropSensorHistory(sensor.db_Id);
 
-            return RedirectToAction("Chart", new { id1 = id1, id2 = id2 });
+            return RedirectToAction("Chart", new { id = id, id2 = id2 });
         }
 
         public ActionResult ClearHistoryByDbId(int id)
@@ -139,7 +139,7 @@ namespace MyNetSensors.WebServer.Controllers
             Sensor sensor = gatewayDb.GetSensor(id);
             historyDb.DropSensorHistory(id);
 
-            return RedirectToAction("Chart", new { id1 = sensor.nodeId, id2 = sensor.sensorId });
+            return RedirectToAction("Chart", new { id = sensor.nodeId, id2 = sensor.sensorId });
         }
 
 

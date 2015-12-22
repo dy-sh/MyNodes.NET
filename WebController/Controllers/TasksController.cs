@@ -35,11 +35,11 @@ namespace MyNetSensors.WebServer.Controllers
             return RedirectToAction("List");
         }
 
-        public ActionResult List(int? id1 = null, int? id2 = null)
+        public ActionResult List(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
@@ -49,7 +49,7 @@ namespace MyNetSensors.WebServer.Controllers
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
 
-                List<SensorTask> tasks = tasksDb.GetTasks(id1.Value, id2.Value);
+                List<SensorTask> tasks = tasksDb.GetTasks(id.Value, id2.Value);
 
                 return View(tasks);
             }
@@ -80,17 +80,17 @@ namespace MyNetSensors.WebServer.Controllers
             int nodeId = Int32.Parse(args[0]);
             int sensorId = Int32.Parse(args[1]);
 
-            return RedirectToAction("New", new { id1 = nodeId, id2 = sensorId });
+            return RedirectToAction("New", new { id = nodeId, id2 = sensorId });
         }
 
 
 
         [HttpGet]
-        public ActionResult New(int? id1 = null, int? id2 = null)
+        public ActionResult New(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
@@ -100,7 +100,7 @@ namespace MyNetSensors.WebServer.Controllers
 
                 SensorTask task = new SensorTask
                 {
-                    nodeId = id1.Value,
+                    nodeId = id.Value,
                     sensorId = id2.Value,
                     sensorDbId = sensor.db_Id,
                     sensorDescription = $"{node.GetSimpleName1()} {sensor.GetSimpleName1()}",
@@ -163,7 +163,7 @@ namespace MyNetSensors.WebServer.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateSensorsTasks();
 
-            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+            return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
         }
 
 
@@ -199,7 +199,7 @@ namespace MyNetSensors.WebServer.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateSensorsTasks();
 
-            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
+            return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
         }
 
         public ActionResult Delete(int id)
@@ -274,16 +274,16 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
-        public ActionResult DeleteAll(int? id1 = null, int? id2 = null)
+        public ActionResult DeleteAll(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                tasksDb.DeleteTasks(id1.Value, id2.Value);
+                tasksDb.DeleteTasks(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateSensorsTasks();
@@ -307,16 +307,16 @@ namespace MyNetSensors.WebServer.Controllers
             return new HttpNotFoundResult();
         }
 
-        public ActionResult DeleteCompleted(int? id1 = null, int? id2 = null)
+        public ActionResult DeleteCompleted(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                tasksDb.DeleteCompleted(id1.Value, id2.Value);
+                tasksDb.DeleteCompleted(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateSensorsTasks();

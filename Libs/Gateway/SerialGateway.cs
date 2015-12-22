@@ -315,8 +315,10 @@ namespace MyNetSensors.Gateway
             {
                 if (mes.subType < 0 || mes.subType > (int)Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
                 {
+                    DebugGatewayState("Exception occurs when the serial port does not have time to write the data");
+
                     throw new ArgumentOutOfRangeException(
-                        "This exception occurs when the serial port does not have time to write the data");
+                        "Exception occurs when the serial port does not have time to write the data");
                 }
 
                 sensor.SetSensorType((SensorType)mes.subType);

@@ -29,11 +29,11 @@ namespace MyNetSensors.WebServer.Controllers
             return RedirectToAction("List");
         }
 
-        public ActionResult List(int? id1 = null, int? id2 = null)
+        public ActionResult List(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
@@ -43,7 +43,7 @@ namespace MyNetSensors.WebServer.Controllers
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
 
-                List<SensorLink> links = linksDb.GetLinksTo(id1.Value, id2.Value);
+                List<SensorLink> links = linksDb.GetLinksTo(id.Value, id2.Value);
                 return View(links);
 
             }
@@ -58,11 +58,11 @@ namespace MyNetSensors.WebServer.Controllers
 
 
         [HttpGet]
-        public ActionResult New(int? id1 = null, int? id2 = null)
+        public ActionResult New(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
@@ -146,9 +146,11 @@ namespace MyNetSensors.WebServer.Controllers
 
 
             linksDb.AddLink(link);
-            string usedId = "";//todo get userid
-           // GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
-            return RedirectToAction("List", new { id1 = link.toNodeId, id2 = link.toSensorId });
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsLinks();
+
+            return RedirectToAction("List", new { id = link.toNodeId, id2 = link.toSensorId });
         }
 
         private bool CheckLinkPossible(Sensor fromSensor, Sensor toSensor)
@@ -189,8 +191,9 @@ namespace MyNetSensors.WebServer.Controllers
                 return new HttpNotFoundResult();
 
             linksDb.DeleteLink(id);
-            string usedId = "";//todo get userid
-          //  GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsLinks();
 
             if (Request.Headers["Referer"].Count > 0)
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -198,19 +201,19 @@ namespace MyNetSensors.WebServer.Controllers
         }
 
 
-        public ActionResult DeleteAll(int? id1 = null, int? id2 = null)
+        public ActionResult DeleteAll(int? id = null, int? id2 = null)
         {
-            if (id1 != null && id2 != null)
+            if (id != null && id2 != null)
             {
-                Sensor sensor = gatewayDb.GetSensor(id1.Value, id2.Value);
+                Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
 
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                linksDb.DeleteLinksTo(id1.Value, id2.Value);
+                linksDb.DeleteLinksTo(id.Value, id2.Value);
 
-                string usedId = "";//todo get userid
-             //   GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsLinks();
 
                 if (Request.Headers["Referer"].Count > 0)
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -220,9 +223,8 @@ namespace MyNetSensors.WebServer.Controllers
             {
                 linksDb.DropLinks();
 
-
-                string usedId = "";//todo get userid
-             //   GatewayClientStatic.gatewayClient.UpdateSensorsLinks(usedId);
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsLinks();
 
                 if (Request.Headers["Referer"].Count>0)
                     return Redirect(Request.Headers["Referer"].ToString());

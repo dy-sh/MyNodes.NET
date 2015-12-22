@@ -19,7 +19,7 @@
         <div style="padding-left: 20px">
             @foreach (Sensor sensor in node.sensors)
             {
-            @Html.ActionLink(sensor.GetSimpleName1(), "Chart", new { id1 = sensor.nodeId, id2 = sensor.sensorId })
+            @Html.ActionLink(sensor.GetSimpleName1(), "Chart", new { id = sensor.nodeId, id2 = sensor.sensorId })
             <br />
             }
         </div>

@@ -28,7 +28,7 @@ else
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="btn-group pull-right" style="margin-top: -7px">
-            @Html.ActionLink("New link", "New", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+            @Html.ActionLink("New link", "New", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
         </div>
         Links
     </div>
@@ -58,7 +58,7 @@ else
                 }
             </ul>
             <div class="btn-group pull-right" style="margin-top: -10px">
-                @Html.ActionLink("Delete all", "DeleteAll", new { id1 = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete all", "DeleteAll", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
             </div>
         }
 

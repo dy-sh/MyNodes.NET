@@ -7,7 +7,7 @@
 <h2>New Task for @ViewBag.description</h2>
 <div>
     < @Html.ActionLink("Control Nodes", "Control", "Gateway")
-    < @Html.ActionLink("Tasks List", "List", new {id1 = Model.nodeId, id2 = Model.sensorId})
+    < @Html.ActionLink("Tasks List", "List", new {id = Model.nodeId, id2 = Model.sensorId})
 </div>
 <hr />
 <br/>
@@ -101,7 +101,7 @@
             <div class="col-sm-offset-3 col-sm-9">
                 <div class="btn-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
-                    @Html.ActionLink("Cancel", "List", new { id1 = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", "List", new { id = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
                 </div>
             </div>
         </div>

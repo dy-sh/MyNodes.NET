@@ -19,7 +19,7 @@ else
     < @Html.ActionLink("Control Nodes", "Control", "Gateway")
     @if (ViewBag.description != null)
     {
-        @: < @Html.ActionLink("Links", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId })
+        @: < @Html.ActionLink("Links", "List", new { id = Model.toNodeId, id2 = Model.toSensorId })
     }
     else
     {
@@ -111,11 +111,11 @@ else
                     <input type="submit" value="Create" class="btn btn-primary" />
                     @if (Model != null)
                     {
-                        @Html.ActionLink("Cancel", "List", new { id1 = Model.toNodeId, id2 = Model.toSensorId }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Cancel", "List", new { id = Model.toNodeId, id2 = Model.toSensorId }, new { @class = "btn btn-default" })
                     }
                     else
                     {
-                        @Html.ActionLink("Cancel", "List", null, new { @class = "btn btn-default" })
+                        <a asp-action="List" class="btn btn-default">Cancel</a>
                     }
                 </div>
             </div>
@@ -125,20 +125,9 @@ else
 
 
 
-@section styles
-{
-    @Styles.Render("~/Content/select")
-
-
-}
-
 @section scripts
 {
-    @Scripts.Render("~/bundles/select")
-
     <script>
-
         $('.selectpicker').selectpicker();
-
     </script>
 }
