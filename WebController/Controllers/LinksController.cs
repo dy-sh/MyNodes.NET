@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
+using MyNetSensors.SerialControl;
 using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
@@ -19,10 +20,8 @@ namespace MyNetSensors.WebServer.Controllers
 
         public LinksController()
         {
-            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            gatewayDb = new GatewayRepositoryDapper(cs);
-            linksDb = new SensorsLinksRepositoryDapper(cs);
-          //  clientsHub = connectionManager.GetHubContext<ClientsHub>();
+            gatewayDb = SerialController.gatewayDb;
+            linksDb = SerialController.sensorsLinksDb;
         }
 
         public ActionResult Index()

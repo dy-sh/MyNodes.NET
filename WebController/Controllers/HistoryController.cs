@@ -11,6 +11,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.SensorsHistoryRepository;
+using MyNetSensors.SerialControl;
 using MyNetSensors.WebServer.Code;
 
 
@@ -23,9 +24,8 @@ namespace MyNetSensors.WebServer.Controllers
 
         public HistoryController()
         {
-            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            historyDb = new SensorsHistoryRepositoryDapper(cs);
-            gatewayDb = new GatewayRepositoryDapper(cs);
+            gatewayDb = SerialController.gatewayDb;
+            historyDb = SerialController.historyDb;
         }
 
         public ActionResult Index()

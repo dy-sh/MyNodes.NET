@@ -21,7 +21,7 @@
         <div class="form-group">
             <label class="control-label col-sm-3">Select sensor</label>
             <div class="col-sm-7">
-                <select class="selectpicker" name="sensor">
+                <select class="selectpicker form-control" name="sensor">
                     @foreach (Node node in ViewBag.nodes)
                     {
                         <optgroup label="@node.GetSimpleName1()">
@@ -40,7 +40,7 @@
             <div class="col-sm-offset-3 col-sm-7">
                 <div class="btn-group">
                     <input type="submit" value="Select" class="btn btn-primary" />
-                        @Html.ActionLink("Cancel", "List", null, new { @class = "btn btn-default" })
+                    <a asp-action="List" class="btn btn-default">Cancel</a>
                 </div>
             </div>
         </div>
@@ -49,20 +49,9 @@
 
 
 
-@section styles
-{
-    @Styles.Render("~/Content/select")
-
-
-}
-
 @section scripts
 {
-    @Scripts.Render("~/bundles/select")
-
     <script>
-
         $('.selectpicker').selectpicker();
-
     </script>
 }

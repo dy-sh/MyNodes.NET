@@ -13,6 +13,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
+using MyNetSensors.SerialControl;
 using MyNetSensors.WebServer.Code;
 
 namespace MyNetSensors.WebServer.Controllers
@@ -25,10 +26,8 @@ namespace MyNetSensors.WebServer.Controllers
 
         public TasksController()
         {
-            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            gatewayDb = new GatewayRepositoryDapper(cs);
-            tasksDb = new SensorsTasksRepositoryDapper(cs);
-           // clientsHub = connectionManager.GetHubContext<ClientsHub>();
+            gatewayDb = SerialController.gatewayDb;
+            tasksDb = SerialController.sensorsTasksDb;
         }
 
         public ActionResult Index()
@@ -69,9 +68,9 @@ namespace MyNetSensors.WebServer.Controllers
         [HttpGet]
         public ActionResult NewSelect()
         {
-                ViewBag.nodes = gatewayDb.GetNodes();
+            ViewBag.nodes = gatewayDb.GetNodes();
 
-                return View();
+            return View();
         }
 
         [HttpPost]
@@ -81,7 +80,7 @@ namespace MyNetSensors.WebServer.Controllers
             int nodeId = Int32.Parse(args[0]);
             int sensorId = Int32.Parse(args[1]);
 
-            return RedirectToAction("New", new {id1 = nodeId, id2 = sensorId});
+            return RedirectToAction("New", new { id1 = nodeId, id2 = sensorId });
         }
 
 
@@ -160,9 +159,11 @@ namespace MyNetSensors.WebServer.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.AddTask(task);
-            string usedId = "";//todo get userid
-          //  GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
-            return RedirectToAction("List",new {id1= task.nodeId,id2=task.sensorId});
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
+
+            return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
 
@@ -194,8 +195,10 @@ namespace MyNetSensors.WebServer.Controllers
                 task.executionValue = task.repeatingBValue;
 
             tasksDb.UpdateTask(task);
-            string usedId = "";//todo get userid
-         //   GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
+
             return RedirectToAction("List", new { id1 = task.nodeId, id2 = task.sensorId });
         }
 
@@ -207,8 +210,9 @@ namespace MyNetSensors.WebServer.Controllers
                 return new HttpNotFoundResult();
 
             tasksDb.DeleteTask(id);
-            string usedId = "";//todo get userid
-        //    GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -222,10 +226,11 @@ namespace MyNetSensors.WebServer.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.UpdateTaskEnabled(task.db_Id,true);
+            tasksDb.UpdateTaskEnabled(task.db_Id, true);
 
-            string usedId = "";//todo get userid
-          //  GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -241,8 +246,9 @@ namespace MyNetSensors.WebServer.Controllers
 
             tasksDb.UpdateTaskEnabled(task.db_Id, false);
 
-            string usedId = "";//todo get userid
-          //  GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -256,17 +262,18 @@ namespace MyNetSensors.WebServer.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.UpdateTask(task.db_Id,true,false,DateTime.Now,0);
+            tasksDb.UpdateTask(task.db_Id, true, false, DateTime.Now, 0);
 
-            string usedId = "";//todo get userid
-       //     GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("List");
         }
 
-  
+
         public ActionResult DeleteAll(int? id1 = null, int? id2 = null)
         {
             if (id1 != null && id2 != null)
@@ -277,8 +284,9 @@ namespace MyNetSensors.WebServer.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteTasks(id1.Value, id2.Value);
-                string usedId = "";//todo get userid
-           //     GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -287,8 +295,9 @@ namespace MyNetSensors.WebServer.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DropTasks();
-                string usedId = "";//todo get userid
-             //   GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -308,8 +317,9 @@ namespace MyNetSensors.WebServer.Controllers
                     return new HttpNotFoundResult();
 
                 tasksDb.DeleteCompleted(id1.Value, id2.Value);
-                string usedId = "";//todo get userid
-             //   GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -318,15 +328,16 @@ namespace MyNetSensors.WebServer.Controllers
             else if (RouteData.Values.Count <= 2)
             {
                 tasksDb.DeleteCompleted();
-                string usedId = "";//todo get userid
-    //            GatewayClientStatic.gatewayClient.UpdateSensorsTasks(usedId);
+
+                GatewayAPIController gatewayApi = new GatewayAPIController();
+                gatewayApi.UpdateSensorsTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
                 else return RedirectToAction("List");
             }
 
-           return new HttpNotFoundResult();
+            return new HttpNotFoundResult();
         }
 
 

@@ -13,6 +13,7 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
+using MyNetSensors.SerialControl;
 
 
 namespace MyNetSensors.WebServer.Controllers
@@ -27,12 +28,8 @@ namespace MyNetSensors.WebServer.Controllers
 
         public NodeController()
         {
-
-
-            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            historyDb = new SensorsHistoryRepositoryDapper(cs);
-            gatewayDb = new GatewayRepositoryDapper(cs);
-         //   clientsHub = connectionManager.GetHubContext<ClientsHub>();
+            gatewayDb = SerialController.gatewayDb;
+            historyDb = SerialController.historyDb;
         }
 
         public ActionResult Index()
