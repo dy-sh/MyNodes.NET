@@ -6,7 +6,7 @@ Official website with detailed documentation: <a href="http://www.mynetsensors.c
 
 With this program, you can easily create your smart devices, automate them, schedule them, monitor state changes of other devices and respond to them, as well as generate graph charts for visualising activity of various sensors.
 
-<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/WebServer/Screen1.png" >
+<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/WebController/Screen1.png" >
 
 All devices are connected over the wireless network. No wires!
 
