@@ -24,5 +24,13 @@ namespace MyNetSensors.WebController.Controllers
         {
             return View();
         }
+
+
+
+
+
+
+
+
     }
 }

@@ -30,6 +30,7 @@
     <ProjectReference Include="..\MyNetSensors.NodesLinks\MyNetSensors.NodesLinks.csproj" />
     <ProjectReference Include="..\MyNetSensors.NodeTasks\MyNetSensors.NodeTasks.csproj" />
     <ProjectReference Include="..\MyNetSensors.SensorsHistoryRepository\MyNetSensors.SensorsHistoryRepository.csproj" />
+    <ProjectReference Include="..\NodesEditor\NodesEditor.csproj" />
     <ProjectReference Include="..\NodesLinks\NodesLinks.csproj" />
     <ProjectReference Include="..\NodeTasks\NodeTasks.csproj" />
     <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj" />
