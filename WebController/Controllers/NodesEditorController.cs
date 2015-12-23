@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateway;
-using MyNetSensors.NodesEditor;
+using LiteGraph;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.SerialControl;
 using Newtonsoft.Json;
-using Node = MyNetSensors.NodesEditor.Node;
+using Node = MyNetSensors.Gateway.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {
@@ -24,12 +24,12 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult GetNodes()
         {
-            List<Gateway.Node> nodes = SerialController.gateway.GetNodes();
-            List<Node> list = new List<Node>();
+            List<Node> nodes = SerialController.gateway.GetNodes();
+            List<LiteGraph.Node> list = new List<LiteGraph.Node>();
 
             for (int i = 0; i < nodes.Count; i++)
             {
-                Node newNode = new Node
+                LiteGraph.Node newNode = new LiteGraph.Node
                 {
                     title = nodes[i].name,
                     type = "Nodes/SimpleNode",
@@ -88,15 +88,15 @@ namespace MyNetSensors.WebController.Controllers
         {
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
-            //List<Gateway.Node> nodes = SerialController.gateway.GetNodes();
+            //List<Node> nodes = SerialController.gateway.GetNodes();
 
             for (int i = 0; i < graph.links.Count; i++)
             {
                 Link link = graph.links[i];
-                Gateway.Node outNode =  SerialController.gateway.GetNode(link.origin_id);
-                Gateway.Node inNode = SerialController.gateway.GetNode(link.target_id);
-                Gateway.Sensor outSensor = outNode.sensors[link.origin_slot];
-                Gateway.Sensor inSensor = inNode.sensors[link.target_slot];
+                Node outNode =  SerialController.gateway.GetNode(link.origin_id);
+                Node inNode = SerialController.gateway.GetNode(link.target_id);
+                Sensor outSensor = outNode.sensors[link.origin_slot];
+                Sensor inSensor = inNode.sensors[link.target_slot];
 
 
 
@@ -125,12 +125,5 @@ namespace MyNetSensors.WebController.Controllers
 
             return Json(true);
         }
-    }
-
-
-    public class X
-    {
-        public int a;
-        public int b;
     }
 }
