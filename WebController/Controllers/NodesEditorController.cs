@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using MyNetSensors.Gateway;
 using MyNetSensors.NodesEditor;
+using MyNetSensors.NodesLinks;
+using MyNetSensors.SerialControl;
 using Newtonsoft.Json;
+using Node = MyNetSensors.NodesEditor.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class NodesEditorController:Controller
+    public class NodesEditorController : Controller
     {
+        const int slotSize = 15;
+        const int nodeWidth = 150;
+
         public IActionResult Index()
         {
             return View();
@@ -17,24 +24,53 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult GetNodes()
         {
-            List<Node> list = new List<Node>
+            List<Gateway.Node> nodes = SerialController.gateway.GetNodes();
+            List<Node> list = new List<Node>();
+
+            for (int i = 0; i < nodes.Count; i++)
             {
-                new Node
+                Node newNode = new Node
                 {
-                    pos = new []{100,100},
-                    type = "Nodes/SimpleNode"
-                },
-                new Node
-                {
-                    pos = new []{200,200},
-                    type =  "Nodes/SimpleIn"
-                },
-                new Node
-                {
-                    pos = new []{300,300},
-                    type = "Nodes/SimpleOut"
-                },
-            };
+                    title = nodes[i].name,
+                    type = "Nodes/SimpleNode",
+                    pos = new[] { 100, 20 + i * 100 },
+                    id = nodes[i].nodeId
+                };
+
+                newNode.inputs=new List<Input>();
+                newNode.outputs=new List<Output>();
+
+                if (nodes[i].sensors != null)
+                    for (int j = 0; j < nodes[i].sensors.Count; j++)
+                    {
+                        newNode.outputs.Add(new Output
+                        {
+                            name = nodes[i].sensors[j].GetSimpleName1(),
+                            type = "number"
+                        });
+                        newNode.inputs.Add(new Input
+                        {
+                            name = nodes[i].sensors[j].GetSimpleName1(),
+                            type = "number"
+                        });
+                    }
+
+
+                int sizeOutY = 0, sizeInY = 0;
+
+                
+
+                if (newNode.outputs != null)
+                    sizeOutY = slotSize + (slotSize * newNode.outputs.Count);
+                if (newNode.inputs != null)
+                    sizeInY = slotSize + (slotSize * newNode.inputs.Count);
+
+                int sizeY = (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
+                newNode.size = new[] { nodeWidth, sizeY };
+
+                list.Add(newNode);
+            }
+
 
             return Json(list);
         }
@@ -51,7 +87,50 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult PutGraph(string json)
         {
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
-            return null;
+
+            //List<Gateway.Node> nodes = SerialController.gateway.GetNodes();
+
+            for (int i = 0; i < graph.links.Count; i++)
+            {
+                Link link = graph.links[i];
+                Gateway.Node outNode =  SerialController.gateway.GetNode(link.origin_id);
+                Gateway.Node inNode = SerialController.gateway.GetNode(link.target_id);
+                Gateway.Sensor outSensor = outNode.sensors[link.origin_slot];
+                Gateway.Sensor inSensor = inNode.sensors[link.target_slot];
+
+
+
+
+
+                SensorLink sensorLink = new SensorLink()
+                {
+                    fromNodeId = outNode.nodeId,
+                    fromSensorId = outSensor.sensorId,
+                    fromDataType = SensorDataType.V_RGB,
+                    fromSensorDbId = outSensor.db_Id,
+                    fromSensorDescription = $"{outNode.GetSimpleName1()} {outSensor.GetSimpleName1()}",
+                    toNodeId = inNode.nodeId,
+                    toSensorId = inSensor.sensorId,
+                    toDataType = SensorDataType.V_RGB,
+                    toSensorDbId = inSensor.db_Id,
+                    toSensorDescription = $"{inNode.GetSimpleName1()} {inSensor.GetSimpleName1()}"
+                };
+                SerialController.sensorsLinksDb.AddLink(sensorLink);
+            }
+
+            GatewayAPIController gatewayApi = new GatewayAPIController();
+            gatewayApi.UpdateSensorsLinks();
+
+
+
+            return Json(true);
         }
+    }
+
+
+    public class X
+    {
+        public int a;
+        public int b;
     }
 }

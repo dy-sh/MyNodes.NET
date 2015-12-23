@@ -12,7 +12,7 @@ $("#sendButton").click(function () {
         type: 'POST',
         data: { json: gr.toString() }
     }).done(function () {
-        alert('Added');
+
     });
 });
 
@@ -67,6 +67,11 @@ function onReturnNodes(nodes) {
 function createOrUpdateNode(node) {
     var newNode = LiteGraph.createNode(node.type);
     newNode.pos = node.pos;
+    newNode.title = node.title + " [" + node.id+"]";
+    newNode.inputs = node.inputs;
+    newNode.outputs = node.outputs;
+    newNode.size = node.size;
+    newNode.id = node.id;
     graph.add(newNode);
 }
 

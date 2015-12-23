@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../NodesEditor/NodesEditor.csproj",
+      "bin": {
+        "assembly": "../../NodesEditor/obj/{configuration}/NodesEditor.dll",
+        "pdb": "../../NodesEditor/obj/{configuration}/NodesEditor.pdb"
+      }
+    }
+  }
+}
