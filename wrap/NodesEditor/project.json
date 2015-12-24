@@ -2,10 +2,13 @@
   "version": "1.0.0-*",
   "frameworks": {
     "net451": {
-      "wrappedProject": "../../NodesEditor/NodesEditor.csproj",
+      "wrappedProject": "../../Libs/LogicalNodes/LogicalNodes.csproj",
       "bin": {
-        "assembly": "../../NodesEditor/obj/{configuration}/NodesEditor.dll",
-        "pdb": "../../NodesEditor/obj/{configuration}/NodesEditor.pdb"
+        "assembly": "../../Libs/LogicalNodes/obj/{configuration}/NodesEditor.dll",
+        "pdb": "../../Libs/LogicalNodes/obj/{configuration}/NodesEditor.pdb"
+      },
+      "dependencies": {
+        "Gateway": "1.0.0-*"
       }
     }
   }

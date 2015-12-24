@@ -15,7 +15,20 @@ namespace LiteGraph
         //public string[] config { get; set; }
         public List<Node> nodes { get; set; }
 
+    }
 
+
+    public class Node
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public string type { get; set; }
+        public int[] pos { get; set; }
+        public int[] size { get; set; }
+        //        public string flags { get; set; }
+        public List<Input> inputs { get; set; }
+        public List<Output> outputs { get; set; }
+        //  public int[] properties { get; set; }
 
     }
 
@@ -46,17 +59,4 @@ namespace LiteGraph
     }
 
 
-    public class Node
-    {
-        public int id { get; set; }
-        public string title { get; set; }
-        public string type { get; set; }
-        public int[] pos { get; set; }
-        public int[] size { get; set; }
-        //        public string flags { get; set; }
-        public List<Input> inputs { get; set; }
-        public List<Output> outputs { get; set; }
-        //  public int[] properties { get; set; }
-
-    }
 }

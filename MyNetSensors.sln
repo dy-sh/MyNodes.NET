@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Libs\Utils\Utils.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialControl", "Libs\SerialControl\SerialControl.csproj", "{8F9745B8-1141-4342-BC5C-FA6077757E23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodesEditor", "NodesEditor\NodesEditor.csproj", "{D01DC889-34D8-41DB-A0E9-81BFB1FA1E1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicalNodes", "Libs\LogicalNodes\LogicalNodes.csproj", "{D01DC889-34D8-41DB-A0E9-81BFB1FA1E1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

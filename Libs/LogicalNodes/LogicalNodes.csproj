@@ -7,7 +7,7 @@
     <ProjectGuid>{D01DC889-34D8-41DB-A0E9-81BFB1FA1E1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.NodesEditor</RootNamespace>
+    <RootNamespace>MyNetSensors.LogicalNodes</RootNamespace>
     <AssemblyName>NodesEditor</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,8 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILogicalNodesRepository.cs" />
     <Compile Include="LiteGraph.cs" />
+    <Compile Include="LogicalNode.cs" />
+    <Compile Include="NodesEditorEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gateway\Gateway.csproj">
+      <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
+      <Name>Gateway</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
