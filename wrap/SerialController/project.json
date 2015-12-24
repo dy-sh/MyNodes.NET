@@ -14,7 +14,8 @@
         "NodesLinks": "1.0.0-*",
         "NodeTasks": "1.0.0-*",
         "SensorsHistoryRepository": "1.0.0-*",
-        "SoftNodes": "1.0.0-*"
+        "SoftNodes": "1.0.0-*",
+        "LogicalNodes": "1.0.0-*"
       }
     }
   }

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
 using MyNetSensors.GatewayRepository;
+using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
@@ -59,6 +60,9 @@ namespace MyNetSensors.SerialControl
         public static ISoftNodesServer softNodesServer;
         public static SoftNodesController softNodesController;
         public static IGatewayServer gatewayWebServer;
+
+        public static NodesEditorEngine nodesEditorEngine;
+
 
         public static event DebugMessageEventHandler OnDebugTxRxMessage;
         public static event DebugMessageEventHandler OnDebugStateMessage;

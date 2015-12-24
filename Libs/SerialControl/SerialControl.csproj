@@ -64,6 +64,10 @@
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
       <Name>Gateway</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
+      <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
+      <Name>LogicalNodes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NodesLinks\NodesLinks.csproj">
       <Project>{5bfb692c-f96f-4f89-8b4f-c5d97b96ae60}</Project>
       <Name>NodesLinks</Name>
