@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class LogicalNode
+    public abstract class LogicalNode
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -17,16 +22,26 @@ namespace MyNetSensors.LogicalNodes
         public List<Input> Inputs { get; set; }
         public List<Output> Outputs { get; set; }
 
-        public LogicalNode()
+        public LogicalNode(int inputsCount, int outputsCount)
         {
             Position=new Position();
             Size=new Size();
+            
+            Inputs = new List<Input>();
+            for (int i = 0; i < inputsCount; i++)
+            {
+                Inputs.Add(new Input(this,$"In {i}"));
+            }
+
+            Outputs = new List<Output>();
+            for (int i = 0; i < outputsCount; i++)
+            {
+                Outputs.Add(new Output(this, $"Out {i}"));
+            }
         }
 
-        public virtual void Loop()
-        {
-            Console.WriteLine($"{DateTime.Now} {Id}");
-        }
+        public abstract void Loop();
+        public abstract void OnInputChange(Input input);
     }
 
     public class Position
@@ -43,13 +58,64 @@ namespace MyNetSensors.LogicalNodes
 
     public class Input
     {
+        public string Name { get; set; }
 
+        public event OnInputChangeEventArgs OnInputChange;
+
+        private string val;
+        private LogicalNode node;
+
+        public Input(LogicalNode node,string name)
+        {
+            this.node = node;
+            this.Name = name;
+        }
+
+        public string Value
+        {
+            get { return val; }
+            set
+            {
+                val = value;
+                if (OnInputChange != null)
+                    OnInputChange(value);
+                node.OnInputChange(this);
+            }
+        }
+
+        public void SetValue(string value)
+        {
+            Value = value;
+        }
     }
 
     public class Output
     {
+        public string Name { get; set; }
 
+        public event OnOutputChangeEventArgs OnOutputChange;
+
+        private string val;
+        private LogicalNode node;
+
+        public Output(LogicalNode node,string name)
+        {
+            this.node = node;
+            this.Name = name;
+        }
+
+        public string Value
+        {
+            get { return val; }
+            set
+            {
+                val = value;
+                if (OnOutputChange != null)
+                    OnOutputChange(value);
+            }
+        }
     }
 
-
+    public delegate void OnInputChangeEventArgs(string value);
+    public delegate void OnOutputChangeEventArgs(string value);
 }

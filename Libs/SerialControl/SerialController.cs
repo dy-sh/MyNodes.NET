@@ -46,6 +46,7 @@ namespace MyNetSensors.SerialControl
         public static bool softNodesDebugTxRx = true;
         public static bool softNodesDebugState = true;
 
+        public static bool logicalNodesEnabled = true;
 
 
         //VARIABLES
@@ -61,7 +62,8 @@ namespace MyNetSensors.SerialControl
         public static SoftNodesController softNodesController;
         public static IGatewayServer gatewayWebServer;
 
-        public static NodesEditorEngine nodesEditorEngine;
+        public static LogicalNodesEngine logicalNodesEngine;
+        public static ILogicalNodesRepository logicalNodesRepository;
 
 
         public static event DebugMessageEventHandler OnDebugTxRxMessage;
@@ -83,6 +85,7 @@ namespace MyNetSensors.SerialControl
                 ConnectSensorsTasks();
                 ConnectSensorsLinks();
                 ConnectToSoftNodesController();
+                ConnectToLogicalNodesEngine();
 
                 //reconnect if disconnected
                 gateway.OnDisconnectedEvent += ReconnectToSerialPort;
@@ -112,6 +115,7 @@ namespace MyNetSensors.SerialControl
             historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
             sensorsTasksDb = new SensorsTasksRepositoryDapper(dataBaseConnectionString);
             sensorsLinksDb = new SensorsLinksRepositoryDapper(dataBaseConnectionString);
+            //todo logicalNodesRepository = new logicalNodesRepositoryDapper(dataBaseConnectionString);
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
             gatewayDb.ShowDebugInConsole(dataBaseDebugState);
@@ -227,6 +231,34 @@ namespace MyNetSensors.SerialControl
         }
 
 
+        private static void ConnectToLogicalNodesEngine()
+        {
+            //connecting tasks
+            if (!logicalNodesEnabled) return;
 
+            OnDebugStateMessage("LOGICAL NODES ENGINE: Starting... ");
+
+            //todo logicalNodesEngine = new LogicalNodesEngine(gateway, logicalNodesRepository);
+            logicalNodesEngine = new LogicalNodesEngine(gateway);
+
+            LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
+            //nodeMathPlus.Inputs[0].Value = "100";
+            //nodeMathPlus.Inputs[1].Value = "5";
+
+            logicalNodesEngine.AddNode(nodeMathPlus);
+
+
+            LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
+            logicalNodesEngine.AddNode(logicalNodeConsole);
+            logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
+
+            LogicalNodeCounter nodeCounter=new LogicalNodeCounter();
+            //nodeCounter.Inputs[0].Value = "1";
+            logicalNodesEngine.AddNode(nodeCounter);
+            logicalNodesEngine.AddLink(nodeCounter.Outputs[0], nodeMathPlus.Inputs[1]);
+
+
+            OnDebugStateMessage("LOGICAL NODES ENGINE: Started");
+        }
     }
 }

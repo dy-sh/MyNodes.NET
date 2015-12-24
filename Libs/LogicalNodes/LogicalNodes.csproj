@@ -43,7 +43,11 @@
     <Compile Include="ILogicalNodesRepository.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="LogicalNode.cs" />
-    <Compile Include="NodesEditorEngine.cs" />
+    <Compile Include="LogicalNodeConsole.cs" />
+    <Compile Include="LogicalNodeConst.cs" />
+    <Compile Include="LogicalNodeCounter.cs" />
+    <Compile Include="LogicalNodeMathPlus.cs" />
+    <Compile Include="LogicalNodesEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

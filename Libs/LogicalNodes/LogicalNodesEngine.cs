@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +12,11 @@ using MyNetSensors.Gateway;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class NodesEditorEngine
+    public class LogicalNodesEngine
     {
         //If you have tons of logical nodes, and system perfomance decreased, increase this value,
         //and you will get less nodes updating frequency 
-        private int updateNodesInterval = 500;
+        private int updateNodesInterval = 1;
 
         private SerialGateway gateway;
         private ILogicalNodesRepository db;
@@ -21,7 +26,7 @@ namespace MyNetSensors.LogicalNodes
 
         private bool started = false;
 
-        public NodesEditorEngine(SerialGateway gateway, ILogicalNodesRepository db=null)
+        public LogicalNodesEngine(SerialGateway gateway, ILogicalNodesRepository db=null)
         {
             this.db = db;
             this.gateway = gateway;
@@ -41,12 +46,12 @@ namespace MyNetSensors.LogicalNodes
         }
 
 
-        public void Start()
+        private void Start()
         {
             started = true;
             updateNodesTimer.Start();
         }
-        public void Stop()
+        private void Stop()
         {
             started = false;
             updateNodesTimer.Stop();
@@ -129,6 +134,11 @@ namespace MyNetSensors.LogicalNodes
 
             if (db != null)
                 db.UpdateNode(oldNode);
+        }
+
+        public void AddLink(Output output, Input input)
+        {
+            output.OnOutputChange += input.SetValue;
         }
     }
 }
