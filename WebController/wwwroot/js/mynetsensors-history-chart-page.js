@@ -247,20 +247,19 @@ function OnSensorUpdatedEvent(sensor) {
     if (sensor.nodeId != nodeId || sensor.sensorId != sensorId)
         return;
 
-    var sensorData = JSON.parse(sensor.sensorDataJson);
-
-    for (var i = 0; i < sensorData.length; i++) {
-        var state = sensorData[i].state;
-        if (sensorData[i].dataType == 16 && state == 0) //V_TRIPPED
-            state = -0.1;
+    if ((sensor.dataType == 2
+        || sensor.dataType == 15
+        || sensor.dataType == 16
+        || sensor.dataType == 36)
+        && sensor.state == "0") //Binary
+        sensor.state = "-0.1";
         //Add new point to chart
         var now = vis.moment();
         dataset.add({
             x: now,
-            y: state,
+            y: sensor.state,
             group: 0
         });
-    }
 }
 
 
