@@ -222,6 +222,9 @@ namespace MyNetSensors.Gateway
 
         public void RemapSensorData()
         {
+            if (!remapEnabled && !invertData)
+                return;
+
             try
             {
                 if (IsBinary(dataType))

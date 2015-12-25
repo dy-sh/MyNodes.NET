@@ -306,8 +306,7 @@ namespace MyNetSensors.Gateway
             {
                 sensor.dataType= (SensorDataType)mes.subType;
                 sensor.state = mes.payload;
-                if (sensor.remapEnabled)
-                    sensor.RemapSensorData();
+                sensor.RemapSensorData();
             }
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
@@ -390,6 +389,7 @@ namespace MyNetSensors.Gateway
         {
             Sensor sensor = GetNode(nodeId).GetSensor(sensorId);
             sensor.state = state;
+            sensor.UnRemapSensorData();
             SendSensorState(sensor);
         }
 
@@ -403,9 +403,6 @@ namespace MyNetSensors.Gateway
             message.sensorId = sensor.sensorId;
             message.subType = (int)sensor.dataType;
             SendMessage(message);
-
-            if (OnSensorUpdatedEvent != null)
-                OnSensorUpdatedEvent(sensor);
         }
 
         public int GetFreeNodeId()
