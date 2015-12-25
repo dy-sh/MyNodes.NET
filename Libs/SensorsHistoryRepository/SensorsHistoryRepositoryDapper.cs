@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using Dapper;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.SensorsHistoryRepository
 {
@@ -32,7 +32,7 @@ namespace MyNetSensors.SensorsHistoryRepository
 
         private Timer updateDbTimer = new Timer();
 
-        private SerialGateway gateway;
+        private Gateway gateway;
 
         private string connectionString;
 
@@ -49,7 +49,7 @@ namespace MyNetSensors.SensorsHistoryRepository
             return true;
         }
 
-        public void ConnectToGateway(SerialGateway gateway)
+        public void ConnectToGateway(Gateway gateway)
         {
             this.gateway = gateway;
 

@@ -54,9 +54,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gateway\Gateway.csproj">
+    <ProjectReference Include="..\Gateways\Gateways.csproj">
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateway</Name>
+      <Name>Gateways</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

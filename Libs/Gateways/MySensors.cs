@@ -3,7 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-namespace MyNetSensors.Gateway
+namespace MyNetSensors.Gateways
 {
     public enum MessageType
     {

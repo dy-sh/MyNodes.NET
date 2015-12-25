@@ -9,7 +9,7 @@ using System.Linq;
 using MyNetSensors.Utils;
 
 
-namespace MyNetSensors.Gateway
+namespace MyNetSensors.Gateways
 {
     public class Sensor
     {

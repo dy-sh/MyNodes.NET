@@ -3,21 +3,18 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using DebugMessageEventHandler = MyNetSensors.Gateway.DebugMessageEventHandler;
+using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
 
-namespace MyNetSensors.SerialControl
+namespace MyNetSensors.SerialControllers
 {
     static public class SerialController
     {
@@ -51,7 +48,7 @@ namespace MyNetSensors.SerialControl
 
         //VARIABLES
         public static ComPort comPort = new ComPort();
-        public static SerialGateway gateway = new SerialGateway();
+        public static Gateway gateway = new Gateway();
         public static IGatewayRepository gatewayDb;
         public static ISensorsHistoryRepository historyDb;
         public static ISensorsTasksRepository sensorsTasksDb;

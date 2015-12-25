@@ -7,7 +7,7 @@ using System;
 
 
 
-namespace MyNetSensors.Gateway
+namespace MyNetSensors.Gateways
 {
     public class Message:ICloneable
     {

@@ -4,7 +4,7 @@
 */
 
 using System.Collections.Generic;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.SensorsHistoryRepository
 {
@@ -14,7 +14,7 @@ namespace MyNetSensors.SensorsHistoryRepository
         void DropSensorHistory(int db_Id);
         void DropHistory();
 
-        void ConnectToGateway(SerialGateway gateway);
+        void ConnectToGateway(Gateway gateway);
         bool IsDbExist();
         void SetWriteInterval(int ms);
     }

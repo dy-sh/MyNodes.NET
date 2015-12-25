@@ -8,12 +8,12 @@ using System.Configuration;
 using Microsoft.AspNet.Mvc;
 
 
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.SerialControl;
+using MyNetSensors.SerialControllers;
 
 
 namespace MyNetSensors.WebController.Controllers

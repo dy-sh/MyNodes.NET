@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Timers;
 using Dapper;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.NodeTasks
 {

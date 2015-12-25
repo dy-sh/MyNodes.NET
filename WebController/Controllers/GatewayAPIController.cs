@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.Gateway;
-using MyNetSensors.SerialControl;
+using MyNetSensors.Gateways;
+using MyNetSensors.SerialControllers;
 
 namespace MyNetSensors.WebController.Controllers
 {
@@ -17,7 +17,7 @@ namespace MyNetSensors.WebController.Controllers
 
     public class GatewayAPIController : Controller
     {
-        private SerialGateway gateway = SerialController.gateway;
+        private Gateway gateway = SerialController.gateway;
 
 
         public ActionResult GetNodes()

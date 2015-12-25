@@ -4,13 +4,13 @@
 */
 
 using System.Collections.Generic;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.GatewayRepository
 {
     public interface IGatewayRepository
     {
-        void ConnectToGateway(SerialGateway gateway);
+        void ConnectToGateway(Gateway gateway);
 
 
         void AddMessage(Message message);

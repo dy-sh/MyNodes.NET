@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 
 namespace MyNetSensors.NodeTasks

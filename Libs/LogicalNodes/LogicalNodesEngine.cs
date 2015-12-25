@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
@@ -18,7 +18,7 @@ namespace MyNetSensors.LogicalNodes
         //and you will get less nodes updating frequency 
         private int updateNodesInterval = 1;
 
-        private SerialGateway gateway;
+        private Gateway gateway;
         private ILogicalNodesRepository db;
 
         private Timer updateNodesTimer = new Timer();
@@ -27,7 +27,7 @@ namespace MyNetSensors.LogicalNodes
 
         private bool started = false;
 
-        public LogicalNodesEngine(SerialGateway gateway, ILogicalNodesRepository db=null)
+        public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db=null)
         {
             this.db = db;
             this.gateway = gateway;

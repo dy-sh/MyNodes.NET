@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Dapper;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.GatewayRepository
 {
@@ -35,7 +35,7 @@ namespace MyNetSensors.GatewayRepository
         //slows down the performance, can cause to exception of a large flow of messages per second
         public bool storeTxRxMessages = false;
 
-        private SerialGateway gateway;
+        private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
@@ -54,7 +54,7 @@ namespace MyNetSensors.GatewayRepository
         }
 
 
-        public void ConnectToGateway(SerialGateway gateway)
+        public void ConnectToGateway(Gateway gateway)
         {
 
             this.gateway = gateway;

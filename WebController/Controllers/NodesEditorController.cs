@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 using LiteGraph;
 //using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesLinks;
-using MyNetSensors.SerialControl;
+using MyNetSensors.SerialControllers;
 using Newtonsoft.Json;
-using Node = MyNetSensors.Gateway.Node;
+using Node = MyNetSensors.Gateways.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {

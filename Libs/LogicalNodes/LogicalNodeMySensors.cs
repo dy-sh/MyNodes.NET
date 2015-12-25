@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
     public class LogicalNodeMySensors : LogicalNode
     {
         private Node node;
-        private SerialGateway gateway;
+        private Gateway gateway;
 
-        public LogicalNodeMySensors(SerialGateway gateway, Node node) : base(node.sensors.Count, node.sensors.Count)
+        public LogicalNodeMySensors(Gateway gateway, Node node) : base(node.sensors.Count, node.sensors.Count)
         {
             this.node = node;
             this.gateway = gateway;

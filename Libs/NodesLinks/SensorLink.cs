@@ -4,7 +4,7 @@
 */
 
 
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.NodesLinks
 {

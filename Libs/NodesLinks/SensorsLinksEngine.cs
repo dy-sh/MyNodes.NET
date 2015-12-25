@@ -5,18 +5,18 @@
 
 using System;
 using System.Collections.Generic;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.NodesLinks
 {
     public class SensorsLinksEngine
     {
-        private SerialGateway gateway;
+        private Gateway gateway;
         private ISensorsLinksRepository db;
 
         private List<SensorLink> links = new List<SensorLink>();
 
-        public SensorsLinksEngine(SerialGateway gateway, ISensorsLinksRepository db)
+        public SensorsLinksEngine(Gateway gateway, ISensorsLinksRepository db)
         {
             this.db = db;
             this.gateway = gateway;

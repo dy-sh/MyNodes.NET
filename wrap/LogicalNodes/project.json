@@ -8,7 +8,7 @@
         "pdb": "../../Libs/LogicalNodes/obj/{configuration}/LogicalNodes.pdb"
       },
       "dependencies": {
-        "Gateway": "1.0.0-*"
+        "Gateways": "1.0.0-*"
       }
     }
   }

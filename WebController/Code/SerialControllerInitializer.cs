@@ -15,8 +15,8 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MyNetSensors.Gateway;
-using MyNetSensors.SerialControl;
+using MyNetSensors.Gateways;
+using MyNetSensors.SerialControllers;
 
 namespace MyNetSensors.WebController.Code
 {

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.NodeTasks
 {
@@ -23,12 +23,12 @@ namespace MyNetSensors.NodeTasks
 
         private Timer updateTasksTimer = new Timer();
 
-        private SerialGateway gateway;
+        private Gateway gateway;
         private ISensorsTasksRepository db;
 
         private List<SensorTask> tasks = new List<SensorTask>();
 
-        public SensorsTasksEngine(SerialGateway gateway, ISensorsTasksRepository db)
+        public SensorsTasksEngine(Gateway gateway, ISensorsTasksRepository db)
         {
             this.db = db;
             this.gateway = gateway;

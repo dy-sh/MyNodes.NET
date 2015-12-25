@@ -10,10 +10,10 @@ using System.Linq;
 using Microsoft.AspNet.Mvc;
 
 
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodeTasks;
-using MyNetSensors.SerialControl;
+using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers

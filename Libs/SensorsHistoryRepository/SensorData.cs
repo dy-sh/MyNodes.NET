@@ -4,7 +4,7 @@
 */
 
 using System;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.SensorsHistoryRepository
 {

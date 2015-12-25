@@ -10,12 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using MyNetSensors.Gateway;
+using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.SerialControl;
 using MyNetSensors.WebController.Code;
 
 
