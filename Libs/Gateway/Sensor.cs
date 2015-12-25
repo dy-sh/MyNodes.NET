@@ -20,10 +20,11 @@ namespace MyNetSensors.Gateway
 
         public int nodeId { get; set; }
         public int sensorId { get; set; }
-        public SensorType? sensorType { get; set; }
         public string description { get; set; }
+        public SensorType? type { get; set; }
+        public SensorDataType? dataType { get; set; }
+        public string state { get; set; }
 
-        public string sensorDataJson { get; set; }
 
 
         public bool storeHistoryEnabled { get; set; }
@@ -55,178 +56,162 @@ namespace MyNetSensors.Gateway
         {
             string s = $"Sensor ID: {sensorId}\r\n";
 
-            if (sensorType != null)
-                s += $"Type: {sensorType.ToString()}\r\n";
+            if (type != null)
+                s += $"Type: {type.ToString()}\r\n";
             else
                 s += "Type: unknown\r\n";
 
             if (description != null)
                 s += $"Description: {description}\r\n";
 
-            List<SensorData> dataList = GetAllData();
-            if (dataList.Any())
-                foreach (var data in dataList)
-                    s += data.ToString();
+            if (type != null)
+                s += $"Data Type: {dataType.ToString()}\r\n";
+            else
+                s += "Data Type: unknown\r\n";
+
+            if (state != null)
+                s += $"State: {state.ToString()}\r\n";
+            else
+                s += "State: unknown\r\n";
 
             return s;
         }
 
-        public List<SensorData> GetAllData()
-        {
-            if (sensorDataJson == null) return null;
-            List<SensorData> dataList = JsonConvert.DeserializeObject<List<SensorData>>(sensorDataJson);
-            return dataList;
-        }
-
-        public SensorData GetData(SensorDataType dataType)
-        {
-            List<SensorData> dataList = GetAllData();
-            if (dataList == null) return null;
-            SensorData data = dataList.FirstOrDefault(x => x.dataType == dataType);
-            return data;
-        }
-
-        public string GetState(SensorDataType dataType)
-        {
-            SensorData data = GetData(dataType);
-            if (data == null) return null;
-            return data.state;
-        }
 
 
-        public void AddOrUpdateData(SensorDataType dataType, string state)
-        {
-            List<SensorData> dataList = GetAllData();
-            if (dataList == null)
-                dataList = new List<SensorData>();
-
-            SensorData data = dataList.FirstOrDefault(x => x.dataType == dataType);
-
-            if (data == null)
-            {
-                data = new SensorData(nodeId,sensorId,dataType, state);
-                dataList.Add(data);
-            }
-            else data.state = state;
-
-            sensorDataJson = JsonConvert.SerializeObject(dataList);
-        }
-
-
-        public void AddOrUpdateData(SensorData newData)
-        {
-            AddOrUpdateData(newData.dataType.Value, newData.state);
-        }
 
         public void SetSensorType(SensorType? sensorType)
         {
-            if (this.sensorType == sensorType) return;
-            if (sensorType < 0 || sensorType > Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
-            { throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data"); }
+            if (this.type == sensorType) return;
+            if (sensorType < 0 || sensorType > Enum.GetValues(typeof (SensorType)).Cast<SensorType>().Max())
+            {
+                Console.WriteLine("This exception occurs when the serial port does not have time to write the data");
+                throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data");
+            }
 
 
-            this.sensorType = sensorType;
+            this.type = sensorType;
 
             switch (sensorType)
             {
                 case SensorType.S_DOOR:
-                    AddOrUpdateData(SensorDataType.V_TRIPPED, "0");
-                    //AddOrUpdateData(SensorDataType.V_ARMED, "0");
+                    dataType = SensorDataType.V_TRIPPED;
                     break;
                 case SensorType.S_MOTION:
+                    dataType = SensorDataType.V_TRIPPED;
                     break;
                 case SensorType.S_SMOKE:
+                    dataType = SensorDataType.V_TRIPPED;
                     break;
-                case SensorType.S_LIGHT:
-                    AddOrUpdateData(SensorDataType.V_STATUS, "0");
-                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
+                case SensorType.S_BINARY:
+                    dataType = SensorDataType.V_STATUS;
                     break;
                 case SensorType.S_DIMMER:
-                    //AddOrUpdateData(SensorDataType.V_STATUS, "0");
-                    AddOrUpdateData(SensorDataType.V_DIMMER, "0");
-                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    dataType = SensorDataType.V_DIMMER;
                     break;
                 case SensorType.S_COVER:
+                    dataType = SensorDataType.V_PERCENTAGE;
                     break;
                 case SensorType.S_TEMP:
+                    dataType = SensorDataType.V_TEMP;
                     break;
                 case SensorType.S_HUM:
+                    dataType = SensorDataType.V_HUM;
                     break;
                 case SensorType.S_BARO:
+                    dataType = SensorDataType.V_PRESSURE;
                     break;
                 case SensorType.S_WIND:
+                    dataType = SensorDataType.V_WIND;
                     break;
                 case SensorType.S_RAIN:
+                    dataType = SensorDataType.V_RAIN;
                     break;
                 case SensorType.S_UV:
+                    dataType = SensorDataType.V_UV;
                     break;
                 case SensorType.S_WEIGHT:
+                    dataType = SensorDataType.V_WEIGHT;
                     break;
                 case SensorType.S_POWER:
+                    dataType = SensorDataType.V_WATT;
                     break;
                 case SensorType.S_HEATER:
+                    dataType = SensorDataType.V_TEMP;
                     break;
                 case SensorType.S_DISTANCE:
+                    dataType = SensorDataType.V_DISTANCE;
                     break;
                 case SensorType.S_LIGHT_LEVEL:
+                    dataType = SensorDataType.V_LIGHT_LEVEL;
                     break;
                 case SensorType.S_ARDUINO_NODE:
+                    dataType = null;
                     break;
                 case SensorType.S_ARDUINO_REPEATER_NODE:
+                    dataType = null;
                     break;
                 case SensorType.S_LOCK:
+                    dataType = SensorDataType.V_LOCK_STATUS;
                     break;
                 case SensorType.S_IR:
-                    AddOrUpdateData(SensorDataType.V_IR_SEND, "");
+                    dataType = SensorDataType.V_IR_SEND;
                     break;
                 case SensorType.S_WATER:
+                    dataType = SensorDataType.V_VOLUME;
                     break;
                 case SensorType.S_AIR_QUALITY:
+                    dataType = SensorDataType.V_LEVEL;
                     break;
                 case SensorType.S_CUSTOM:
+                    dataType = null;
                     break;
                 case SensorType.S_DUST:
+                    dataType = SensorDataType.V_LEVEL;
                     break;
                 case SensorType.S_SCENE_CONTROLLER:
+                    dataType = SensorDataType.V_SCENE_ON;
                     break;
                 case SensorType.S_RGB_LIGHT:
-                    AddOrUpdateData(SensorDataType.V_RGB, "000000");
-                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    dataType = SensorDataType.V_RGB;
                     break;
                 case SensorType.S_RGBW_LIGHT:
-                    AddOrUpdateData(SensorDataType.V_RGBW, "00000000");
-                    //AddOrUpdateData(SensorDataType.V_WATT, "0");
+                    dataType = SensorDataType.V_RGBW;
                     break;
                 case SensorType.S_COLOR_SENSOR:
+                    dataType = SensorDataType.V_RGB;
                     break;
                 case SensorType.S_HVAC:
+                    dataType = SensorDataType.V_HVAC_SETPOINT_HEAT;
                     break;
                 case SensorType.S_MULTIMETER:
+                    dataType = SensorDataType.V_VOLTAGE;
                     break;
                 case SensorType.S_SPRINKLER:
+                    dataType = SensorDataType.V_STATUS;
                     break;
                 case SensorType.S_WATER_LEAK:
+                    dataType = SensorDataType.V_TRIPPED;
                     break;
                 case SensorType.S_SOUND:
+                    dataType = SensorDataType.V_LEVEL;
                     break;
                 case SensorType.S_VIBRATION:
+                    dataType = SensorDataType.V_LEVEL;
                     break;
                 case SensorType.S_MOISTURE:
+                    dataType = SensorDataType.V_LEVEL;
                     break;
             }
         }
 
-        public SensorType? GetSensorType()
-        {
-            return sensorType;
-        }
-
+      
         public string GetSimpleName1()
         {
             if (description != null)
                 return description;
             else
-                return MySensors.GetSimpleSensorType(sensorType);
+                return MySensors.GetSimpleSensorType(type);
         }
 
         public string GetSimpleName2()
@@ -235,24 +220,23 @@ namespace MyNetSensors.Gateway
         }
 
 
-        public SensorData RemapSensorData(SensorData data)
+        public void RemapSensorData()
         {
-            SensorData newData = (SensorData)data.Clone();
             try
             {
-                if (newData.IsBinary())
+                if (IsBinary(dataType))
                 {
                     if (invertData)
                     {
-                        if (newData.state == "0")
-                            newData.state = "1";
-                        else newData.state = "0";
+                        if (state == "0")
+                            state = "1";
+                        else state = "0";
                     }
                 }
 
-                if (newData.IsPercentage())
+                if (IsPercentage(dataType))
                 {
-                    int val = Int32.Parse(newData.state);
+                    int val = Int32.Parse(state);
 
                     if (remapEnabled)
                     {
@@ -271,12 +255,12 @@ namespace MyNetSensors.Gateway
                         val = 100 - val;
                     }
 
-                    newData.state = val.ToString();
+                    state = val.ToString();
                 }
 
-                if (newData.dataType == SensorDataType.V_RGB)
+                if (dataType == SensorDataType.V_RGB)
                 {
-                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(newData.state);
+                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(state);
 
                     if (remapEnabled)
                     {
@@ -304,14 +288,14 @@ namespace MyNetSensors.Gateway
                         }
                     }
 
-                    newData.state = ColorUtils.ConvertRGBIntArrayToHexString(val);
+                    state = ColorUtils.ConvertRGBIntArrayToHexString(val);
 
                 }
 
 
-                if (newData.dataType == SensorDataType.V_RGBW)
+                if (dataType == SensorDataType.V_RGBW)
                 {
-                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(newData.state);
+                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(state);
 
                     if (remapEnabled)
                     {
@@ -339,35 +323,34 @@ namespace MyNetSensors.Gateway
                         }
                     }
 
-                    newData.state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
+                    state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
 
                 }
             }
             catch
             {
-                return null;
+                Console.WriteLine($"Can't remap data from Node{nodeId} Sensor{sensorId}");
             }
-            return newData;
         }
 
-        public SensorData UnRemapSensorData(SensorData data)
+        public void UnRemapSensorData()
         {
-            SensorData newData = (SensorData)data.Clone();
+
             try
             {
-                if (newData.IsBinary())
+                if (IsBinary(dataType))
                 {
                     if (invertData)
                     {
-                        if (newData.state == "0")
-                            newData.state = "1";
-                        else newData.state = "0";
+                        if (state == "0")
+                            state = "1";
+                        else state = "0";
                     }
                 }
 
-                if (newData.IsPercentage())
+                if (IsPercentage(dataType))
                 {
-                    int val = Int32.Parse(newData.state);
+                    int val = Int32.Parse(state);
 
                     if (remapEnabled)
                     {
@@ -386,12 +369,12 @@ namespace MyNetSensors.Gateway
                         val = 100 - val;
                     }
 
-                    newData.state = val.ToString();
+                    state = val.ToString();
                 }
 
-                if (newData.dataType == SensorDataType.V_RGB)
+                if (dataType == SensorDataType.V_RGB)
                 {
-                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(newData.state);
+                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(state);
 
                     if (remapEnabled)
                     {
@@ -419,14 +402,14 @@ namespace MyNetSensors.Gateway
                         }
                     }
 
-                    newData.state = ColorUtils.ConvertRGBIntArrayToHexString(val);
+                    state = ColorUtils.ConvertRGBIntArrayToHexString(val);
 
                 }
 
 
-                if (newData.dataType == SensorDataType.V_RGBW)
+                if (dataType == SensorDataType.V_RGBW)
                 {
-                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(newData.state);
+                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(state);
 
                     if (remapEnabled)
                     {
@@ -454,15 +437,56 @@ namespace MyNetSensors.Gateway
                         }
                     }
 
-                    newData.state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
+                    state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
 
                 }
             }
             catch
             {
-                return null;
+                Console.WriteLine($"Can't remap data from Node{nodeId} Sensor{sensorId}");
             }
-            return newData;
+        }
+
+        public string ConvertSensorData(SensorDataType? newDataType)
+        {
+
+            //convert binary to percentage 
+            if (IsBinary(this.dataType)
+                && IsPercentage(newDataType))
+            {
+                if (this.state == "0")
+                    return ("0");
+                else
+                    return ("100");
+            }
+
+            //convert  percentage to binary
+            if (IsBinary(newDataType)
+                && IsPercentage(this.dataType))
+            {
+                if (this.state == "0")
+                    return ("0");
+                else
+                    return ("1");
+            }
+
+            return this.state;
+        }
+
+        public bool IsBinary(SensorDataType? dataType)
+        {
+            return (dataType == SensorDataType.V_STATUS ||
+                    dataType == SensorDataType.V_LIGHT ||
+                    dataType == SensorDataType.V_ARMED ||
+                    dataType == SensorDataType.V_TRIPPED ||
+                    dataType == SensorDataType.V_LOCK_STATUS);
+        }
+
+        public bool IsPercentage(SensorDataType? dataType)
+        {
+            return (dataType == SensorDataType.V_PERCENTAGE ||
+                 dataType == SensorDataType.V_DIMMER ||
+                 dataType == SensorDataType.V_LIGHT_LEVEL);
         }
     }
 }

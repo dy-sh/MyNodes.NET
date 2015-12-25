@@ -161,8 +161,8 @@ namespace MyNetSensors.Gateway
                     return "Motion";
                 case SensorType.S_SMOKE:
                     return "Smoke";
-                case SensorType.S_LIGHT:
-                    return "Light";
+                case SensorType.S_BINARY:
+                    return "Binary";
                 case SensorType.S_DIMMER:
                     return "Dimmer";
                 case SensorType.S_COVER:

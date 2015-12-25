@@ -46,15 +46,12 @@
   <ItemGroup>
     <Compile Include="GatewayInfo.cs" />
     <Compile Include="IComPort.cs" />
-    <Compile Include="IGatewayClient.cs" />
-    <Compile Include="IGatewayServer.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessagesLog.cs" />
     <Compile Include="MySensors.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensor.cs" />
-    <Compile Include="SensorData.cs" />
     <Compile Include="SerialGateway.cs" />
   </ItemGroup>
   <ItemGroup>

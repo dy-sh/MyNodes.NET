@@ -51,6 +51,7 @@
     <Compile Include="ISensorsHistoryRepository.cs" />
     <Compile Include="OneToManyDapperMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SensorData.cs" />
     <Compile Include="SensorsHistoryRepositoryDapper.cs" />
   </ItemGroup>
   <ItemGroup>

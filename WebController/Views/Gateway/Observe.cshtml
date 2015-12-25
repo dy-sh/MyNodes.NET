@@ -36,15 +36,12 @@
         Sensor Id: {{sensorId}} <br />        
         Type: <span id="sensorType{{sensor-id this}}"> {{sensor-type this}} </span><br />
         {{#if description}} Description: {{description}} <br />{{/if}}
-        <br />
+        Data Type: <span id="dataType{{sensor-id this}}"> </span><br /> 
+        State: <span id="state{{sensor-id this}}"> </span><br />
     </li>
 </script>
 
-<script id="dataTemplate" type="text/x-handlebars-template">
-    <div id="dataPanel{{sensordata-id this}}">
 
-    </div>
-</script>
 
 @section scripts
 {

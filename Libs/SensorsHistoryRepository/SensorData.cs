@@ -4,8 +4,9 @@
 */
 
 using System;
+using MyNetSensors.Gateway;
 
-namespace MyNetSensors.Gateway
+namespace MyNetSensors.SensorsHistoryRepository
 {
     public class SensorData:ICloneable
     {

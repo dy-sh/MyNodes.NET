@@ -151,8 +151,9 @@ namespace MyNetSensors.GatewayRepository
 	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	                [nodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
-	                [sensorType] [int] NULL,
-	                [sensorDataJson] [nvarchar](max) NULL,
+	                [type] [int] NULL,
+	                [dataType] [int] NULL,
+	                [state] [nvarchar](max) NULL,
 	                [description] [nvarchar](max) NULL,
 	                [storeHistoryEnabled] [bit] NULL,
 	                [storeHistoryEveryChange] [bit] NULL,
@@ -327,16 +328,17 @@ namespace MyNetSensors.GatewayRepository
 
                 if (oldSensor == null)
                 {
-                    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, sensorType, sensorDataJson, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
+                    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
                                    +
-                                   "VALUES(@nodeId, @sensorId, @sensorType, @sensorDataJson, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
+                                   "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int dbId = db.Query<int>(sqlQuery, new
                     {
                         nodeId = sensor.nodeId,
                         sensorId = sensor.sensorId,
-                        sensorType = sensor.sensorType,
-                        sensorDataJson = sensor.sensorDataJson,
+                         type= sensor.type,
+                        dataType= sensor.dataType,
+                        state= sensor.state,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryEveryChange = sensor.storeHistoryEveryChange,
@@ -358,8 +360,9 @@ namespace MyNetSensors.GatewayRepository
                         "UPDATE Sensors SET " +
                         "nodeId = @nodeId, " +
                         "sensorId  = @sensorId, " +
-                        "sensorType = @sensorType, " +
-                        "sensorDataJson = @sensorDataJson, " +
+                        "type = @type, " +
+                        "dataType = @dataType, " +
+                        "state = @state, " +
                         "description = @description, " +
                         "storeHistoryEnabled = @storeHistoryEnabled, " +
                         "storeHistoryWithInterval = @storeHistoryWithInterval, " +
@@ -376,8 +379,9 @@ namespace MyNetSensors.GatewayRepository
                     {
                         nodeId = sensor.nodeId,
                         sensorId = sensor.sensorId,
-                        sensorType = sensor.sensorType,
-                        sensorDataJson = sensor.sensorDataJson,
+                        type = sensor.type,
+                        dataType = sensor.dataType,
+                        state = sensor.state,
                         description = sensor.description,
                         storeHistoryEnabled = sensor.storeHistoryEnabled,
                         storeHistoryWithInterval = sensor.storeHistoryWithInterval,

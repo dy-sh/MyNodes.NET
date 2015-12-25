@@ -15,7 +15,7 @@ using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-using MyNetSensors.SoftNodes;
+//using MyNetSensors.SoftNodes;
 using DebugMessageEventHandler = MyNetSensors.Gateway.DebugMessageEventHandler;
 
 namespace MyNetSensors.SerialControl
@@ -59,9 +59,9 @@ namespace MyNetSensors.SerialControl
         public static SensorsTasksEngine sensorsTasksEngine;
         public static ISensorsLinksRepository sensorsLinksDb;
         public static SensorsLinksEngine sensorsLinksEngine;
-        public static ISoftNodesServer softNodesServer;
-        public static SoftNodesController softNodesController;
-        public static IGatewayServer gatewayWebServer;
+ //       public static ISoftNodesServer softNodesServer;
+//        public static SoftNodesController softNodesController;
+
 
         public static LogicalNodesEngine logicalNodesEngine;
         public static ILogicalNodesRepository logicalNodesRepository;
@@ -85,8 +85,8 @@ namespace MyNetSensors.SerialControl
                 ConnectToSerialPort();
                 ConnectSensorsTasks();
                 ConnectSensorsLinks();
-                ConnectToSoftNodesController();
-                ConnectToLogicalNodesEngine();
+                //ConnectToSoftNodesController();
+                //ConnectToLogicalNodesEngine();
 
                 //reconnect if disconnected
                 gateway.OnDisconnectedEvent += ReconnectToSerialPort;
@@ -213,23 +213,23 @@ namespace MyNetSensors.SerialControl
             }
         }
 
-        private static void ConnectToSoftNodesController()
-        {
-            if (!softNodesEnabled) return;
+        //private static void ConnectToSoftNodesController()
+        //{
+        //    if (!softNodesEnabled) return;
 
-            OnDebugStateMessage("SOFT NODES SERVER: Starting...");
+        //    OnDebugStateMessage("SOFT NODES SERVER: Starting...");
 
-            if (softNodesDebugState)
-                softNodesServer.OnDebugStateMessage += message => OnDebugStateMessage("SOFT NODES SERVER: " + message);
+        //    if (softNodesDebugState)
+        //        softNodesServer.OnDebugStateMessage += message => OnDebugStateMessage("SOFT NODES SERVER: " + message);
 
-            if (softNodesDebugTxRx)
-                softNodesServer.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SOFT NODES SERVER: " + message);
+        //    if (softNodesDebugTxRx)
+        //        softNodesServer.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SOFT NODES SERVER: " + message);
 
-            softNodesController = new SoftNodesController(softNodesServer, gateway);
-            softNodesController.StartServer($"http://*:{softNodesPort}/");
-            OnDebugStateMessage("SOFT NODES SERVER: Started");
+        //    softNodesController = new SoftNodesController(softNodesServer, gateway);
+        //    softNodesController.StartServer($"http://*:{softNodesPort}/");
+        //    OnDebugStateMessage("SOFT NODES SERVER: Started");
 
-        }
+        //}
 
 
         private static void ConnectToLogicalNodesEngine()

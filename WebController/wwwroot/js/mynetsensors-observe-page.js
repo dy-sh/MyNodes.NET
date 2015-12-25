@@ -135,7 +135,6 @@ function onReturnNodes(nodes) {
 
 var nodeTemplate = Handlebars.compile($('#nodeTemplate').html());
 var sensorTemplate = Handlebars.compile($('#sensorTemplate').html());
-var dataTemplate = Handlebars.compile($('#dataTemplate').html());
 
 Handlebars.registerHelper("fullDate", function (datetime) {
     return moment(datetime).format("DD/MM/YYYY HH:mm:ss");
@@ -154,21 +153,25 @@ Handlebars.registerHelper("sensor-id", function (sensor) {
     return sensor.nodeId + "-" + sensor.sensorId;
 });
 
-Handlebars.registerHelper("sensordata-id", function (data) {
-    return data.nodeId + "-" + data.sensorId + "-" + data.dataType;
-});
+
 
 Handlebars.registerHelper("sensor-type", function (sensor) {
     return getSensorType(sensor);
 });
 
 function getSensorType(sensor) {
-    var type = Object.keys(mySensors.sensorType)[sensor.sensorType];
+    var type = Object.keys(mySensors.sensorType)[sensor.type];
     if (type == null)
         type = "Unknown";
     return type;
 }
 
+function getDataType(sensor) {
+    var type = Object.keys(mySensors.sensorDataType)[sensor.dataType];
+    if (type == null)
+        type = "Unknown";
+    return type;
+}
 
 function createOrUpdateNode(node) {
     var nodePanel = $('#nodePanel' + node.nodeId);
@@ -203,46 +206,19 @@ function createOrUpdateSensor(sensor) {
         //create new
         $(sensorTemplate(sensor)).hide().appendTo("#sensorsContainer" + sensor.nodeId).fadeIn(elementsFadeTime);
     }
-    else {
-        //update
-        $('#sensorType' + id).html(getSensorType(sensor));
-    }
 
-    //update body
-    createOrUpdateSensorData(sensor);
+
+    var state = sensor.state;
+    if (state == "" || state == null)
+        state = "null";
+
+    $('#sensorType' + id).html(getSensorType(sensor));
+    $('#dataType' + id).html(getDataType(sensor));
+    $('#state' + id).html(state);
 }
 
 
-function createOrUpdateSensorData(sensor) {
 
-    var sensorData = JSON.parse(sensor.sensorDataJson);
-
-    if (sensorData == null || sensorData.length == 0)
-        return;
-
-    var sensorId = sensor.nodeId + "-" + sensor.sensorId;
-
-    for (var i = 0; i < sensorData.length; i++) {
-        var data = sensorData[i];
-        var id = data.nodeId + "-" + data.sensorId + "-" + data.dataType;
-
-        if ($('#dataPanel' + id).length == 0) {
-            //create new
-            $(dataTemplate(data)).hide().appendTo("#sensorPanel" + sensorId).fadeIn(elementsFadeTime);
-        }
-
-        var dataState = data.state;
-        if (dataState == "" || dataState == null)
-            dataState = "null";
-
-        //update body
-
-        var dataType = Object.keys(mySensors.sensorDataType)[data.dataType];
-
-        $('#dataPanel' + id)
-            .html(dataType + " : " + dataState + "<br/>");
-    }
-}
 
 function updateLastSeen(nodeId, lastSeen) {
 

@@ -32,37 +32,8 @@ namespace MyNetSensors.NodeTasks
         public int repeatingNeededCount { get; set; }
         public int repeatingDoneCount { get; set; }
 
-        public SensorData GetExecutionSensorData()
-        {
-            return new SensorData(nodeId,sensorId,dataType,executionValue);
-        }
 
-        public SensorData GetRepeatingASensorData()
-        {
-            return new SensorData(nodeId, sensorId, dataType, repeatingAValue);
-        }
 
-        public SensorData GetRepeatingBSensorData()
-        {
-            return new SensorData(nodeId, sensorId, dataType, repeatingBValue);
-        }
-
-        public void SetExecutionValue(SensorData data)
-        {
-            executionValue = data.state;
-            dataType = data.dataType;
-        }
-
-        public void SetRepeatingAValue(SensorData data)
-        {
-            repeatingAValue = data.state;
-            dataType = data.dataType;
-        }
-
-        public void SetRepeatingBValue(SensorData data)
-        {
-            repeatingBValue = data.state;
-            dataType = data.dataType;
-        }
+     
     }
 }

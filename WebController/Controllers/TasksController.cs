@@ -109,7 +109,7 @@ namespace MyNetSensors.WebController.Controllers
                     enabled = true
                 };
 
-                SensorDataType? dataType = sensor.GetAllData()[0].dataType;
+                SensorDataType? dataType = sensor.dataType;
                 task.dataType = dataType;
 
                 if (dataType == SensorDataType.V_ARMED ||

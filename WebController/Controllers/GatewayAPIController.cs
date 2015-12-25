@@ -51,13 +51,12 @@ namespace MyNetSensors.WebController.Controllers
             return Json(true);
         }
 
-        public ActionResult SendMessage(string message)
+        public ActionResult SendMessage(int nodeId, int sensorId, string state)
         {
             if (!gateway.IsConnected())
                 return Json(false);
 
-            Message mess = gateway.ParseMessageFromString(message);
-            gateway.SendMessage(mess);
+            gateway.SendSensorState(nodeId, sensorId, state);
             return Json(true);
         }
 

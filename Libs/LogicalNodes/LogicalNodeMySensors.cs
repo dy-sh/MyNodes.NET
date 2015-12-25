@@ -35,7 +35,7 @@ namespace MyNetSensors.LogicalNodes
                 return;
 
             Output output = Outputs.FirstOrDefault(x => x.Id == sensor.sensorId);
-            output.Value = sensor.GetState(SensorDataType.V_STATUS);
+            output.Value = sensor.state;
         }
 
         public override void Loop()
@@ -44,10 +44,7 @@ namespace MyNetSensors.LogicalNodes
 
         public override void OnInputChange(Input input)
         {
-            Sensor sensor = node.GetSensor(input.Id);
-            SensorData sensorData=new SensorData(node.nodeId, input.Id, SensorDataType.V_STATUS, input.Value);
-
-            gateway.SendSensorState(node.nodeId,input.Id, sensorData);
+            gateway.SendSensorState(node.nodeId, input.Id, input.Value);
 
         }
     }

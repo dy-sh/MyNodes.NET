@@ -46,39 +46,12 @@ namespace MyNetSensors.NodesLinks
                 if (link.fromNodeId == sensor.nodeId
                     && link.fromSensorId == sensor.sensorId)
                 {
-                    SensorData oldData = sensor.GetData(link.fromDataType.Value);
-                    SensorData newData = ConvertSensorData(oldData, link.toDataType);
-                    gateway.SendSensorState(link.toNodeId, link.toSensorId, newData);
+                    string state = sensor.ConvertSensorData(link.toDataType);
+                    gateway.SendSensorState(link.toNodeId, link.toSensorId, state);
                 }
             }
         }
 
-        private SensorData ConvertSensorData(SensorData oldData, SensorDataType? newDataType)
-        {
-            SensorData newData = (SensorData)oldData.Clone();
-            newData.dataType = newDataType;
 
-            //convert binary to percentage 
-            if ((oldData.IsBinary())
-                && (newData.IsPercentage()))
-            {
-                if (oldData.state == "0")
-                    newData.state = "0";
-                else
-                    newData.state = "100";
-            }
-
-            //convert  percentage to binary
-            if ((newData.IsBinary())
-                && (oldData.IsPercentage()))
-            {
-                if (oldData.state == "0")
-                    newData.state = "0";
-                else
-                    newData.state = "1";
-            }
-
-            return newData;
-        }
     }
 }

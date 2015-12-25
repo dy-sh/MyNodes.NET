@@ -301,7 +301,7 @@ namespace MyNetSensors.SoftNodes
                 sensorId = sensor.sensorId,
                 messageType = MessageType.C_PRESENTATION,
                 ack = false,
-                subType = (int)sensor.sensorType,
+                subType = (int)sensor.type,
                 payload = sensor.description
             };
 

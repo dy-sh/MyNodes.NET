@@ -114,7 +114,7 @@ namespace MyNetSensors.NodeTasks
                 task.executionValue,
                 task.repeatingDoneCount);
 
-            gateway.SendSensorState(task.nodeId, task.sensorId, task.GetExecutionSensorData());
+            gateway.SendSensorState(task.nodeId, task.sensorId, task.executionValue);
         }
 
         public void SetUpdateInterval(int ms)

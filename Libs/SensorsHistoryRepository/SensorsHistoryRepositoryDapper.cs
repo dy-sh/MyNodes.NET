@@ -167,18 +167,19 @@ namespace MyNetSensors.SensorsHistoryRepository
 
                 CreateTableForSensor(sensor);
 
-                List<SensorData> data = sensor.GetAllData();
-
-                if (data == null)
+                if (sensor.state == null)
                     return;
 
-                foreach (var sensorData in data)
-                    sensorData.dateTime = DateTime.Now;
 
                 var sqlQuery = $"INSERT INTO SensorHistory{sensor.db_Id} (dataType, state, dateTime) "
                     + "VALUES(@dataType,@state, @dateTime); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Execute(sqlQuery, data);
+                db.Execute(sqlQuery,new
+                {
+                    dataType= sensor.dataType,
+                    state = sensor.state,
+                    dateTime =DateTime.Now
+                });
 
             }
         }
