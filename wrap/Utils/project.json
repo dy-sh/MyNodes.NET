@@ -7,9 +7,7 @@
         "assembly": "../../Libs/Utils/obj/{configuration}/Utils.dll",
         "pdb": "../../Libs/Utils/obj/{configuration}/Utils.pdb"
       },
-      "dependencies": {
-        "Newtonsoft.Json": "7.0.1"
-      }
+      "dependencies": {}
     }
   }
 }

@@ -15,7 +15,6 @@ using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
-//using MyNetSensors.SoftNodes;
 using DebugMessageEventHandler = MyNetSensors.Gateway.DebugMessageEventHandler;
 
 namespace MyNetSensors.SerialControl

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyNetSensors.Utils;
-using Newtonsoft.Json;
 
 
 namespace MyNetSensors.Gateway
