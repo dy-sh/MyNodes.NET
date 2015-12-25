@@ -58,6 +58,8 @@ namespace MyNetSensors.LogicalNodes
 
     public class Input
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public event OnInputChangeEventArgs OnInputChange;
@@ -91,6 +93,8 @@ namespace MyNetSensors.LogicalNodes
 
     public class Output
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public event OnOutputChangeEventArgs OnOutputChange;

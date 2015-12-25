@@ -4,8 +4,9 @@
 */
 
 using System;
-
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateway;
@@ -242,20 +243,32 @@ namespace MyNetSensors.SerialControl
             logicalNodesEngine = new LogicalNodesEngine(gateway);
 
             LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
-            //nodeMathPlus.Inputs[0].Value = "100";
-            //nodeMathPlus.Inputs[1].Value = "5";
-
+            nodeMathPlus.Inputs[0].Value = "0";
+            nodeMathPlus.Inputs[1].Value = "0";
             logicalNodesEngine.AddNode(nodeMathPlus);
 
 
             LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
             logicalNodesEngine.AddNode(logicalNodeConsole);
-            logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
+           // logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
 
-            LogicalNodeCounter nodeCounter=new LogicalNodeCounter();
+            List<LogicalNodeMySensors> mySensorsesNodes=new List<LogicalNodeMySensors>();
+            foreach (var node in gateway.GetNodes())
+            {
+                LogicalNodeMySensors newNode = new LogicalNodeMySensors(gateway, node);
+                mySensorsesNodes.Add(newNode);
+                logicalNodesEngine.AddNode(newNode);
+            }
+
+           logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeConsole.Inputs[0]);
+
+           logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], mySensorsesNodes[0].Inputs[0]);
+            nodeMathPlus.Inputs[1].Value = "1";
+
+            // LogicalNodeCounter nodeCounter=new LogicalNodeCounter();
             //nodeCounter.Inputs[0].Value = "1";
-            logicalNodesEngine.AddNode(nodeCounter);
-            logicalNodesEngine.AddLink(nodeCounter.Outputs[0], nodeMathPlus.Inputs[1]);
+            // logicalNodesEngine.AddNode(nodeCounter);
+            //logicalNodesEngine.AddLink(nodeCounter.Outputs[0], nodeMathPlus.Inputs[1]);
 
 
             OnDebugStateMessage("LOGICAL NODES ENGINE: Started");

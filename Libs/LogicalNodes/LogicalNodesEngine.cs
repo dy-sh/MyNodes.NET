@@ -23,6 +23,7 @@ namespace MyNetSensors.LogicalNodes
 
         private Timer updateNodesTimer = new Timer();
         private List<LogicalNode> nodes = new List<LogicalNode>();
+        private List<LogicalNodesLink> links = new List<LogicalNodesLink>();
 
         private bool started = false;
 
@@ -139,6 +140,7 @@ namespace MyNetSensors.LogicalNodes
         public void AddLink(Output output, Input input)
         {
             output.OnOutputChange += input.SetValue;
+            input.Value = output.Value;
         }
     }
 }

@@ -47,7 +47,9 @@
     <Compile Include="LogicalNodeConst.cs" />
     <Compile Include="LogicalNodeCounter.cs" />
     <Compile Include="LogicalNodeMathPlus.cs" />
+    <Compile Include="LogicalNodeMySensors.cs" />
     <Compile Include="LogicalNodesEngine.cs" />
+    <Compile Include="LogicalNodesLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
