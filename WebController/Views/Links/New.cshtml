@@ -49,22 +49,7 @@ else
                         <optgroup label="@node.GetSimpleName1()">
                             @foreach (Sensor sensor in node.sensors)
                             {
-                                List<SensorData> datas = sensor.GetAllData();
-
-                                if (datas != null)
-                                {
-                                    if (datas.Count == 1)
-                                    {
-                                        <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
-                                    }
-                                    else
-                                    {
-                                        foreach (SensorData data in datas)
-                                        {
-                                            <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
-                                        }
-                                    }
-                                }
+                                <option value="@node.nodeId-@sensor.sensorId-@((int) sensor.dataType)">@sensor.GetSimpleName1()</option>
                             }
                         </optgroup>
                     }
@@ -81,22 +66,7 @@ else
                         <optgroup label="@node.GetSimpleName1()">
                             @foreach (Sensor sensor in node.sensors)
                             {
-                                List<SensorData> datas = sensor.GetAllData();
-
-                                if (datas != null)
-                                {
-                                    if (datas.Count == 1)
-                                    {
-                                        <option value="@node.nodeId-@sensor.sensorId-@((int) datas[0].dataType)">@sensor.GetSimpleName1()</option>
-                                    }
-                                    else
-                                    {
-                                        foreach (SensorData data in datas)
-                                        {
-                                            <option value="@node.nodeId-@sensor.sensorId-@((int) data.dataType)">@sensor.GetSimpleName1() [@data.dataType]</option>
-                                        }
-                                    }
-                                }
+                                <option value="@node.nodeId-@sensor.sensorId-@((int) sensor.dataType)">@sensor.GetSimpleName1()</option>
                             }
                         </optgroup>
                     }
