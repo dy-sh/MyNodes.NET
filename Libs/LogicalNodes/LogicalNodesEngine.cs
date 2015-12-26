@@ -53,6 +53,8 @@ namespace MyNetSensors.LogicalNodes
             }
 
             Start();
+
+
         }
 
         private void OnMySensorsNodeUpdated(Sensor sensor)

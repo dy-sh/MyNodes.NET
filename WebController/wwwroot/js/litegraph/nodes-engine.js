@@ -72,6 +72,7 @@ function createOrUpdateNode(node) {
     newNode.outputs = node.outputs;
     newNode.size = node.size;
     newNode.id = node.id;
+    newNode.properties = node.properties;
     graph.add(newNode);
 }
 

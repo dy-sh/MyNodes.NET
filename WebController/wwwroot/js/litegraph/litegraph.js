@@ -10,6 +10,22 @@
 * @constructor
 */
 
+
+
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+}
+
+
+
+
 var LiteGraph = {
 
 	NODE_TITLE_HEIGHT: 16,
@@ -105,6 +121,8 @@ var LiteGraph = {
 			for(var i in options)
 				node[i] = options[i];								
 		}
+
+		node.id = guid();
 
 		return node;
 	},

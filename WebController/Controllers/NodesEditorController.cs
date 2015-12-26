@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
@@ -36,7 +37,7 @@ namespace MyNetSensors.WebController.Controllers
 
             for (int i = 0; i < nodes.Count; i++)
             {
-                LiteGraph.Node newNode = new LiteGraph.Node
+                LiteGraph.Node node = new LiteGraph.Node
                 {
                     title = nodes[i].Title,
                     type = nodes[i].Type,
@@ -44,16 +45,19 @@ namespace MyNetSensors.WebController.Controllers
                     id = nodes[i].Id
                 };
 
-                if (nodes[i].Position != null)
-                    newNode.pos = new[] { nodes[i].Position.X, nodes[i].Position.Y };
 
-                newNode.inputs = new List<Input>();
-                newNode.outputs = new List<Output>();
+                node.properties["objectType"] = nodes[i].GetType().ToString();
+
+                if (nodes[i].Position != null)
+                    node.pos = new[] { nodes[i].Position.X, nodes[i].Position.Y };
+
+                node.inputs = new List<Input>();
+                node.outputs = new List<Output>();
 
                 if (nodes[i].Inputs != null)
                     for (int j = 0; j < nodes[i].Inputs.Count; j++)
                     {
-                        newNode.inputs.Add(new Input
+                        node.inputs.Add(new Input
                         {
                             name = nodes[i].Inputs[j].Name,
                             type = "string"
@@ -63,7 +67,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (nodes[i].Outputs != null)
                     for (int j = 0; j < nodes[i].Outputs.Count; j++)
                     {
-                        newNode.outputs.Add(new Output
+                        node.outputs.Add(new Output
                         {
                             name = nodes[i].Outputs[j].Name,
                             type = "string"
@@ -71,9 +75,9 @@ namespace MyNetSensors.WebController.Controllers
                     }
 
 
-                newNode.size = new[] { NODE_WIDTH, CalculateSizeY(newNode) };
+                node.size = new[] { NODE_WIDTH, CalculateSizeY(node) };
 
-                list.Add(newNode);
+                list.Add(node);
             }
 
             MooveNewNodesToFreeSpace(list);
@@ -106,15 +110,15 @@ namespace MyNetSensors.WebController.Controllers
                 if (nodes[k].pos != null)
                     continue;
 
-                nodes[k].pos = new int[2];
+                nodes[k].pos = new float[2];
 
-                int result = START_POS;
+                float result = START_POS;
 
 
                 for (int i = 0; i < nodes.Count; i++)
                 {
-                    int needFromY = result;
-                    int needToY = result + nodes[k].size[1];
+                    float needFromY = result;
+                    float needToY = result + nodes[k].size[1];
 
                     if (i == k)
                         continue;
@@ -125,8 +129,8 @@ namespace MyNetSensors.WebController.Controllers
                     if (nodes[i].pos[0] > NODE_WIDTH + 20 + START_POS)
                         continue;
 
-                    int occupyFromY = nodes[i].pos[1]- FREE_SPACE_UNDER;
-                    int occupyToY = nodes[i].pos[1] + nodes[i].size[1];
+                    float occupyFromY = nodes[i].pos[1]- FREE_SPACE_UNDER;
+                    float occupyToY = nodes[i].pos[1] + nodes[i].size[1];
 
                     if (occupyFromY <= needToY && occupyToY >= needFromY)
                     {
@@ -153,7 +157,26 @@ namespace MyNetSensors.WebController.Controllers
         {
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
+            engine.RemoveAllLinks();
+            engine.RemoveAllNonHardwareNodes();
 
+            foreach (var node in graph.nodes)
+            {
+                string type = node.properties["objectType"];
+                
+                if (type == "MyNetSensors.LogicalNodes.LogicalNodeMySensors")
+                    continue;
+
+                var newObject = Activator.CreateInstance("LogicalNodes", type);
+                LogicalNode newNode = (LogicalNode)newObject.Unwrap();
+
+                //LogicalNode newNode = newObject as LogicalNode;
+                newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+                newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+                newNode.Id = node.id;
+
+                engine.AddNode(newNode);
+            }
 
             for (int i = 0; i < graph.links.Count; i++)
             {

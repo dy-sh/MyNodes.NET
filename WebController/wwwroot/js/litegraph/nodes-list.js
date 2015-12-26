@@ -5,7 +5,7 @@
     //HardwareNode
     function HardwareNode() {
         this.size = [150, 20];
-        this.properties = { min: 0, max: 1 };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMySensors" };
     }
 
     LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);
@@ -15,7 +15,7 @@
     function SystemConsole() {
         this.addInput("in", "string");
         this.size = [150, 30];
-        this.properties = { min: 0, max: 1 };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
     }
     SystemConsole.title = "System Console";
 
@@ -27,7 +27,8 @@
         this.addInput("freq", "string");
         this.addOutput("out", "string");
         this.size = [150, 30];
-        this.properties = { min: 0, max: 1 };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
+
     }
     LogicCounter.title = "Logic Counter";
 
@@ -39,7 +40,8 @@
         this.addInput("in", "string");
         this.addOutput("out", "string");
         this.size = [150, 30];
-        this.properties = { min: 0, max: 1 };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
+
     }
     LogicInvert.title = "Logic Invert";
 
@@ -52,7 +54,8 @@
         this.addInput("in2", "string");
         this.addOutput("out", "string");
         this.size = [150, 45];
-        this.properties = { min: 0, max: 1 };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
+
     }
     MathPlus.title = "MathPlus";
 
