@@ -5,10 +5,10 @@ window.addEventListener("resize", function () { editor.graphcanvas.resize(); });
 getNodes();
 
 $("#sendButton").click(function () {
-    console.log(graph);
+    //console.log(graph);
     var gr = JSON.stringify(graph.serialize());
     $.ajax({
-        url: '/NodesEditor/PutGraph',
+        url: '/NodesEditorAPI/PutGraph',
         type: 'POST',
         data: { json: gr.toString() }
     }).done(function () {
@@ -35,7 +35,7 @@ function test()
 function getGraph() {
 
     $.ajax({
-        url: "/NodesEditor/GetGraph",
+        url: "/NodesEditorAPI/GetGraph",
         type: "POST",
         success: function (loadedGraph) {
             graph.configure(loadedGraph);
@@ -46,7 +46,7 @@ function getGraph() {
 function getNodes() {
 
     $.ajax({
-        url: "/NodesEditor/GetNodes",
+        url: "/NodesEditorAPI/GetNodes",
         type: "POST",
         success: function (nodes) {
             onReturnNodes(nodes);
@@ -57,7 +57,7 @@ function getNodes() {
 
 
 function onReturnNodes(nodes) {
-    console.log(nodes);
+    //console.log(nodes);
     for (var i = 0; i < nodes.length; i++) {
         createOrUpdateNode(nodes[i]);
     }
