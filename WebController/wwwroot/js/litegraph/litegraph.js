@@ -2186,7 +2186,7 @@ function LGraphCanvas( canvas, graph, skip_render )
 		this.startRendering();
 }
 
-LGraphCanvas.link_type_colors = {'number':"#AAC",'node':"#DCA"};
+LGraphCanvas.link_type_colors = {'number':"#ACC",'string':"#AAC",'node':"#DCA"};
 
 
 /**

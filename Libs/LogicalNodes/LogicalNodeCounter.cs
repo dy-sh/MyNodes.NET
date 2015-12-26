@@ -24,6 +24,9 @@ namespace MyNetSensors.LogicalNodes
         /// </summary>
         public LogicalNodeCounter() : base(1, 2)
         {
+            this.Title = "Logic Counter";
+            this.Type = "Logic/Counter";
+
             Inputs[0].Name = "Frequency";
             lastTime = DateTime.Now;
         }

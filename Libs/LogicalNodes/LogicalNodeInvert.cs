@@ -13,10 +13,14 @@ namespace MyNetSensors.LogicalNodes
 {
   public class LogicalNodeInvert : LogicalNode
     {
-        /// <summary>
-        /// Invert (1 input, 1 output).
-        /// </summary>
-        public LogicalNodeInvert() : base(1, 1){}
+      /// <summary>
+      /// Invert (1 input, 1 output).
+      /// </summary>
+      public LogicalNodeInvert() : base(1, 1)
+      {
+            this.Title = "Logic Invert";
+            this.Type = "Logic/Invert";
+        }
 
         public override void Loop()
         {

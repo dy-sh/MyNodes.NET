@@ -12,10 +12,12 @@ namespace MyNetSensors.LogicalNodes
         public int nodeId;
         private Gateway gateway;
 
-        public LogicalNodeMySensors(int nodeId) : base(0, 0)
+        public LogicalNodeMySensors(Node node) : base(0, 0)
         {
-            this.nodeId = nodeId;
+            this.nodeId = node.nodeId;
+            this.Title = node.GetSimpleName1();
             this.gateway = LogicalNodesEngine.gateway;
+            this.Type = "Nodes/HardwareNode";
             CreateInputsOutputs();
         }
 

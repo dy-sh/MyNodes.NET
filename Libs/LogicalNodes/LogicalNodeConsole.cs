@@ -18,6 +18,8 @@ namespace MyNetSensors.LogicalNodes
         /// </summary>
         public LogicalNodeConsole() : base(1, 0)
         {
+            this.Title = "System Console";
+            this.Type = "System/Console";
         }
 
         public override void Loop()

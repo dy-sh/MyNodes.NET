@@ -27,9 +27,6 @@ namespace MyNetSensors.LogicalNodes
         {
             Id = Guid.NewGuid().ToString();
 
-            Position = new Position();
-            Size = new Size();
-
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
             {
@@ -46,8 +43,6 @@ namespace MyNetSensors.LogicalNodes
 
         public LogicalNode()
         {
-            Position = new Position();
-            Size = new Size();
             Inputs = new List<Input>();
             Outputs = new List<Output>();
         }

@@ -16,7 +16,11 @@ namespace MyNetSensors.LogicalNodes
         /// <summary>
         /// Math Plus (2 inputs, 1 output).
         /// </summary>
-        public LogicalNodeMathPlus() : base(2, 1) { }
+        public LogicalNodeMathPlus() : base(2, 1)
+        {
+            this.Title = "Math Plus";
+            this.Type = "Math/Plus";
+        }
 
         public override void Loop()
         {

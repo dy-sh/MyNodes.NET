@@ -247,16 +247,20 @@ namespace MyNetSensors.SerialControllers
             if (logicalNodesDebugNodes)
                 logicalNodesEngine.OnDebugNodeMessage += message => OnDebugTxRxMessage("LOGICAL NODES ENGINE: " + message);
 
-            //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
+            logicalNodesEngine.CreateAndAddMySensorsNodes();
+
+            LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
+            nodeMathPlus.Position=new Position {X=100,Y=331};
             //nodeMathPlus.Inputs[0].Value = "1";
             //nodeMathPlus.Inputs[1].Value = "0";
-            //logicalNodesEngine.AddNode(nodeMathPlus);
+            logicalNodesEngine.AddNode(nodeMathPlus);
 
-            //LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
-            //logicalNodesEngine.AddNode(logicalNodeInvert);
+            LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
+            logicalNodeInvert.Position=new Position {X=100,Y=251};
+            logicalNodesEngine.AddNode(logicalNodeInvert);
 
-            //LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
-            //logicalNodesEngine.AddNode(logicalNodeConsole);
+            LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
+            logicalNodesEngine.AddNode(logicalNodeConsole);
 
             //List<LogicalNodeMySensors> mySensorsesNodes
             //    = logicalNodesEngine.CreateAndAddMySensorsNodes();

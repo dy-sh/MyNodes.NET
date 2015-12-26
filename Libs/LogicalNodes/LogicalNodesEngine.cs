@@ -250,7 +250,7 @@ namespace MyNetSensors.LogicalNodes
 
             foreach (var node in gateway.GetNodes())
             {
-                LogicalNodeMySensors newNode = new LogicalNodeMySensors(node.nodeId);
+                LogicalNodeMySensors newNode = new LogicalNodeMySensors(node);
                 list.Add(newNode);
                 AddNode(newNode);
             }

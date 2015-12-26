@@ -25,7 +25,7 @@ namespace LiteGraph
 
     public class Node
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string title { get; set; }
         public string type { get; set; }
         public int[] pos { get; set; }

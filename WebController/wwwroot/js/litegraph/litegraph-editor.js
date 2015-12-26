@@ -17,18 +17,18 @@ function Editor(container_id, options)
 	//create graph
 	var graph = this.graph = new LGraph();
 	var graphcanvas = this.graphcanvas = new LGraphCanvas(canvas,graph);
-	graphcanvas.background_image = "imgs/grid.png";
+	graphcanvas.background_image = "images/litegraph/grid.png";
 	graph.onAfterExecute = function() { graphcanvas.draw(true) };
 
 	//add stuff
-	//this.addToolsButton("loadsession_button","Load","imgs/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
-	//this.addToolsButton("savesession_button","Save","imgs/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
+    //this.addToolsButton("loadsession_button","Load","images/litegraph/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
+    //this.addToolsButton("savesession_button","Save","images/litegraph/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
 	//this.addLoadCounter();
-	//this.addToolsButton("playnode_button","Play","imgs/icon-play.png", this.onPlayButton.bind(this), ".tools-right" );
-	//this.addToolsButton("playstepnode_button","Step","imgs/icon-playstep.png", this.onPlayStepButton.bind(this), ".tools-right" );
+    //this.addToolsButton("playnode_button","Play","images/litegraph/icon-play.png", this.onPlayButton.bind(this), ".tools-right" );
+    //this.addToolsButton("playstepnode_button","Step","images/litegraph/icon-playstep.png", this.onPlayStepButton.bind(this), ".tools-right" );
 	
-	//this.addToolsButton("livemode_button","Live","imgs/icon-record.png", this.onLiveButton.bind(this), ".tools-right" );
-	this.addToolsButton("maximize_button","","imgs/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right" );
+    //this.addToolsButton("livemode_button","Live","images/litegraph/icon-record.png", this.onLiveButton.bind(this), ".tools-right" );
+	this.addToolsButton("maximize_button", "", "images/litegraph/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right");
 
 	//this.addMiniWindow(300,200);
 
@@ -120,12 +120,12 @@ Editor.prototype.onPlayButton = function()
 
 	if(graph.status == LGraph.STATUS_STOPPED)
 	{
-		button.innerHTML = "<img src='imgs/icon-stop.png'/> Stop";
+	    button.innerHTML = "<img src='images/litegraph/icon-stop.png'/> Stop";
 		graph.start(1); 
 	}
 	else
 	{
-		button.innerHTML = "<img src='imgs/icon-play.png'/> Play";
+	    button.innerHTML = "<img src='images/litegraph/icon-play.png'/> Play";
 		graph.stop(); 
 	}
 }
@@ -142,9 +142,9 @@ Editor.prototype.onLiveButton = function()
 	var is_live_mode = !this.graphcanvas.live_mode;
 	this.graphcanvas.switchLiveMode(true);
 	this.graphcanvas.draw();
-	var url = this.graphcanvas.live_mode ? "imgs/gauss_bg_medium.jpg" : "imgs/gauss_bg.jpg";
+	var url = this.graphcanvas.live_mode ? "images/litegraph/gauss_bg_medium.jpg" : "images/litegraph/gauss_bg.jpg";
 	var button = this.root.querySelector("#livemode_button");
-	button.innerHTML = !is_live_mode ? "<img src='imgs/icon-record.png'/> Live" : "<img src='imgs/icon-gear.png'/> Edit" ;
+	button.innerHTML = !is_live_mode ? "<img src='images/litegraph/icon-record.png'/> Live" : "<img src='images/litegraph/icon-gear.png'/> Edit";
 }
 
 Editor.prototype.goFullscreen = function()
@@ -182,7 +182,7 @@ Editor.prototype.addMiniWindow = function(w,h)
 	var canvas = miniwindow.querySelector("canvas");
 
 	var graphcanvas = new LGraphCanvas(canvas, this.graph);
-	graphcanvas.background_image = "imgs/grid.png";
+	graphcanvas.background_image = "images/litegraph/grid.png";
 	graphcanvas.scale = 0.5;
 
 	miniwindow.style.position = "absolute";
