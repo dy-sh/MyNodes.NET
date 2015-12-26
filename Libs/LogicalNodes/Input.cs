@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public delegate void OnInputChangeEventArgs(Input input);
-
-
-
     public class Input
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
-        public event OnInputChangeEventArgs OnInputChange;
 
         private string val;
 
@@ -24,15 +19,13 @@ namespace MyNetSensors.LogicalNodes
             set
             {
                 val = value;
-                if (OnInputChange != null)
-                    OnInputChange(this);
+                LogicalNodesEngine.logicalNodesEngine.OnInputChange(this);
             }
         }
 
-        public void Subscribe(OnInputChangeEventArgs subscriber)
+        public Input()
         {
-            if (OnInputChange != subscriber)
-                OnInputChange += subscriber;
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

@@ -26,6 +26,8 @@ namespace MyNetSensors.LogicalNodes
 
         public override void OnInputChange(Input input)
         {
+            //Debug($"Console: {input.Value}");
+
             Console.WriteLine($"LOGICAL NODE CONSOLE: {input.Value}");
         }
     }

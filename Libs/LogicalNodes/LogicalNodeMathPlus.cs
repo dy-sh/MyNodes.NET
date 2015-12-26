@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-  public class LogicalNodeMathPlus : LogicalNode
+    public class LogicalNodeMathPlus : LogicalNode
     {
         /// <summary>
         /// Math Plus (2 inputs, 1 output).
         /// </summary>
-        public LogicalNodeMathPlus() : base(2, 1){}
+        public LogicalNodeMathPlus() : base(2, 1) { }
 
         public override void Loop()
         {
-          //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
+            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
@@ -33,9 +33,10 @@ namespace MyNetSensors.LogicalNodes
             if (Inputs[1].Value != null)
                 b = Int32.Parse(Inputs[1].Value);
 
+            Debug($"MathPlus: {Inputs[0].Value} + {Inputs[1].Value}  = {Outputs[0].Value}");
+
             Outputs[0].Value = (a + b).ToString();
 
-          //  Console.WriteLine($"MATH OUT {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
 

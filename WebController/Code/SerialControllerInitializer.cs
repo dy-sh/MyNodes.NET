@@ -56,6 +56,11 @@ namespace MyNetSensors.WebController.Code
                 SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
                 SerialController.softNodesDebugTxRx = Boolean.Parse(Configuration["SoftNodes:DebugTxRx"]);
                 SerialController.softNodesDebugState = Boolean.Parse(Configuration["SoftNodes:DebugState"]);
+                SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
+                SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
+                SerialController.logicalNodesDebugEngine = Boolean.Parse(Configuration["LogicalNodes:DebugEngine"]);
+                SerialController.logicalNodesDebugNodes = Boolean.Parse(Configuration["LogicalNodes:DebugNodes"]);
+
 
                 portName = Configuration["SerialPort:Name"];
             }
@@ -94,7 +99,7 @@ namespace MyNetSensors.WebController.Code
         public static void Log(string message)
         {
             Console.WriteLine(message);
-           // logger.LogInformation(message);
+            // logger.LogInformation(message);
         }
 
         private static void OnNewSensorEvent(Sensor sensor)

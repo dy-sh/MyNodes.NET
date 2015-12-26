@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public delegate void OnOutputChangeEventArgs(Output output);
-
-
-
     public class Output
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
-        public event OnOutputChangeEventArgs OnOutputChange;
 
         private string val;
 
@@ -24,9 +19,13 @@ namespace MyNetSensors.LogicalNodes
             set
             {
                 val = value;
-                if (OnOutputChange != null)
-                    OnOutputChange(this);
+                LogicalNodesEngine.logicalNodesEngine.OnOutputChange(this);
             }
+        }
+
+        public Output()
+        {
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

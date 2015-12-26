@@ -14,24 +14,27 @@ namespace MyNetSensors.LogicalNodes
   public class LogicalNodeInvert : LogicalNode
     {
         /// <summary>
-        /// Math Plus (2 inputs, 1 output).
+        /// Invert (1 input, 1 output).
         /// </summary>
         public LogicalNodeInvert() : base(1, 1){}
 
         public override void Loop()
         {
-          //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
+
+            string result;
+
             if (Inputs[0].Value == "0")
-                Outputs[0].Value = "1";
+                result = "1";
             else
-                Outputs[0].Value = "0";
+                result = "0";
 
+            Debug($"Invert: from {Inputs[0].Value} to {result}");
 
-          //  Console.WriteLine($"MATH OUT {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
+            Outputs[0].Value = result;
         }
 
 

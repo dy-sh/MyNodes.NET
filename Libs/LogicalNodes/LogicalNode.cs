@@ -14,7 +14,7 @@ namespace MyNetSensors.LogicalNodes
 {
     public abstract class LogicalNode
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public Position Position { get; set; }
@@ -25,13 +25,15 @@ namespace MyNetSensors.LogicalNodes
 
         public LogicalNode(int inputsCount, int outputsCount)
         {
-            Position=new Position();
-            Size=new Size();
+            Id = Guid.NewGuid().ToString();
+
+            Position = new Position();
+            Size = new Size();
 
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
             {
-                Outputs.Add(new Output { Name = $"Out {i}"});
+                Outputs.Add(new Output { Name = $"Out {i}" });
             }
 
             Inputs = new List<Input>();
@@ -40,7 +42,6 @@ namespace MyNetSensors.LogicalNodes
                 Input input = new Input { Name = $"In {i}" };
                 Inputs.Add(input);
             }
-            ConnectInputs();
         }
 
         public LogicalNode()
@@ -51,21 +52,18 @@ namespace MyNetSensors.LogicalNodes
             Outputs = new List<Output>();
         }
 
-        public void ConnectInputs()
+
+
+        internal void Debug(string message)
         {
-            foreach (var input in Inputs)
-                input.Subscribe(OnInputChange);
+            LogicalNodesEngine.logicalNodesEngine.DebugNodes(message);
         }
-
-
 
         public abstract void Loop();
         public abstract void OnInputChange(Input input);
+        public virtual void OnOutputChange(Output output) { }
 
-        public virtual void OnDeserialize()
-        {
-            ConnectInputs();
-        }
+        public virtual void OnDeserialize() { }
     }
 
 

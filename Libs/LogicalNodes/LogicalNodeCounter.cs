@@ -36,15 +36,20 @@ namespace MyNetSensors.LogicalNodes
             if (elapsed.TotalMilliseconds >= freq)
             {
                 count++;
+
+                Debug($"Counter: {count}");
+
                 Outputs[0].Value = count.ToString();
                 lastTime = DateTime.Now;
-                //Console.WriteLine($"COUNTER OUT {DateTime.Now} {Inputs[0].Value} {Outputs[0].Value}");
+
             }
         }
 
         public override void OnInputChange(Input input)
         {
-            freq=Int32.Parse(input.Value);
+            freq = Int32.Parse(input.Value);
+
+            Debug($"Counter: frequency changed to {freq}");
         }
 
 

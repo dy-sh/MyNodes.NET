@@ -9,15 +9,20 @@ namespace MyNetSensors.LogicalNodes
 {
     public class LogicalLink
     {
-        public int Id { get; set; }
-        public Input Input { get; set; }
-        public Output Output { get; set; }
+        public string InputId { get; set; }
+        public string OutputId { get; set; }
 
         
-        public LogicalLink( Output output, Input input)
+        //public LogicalLink( Output output, Input input)
+        //{
+        //    InputId = input.Id;
+        //    OutputId = output.Id;
+        //}
+
+        public LogicalLink(string outputId, string inputId)
         {
-            this.Input = input;
-            this.Output = output;
+            InputId = inputId;
+            OutputId = outputId;
         }
 
         public LogicalLink(){}

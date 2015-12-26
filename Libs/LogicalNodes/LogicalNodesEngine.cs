@@ -28,10 +28,18 @@ namespace MyNetSensors.LogicalNodes
 
         private bool started = false;
 
-        public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db=null)
+        public static LogicalNodesEngine logicalNodesEngine;
+
+        public event DebugMessageEventHandler OnDebugNodeMessage;
+        public event DebugMessageEventHandler OnDebugEngineMessage;
+
+        public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db = null)
         {
             this.db = db;
             LogicalNodesEngine.gateway = gateway;
+            LogicalNodesEngine.logicalNodesEngine = this;
+            gateway.OnSensorUpdatedEvent += OnMySensorsNodeUpdated;
+
 
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
 
@@ -47,16 +55,43 @@ namespace MyNetSensors.LogicalNodes
             Start();
         }
 
+        private void OnMySensorsNodeUpdated(Sensor sensor)
+        {
+            foreach (var node in nodes)
+            {
+                if (node is LogicalNodeMySensors)
+                {
+                    if (((LogicalNodeMySensors)node).nodeId != sensor.nodeId)
+                        continue;
+
+                    foreach (var output in node.Outputs)
+                    {
+                        if (((OutputMySensors)output).sensorId != sensor.nodeId)
+                            continue;
+
+                        output.Value = sensor.state;
+                    }
+                }
+            }
+        }
+
 
         private void Start()
         {
             started = true;
             updateNodesTimer.Start();
+
+            UpdateStatesFromLinks();
+
+            DebugEngine("Started");
         }
+
+
         private void Stop()
         {
             started = false;
             updateNodesTimer.Stop();
+            DebugEngine("Stopped");
         }
 
         public bool IsStarted()
@@ -66,13 +101,13 @@ namespace MyNetSensors.LogicalNodes
 
         public void GetNodesFromRepository()
         {
-            if (db!=null)
-            nodes = db.GetAllNodes();
+            if (db != null)
+                nodes = db.GetAllNodes();
         }
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
         {
-            if(nodes==null)
+            if (nodes == null)
                 return;
 
             updateNodesTimer.Stop();
@@ -116,10 +151,14 @@ namespace MyNetSensors.LogicalNodes
 
             if (db != null)
                 db.AddNode(node);
+
+            DebugEngine($"New node {node.GetType().Name}");
         }
 
         public void RemoveNode(LogicalNode node)
         {
+            DebugEngine($"Remove node {node.GetType().Name}");
+
             nodes.Remove(node);
 
             if (db != null)
@@ -128,7 +167,9 @@ namespace MyNetSensors.LogicalNodes
 
         public void UpdateNode(LogicalNode node)
         {
-            LogicalNode oldNode = nodes.FirstOrDefault(x=>x.Id==node.Id);
+            DebugEngine($"Update node {node.GetType().Name}");
+
+            LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
 
             oldNode.Inputs = node.Inputs;
             oldNode.Outputs = node.Outputs;
@@ -141,25 +182,66 @@ namespace MyNetSensors.LogicalNodes
                 db.UpdateNode(oldNode);
         }
 
+        public void AddLink(string outputId, string inputId)
+        {
+            Input input = GetInput(inputId);
+            Output output = GetOutput(outputId);
+            AddLink(output, input);
+        }
+
         public void AddLink(Output output, Input input)
         {
-            links.Add(new LogicalLink(output,input));
-            output.OnOutputChange += OnOutputChange;
+            LogicalNode inputNode = GetInputOwner(input);
+            LogicalNode outputNode = GetOutputOwner(output);
+            DebugEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+
+            links.Add(new LogicalLink(output.Id, input.Id));
+
+            if (!started)
+                return;
+
             input.Value = output.Value;
         }
 
-        private void OnOutputChange(Output output)
+        private void UpdateStatesFromLinks()
         {
-            List<LogicalLink> list = links.Where(x => x.Output == output).ToList();
-
-            foreach (var link in list)
+            foreach (var link in links)
             {
-                link.Input.Value = output.Value;
+                Input input = GetInput(link.InputId);
+                Output output = GetOutput(link.OutputId);
+                input.Value = output.Value;
             }
         }
 
 
-        public List<LogicalNodeMySensors> CreateEndAddMySensorsNodes()
+        public Input GetInput(string id)
+        {
+            foreach (var node in nodes)
+            {
+                foreach (var input in node.Inputs)
+                {
+                    if (input.Id == id)
+                        return input;
+                }
+            }
+            return null;
+        }
+
+        public Output GetOutput(string id)
+        {
+            foreach (var node in nodes)
+            {
+                foreach (var output in node.Outputs)
+                {
+                    if (output.Id == id)
+                        return output;
+                }
+            }
+            return null;
+        }
+
+
+        public List<LogicalNodeMySensors> CreateAndAddMySensorsNodes()
         {
             var list = new List<LogicalNodeMySensors>();
 
@@ -193,39 +275,100 @@ namespace MyNetSensors.LogicalNodes
 
             foreach (var link in newLinks)
             {
-                AddLink(link.Output, link.Input);
+                AddLink(link.OutputId, link.InputId);
             }
         }
 
 
         public string SerializeNodes()
         {
-            JsonSerializerSettings settings=new JsonSerializerSettings();
-            settings.TypeNameHandling=TypeNameHandling.All;
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
             return JsonConvert.SerializeObject(nodes, settings);
         }
 
         public void DeserializeNodes(string json)
         {
             nodes.Clear();
-            
-            JsonSerializerSettings settings=new JsonSerializerSettings();
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
-            
+            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+
             nodes = JsonConvert.DeserializeObject<List<LogicalNode>>(json, settings);
 
             foreach (var node in nodes)
             {
-               node.OnDeserialize();
+                node.OnDeserialize();
+                DebugEngine($"New node {node.GetType().Name}");
             }
+        }
 
-            //for (int i = 0; i < nodes.Count; i++)
-            //{
-            //    if (nodes[i] is LogicalNodeMySensors)
-            //    {
-            //        nodes[i] = new LogicalNodeMySensors(gateway, ((LogicalNodeMySensors)nodes[i]).nodeId);
-            //    }
-            //}
+        public void OnOutputChange(Output output)
+        {
+            if (!started)
+                return;
+
+            GetOutputOwner(output)
+                .OnOutputChange(output);
+
+            List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
+
+            foreach (var link in list)
+            {
+                Input input = GetInput(link.InputId);
+                if (input != null)
+                    input.Value = output.Value;
+            }
+        }
+
+        public LogicalNode GetInputOwner(Input input)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.Inputs.Contains(input))
+                    return node;
+            }
+            return null;
+        }
+
+        public LogicalNode GetOutputOwner(Output output)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.Outputs.Contains(output))
+                    return node;
+            }
+            return null;
+        }
+
+        public void OnInputChange(Input input)
+        {
+
+            //DebugNodes($"Input changed: {input.Name}");
+
+            if (!started)
+                return;
+
+            foreach (var node in nodes)
+            {
+                if (node.Inputs.Contains(input))
+                    node.OnInputChange(input);
+            }
+        }
+
+
+
+        public void DebugNodes(string message)
+        {
+            if (OnDebugNodeMessage != null)
+                OnDebugNodeMessage(message);
+        }
+
+        public void DebugEngine(string message)
+        {
+            if (OnDebugEngineMessage != null)
+                OnDebugEngineMessage(message);
         }
     }
 }
