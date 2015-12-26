@@ -24,10 +24,13 @@ namespace MyNetSensors.WebController.Controllers
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
-        public IActionResult GetNodes()
+        public List<LiteGraph.Node> GetNodes()
         {
 
             List<LogicalNode> nodes = engine.nodes;
+            if (!nodes.Any())
+                return null;
+
             List<LiteGraph.Node> list = new List<LiteGraph.Node>();
 
             for (int i = 0; i < nodes.Count; i++)
@@ -77,9 +80,63 @@ namespace MyNetSensors.WebController.Controllers
 
             MooveNewNodesToFreeSpace(list);
 
-            return Json(list);
+            return list;
         }
 
+
+
+
+        public List<LiteGraph.Link> GetLinks()
+        {
+
+            List<LogicalLink> links = engine.links;
+            if (!links.Any())
+                return null;
+
+            List< LiteGraph.Link > list=new List<Link>();
+
+            for (int i = 0; i < links.Count; i++)
+            {
+                LiteGraph.Link link = new LiteGraph.Link
+                {
+                    origin_id = engine.GetOutputOwner(links[i].OutputId).Id,
+                    target_id = engine.GetInputOwner(links[i].InputId).Id,
+                    origin_slot = GetOutputSlot(links[i].OutputId),
+                    target_slot = GetInputSlot(links[i].InputId),
+                };
+                
+                list.Add(link);
+            }
+
+            return list;
+        }
+
+
+        private int GetInputSlot(string inputId)
+        {
+            for (int i = 0; i < engine.nodes.Count; i++)
+            {
+                for (int j = 0; j < engine.nodes[i].Inputs.Count; j++)
+                {
+                    if (engine.nodes[i].Inputs[j].Id == inputId)
+                        return j;
+                }
+            }
+            return -1;
+        }
+
+        private int GetOutputSlot(string outputId)
+        {
+            for (int i = 0; i < engine.nodes.Count; i++)
+            {
+                for (int j = 0; j < engine.nodes[i].Outputs.Count; j++)
+                {
+                    if (engine.nodes[i].Outputs[j].Id == outputId)
+                        return j;
+                }
+            }
+            return -1;
+        }
 
         private int CalculateSizeY(LiteGraph.Node node)
         {

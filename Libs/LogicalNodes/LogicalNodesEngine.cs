@@ -354,6 +354,32 @@ namespace MyNetSensors.LogicalNodes
             return null;
         }
 
+        public LogicalNode GetInputOwner(string inputId)
+        {
+            foreach (var node in nodes)
+            {
+                foreach (var input in node.Inputs)
+                {
+                    if (input.Id == inputId)
+                        return node;
+                }
+            }
+            return null;
+        }
+
+        public LogicalNode GetOutputOwner(string outputId)
+        {
+            foreach (var node in nodes)
+            {
+                foreach (var output in node.Outputs)
+                {
+                    if (output.Id == outputId)
+                        return node;
+                }
+            }
+            return null;
+        }
+
         public void OnInputChange(Input input)
         {
 

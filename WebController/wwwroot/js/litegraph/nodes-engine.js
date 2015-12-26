@@ -61,6 +61,8 @@ function onReturnNodes(nodes) {
     for (var i = 0; i < nodes.length; i++) {
         createOrUpdateNode(nodes[i]);
     }
+
+    getLinks();
 }
 
 
@@ -76,14 +78,32 @@ function createOrUpdateNode(node) {
     graph.add(newNode);
 }
 
-//function onRetunrLinks(links) {
-
-//}
 
 
-//function createOrUpdateLinks(link) {
-//    var newLink = LiteGraph.createNode(link.type);
-//    newLink.pos = link.pos;
-//    graph.add(newLink);
-//}
+function getLinks() {
+
+    $.ajax({
+        url: "/NodesEditorAPI/GetLinks",
+        type: "POST",
+        success: function (links) {
+            onRetunrLinks(links);
+        }
+    });
+}
+
+
+
+function onRetunrLinks(links) {
+    //console.log(nodes);
+    for (var i = 0; i < links.length; i++) {
+        createOrUpdateLink(links[i]);
+    }
+}
+
+
+function createOrUpdateLink(link) {
+    var target = graph.getNodeById(link.target_id);
+    graph.getNodeById(link.origin_id)
+        .connect(link.origin_slot, target, link.target_slot);
+}
 
