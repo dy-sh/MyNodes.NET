@@ -13,9 +13,6 @@ namespace LiteGraph
 {
     public class Graph
     {
-        public int iteration { get; set; }
-        public int last_node_id { get; set; }
-        public int last_link_id { get; set; }
         public IDictionary<int, Link> links { get; set; }
         //public string[] config { get; set; }
         public List<Node> nodes { get; set; }
@@ -41,23 +38,23 @@ namespace LiteGraph
     {
         public string name { get; set; }
         public string type { get; set; }
-        public int? link { get; set; }
+        public string link { get; set; }
     }
 
     public class Output
     {
         public string name { get; set; }
         public string type { get; set; }
-        public int[] links { get; set; }
+        public string[] links { get; set; }
 
     }
 
     public class Link
     {
-        public int id { get; set; }
-        public int origin_id { get; set; }
+        public string id { get; set; }
+        public string origin_id { get; set; }
         public int origin_slot { get; set; }
-        public int target_id { get; set; }
+        public string target_id { get; set; }
         public int target_slot { get; set; }
         //public string data { get; set; }
 

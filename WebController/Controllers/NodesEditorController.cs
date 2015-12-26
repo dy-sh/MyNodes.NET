@@ -149,46 +149,23 @@ namespace MyNetSensors.WebController.Controllers
         //    return Json(graph);
         //}
 
-        public IActionResult PutGraph(string json)
+        public bool PutGraph(string json)
         {
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
-            //List<Node> nodes = SerialController.gateway.GetNodes();
+
 
             for (int i = 0; i < graph.links.Count; i++)
             {
                 Link link = graph.links[i];
-                Node outNode = SerialController.gateway.GetNode(link.origin_id);
-                Node inNode = SerialController.gateway.GetNode(link.target_id);
-                Sensor outSensor = outNode.sensors[link.origin_slot];
-                Sensor inSensor = inNode.sensors[link.target_slot];
-
-
-
-
-
-                SensorLink sensorLink = new SensorLink()
-                {
-                    fromNodeId = outNode.nodeId,
-                    fromSensorId = outSensor.sensorId,
-                    fromDataType = SensorDataType.V_RGB,
-                    fromSensorDbId = outSensor.db_Id,
-                    fromSensorDescription = $"{outNode.GetSimpleName1()} {outSensor.GetSimpleName1()}",
-                    toNodeId = inNode.nodeId,
-                    toSensorId = inSensor.sensorId,
-                    toDataType = SensorDataType.V_RGB,
-                    toSensorDbId = inSensor.db_Id,
-                    toSensorDescription = $"{inNode.GetSimpleName1()} {inSensor.GetSimpleName1()}"
-                };
-                SerialController.sensorsLinksDb.AddLink(sensorLink);
+                
+                LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
+                LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+                engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             }
 
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsLinks();
 
-
-
-            return Json(true);
+            return true;
         }
     }
 }

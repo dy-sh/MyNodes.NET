@@ -376,6 +376,25 @@ namespace MyNetSensors.LogicalNodes
             nodes=new List<LogicalNode>();
         }
 
+        public void RemoveAllNonHardwareNodes()
+        {
+            DebugEngine("Remove all non-hardware nodes");
+            List<LogicalNode> list=new List<LogicalNode>();
+            foreach (var node in nodes)
+            {
+                if (node is LogicalNodeMySensors)
+                    list.Add(node);
+            }
+            nodes = list;
+        }
+
+        public void RemoveAllLinks()
+        {
+            DebugEngine("Remove all links");
+
+            links = new List<LogicalLink>();
+        }
+
         public void DebugNodes(string message)
         {
             if (OnDebugNodeMessage != null)
@@ -386,6 +405,11 @@ namespace MyNetSensors.LogicalNodes
         {
             if (OnDebugEngineMessage != null)
                 OnDebugEngineMessage(message);
+        }
+
+        public LogicalNode GetNode(string id)
+        {
+            return nodes.FirstOrDefault(x => x.Id == id);
         }
     }
 }
