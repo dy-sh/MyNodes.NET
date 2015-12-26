@@ -15,8 +15,10 @@ namespace MyNetSensors.LogicalNodes
 
     public class LogicalNodeCounter : LogicalNode
     {
-        private int count = 0;
-        private int freq = 1000;
+        private int DEFAULT_VALUE = 1000;
+
+        public int count = 0;
+        private int? freqInput;
         private DateTime lastTime;
 
         /// <summary>
@@ -33,6 +35,10 @@ namespace MyNetSensors.LogicalNodes
 
         public override void Loop()
         {
+            int freq = DEFAULT_VALUE;
+            if (freqInput.HasValue)
+                freq = freqInput.Value;
+
             if (freq <= 0) return;
 
             TimeSpan elapsed = DateTime.Now - lastTime;
@@ -50,9 +56,17 @@ namespace MyNetSensors.LogicalNodes
 
         public override void OnInputChange(Input input)
         {
-            freq = Int32.Parse(input.Value);
+            try
+            {
+                freqInput = Int32.Parse(input.Value);
+                Debug($"Counter: frequency changed to {freqInput.Value} ms");
+            }
+            catch
+            {
+                freqInput = null;
+                Debug($"Counter: frequency changed to default value: {DEFAULT_VALUE} ms");
+            }
 
-            Debug($"Counter: frequency changed to {freq}");
         }
 
 
