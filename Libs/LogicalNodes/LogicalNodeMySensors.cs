@@ -9,29 +9,38 @@ namespace MyNetSensors.LogicalNodes
 {
     public class LogicalNodeMySensors : LogicalNode
     {
-        private Node node;
+        public int nodeId;
         private Gateway gateway;
 
-        public LogicalNodeMySensors(Gateway gateway, Node node) : base(node.sensors.Count, node.sensors.Count)
+        public LogicalNodeMySensors(Gateway gateway, int nodeId) : base(0, 0)
         {
-            this.node = node;
+            this.nodeId = nodeId;
             this.gateway = gateway;
+
+            Node node = gateway.GetNode(nodeId);
+
             for (int i = 0; i < node.sensors.Count; i++)
             {
-                Inputs[i].Name = node.sensors[i].GetSimpleName1();
-                Outputs[i].Name = node.sensors[i].GetSimpleName1();
+                Input input=new Input(this, node.sensors[i].GetSimpleName1());
+                input.Id = node.sensors[i].sensorId;
+                Inputs.Add(input);
 
-                Inputs[i].Id = node.sensors[i].sensorId;
-                Outputs[i].Id = node.sensors[i].sensorId;
+                Output output = new Output(this, node.sensors[i].GetSimpleName1());
+                output.Id = node.sensors[i].sensorId;
+                Outputs.Add(output);
             }
 
 
             gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
         }
 
+        public LogicalNodeMySensors() : base()
+        {
+        }
+
         private void OnSensorUpdatedEvent(Sensor sensor)
         {
-            if (!node.sensors.Contains(sensor))
+            if (sensor.nodeId!=nodeId)
                 return;
 
             Output output = Outputs.FirstOrDefault(x => x.Id == sensor.sensorId);
@@ -44,7 +53,7 @@ namespace MyNetSensors.LogicalNodes
 
         public override void OnInputChange(Input input)
         {
-            gateway.SendSensorState(node.nodeId, input.Id, input.Value);
+            gateway.SendSensorState(nodeId, input.Id, input.Value);
 
         }
     }

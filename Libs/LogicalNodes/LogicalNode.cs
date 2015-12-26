@@ -40,6 +40,14 @@ namespace MyNetSensors.LogicalNodes
             }
         }
 
+        public LogicalNode()
+        {
+            Position = new Position();
+            Size = new Size();
+            Inputs = new List<Input>();
+            Outputs = new List<Output>();
+        }
+
         public abstract void Loop();
         public abstract void OnInputChange(Input input);
     }
@@ -73,6 +81,10 @@ namespace MyNetSensors.LogicalNodes
             this.Name = name;
         }
 
+        public Input()
+        {
+        }
+
         public string Value
         {
             get { return val; }
@@ -81,6 +93,7 @@ namespace MyNetSensors.LogicalNodes
                 val = value;
                 if (OnInputChange != null)
                     OnInputChange(value);
+                if(node!=null)
                 node.OnInputChange(this);
             }
         }
@@ -106,6 +119,10 @@ namespace MyNetSensors.LogicalNodes
         {
             this.node = node;
             this.Name = name;
+        }
+
+        public Output()
+        {
         }
 
         public string Value

@@ -82,7 +82,7 @@ namespace MyNetSensors.SerialControllers
                 ConnectSensorsTasks();
                 ConnectSensorsLinks();
                 //ConnectToSoftNodesController();
-                //ConnectToLogicalNodesEngine();
+                ConnectToLogicalNodesEngine();
 
                 //reconnect if disconnected
                 gateway.OnDisconnectedEvent += ReconnectToSerialPort;
@@ -238,28 +238,34 @@ namespace MyNetSensors.SerialControllers
             //todo logicalNodesEngine = new LogicalNodesEngine(gateway, logicalNodesRepository);
             logicalNodesEngine = new LogicalNodesEngine(gateway);
 
-            LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
-            nodeMathPlus.Inputs[0].Value = "0";
-            nodeMathPlus.Inputs[1].Value = "0";
-            logicalNodesEngine.AddNode(nodeMathPlus);
+            //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
+            //nodeMathPlus.Inputs[0].Value = "1";
+            //nodeMathPlus.Inputs[1].Value = "0";
+            //logicalNodesEngine.AddNode(nodeMathPlus);
 
 
-            LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
-            logicalNodesEngine.AddNode(logicalNodeConsole);
-           // logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
+            //LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
+            //logicalNodesEngine.AddNode(logicalNodeConsole);
+            //// logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
 
-            List<LogicalNodeMySensors> mySensorsesNodes=new List<LogicalNodeMySensors>();
+            List<LogicalNodeMySensors> mySensorsesNodes = new List<LogicalNodeMySensors>();
             foreach (var node in gateway.GetNodes())
             {
-                LogicalNodeMySensors newNode = new LogicalNodeMySensors(gateway, node);
+                LogicalNodeMySensors newNode = new LogicalNodeMySensors(gateway, node.nodeId);
                 mySensorsesNodes.Add(newNode);
                 logicalNodesEngine.AddNode(newNode);
             }
 
-           logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeConsole.Inputs[0]);
+            string json = logicalNodesEngine.GetJsonFromNodes();
+            logicalNodesEngine.nodes = null;
+            logicalNodesEngine.SetNodesFromJson(json);
 
-           logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], mySensorsesNodes[0].Inputs[0]);
-            nodeMathPlus.Inputs[1].Value = "1";
+
+            //logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], mySensorsesNodes[1].Inputs[0]);
+            //logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
+
+            // logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], mySensorsesNodes[0].Inputs[0]);
+            // nodeMathPlus.Inputs[0].Value = "1";
 
             // LogicalNodeCounter nodeCounter=new LogicalNodeCounter();
             //nodeCounter.Inputs[0].Value = "1";

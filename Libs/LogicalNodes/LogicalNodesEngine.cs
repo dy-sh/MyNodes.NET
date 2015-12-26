@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 using MyNetSensors.Gateways;
+using Newtonsoft.Json;
 
 namespace MyNetSensors.LogicalNodes
 {
@@ -22,7 +23,7 @@ namespace MyNetSensors.LogicalNodes
         private ILogicalNodesRepository db;
 
         private Timer updateNodesTimer = new Timer();
-        private List<LogicalNode> nodes = new List<LogicalNode>();
+        public List<LogicalNode> nodes = new List<LogicalNode>();
         private List<LogicalNodesLink> links = new List<LogicalNodesLink>();
 
         private bool started = false;
@@ -71,6 +72,9 @@ namespace MyNetSensors.LogicalNodes
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
         {
+            if(nodes==null)
+                return;
+
             updateNodesTimer.Stop();
 
             try
@@ -141,6 +145,30 @@ namespace MyNetSensors.LogicalNodes
         {
             output.OnOutputChange += input.SetValue;
             input.Value = output.Value;
+        }
+
+
+        public string GetJsonFromNodes()
+        {
+            JsonSerializerSettings settings=new JsonSerializerSettings();
+            settings.TypeNameHandling=TypeNameHandling.All;
+            return JsonConvert.SerializeObject(nodes, settings);
+        }
+
+        public void SetNodesFromJson(string json)
+        {
+            JsonSerializerSettings settings=new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+            
+            nodes = JsonConvert.DeserializeObject<List<LogicalNode>>(json, settings);
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i] is LogicalNodeMySensors)
+                {
+                    nodes[i] = new LogicalNodeMySensors(gateway, ((LogicalNodeMySensors)nodes[i]).nodeId);
+                }
+            }
         }
     }
 }

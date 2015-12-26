@@ -20,20 +20,20 @@ namespace MyNetSensors.WebController.Controllers
         private Gateway gateway = SerialController.gateway;
 
 
-        public ActionResult GetNodes()
+        public List<Node> GetNodes()
         {
-            return Json(gateway.GetNodes());
+            return gateway.GetNodes();
         }
 
-        public ActionResult IsHardwareConnected()
+        public bool IsHardwareConnected()
         {
             if (gateway == null)
-                return Json(false);
+                return false;
 
-            return Json(gateway.IsConnected());
+            return gateway.IsConnected();
         }
 
-        public ActionResult GetMessages()
+        public string GetMessages()
         {
             List<Message> messages = gateway.messagesLog.GetAllMessages();
             string text = null;
@@ -42,77 +42,76 @@ namespace MyNetSensors.WebController.Controllers
                 text += message.ToString();
                 text += " <br>\n";
             }
-            return Content(text);
+            return text;
         }
 
-        public ActionResult ClearMessages()
+        public bool ClearMessages()
         {
             gateway.messagesLog.ClearLog();
-            return Json(true);
+            return true;
         }
 
-        public ActionResult SendMessage(int nodeId, int sensorId, string state)
+        public bool SendMessage(int nodeId, int sensorId, string state)
         {
             if (!gateway.IsConnected())
-                return Json(false);
+                return false;
 
             gateway.SendSensorState(nodeId, sensorId, state);
-            return Json(true);
+            return true;
         }
 
 
 
 
-        public ActionResult GetGatewayInfo()
+        public GatewayInfo GetGatewayInfo()
         {
-            GatewayInfo info = gateway.GetGatewayInfo();
-            return Json(info);
+            return gateway.GetGatewayInfo();
         }
 
 
 
-        public ActionResult UpdateNodeSettings(Node node)
+        public bool UpdateNodeSettings(Node node)
         {
             gateway.UpdateNodeSettings(node);
-            return Json(true);
+            return true;
         }
 
 
-        public ActionResult ClearNodes()
+        public bool ClearNodes()
         {
             gateway.ClearNodesList();
-            return Json(true);
+            return true;
         }
 
 
-        public ActionResult UpdateSensorsLinks()
+        public bool UpdateSensorsLinks()
         {
             SerialController.sensorsLinksEngine.GetLinksFromRepository();
-            return Json(true);
+            return true;
         }
 
-        public ActionResult UpdateSensorsTasks()
+        public bool UpdateSensorsTasks()
         {
             SerialController.sensorsTasksEngine.GetTasksFromRepository();
-            return Json(true);
+            return true;
         }
 
-        public ActionResult DeleteNode(int nodeId)
+        public bool DeleteNode(int nodeId)
         {
             if (gateway.GetNode(nodeId) == null)
-                return Json(false);
+                return false;
             gateway.DeleteNode(nodeId);
-            return Json(true);
+            return true;
         }
 
 
-        public async Task<ActionResult> DropNodes()
+        public async Task<bool> DropNodes()
         {
             await DropHistory();
 
             ClearNodes();
 
-            return Json(true);
+            return true;
         }
 
 
