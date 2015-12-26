@@ -252,25 +252,25 @@ namespace MyNetSensors.SerialControllers
             //nodeMathPlus.Inputs[1].Value = "0";
             //logicalNodesEngine.AddNode(nodeMathPlus);
 
-            LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
-            logicalNodesEngine.AddNode(logicalNodeInvert);
+            //LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
+            //logicalNodesEngine.AddNode(logicalNodeInvert);
 
-            LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
-            logicalNodesEngine.AddNode(logicalNodeConsole);
+            //LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
+            //logicalNodesEngine.AddNode(logicalNodeConsole);
 
-            List<LogicalNodeMySensors> mySensorsesNodes
-                = logicalNodesEngine.CreateAndAddMySensorsNodes();
-
-
-            logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeInvert.Inputs[0]);
-            logicalNodesEngine.AddLink(logicalNodeInvert.Outputs[0], mySensorsesNodes[1].Inputs[0]);
-            logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
+            //List<LogicalNodeMySensors> mySensorsesNodes
+            //    = logicalNodesEngine.CreateAndAddMySensorsNodes();
 
 
-            string json1 = logicalNodesEngine.SerializeNodes();
-            string json2 = logicalNodesEngine.SerializeLinks();
-        //    logicalNodesEngine.DeserializeNodes(json1);
-        //    logicalNodesEngine.DeserializeLinks(json2);
+            //logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeInvert.Inputs[0]);
+            //logicalNodesEngine.AddLink(logicalNodeInvert.Outputs[0], mySensorsesNodes[1].Inputs[0]);
+            //logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
+
+
+            //string json1 = logicalNodesEngine.SerializeNodes();
+            //string json2 = logicalNodesEngine.SerializeLinks();
+            //logicalNodesEngine.DeserializeNodes(json1);
+            //logicalNodesEngine.DeserializeLinks(json2);
 
 
             OnDebugStateMessage("LOGICAL NODES ENGINE: Started");

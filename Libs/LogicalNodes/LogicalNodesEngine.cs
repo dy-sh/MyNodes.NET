@@ -66,7 +66,7 @@ namespace MyNetSensors.LogicalNodes
 
                     foreach (var output in node.Outputs)
                     {
-                        if (((OutputMySensors)output).sensorId != sensor.nodeId)
+                        if (((OutputMySensors)output).sensorId != sensor.sensorId)
                             continue;
 
                         output.Value = sensor.state;
@@ -130,7 +130,7 @@ namespace MyNetSensors.LogicalNodes
 
         private void OnClearNodesListEvent()
         {
-            nodes.Clear();
+            RemoveAllNodesAndLinks();
             if (db != null)
                 db.DropNodes();
         }
@@ -205,6 +205,9 @@ namespace MyNetSensors.LogicalNodes
 
         private void UpdateStatesFromLinks()
         {
+            if (links==null)
+                return;
+
             foreach (var link in links)
             {
                 Input input = GetInput(link.InputId);
@@ -266,7 +269,7 @@ namespace MyNetSensors.LogicalNodes
 
         public void DeserializeLinks(string json)
         {
-            links.Clear();
+            links = new List<LogicalLink>();
 
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
@@ -289,7 +292,11 @@ namespace MyNetSensors.LogicalNodes
 
         public void DeserializeNodes(string json)
         {
-            nodes.Clear();
+            bool state = started;
+            if (state)
+                Stop();
+
+            RemoveAllNodesAndLinks();
 
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
@@ -302,6 +309,9 @@ namespace MyNetSensors.LogicalNodes
                 node.OnDeserialize();
                 DebugEngine($"New node {node.GetType().Name}");
             }
+
+            if(state)
+                Start();
         }
 
         public void OnOutputChange(Output output)
@@ -309,8 +319,8 @@ namespace MyNetSensors.LogicalNodes
             if (!started)
                 return;
 
-            GetOutputOwner(output)
-                .OnOutputChange(output);
+            LogicalNode owner= GetOutputOwner(output);
+            owner.OnOutputChange(output);
 
             List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
 
@@ -358,6 +368,13 @@ namespace MyNetSensors.LogicalNodes
         }
 
 
+        public void RemoveAllNodesAndLinks()
+        {
+            DebugEngine("Remove all nodes and links");
+
+            links=new List<LogicalLink>();
+            nodes=new List<LogicalNode>();
+        }
 
         public void DebugNodes(string message)
         {
