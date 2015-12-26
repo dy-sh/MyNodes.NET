@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
@@ -26,18 +27,20 @@ namespace MyNetSensors.LogicalNodes
         {
             Position=new Position();
             Size=new Size();
-            
-            Inputs = new List<Input>();
-            for (int i = 0; i < inputsCount; i++)
-            {
-                Inputs.Add(new Input(this,$"In {i}"));
-            }
 
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
             {
-                Outputs.Add(new Output(this, $"Out {i}"));
+                Outputs.Add(new Output { Name = $"Out {i}"});
             }
+
+            Inputs = new List<Input>();
+            for (int i = 0; i < inputsCount; i++)
+            {
+                Input input = new Input { Name = $"In {i}" };
+                Inputs.Add(input);
+            }
+            ConnectInputs();
         }
 
         public LogicalNode()
@@ -48,95 +51,25 @@ namespace MyNetSensors.LogicalNodes
             Outputs = new List<Output>();
         }
 
+        public void ConnectInputs()
+        {
+            foreach (var input in Inputs)
+                input.Subscribe(OnInputChange);
+        }
+
+
+
         public abstract void Loop();
         public abstract void OnInputChange(Input input);
-    }
 
-    public class Position
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-    }
-
-    public class Size
-    {
-        public int Width { get; set; }
-        public int Height { get; set; }
-    }
-
-    public class Input
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public event OnInputChangeEventArgs OnInputChange;
-
-        private string val;
-        private LogicalNode node;
-
-        public Input(LogicalNode node,string name)
+        public virtual void OnDeserialize()
         {
-            this.node = node;
-            this.Name = name;
-        }
-
-        public Input()
-        {
-        }
-
-        public string Value
-        {
-            get { return val; }
-            set
-            {
-                val = value;
-                if (OnInputChange != null)
-                    OnInputChange(value);
-                if(node!=null)
-                node.OnInputChange(this);
-            }
-        }
-
-        public void SetValue(string value)
-        {
-            Value = value;
+            ConnectInputs();
         }
     }
 
-    public class Output
-    {
-        public int Id { get; set; }
 
-        public string Name { get; set; }
 
-        public event OnOutputChangeEventArgs OnOutputChange;
 
-        private string val;
-        private LogicalNode node;
 
-        public Output(LogicalNode node,string name)
-        {
-            this.node = node;
-            this.Name = name;
-        }
-
-        public Output()
-        {
-        }
-
-        public string Value
-        {
-            get { return val; }
-            set
-            {
-                val = value;
-                if (OnOutputChange != null)
-                    OnOutputChange(value);
-            }
-        }
-    }
-
-    public delegate void OnInputChangeEventArgs(string value);
-    public delegate void OnOutputChangeEventArgs(string value);
 }

@@ -243,37 +243,30 @@ namespace MyNetSensors.SerialControllers
             //nodeMathPlus.Inputs[1].Value = "0";
             //logicalNodesEngine.AddNode(nodeMathPlus);
 
+            LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
+            logicalNodesEngine.AddNode(logicalNodeInvert);
 
-            //LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
-            //logicalNodesEngine.AddNode(logicalNodeConsole);
-            //// logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], logicalNodeConsole.Inputs[0]);
+            LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
+            logicalNodesEngine.AddNode(logicalNodeConsole);
 
-            List<LogicalNodeMySensors> mySensorsesNodes = new List<LogicalNodeMySensors>();
-            foreach (var node in gateway.GetNodes())
-            {
-                LogicalNodeMySensors newNode = new LogicalNodeMySensors(gateway, node.nodeId);
-                mySensorsesNodes.Add(newNode);
-                logicalNodesEngine.AddNode(newNode);
-            }
-
-            string json = logicalNodesEngine.GetJsonFromNodes();
-            logicalNodesEngine.nodes = null;
-            logicalNodesEngine.SetNodesFromJson(json);
+            List<LogicalNodeMySensors> mySensorsesNodes
+                = logicalNodesEngine.CreateEndAddMySensorsNodes();
 
 
-            //logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], mySensorsesNodes[1].Inputs[0]);
-            //logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
+            logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeInvert.Inputs[0]);
+            logicalNodesEngine.AddLink(logicalNodeInvert.Outputs[0], mySensorsesNodes[1].Inputs[0]);
+            logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
 
-            // logicalNodesEngine.AddLink(nodeMathPlus.Outputs[0], mySensorsesNodes[0].Inputs[0]);
-            // nodeMathPlus.Inputs[0].Value = "1";
 
-            // LogicalNodeCounter nodeCounter=new LogicalNodeCounter();
-            //nodeCounter.Inputs[0].Value = "1";
-            // logicalNodesEngine.AddNode(nodeCounter);
-            //logicalNodesEngine.AddLink(nodeCounter.Outputs[0], nodeMathPlus.Inputs[1]);
+   //         string json1 = logicalNodesEngine.SerializeNodes();
+  //          string json2 = engine.SerializeLinks();
+   //         logicalNodesEngine.DeserializeNodes(json1);
+   //         engine.DeserializeLinks(json2);
 
 
             OnDebugStateMessage("LOGICAL NODES ENGINE: Started");
         }
+
+
     }
 }

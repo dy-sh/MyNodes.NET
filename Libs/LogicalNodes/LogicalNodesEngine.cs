@@ -19,19 +19,19 @@ namespace MyNetSensors.LogicalNodes
         //and you will get less nodes updating frequency 
         private int updateNodesInterval = 1;
 
-        private Gateway gateway;
+        public static Gateway gateway;
         private ILogicalNodesRepository db;
 
         private Timer updateNodesTimer = new Timer();
         public List<LogicalNode> nodes = new List<LogicalNode>();
-        private List<LogicalNodesLink> links = new List<LogicalNodesLink>();
+        public List<LogicalLink> links = new List<LogicalLink>();
 
         private bool started = false;
 
         public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db=null)
         {
             this.db = db;
-            this.gateway = gateway;
+            LogicalNodesEngine.gateway = gateway;
 
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
 
@@ -143,32 +143,89 @@ namespace MyNetSensors.LogicalNodes
 
         public void AddLink(Output output, Input input)
         {
-            output.OnOutputChange += input.SetValue;
+            links.Add(new LogicalLink(output,input));
+            output.OnOutputChange += OnOutputChange;
             input.Value = output.Value;
         }
 
+        private void OnOutputChange(Output output)
+        {
+            List<LogicalLink> list = links.Where(x => x.Output == output).ToList();
 
-        public string GetJsonFromNodes()
+            foreach (var link in list)
+            {
+                link.Input.Value = output.Value;
+            }
+        }
+
+
+        public List<LogicalNodeMySensors> CreateEndAddMySensorsNodes()
+        {
+            var list = new List<LogicalNodeMySensors>();
+
+            foreach (var node in gateway.GetNodes())
+            {
+                LogicalNodeMySensors newNode = new LogicalNodeMySensors(node.nodeId);
+                list.Add(newNode);
+                AddNode(newNode);
+            }
+            return list;
+        }
+
+
+
+
+        public string SerializeLinks()
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+            return JsonConvert.SerializeObject(links, settings);
+        }
+
+        public void DeserializeLinks(string json)
+        {
+            links.Clear();
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+
+            List<LogicalLink> newLinks = JsonConvert.DeserializeObject<List<LogicalLink>>(json, settings);
+
+            foreach (var link in newLinks)
+            {
+                AddLink(link.Output, link.Input);
+            }
+        }
+
+
+        public string SerializeNodes()
         {
             JsonSerializerSettings settings=new JsonSerializerSettings();
             settings.TypeNameHandling=TypeNameHandling.All;
             return JsonConvert.SerializeObject(nodes, settings);
         }
 
-        public void SetNodesFromJson(string json)
+        public void DeserializeNodes(string json)
         {
+            nodes.Clear();
+            
             JsonSerializerSettings settings=new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
             
             nodes = JsonConvert.DeserializeObject<List<LogicalNode>>(json, settings);
 
-            for (int i = 0; i < nodes.Count; i++)
+            foreach (var node in nodes)
             {
-                if (nodes[i] is LogicalNodeMySensors)
-                {
-                    nodes[i] = new LogicalNodeMySensors(gateway, ((LogicalNodeMySensors)nodes[i]).nodeId);
-                }
+               node.OnDeserialize();
             }
+
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    if (nodes[i] is LogicalNodeMySensors)
+            //    {
+            //        nodes[i] = new LogicalNodeMySensors(gateway, ((LogicalNodeMySensors)nodes[i]).nodeId);
+            //    }
+            //}
         }
     }
 }

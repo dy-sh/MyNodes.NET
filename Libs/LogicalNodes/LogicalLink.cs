@@ -7,17 +7,19 @@ using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class LogicalNodesLink
+    public class LogicalLink
     {
         public int Id { get; set; }
         public Input Input { get; set; }
         public Output Output { get; set; }
 
         
-        public LogicalNodesLink(Input input, Output output)
+        public LogicalLink( Output output, Input input)
         {
             this.Input = input;
             this.Output = output;
         }
+
+        public LogicalLink(){}
     }
 }
