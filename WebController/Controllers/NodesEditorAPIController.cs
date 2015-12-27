@@ -23,6 +23,7 @@ namespace MyNetSensors.WebController.Controllers
         const int NODE_WIDTH = 150;
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
+        private LogicalHardwareNodesEngine hardwareEngine = LogicalHardwareNodesEngine.logicalHardwareNodesEngine;
 
         public List<LiteGraph.Node> GetNodes()
         {
@@ -210,13 +211,13 @@ namespace MyNetSensors.WebController.Controllers
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
             engine.RemoveAllLinks();
-            engine.RemoveAllNonHardwareNodes();
+            hardwareEngine.RemoveAllNonHardwareNodes();
 
             foreach (var node in graph.nodes)
             {
                 string type = node.properties["objectType"];
 
-                if (type == "MyNetSensors.LogicalNodes.LogicalNodeMySensors")
+                if (type == "MyNetSensors.LogicalNodes.LogicalHardwareNode")
                 {
                     LogicalNode oldNode=engine.GetNode(node.id);
                     oldNode.Position= new Position { X = node.pos[0], Y = node.pos[1] };

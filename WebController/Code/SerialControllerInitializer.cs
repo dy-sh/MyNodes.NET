@@ -88,6 +88,8 @@ namespace MyNetSensors.WebController.Code
                 SerialController.gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
                 SerialController.gateway.OnNewSensorEvent += OnNewSensorEvent;
 
+               // SerialController.logicalNodesEngine. += OnNewSensorEvent;
+
 
                 //start
                 SerialController.Start(portName);

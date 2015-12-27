@@ -19,7 +19,6 @@ namespace MyNetSensors.LogicalNodes
         //and you will get less nodes updating frequency 
         private int updateNodesInterval = 1;
 
-        public static Gateway gateway;
         private ILogicalNodesRepository db;
 
         private Timer updateNodesTimer = new Timer();
@@ -33,15 +32,29 @@ namespace MyNetSensors.LogicalNodes
         public event DebugMessageEventHandler OnDebugNodeMessage;
         public event DebugMessageEventHandler OnDebugEngineMessage;
 
+        public event LogicalNodesEventHandler OnNodesUpdatedEvent;
+        public event LogicalNodeEventHandler OnNewNodeEvent;
+        public event LogicalNodeEventHandler OnNodeRemoveEvent;
+        public event LogicalNodeEventHandler OnNodeUpdatedEvent;
+        public event LogicalInputEventHandler OnInputUpdatedEvent;
+        public event LogicalOutputEventHandler OnOutputUpdatedEvent;
+        public event LogicalLinksEventHandler OnLinksUpdatedEvent;
+
+        public delegate void LogicalNodeEventHandler(LogicalNode node);
+        public delegate void LogicalNodesEventHandler(List<LogicalNode> nodes);
+        public delegate void LogicalInputEventHandler(Input input);
+        public delegate void LogicalOutputEventHandler(Output output);
+        public delegate void LogicalLinksEventHandler(List<LogicalLink> output);
+
+        public static LogicalHardwareNodesEngine hardwareNodesEngine;
+
         public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db = null)
         {
-            this.db = db;
-            LogicalNodesEngine.gateway = gateway;
             LogicalNodesEngine.logicalNodesEngine = this;
-            gateway.OnSensorUpdatedEvent += OnMySensorsNodeUpdated;
 
+            this.db = db;
 
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            hardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, this);
 
             updateNodesTimer.Elapsed += UpdateNodes;
             updateNodesTimer.Interval = updateNodesInterval;
@@ -55,26 +68,6 @@ namespace MyNetSensors.LogicalNodes
             Start();
 
 
-        }
-
-        private void OnMySensorsNodeUpdated(Sensor sensor)
-        {
-            foreach (var node in nodes)
-            {
-                if (node is LogicalNodeMySensors)
-                {
-                    if (((LogicalNodeMySensors)node).nodeId != sensor.nodeId)
-                        continue;
-
-                    foreach (var output in node.Outputs)
-                    {
-                        if (((OutputMySensors)output).sensorId != sensor.sensorId)
-                            continue;
-
-                        output.Value = sensor.state;
-                    }
-                }
-            }
         }
 
 
@@ -105,6 +98,8 @@ namespace MyNetSensors.LogicalNodes
         {
             if (db != null)
                 nodes = db.GetAllNodes();
+
+            OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
@@ -130,12 +125,7 @@ namespace MyNetSensors.LogicalNodes
             updateNodesTimer.Start();
         }
 
-        private void OnClearNodesListEvent()
-        {
-            RemoveAllNodesAndLinks();
-            if (db != null)
-                db.DropNodes();
-        }
+
 
 
 
@@ -155,16 +145,20 @@ namespace MyNetSensors.LogicalNodes
                 db.AddNode(node);
 
             DebugEngine($"New node {node.GetType().Name}");
+
+            OnNewNodeEvent?.Invoke(node);
         }
 
         public void RemoveNode(LogicalNode node)
         {
             DebugEngine($"Remove node {node.GetType().Name}");
+            OnNodeRemoveEvent?.Invoke(node);
 
             nodes.Remove(node);
 
             if (db != null)
                 db.DeleteNode(node.Id);
+
         }
 
         public void UpdateNode(LogicalNode node)
@@ -182,6 +176,8 @@ namespace MyNetSensors.LogicalNodes
 
             if (db != null)
                 db.UpdateNode(oldNode);
+
+            OnNodeUpdatedEvent?.Invoke(node);
         }
 
         public void AddLink(string outputId, string inputId)
@@ -199,15 +195,18 @@ namespace MyNetSensors.LogicalNodes
 
             links.Add(new LogicalLink(output.Id, input.Id));
 
+            OnLinksUpdatedEvent?.Invoke(links);
+
             if (!started)
                 return;
 
             input.Value = output.Value;
+
         }
 
         private void UpdateStatesFromLinks()
         {
-            if (links==null)
+            if (links == null)
                 return;
 
             foreach (var link in links)
@@ -215,9 +214,14 @@ namespace MyNetSensors.LogicalNodes
                 Input input = GetInput(link.InputId);
                 Output output = GetOutput(link.OutputId);
                 input.Value = output.Value;
+                OnInputUpdatedEvent?.Invoke(input);
             }
         }
 
+        public LogicalNode GetNode(string id)
+        {
+            return nodes.FirstOrDefault(x => x.Id == id);
+        }
 
         public Input GetInput(string id)
         {
@@ -246,18 +250,6 @@ namespace MyNetSensors.LogicalNodes
         }
 
 
-        public List<LogicalNodeMySensors> CreateAndAddMySensorsNodes()
-        {
-            var list = new List<LogicalNodeMySensors>();
-
-            foreach (var node in gateway.GetNodes())
-            {
-                LogicalNodeMySensors newNode = new LogicalNodeMySensors(node);
-                list.Add(newNode);
-                AddNode(newNode);
-            }
-            return list;
-        }
 
 
 
@@ -282,6 +274,8 @@ namespace MyNetSensors.LogicalNodes
             {
                 AddLink(link.OutputId, link.InputId);
             }
+
+            OnLinksUpdatedEvent?.Invoke(links);
         }
 
 
@@ -312,8 +306,10 @@ namespace MyNetSensors.LogicalNodes
                 DebugEngine($"New node {node.GetType().Name}");
             }
 
-            if(state)
+            if (state)
                 Start();
+
+            OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
         public void OnOutputChange(Output output)
@@ -321,7 +317,10 @@ namespace MyNetSensors.LogicalNodes
             if (!started)
                 return;
 
-            LogicalNode owner= GetOutputOwner(output);
+            OnOutputUpdatedEvent?.Invoke(output);
+
+
+            LogicalNode owner = GetOutputOwner(output);
             owner.OnOutputChange(output);
 
             List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
@@ -330,8 +329,12 @@ namespace MyNetSensors.LogicalNodes
             {
                 Input input = GetInput(link.InputId);
                 if (input != null)
+                {
                     input.Value = output.Value;
+                    OnInputUpdatedEvent?.Invoke(input);
+                }
             }
+
         }
 
         public LogicalNode GetInputOwner(Input input)
@@ -393,6 +396,8 @@ namespace MyNetSensors.LogicalNodes
                 if (node.Inputs.Contains(input))
                     node.OnInputChange(input);
             }
+
+            OnInputUpdatedEvent?.Invoke(input);
         }
 
 
@@ -400,27 +405,25 @@ namespace MyNetSensors.LogicalNodes
         {
             DebugEngine("Remove all nodes and links");
 
-            links=new List<LogicalLink>();
-            nodes=new List<LogicalNode>();
+            if (db != null)
+                db.DropNodes();
+
+            links = new List<LogicalLink>();
+            nodes = new List<LogicalNode>();
+
+            OnNodesUpdatedEvent?.Invoke(nodes);
+            OnLinksUpdatedEvent?.Invoke(links);
+
         }
 
-        public void RemoveAllNonHardwareNodes()
-        {
-            DebugEngine("Remove all non-hardware nodes");
-            List<LogicalNode> list=new List<LogicalNode>();
-            foreach (var node in nodes)
-            {
-                if (node is LogicalNodeMySensors)
-                    list.Add(node);
-            }
-            nodes = list;
-        }
+
 
         public void RemoveAllLinks()
         {
             DebugEngine("Remove all links");
 
             links = new List<LogicalLink>();
+            OnLinksUpdatedEvent?.Invoke(links);
         }
 
         public void DebugNodes(string message)
@@ -435,9 +438,6 @@ namespace MyNetSensors.LogicalNodes
                 OnDebugEngineMessage(message);
         }
 
-        public LogicalNode GetNode(string id)
-        {
-            return nodes.FirstOrDefault(x => x.Id == id);
-        }
+
     }
 }

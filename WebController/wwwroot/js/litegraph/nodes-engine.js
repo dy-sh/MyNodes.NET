@@ -1,8 +1,99 @@
+/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+var gatewayHardwareConnected = null;
+var signalRServerConnected = null;
+
 
 var editor = new LiteGraph.Editor("main");
 window.graph = editor.graph;
 window.addEventListener("resize", function () { editor.graphcanvas.resize(); });
 getNodes();
+
+
+
+
+$(function () {
+
+    //configure signalr
+    var clientsHub = $.connection.clientsHub;
+
+    clientsHub.client.OnConnectedEvent = function () {
+        hardwareStateChanged(true);
+    };
+
+    clientsHub.client.OnDisconnectedEvent = function () {
+        hardwareStateChanged(false);
+    };
+
+
+
+    clientsHub.client.OnNewLogicaNodeEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+    clientsHub.client.OnLogicalNodeUpdatedEvent = function (node) {
+        createOrUpdateNode(node);
+    };
+
+
+    $.connection.hub.start();
+
+    $.connection.hub.stateChanged(function (change) {
+        if (change.newState === $.signalR.connectionState.reconnecting) {
+            noty({ text: 'Web server is not responding!', type: 'error', timeout: false });
+            signalRServerConnected = false;
+        }
+        else if (change.newState === $.signalR.connectionState.connected) {
+            if (signalRServerConnected == false) {
+                noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
+                getIsHardwareConnected();
+                getNodes();
+            }
+            signalRServerConnected = true;
+        }
+    });
+
+    setInterval(updateAllLastSeens, 1000);
+
+    getIsHardwareConnected();
+    getNodes();
+});
+
+function getIsHardwareConnected() {
+    $.ajax({
+        url: "/GatewayAPI/IsHardwareConnected/",
+        type: "POST",
+        success: function (connected) {
+            hardwareStateChanged(connected);
+        }
+    });
+}
+
+
+
+function hardwareStateChanged(connected) {
+    if (connected) {
+        $('#nodesContainer').fadeIn(elementsFadeTime);
+    } else {
+        $('#nodesContainer').fadeOut(elementsFadeTime);
+    }
+
+    if (connected && gatewayHardwareConnected === false) {
+        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
+    } else if (!connected) {
+        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
+    }
+
+    gatewayHardwareConnected = connected;
+}
+
+
+
+
+
 
 $("#sendButton").click(function () {
     //console.log(graph);
@@ -16,19 +107,6 @@ $("#sendButton").click(function () {
     });
 });
 
-function test()
-{
-    //var node1 = LiteGraph.createNode("Nodes/SimpleNode");
-    //node1.pos = [200,200];
-    //graph.add(node1);
-
-    //var node2 = LiteGraph.createNode("Nodes/SimpleNode");
-    //node2.pos = [200,300];
-    //graph.add(node2);
-
-	
-    //node1.connect(0, node2, 0);
-}
 
 
 
@@ -112,4 +190,9 @@ function createOrUpdateLink(link) {
     graph.getNodeById(link.origin_id)
         .connect(link.origin_slot, target, link.target_slot);
 }
+
+
+
+
+
 

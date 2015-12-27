@@ -7,23 +7,23 @@ using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class LogicalNodeMySensors : LogicalNode
+    public class LogicalHardwareNode : LogicalNode
     {
         public int nodeId;
         private Gateway gateway;
 
-        public LogicalNodeMySensors(Node node) : base(0, 0)
+        public LogicalHardwareNode(Node node) : base(0, 0)
         {
             this.nodeId = node.nodeId;
             this.Title = node.GetSimpleName1();
-            this.gateway = LogicalNodesEngine.gateway;
+            this.gateway = LogicalHardwareNodesEngine.gateway;
             this.Type = "Nodes/HardwareNode";
             CreateInputsOutputs();
         }
 
-        public LogicalNodeMySensors() : base()
+        public LogicalHardwareNode() : base()
         {
-            this.gateway = LogicalNodesEngine.gateway;
+            this.gateway = LogicalHardwareNodesEngine.gateway;
         }
 
 
@@ -34,19 +34,19 @@ namespace MyNetSensors.LogicalNodes
 
         public override void OnInputChange(Input input)
         {
-            InputMySensors inputMySensors = (InputMySensors)input;
+            InputHardware inputHardware = (InputHardware)input;
 
-            Debug($"Hardware Node{inputMySensors.nodeId} Sensor{inputMySensors.sensorId} input: {input.Value}");
+            Debug($"Hardware Node{inputHardware.nodeId} Sensor{inputHardware.sensorId} input: {input.Value}");
 
-            gateway.SendSensorState(inputMySensors.nodeId, inputMySensors.sensorId, input.Value);
+            gateway.SendSensorState(inputHardware.nodeId, inputHardware.sensorId, input.Value);
 
         }
 
         public override void OnOutputChange(Output output)
         {
-            OutputMySensors outputMySensors = (OutputMySensors)output;
+            OutputHardware outputHardware = (OutputHardware)output;
 
-            Debug($"Hardware Node{outputMySensors.nodeId} Sensor{outputMySensors.sensorId} output: {output.Value}");
+            Debug($"Hardware Node{outputHardware.nodeId} Sensor{outputHardware.sensorId} output: {output.Value}");
         }
 
         public void CreateInputsOutputs()
@@ -56,12 +56,12 @@ namespace MyNetSensors.LogicalNodes
 
             for (int i = 0; i < node.sensors.Count; i++)
             {
-                InputMySensors input = new InputMySensors { Name = node.sensors[i].GetSimpleName1() };
+                InputHardware input = new InputHardware { Name = node.sensors[i].GetSimpleName1() };
                 input.sensorId = node.sensors[i].sensorId;
                 input.nodeId = node.sensors[i].nodeId;
                 Inputs.Add(input);
 
-                OutputMySensors output = new OutputMySensors { Name = node.sensors[i].GetSimpleName1() };
+                OutputHardware output = new OutputHardware { Name = node.sensors[i].GetSimpleName1() };
                 output.sensorId = node.sensors[i].sensorId;
                 output.nodeId = node.sensors[i].nodeId;
                 Outputs.Add(output);

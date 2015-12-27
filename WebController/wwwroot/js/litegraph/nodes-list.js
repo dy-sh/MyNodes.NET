@@ -5,7 +5,7 @@
     //HardwareNode
     function HardwareNode() {
         this.size = [150, 20];
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMySensors" };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
         this.clonable = false;
         this.removable = false;
     }
