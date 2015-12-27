@@ -10,7 +10,7 @@ var signalRServerConnected = null;
 var editor = new LiteGraph.Editor("main");
 window.graph = editor.graph;
 window.addEventListener("resize", function () { editor.graphcanvas.resize(); });
-getNodes();
+//getNodes();
 
 var START_POS = 50;
 var FREE_SPACE_UNDER = 30;
@@ -158,9 +158,7 @@ function createOrUpdateNode(node) {
         newNode.id = node.id;
         newNode.properties = node.properties;
 
-        newNode.size = node.size;
-        if (!newNode.size)
-            newNode.size = [NODE_WIDTH, calculateNodeHeight(newNode)];
+        newNode.size = [NODE_WIDTH, calculateNodeHeight(newNode)];
 
         newNode.pos = node.pos;
         if (!newNode.pos)
@@ -176,13 +174,12 @@ function createOrUpdateNode(node) {
         oldNode.id = node.id;
         oldNode.properties = node.properties;
 
-        oldNode.size = node.size;
-        if (!oldNode.size)
-            oldNode.size = [NODE_WIDTH, calculateNodeHeight(oldNode)];
+        oldNode.size = [NODE_WIDTH, calculateNodeHeight(oldNode)];
 
-        oldNode.pos = node.pos;
-        if (!oldNode.pos)
-            oldNode.pos = [START_POS, findFreeSpaceY(oldNode)];
+        //if (node.pos)
+        //    oldNode.pos = node.pos;
+        //if (!oldNode.pos)
+        //    oldNode.pos = [START_POS, findFreeSpaceY(oldNode)];
 
         oldNode.setDirtyCanvas(true, true);
     }
