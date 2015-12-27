@@ -74,12 +74,12 @@ namespace MyNetSensors.WebController.Controllers
                     }
 
 
-                node.size = new[] { NODE_WIDTH, CalculateSizeY(node) };
+                //node.size = new[] { NODE_WIDTH, CalculateNodeHeight(node) };
 
                 list.Add(node);
             }
 
-            MooveNewNodesToFreeSpace(list);
+           // MooveNewNodesToFreeSpace(list);
 
             return list;
         }
@@ -139,63 +139,63 @@ namespace MyNetSensors.WebController.Controllers
             return -1;
         }
 
-        private int CalculateSizeY(LiteGraph.Node node)
-        {
-            int sizeOutY = 0, sizeInY = 0;
+        //private int CalculateNodeHeight(LiteGraph.Node node)
+        //{
+        //    int sizeOutY = 0, sizeInY = 0;
 
-            if (node.outputs != null)
-                sizeOutY = SLOT_SIZE + (SLOT_SIZE * node.outputs.Count);
-            if (node.inputs != null)
-                sizeInY = SLOT_SIZE + (SLOT_SIZE * node.inputs.Count);
+        //    if (node.outputs != null)
+        //        sizeOutY = SLOT_SIZE + (SLOT_SIZE * node.outputs.Count);
+        //    if (node.inputs != null)
+        //        sizeInY = SLOT_SIZE + (SLOT_SIZE * node.inputs.Count);
 
-            return (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
-        }
-
-
-
-        private void MooveNewNodesToFreeSpace(List<LiteGraph.Node> nodes)
-        {
-            const int START_POS = 50;
-            const int FREE_SPACE_UNDER = 30;
-
-            for (int k = 0; k < nodes.Count; k++)
-            {
-                if (nodes[k].pos != null)
-                    continue;
-
-                nodes[k].pos = new float[2];
-
-                float result = START_POS;
+        //    return (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
+        //}
 
 
-                for (int i = 0; i < nodes.Count; i++)
-                {
-                    float needFromY = result;
-                    float needToY = result + nodes[k].size[1];
 
-                    if (i == k)
-                        continue;
+        //private void MooveNewNodesToFreeSpace(List<LiteGraph.Node> nodes)
+        //{
+        //    const int START_POS = 50;
+        //    const int FREE_SPACE_UNDER = 30;
 
-                    if (nodes[i].pos == null)
-                        continue;
+        //    for (int k = 0; k < nodes.Count; k++)
+        //    {
+        //        if (nodes[k].pos != null)
+        //            continue;
 
-                    if (nodes[i].pos[0] > NODE_WIDTH + 20 + START_POS)
-                        continue;
+        //        nodes[k].pos = new float[2];
 
-                    float occupyFromY = nodes[i].pos[1]- FREE_SPACE_UNDER;
-                    float occupyToY = nodes[i].pos[1] + nodes[i].size[1];
+        //        float result = START_POS;
 
-                    if (occupyFromY <= needToY && occupyToY >= needFromY)
-                    {
-                        result = occupyToY + FREE_SPACE_UNDER;
-                        i = -1;
-                    }
-                }
 
-                nodes[k].pos[0] = START_POS;
-                nodes[k].pos[1] = result;
-            }
-        }
+        //        for (int i = 0; i < nodes.Count; i++)
+        //        {
+        //            float needFromY = result;
+        //            float needToY = result + nodes[k].size[1];
+
+        //            if (i == k)
+        //                continue;
+
+        //            if (nodes[i].pos == null)
+        //                continue;
+
+        //            if (nodes[i].pos[0] > NODE_WIDTH + 20 + START_POS)
+        //                continue;
+
+        //            float occupyFromY = nodes[i].pos[1]- FREE_SPACE_UNDER;
+        //            float occupyToY = nodes[i].pos[1] + nodes[i].size[1];
+
+        //            if (occupyFromY <= needToY && occupyToY >= needFromY)
+        //            {
+        //                result = occupyToY + FREE_SPACE_UNDER;
+        //                i = -1;
+        //            }
+        //        }
+
+        //        nodes[k].pos[0] = START_POS;
+        //        nodes[k].pos[1] = result;
+        //    }
+        //}
 
         //public IActionResult GetGraph()
         //{

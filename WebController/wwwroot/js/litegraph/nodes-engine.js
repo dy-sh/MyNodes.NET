@@ -12,7 +12,9 @@ window.graph = editor.graph;
 window.addEventListener("resize", function () { editor.graphcanvas.resize(); });
 getNodes();
 
-
+var START_POS = 50;
+var FREE_SPACE_UNDER = 30;
+var NODE_WIDTH = 150;
 
 
 $(function () {
@@ -145,16 +147,45 @@ function onReturnNodes(nodes) {
 
 
 function createOrUpdateNode(node) {
-    var newNode = LiteGraph.createNode(node.type);
-    newNode.pos = node.pos;
-    //newNode.title = node.title + " [" + node.id+"]";
-    newNode.title = node.title;
-    newNode.inputs = node.inputs;
-    newNode.outputs = node.outputs;
-    newNode.size = node.size;
-    newNode.id = node.id;
-    newNode.properties = node.properties;
-    graph.add(newNode);
+    var oldNode = graph.getNodeById(node.Id);
+    if (!oldNode) {
+        //create new
+        var newNode = LiteGraph.createNode(node.type);
+        //newNode.title = node.title + " [" + node.id+"]";
+        newNode.title = node.title;
+        newNode.inputs = node.inputs;
+        newNode.outputs = node.outputs;
+        newNode.id = node.id;
+        newNode.properties = node.properties;
+
+        newNode.size = node.size;
+        if (!newNode.size)
+            newNode.size = [NODE_WIDTH, calculateNodeHeight(newNode)];
+
+        newNode.pos = node.pos;
+        if (!newNode.pos)
+            newNode.pos = [START_POS, findFreeSpaceY(newNode)];
+
+        graph.add(newNode);
+    } else {
+        //update
+        //newNode.title = node.title + " [" + node.id+"]";
+        oldNode.title = node.title;
+        oldNode.inputs = node.inputs;
+        oldNode.outputs = node.outputs;
+        oldNode.id = node.id;
+        oldNode.properties = node.properties;
+
+        oldNode.size = node.size;
+        if (!oldNode.size)
+            oldNode.size = [NODE_WIDTH, calculateNodeHeight(oldNode)];
+
+        oldNode.pos = node.pos;
+        if (!oldNode.pos)
+            oldNode.pos = [START_POS, findFreeSpaceY(oldNode)];
+
+        oldNode.setDirtyCanvas(true, true);
+    }
 }
 
 
@@ -194,3 +225,53 @@ function createOrUpdateLink(link) {
 
 
 
+function calculateNodeHeight(node) {
+    var SLOT_SIZE = 15;
+    var sizeOutY = 0, sizeInY = 0;
+
+    if (node.outputs)
+        sizeOutY = SLOT_SIZE + (SLOT_SIZE * node.outputs.length);
+    if (node.inputs)
+        sizeInY = SLOT_SIZE + (SLOT_SIZE * node.inputs.length);
+
+    return (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
+}
+
+
+
+function findFreeSpaceY(node) {
+
+
+    var nodes = graph._nodes;
+
+
+    node.pos = [0, 0];
+
+    var result = START_POS;
+
+
+    for (var i = 0; i < nodes.length; i++) {
+        var needFromY = result;
+        var needToY = result + node.size[1];
+
+        if (node.id == nodes[i].id)
+            continue;
+
+        if (!nodes[i].pos)
+            continue;
+
+        if (nodes[i].pos[0] > NODE_WIDTH + 20 + START_POS)
+            continue;
+
+        var occupyFromY = nodes[i].pos[1] - FREE_SPACE_UNDER;
+        var occupyToY = nodes[i].pos[1] + nodes[i].size[1];
+
+        if (occupyFromY <= needToY && occupyToY >= needFromY) {
+            result = occupyToY + FREE_SPACE_UNDER;
+            i = -1;
+        }
+    }
+
+    return result;
+
+}
