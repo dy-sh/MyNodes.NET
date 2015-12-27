@@ -30,7 +30,13 @@ $(function () {
 
 
 
-    clientsHub.client.OnNewLogicaNodeEvent = function (node) {
+    clientsHub.client.OnLogicalNodeDeleteEvent = function (node) {
+        var oldNode = graph.getNodeById(node.Id);
+        graph.remove(oldNode);
+        graph.setDirtyCanvas(true, true);
+    };
+
+    clientsHub.client.OnLogicalNodeUpdatedEvent = function (node) {
         createOrUpdateNode(node);
     };
 

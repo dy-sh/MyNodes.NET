@@ -91,6 +91,7 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.logicalNodesEngine.OnNewNodeEvent += OnNewLogicalNodeEvent;
                 SerialController.logicalNodesEngine.OnNodeUpdatedEvent += OnLogicalNodeUpdatedEvent;
+                SerialController.logicalNodesEngine.OnNodeRemoveEvent += OnLogicalNodeDeleteEvent;
 
 
                 //start
@@ -101,6 +102,11 @@ namespace MyNetSensors.WebController.Code
             }
         }
 
+        private static void OnLogicalNodeDeleteEvent(LogicalNode node)
+        {
+            hub.Clients.All.OnLogicalNodeDeleteEvent(node);
+        }
+
         private static void OnLogicalNodeUpdatedEvent(LogicalNode node)
         {
             hub.Clients.All.OnLogicalNodeUpdatedEvent(node);
@@ -109,7 +115,7 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnNewLogicalNodeEvent(LogicalNode node)
         {
-            hub.Clients.All.OnLogicalNodeUpdatedEvent(node);
+            hub.Clients.All.OnNewLogicalNodeEvent(node);
 
         }
 
