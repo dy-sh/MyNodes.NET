@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using MyNetSensors.Gateways;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.SerialControllers;
+using MyNetSensors.WebController.Controllers;
 
 namespace MyNetSensors.WebController.Code
 {
@@ -104,19 +105,24 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnLogicalNodeDeleteEvent(LogicalNode node)
         {
-            hub.Clients.All.OnLogicalNodeDeleteEvent(node);
+            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertLogicalNodeToLitegraphNode(node);
+            hub.Clients.All.OnLogicalNodeDeleteEvent(liteGraphNode);
         }
 
         private static void OnLogicalNodeUpdatedEvent(LogicalNode node)
         {
-            hub.Clients.All.OnLogicalNodeUpdatedEvent(node);
+            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertLogicalNodeToLitegraphNode(node);
+            hub.Clients.All.OnLogicalNodeUpdatedEvent(liteGraphNode);
 
         }
 
         private static void OnNewLogicalNodeEvent(LogicalNode node)
         {
-            hub.Clients.All.OnNewLogicalNodeEvent(node);
-
+            NodesEditorAPIController nodesEditorApi=new NodesEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertLogicalNodeToLitegraphNode(node);
+            hub.Clients.All.OnNewLogicalNodeEvent(liteGraphNode);
         }
 
 

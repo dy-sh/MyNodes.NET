@@ -33,7 +33,7 @@ $(function () {
 
 
     clientsHub.client.OnLogicalNodeDeleteEvent = function (node) {
-        var oldNode = graph.getNodeById(node.Id);
+        var oldNode = graph.getNodeById(node.id);
         graph.remove(oldNode);
         graph.setDirtyCanvas(true, true);
     };
@@ -147,7 +147,7 @@ function onReturnNodes(nodes) {
 
 
 function createOrUpdateNode(node) {
-    var oldNode = graph.getNodeById(node.Id);
+    var oldNode = graph.getNodeById(node.id);
     if (!oldNode) {
         //create new
         var newNode = LiteGraph.createNode(node.type);

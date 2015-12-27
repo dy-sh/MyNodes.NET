@@ -34,56 +34,56 @@ namespace MyNetSensors.WebController.Controllers
 
             List<LiteGraph.Node> list = new List<LiteGraph.Node>();
 
-            for (int i = 0; i < nodes.Count; i++)
+            foreach (var node in nodes)
             {
-                LiteGraph.Node node = new LiteGraph.Node
-                {
-                    title = nodes[i].Title,
-                    type = nodes[i].Type,
-                    // pos = new[] { 100, 20 + i * 100 },
-                    id = nodes[i].Id
-                };
-
-
-                node.properties["objectType"] = nodes[i].GetType().ToString();
-
-                if (nodes[i].Position != null)
-                    node.pos = new[] { nodes[i].Position.X, nodes[i].Position.Y };
-
-                node.inputs = new List<Input>();
-                node.outputs = new List<Output>();
-
-                if (nodes[i].Inputs != null)
-                    for (int j = 0; j < nodes[i].Inputs.Count; j++)
-                    {
-                        node.inputs.Add(new Input
-                        {
-                            name = nodes[i].Inputs[j].Name,
-                            type = "string"
-                        });
-                    }
-
-                if (nodes[i].Outputs != null)
-                    for (int j = 0; j < nodes[i].Outputs.Count; j++)
-                    {
-                        node.outputs.Add(new Output
-                        {
-                            name = nodes[i].Outputs[j].Name,
-                            type = "string"
-                        });
-                    }
-
-
-                //node.size = new[] { NODE_WIDTH, CalculateNodeHeight(node) };
-
-                list.Add(node);
+                LiteGraph.Node newNode = ConvertLogicalNodeToLitegraphNode(node);
+                list.Add(newNode);
             }
-
-           // MooveNewNodesToFreeSpace(list);
 
             return list;
         }
 
+
+        public LiteGraph.Node ConvertLogicalNodeToLitegraphNode(LogicalNode logicalNode)
+        {
+            LiteGraph.Node node = new LiteGraph.Node
+            {
+                title = logicalNode.Title,
+                type = logicalNode.Type,
+                id = logicalNode.Id
+            };
+
+
+            node.properties["objectType"] = logicalNode.GetType().ToString();
+
+            if (logicalNode.Position != null)
+                node.pos = new[] { logicalNode.Position.X, logicalNode.Position.Y };
+
+            node.inputs = new List<Input>();
+            node.outputs = new List<Output>();
+
+            if (logicalNode.Inputs != null)
+                for (int j = 0; j < logicalNode.Inputs.Count; j++)
+                {
+                    node.inputs.Add(new Input
+                    {
+                        name = logicalNode.Inputs[j].Name,
+                        type = "string"
+                    });
+                }
+
+            if (logicalNode.Outputs != null)
+                for (int j = 0; j < logicalNode.Outputs.Count; j++)
+                {
+                    node.outputs.Add(new Output
+                    {
+                        name = logicalNode.Outputs[j].Name,
+                        type = "string"
+                    });
+                }
+
+            return node;
+        }
 
 
 
