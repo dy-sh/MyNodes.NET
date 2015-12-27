@@ -28,9 +28,11 @@ function Editor(container_id, options)
     //this.addToolsButton("playstepnode_button","Step","images/litegraph/icon-playstep.png", this.onPlayStepButton.bind(this), ".tools-right" );
 	
     //this.addToolsButton("livemode_button","Live","images/litegraph/icon-record.png", this.onLiveButton.bind(this), ".tools-right" );
+	this.addToolsButton("minimap_button", "", "images/litegraph/icon-edit.png", this.onMinimapButton.bind(this), ".tools-right");
+	this.addToolsButton("reset_button", "", "images/litegraph/icon-stop.png", this.onResetButton.bind(this), ".tools-right");
 	this.addToolsButton("maximize_button", "", "images/litegraph/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right");
 
-	//this.addMiniWindow(300,200);
+	this.addMiniWindow(200,200);
 
 	//append to DOM
 	var	parent = document.getElementById(container_id);
@@ -40,6 +42,8 @@ function Editor(container_id, options)
 	graphcanvas.resize();
 	//graphcanvas.draw(true,true);
 }
+
+var minimap_opened = false;
 
 Editor.prototype.addLoadCounter = function()
 {
@@ -164,6 +168,17 @@ Editor.prototype.goFullscreen = function()
 	},100);
 }
 
+//derwish added
+Editor.prototype.onResetButton = function () {
+    this.graphcanvas.offset = [0, 0];
+    this.graphcanvas.scale = 1;
+    this.graphcanvas.setZoom(1, [1, 1]);
+}
+//derwish added
+Editor.prototype.onMinimapButton = function () {
+    this.addMiniWindow(200,200);
+}
+
 Editor.prototype.onFullscreenButton = function()
 {
 	this.goFullscreen();
@@ -174,8 +189,13 @@ Editor.prototype.onMaximizeButton = function()
 	this.maximize();
 }
 
-Editor.prototype.addMiniWindow = function(w,h)
-{
+Editor.prototype.addMiniWindow = function (w, h) {
+
+    if (minimap_opened) 
+        return;
+
+    minimap_opened = true;
+
 	var miniwindow = document.createElement("div");
 	miniwindow.className = "litegraph miniwindow";
 	miniwindow.innerHTML = "<canvas class='graphcanvas' width='"+w+"' height='"+h+"' tabindex=10></canvas>";
@@ -183,7 +203,13 @@ Editor.prototype.addMiniWindow = function(w,h)
 
 	var graphcanvas = new LGraphCanvas(canvas, this.graph);
 	graphcanvas.background_image = "images/litegraph/grid.png";
-	graphcanvas.scale = 0.5;
+    //derwish edit
+	graphcanvas.scale = 0.1;
+    //graphcanvas.allow_dragnodes = false;
+
+	graphcanvas.offset = [0, 0];
+	graphcanvas.scale = 0.1;
+	graphcanvas.setZoom(0.1, [1, 1]);
 
 	miniwindow.style.position = "absolute";
 	miniwindow.style.top = "4px";
@@ -192,14 +218,27 @@ Editor.prototype.addMiniWindow = function(w,h)
 	var close_button = document.createElement("div");
 	close_button.className = "corner-button";
 	close_button.innerHTML = "X";
-	close_button.addEventListener("click",function(e) {
+	close_button.addEventListener("click", function (e) {
+	    minimap_opened = false;
 		graphcanvas.setGraph(null);
 		miniwindow.parentNode.removeChild(miniwindow);
 	});
 	miniwindow.appendChild(close_button);
 
+    //derwiah added
+	var reset_button = document.createElement("div");
+	reset_button.className = "corner-button2";
+	reset_button.innerHTML = "R";
+	reset_button.addEventListener("click", function (e) {
+	    graphcanvas.offset = [0, 0];
+	    graphcanvas.scale = 0.1;
+	    graphcanvas.setZoom (0.1, [1, 1]);
+	});
+	miniwindow.appendChild(reset_button);
 
 	this.root.querySelector(".content").appendChild(miniwindow);
+
 }
+
 
 LiteGraph.Editor = Editor;

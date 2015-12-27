@@ -71,7 +71,8 @@ function onReturnNodes(nodes) {
 function createOrUpdateNode(node) {
     var newNode = LiteGraph.createNode(node.type);
     newNode.pos = node.pos;
-    newNode.title = node.title + " [" + node.id+"]";
+    //newNode.title = node.title + " [" + node.id+"]";
+    newNode.title = node.title;
     newNode.inputs = node.inputs;
     newNode.outputs = node.outputs;
     newNode.size = node.size;

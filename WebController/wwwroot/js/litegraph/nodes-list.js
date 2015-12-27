@@ -6,6 +6,8 @@
     function HardwareNode() {
         this.size = [150, 20];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMySensors" };
+        this.clonable = false;
+        this.removable = false;
     }
 
     LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);

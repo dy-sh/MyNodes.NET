@@ -89,6 +89,16 @@
 	cursor: pointer;
 }
 
+.litegraph-editor .miniwindow .corner-button2 {
+	position: absolute;
+	top: 2px;
+	right: 15px;
+	font-family: "Tahoma";
+	font-size: 14px;
+	color: #AAA;
+	cursor: pointer;
+}
+
 
 /* BUTTONS **********************/
 

@@ -33,7 +33,8 @@ var LiteGraph = {
 	NODE_WIDTH: 140,
 	NODE_MIN_WIDTH: 50,
 	NODE_COLLAPSED_RADIUS: 10,
-	NODE_COLLAPSED_WIDTH: 80,
+    //derwish edit
+	NODE_COLLAPSED_WIDTH: 150,
 	CANVAS_GRID_SIZE: 10,
 	NODE_TITLE_COLOR: "#222",
 	NODE_DEFAULT_COLOR: "#999",
@@ -2198,7 +2199,8 @@ function LGraphCanvas( canvas, graph, skip_render )
 	if(canvas && canvas.constructor === String )
 		canvas = document.querySelector( canvas );
 
-	this.max_zoom = 10;
+    //derwish edit
+	this.max_zoom = 2;
 	this.min_zoom = 0.1;
 
 	//link canvas and graph
@@ -3066,7 +3068,8 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 LGraphCanvas.prototype.processMouseWheel = function(e) 
 {
 	if(!this.graph || !this.allow_dragcanvas)
-		return;
+	    return;
+
 
 	var delta = (e.wheelDeltaY != null ? e.wheelDeltaY : e.detail * -60);
 
@@ -3079,7 +3082,9 @@ LGraphCanvas.prototype.processMouseWheel = function(e)
 	else if (delta < 0)
 		zoom *= 1/(1.1);
 
-	this.setZoom( zoom, [ e.localX, e.localY ] );
+	this.setZoom(zoom, [e.localX, e.localY]);
+
+
 
 	/*
 	if(this.rendering_timer_id == null)
@@ -4485,7 +4490,7 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function()
 	else
 	{
 		options = [
-			{content:"Add Node", is_menu: true, callback: LGraphCanvas.onMenuAdd }
+			{content:"Add Node", is_menu: true, callback: LGraphCanvas.onMenuAdd },
 			//{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
 		];
 
@@ -4514,13 +4519,15 @@ LGraphCanvas.prototype.getNodeMenuOptions = function(node)
 		options = node.getMenuOptions(this);
 	else
 		options = [
-			{content:"Inputs", is_menu: true, disabled:true, callback: LGraphCanvas.onMenuNodeInputs },
-			{content:"Outputs", is_menu: true, disabled:true, callback: LGraphCanvas.onMenuNodeOutputs },
+            //derwish remove
+			//{ content: "Inputs", is_menu: true, disabled: true, callback: LGraphCanvas.onMenuNodeInputs },
+			//{content:"Outputs", is_menu: true, disabled:true, callback: LGraphCanvas.onMenuNodeOutputs },
 			null,
-			{content:"Collapse", callback: LGraphCanvas.onMenuNodeCollapse },
-			{content:"Pin", callback: LGraphCanvas.onMenuNodePin },
-			{content:"Colors", is_menu: true, callback: LGraphCanvas.onMenuNodeColors },
-			{content:"Shapes", is_menu: true, callback: LGraphCanvas.onMenuNodeShapes },
+			{ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse },
+            //derwish remove
+			//{content:"Pin", callback: LGraphCanvas.onMenuNodePin },
+			//{content:"Colors", is_menu: true, callback: LGraphCanvas.onMenuNodeColors },
+			//{content:"Shapes", is_menu: true, callback: LGraphCanvas.onMenuNodeShapes },
 			null
 		];
 
@@ -4569,10 +4576,10 @@ LGraphCanvas.prototype.processContextualMenu = function(node, event)
 	if(node)
 		slot = node.getSlotInPosition( event.canvasX, event.canvasY );
 
-	if(slot)
-	{
-		menu_info = slot.locked ? [ "Cannot remove" ] : { "Remove Slot": slot };
-		options.title = slot.input ? slot.input.type : slot.output.type;
+	if(slot) {
+        //derwish remove
+		//menu_info = slot.locked ? [ "Cannot remove" ] : { "Remove Slot": slot };
+		//options.title = slot.input ? slot.input.type : slot.output.type;
 	}
 	else
 		menu_info = node ? this.getNodeMenuOptions(node) : this.getCanvasMenuOptions();
