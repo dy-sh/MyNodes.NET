@@ -16,6 +16,7 @@ using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Gateways;
+using MyNetSensors.LogicalNodes;
 using MyNetSensors.SerialControllers;
 
 namespace MyNetSensors.WebController.Code
@@ -88,14 +89,29 @@ namespace MyNetSensors.WebController.Code
                 SerialController.gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
                 SerialController.gateway.OnNewSensorEvent += OnNewSensorEvent;
 
-               // SerialController.logicalNodesEngine. += OnNewSensorEvent;
+                SerialController.logicalNodesEngine.OnNewNodeEvent += OnNewLogicalNodeEvent;
+                SerialController.logicalNodesEngine.OnNodeUpdatedEvent += OnLogicalNodeUpdatedEvent;
 
 
                 //start
                 SerialController.Start(portName);
+
+ 
+
             }
         }
 
+        private static void OnLogicalNodeUpdatedEvent(LogicalNode node)
+        {
+            hub.Clients.All.OnLogicalNodeUpdatedEvent(node);
+
+        }
+
+        private static void OnNewLogicalNodeEvent(LogicalNode node)
+        {
+            hub.Clients.All.OnLogicalNodeUpdatedEvent(node);
+
+        }
 
 
         public static void Log(string message)

@@ -114,9 +114,8 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-            string cs = ConfigurationManager.ConnectionStrings["GatewayDbConnection"].ConnectionString;
-            ISensorsLinksRepository linksDb = new SensorsLinksRepositoryDapper(cs);
-            ISensorsTasksRepository tasksDb = new SensorsTasksRepositoryDapper(cs);
+            ISensorsLinksRepository linksDb = SerialController.sensorsLinksDb;
+            ISensorsTasksRepository tasksDb = SerialController.sensorsTasksDb;
 
             foreach (var sensor in node.sensors)
             {

@@ -34,7 +34,7 @@ $(function () {
         createOrUpdateNode(node);
     };
 
-    clientsHub.client.OnLogicalNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNewLogicalNodeEvent = function (node) {
         createOrUpdateNode(node);
     };
 
@@ -56,8 +56,6 @@ $(function () {
         }
     });
 
-    setInterval(updateAllLastSeens, 1000);
-
     getIsHardwareConnected();
     getNodes();
 });
@@ -75,12 +73,6 @@ function getIsHardwareConnected() {
 
 
 function hardwareStateChanged(connected) {
-    if (connected) {
-        $('#nodesContainer').fadeIn(elementsFadeTime);
-    } else {
-        $('#nodesContainer').fadeOut(elementsFadeTime);
-    }
-
     if (connected && gatewayHardwareConnected === false) {
         noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
     } else if (!connected) {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class InputHardware : Input
+    public class HardwareOutput:Output
     {
         public int nodeId;
         public int sensorId;

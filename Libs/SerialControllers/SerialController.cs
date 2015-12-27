@@ -61,7 +61,7 @@ namespace MyNetSensors.SerialControllers
 //        public static SoftNodesController softNodesController;
 
 
-        public static LogicalNodesEngine logicalNodesEngine;
+        public static LogicalNodesEngine logicalNodesEngine=new LogicalNodesEngine(gateway);
         public static ILogicalNodesRepository logicalNodesRepository;
 
 
@@ -238,7 +238,7 @@ namespace MyNetSensors.SerialControllers
             OnDebugStateMessage("LOGICAL NODES ENGINE: Starting... ");
 
             //todo logicalNodesEngine = new LogicalNodesEngine(gateway, logicalNodesRepository);
-            logicalNodesEngine = new LogicalNodesEngine(gateway);
+
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
             if (logicalNodesDebugEngine)
@@ -246,6 +246,8 @@ namespace MyNetSensors.SerialControllers
 
             if (logicalNodesDebugNodes)
                 logicalNodesEngine.OnDebugNodeMessage += message => OnDebugTxRxMessage("LOGICAL NODES ENGINE: " + message);
+
+            logicalNodesEngine.Start();
 
 
             //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();

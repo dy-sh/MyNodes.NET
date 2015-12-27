@@ -64,15 +64,13 @@ namespace MyNetSensors.LogicalNodes
                 db.CreateDb();
                 GetNodesFromRepository();
             }
-
-            Start();
-
-
         }
 
 
-        private void Start()
+        public void Start()
         {
+            hardwareNodesEngine.CreateAndAddHardwareNodes();
+
             started = true;
             updateNodesTimer.Start();
 
@@ -82,7 +80,7 @@ namespace MyNetSensors.LogicalNodes
         }
 
 
-        private void Stop()
+        public void Stop()
         {
             started = false;
             updateNodesTimer.Stop();
@@ -178,6 +176,46 @@ namespace MyNetSensors.LogicalNodes
                 db.UpdateNode(oldNode);
 
             OnNodeUpdatedEvent?.Invoke(node);
+        }
+
+        //public void UpdateOutput(Output output)
+        //{
+
+        //    Output oldOutput = GetOutput(output.Id);
+
+        //    oldOutput.Name = output.Name;
+        //    oldOutput.Value = output.Value;
+
+        //}
+
+        //public void UpdateInput(Input input)
+        //{
+
+        //    Input oldInput = GetInput(input.Id);
+
+        //    oldInput.Name = input.Name;
+        //    oldInput.Value = input.Value;
+
+        //}
+
+        public void UpdateOutput(string outputId, string value, string name = null)
+        {
+            Output oldOutput = GetOutput(outputId);
+
+            if (name != null)
+                oldOutput.Name = name;
+            oldOutput.Value = value;
+
+        }
+
+        public void UpdateInput(string inputId, string value, string name = null)
+        {
+            Input oldInput = GetInput(inputId);
+
+            if (name != null)
+                oldInput.Name = name;
+            oldInput.Value = value;
+
         }
 
         public void AddLink(string outputId, string inputId)

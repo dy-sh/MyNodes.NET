@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="ILogicalNodesRepository.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="InputHardware.cs" />
+    <Compile Include="HardwareInput.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="LogicalHardwareNodesEngine.cs" />
     <Compile Include="LogicalNode.cs" />
@@ -59,7 +59,7 @@
     <Compile Include="LogicalNodesEngine.cs" />
     <Compile Include="LogicalLink.cs" />
     <Compile Include="Output.cs" />
-    <Compile Include="OutputHardware.cs" />
+    <Compile Include="HardwareOutput.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Size.cs" />

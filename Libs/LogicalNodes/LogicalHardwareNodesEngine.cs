@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using MyNetSensors.Gateways;
@@ -26,9 +27,17 @@ namespace MyNetSensors.LogicalNodes
             gateway.OnNewSensorEvent += CreateOrUpdateSensor;
             gateway.OnSensorUpdatedEvent += CreateOrUpdateSensor;
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            gateway.OnDeleteNodeEvent += OnDeleteNodeEvent;
 
-            CreateAndAddHardwareNodes();
 
+
+        }
+
+        private void OnDeleteNodeEvent(Node node)
+        {
+            LogicalHardwareNode oldNode = GetHardwareNode(node.nodeId);
+            if (oldNode != null)
+                engine.RemoveNode(oldNode);
         }
 
         private void OnClearNodesListEvent()
@@ -38,47 +47,91 @@ namespace MyNetSensors.LogicalNodes
 
         private void CreateOrUpdateSensor(Sensor sensor)
         {
-            foreach (var node in engine.nodes)
+            HardwareOutput output = GetHardwarOutput(sensor);
+            if (output == null)
             {
-                if (node is LogicalHardwareNode)
-                {
-                    if (((LogicalHardwareNode)node).nodeId != sensor.nodeId)
-                        continue;
-
-                    foreach (var output in node.Outputs)
-                    {
-                        if (((OutputHardware)output).sensorId != sensor.sensorId)
-                            continue;
-
-                        output.Value = sensor.state;
-                    }
-                }
+                LogicalHardwareNode node = GetHardwareNode(sensor.nodeId);
+                node.AddInputOutput(sensor);
+                engine.UpdateNode(node);//for call event
             }
+            else
+            {
+                engine.UpdateOutput(output.Id, sensor.state, sensor.GetSimpleName1());
+            }
+
         }
 
         private void CreateOrUpdateNode(Node node)
         {
-            LogicalHardwareNode newHardwareNode = new LogicalHardwareNode(node);
-            engine.AddNode(newHardwareNode);
+            LogicalHardwareNode oldNode = GetHardwareNode(node.nodeId);
+            if (oldNode == null)
+            {
+                LogicalHardwareNode newHardwareNode = new LogicalHardwareNode(node);
+                engine.AddNode(newHardwareNode);
+            }
+            else
+            {
+                oldNode.Title = node.GetSimpleName1();
+                engine.UpdateNode(oldNode);
+            }
         }
 
 
-        private LogicalHardwareNode GetHardwareNode(int nodeId)
+        public LogicalHardwareNode GetHardwareNode(int nodeId)
         {
-            foreach (var node in engine.nodes)
+            foreach (var n in engine.nodes)
             {
-                if (node is LogicalHardwareNode)
+                if (n is LogicalHardwareNode)
                 {
-                  //  if ((LogicalHardwareNode node).nodeId == nodeId)
-                   // return node;
+                    LogicalHardwareNode node = (LogicalHardwareNode)n;
+                    if (node.nodeId == nodeId)
+                        return node;
                 }
+            }
+            return null;
+        }
+
+        public HardwareOutput GetHardwarOutput(int nodeId, int sensorId)
+        {
+            LogicalHardwareNode oldNode = GetHardwareNode(nodeId);
+            if (oldNode == null)
+                return null;
+
+            foreach (HardwareOutput output in oldNode.Outputs)
+            {
+                if (output.sensorId == sensorId)
+                    return output;
             }
             return null;
         }
 
 
 
+        public HardwareInput GetHardwareInput(int nodeId, int sensorId)
+        {
+            LogicalHardwareNode oldNode = GetHardwareNode(nodeId);
+            if (oldNode == null)
+                return null;
 
+            foreach (HardwareInput input in oldNode.Inputs)
+            {
+                if (input.sensorId == sensorId)
+                    return input;
+            }
+            return null;
+        }
+
+        public HardwareOutput GetHardwarOutput(Sensor sensor)
+        {
+            return GetHardwarOutput(sensor.nodeId, sensor.sensorId);
+        }
+
+
+
+        public HardwareInput GetHardwareInput(Sensor sensor)
+        {
+            return GetHardwareInput(sensor.nodeId, sensor.sensorId);
+        }
 
         public List<LogicalHardwareNode> CreateAndAddHardwareNodes()
         {
@@ -93,7 +146,7 @@ namespace MyNetSensors.LogicalNodes
             return list;
         }
 
-   
+
 
         public void RemoveAllNonHardwareNodes()
         {

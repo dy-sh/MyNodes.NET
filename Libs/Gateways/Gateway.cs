@@ -24,6 +24,7 @@ namespace MyNetSensors.Gateways
 
         public event MessageEventHandler OnMessageRecievedEvent;
         public event MessageEventHandler OnMessageSendEvent;
+        public event NodeEventHandler OnDeleteNodeEvent;
         public event NodeEventHandler OnNewNodeEvent;
         public event NodeEventHandler OnNodeUpdatedEvent;
         public event NodeEventHandler OnNodeLastSeenUpdatedEvent;
@@ -535,6 +536,8 @@ namespace MyNetSensors.Gateways
         public void DeleteNode(int nodeId)
         {
             Node oldNode = GetNode(nodeId);
+
+            OnDeleteNodeEvent?.Invoke(oldNode);
 
             if (oldNode!=null) 
                 nodes.Remove(oldNode);
