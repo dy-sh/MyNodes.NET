@@ -12,7 +12,7 @@
 
 
 
-
+//derwish added
 function guid() {
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
@@ -122,6 +122,7 @@ var LiteGraph = {
 				node[i] = options[i];								
 		}
 
+	    //derwish added
 		node.id = guid();
 
 		return node;
@@ -1937,6 +1938,9 @@ LGraphNode.prototype.disconnectOutput = function(slot, target_node)
 		output.links = null;
 	}
 
+    //derwish added
+	delete graph.links[link_id];
+
 	this.setDirtyCanvas(false,true);
 	this.graph.onConnectionChange();
 	return true;
@@ -1998,6 +2002,10 @@ LGraphNode.prototype.disconnectInput = function(slot)
 			}
 		}
 	}
+
+	//derwish added
+	delete graph.links[link_id];
+
 
 	this.setDirtyCanvas(false,true);
 	this.graph.onConnectionChange();

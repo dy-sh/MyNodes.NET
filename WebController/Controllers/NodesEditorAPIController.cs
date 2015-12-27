@@ -215,29 +215,41 @@ namespace MyNetSensors.WebController.Controllers
             foreach (var node in graph.nodes)
             {
                 string type = node.properties["objectType"];
-                
+
                 if (type == "MyNetSensors.LogicalNodes.LogicalNodeMySensors")
-                    continue;
+                {
+                    LogicalNode oldNode=engine.GetNode(node.id);
+                    oldNode.Position= new Position { X = node.pos[0], Y = node.pos[1] };
+                }
+                else
+                {
+                    var newObject = Activator.CreateInstance("LogicalNodes", type);
+                    LogicalNode newNode = (LogicalNode) newObject.Unwrap();
 
-                var newObject = Activator.CreateInstance("LogicalNodes", type);
-                LogicalNode newNode = (LogicalNode)newObject.Unwrap();
+                    //LogicalNode newNode = newObject as LogicalNode;
+                    newNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
+                    newNode.Size = new Size {Width = node.size[0], Height = node.size[1]};
+                    newNode.Id = node.id;
 
-                //LogicalNode newNode = newObject as LogicalNode;
-                newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-                newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
-                newNode.Id = node.id;
-
-                engine.AddNode(newNode);
+                    engine.AddNode(newNode);
+                }
             }
 
-            for (int i = 0; i < graph.links.Count; i++)
+            foreach (Link link in graph.links.Values)
             {
-                Link link = graph.links[i];
-                
                 LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
                 LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
                 engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             }
+
+            //for (int i = 0; i < graph.links.Count; i++)
+            //{
+            //    Link link = graph.links[i];
+                
+            //    LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
+            //    LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            //    engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+            //}
 
 
             return true;

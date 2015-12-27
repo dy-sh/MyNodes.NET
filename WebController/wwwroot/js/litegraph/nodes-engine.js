@@ -58,6 +58,8 @@ function getNodes() {
 
 function onReturnNodes(nodes) {
     //console.log(nodes);
+    if (!nodes) return;
+
     for (var i = 0; i < nodes.length; i++) {
         createOrUpdateNode(nodes[i]);
     }
@@ -86,15 +88,18 @@ function getLinks() {
         url: "/NodesEditorAPI/GetLinks",
         type: "POST",
         success: function (links) {
-            onRetunrLinks(links);
+            onReturnLinks(links);
         }
     });
 }
 
 
 
-function onRetunrLinks(links) {
+function onReturnLinks(links) {
     //console.log(nodes);
+
+    if (!links) return;
+
     for (var i = 0; i < links.length; i++) {
         createOrUpdateLink(links[i]);
     }
