@@ -17,9 +17,17 @@ namespace MyNetSensors.LogicalNodes
         int AddOrUpdateNode(LogicalNode node);
         int AddNode(LogicalNode node);
         void UpdateNode(LogicalNode node);
-        LogicalNode GetNode(string Id);
+        LogicalNode GetNode(string id);
         List<LogicalNode> GetAllNodes();
-        void DeleteNode(string Id);
+        void DeleteNode(string id);
         void DropNodes();
+
+        int AddOrUpdateLink(LogicalLink link);
+        int AddLink(LogicalLink link);
+        void UpdateLink(LogicalLink link);
+        LogicalLink GetLink(string id);
+        List<LogicalLink> GetAllLinks();
+        void DeleteLink(string id);
+        void DropLinks();
     }
 }

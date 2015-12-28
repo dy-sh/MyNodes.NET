@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.LogicalNodes;
+using MyNetSensors.LogicalNodesMySensors;
+using MyNetSensors.LogicalNodesRepositoryDappers;
 using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
@@ -61,7 +63,8 @@ namespace MyNetSensors.SerialControllers
 //        public static SoftNodesController softNodesController;
 
 
-        public static LogicalNodesEngine logicalNodesEngine=new LogicalNodesEngine(gateway);
+        public static LogicalNodesEngine logicalNodesEngine;
+        public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
         public static ILogicalNodesRepository logicalNodesRepository;
 
 
@@ -70,14 +73,12 @@ namespace MyNetSensors.SerialControllers
 
 
 
-        public static async void Start(string serialPortName, string dbConnectionString = null)
+        public static void Start(string serialPortName, string dbConnectionString = null)
         {
             SerialController.serialPortName = serialPortName;
 
-            await Task.Run(() =>
-            {
+    
                 OnDebugStateMessage("-------------STARTING GATEWAY--------------");
-
 
                 ConnectToDB();
                 ConnectToSerialPort();
@@ -90,7 +91,7 @@ namespace MyNetSensors.SerialControllers
                 gateway.OnDisconnectedEvent += ReconnectToSerialPort;
 
                 OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
-            });
+ 
         }
 
 
@@ -114,7 +115,7 @@ namespace MyNetSensors.SerialControllers
             historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
             sensorsTasksDb = new SensorsTasksRepositoryDapper(dataBaseConnectionString);
             sensorsLinksDb = new SensorsLinksRepositoryDapper(dataBaseConnectionString);
-            //todo logicalNodesRepository = new logicalNodesRepositoryDapper(dataBaseConnectionString);
+            logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
             gatewayDb.ShowDebugInConsole(dataBaseDebugState);
@@ -123,8 +124,9 @@ namespace MyNetSensors.SerialControllers
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
+  
 
-            OnDebugStateMessage("DATABASE: Connected");
+OnDebugStateMessage("DATABASE: Connected");
         }
 
 
@@ -237,7 +239,9 @@ namespace MyNetSensors.SerialControllers
 
             OnDebugStateMessage("LOGICAL NODES ENGINE: Starting... ");
 
-            //todo logicalNodesEngine = new LogicalNodesEngine(gateway, logicalNodesRepository);
+
+            //logicalNodesEngine=new LogicalNodesEngine(logicalNodesRepository);
+            logicalNodesEngine=new LogicalNodesEngine();
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
@@ -247,27 +251,18 @@ namespace MyNetSensors.SerialControllers
             if (logicalNodesDebugNodes)
                 logicalNodesEngine.OnDebugNodeMessage += message => OnDebugTxRxMessage("LOGICAL NODES ENGINE: " + message);
 
+
+            logicalHardwareNodesEngine=new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
+
             logicalNodesEngine.Start();
 
-
+            //demo
             //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();
-            //nodeMathPlus.Position=new Position {X=100,Y=331};
             //logicalNodesEngine.AddNode(nodeMathPlus);
-
-            //LogicalNodeInvert logicalNodeInvert = new LogicalNodeInvert();
-            //logicalNodeInvert.Position=new Position {X=100,Y=251};
-            //logicalNodesEngine.AddNode(logicalNodeInvert);
-
             //LogicalNodeConsole logicalNodeConsole = new LogicalNodeConsole();
             //logicalNodesEngine.AddNode(logicalNodeConsole);
+            //logicalNodesEngine.AddLink(nodeMathPlus[0].Outputs[0], logicalNodeConsole.Inputs[0]);
 
-            //List<LogicalNodeMySensors> mySensorsesNodes
-            //    = logicalNodesEngine.CreateAndAddMySensorsNodes();
-
-
-            //logicalNodesEngine.AddLink(mySensorsesNodes[0].Outputs[0], logicalNodeInvert.Inputs[0]);
-            //logicalNodesEngine.AddLink(logicalNodeInvert.Outputs[0], mySensorsesNodes[1].Inputs[0]);
-            //logicalNodesEngine.AddLink(mySensorsesNodes[1].Outputs[0], logicalNodeConsole.Inputs[0]);
 
 
             //string json1 = logicalNodesEngine.SerializeNodes();

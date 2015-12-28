@@ -12,6 +12,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.Models;
 using MyNetSensors.WebController.Services;
@@ -133,9 +134,21 @@ namespace MyNetSensors.WebController
                     });
                 }
 
-            SerialControllerInitializer.Start(loggerFactory, Configuration, connectionManager);
+
+            StartSerialController(connectionManager);
 
         }
+
+        public async Task StartSerialController(IConnectionManager connectionManager)
+        {
+            await Task.Run(() => SerialControllerConfigurator.Start(Configuration))
+                .ContinueWith((t1) =>
+                {
+                    SignalRServer.Start(connectionManager);
+                });
+        }
+
+ 
 
         // Entry point for the application.
         public static void Main(string[] args)

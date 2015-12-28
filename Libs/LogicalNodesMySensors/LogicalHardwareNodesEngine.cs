@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MyNetSensors.Gateways;
+using MyNetSensors.LogicalNodes;
 
-namespace MyNetSensors.LogicalNodes
+namespace MyNetSensors.LogicalNodesMySensors
 {
     public class LogicalHardwareNodesEngine
     {
@@ -28,9 +24,7 @@ namespace MyNetSensors.LogicalNodes
             gateway.OnSensorUpdatedEvent += CreateOrUpdateSensor;
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
             gateway.OnDeleteNodeEvent += OnDeleteNodeEvent;
-
-
-
+            CreateAndAddHardwareNodes();
         }
 
         private void OnDeleteNodeEvent(Node node)

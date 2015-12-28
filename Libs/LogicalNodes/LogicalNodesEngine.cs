@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using MyNetSensors.Gateways;
 using Newtonsoft.Json;
 
 namespace MyNetSensors.LogicalNodes
 {
+    public delegate void DebugMessageEventHandler(string message);
     public class LogicalNodesEngine
     {
         //If you have tons of logical nodes, and system perfomance decreased, increase this value,
@@ -49,15 +49,13 @@ namespace MyNetSensors.LogicalNodes
         public delegate void LogicalLinkEventHandler(LogicalLink link);
         public delegate void LogicalLinksEventHandler(List<LogicalLink> link);
 
-        public static LogicalHardwareNodesEngine hardwareNodesEngine;
 
-        public LogicalNodesEngine(Gateway gateway, ILogicalNodesRepository db = null)
+        public LogicalNodesEngine(ILogicalNodesRepository db = null)
         {
             LogicalNodesEngine.logicalNodesEngine = this;
 
             this.db = db;
 
-            hardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, this);
 
             updateNodesTimer.Elapsed += UpdateNodes;
             updateNodesTimer.Interval = updateNodesInterval;
@@ -72,8 +70,6 @@ namespace MyNetSensors.LogicalNodes
 
         public void Start()
         {
-            hardwareNodesEngine.CreateAndAddHardwareNodes();
-
             started = true;
             updateNodesTimer.Start();
 

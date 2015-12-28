@@ -24,6 +24,8 @@
     <ProjectReference Include="..\GatewayRepository\GatewayRepository.csproj" />
     <ProjectReference Include="..\Gateway\Gateway.csproj" />
     <ProjectReference Include="..\Libs\Gateways\Gateways.csproj" />
+    <ProjectReference Include="..\Libs\LogicalNodesMySensors\LogicalNodesMySensors.csproj" />
+    <ProjectReference Include="..\Libs\LogicalNodesRepositoryDappers\LogicalNodesRepositoryDappers.csproj" />
     <ProjectReference Include="..\Libs\LogicalNodes\LogicalNodes.csproj" />
     <ProjectReference Include="..\Libs\SerialControllers\SerialControllers.csproj" />
     <ProjectReference Include="..\Libs\SerialController\SerialControl.csproj" />

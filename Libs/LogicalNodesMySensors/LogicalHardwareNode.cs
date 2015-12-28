@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.Gateways;
+﻿using MyNetSensors.Gateways;
+using MyNetSensors.LogicalNodes;
 
-namespace MyNetSensors.LogicalNodes
+namespace MyNetSensors.LogicalNodesMySensors
 {
     public class LogicalHardwareNode : LogicalNode
     {

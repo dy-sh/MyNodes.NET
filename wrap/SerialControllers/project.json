@@ -14,7 +14,9 @@
         "LogicalNodes": "1.0.0-*",
         "NodesLinks": "1.0.0-*",
         "NodeTasks": "1.0.0-*",
-        "SensorsHistoryRepository": "1.0.0-*"
+        "SensorsHistoryRepository": "1.0.0-*",
+        "LogicalNodesRepositoryDappers": "1.0.0-*",
+        "LogicalNodesMySensors": "1.0.0-*"
       }
     }
   }

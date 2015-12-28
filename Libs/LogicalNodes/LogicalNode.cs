@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyNetSensors.Gateways;
 
 namespace MyNetSensors.LogicalNodes
 {
@@ -49,7 +48,7 @@ namespace MyNetSensors.LogicalNodes
 
 
 
-        internal void Debug(string message)
+        public void Debug(string message)
         {
             LogicalNodesEngine.logicalNodesEngine.DebugNodes(message);
         }
