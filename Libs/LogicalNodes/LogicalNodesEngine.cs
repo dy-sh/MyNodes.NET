@@ -152,14 +152,42 @@ namespace MyNetSensors.LogicalNodes
 
         public void RemoveNode(LogicalNode node)
         {
-            DebugEngine($"Remove node {node.GetType().Name}");
+
+            List<LogicalLink> links = GetLinksForNode(node);
+            foreach (var link in links)
+            {
+                    DeleteLink(link);
+            }
+
             OnNodeDeleteEvent?.Invoke(node);
+            DebugEngine($"Remove node {node.GetType().Name}");
 
             nodes.Remove(node);
 
             if (db != null)
                 db.DeleteNode(node.Id);
 
+        }
+
+        public List<LogicalLink> GetLinksForNode(LogicalNode node)
+        {
+            List<LogicalLink> list=new List<LogicalLink>();
+
+            foreach (var input in node.Inputs)
+            {
+                LogicalLink link = GetLinkForInput(input);
+                if (link!=null)
+                    list.Add(link);
+            }
+
+            foreach (var output in node.Outputs)
+            {
+                List<LogicalLink> links = GetLinksForOutput(output);
+                if (links != null)
+                    list.AddRange(links);
+            }
+
+            return list;
         }
 
         public void UpdateNode(LogicalNode node)
@@ -232,6 +260,12 @@ namespace MyNetSensors.LogicalNodes
         {
             LogicalNode inputNode = GetInputOwner(input);
             LogicalNode outputNode = GetOutputOwner(output);
+
+            //prevent two links to one input
+            LogicalLink oldLink = GetLinkForInput(input);
+            if (oldLink!=null)
+                DeleteLink(oldLink);
+
             DebugEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = new LogicalLink(output.Id, input.Id);
@@ -256,6 +290,13 @@ namespace MyNetSensors.LogicalNodes
 
             OnLinkDeleteEvent?.Invoke(link);
             links.Remove(link);
+        }
+
+        public void DeleteLink(LogicalLink link)
+        {
+            Output output=GetOutput(link.OutputId);
+            Input input=GetInput(link.InputId);
+            DeleteLink(output,input);
         }
 
         public LogicalLink GetLink(Output output, Input input)

@@ -240,6 +240,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool PutGraph(string json)
         {
+            return false;
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
             engine.RemoveAllLinks();

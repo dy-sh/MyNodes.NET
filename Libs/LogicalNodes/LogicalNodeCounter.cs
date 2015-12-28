@@ -24,7 +24,7 @@ namespace MyNetSensors.LogicalNodes
         /// <summary>
         /// Counter (1 input, 1 output). Input[0] - Frequency (ms). Default=1000.
         /// </summary>
-        public LogicalNodeCounter() : base(1, 2)
+        public LogicalNodeCounter() : base(1, 1)
         {
             this.Title = "Logic Counter";
             this.Type = "Logic/Counter";
