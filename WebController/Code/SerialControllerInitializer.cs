@@ -92,7 +92,10 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.logicalNodesEngine.OnNewNodeEvent += OnNewLogicalNodeEvent;
                 SerialController.logicalNodesEngine.OnNodeUpdatedEvent += OnLogicalNodeUpdatedEvent;
-                SerialController.logicalNodesEngine.OnNodeRemoveEvent += OnLogicalNodeDeleteEvent;
+                SerialController.logicalNodesEngine.OnNodeDeleteEvent += OnLogicalNodeDeleteEvent;
+                SerialController.logicalNodesEngine.OnLinksUpdatedEvent += OnLinksUpdatedEvent;
+                SerialController.logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
+                SerialController.logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
 
 
                 //start
@@ -101,6 +104,25 @@ namespace MyNetSensors.WebController.Code
  
 
             }
+        }
+
+        private static void OnNewLinkEvent(LogicalLink link)
+        {
+            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
+            LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLogicalNodeToLitegraphLink(link);
+            hub.Clients.All.OnNewLinkEvent(liteGraphLink);
+        }
+
+        private static void OnLinkDeleteEvent(LogicalLink link)
+        {
+            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
+            LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLogicalNodeToLitegraphLink(link);
+            hub.Clients.All.OnDeleteLinkEvent(liteGraphLink);
+        }
+
+        private static void OnLinksUpdatedEvent(List<LogicalLink> link)
+        {
+
         }
 
         private static void OnLogicalNodeDeleteEvent(LogicalNode node)

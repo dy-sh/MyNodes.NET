@@ -34,17 +34,20 @@ namespace MyNetSensors.LogicalNodes
 
         public event LogicalNodesEventHandler OnNodesUpdatedEvent;
         public event LogicalNodeEventHandler OnNewNodeEvent;
-        public event LogicalNodeEventHandler OnNodeRemoveEvent;
+        public event LogicalNodeEventHandler OnNodeDeleteEvent;
         public event LogicalNodeEventHandler OnNodeUpdatedEvent;
         public event LogicalInputEventHandler OnInputUpdatedEvent;
         public event LogicalOutputEventHandler OnOutputUpdatedEvent;
+        public event LogicalLinkEventHandler OnNewLinkEvent;
+        public event LogicalLinkEventHandler OnLinkDeleteEvent;
         public event LogicalLinksEventHandler OnLinksUpdatedEvent;
 
         public delegate void LogicalNodeEventHandler(LogicalNode node);
         public delegate void LogicalNodesEventHandler(List<LogicalNode> nodes);
         public delegate void LogicalInputEventHandler(Input input);
         public delegate void LogicalOutputEventHandler(Output output);
-        public delegate void LogicalLinksEventHandler(List<LogicalLink> output);
+        public delegate void LogicalLinkEventHandler(LogicalLink link);
+        public delegate void LogicalLinksEventHandler(List<LogicalLink> link);
 
         public static LogicalHardwareNodesEngine hardwareNodesEngine;
 
@@ -150,7 +153,7 @@ namespace MyNetSensors.LogicalNodes
         public void RemoveNode(LogicalNode node)
         {
             DebugEngine($"Remove node {node.GetType().Name}");
-            OnNodeRemoveEvent?.Invoke(node);
+            OnNodeDeleteEvent?.Invoke(node);
 
             nodes.Remove(node);
 
@@ -231,9 +234,10 @@ namespace MyNetSensors.LogicalNodes
             LogicalNode outputNode = GetOutputOwner(output);
             DebugEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
-            links.Add(new LogicalLink(output.Id, input.Id));
+            LogicalLink link = new LogicalLink(output.Id, input.Id);
+            links.Add(link);
 
-            OnLinksUpdatedEvent?.Invoke(links);
+            OnNewLinkEvent?.Invoke(link);
 
             if (!started)
                 return;
@@ -241,6 +245,24 @@ namespace MyNetSensors.LogicalNodes
             input.Value = output.Value;
 
         }
+
+        public void DeleteLink(Output output, Input input)
+        {
+            LogicalNode inputNode = GetInputOwner(input);
+            LogicalNode outputNode = GetOutputOwner(output);
+            DebugEngine($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+
+            LogicalLink link = GetLink(output, input);
+
+            OnLinkDeleteEvent?.Invoke(link);
+            links.Remove(link);
+        }
+
+        public LogicalLink GetLink(Output output, Input input)
+        {
+            return links.FirstOrDefault(x => x.InputId == input.Id && x.OutputId == output.Id);
+        }
+
 
         private void UpdateStatesFromLinks()
         {

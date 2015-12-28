@@ -47,6 +47,26 @@ $(function () {
     };
 
 
+    clientsHub.client.OnDeleteLinkEvent = function (link) {
+        var node = graph.getNodeById(link.origin_id);
+        var targetNode = graph.getNodeById(link.target_id);
+        node.disconnectOutput(link.target_slot, targetNode);
+        targetNode.disconnectInput(link.target_slot);
+    };
+
+    clientsHub.client.OnNewLinkEvent = function (link) {
+        var node = graph.getNodeById(link.origin_id);
+        var targetNode = graph.getNodeById(link.target_id);
+        node.connect(link.origin_slot, targetNode, link.target_slot);
+      //  graph.change();
+
+    };
+
+    clientsHub.client.OnLinksUpdatedEvent = function (links) {
+
+    };
+
+
     $.connection.hub.start();
 
     $.connection.hub.stateChanged(function (change) {
@@ -108,6 +128,51 @@ $("#sendButton").click(function () {
 });
 
 
+function send_create_link(link) {
+
+    $.ajax({
+        url: '/NodesEditorAPI/CreateLink',
+        type: 'POST',
+        data: { 'link': link }
+    }).done(function () {
+
+    });
+};
+
+function send_delete_link(link) {
+
+    $.ajax({
+        url: '/NodesEditorAPI/DeleteLink',
+        type: 'POST',
+        data: { 'link': link }
+    }).done(function () {
+
+    });
+};
+
+function send_create_node(node) {
+
+    var serializedNode = node.serialize();
+    $.ajax({
+        url: '/NodesEditorAPI/CreateNode',
+        type: 'POST',
+        data: { 'node': serializedNode }
+    }).done(function () {
+
+    });
+};
+
+function send_delete_node(node) {
+
+    var serializedNode = node.serialize();
+    $.ajax({
+        url: '/NodesEditorAPI/DeleteNode',
+        type: 'POST',
+        data: { 'node': serializedNode }
+    }).done(function () {
+
+    });
+};
 
 
 function getGraph() {

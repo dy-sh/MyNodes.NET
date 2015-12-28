@@ -1869,6 +1869,7 @@ LGraphNode.prototype.connect = function(slot, node, target_slot)
 		node.inputs[target_slot].link = link.id;
 
 	}
+
 	return true;
 }
 
@@ -1940,6 +1941,9 @@ LGraphNode.prototype.disconnectOutput = function(slot, target_node)
 	}
 
     //derwish added
+	send_delete_link(graph.links[link_id]);
+
+    //derwish added
 	delete graph.links[link_id];
 
 	this.setDirtyCanvas(false,true);
@@ -2003,6 +2007,9 @@ LGraphNode.prototype.disconnectInput = function(slot)
 			}
 		}
 	}
+
+    //derwish added
+	send_delete_link(graph.links[link_id]);
 
 	//derwish added
 	delete graph.links[link_id];
@@ -2994,15 +3001,28 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 					var slot = this.isOverNodeInput(node, e.canvasX, e.canvasY);
 					if(slot != -1)
 					{
-						this.connecting_node.connect(this.connecting_slot, node, slot);
+					    //derwish added
+					    var link = { origin_id: this.connecting_node.id, origin_slot: this.connecting_slot, target_id: node.id, target_slot: slot };
+					    send_create_link(link);
+
+					    //derwish removed
+					    //this.connecting_node.connect(this.connecting_slot, node, slot);
 					}
 					else
 					{ //not on top of an input
 						var input = node.getInputInfo(0);
 						//simple connect
-						if(input && !input.link && input.type == this.connecting_output.type) //toLowerCase missing
-							this.connecting_node.connect(this.connecting_slot, node, 0);
+					    if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
+
+					        //derwish added
+					        var link = { origin_id: this.connecting_node.id, origin_slot: this.connecting_slot, target_id: node.id, target_slot: 0 };
+					        send_create_link(link);
+                            //derwish removed
+					        //this.connecting_node.connect(this.connecting_slot, node, 0);
+					    }
 					}
+
+
 				}
 			}
 
@@ -4313,7 +4333,9 @@ LGraphCanvas.onMenuAdd = function(node, e, prev_menu, canvas, first_event )
 		if(node)
 		{
 			node.pos = canvas.convertEventToCanvas(first_event);
-			canvas.graph.add( node );
+			canvas.graph.add(node);
+            //derwish added
+		    send_create_node(node);
 		}
 	}
 
@@ -4461,8 +4483,9 @@ LGraphCanvas.onMenuNodeShapes = function(node,e)
 LGraphCanvas.onMenuNodeRemove = function(node)
 {
 	if(node.removable == false) return;
+	send_delete_node(node);
 	node.graph.remove(node);
-	node.setDirtyCanvas(true,true);
+	node.setDirtyCanvas(true, true);
 }
 
 LGraphCanvas.onMenuNodeClone = function(node)
