@@ -1940,16 +1940,11 @@ LGraphNode.prototype.disconnectOutput = function(slot, target_node)
 
 			var target_node = this.graph.getNodeById( link_info.target_id );
 			if(target_node)
-				target_node.inputs[ link_info.target_slot ].link = null; //remove other side link
+			    target_node.inputs[link_info.target_slot].link = null; //remove other side link
+			delete this.graph.links[link_id]; //remove the link from the links pool
 		}
 		output.links = null;
 	}
-
-    //derwish added
-	//send_delete_link(graph.links[link_id]);
-
-    //derwish added
-	delete graph.links[link_id];
 
 	this.setDirtyCanvas(false,true);
 	this.graph.onConnectionChange();
@@ -4865,7 +4860,8 @@ LiteGraph.createContextualMenu = function(values,options, ref_window)
 
 	root.addEventListener("mouseout", function(e) {
 		//console.log("OUT!");
-		var aux = e.toElement;
+	    //check if mouse leave a inner element
+	    var aux = e.relatedTarget || e.toElement;
 		while(aux != this && aux != ref_window.document)
 			aux = aux.parentNode;
 
