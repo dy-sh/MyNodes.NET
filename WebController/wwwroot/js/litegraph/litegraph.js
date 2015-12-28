@@ -1946,7 +1946,7 @@ LGraphNode.prototype.disconnectOutput = function(slot, target_node)
 	}
 
     //derwish added
-	send_delete_link(graph.links[link_id]);
+	//send_delete_link(graph.links[link_id]);
 
     //derwish added
 	delete graph.links[link_id];
@@ -2014,7 +2014,7 @@ LGraphNode.prototype.disconnectInput = function(slot)
 	}
 
     //derwish added
-	send_delete_link(graph.links[link_id]);
+	//send_delete_link(graph.links[link_id]);
 
 	//derwish added
 	delete graph.links[link_id];
@@ -2730,8 +2730,13 @@ LGraphCanvas.prototype.processMouseDown = function(e)
 						{
 							if(input.link !== null)
 							{
-								n.disconnectInput(i);
-								this.dirty_bgcanvas = true;
+                                //derwish removed
+							    //n.disconnectInput(i);
+								//this.dirty_bgcanvas = true;
+
+							    //derwish added
+							    send_delete_link(graph.links[input.link]);
+
 								skip_action = true;
 							}
 						}
@@ -3058,8 +3063,12 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 			if(this.graph.config.align_to_grid)
 			    this.node_dragged.alignToGrid();
 
-		    //derwish added
-			send_update_node(this.node_dragged);
+
+
+			    //derwish added
+			for (var i in this.selected_nodes) {
+			    send_update_node(this.selected_nodes[i]);
+			}
 
 			this.node_dragged = null;
 		}
@@ -4501,8 +4510,9 @@ LGraphCanvas.onMenuNodeRemove = function(node)
 {
 	if(node.removable == false) return;
 	send_delete_node(node);
-	node.graph.remove(node);
-	node.setDirtyCanvas(true, true);
+    //derwish remove
+	//node.graph.remove(node);
+	//node.setDirtyCanvas(true, true);
 }
 
 LGraphCanvas.onMenuNodeClone = function(node)
