@@ -66,23 +66,43 @@ namespace MyNetSensors.WebController.Controllers
             node.outputs = new List<Output>();
 
             if (logicalNode.Inputs != null)
-                for (int j = 0; j < logicalNode.Inputs.Count; j++)
+                foreach (var input in logicalNode.Inputs)
                 {
                     node.inputs.Add(new Input
                     {
-                        name = logicalNode.Inputs[j].Name,
-                        type = "string"
+                        name = input.Name,
+                        type = "string",
+                        link = engine.GetLinkForInput(input)?.Id
                     });
                 }
+ 
 
             if (logicalNode.Outputs != null)
-                for (int j = 0; j < logicalNode.Outputs.Count; j++)
+                foreach (var output in logicalNode.Outputs)
                 {
-                    node.outputs.Add(new Output
+                    List<LogicalLink> links = engine.GetLinksForOutput(output);
+                    if (links != null)
                     {
-                        name = logicalNode.Outputs[j].Name,
-                        type = "string"
-                    });
+                        string[] linksIds = new string[links.Count];
+                        for (int i = 0; i < links.Count; i++)
+                        {
+                            linksIds[i] = links[i].Id;
+                        }
+                        node.outputs.Add(new Output
+                        {
+                            name = output.Name,
+                            type = "string",
+                            links = linksIds
+                        });
+                    }
+                    else
+                    {
+                        node.outputs.Add(new Output
+                        {
+                            name = output.Name,
+                            type = "string"
+                        });
+                    }
                 }
 
             return node;
@@ -99,6 +119,7 @@ namespace MyNetSensors.WebController.Controllers
                 target_id = engine.GetInputOwner(logicalLink.InputId).Id,
                 origin_slot = GetOutputSlot(logicalLink.OutputId),
                 target_slot = GetInputSlot(logicalLink.InputId),
+                id = logicalLink.Id
             };
 
             return link;
@@ -112,7 +133,7 @@ namespace MyNetSensors.WebController.Controllers
             if (!links.Any())
                 return null;
 
-            List< LiteGraph.Link > list=new List<Link>();
+            List<LiteGraph.Link> list = new List<Link>();
 
             foreach (var link in links)
             {
@@ -230,8 +251,8 @@ namespace MyNetSensors.WebController.Controllers
 
                 if (type == "MyNetSensors.LogicalNodes.LogicalHardwareNode")
                 {
-                    LogicalNode oldNode=engine.GetNode(node.id);
-                    oldNode.Position= new Position { X = node.pos[0], Y = node.pos[1] };
+                    LogicalNode oldNode = engine.GetNode(node.id);
+                    oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
                 }
                 else
                 {
@@ -247,7 +268,7 @@ namespace MyNetSensors.WebController.Controllers
             //for (int i = 0; i < graph.links.Count; i++)
             //{
             //    Link link = graph.links[i];
-                
+
             //    LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
             //    LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
             //    engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
@@ -305,7 +326,7 @@ namespace MyNetSensors.WebController.Controllers
             LogicalNode oldNode = engine.GetNode(node.id);
 
             oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-            oldNode.Size = new Size{ Width = node.size[0], Height = node.size[1] };
+            oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
 
             engine.UpdateNode(oldNode);
 

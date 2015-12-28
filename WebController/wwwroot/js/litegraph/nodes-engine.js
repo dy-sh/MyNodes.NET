@@ -57,7 +57,7 @@ $(function () {
     clientsHub.client.OnNewLinkEvent = function (link) {
         var node = graph.getNodeById(link.origin_id);
         var targetNode = graph.getNodeById(link.target_id);
-        node.connect(link.origin_slot, targetNode, link.target_slot);
+        node.connect(link.origin_slot, targetNode, link.target_slot,link.id);
       //  graph.change();
 
     };
@@ -309,7 +309,7 @@ function onReturnLinks(links) {
 function createOrUpdateLink(link) {
     var target = graph.getNodeById(link.target_id);
     graph.getNodeById(link.origin_id)
-        .connect(link.origin_slot, target, link.target_slot);
+        .connect(link.origin_slot, target, link.target_slot,link.id);
 }
 
 

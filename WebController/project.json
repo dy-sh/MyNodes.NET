@@ -30,6 +30,7 @@
 
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://localhost:1312",
+    "share": "Microsoft.AspNet.Server.Kestrel --server.urls http://192.168.88.3:1312",
     "ef": "EntityFramework.Commands"
   },
 

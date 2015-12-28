@@ -263,6 +263,15 @@ namespace MyNetSensors.LogicalNodes
             return links.FirstOrDefault(x => x.InputId == input.Id && x.OutputId == output.Id);
         }
 
+        public LogicalLink GetLinkForInput(Input input)
+        {
+            return links.FirstOrDefault(x => x.InputId == input.Id);
+        }
+
+        public List<LogicalLink> GetLinksForOutput(Output output)
+        {
+            return links.Where(x => x.OutputId == output.Id).ToList();
+        }
 
         private void UpdateStatesFromLinks()
         {

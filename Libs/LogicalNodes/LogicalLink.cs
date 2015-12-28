@@ -9,6 +9,8 @@ namespace MyNetSensors.LogicalNodes
 {
     public class LogicalLink
     {
+        public string Id { get; set; }
+
         public string InputId { get; set; }
         public string OutputId { get; set; }
 
@@ -21,6 +23,7 @@ namespace MyNetSensors.LogicalNodes
 
         public LogicalLink(string outputId, string inputId)
         {
+            Id = Guid.NewGuid().ToString();
             InputId = inputId;
             OutputId = outputId;
         }

@@ -1674,7 +1674,11 @@ LGraphNode.prototype.computeSize = function(minHeight)
 		}
 
 	size[0] = Math.max( input_width + output_width + 10, title_width );
-	size[0] = Math.max( size[0], LiteGraph.NODE_WIDTH );
+	size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
+
+    //derwish added
+	size[0] = Math.floor(size[0]);
+	size[1] = Math.floor(size[1]);
 
 	function compute_text_size( text )
 	{
@@ -1789,7 +1793,8 @@ LGraphNode.prototype.findOutputSlot = function(name)
 * @param {number_or_string} target_slot the input slot of the target node (could be the number of the slot or the string with the name of the slot)
 * @return {boolean} if it was connected succesfully
 */
-LGraphNode.prototype.connect = function(slot, node, target_slot)
+//derwish edit
+LGraphNode.prototype.connect = function(slot, node, target_slot,linkId)
 {
 	target_slot = target_slot || 0;
 
@@ -1865,7 +1870,8 @@ LGraphNode.prototype.connect = function(slot, node, target_slot)
 	{
 		//info: link structure => [ 0:link_id, 1:start_node_id, 2:start_slot, 3:end_node_id, 4:end_slot ]
 		//var link = [ this.graph.last_link_id++, this.id, slot, node.id, target_slot ];
-		var link = { id: this.graph.last_link_id++, origin_id: this.id, origin_slot: slot, target_id: node.id, target_slot: target_slot };
+//derwish edit
+	    var link = { id: linkId, origin_id: this.id, origin_slot: slot, target_id: node.id, target_slot: target_slot };
 		this.graph.links[ link.id ] = link;
 
 		//connect
@@ -3059,10 +3065,9 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 			    this.node_dragged.alignToGrid();
 
 
-
 			    //derwish added
 			for (var i in this.selected_nodes) {
-			    send_update_node(this.selected_nodes[i]);
+			   send_update_node(this.selected_nodes[i]);
 			}
 
 			this.node_dragged = null;
