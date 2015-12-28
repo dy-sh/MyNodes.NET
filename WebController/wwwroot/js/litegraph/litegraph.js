@@ -4347,8 +4347,10 @@ LGraphCanvas.onMenuAdd = function(node, e, prev_menu, canvas, first_event )
 		var node = LiteGraph.createNode( v.value );
 		if(node)
 		{
-			node.pos = canvas.convertEventToCanvas(first_event);
-			canvas.graph.add(node);
+		    node.pos = canvas.convertEventToCanvas(first_event);
+            //derwish removed
+		    //canvas.graph.add(node);
+
             //derwish added
 		    send_create_node(node);
 		}
@@ -4509,8 +4511,12 @@ LGraphCanvas.onMenuNodeClone = function(node)
 	var newnode = node.clone();
 	if(!newnode) return;
 	newnode.pos = [node.pos[0]+5,node.pos[1]+5];
-	node.graph.add(newnode);
-	node.setDirtyCanvas(true,true);
+    //derwish removed
+	//node.graph.add(newnode);
+	//node.setDirtyCanvas(true, true);
+
+    //derwish added
+	send_create_node(newnode);
 }
 
 LGraphCanvas.node_colors = {
