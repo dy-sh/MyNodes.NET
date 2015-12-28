@@ -174,6 +174,18 @@ function send_delete_node(node) {
     });
 };
 
+function send_update_node(node) {
+
+    var serializedNode = node.serialize();
+    $.ajax({
+        url: '/NodesEditorAPI/UpdateNode',
+        type: 'POST',
+        data: { 'node': serializedNode }
+    }).done(function () {
+
+    });
+};
+
 
 function getGraph() {
 
@@ -223,10 +235,15 @@ function createOrUpdateNode(node) {
         newNode.id = node.id;
         newNode.properties = node.properties;
 
-        newNode.size = [NODE_WIDTH, calculateNodeHeight(newNode)];
 
-        newNode.pos = node.pos;
-        if (!newNode.pos)
+        if (node.size)
+            newNode.size = node.size;
+        else
+            newNode.size = [NODE_WIDTH, calculateNodeHeight(newNode)];
+
+        if (node.pos)
+            newNode.pos = node.pos;
+        else
             newNode.pos = [START_POS, findFreeSpaceY(newNode)];
 
         graph.add(newNode);
@@ -239,12 +256,14 @@ function createOrUpdateNode(node) {
         oldNode.id = node.id;
         oldNode.properties = node.properties;
 
+        if (node.size)
+            oldNode.size = node.size;
+        else
         oldNode.size = [NODE_WIDTH, calculateNodeHeight(oldNode)];
 
-        //if (node.pos)
-        //    oldNode.pos = node.pos;
-        //if (!oldNode.pos)
-        //    oldNode.pos = [START_POS, findFreeSpaceY(oldNode)];
+       if (node.pos)
+            oldNode.pos = node.pos;
+
 
         oldNode.setDirtyCanvas(true, true);
     }

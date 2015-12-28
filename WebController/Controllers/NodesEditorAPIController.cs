@@ -59,6 +59,9 @@ namespace MyNetSensors.WebController.Controllers
             if (logicalNode.Position != null)
                 node.pos = new[] { logicalNode.Position.X, logicalNode.Position.Y };
 
+            if (logicalNode.Size != null)
+                node.size = new[] { logicalNode.Size.Width, logicalNode.Size.Height };
+
             node.inputs = new List<Input>();
             node.outputs = new List<Output>();
 
@@ -291,9 +294,21 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool DeleteNode(LiteGraph.Node node)
         {
-            LogicalNode newNode = engine.GetNode(node.id);
+            LogicalNode oldNode = engine.GetNode(node.id);
 
-            engine.RemoveNode(newNode);
+            engine.RemoveNode(oldNode);
+            return true;
+        }
+
+        public bool UpdateNode(LiteGraph.Node node)
+        {
+            LogicalNode oldNode = engine.GetNode(node.id);
+
+            oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+            oldNode.Size = new Size{ Width = node.size[0], Height = node.size[1] };
+
+            engine.UpdateNode(oldNode);
+
             return true;
         }
     }

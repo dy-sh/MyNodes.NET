@@ -4,7 +4,7 @@
 
     //HardwareNode
     function HardwareNode() {
-        this.size = [150, 20];
+        //this.size = [150, 20];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
         this.clonable = false;
         this.removable = false;
@@ -16,7 +16,7 @@
     //SystemConsole
     function SystemConsole() {
         this.addInput("in", "string");
-        this.size = [150, 30];
+       // this.size = [150, 30];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
     }
     SystemConsole.title = "System Console";
@@ -26,22 +26,21 @@
 
     //LogicCounter
     function LogicCounter() {
-        this.addInput("freq", "string");
-        this.addOutput("out", "string");
-        this.size = [150, 30];
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
-
+        this.addInput("Frequency", "string");
+        this.addOutput("Out", "string");
+      //  this.size = [150, 30];
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter2" };
     }
-    LogicCounter.title = "Logic Counter";
+    LogicCounter.title = "Logic Counter fghfghg hg ff gfh h hg";
 
-    LiteGraph.registerNodeType("Logic/Counter", LogicCounter);
+    LiteGraph.registerNodeType("Logic/Counter2", LogicCounter);
 
 
     //LogicInvert
     function LogicInvert() {
         this.addInput("in", "string");
         this.addOutput("out", "string");
-        this.size = [150, 30];
+      //  this.size = [150, 30];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
 
     }
@@ -55,7 +54,7 @@
         this.addInput("in1", "string");
         this.addInput("in2", "string");
         this.addOutput("out", "string");
-        this.size = [150, 45];
+      //  this.size = [150, 45];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
 
     }

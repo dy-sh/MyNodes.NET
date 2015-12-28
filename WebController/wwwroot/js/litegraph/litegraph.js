@@ -1512,8 +1512,9 @@ LGraphNode.prototype.addOutput = function(name,type,extra_info)
 	if(!this.outputs) this.outputs = [];
 	this.outputs.push(o);
 	if(this.onOutputAdded)
-		this.onOutputAdded(o);
-	this.size = this.computeSize();
+	    this.onOutputAdded(o);
+    //derwish remove
+	//this.size = this.computeSize();
 }
 
 /**
@@ -1537,8 +1538,8 @@ LGraphNode.prototype.addOutputs = function(array)
 		if(this.onOutputAdded)
 			this.onOutputAdded(o);
 	}
-
-	this.size = this.computeSize();
+    //derwish remove
+	//this.size = this.computeSize();
 }
 
 /**
@@ -1549,8 +1550,9 @@ LGraphNode.prototype.addOutputs = function(array)
 LGraphNode.prototype.removeOutput = function(slot)
 {
 	this.disconnectOutput(slot);
-	this.outputs.splice(slot,1);
-	this.size = this.computeSize();
+	this.outputs.splice(slot, 1);
+    //derwish remove
+	//this.size = this.computeSize();
 	if(this.onOutputRemoved)
 		this.onOutputRemoved(slot);
 }
@@ -1573,7 +1575,8 @@ LGraphNode.prototype.addInput = function(name,type,extra_info)
 	if(!this.inputs)
 		this.inputs = [];
 	this.inputs.push(o);
-	this.size = this.computeSize();
+    //derwish remove
+	//this.size = this.computeSize();
 	if(this.onInputAdded)
 		this.onInputAdded(o);
 }
@@ -1599,8 +1602,8 @@ LGraphNode.prototype.addInputs = function(array)
 		if(this.onInputAdded)
 			this.onInputAdded(o);
 	}
-
-	this.size = this.computeSize();
+    //derwish remove
+	//this.size = this.computeSize();
 }
 
 /**
@@ -1611,8 +1614,9 @@ LGraphNode.prototype.addInputs = function(array)
 LGraphNode.prototype.removeInput = function(slot)
 {
 	this.disconnectInput(slot);
-	this.inputs.splice(slot,1);
-	this.size = this.computeSize();
+	this.inputs.splice(slot, 1);
+    //derwish remove
+	//this.size = this.computeSize();
 	if(this.onInputRemoved)
 		this.onInputRemoved(slot);
 }
@@ -2732,8 +2736,9 @@ LGraphCanvas.prototype.processMouseDown = function(e)
 						}
 					}
 
-				//Search for corner
-				if( !skip_action && isInsideRectangle(e.canvasX, e.canvasY, n.pos[0] + n.size[0] - 5, n.pos[1] + n.size[1] - 5 ,5,5 ))
+			    //Search for corner
+			    //derwish edit 5 to 10
+				if( !skip_action && isInsideRectangle(e.canvasX, e.canvasY, n.pos[0] + n.size[0] - 10, n.pos[1] + n.size[1] - 10 ,10,10 ))
 				{
 					this.resizing_node = n;
 					this.canvas.style.cursor = "se-resize";
@@ -2896,8 +2901,9 @@ LGraphCanvas.prototype.processMouseMove = function(e)
 					this._highlight_input = null;
 			}
 
-			//Search for corner
-			if( isInsideRectangle(e.canvasX, e.canvasY, n.pos[0] + n.size[0] - 5, n.pos[1] + n.size[1] - 5 ,5,5 ))
+		    //Search for corner
+            //derwish edit 5 to 10
+			if( isInsideRectangle(e.canvasX, e.canvasY, n.pos[0] + n.size[0] - 10, n.pos[1] + n.size[1] - 10 ,10,10 ))
 				this.canvas.style.cursor = "se-resize";
 			else
 				this.canvas.style.cursor = null;
@@ -3036,6 +3042,10 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 		{
 			this.dirty_canvas = true;
 			this.dirty_bgcanvas = true;
+
+		    //derwish added
+			send_update_node(this.resizing_node);
+
 			this.resizing_node = null;
 		}
 		else if(this.node_dragged) //node being dragged?
@@ -3045,7 +3055,11 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 			this.node_dragged.pos[0] = Math.round(this.node_dragged.pos[0]);
 			this.node_dragged.pos[1] = Math.round(this.node_dragged.pos[1]);
 			if(this.graph.config.align_to_grid)
-				this.node_dragged.alignToGrid();
+			    this.node_dragged.alignToGrid();
+
+		    //derwish added
+			send_update_node(this.node_dragged);
+
 			this.node_dragged = null;
 		}
 		else //no node being dragged
