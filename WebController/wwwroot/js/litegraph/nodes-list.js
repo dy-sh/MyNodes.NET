@@ -29,11 +29,11 @@
         this.addInput("Frequency", "string");
         this.addOutput("Out", "string");
       //  this.size = [150, 30];
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter2" };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
     }
-    LogicCounter.title = "Logic Counter fghfghg hg ff gfh h hg";
+    LogicCounter.title = "Logic Counter";
 
-    LiteGraph.registerNodeType("Logic/Counter2", LogicCounter);
+    LiteGraph.registerNodeType("Logic/Counter", LogicCounter);
 
 
     //LogicInvert

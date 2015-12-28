@@ -30,7 +30,8 @@ var LiteGraph = {
 
 	NODE_TITLE_HEIGHT: 16,
 	NODE_SLOT_HEIGHT: 15,
-	NODE_WIDTH: 140,
+    //derwish edit
+	NODE_WIDTH: 150,
 	NODE_MIN_WIDTH: 50,
 	NODE_COLLAPSED_RADIUS: 10,
     //derwish edit
