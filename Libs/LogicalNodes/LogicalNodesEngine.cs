@@ -64,8 +64,11 @@ namespace MyNetSensors.LogicalNodes
             {
                 db.CreateDb();
                 GetNodesFromRepository();
+                GetLinksFromRepository();
             }
         }
+
+
 
 
         public void Start()
@@ -95,6 +98,14 @@ namespace MyNetSensors.LogicalNodes
         {
             if (db != null)
                 nodes = db.GetAllNodes();
+
+            OnNodesUpdatedEvent?.Invoke(nodes);
+        }
+
+        private void GetLinksFromRepository()
+        {
+            if (db != null)
+                links = db.GetAllLinks();
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
@@ -200,10 +211,12 @@ namespace MyNetSensors.LogicalNodes
 
             oldOutput.Value = value;
 
-            if (name != null)
+            if (name != null && name!= oldOutput.Name)
             {
                 oldOutput.Name = name;
-                //todo update node
+                LogicalNode node = GetOutputOwner(oldOutput);
+                if (db != null)
+                    db.UpdateNode(node);
             }
         }
 
@@ -213,10 +226,12 @@ namespace MyNetSensors.LogicalNodes
 
             oldInput.Value = value;
 
-            if (name != null)
+            if (name != null && name != oldInput.Name)
             {
                 oldInput.Name = name;
-                //todo update node
+                LogicalNode node = GetInputOwner(oldInput);
+                if (db != null)
+                    db.UpdateNode(node);
             }
 
         }
@@ -243,6 +258,9 @@ namespace MyNetSensors.LogicalNodes
             LogicalLink link = new LogicalLink(output.Id, input.Id);
             links.Add(link);
 
+            if (db != null)
+                db.AddLink(link);
+
             OnNewLinkEvent?.Invoke(link);
 
             if (!started)
@@ -259,6 +277,9 @@ namespace MyNetSensors.LogicalNodes
             DebugEngine($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = GetLink(output, input);
+
+            if (db != null)
+                db.DeleteLink(link.Id);
 
             OnLinkDeleteEvent?.Invoke(link);
             links.Remove(link);

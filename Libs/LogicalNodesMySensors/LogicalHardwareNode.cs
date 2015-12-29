@@ -6,20 +6,20 @@ namespace MyNetSensors.LogicalNodesMySensors
     public class LogicalHardwareNode : LogicalNode
     {
         public int nodeId;
-        private Gateway gateway;
+
 
         public LogicalHardwareNode(Node node) : base(0, 0)
         {
             this.nodeId = node.nodeId;
             this.Title = node.GetSimpleName1();
-            this.gateway = LogicalHardwareNodesEngine.gateway;
             this.Type = "Nodes/HardwareNode";
             CreateInputsOutputs(node);
         }
 
-        public LogicalHardwareNode() : base()
+
+        public LogicalHardwareNode() : base(0, 0)
         {
-            this.gateway = LogicalHardwareNodesEngine.gateway;
+
         }
 
 
@@ -30,11 +30,14 @@ namespace MyNetSensors.LogicalNodesMySensors
 
         public override void OnInputChange(Input input)
         {
+            if (input.Value==null)
+                return;
+            
             HardwareInput hardwareInput = (HardwareInput)input;
 
             Debug($"Hardware Node{hardwareInput.nodeId} Sensor{hardwareInput.sensorId} input: {input.Value}");
 
-            gateway.SendSensorState(hardwareInput.nodeId, hardwareInput.sensorId, input.Value);
+            LogicalHardwareNodesEngine.gateway.SendSensorState(hardwareInput.nodeId, hardwareInput.sensorId, input.Value);
 
         }
 

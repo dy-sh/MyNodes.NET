@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MyNetSensors.LogicalNodesRepositoryDappers
 {
-    public class LogicalNodesRepositoryDapper:ILogicalNodesRepository
+    public class LogicalNodesRepositoryDapper : ILogicalNodesRepository
     {
         private string connectionString;
 
@@ -32,7 +32,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
                 try
                 {
-                     //[Id][uniqueidentifier]NOT NULL,
+                    //[Id][uniqueidentifier]NOT NULL,
                     string req =
                         @"CREATE TABLE [dbo].[LogicalNodes](
 	                    [Id] [nvarchar](max) NOT NULL,
@@ -41,7 +41,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
                     db.Query(req);
                 }
-                catch{}
+                catch { }
             }
         }
 
@@ -92,7 +92,6 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
         public string AddNode(LogicalNode node)
         {
-            string id;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
@@ -101,7 +100,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
                                + "VALUES(@Id, @JsonData)";
 
                 LogicalNodeSerialized serializedNode = new LogicalNodeSerialized(node);
-               db.Execute(sqlQuery, serializedNode);
+                db.Execute(sqlQuery, serializedNode);
             }
             return node.Id;
         }
@@ -117,7 +116,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
                     "WHERE Id = @Id";
 
                 LogicalNodeSerialized serializedNode = new LogicalNodeSerialized(node);
-                db.Execute(sqlQuery, serializedNode );
+                db.Execute(sqlQuery, serializedNode);
             }
         }
 
@@ -128,7 +127,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
             {
                 db.Open();
                 LogicalNodeSerialized serializedNode = db.Query<LogicalNodeSerialized>
-                    ("SELECT * FROM LogicalNodes WHERE Id=@Id",id ).SingleOrDefault();
+                    ($"SELECT * FROM LogicalNodes WHERE Id='{id}'").SingleOrDefault();
 
                 node = serializedNode.GetDeserializedNode();
             }
@@ -138,7 +137,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
         public List<LogicalNode> GetAllNodes()
         {
-            List<LogicalNode> nodes=new List<LogicalNode>();
+            List<LogicalNode> nodes = new List<LogicalNode>();
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
@@ -159,7 +158,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM LogicalNodes WHERE Id=@Id", id );
+                db.Query($"DELETE FROM LogicalNodes WHERE Id='{id}'");
             }
         }
 
@@ -172,39 +171,96 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
             }
         }
 
+
+
+
+
         public string AddOrUpdateLink(LogicalLink link)
         {
-            throw new NotImplementedException();
+            string id = link.Id;
+
+            LogicalLink oldLink = GetLink(link.Id);
+
+            if (oldLink == null)
+                id = AddLink(link);
+            else
+                UpdateLink(link);
+
+            return id;
         }
 
         public string AddLink(LogicalLink link)
         {
-            throw new NotImplementedException();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                var sqlQuery = "INSERT INTO LogicalLinks (Id, InputId, OutputId) "
+                               + "VALUES(@Id, @InputId, @OutputId)";
+
+                db.Execute(sqlQuery, link);
+            }
+            return link.Id;
         }
 
         public void UpdateLink(LogicalLink link)
         {
-            throw new NotImplementedException();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                var sqlQuery =
+                    "UPDATE LogicalLinks SET " +
+                    "InputId = @InputId, OutputId = @OutputId " +
+                    "WHERE Id = @Id";
+
+                db.Execute(sqlQuery, link);
+            }
         }
 
         public LogicalLink GetLink(string id)
         {
-            throw new NotImplementedException();
+            LogicalLink link;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                link = db.Query<LogicalLink>
+                    ($"SELECT * FROM LogicalLinks WHERE Id='{id}'").SingleOrDefault();
+
+            }
+            return link;
         }
 
         public List<LogicalLink> GetAllLinks()
         {
-            throw new NotImplementedException();
+            List<LogicalLink> links;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                links = db.Query<LogicalLink>("SELECT * FROM LogicalLinks").ToList();
+            }
+
+            return links;
         }
 
         public void DeleteLink(string id)
         {
-            throw new NotImplementedException();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query($"DELETE FROM LogicalLinks WHERE Id='{id}'");
+            }
         }
 
         public void DropLinks()
         {
-            throw new NotImplementedException();
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Query("TRUNCATE TABLE LogicalLinks");
+            }
         }
+
+
+
     }
 }
