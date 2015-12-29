@@ -1677,8 +1677,8 @@ LGraphNode.prototype.computeSize = function(minHeight)
 	size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
 
     //derwish added
-	size[0] = Math.floor(size[0]);
-	size[1] = Math.floor(size[1]);
+	size[0] = Math.round(size[0]);
+	size[1] = Math.round(size[1]);
 
 	function compute_text_size( text )
 	{
@@ -2939,8 +2939,10 @@ LGraphCanvas.prototype.processMouseMove = function(e)
 				
 				n.pos[0] += delta[0] / this.scale;
 				n.pos[1] += delta[1] / this.scale;
-				//n.pos[0] = Math.round(n.pos[0]);
-				//n.pos[1] = Math.round(n.pos[1]);
+
+                //derwish added
+				n.pos[0] = Math.round(n.pos[0]);
+				n.pos[1] = Math.round(n.pos[1]);
 			}
 			
 			this.dirty_canvas = true;
@@ -3067,6 +3069,9 @@ LGraphCanvas.prototype.processMouseUp = function(e)
 
 			    //derwish added
 			for (var i in this.selected_nodes) {
+			    //derwish added
+			    this.selected_nodes[i]. size[0] = Math.round(this.selected_nodes[i].size[0]);
+			    this.selected_nodes[i].size[1] = Math.round(this.selected_nodes[i].size[1]);
 			   send_update_node(this.selected_nodes[i]);
 			}
 
@@ -4357,10 +4362,14 @@ LGraphCanvas.onMenuAdd = function(node, e, prev_menu, canvas, first_event )
 		if(node)
 		{
 		    node.pos = canvas.convertEventToCanvas(first_event);
+
+
             //derwish removed
 		    //canvas.graph.add(node);
 
-            //derwish added
+		    //derwish added
+		    node.pos[0] = Math.round(node.pos[0]);
+		    node.pos[1] = Math.round(node.pos[1]);
 		    send_create_node(node);
 		}
 	}
@@ -4520,7 +4529,7 @@ LGraphCanvas.onMenuNodeClone = function(node)
 	if(node.clonable == false) return;
 	var newnode = node.clone();
 	if(!newnode) return;
-	newnode.pos = [node.pos[0]+5,node.pos[1]+5];
+	newnode.pos = [node.pos[0]+10,node.pos[1]+10];
     //derwish removed
 	//node.graph.add(newnode);
 	//node.setDirtyCanvas(true, true);

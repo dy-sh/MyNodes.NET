@@ -3,7 +3,9 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateways;
@@ -71,7 +73,7 @@ namespace MyNetSensors.SerialControllers
         public static event DebugMessageEventHandler OnDebugTxRxMessage;
         public static event DebugMessageEventHandler OnDebugStateMessage;
 
-
+        public static event EventHandler OnStarted;
 
         public static void Start(string serialPortName, string dbConnectionString = null)
         {
@@ -91,7 +93,10 @@ namespace MyNetSensors.SerialControllers
                 gateway.OnDisconnectedEvent += ReconnectToSerialPort;
 
                 OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
- 
+
+            OnStarted?.Invoke(null, EventArgs.Empty);
+
+
         }
 
 

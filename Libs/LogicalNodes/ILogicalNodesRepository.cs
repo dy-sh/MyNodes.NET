@@ -14,16 +14,16 @@ namespace MyNetSensors.LogicalNodes
     {
         void CreateDb();
         bool IsDbExist();
-        int AddOrUpdateNode(LogicalNode node);
-        int AddNode(LogicalNode node);
+        string AddOrUpdateNode(LogicalNode node);
+        string AddNode(LogicalNode node);
         void UpdateNode(LogicalNode node);
         LogicalNode GetNode(string id);
         List<LogicalNode> GetAllNodes();
         void DeleteNode(string id);
         void DropNodes();
 
-        int AddOrUpdateLink(LogicalLink link);
-        int AddLink(LogicalLink link);
+        string AddOrUpdateLink(LogicalLink link);
+        string AddLink(LogicalLink link);
         void UpdateLink(LogicalLink link);
         LogicalLink GetLink(string id);
         List<LogicalLink> GetAllLinks();

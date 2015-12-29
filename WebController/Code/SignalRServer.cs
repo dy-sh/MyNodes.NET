@@ -20,8 +20,14 @@ namespace MyNetSensors.WebController.Code
         public static void Start(IConnectionManager connectionManager)
         {
             hub = connectionManager.GetHubContext<ClientsHub>();
-            SignalRServer.gateway = SerialController.gateway;
-            SignalRServer.logicalNodesEngine = SerialController.logicalNodesEngine;
+
+            SerialController.OnStarted += OnSerialControllerStarted;
+        }
+
+        private static void OnSerialControllerStarted(object sender, EventArgs e)
+        {
+            gateway = SerialController.gateway;
+            logicalNodesEngine = SerialController.logicalNodesEngine;
 
             gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             gateway.OnMessageSendEvent += OnMessageSendEvent;
@@ -42,7 +48,6 @@ namespace MyNetSensors.WebController.Code
             logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
             logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
         }
-
 
 
         private static void OnNewLinkEvent(LogicalLink link)

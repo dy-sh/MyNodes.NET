@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -74,11 +75,7 @@ namespace MyNetSensors.WebController.Code
                 SerialController.OnDebugStateMessage += Log;
                 SerialController.OnDebugTxRxMessage += Log;
 
-
-
-                //start
                 SerialController.Start(portName);
-
             }
         }
 
@@ -87,6 +84,7 @@ namespace MyNetSensors.WebController.Code
             Console.WriteLine(message);
             // logger.LogInformation(message);
         }
+
 
     }
 }

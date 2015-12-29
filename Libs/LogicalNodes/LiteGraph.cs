@@ -25,7 +25,7 @@ namespace LiteGraph
         public string id { get; set; }
         public string title { get; set; }
         public string type { get; set; }
-        public float[] pos { get; set; }
+        public int[] pos { get; set; }
         public int[] size { get; set; }
         //        public string flags { get; set; }
         public List<Input> inputs { get; set; }

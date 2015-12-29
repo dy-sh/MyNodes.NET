@@ -68,7 +68,7 @@ namespace MyNetSensors.WebController
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConnectionManager connectionManager)
         {
             bool webServerDebug = false;
-            IConfigurationSection logging=null;
+            IConfigurationSection logging = null;
             bool webServerEnable = false;
             try
             {
@@ -90,65 +90,62 @@ namespace MyNetSensors.WebController
             loggerFactory.AddDebug();
 
             if (webServerEnable)
+            {
+                if (env.IsDevelopment())
                 {
-                    if (env.IsDevelopment())
-                    {
-                        app.UseBrowserLink();
-                        app.UseDeveloperExceptionPage();
-                        app.UseDatabaseErrorPage();
-                    }
-                    else
-                    {
-                        app.UseExceptionHandler("/Home/Error");
+                    app.UseBrowserLink();
+                    app.UseDeveloperExceptionPage();
+                    app.UseDatabaseErrorPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
 
-                        // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                        try
+                    // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+                    try
+                    {
+                        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                            .CreateScope())
                         {
-                            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                                .CreateScope())
-                            {
-                                serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-                                    .Database.Migrate();
-                            }
-                        }
-                        catch
-                        {
+                            serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
+                                .Database.Migrate();
                         }
                     }
-
-                    app.UseSignalR();
-
-                    app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-                    app.UseStaticFiles();
-
-                    app.UseIdentity();
-
-                    // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
-
-                    app.UseMvc(routes =>
+                    catch
                     {
-                        routes.MapRoute(
-                            name: "default",
-                            template: "{controller=Home}/{action=Index}/{id?}/{id2?}/{id3?}");
-                    });
+                    }
                 }
 
+                app.UseSignalR();
 
+                app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+
+                app.UseStaticFiles();
+
+                app.UseIdentity();
+
+                // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+                app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}/{id2?}/{id3?}");
+                });
+            }
+
+
+            SignalRServer.Start(connectionManager);
             StartSerialController(connectionManager);
 
         }
 
         public async Task StartSerialController(IConnectionManager connectionManager)
         {
-            await Task.Run(() => SerialControllerConfigurator.Start(Configuration))
-                .ContinueWith((t1) =>
-                {
-                    SignalRServer.Start(connectionManager);
-                });
+            await Task.Run(() => SerialControllerConfigurator.Start(Configuration));
         }
 
- 
+
 
         // Entry point for the application.
         public static void Main(string[] args)

@@ -134,6 +134,13 @@ namespace MyNetSensors.LogicalNodes
             updateNodesTimer.Start();
         }
 
+
+        public LogicalNode GetNode(string id)
+        {
+            return nodes.FirstOrDefault(x => x.Id == id);
+        }
+
+
         public void AddNode(LogicalNode node)
         {
             nodes.Add(node);
@@ -158,33 +165,13 @@ namespace MyNetSensors.LogicalNodes
             OnNodeDeleteEvent?.Invoke(node);
             DebugEngine($"Remove node {node.GetType().Name}");
 
-            nodes.Remove(node);
-
             if (db != null)
                 db.DeleteNode(node.Id);
 
+            nodes.Remove(node);
         }
 
-        public List<LogicalLink> GetLinksForNode(LogicalNode node)
-        {
-            List<LogicalLink> list=new List<LogicalLink>();
 
-            foreach (var input in node.Inputs)
-            {
-                LogicalLink link = GetLinkForInput(input);
-                if (link!=null)
-                    list.Add(link);
-            }
-
-            foreach (var output in node.Outputs)
-            {
-                List<LogicalLink> links = GetLinksForOutput(output);
-                if (links != null)
-                    list.AddRange(links);
-            }
-
-            return list;
-        }
 
         public void UpdateNode(LogicalNode node)
         {
@@ -205,43 +192,32 @@ namespace MyNetSensors.LogicalNodes
             OnNodeUpdatedEvent?.Invoke(node);
         }
 
-        //public void UpdateOutput(Output output)
-        //{
 
-        //    Output oldOutput = GetOutput(output.Id);
-
-        //    oldOutput.Name = output.Name;
-        //    oldOutput.Value = output.Value;
-
-        //}
-
-        //public void UpdateInput(Input input)
-        //{
-
-        //    Input oldInput = GetInput(input.Id);
-
-        //    oldInput.Name = input.Name;
-        //    oldInput.Value = input.Value;
-
-        //}
 
         public void UpdateOutput(string outputId, string value, string name = null)
         {
             Output oldOutput = GetOutput(outputId);
 
-            if (name != null)
-                oldOutput.Name = name;
             oldOutput.Value = value;
 
+            if (name != null)
+            {
+                oldOutput.Name = name;
+                //todo update node
+            }
         }
 
         public void UpdateInput(string inputId, string value, string name = null)
         {
             Input oldInput = GetInput(inputId);
 
-            if (name != null)
-                oldInput.Name = name;
             oldInput.Value = value;
+
+            if (name != null)
+            {
+                oldInput.Name = name;
+                //todo update node
+            }
 
         }
 
@@ -310,6 +286,27 @@ namespace MyNetSensors.LogicalNodes
             return links.Where(x => x.OutputId == output.Id).ToList();
         }
 
+        public List<LogicalLink> GetLinksForNode(LogicalNode node)
+        {
+            List<LogicalLink> list = new List<LogicalLink>();
+
+            foreach (var input in node.Inputs)
+            {
+                LogicalLink link = GetLinkForInput(input);
+                if (link != null)
+                    list.Add(link);
+            }
+
+            foreach (var output in node.Outputs)
+            {
+                List<LogicalLink> links = GetLinksForOutput(output);
+                if (links != null)
+                    list.AddRange(links);
+            }
+
+            return list;
+        }
+
         private void UpdateStatesFromLinks()
         {
             if (links == null)
@@ -324,10 +321,7 @@ namespace MyNetSensors.LogicalNodes
             }
         }
 
-        public LogicalNode GetNode(string id)
-        {
-            return nodes.FirstOrDefault(x => x.Id == id);
-        }
+
 
         public Input GetInput(string id)
         {
