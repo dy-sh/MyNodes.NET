@@ -41,6 +41,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
+            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
 
             return JsonConvert.DeserializeObject<LogicalNode>(json, settings);
         }

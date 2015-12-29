@@ -32,9 +32,10 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
 
                 try
                 {
+                     //[Id][uniqueidentifier]NOT NULL,
                     string req =
                         @"CREATE TABLE [dbo].[LogicalNodes](
-	                    [Id] [uniqueidentifier] NOT NULL,
+	                    [Id] [nvarchar](max) NOT NULL,
 	                    [JsonData] [nvarchar](max)NOT NULL,       
                         ) ON [PRIMARY] ";
 
@@ -55,7 +56,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
                 {
                     string req =
                         @"CREATE TABLE [dbo].[LogicalLinks](
-	                    [Id] [uniqueidentifier] NOT NULL,
+	                    [Id] [nvarchar](max) NOT NULL,
 	                    [InputId] [nvarchar](max)NOT NULL,       
 	                    [OutputId] [nvarchar](max)NOT NULL,       
                         ) ON [PRIMARY] ";
@@ -112,7 +113,7 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
                 db.Open();
                 var sqlQuery =
                     "UPDATE LogicalNodes SET " +
-                    "JsonData = @JsonData, " +
+                    "JsonData = @JsonData " +
                     "WHERE Id = @Id";
 
                 LogicalNodeSerialized serializedNode = new LogicalNodeSerialized(node);
@@ -205,12 +206,5 @@ namespace MyNetSensors.LogicalNodesRepositoryDappers
         {
             throw new NotImplementedException();
         }
-
-
-
-
-
-
-
     }
 }

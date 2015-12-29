@@ -133,6 +133,9 @@ namespace MyNetSensors.LogicalNodesMySensors
 
             foreach (var node in gateway.GetNodes())
             {
+                if (GetHardwareNode(node.nodeId)!=null)
+                    continue;
+
                 LogicalHardwareNode newHardwareNode = new LogicalHardwareNode(node);
                 list.Add(newHardwareNode);
                 engine.AddNode(newHardwareNode);

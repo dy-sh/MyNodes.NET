@@ -75,6 +75,7 @@ namespace MyNetSensors.SerialControllers
 
         public static event EventHandler OnStarted;
 
+
         public static void Start(string serialPortName, string dbConnectionString = null)
         {
             SerialController.serialPortName = serialPortName;
@@ -245,8 +246,8 @@ OnDebugStateMessage("DATABASE: Connected");
             OnDebugStateMessage("LOGICAL NODES ENGINE: Starting... ");
 
 
-            //logicalNodesEngine=new LogicalNodesEngine(logicalNodesRepository);
-            logicalNodesEngine=new LogicalNodesEngine();
+            logicalNodesEngine=new LogicalNodesEngine(logicalNodesRepository);
+            //logicalNodesEngine=new LogicalNodesEngine();
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 

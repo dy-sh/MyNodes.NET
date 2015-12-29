@@ -67,6 +67,13 @@ namespace MyNetSensors.WebController
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConnectionManager connectionManager)
         {
+            //Set up dot instead of comma in float values
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
+
+
             bool webServerDebug = false;
             IConfigurationSection logging = null;
             bool webServerEnable = false;
