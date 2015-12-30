@@ -9,12 +9,10 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MyNetSensors.Gateways;
-using MyNetSensors.GatewayRepository;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
 using MyNetSensors.NodesTasks;
 using MyNetSensors.Repositories.Dapper;
-using MyNetSensors.SensorsHistoryRepository;
 using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
 
 namespace MyNetSensors.SerialControllers

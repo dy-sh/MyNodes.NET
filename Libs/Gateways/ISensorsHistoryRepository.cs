@@ -4,9 +4,8 @@
 */
 
 using System.Collections.Generic;
-using MyNetSensors.Gateways;
 
-namespace MyNetSensors.SensorsHistoryRepository
+namespace MyNetSensors.Gateways
 {
     public interface ISensorsHistoryRepository
     {

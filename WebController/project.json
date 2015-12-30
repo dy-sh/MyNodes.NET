@@ -37,13 +37,12 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "GatewayRepository": "1.0.0-*",
         "Gateways": "1.0.0-*",
         "LogicalNodes": "1.0.0-*",
         "LogicalNodesMySensors": "1.0.0-*",
         "NodesTasks": "1.0.0-*",
-        "SensorsHistoryRepository": "1.0.0-*",
         "SerialControllers": "1.0.0-*"
+
       }
     }
   },

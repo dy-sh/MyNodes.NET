@@ -54,10 +54,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GatewayRepository\GatewayRepository.csproj">
-      <Project>{92ec924f-9445-47d4-9af7-32f92f2167f0}</Project>
-      <Name>GatewayRepository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Gateways\Gateways.csproj">
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
       <Name>Gateways</Name>
@@ -81,10 +77,6 @@
     <ProjectReference Include="..\Repositories.EF.SQLite\Repositories.EF.SQLite.csproj">
       <Project>{0845a6b2-ec20-413b-b947-1472d10f93f9}</Project>
       <Name>Repositories.EF.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
-      <Project>{7fd2eb6a-32c2-4659-96c1-093fcb85fbfd}</Project>
-      <Name>SensorsHistoryRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

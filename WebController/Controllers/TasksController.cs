@@ -11,7 +11,6 @@ using Microsoft.AspNet.Mvc;
 
 
 using MyNetSensors.Gateways;
-using MyNetSensors.GatewayRepository;
 using MyNetSensors.NodesTasks;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;

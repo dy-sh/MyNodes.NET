@@ -9,11 +9,8 @@
       },
       "dependencies": {
         "Dapper": "1.50.0-beta6",
-        "GatewayRepository": "1.0.0-*",
         "Gateways": "1.0.0-*",
         "LogicalNodes": "1.0.0-*",
-        "SensorsHistoryRepository": "1.0.0-*",
-        "LogicalNodesRepositoryDappers": "1.0.0-*",
         "LogicalNodesMySensors": "1.0.0-*",
         "NodesTasks": "1.0.0-*",
         "Repositories.Dapper": "1.0.0-*",

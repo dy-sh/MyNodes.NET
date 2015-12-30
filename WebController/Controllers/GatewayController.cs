@@ -11,8 +11,6 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateways;
-using MyNetSensors.GatewayRepository;
-using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.WebController.Code;
 
 

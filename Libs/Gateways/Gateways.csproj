@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="GatewayInfo.cs" />
     <Compile Include="IComPort.cs" />
+    <Compile Include="IGatewayRepository.cs" />
+    <Compile Include="ISensorsHistoryRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessagesLog.cs" />
     <Compile Include="MySensors.cs" />
@@ -49,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensor.cs" />
     <Compile Include="Gateway.cs" />
+    <Compile Include="SensorData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utils\Utils.csproj">

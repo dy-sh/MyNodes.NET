@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MyNetSensors.SensorsHistoryRepository
+namespace MyNetSensors.Repositories.Dapper
 {
     public class OneToManyDapperMapper<TP, TC, TPk>
     {

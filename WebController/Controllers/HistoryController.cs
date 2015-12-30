@@ -9,8 +9,7 @@ using System.Configuration;
 using Microsoft.AspNet.Mvc;
 
 using MyNetSensors.Gateways;
-using MyNetSensors.GatewayRepository;
-using MyNetSensors.SensorsHistoryRepository;
+using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 
