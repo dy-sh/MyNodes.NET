@@ -12,8 +12,8 @@ using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
-using MyNetSensors.LogicalNodesRepositoryDappers;
 using MyNetSensors.NodesTasks;
+using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.SensorsHistoryRepository;
 using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
 

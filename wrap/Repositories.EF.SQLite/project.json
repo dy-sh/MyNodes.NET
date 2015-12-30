@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../Libs/Repositories.EF.SQLite/Repositories.EF.SQLite.csproj",
+      "bin": {
+        "assembly": "../../Libs/Repositories.EF.SQLite/obj/{configuration}/Repositories.EF.SQLite.dll",
+        "pdb": "../../Libs/Repositories.EF.SQLite/obj/{configuration}/Repositories.EF.SQLite.pdb"
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@
       },
       "dependencies": {
         "Gateways": "1.0.0-*",
-        "Newtonsoft.Json": "7.0.1"
+        "Newtonsoft.Json": "8.0.1"
       }
     }
   }

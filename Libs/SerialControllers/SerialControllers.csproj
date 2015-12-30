@@ -66,10 +66,6 @@
       <Project>{2ff8c376-11aa-42a3-8a7e-446602584165}</Project>
       <Name>LogicalNodesMySensors</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LogicalNodesRepositoryDappers\LogicalNodesRepositoryDappers.csproj">
-      <Project>{17833b94-bee3-4a7f-9140-310990689612}</Project>
-      <Name>LogicalNodesRepositoryDappers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>LogicalNodes</Name>
@@ -77,6 +73,14 @@
     <ProjectReference Include="..\NodesTasks\NodesTasks.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
       <Name>NodesTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repositories.Dapper\Repositories.Dapper.csproj">
+      <Project>{80ce261c-2829-445c-8dd6-ceded5996ee9}</Project>
+      <Name>Repositories.Dapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repositories.EF.SQLite\Repositories.EF.SQLite.csproj">
+      <Project>{0845a6b2-ec20-413b-b947-1472d10f93f9}</Project>
+      <Name>Repositories.EF.SQLite</Name>
     </ProjectReference>
     <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
       <Project>{7fd2eb6a-32c2-4659-96c1-093fcb85fbfd}</Project>

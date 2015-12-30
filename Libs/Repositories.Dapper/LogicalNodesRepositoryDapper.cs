@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
 using MyNetSensors.LogicalNodes;
-using Newtonsoft.Json;
 
-namespace MyNetSensors.LogicalNodesRepositoryDappers
+namespace MyNetSensors.Repositories.Dapper
 {
     public class LogicalNodesRepositoryDapper : ILogicalNodesRepository
     {

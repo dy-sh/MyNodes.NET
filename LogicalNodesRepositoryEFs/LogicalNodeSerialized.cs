@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.LogicalNodes;
-using Newtonsoft.Json;
-
-namespace MyNetSensors.LogicalNodesRepositoryDappers
+﻿namespace MyNetSensors.LogicalNodesRepositoryEFs
 {
     public class LogicalNodeSerialized
     {
