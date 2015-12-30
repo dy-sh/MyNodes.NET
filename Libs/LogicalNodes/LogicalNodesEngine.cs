@@ -52,6 +52,11 @@ namespace MyNetSensors.LogicalNodes
 
         public LogicalNodesEngine(ILogicalNodesRepository db = null)
         {
+            //var x= AppDomain.CurrentDomain.GetAssemblies()
+            //           .SelectMany(assembly => assembly.GetTypes())
+            //           .Where(type => type.IsSubclassOf(typeof(LogicalNode))).ToList();
+
+
             LogicalNodesEngine.logicalNodesEngine = this;
 
             this.db = db;
@@ -106,6 +111,20 @@ namespace MyNetSensors.LogicalNodes
         {
             if (db != null)
                 links = db.GetAllLinks();
+
+            //delete link if node is not exist
+            LogicalLink[] oldLinks = links.ToArray();
+            foreach (var link in oldLinks)
+            {
+                if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
+                {
+                    if(db!=null)
+                        db.DeleteLink(link.Id);
+
+                    links.Remove(link);
+                }
+            }
+
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }

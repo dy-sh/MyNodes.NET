@@ -4,7 +4,6 @@
 
     //HardwareNode
     function HardwareNode() {
-        //this.size = [150, 20];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
         this.clonable = false;
         this.removable = false;
@@ -16,7 +15,6 @@
     //SystemConsole
     function SystemConsole() {
         this.addInput("in", "string");
-       // this.size = [150, 30];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
     }
     SystemConsole.title = "System Console";
@@ -28,7 +26,6 @@
     function LogicCounter() {
         this.addInput("Frequency", "string");
         this.addOutput("Out", "string");
-      //  this.size = [150, 30];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
     }
     LogicCounter.title = "Logic Counter";
@@ -40,7 +37,6 @@
     function LogicInvert() {
         this.addInput("in", "string");
         this.addOutput("out", "string");
-      //  this.size = [150, 30];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
 
     }
@@ -54,7 +50,6 @@
         this.addInput("in1", "string");
         this.addInput("in2", "string");
         this.addOutput("out", "string");
-      //  this.size = [150, 45];
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
 
     }
