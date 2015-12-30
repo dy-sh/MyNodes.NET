@@ -84,11 +84,6 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool UpdateSensorsLinks()
-        {
-            SerialController.sensorsLinksEngine.GetLinksFromRepository();
-            return true;
-        }
 
         public bool UpdateSensorsTasks()
         {
@@ -153,14 +148,7 @@ namespace MyNetSensors.WebController.Controllers
              return Json(true);
         }
 
-        public ActionResult DropLinks()
-        {
 
-            SerialController.sensorsLinksDb.DropLinks();
-
-            UpdateSensorsLinks();
-             return Json(true);
-        }
 
         public async Task<ActionResult> StopWritingHistory()
         {

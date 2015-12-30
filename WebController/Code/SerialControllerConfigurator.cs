@@ -51,7 +51,6 @@ namespace MyNetSensors.WebController.Code
                 SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);
                 SerialController.sensorsTasksEnabled = Boolean.Parse(Configuration["SensorsTasks:Enable"]);
                 SerialController.sensorsTasksUpdateInterval = Int32.Parse(Configuration["SensorsTasks:UpdateInterval"]);
-                SerialController.sensorsLinksEnabled = Boolean.Parse(Configuration["SensorsLinks:Enable"]);
                 SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
                 SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
                 SerialController.softNodesDebugTxRx = Boolean.Parse(Configuration["SoftNodes:DebugTxRx"]);

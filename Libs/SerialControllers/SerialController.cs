@@ -13,7 +13,6 @@ using MyNetSensors.GatewayRepository;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
 using MyNetSensors.LogicalNodesRepositoryDappers;
-using MyNetSensors.NodesLinks;
 using MyNetSensors.NodeTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
@@ -40,7 +39,6 @@ namespace MyNetSensors.SerialControllers
         public static bool sensorsTasksEnabled = true;
         public static int sensorsTasksUpdateInterval = 10;
 
-        public static bool sensorsLinksEnabled = true;
 
         public static bool softNodesEnabled = true;
         public static int softNodesPort = 13122;
@@ -59,8 +57,6 @@ namespace MyNetSensors.SerialControllers
         public static ISensorsHistoryRepository historyDb;
         public static ISensorsTasksRepository sensorsTasksDb;
         public static SensorsTasksEngine sensorsTasksEngine;
-        public static ISensorsLinksRepository sensorsLinksDb;
-        public static SensorsLinksEngine sensorsLinksEngine;
  //       public static ISoftNodesServer softNodesServer;
 //        public static SoftNodesController softNodesController;
 
@@ -86,7 +82,6 @@ namespace MyNetSensors.SerialControllers
                 ConnectToDB();
                 ConnectToSerialPort();
                 ConnectSensorsTasks();
-                ConnectSensorsLinks();
                 //ConnectToSoftNodesController();
                 ConnectToLogicalNodesEngine();
 
@@ -120,7 +115,6 @@ namespace MyNetSensors.SerialControllers
             gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
             historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
             sensorsTasksDb = new SensorsTasksRepositoryDapper(dataBaseConnectionString);
-            sensorsLinksDb = new SensorsLinksRepositoryDapper(dataBaseConnectionString);
             logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
@@ -141,26 +135,14 @@ OnDebugStateMessage("DATABASE: Connected");
             //connecting tasks
             if (!sensorsTasksEnabled) return;
 
-            OnDebugStateMessage("TASK ENGINE: Starting...");
+            OnDebugStateMessage("TASKS ENGINE: Starting...");
 
             sensorsTasksEngine = new SensorsTasksEngine(gateway, sensorsTasksDb);
             sensorsTasksEngine.SetUpdateInterval(sensorsTasksUpdateInterval);
 
-            OnDebugStateMessage("TASK ENGINE: Started");
+            OnDebugStateMessage("TASKS ENGINE: Started");
         }
 
-        private static void ConnectSensorsLinks()
-        {
-            //connecting tasks
-            if (!sensorsLinksEnabled) return;
-
-            OnDebugStateMessage("LINKS ENGINE: Starting... ");
-
-            sensorsLinksEngine = new SensorsLinksEngine(gateway, sensorsLinksDb);
-            sensorsLinksEngine.GetLinksFromRepository();
-
-            OnDebugStateMessage("LINKS ENGINE: Started");
-        }
 
 
 
