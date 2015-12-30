@@ -74,9 +74,9 @@
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>LogicalNodes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NodeTasks\NodeTasks.csproj">
+    <ProjectReference Include="..\NodesTasks\NodesTasks.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
-      <Name>NodeTasks</Name>
+      <Name>NodesTasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj">
       <Project>{7fd2eb6a-32c2-4659-96c1-093fcb85fbfd}</Project>

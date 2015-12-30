@@ -12,7 +12,7 @@ using Microsoft.AspNet.Mvc;
 
 using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
-using MyNetSensors.NodeTasks;
+using MyNetSensors.NodesTasks;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 
@@ -21,13 +21,13 @@ namespace MyNetSensors.WebController.Controllers
     public class TasksController : Controller
     {
 
-        private ISensorsTasksRepository tasksDb;
+        private INodesTasksRepository tasksDb;
         private IGatewayRepository gatewayDb;
 
         public TasksController()
         {
             gatewayDb = SerialController.gatewayDb;
-            tasksDb = SerialController.sensorsTasksDb;
+            tasksDb = SerialController.nodesTasksDb;
         }
 
         public ActionResult Index()
@@ -49,14 +49,14 @@ namespace MyNetSensors.WebController.Controllers
                 ViewBag.db_Id = sensor.db_Id;
                 ViewBag.description = sensor.GetSimpleName1();
 
-                List<SensorTask> tasks = tasksDb.GetTasks(id.Value, id2.Value);
+                List<NodeTask> tasks = tasksDb.GetTasks(id.Value, id2.Value);
 
                 return View(tasks);
             }
 
             else if (RouteData.Values.Count <= 2)
             {
-                List<SensorTask> tasks = tasksDb.GetAllTasks();
+                List<NodeTask> tasks = tasksDb.GetAllTasks();
                 return View(tasks);
             }
 
@@ -98,7 +98,7 @@ namespace MyNetSensors.WebController.Controllers
                 Node node = gatewayDb.GetNodeByNodeId(sensor.nodeId);
                 ViewBag.description = sensor.GetSimpleName1();
 
-                SensorTask task = new SensorTask
+                NodeTask task = new NodeTask
                 {
                     nodeId = id.Value,
                     sensorId = id2.Value,
@@ -148,7 +148,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(SensorTask task)
+        public ActionResult New(NodeTask task)
         {
             Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
 
@@ -161,7 +161,7 @@ namespace MyNetSensors.WebController.Controllers
             tasksDb.AddTask(task);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
         }
@@ -171,7 +171,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            SensorTask task = tasksDb.GetTask(id);
+            NodeTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
@@ -184,7 +184,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(SensorTask task)
+        public ActionResult Edit(NodeTask task)
         {
             Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
 
@@ -197,14 +197,14 @@ namespace MyNetSensors.WebController.Controllers
             tasksDb.UpdateTask(task);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
         }
 
         public ActionResult Delete(int id)
         {
-            SensorTask task = tasksDb.GetTask(id);
+            NodeTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
@@ -212,7 +212,7 @@ namespace MyNetSensors.WebController.Controllers
             tasksDb.DeleteTask(id);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -221,7 +221,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Enable(int id)
         {
-            SensorTask task = tasksDb.GetTask(id);
+            NodeTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
@@ -230,7 +230,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -239,7 +239,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Disable(int id)
         {
-            SensorTask task = tasksDb.GetTask(id);
+            NodeTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
@@ -248,7 +248,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -257,7 +257,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult ExecuteNow(int id)
         {
-            SensorTask task = tasksDb.GetTask(id);
+            NodeTask task = tasksDb.GetTask(id);
 
             if (task == null)
                 return new HttpNotFoundResult();
@@ -266,7 +266,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -286,7 +286,7 @@ namespace MyNetSensors.WebController.Controllers
                 tasksDb.DeleteTasks(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
-                gatewayApi.UpdateSensorsTasks();
+                gatewayApi.UpdateNodesTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -297,7 +297,7 @@ namespace MyNetSensors.WebController.Controllers
                 tasksDb.DropTasks();
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
-                gatewayApi.UpdateSensorsTasks();
+                gatewayApi.UpdateNodesTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -319,7 +319,7 @@ namespace MyNetSensors.WebController.Controllers
                 tasksDb.DeleteCompleted(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
-                gatewayApi.UpdateSensorsTasks();
+                gatewayApi.UpdateNodesTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());
@@ -330,7 +330,7 @@ namespace MyNetSensors.WebController.Controllers
                 tasksDb.DeleteCompleted();
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
-                gatewayApi.UpdateSensorsTasks();
+                gatewayApi.UpdateNodesTasks();
 
                 if (Request.Headers["Referer"].Any())
                     return Redirect(Request.Headers["Referer"].ToString());

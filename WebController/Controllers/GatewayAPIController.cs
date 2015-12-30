@@ -85,9 +85,9 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public bool UpdateSensorsTasks()
+        public bool UpdateNodesTasks()
         {
-            SerialController.sensorsTasksEngine.GetTasksFromRepository();
+            SerialController.nodesTasksEngine.GetTasksFromRepository();
             return true;
         }
 
@@ -131,9 +131,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult DisableTasks()
         {
-            SerialController.sensorsTasksDb.DisableTasks();
+            SerialController.nodesTasksDb.DisableTasks();
             
-            UpdateSensorsTasks();
+            UpdateNodesTasks();
 
              return Json(true);
         }
@@ -142,9 +142,9 @@ namespace MyNetSensors.WebController.Controllers
         {
             DisableTasks();
             await Task.Delay(1000);
-            SerialController.sensorsTasksDb.DropTasks();
+            SerialController.nodesTasksDb.DropTasks();
 
-            UpdateSensorsTasks();
+            UpdateNodesTasks();
              return Json(true);
         }
 

@@ -10,7 +10,7 @@ using Microsoft.AspNet.Mvc;
 
 using MyNetSensors.Gateways;
 using MyNetSensors.GatewayRepository;
-using MyNetSensors.NodeTasks;
+using MyNetSensors.NodesTasks;
 using MyNetSensors.SensorsHistoryRepository;
 using MyNetSensors.SerialControllers;
 
@@ -113,7 +113,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-            ISensorsTasksRepository tasksDb = SerialController.sensorsTasksDb;
+            INodesTasksRepository tasksDb = SerialController.nodesTasksDb;
 
             foreach (var sensor in node.sensors)
             {
@@ -121,7 +121,7 @@ namespace MyNetSensors.WebController.Controllers
                 tasksDb.DeleteTasks(sensor.db_Id);
             }
 
-            gatewayApi.UpdateSensorsTasks();
+            gatewayApi.UpdateNodesTasks();
 
 
 

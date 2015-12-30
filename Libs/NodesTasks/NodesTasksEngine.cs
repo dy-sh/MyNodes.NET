@@ -5,16 +5,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using MyNetSensors.Gateways;
 
-namespace MyNetSensors.NodeTasks
+namespace MyNetSensors.NodesTasks
 {
-    public class SensorsTasksEngine
+    public class NodesTasksEngine
     {
         //If you have tons of tasks, and system perfomance decreased, increase this value,
         //and you will get less tasks updating frequency 
@@ -24,11 +20,11 @@ namespace MyNetSensors.NodeTasks
         private Timer updateTasksTimer = new Timer();
 
         private Gateway gateway;
-        private ISensorsTasksRepository db;
+        private INodesTasksRepository db;
 
-        private List<SensorTask> tasks = new List<SensorTask>();
+        private List<NodeTask> tasks = new List<NodeTask>();
 
-        public SensorsTasksEngine(Gateway gateway, ISensorsTasksRepository db)
+        public NodesTasksEngine(Gateway gateway, INodesTasksRepository db)
         {
             this.db = db;
             this.gateway = gateway;
@@ -65,7 +61,7 @@ namespace MyNetSensors.NodeTasks
             try
             {
                 //to prevent changing of collection while writing to db is not yet finished
-                SensorTask[] tasksTemp = new SensorTask[tasks.Count];
+                NodeTask[] tasksTemp = new NodeTask[tasks.Count];
                 tasks.CopyTo(tasksTemp);
 
                 foreach (var task in tasksTemp)
@@ -85,7 +81,7 @@ namespace MyNetSensors.NodeTasks
             db.DropTasks();
         }
 
-        private void Execute(SensorTask task)
+        private void Execute(NodeTask task)
         {
             task.repeatingDoneCount++;
 

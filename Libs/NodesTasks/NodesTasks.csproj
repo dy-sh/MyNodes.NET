@@ -7,8 +7,8 @@
     <ProjectGuid>{5C0BDA8E-7C8C-427D-9673-B18A05B05280}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.NodeTasks</RootNamespace>
-    <AssemblyName>NodeTasks</AssemblyName>
+    <RootNamespace>MyNetSensors.NodesTasks</RootNamespace>
+    <AssemblyName>NodesTasks</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISensorsTasksRepository.cs" />
+    <Compile Include="INodesTasksRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SensorsTasksEngine.cs" />
-    <Compile Include="SensorsTasksRepositoryDapper.cs" />
-    <Compile Include="SensorTask.cs" />
+    <Compile Include="NodesTasksEngine.cs" />
+    <Compile Include="NodesTasksRepositoryDapper.cs" />
+    <Compile Include="NodeTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

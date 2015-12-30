@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Libs\LogicalNodesMySensors\LogicalNodesMySensors.csproj" />
     <ProjectReference Include="..\Libs\LogicalNodesRepositoryDappers\LogicalNodesRepositoryDappers.csproj" />
     <ProjectReference Include="..\Libs\LogicalNodes\LogicalNodes.csproj" />
+    <ProjectReference Include="..\Libs\NodesTasks\NodesTasks.csproj" />
     <ProjectReference Include="..\Libs\SerialControllers\SerialControllers.csproj" />
     <ProjectReference Include="..\Libs\SerialController\SerialControl.csproj" />
     <ProjectReference Include="..\Libs\SerialControl\SerialControl.csproj" />

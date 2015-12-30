@@ -5,26 +5,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyNetSensors.Gateways;
 
-namespace MyNetSensors.NodeTasks
+namespace MyNetSensors.NodesTasks
 {
-    public interface ISensorsTasksRepository
+    public interface INodesTasksRepository
     {
         void CreateDb();
         bool IsDbExist();
-        int AddOrUpdateTask(SensorTask task);
-        int AddTask(SensorTask task);
-        void UpdateTask(SensorTask task);
+        int AddOrUpdateTask(NodeTask task);
+        int AddTask(NodeTask task);
+        void UpdateTask(NodeTask task);
         void UpdateTask(int db_Id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount);
         void UpdateTask(int db_Id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount);
         void UpdateTaskEnabled(int db_Id, bool enabled);
-        SensorTask GetTask(int db_Id);
-        List<SensorTask> GetTasks(int nodeId, int sensorId);
-        List<SensorTask> GetAllTasks();
+        NodeTask GetTask(int db_Id);
+        List<NodeTask> GetTasks(int nodeId, int sensorId);
+        List<NodeTask> GetAllTasks();
         void DeleteTask(int db_Id);
         void DeleteTasks(int nodeId,int sensorId);
         void DeleteTasks(int sensorDbId);

@@ -4,13 +4,11 @@
 */
 
 using System;
-using System.Collections.Generic;
 using MyNetSensors.Gateways;
 
-
-namespace MyNetSensors.NodeTasks
+namespace MyNetSensors.NodesTasks
 {
-    public class SensorTask
+    public class NodeTask
     {
 
         public int db_Id { get; set; }
