@@ -18,14 +18,15 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class NodesEditorAPIController : Controller
     {
-        const int SLOT_SIZE = 15;
-        const int NODE_WIDTH = 150;
+
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
-        private LogicalHardwareNodesEngine hardwareEngine = LogicalHardwareNodesEngine.logicalHardwareNodesEngine;
-
+   
         public List<LiteGraph.Node> GetNodes()
         {
+            if (engine == null)
+                return null;
+
             List<LogicalNode> nodes = engine.nodes;
             if (!nodes.Any())
                 return null;
@@ -126,6 +127,8 @@ namespace MyNetSensors.WebController.Controllers
 
         public List<LiteGraph.Link> GetLinks()
         {
+            if (engine == null)
+                return null;
 
             List<LogicalLink> links = engine.links;
             if (!links.Any())
@@ -169,8 +172,87 @@ namespace MyNetSensors.WebController.Controllers
             return -1;
         }
 
+    
+
+        public bool DeleteLink(Link link)
+        {
+            if (engine == null)
+                return false;
+
+            if (link.origin_id == null || link.target_id == null)
+                return false;
+
+            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
+            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            engine.DeleteLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+            return true;
+        }
+
+        public bool CreateLink(Link link)
+        {
+            if (engine == null)
+                return false;
+
+            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
+            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+            return true;
+        }
+
+        public bool CreateNode(LiteGraph.Node node)
+        {
+            if (engine == null)
+                return false;
+
+            string type = node.properties["objectType"];
+
+            var newObject = Activator.CreateInstance("LogicalNodes", type);
+            LogicalNode newNode = (LogicalNode)newObject.Unwrap();
+
+            //LogicalNode newNode = newObject as LogicalNode;
+            newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+            newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+            newNode.Id = node.id;
+
+            engine.AddNode(newNode);
+            return true;
+        }
+
+        public bool DeleteNode(LiteGraph.Node node)
+        {
+            if (engine == null)
+                return false;
+
+            LogicalNode oldNode = engine.GetNode(node.id);
+
+            engine.RemoveNode(oldNode);
+            return true;
+        }
+
+        public bool UpdateNode(LiteGraph.Node node)
+        {
+            if (engine == null)
+                return false;
+
+            LogicalNode oldNode = engine.GetNode(node.id);
+
+            oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+            oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+
+            engine.UpdateNode(oldNode);
+
+            return true;
+        }
+
+
+
+
+
         //private int CalculateNodeHeight(LiteGraph.Node node)
         //{
+        //const int SLOT_SIZE = 15;
+        //const int NODE_WIDTH = 150;
+
         //    int sizeOutY = 0, sizeInY = 0;
 
         //    if (node.outputs != null)
@@ -185,6 +267,9 @@ namespace MyNetSensors.WebController.Controllers
 
         //private void MooveNewNodesToFreeSpace(List<LiteGraph.Node> nodes)
         //{
+        //const int SLOT_SIZE = 15;
+        //const int NODE_WIDTH = 150;
+
         //    const int START_POS = 50;
         //    const int FREE_SPACE_UNDER = 30;
 
@@ -242,7 +327,7 @@ namespace MyNetSensors.WebController.Controllers
             Graph graph = JsonConvert.DeserializeObject<Graph>(json);
 
             engine.RemoveAllLinks();
-            hardwareEngine.RemoveAllNonHardwareNodes();
+            //hardwareEngine.RemoveAllNonHardwareNodes();
 
             foreach (var node in graph.nodes)
             {
@@ -273,61 +358,6 @@ namespace MyNetSensors.WebController.Controllers
             //    engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             //}
 
-
-            return true;
-        }
-
-        public bool DeleteLink(Link link)
-        {
-            if (link.origin_id == null || link.target_id == null)
-                return false;
-
-            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
-            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
-            engine.DeleteLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
-            return true;
-        }
-
-        public bool CreateLink(Link link)
-        {
-            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
-            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
-            engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
-            return true;
-        }
-
-        public bool CreateNode(LiteGraph.Node node)
-        {
-            string type = node.properties["objectType"];
-
-            var newObject = Activator.CreateInstance("LogicalNodes", type);
-            LogicalNode newNode = (LogicalNode)newObject.Unwrap();
-
-            //LogicalNode newNode = newObject as LogicalNode;
-            newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-            newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
-            newNode.Id = node.id;
-
-            engine.AddNode(newNode);
-            return true;
-        }
-
-        public bool DeleteNode(LiteGraph.Node node)
-        {
-            LogicalNode oldNode = engine.GetNode(node.id);
-
-            engine.RemoveNode(oldNode);
-            return true;
-        }
-
-        public bool UpdateNode(LiteGraph.Node node)
-        {
-            LogicalNode oldNode = engine.GetNode(node.id);
-
-            oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-            oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
-
-            engine.UpdateNode(oldNode);
 
             return true;
         }

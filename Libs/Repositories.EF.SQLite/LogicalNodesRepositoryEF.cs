@@ -56,8 +56,14 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void UpdateNode(LogicalNode node)
         {
-            LogicalNodeSerialized serializedNode = new LogicalNodeSerialized(node);
-            db.LogicalNodesSerialized.Update(serializedNode);
+            LogicalNodeSerialized oldNode = db.LogicalNodesSerialized.FirstOrDefault(x => x.Id == node.Id);
+            if (oldNode == null)
+                return;
+
+            LogicalNodeSerialized newNode = new LogicalNodeSerialized(node);
+            oldNode.JsonData = newNode.JsonData;
+
+            db.LogicalNodesSerialized.Update(oldNode);
             db.SaveChanges();
         }
 
