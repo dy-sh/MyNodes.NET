@@ -109,7 +109,7 @@ namespace MyNetSensors.WebController.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.DeleteNode(node.nodeId);
 
-            gatewayDb.DeleteNodeByDbId(node.db_Id);
+            gatewayDb.DeleteNodeByDbId(node.Id);
 
 
 

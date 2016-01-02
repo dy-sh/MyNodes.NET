@@ -48,7 +48,7 @@ namespace MyNetSensors.WebController.Controllers
 
             ViewBag.nodeId = sensor.nodeId;
             ViewBag.sensorId = sensor.sensorId;
-            ViewBag.db_Id = sensor.db_Id;
+            ViewBag.db_Id = sensor.Id;
             ViewBag.description = sensor.GetSimpleName1();
 
             List<SensorData> samples = historyDb.GetSensorHistory(sensor.nodeId,sensor.sensorId);
@@ -66,7 +66,7 @@ namespace MyNetSensors.WebController.Controllers
 
             ViewBag.nodeId = sensor.nodeId;
             ViewBag.sensorId = sensor.sensorId;
-            ViewBag.db_Id = sensor.db_Id;
+            ViewBag.db_Id = sensor.Id;
             ViewBag.description = sensor.GetSimpleName1();
             ViewBag.autoscroll = autoscroll;
             ViewBag.style = style;
@@ -124,7 +124,7 @@ namespace MyNetSensors.WebController.Controllers
         public JsonResult GetSensorDataJson(int id, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id, id2);
-            return GetSensorDataJsonByDbId(sensor.db_Id);
+            return GetSensorDataJsonByDbId(sensor.Id);
         }
 
 

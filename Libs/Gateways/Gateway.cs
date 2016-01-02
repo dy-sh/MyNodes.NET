@@ -503,14 +503,14 @@ namespace MyNetSensors.Gateways
         public void SetNodeDbId(int nodeId, int dbId)
         {
             Node node = GetNode(nodeId);
-            node.db_Id = dbId;
+            node.Id = dbId;
         }
 
         public void SetSensorDbId(int nodeId,int sensorId, int dbId)
         {
             Node node = GetNode(nodeId);
             Sensor sensor = node.GetSensor(sensorId);
-            sensor.db_Id = dbId;
+            sensor.Id = dbId;
         }
 
         public void UpdateNodeSettings(Node node)

@@ -110,7 +110,7 @@ namespace MyNetSensors.Repositories.Dapper
 
                     db.Execute(
                         @"CREATE TABLE [dbo].[Messages](
-	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	            [Id] [int] IDENTITY(1,1) NOT NULL,
 	            [nodeId] [int] NOT NULL,
 	            [sensorId] [int] NOT NULL,
 	            [messageType] [int] NOT NULL,
@@ -129,7 +129,7 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     db.Execute(
                         @" CREATE TABLE [dbo].[Nodes](
-	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                [Id] [int] IDENTITY(1,1) NOT NULL,
 	                [nodeId] [int] NOT NULL,
 	                [registered] [datetime] NOT NULL,
 	                [lastSeen] [datetime] NOT NULL,
@@ -146,7 +146,7 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     db.Execute(
                         @" CREATE TABLE [dbo].[Sensors](
-	                [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                [Id] [int] IDENTITY(1,1) NOT NULL,
 	                [nodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
 	                [type] [int] NULL,
@@ -162,7 +162,7 @@ namespace MyNetSensors.Repositories.Dapper
 	                [remapFromMax] [nvarchar](max) NULL,
 	                [remapToMin] [nvarchar](max) NULL,
 	                [remapToMax] [nvarchar](max) NULL,
-	                [Node_db_Id] [int] NULL) ON [PRIMARY] ");
+	                [Node_Id] [int] NULL) ON [PRIMARY] ");
                 }
                 catch
                 {
@@ -251,16 +251,16 @@ namespace MyNetSensors.Repositories.Dapper
 
                     node.sensors.Add(sensor);
                 },
-                ParentKey = (node) => node.db_Id
+                ParentKey = (node) => node.Id
             };
 
             List<Node> list;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id ORDER BY n.nodeId";
+                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id ORDER BY n.nodeId";
 
-                list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
+                list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id")
                      .Where(y => y != null).ToList();
             }
             return list;
@@ -319,16 +319,16 @@ namespace MyNetSensors.Repositories.Dapper
                 Sensor oldSensor =
                     db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
                         new { nodeId = sensor.nodeId, sensorId = sensor.sensorId }).SingleOrDefault();
-                int node_db_id =
+                int node_Id =
                     db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.nodeId })
                         .SingleOrDefault()
-                        .db_Id;
+                        .Id;
 
                 if (oldSensor == null)
                 {
-                    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
+                    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_Id) "
                                    +
-                                   "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
+                                   "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_Id); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int dbId = db.Query<int>(sqlQuery, new
                     {
@@ -347,7 +347,7 @@ namespace MyNetSensors.Repositories.Dapper
                         remapFromMax = sensor.remapFromMax,
                         remapToMin = sensor.remapToMin,
                         remapToMax = sensor.remapToMax,
-                        Node_db_Id = node_db_id
+                        Node_Id = node_Id
                     }).Single();
 
                     gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, dbId);
@@ -371,7 +371,7 @@ namespace MyNetSensors.Repositories.Dapper
                         "remapFromMax = @remapFromMax, " +
                         "remapToMin = @remapToMin, " +
                         "remapToMax = @remapToMax, " +
-                        "Node_db_Id = @Node_db_Id " +
+                        "Node_Id = @Node_Id " +
                         "WHERE nodeId = @nodeId AND sensorId = @sensorId";
                     db.Execute(sqlQuery, new
                     {
@@ -390,7 +390,7 @@ namespace MyNetSensors.Repositories.Dapper
                         remapFromMax = sensor.remapFromMax,
                         remapToMin = sensor.remapToMin,
                         remapToMax = sensor.remapToMax,
-                        Node_db_Id = node_db_id
+                        Node_Id = node_Id
                     });
                 }
             }
@@ -499,7 +499,7 @@ namespace MyNetSensors.Repositories.Dapper
 
                     node.sensors.Add(sensor);
                 },
-                ParentKey = (node) => node.db_Id
+                ParentKey = (node) => node.Id
             };
 
 
@@ -507,8 +507,8 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {nodeId}";
-                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+                string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id WHERE n.nodeId = {nodeId}";
+                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id").FirstOrDefault();
                 if (result == null)
                 {
                     joinQuery = $"SELECT * FROM Nodes WHERE nodeId = {nodeId}";
@@ -520,7 +520,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        public Node GetNodeByDbId(int db_Id)
+        public Node GetNodeByDbId(int id)
         {
             var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             {
@@ -531,28 +531,28 @@ namespace MyNetSensors.Repositories.Dapper
 
                     node.sensors.Add(sensor);
                 },
-                ParentKey = (node) => node.db_Id
+                ParentKey = (node) => node.Id
             };
 
-            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {db_Id}";
+            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id WHERE n.Id = {id}";
 
             Node result;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
+                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id").FirstOrDefault();
             }
 
             return result;
         }
 
-        public Sensor GetSensor(int db_Id)
+        public Sensor GetSensor(int id)
         {
             Sensor sensor;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
+                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE Id = @Id", new { Id = id }).FirstOrDefault();
             }
             return sensor;
         }
@@ -624,20 +624,20 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteNodeByDbId(int db_Id)
+        public void DeleteNodeByDbId(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
                 var sqlQuery =
                     "Delete FROM Nodes " +
-                    "WHERE db_Id = @db_Id";
-                db.Execute(sqlQuery, new { db_Id });
+                    "WHERE Id = @Id";
+                db.Execute(sqlQuery, new { Id = id });
 
                 sqlQuery =
                     "Delete FROM Sensors " +
-                    "WHERE Node_db_Id = @Node_db_Id";
-                db.Execute(sqlQuery, new { Node_db_Id = db_Id });
+                    "WHERE Node_Id = @Node_Id";
+                db.Execute(sqlQuery, new { Node_Id = id });
             }
         }
 

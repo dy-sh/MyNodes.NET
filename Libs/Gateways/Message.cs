@@ -11,7 +11,7 @@ namespace MyNetSensors.Gateways
 {
     public class Message:ICloneable
     {
-        public int db_Id { get; set; }
+        public int Id { get; set; }
 
 
         public int nodeId { get; set; }

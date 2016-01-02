@@ -19,9 +19,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
         public DbSet<LogicalLink> LogicalLinks { get; set; }
         public DbSet<SensorData> SensorsData { get; set; }
         public DbSet<NodeTask> NodesTasks { get; set; }
-   //     public DbSet<Node> Nodes { get; set; }
-   //     public DbSet<Message> Messages { get; set; }
-   //     public DbSet<Sensor> Sensors { get; set; }
+        public DbSet<Node> Nodes { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Sensor> Sensors { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{

@@ -520,7 +520,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        public Node GetNodeByDbId(int db_Id)
+        public Node GetNodeByDbId(int id)
         {
             //var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             //{
@@ -534,7 +534,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             //    ParentKey = (node) => node.db_Id
             //};
 
-            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {db_Id}";
+            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {id}";
 
             Node result = null;
             //using (var db = new SqlConnection(connectionString))
@@ -546,7 +546,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             return result;
         }
 
-        public Sensor GetSensor(int db_Id)
+        public Sensor GetSensor(int id)
         {
             Sensor sensor = null;
             using (var db = new SqlConnection(connectionString))
@@ -624,7 +624,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void DeleteNodeByDbId(int db_Id)
+        public void DeleteNodeByDbId(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {

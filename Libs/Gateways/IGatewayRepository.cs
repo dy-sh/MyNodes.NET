@@ -20,9 +20,9 @@ namespace MyNetSensors.Gateways
         void AddOrUpdateNode(Node node);
         void AddOrUpdateSensor(Sensor sensor);
         List<Node> GetNodes();
-        Node GetNodeByDbId(int db_Id);
+        Node GetNodeByDbId(int id);
         Node GetNodeByNodeId(int nodeId);
-        Sensor GetSensor(int db_Id);
+        Sensor GetSensor(int id);
         Sensor GetSensor(int nodeId, int sensorId);
         void DropNodes();
         
@@ -36,7 +36,7 @@ namespace MyNetSensors.Gateways
 
         void UpdateNodeSettings(Node node);
         void UpdateSensorSettings(Sensor sensor);
-        void DeleteNodeByDbId(int db_Id);
+        void DeleteNodeByDbId(int id);
         void DeleteNodeByNodeId(int nodeId);
     }
 }
