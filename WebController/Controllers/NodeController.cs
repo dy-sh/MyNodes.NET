@@ -9,7 +9,9 @@ using Microsoft.AspNet.Mvc;
 
 
 using MyNetSensors.Gateways;
+using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesTasks;
+using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.SerialControllers;
 
 

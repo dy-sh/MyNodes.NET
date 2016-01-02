@@ -26,7 +26,6 @@ namespace MyNetSensors.WebController.Controllers
 
         public List<LiteGraph.Node> GetNodes()
         {
-
             List<LogicalNode> nodes = engine.nodes;
             if (!nodes.Any())
                 return null;

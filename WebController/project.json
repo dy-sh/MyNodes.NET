@@ -1,6 +1,6 @@
 {
   "userSecretsId": "aspnet5-WebServer-dc3c76a8-981e-44dc-bfe3-f2f4f7dd6bf3",
-  "version": "1.2.0-*",
+  "version": "2.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -8,6 +8,7 @@
   "dependencies": {
     "EntityFramework.Commands": "7.0.0-rc1-final",
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
+    "EntityFramework.SQLite": "7.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
     "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
@@ -25,7 +26,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
-    "Microsoft.AspNet.SignalR.Server": "3.0.0-rc1-final"
+    "Microsoft.AspNet.SignalR.Server": "3.0.0-rc1-final",
   },
 
   "commands": {

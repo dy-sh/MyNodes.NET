@@ -47,7 +47,6 @@
     <Compile Include="INodesTasksRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodesTasksEngine.cs" />
-    <Compile Include="NodesTasksRepositoryDapper.cs" />
     <Compile Include="NodeTask.cs" />
   </ItemGroup>
   <ItemGroup>

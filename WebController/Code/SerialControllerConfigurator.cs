@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Gateways;
 using MyNetSensors.LogicalNodes;
+using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Controllers;
 
@@ -27,6 +28,7 @@ namespace MyNetSensors.WebController.Code
     {
         private static bool serialControllerStarted;
 
+        public static NodesDbContext nodesDbContext;
 
         public static void Start(IConfigurationRoot Configuration)
         {
@@ -45,7 +47,20 @@ namespace MyNetSensors.WebController.Code
                 SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
 
                 SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
-                SerialController.dataBaseConnectionString = Configuration["DataBase:ConnectionString"];
+                SerialController.useMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
+                if (SerialController.useMSSQL)
+                    SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
+                else
+                {
+                    //todo temporary
+                    SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
+
+                    SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
+                    SerialController.historyDb = new SensorsHistoryRepositoryEF(nodesDbContext);
+                    SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesDbContext);
+                    SerialController.logicalNodesRepository = new LogicalNodesRepositoryEF(nodesDbContext);
+                }
+
                 SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
                 SerialController.dataBaseDebugState = Boolean.Parse(Configuration["DataBase:DebugState"]);
                 SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);

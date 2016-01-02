@@ -6,19 +6,19 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using Dapper;
+using MyNetSensors.NodesTasks;
 
-namespace MyNetSensors.NodesTasks
+namespace MyNetSensors.Repositories.EF.SQLite
 {
-    public class NodesTasksRepositoryDapper : INodesTasksRepository
+    public class NodesTasksRepositoryEF : INodesTasksRepository
     {
 
         private string connectionString;
+        private NodesDbContext nodesDbContext;
 
-        public NodesTasksRepositoryDapper(string connectionString)
+        public NodesTasksRepositoryEF(NodesDbContext nodesDbContext)
         {
-            this.connectionString = connectionString;
+            this.nodesDbContext = nodesDbContext;
         }
 
 
@@ -56,7 +56,7 @@ namespace MyNetSensors.NodesTasks
 	                    [repeatingDoneCount] [int] NULL
                         ) ON [PRIMARY] ";
 
-                    db.Query(req);
+                   // db.Query(req);
                 }
                 catch
                 {
@@ -87,7 +87,7 @@ namespace MyNetSensors.NodesTasks
 
         public int AddTask(NodeTask task)
         {
-            int db_Id;
+            int db_Id = -1;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
@@ -96,7 +96,7 @@ namespace MyNetSensors.NodesTasks
                              + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId,@sensorDescription, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                db_Id = db.Query<int>(sqlQuery, task).Single();
+              //  db_Id = db.Query<int>(sqlQuery, task).Single();
             }
             return db_Id;
         }
@@ -125,7 +125,7 @@ namespace MyNetSensors.NodesTasks
                     "repeatingNeededCount = @repeatingNeededCount, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
                     "WHERE db_Id = @db_Id";
-                db.Execute(sqlQuery, task);
+              //  db.Execute(sqlQuery, task);
             }
         }
 
@@ -133,12 +133,12 @@ namespace MyNetSensors.NodesTasks
 
         public NodeTask GetTask(int db_Id)
         {
-            NodeTask task;
+            NodeTask task=null;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                task = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE db_Id=@db_Id",
-                    new { db_Id }).SingleOrDefault();
+                //task = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE db_Id=@db_Id",
+                //    new { db_Id }).SingleOrDefault();
             }
 
             return task;
@@ -146,11 +146,11 @@ namespace MyNetSensors.NodesTasks
 
         public List<NodeTask> GetAllTasks()
         {
-            List<NodeTask> tasks;
+            List<NodeTask> tasks = null;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                tasks = db.Query<NodeTask>("SELECT * FROM NodesTasks").ToList();
+               // tasks = db.Query<NodeTask>("SELECT * FROM NodesTasks").ToList();
             }
 
             return tasks;
@@ -158,12 +158,12 @@ namespace MyNetSensors.NodesTasks
 
         public List<NodeTask> GetTasks(int nodeId, int sensorId)
         {
-            List<NodeTask> list;
+            List<NodeTask> list=null;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                list = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
-                    new { nodeId, sensorId }).ToList();
+                //list = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
+                //    new { nodeId, sensorId }).ToList();
             }
 
             return list;
@@ -174,8 +174,8 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE db_Id=@db_Id",
-                    new { db_Id });
+                //db.Query("DELETE FROM NodesTasks WHERE db_Id=@db_Id",
+                //    new { db_Id });
             }
         }
 
@@ -184,8 +184,8 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
-                    new { nodeId, sensorId });
+                //db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
+                //    new { nodeId, sensorId });
             }
         }
 
@@ -194,8 +194,8 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE sensorDbId=@sensorDbId",
-                    new { sensorDbId });
+                //db.Query("DELETE FROM NodesTasks WHERE sensorDbId=@sensorDbId",
+                //    new { sensorDbId });
             }
         }
 
@@ -204,7 +204,7 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE isCompleted=1");
+               // db.Query("DELETE FROM NodesTasks WHERE isCompleted=1");
             }
         }
 
@@ -213,8 +213,8 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId AND isCompleted=1",
-                    new { nodeId, sensorId });
+                //db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId AND isCompleted=1",
+                //    new { nodeId, sensorId });
             }
         }
 
@@ -223,7 +223,7 @@ namespace MyNetSensors.NodesTasks
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("TRUNCATE TABLE [NodesTasks]");
+              //  db.Query("TRUNCATE TABLE [NodesTasks]");
             }
         }
 
@@ -239,13 +239,13 @@ namespace MyNetSensors.NodesTasks
                     "executionValue = @executionValue, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
                     "WHERE db_Id = @db_Id";
-                db.Execute(sqlQuery, new {
-                    db_Id,
-                    isCompleted,
-                    repeatingDoneCount,
-                    executionDate,
-                    executionValue
-                });
+                //db.Execute(sqlQuery, new {
+                //    db_Id,
+                //    isCompleted,
+                //    repeatingDoneCount,
+                //    executionDate,
+                //    executionValue
+                //});
             }
         }
 
@@ -261,14 +261,14 @@ namespace MyNetSensors.NodesTasks
                     "executionDate = @executionDate, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
                     "WHERE db_Id = @db_Id";
-                db.Execute(sqlQuery, new
-                {
-                    db_Id,
-                    enabled,
-                    isCompleted,
-                    executionDate,
-                    repeatingDoneCount
-                });
+                //db.Execute(sqlQuery, new
+                //{
+                //    db_Id,
+                //    enabled,
+                //    isCompleted,
+                //    executionDate,
+                //    repeatingDoneCount
+                //});
             }
         }
 
@@ -281,11 +281,11 @@ namespace MyNetSensors.NodesTasks
                     "UPDATE NodesTasks SET " +
                     "enabled = @enabled " +
                     "WHERE db_Id = @db_Id";
-                db.Execute(sqlQuery, new
-                {
-                    db_Id,
-                    enabled
-                });
+                //db.Execute(sqlQuery, new
+                //{
+                //    db_Id,
+                //    enabled
+                //});
             }
         }
 
@@ -297,7 +297,7 @@ namespace MyNetSensors.NodesTasks
                 var sqlQuery =
                     "UPDATE NodesTasks SET " +
                     "enabled = 0 ";
-                db.Execute(sqlQuery);
+               // db.Execute(sqlQuery);
             }
         }
 

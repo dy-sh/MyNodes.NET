@@ -12,6 +12,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.Models;
@@ -45,10 +46,32 @@ namespace MyNetSensors.WebController
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["DataBase:ConnectionString"]));
+            //database
+            string connectionString;
+            bool useMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
+            if (useMSSQL)
+                connectionString = Configuration["DataBase:MSSQLConnectionString"];
+            else
+                connectionString = Configuration["DataBase:SqliteConnectionString"];
+
+            if (useMSSQL)
+            {
+                services.AddEntityFramework()
+                    .AddSqlServer()
+                    .AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlServer(connectionString))
+                    .AddDbContext<NodesDbContext>(options =>
+                        options.UseSqlServer(connectionString));
+            }
+            else
+            {
+                services.AddEntityFramework()
+                    .AddSqlite()
+                    .AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlite(connectionString))
+                    .AddDbContext<NodesDbContext>(options =>
+                        options.UseSqlite(connectionString));
+            }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -65,7 +88,13 @@ namespace MyNetSensors.WebController
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IConnectionManager connectionManager)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IConnectionManager connectionManager,
+            NodesDbContext nodesDbContext
+            )
         {
             //Set up dot instead of comma in float values
             System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
@@ -73,7 +102,7 @@ namespace MyNetSensors.WebController
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
 
-
+            //debug settings
             bool webServerDebug = false;
             IConfigurationSection logging = null;
             bool webServerEnable = false;
@@ -96,6 +125,10 @@ namespace MyNetSensors.WebController
 
             loggerFactory.AddDebug();
 
+
+
+
+            //web server settings
             if (webServerEnable)
             {
                 if (env.IsDevelopment())
@@ -123,6 +156,8 @@ namespace MyNetSensors.WebController
                     }
                 }
 
+                app.UseRuntimeInfoPage("/info");
+
                 app.UseSignalR();
 
                 app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -143,6 +178,7 @@ namespace MyNetSensors.WebController
 
 
             SignalRServer.Start(connectionManager);
+            SerialControllerConfigurator.nodesDbContext = nodesDbContext;
             StartSerialController(connectionManager);
 
         }

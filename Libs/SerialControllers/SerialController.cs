@@ -13,6 +13,7 @@ using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
 using MyNetSensors.NodesTasks;
 using MyNetSensors.Repositories.Dapper;
+using MyNetSensors.Repositories.EF.SQLite;
 using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
 
 namespace MyNetSensors.SerialControllers
@@ -29,6 +30,7 @@ namespace MyNetSensors.SerialControllers
         public static bool gatewayDebugState = true;
 
         public static bool dataBaseEnabled = true;
+        public static bool useMSSQL = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
         public static bool dataBaseDebugState = true;
@@ -55,8 +57,9 @@ namespace MyNetSensors.SerialControllers
         public static ISensorsHistoryRepository historyDb;
         public static INodesTasksRepository nodesTasksDb;
         public static NodesTasksEngine nodesTasksEngine;
- //       public static ISoftNodesServer softNodesServer;
-//        public static SoftNodesController softNodesController;
+        //       public static ISoftNodesServer softNodesServer;
+        //        public static SoftNodesController softNodesController;
+
 
 
         public static LogicalNodesEngine logicalNodesEngine;
@@ -74,26 +77,24 @@ namespace MyNetSensors.SerialControllers
         {
             SerialController.serialPortName = serialPortName;
 
-    
-                OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-                ConnectToDB();
-                ConnectToSerialPort();
-                ConnectNodesTasks();
-                //ConnectToSoftNodesController();
-                ConnectToLogicalNodesEngine();
+            OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-                //reconnect if disconnected
-                gateway.OnDisconnectedEvent += ReconnectToSerialPort;
+            ConnectToDB();
+            ConnectToSerialPort();
+            ConnectNodesTasks();
+            //ConnectToSoftNodesController();
+            ConnectToLogicalNodesEngine();
 
-                OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
+            //reconnect if disconnected
+            gateway.OnDisconnectedEvent += ReconnectToSerialPort;
+
+            OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
 
             OnStarted?.Invoke(null, EventArgs.Empty);
 
 
         }
-
-
 
         public static void ConnectToDB()
         {
@@ -103,17 +104,29 @@ namespace MyNetSensors.SerialControllers
 
             OnDebugStateMessage("DATABASE: Connecting... ");
 
-            if (dataBaseConnectionString == null)
+
+            if (useMSSQL)
             {
-                OnDebugStateMessage("DATABASE: Connection failed. Set ConnectionString in appsettings.json file.");
-                return;
+                if (dataBaseConnectionString == null)
+                {
+                    OnDebugStateMessage("DATABASE: Connection failed. Set ConnectionString in appsettings.json file.");
+                    return;
+                }
+
+                gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
+                historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
+                nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
+                logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
             }
+            else
+            {
+                //configure from SerialControllerConfigurator, 
+                //because I don`t want to reference Entity Framework to SerialController
 
-
-            gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
-            historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
-            nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
-            logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
+                gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
+                historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
+                nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
+            }
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
             gatewayDb.ShowDebugInConsole(dataBaseDebugState);
@@ -122,9 +135,9 @@ namespace MyNetSensors.SerialControllers
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
-  
 
-OnDebugStateMessage("DATABASE: Connected");
+
+            OnDebugStateMessage("DATABASE: Connected");
         }
 
 
@@ -226,7 +239,7 @@ OnDebugStateMessage("DATABASE: Connected");
             OnDebugStateMessage("LOGICAL NODES ENGINE: Starting... ");
 
 
-            logicalNodesEngine=new LogicalNodesEngine(logicalNodesRepository);
+            logicalNodesEngine = new LogicalNodesEngine(logicalNodesRepository);
             //logicalNodesEngine=new LogicalNodesEngine();
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
@@ -238,7 +251,7 @@ OnDebugStateMessage("DATABASE: Connected");
                 logicalNodesEngine.OnDebugNodeMessage += message => OnDebugTxRxMessage("LOGICAL NODES ENGINE: " + message);
 
 
-            logicalHardwareNodesEngine=new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
+            logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
 
             logicalNodesEngine.Start();
 

@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
 using MyNetSensors.LogicalNodes;
+using MyNetSensors.Repositories.EF.SQLite;
 //using MyNetSensors.LogicalNodes;
 using MyNetSensors.SerialControllers;
 using Newtonsoft.Json;
@@ -16,14 +17,18 @@ using Output = LiteGraph.Output;
 
 namespace MyNetSensors.WebController.Controllers
 {
+
     public class NodesEditorController : Controller
     {
+        public NodesEditorController()
+        {
+        }
 
         //private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
         public IActionResult Index()
         {
-            return View();
+              return View();
         }
 
     }
