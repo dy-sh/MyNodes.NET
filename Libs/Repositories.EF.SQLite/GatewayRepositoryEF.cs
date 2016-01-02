@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
+using Microsoft.Data.Entity;
 using MyNetSensors.Gateways;
 
 namespace MyNetSensors.Repositories.EF.SQLite
@@ -19,6 +20,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
     public class GatewayRepositoryEF : IGatewayRepository
     {
+        private string connectionString;
+
         private bool showConsoleMessages = false;
 
         //if writeInterval==0, every message will be instantly writing to DB
@@ -40,15 +43,14 @@ namespace MyNetSensors.Repositories.EF.SQLite
         //messages list, to write to db by timer
         private List<Message> newMessages = new List<Message>();
 
-        private string connectionString;
-        private NodesDbContext nodesDbContext;
+        private NodesDbContext db;
 
         public GatewayRepositoryEF(NodesDbContext nodesDbContext)
         {
             updateDbTimer.Elapsed += UpdateDbTimerEvent;
 
-            this.nodesDbContext = nodesDbContext;
-            InitializeDB();
+            this.db = nodesDbContext;
+            CreateDb();
         }
 
 
@@ -84,114 +86,28 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-
-        private void InitializeDB()
+        public void CreateDb()
         {
-            using (var db = new SqlConnection(connectionString + ";Database= master"))
+            try
             {
-
-                try
-                {
-                    //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
-                    db.Open();
-                 //   db.Execute("CREATE DATABASE [MyNetSensors]");
-                }
-                catch
-                {
-                }
+                db.Database.EnsureCreated();
             }
-
-            using (var db = new SqlConnection(connectionString))
+            catch (Exception ex)
             {
-
-                try
-                {
-                    db.Open();
-
-             //       db.Execute(
-             //           @"CREATE TABLE [dbo].[Messages](
-	            //[db_Id] [int] IDENTITY(1,1) NOT NULL,
-	            //[nodeId] [int] NOT NULL,
-	            //[sensorId] [int] NOT NULL,
-	            //[messageType] [int] NOT NULL,
-	            //[ack] [bit] NOT NULL,
-	            //[subType] [int] NOT NULL,
-	            //[payload] [nvarchar](max) NULL,
-	            //[isValid] [bit] NOT NULL,
-	            //[incoming] [bit] NOT NULL,
-	            //[dateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
-                }
-                catch
-                {
-                }
-
-                try
-                {
-                 //   db.Execute(
-                 //       @" CREATE TABLE [dbo].[Nodes](
-	                //[db_Id] [int] IDENTITY(1,1) NOT NULL,
-	                //[nodeId] [int] NOT NULL,
-	                //[registered] [datetime] NOT NULL,
-	                //[lastSeen] [datetime] NOT NULL,
-	                //[isRepeatingNode] [bit] NULL,
-	                //[name] [nvarchar](max) NULL,
-	                //[version] [nvarchar](max) NULL,
-	                //[batteryLevel] [int] NULL ) ON [PRIMARY] ");
-                }
-                catch
-                {
-                }
-
-                try
-                {
-                 //   db.Execute(
-                 //       @" CREATE TABLE [dbo].[Sensors](
-	                //[db_Id] [int] IDENTITY(1,1) NOT NULL,
-	                //[nodeId] [int] NOT NULL,
-	                //[sensorId] [int] NOT NULL,
-	                //[type] [int] NULL,
-	                //[dataType] [int] NULL,
-	                //[state] [nvarchar](max) NULL,
-	                //[description] [nvarchar](max) NULL,
-	                //[storeHistoryEnabled] [bit] NULL,
-	                //[storeHistoryEveryChange] [bit] NULL,
-	                //[storeHistoryWithInterval] [int] NULL,
-	                //[invertData] [bit] NULL,
-	                //[remapEnabled] [bit] NULL,
-	                //[remapFromMin] [nvarchar](max) NULL,
-	                //[remapFromMax] [nvarchar](max) NULL,
-	                //[remapToMin] [nvarchar](max) NULL,
-	                //[remapToMax] [nvarchar](max) NULL,
-	                //[Node_db_Id] [int] NULL) ON [PRIMARY] ");
-                }
-                catch
-                {
-                }
+                Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
 
         public void DropMessages()
         {
-            newMessages.Clear();
-
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-             //   db.Query("TRUNCATE TABLE [Messages]");
-            }
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Messages]");
         }
 
         public void DropNodes()
         {
-            updatedNodesId.Clear();
-
-            using (var db = new SqlConnection(connectionString))
-            {
-              //  db.Open();
-              //  db.Query("TRUNCATE TABLE [Nodes]");
-              //  db.Query("TRUNCATE TABLE [Sensors]");
-            }
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Nodes]");
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Sensors]");
         }
 
 
@@ -208,13 +124,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public List<Message> GetMessages()
         {
-            List<Message> messages=null;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-             //   messages = db.Query<Message>("SELECT * FROM Messages").ToList();
-            }
-            return messages;
+            return db.Messages.ToList();
         }
 
         private void OnNewMessage(Message message)
@@ -229,80 +139,51 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void AddMessage(Message message)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                               +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-              //  db.Query(sqlQuery, message);
-            }
+            db.Messages.Add(message);
+            db.SaveChanges();
         }
+
+
+ 
 
         public List<Node> GetNodes()
         {
-            //var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            //{
-            //    AddChildAction = (node, sensor) =>
-            //    {
-            //        if (node.sensors == null)
-            //            node.sensors = new List<Sensor>();
-
-            //        node.sensors.Add(sensor);
-            //    },
-            //    ParentKey = (node) => node.db_Id
-            //};
-
-            List<Node> list = null;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id ORDER BY n.nodeId";
-
-            //    list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id")
-            //         .Where(y => y != null).ToList();
-            }
-            return list;
+            return db.Nodes.Include(x => x.sensors).ToList();
         }
 
 
-
-
-
-        public void AddOrUpdateNode(Node node)
+        public int AddOrUpdateNode(Node node)
         {
-            using (var db = new SqlConnection(connectionString))
+            int id = node.Id;
+
+            Node oldNode = GetNodeByDbId(node.Id);
+
+            if (oldNode == null)
+                id = AddNode(node);
+            else
+                UpdateNode(node);
+
+            return id;
+        }
+
+        public int AddNode(Node node)
+        {
+            db.Nodes.Add(node);
+            db.SaveChanges();
+            gateway.SetNodeDbId(node.nodeId, node.Id);
+
+            foreach (var sensor in node.sensors)
             {
-                db.Open();
-
-                //Node oldNode =
-                //    db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { node.nodeId }).SingleOrDefault();
-
-                //if (oldNode == null)
-                //{
-                //    var sqlQuery = "INSERT INTO Nodes (nodeId, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
-                //                   +
-                //                   "VALUES(@nodeId, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel); "
-                //                   + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                //    int dbId = db.Query<int>(sqlQuery, node).Single();
-                //    gateway.SetNodeDbId(node.nodeId, dbId);
-                //}
-                //else
-                //{
-                //    var sqlQuery =
-                //        "UPDATE Nodes " +
-                //        "SET nodeId = @nodeId, " +
-                //        "registered  = @registered, " +
-                //        "lastSeen = @lastSeen, " +
-                //        "isRepeatingNode = @isRepeatingNode, " +
-                //        "name = @name, " +
-                //        "version = @version, " +
-                //        "batteryLevel = @batteryLevel " +
-                //        "WHERE nodeId = @nodeId";
-                //    db.Execute(sqlQuery, node);
-                //}
+                AddOrUpdateSensor(sensor);
             }
+
+            return node.Id;
+        }
+
+        public void UpdateNode(Node node)
+        {
+            db.Nodes.Update(node);
+            db.SaveChanges();
 
             foreach (var sensor in node.sensors)
             {
@@ -310,122 +191,46 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void AddOrUpdateSensor(Sensor sensor)
+        public int AddOrUpdateSensor(Sensor sensor)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
+            int id = sensor.Id;
 
-                //Sensor oldSensor =
-                //    db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
-                //        new { nodeId = sensor.nodeId, sensorId = sensor.sensorId }).SingleOrDefault();
-                //int node_db_id =
-                //    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.nodeId })
-                //        .SingleOrDefault()
-                //        .db_Id;
+            Sensor oldSensor = GetSensor(sensor.Id);
 
-                //if (oldSensor == null)
-                //{
-                //    var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_db_Id) "
-                //                   +
-                //                   "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_db_Id); "
-                //                   + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                //    int dbId = db.Query<int>(sqlQuery, new
-                //    {
-                //        nodeId = sensor.nodeId,
-                //        sensorId = sensor.sensorId,
-                //        type = sensor.type,
-                //        dataType = sensor.dataType,
-                //        state = sensor.state,
-                //        description = sensor.description,
-                //        storeHistoryEnabled = sensor.storeHistoryEnabled,
-                //        storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                //        storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                //        invertData = sensor.invertData,
-                //        remapEnabled = sensor.remapEnabled,
-                //        remapFromMin = sensor.remapFromMin,
-                //        remapFromMax = sensor.remapFromMax,
-                //        remapToMin = sensor.remapToMin,
-                //        remapToMax = sensor.remapToMax,
-                //        Node_db_Id = node_db_id
-                //    }).Single();
+            if (oldSensor == null)
+                id = AddSensor(sensor);
+            else
+                UpdateSensor(sensor);
 
-                  //  gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, dbId);
-                //}
-                //else
-                //{
-                //    var sqlQuery =
-                //        "UPDATE Sensors SET " +
-                //        "nodeId = @nodeId, " +
-                //        "sensorId  = @sensorId, " +
-                //        "type = @type, " +
-                //        "dataType = @dataType, " +
-                //        "state = @state, " +
-                //        "description = @description, " +
-                //        "storeHistoryEnabled = @storeHistoryEnabled, " +
-                //        "storeHistoryWithInterval = @storeHistoryWithInterval, " +
-                //        "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                //        "invertData = @invertData, " +
-                //        "remapEnabled = @remapEnabled, " +
-                //        "remapFromMin = @remapFromMin, " +
-                //        "remapFromMax = @remapFromMax, " +
-                //        "remapToMin = @remapToMin, " +
-                //        "remapToMax = @remapToMax, " +
-                //        "Node_db_Id = @Node_db_Id " +
-                //        "WHERE nodeId = @nodeId AND sensorId = @sensorId";
-                //    db.Execute(sqlQuery, new
-                //    {
-                //        nodeId = sensor.nodeId,
-                //        sensorId = sensor.sensorId,
-                //        type = sensor.type,
-                //        dataType = sensor.dataType,
-                //        state = sensor.state,
-                //        description = sensor.description,
-                //        storeHistoryEnabled = sensor.storeHistoryEnabled,
-                //        storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                //        storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                //        invertData = sensor.invertData,
-                //        remapEnabled = sensor.remapEnabled,
-                //        remapFromMin = sensor.remapFromMin,
-                //        remapFromMax = sensor.remapFromMax,
-                //        remapToMin = sensor.remapToMin,
-                //        remapToMax = sensor.remapToMax,
-                //        Node_db_Id = node_db_id
-                //    });
-              //  }
-            }
+            return id;
         }
 
-
-
-
-
-        private void WriteAllNodes()
+        public int AddSensor(Sensor sensor)
         {
-            List<Node> nodes = gateway.GetNodes();
-            foreach (var node in nodes)
-            {
-                AddOrUpdateNode(node);
-            }
+           // int node_Id = GetNodeByNodeId(sensor.nodeId).Id;
+
+            db.Sensors.Add(sensor);
+            db.SaveChanges();
+
+            gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, sensor.Id);
+            return sensor.Id;
         }
 
+        public void UpdateSensor(Sensor sensor)
+        {
+            db.Sensors.Update(sensor);
+            db.SaveChanges();
+        }
 
         private void WriteNewMessages()
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                //to prevent changing of collection while writing to db is not yet finished
-                Message[] messages = new Message[newMessages.Count];
-                newMessages.CopyTo(messages);
-                newMessages.Clear();
 
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                               +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-              //  db.Execute(sqlQuery, messages);
-            }
+            Message[] messages = new Message[newMessages.Count];
+            newMessages.CopyTo(messages);
+            newMessages.Clear();
+
+            db.Messages.AddRange(messages);
+            db.SaveChanges();
         }
 
 
@@ -490,97 +295,40 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public Node GetNodeByNodeId(int nodeId)
         {
-            //var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            //{
-            //    AddChildAction = (node, sensor) =>
-            //    {
-            //        if (node.sensors == null)
-            //            node.sensors = new List<Sensor>();
-
-            //        node.sensors.Add(sensor);
-            //    },
-            //    ParentKey = (node) => node.db_Id
-            //};
-
-
-            Node result = null;
-            //using (var db = new SqlConnection(connectionString))
-            //{
-            //    db.Open();
-            //    string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.nodeId = {nodeId}";
-            //    result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-            //    if (result == null)
-            //    {
-            //        joinQuery = $"SELECT * FROM Nodes WHERE nodeId = {nodeId}";
-            //        result = db.Query<Node>(joinQuery).FirstOrDefault();
-            //    }
-            //}
-
-            return result;
+            return db.Nodes.FirstOrDefault(x => x.nodeId == nodeId);
         }
 
 
         public Node GetNodeByDbId(int id)
         {
-            //var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            //{
-            //    AddChildAction = (node, sensor) =>
-            //    {
-            //        if (node.sensors == null)
-            //            node.sensors = new List<Sensor>();
-
-            //        node.sensors.Add(sensor);
-            //    },
-            //    ParentKey = (node) => node.db_Id
-            //};
-
-            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.db_Id = s.Node_db_Id WHERE n.db_Id = {id}";
-
-            Node result = null;
-            //using (var db = new SqlConnection(connectionString))
-            //{
-            //    db.Open();
-            //    result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "db_Id").FirstOrDefault();
-            //}
-
-            return result;
+            return db.Nodes.FirstOrDefault(x => x.Id == id);
         }
 
         public Sensor GetSensor(int id)
         {
-            Sensor sensor = null;
-            using (var db = new SqlConnection(connectionString))
+            try
             {
-                db.Open();
-               // sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE db_Id = @db_Id", new { db_Id }).FirstOrDefault();
+                Sensor sensor = db.Sensors.FirstOrDefault(x => x.Id == id);
+                return sensor;
             }
-            return sensor;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public Sensor GetSensor(int nodeId, int sensorId)
         {
-            Sensor sensor = null;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-              //  sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
-               //         new { nodeId, sensorId }).FirstOrDefault();
-            }
-            return sensor;
+            return db.Sensors.FirstOrDefault(x => x.nodeId == nodeId && x.sensorId==sensorId);
         }
 
 
         public void UpdateNodeSettings(Node node)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "UPDATE Nodes SET " +
-                    "name = @name " +
-                    "WHERE nodeId = @nodeId";
-              //  db.Execute(sqlQuery, node);
-            }
+            Node oldNode = GetNodeByDbId(node.Id);
+            oldNode.name = node.name;
+            db.Nodes.Update(oldNode);
+            db.SaveChanges();
 
             foreach (var sensor in node.sensors)
             {
@@ -590,73 +338,49 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void UpdateSensorSettings(Sensor sensor)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "UPDATE Sensors SET " +
-                    "description = @description, " +
-                    "storeHistoryEnabled = @storeHistoryEnabled, " +
-                    "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                    "storeHistoryWithInterval = @storeHistoryWithInterval, " +
-                    "invertData = @invertData, " +
-                    "remapEnabled = @remapEnabled, " +
-                    "remapFromMin = @remapFromMin, " +
-                    "remapFromMax = @remapFromMax, " +
-                    "remapToMin = @remapToMin, " +
-                    "remapToMax = @remapToMax " +
-                    "WHERE nodeId = @nodeId AND sensorId = @sensorId";
-                //db.Execute(sqlQuery, new
-                //{
-                //    description = sensor.description,
-                //    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                //    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                //    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                //    invertData = sensor.invertData,
-                //    remapEnabled = sensor.remapEnabled,
-                //    remapFromMin = sensor.remapFromMin,
-                //    remapFromMax = sensor.remapFromMax,
-                //    remapToMin = sensor.remapToMin,
-                //    remapToMax = sensor.remapToMax,
-                //    sensorId = sensor.sensorId,
-                //    nodeId = sensor.nodeId
-                //});
-            }
+            Sensor oldSensor = GetSensor(sensor.Id);
+            oldSensor.description = sensor.description;
+            oldSensor.storeHistoryEnabled = sensor.storeHistoryEnabled;
+            oldSensor.storeHistoryEveryChange = sensor.storeHistoryEveryChange;
+            oldSensor.storeHistoryWithInterval = sensor.storeHistoryWithInterval;
+            oldSensor.invertData = sensor.invertData;
+            oldSensor.remapEnabled = sensor.remapEnabled;
+            oldSensor.remapFromMin = sensor.remapFromMin;
+            oldSensor.remapFromMax = sensor.remapFromMax;
+            oldSensor.remapToMin = sensor.remapToMin;
+            oldSensor.remapToMax = sensor.remapToMax;
+
+            db.Sensors.Update(oldSensor);
+            db.SaveChanges();
         }
 
         public void DeleteNodeByDbId(int id)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "Delete FROM Nodes " +
-                    "WHERE db_Id = @db_Id";
-             //   db.Execute(sqlQuery, new { db_Id });
+            Node node = db.Nodes.FirstOrDefault(x => x.Id == id);
+            if (node == null)
+                return;
 
-                sqlQuery =
-                    "Delete FROM Sensors " +
-                    "WHERE Node_db_Id = @Node_db_Id";
-             //   db.Execute(sqlQuery, new { Node_db_Id = db_Id });
-            }
+            db.Nodes.Remove(node);
+            db.SaveChanges();
+
+            List<Sensor> sensors = db.Sensors.Where(x => x.nodeId == node.Id).ToList();
+            db.Sensors.RemoveRange(sensors);
+            db.SaveChanges();
+            
         }
 
         public void DeleteNodeByNodeId(int nodeId)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "Delete FROM Nodes " +
-                    "WHERE nodeId = @nodeId";
-             //   db.Execute(sqlQuery, new { nodeId });
+            Node node = db.Nodes.FirstOrDefault(x => x.nodeId == nodeId);
+            if (node == null)
+                return;
 
+            db.Nodes.Remove(node);
+            db.SaveChanges();
 
-                sqlQuery =
-                    "Delete FROM Sensors " +
-                    "WHERE nodeId = @nodeId";
-              //  db.Execute(sqlQuery, new { nodeId = nodeId });
-            }
+            List<Sensor> sensors = db.Sensors.Where(x => x.nodeId == node.Id).ToList();
+            db.Sensors.RemoveRange(sensors);
+            db.SaveChanges();
         }
 
 

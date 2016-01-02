@@ -122,8 +122,6 @@ namespace MyNetSensors.SerialControllers
             {
                 //configure from SerialControllerConfigurator, 
                 //because I don`t want to reference Entity Framework to SerialController
-
-                gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
             }
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);

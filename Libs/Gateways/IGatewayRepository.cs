@@ -17,8 +17,12 @@ namespace MyNetSensors.Gateways
         void DropMessages();
 
 
-        void AddOrUpdateNode(Node node);
-        void AddOrUpdateSensor(Sensor sensor);
+        int AddOrUpdateNode(Node node);
+        int AddNode(Node node);
+        void UpdateNode(Node node);
+        int AddOrUpdateSensor(Sensor sensor);
+        int AddSensor(Sensor sensor);
+        void UpdateSensor(Sensor sensor);
         List<Node> GetNodes();
         Node GetNodeByDbId(int id);
         Node GetNodeByNodeId(int nodeId);
