@@ -225,7 +225,7 @@ namespace MyNetSensors.WebController.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.UpdateTaskEnabled(task.db_Id, true);
+            tasksDb.UpdateTaskEnabled(task.Id, true);
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
@@ -243,7 +243,7 @@ namespace MyNetSensors.WebController.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.UpdateTaskEnabled(task.db_Id, false);
+            tasksDb.UpdateTaskEnabled(task.Id, false);
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
@@ -261,7 +261,7 @@ namespace MyNetSensors.WebController.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.UpdateTask(task.db_Id, true, false, DateTime.Now, 0);
+            tasksDb.UpdateTask(task.Id, true, false, DateTime.Now, 0);
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();

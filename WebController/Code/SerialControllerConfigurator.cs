@@ -46,24 +46,6 @@ namespace MyNetSensors.WebController.Code
                 SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
                 SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
 
-                SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
-                SerialController.useMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
-                if (SerialController.useMSSQL)
-                    SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
-                else
-                {
-                    //todo temporary
-                    SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
-
-                    SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
-                    SerialController.historyDb = new SensorsHistoryRepositoryEF(nodesDbContext);
-                    SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesDbContext);
-                    SerialController.logicalNodesRepository = new LogicalNodesRepositoryEF(nodesDbContext);
-                }
-
-                SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
-                SerialController.dataBaseDebugState = Boolean.Parse(Configuration["DataBase:DebugState"]);
-                SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);
                 SerialController.nodesTasksEnabled = Boolean.Parse(Configuration["NodesTasks:Enable"]);
                 SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
                 SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
@@ -75,6 +57,16 @@ namespace MyNetSensors.WebController.Code
                 SerialController.logicalNodesDebugEngine = Boolean.Parse(Configuration["LogicalNodes:DebugEngine"]);
                 SerialController.logicalNodesDebugNodes = Boolean.Parse(Configuration["LogicalNodes:DebugNodes"]);
 
+                SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
+                SerialController.dataBadeUseMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
+                SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
+                SerialController.dataBaseDebugState = Boolean.Parse(Configuration["DataBase:DebugState"]);
+                SerialController.dataBaseWriteTxRxMessages = Boolean.Parse(Configuration["DataBase:WriteTxRxMessages"]);
+
+                if (SerialController.dataBadeUseMSSQL)
+                    SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
+                else
+                    SerialController.dataBaseConnectionString = Configuration["DataBase:SqliteConnectionString"];
 
                 portName = Configuration["SerialPort:Name"];
             }
@@ -82,6 +74,17 @@ namespace MyNetSensors.WebController.Code
             {
                 Log("ERROR: Bad configuration in appsettings.json file.");
                 throw new Exception("Bad configuration in appsettings.json file.");
+            }
+
+            if (!SerialController.dataBadeUseMSSQL)
+            {
+                //todo temporary
+                SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
+
+                SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
+                SerialController.historyDb = new SensorsHistoryRepositoryEF(nodesDbContext);
+                SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesDbContext);
+                SerialController.logicalNodesRepository = new LogicalNodesRepositoryEF(nodesDbContext);
             }
 
             if (portName != null)

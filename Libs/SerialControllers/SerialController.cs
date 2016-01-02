@@ -30,7 +30,7 @@ namespace MyNetSensors.SerialControllers
         public static bool gatewayDebugState = true;
 
         public static bool dataBaseEnabled = true;
-        public static bool useMSSQL = true;
+        public static bool dataBadeUseMSSQL = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
         public static bool dataBaseDebugState = true;
@@ -105,7 +105,7 @@ namespace MyNetSensors.SerialControllers
             OnDebugStateMessage("DATABASE: Connecting... ");
 
 
-            if (useMSSQL)
+            if (dataBadeUseMSSQL)
             {
                 if (dataBaseConnectionString == null)
                 {
@@ -124,8 +124,6 @@ namespace MyNetSensors.SerialControllers
                 //because I don`t want to reference Entity Framework to SerialController
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
-               // historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
-                nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
             }
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);

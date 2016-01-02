@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Data.Entity;
@@ -8,7 +9,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 {
     public class LogicalNodesRepositoryEF : ILogicalNodesRepository
     {
-        private string connectionString;
         private NodesDbContext db;
 
         public LogicalNodesRepositoryEF(NodesDbContext nodesDbContext)
@@ -19,7 +19,15 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void CreateDb()
         {
-            db.Database.EnsureCreated();
+            try
+            {
+                db.Database.EnsureCreated();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
+            }
         }
 
 

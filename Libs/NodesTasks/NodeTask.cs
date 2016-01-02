@@ -11,7 +11,7 @@ namespace MyNetSensors.NodesTasks
     public class NodeTask
     {
 
-        public int db_Id { get; set; }
+        public int Id { get; set; }
         public bool enabled { get; set; }
         public bool isCompleted { get; set; }
         public string description { get; set; }

@@ -118,7 +118,7 @@ namespace MyNetSensors.WebController.Controllers
             foreach (var sensor in node.sensors)
             {
                 historyDb.DropSensorHistory(sensor.nodeId,sensor.sensorId);
-                tasksDb.DeleteTasks(sensor.db_Id);
+                tasksDb.DeleteTasks(sensor.nodeId, sensor.sensorId);
             }
 
             gatewayApi.UpdateNodesTasks();

@@ -47,7 +47,7 @@ else
                     <li class="list-group-item">
                         <p class="list-group-item-text">
                             <h4 class="list-group-item-heading">
-                                Task @task.db_Id
+                                Task @task.Id
                                 @if (task.description != null)
                                 {
                                     @: : @task.description
@@ -58,23 +58,23 @@ else
                                 {
                                     if (task.enabled)
                                     {
-                                        @Html.ActionLink("Disable", "Disable", new {id = task.db_Id})
+                                        @Html.ActionLink("Disable", "Disable", new {id = task.Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Enable", "Enable", new {id = task.db_Id})
+                                        @Html.ActionLink("Enable", "Enable", new {id = task.Id})
                                         @: |
                                     }
 
                                     if (task.isRepeating)
                                     {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.db_Id})
+                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.db_Id})
+                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.Id})
                                         @: |
                                     }
                                 }
@@ -82,17 +82,17 @@ else
                                 {
                                     if (task.isRepeating)
                                     {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.db_Id})
+                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.Id})
                                         @: |
                                     }
                                     else
                                     {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.db_Id})
+                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.Id})
                                         @: |
                                     }
                                 }
-                                @Html.ActionLink("Edit", "Edit", new {id = task.db_Id}) |
-                                @Html.ActionLink("Delete", "Delete", new {id = task.db_Id})
+                                @Html.ActionLink("Edit", "Edit", new {id = task.Id}) |
+                                @Html.ActionLink("Delete", "Delete", new {id = task.Id})
                             </div>
 
 

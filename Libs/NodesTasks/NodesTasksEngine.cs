@@ -104,7 +104,7 @@ namespace MyNetSensors.NodesTasks
 
             //we should not update the whole record, because other parts of the record can be updated from outside
             db.UpdateTask(
-                task.db_Id,
+                task.Id,
                 task.isCompleted,
                 task.executionDate,
                 task.executionValue,

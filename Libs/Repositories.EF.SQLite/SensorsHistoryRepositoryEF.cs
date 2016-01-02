@@ -32,7 +32,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private Gateway gateway;
 
-        private string connectionString;
         private NodesDbContext db;
 
         public SensorsHistoryRepositoryEF(NodesDbContext nodesDbContext)
@@ -43,7 +42,15 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void CreateDb()
         {
-            db.Database.EnsureCreated();
+            try
+            {
+                db.Database.EnsureCreated();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
+            }
         }
 
 
@@ -111,7 +118,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        public List<SensorData> GetSensorHistory(int nodeId,int sensorId)
+        public List<SensorData> GetSensorHistory(int nodeId, int sensorId)
         {
             return db.SensorsData.Where(x => x.nodeId == nodeId && x.sensorId == sensorId).ToList();
         }
@@ -133,11 +140,11 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private void WriteSensorDataToHistory(Sensor sensor)
         {
-            SensorData data=new SensorData(sensor);
+            SensorData data = new SensorData(sensor);
             db.SensorsData.Add(data);
             db.SaveChanges();
         }
 
-      
+
     }
 }

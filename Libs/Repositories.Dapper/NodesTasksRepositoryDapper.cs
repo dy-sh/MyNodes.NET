@@ -38,7 +38,7 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     string req = 
                         @"CREATE TABLE [dbo].[NodesTasks](
-	                    [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	                    [Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [enabled] [bit] NULL,       
 	                    [isCompleted] [bit] NULL,       
 	                    [description] [nvarchar](max) NULL,	        
@@ -74,21 +74,21 @@ namespace MyNetSensors.Repositories.Dapper
 
         public int AddOrUpdateTask(NodeTask task)
         {
-            int db_Id=task.db_Id;
+            int id=task.Id;
 
-            NodeTask oldTask = GetTask(task.db_Id);
+            NodeTask oldTask = GetTask(task.Id);
 
             if (oldTask == null)
-                db_Id= AddTask(task);
+                id= AddTask(task);
             else
                 UpdateTask(task);
 
-            return db_Id;
+            return id;
         }
 
         public int AddTask(NodeTask task)
         {
-            int db_Id;
+            int id;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
@@ -97,9 +97,9 @@ namespace MyNetSensors.Repositories.Dapper
                              + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId,@sensorDescription, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                db_Id = db.Query<int>(sqlQuery, task).Single();
+                id = db.Query<int>(sqlQuery, task).Single();
             }
-            return db_Id;
+            return id;
         }
 
         public void UpdateTask(NodeTask task)
@@ -125,21 +125,21 @@ namespace MyNetSensors.Repositories.Dapper
                     "repeatingBValue = @repeatingBValue, " +
                     "repeatingNeededCount = @repeatingNeededCount, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
-                    "WHERE db_Id = @db_Id";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, task);
             }
         }
 
 
 
-        public NodeTask GetTask(int db_Id)
+        public NodeTask GetTask(int id)
         {
             NodeTask task;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                task = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE db_Id=@db_Id",
-                    new { db_Id }).SingleOrDefault();
+                task = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE Id=@Id",
+                    new { id }).SingleOrDefault();
             }
 
             return task;
@@ -170,13 +170,13 @@ namespace MyNetSensors.Repositories.Dapper
             return list;
         }
 
-        public void DeleteTask(int db_Id)
+        public void DeleteTask(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE db_Id=@db_Id",
-                    new { db_Id });
+                db.Query("DELETE FROM NodesTasks WHERE Id=@Id",
+                    new { id });
             }
         }
 
@@ -190,15 +190,6 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteTasks(int sensorDbId)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE sensorDbId=@sensorDbId",
-                    new { sensorDbId });
-            }
-        }
 
         public void DeleteCompleted()
         {
@@ -228,7 +219,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void UpdateTask(int db_Id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount)
+        public void UpdateTask(int id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -239,9 +230,9 @@ namespace MyNetSensors.Repositories.Dapper
                     "executionDate = @executionDate, " +
                     "executionValue = @executionValue, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
-                    "WHERE db_Id = @db_Id";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, new {
-                    db_Id,
+                    id,
                     isCompleted,
                     repeatingDoneCount,
                     executionDate,
@@ -250,7 +241,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void UpdateTask(int db_Id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount)
+        public void UpdateTask(int id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -261,10 +252,10 @@ namespace MyNetSensors.Repositories.Dapper
                     "isCompleted = @isCompleted, " +
                     "executionDate = @executionDate, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
-                    "WHERE db_Id = @db_Id";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, new
                 {
-                    db_Id,
+                    id,
                     enabled,
                     isCompleted,
                     executionDate,
@@ -273,7 +264,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void UpdateTaskEnabled(int db_Id, bool enabled)
+        public void UpdateTaskEnabled(int id, bool enabled)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -281,10 +272,10 @@ namespace MyNetSensors.Repositories.Dapper
                 var sqlQuery =
                     "UPDATE NodesTasks SET " +
                     "enabled = @enabled " +
-                    "WHERE db_Id = @db_Id";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, new
                 {
-                    db_Id,
+                    id,
                     enabled
                 });
             }
