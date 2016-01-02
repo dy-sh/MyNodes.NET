@@ -82,7 +82,7 @@ namespace MyNetSensors.WebController.Code
                 SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
 
                 SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
-                SerialController.historyDb = new SensorsHistoryRepositoryEF(nodesDbContext);
+                SerialController.historyDb = new NodesHistoryRepositoryEf(nodesDbContext);
                 SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesDbContext);
                 SerialController.logicalNodesRepository = new LogicalNodesRepositoryEF(nodesDbContext);
             }

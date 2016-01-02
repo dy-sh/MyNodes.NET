@@ -136,7 +136,7 @@
     <Compile Include="NodesDbContext.cs" />
     <Compile Include="NodesTasksRepositoryEF.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SensorsHistoryRepositoryEF.cs" />
+    <Compile Include="NodesHistoryRepositoryEf.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gateways\Gateways.csproj">

@@ -19,7 +19,7 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class HistoryController : Controller
     {
-        private ISensorsHistoryRepository historyDb;
+        private INodesHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
         public HistoryController()

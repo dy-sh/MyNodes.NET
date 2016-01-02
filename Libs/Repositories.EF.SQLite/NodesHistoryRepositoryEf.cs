@@ -13,10 +13,7 @@ using MyNetSensors.Gateways;
 
 namespace MyNetSensors.Repositories.EF.SQLite
 {
-    /// <summary>
-    /// Repository can read sensors history. If gateway connected, it will store updated sensors history.
-    /// </summary>
-    public class SensorsHistoryRepositoryEF : ISensorsHistoryRepository
+    public class NodesHistoryRepositoryEf : INodesHistoryRepository
     {
         //This value is interval for updateDbTimer in ms. 
         //When timer will elapsed, program will check all nodes,
@@ -34,7 +31,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private NodesDbContext db;
 
-        public SensorsHistoryRepositoryEF(NodesDbContext nodesDbContext)
+        public NodesHistoryRepositoryEf(NodesDbContext nodesDbContext)
         {
             this.db = nodesDbContext;
             CreateDb();

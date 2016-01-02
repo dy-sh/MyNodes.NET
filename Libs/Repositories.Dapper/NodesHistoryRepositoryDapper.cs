@@ -13,10 +13,7 @@ using MyNetSensors.Gateways;
 
 namespace MyNetSensors.Repositories.Dapper
 {
-    /// <summary>
-    /// Repository can read sensors history. If gateway connected, it will store updated sensors history.
-    /// </summary>
-    public class SensorsHistoryRepositoryDapper : ISensorsHistoryRepository
+    public class NodesHistoryRepositoryDapper : INodesHistoryRepository
     {
         //This value is interval for updateDbTimer in ms. 
         //When timer will elapsed, program will check all nodes,
@@ -34,7 +31,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         private string connectionString;
 
-        public SensorsHistoryRepositoryDapper(string connectionString)
+        public NodesHistoryRepositoryDapper(string connectionString)
         {
             this.connectionString = connectionString;
             // db = new SqlConnection(connectionString);

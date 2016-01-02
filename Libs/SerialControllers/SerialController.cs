@@ -54,7 +54,7 @@ namespace MyNetSensors.SerialControllers
         public static ComPort comPort = new ComPort();
         public static Gateway gateway = new Gateway();
         public static IGatewayRepository gatewayDb;
-        public static ISensorsHistoryRepository historyDb;
+        public static INodesHistoryRepository historyDb;
         public static INodesTasksRepository nodesTasksDb;
         public static NodesTasksEngine nodesTasksEngine;
         //       public static ISoftNodesServer softNodesServer;
@@ -114,7 +114,7 @@ namespace MyNetSensors.SerialControllers
                 }
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
-                historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
+                historyDb = new NodesHistoryRepositoryDapper(dataBaseConnectionString);
                 nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
                 logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
             }

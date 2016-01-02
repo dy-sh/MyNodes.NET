@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace MyNetSensors.Gateways
 {
-    public interface ISensorsHistoryRepository
+    public interface INodesHistoryRepository
     {
         List<SensorData> GetSensorHistory(int nodeId, int sensorId);
         void DropSensorHistory(int nodeId, int sensorId);
