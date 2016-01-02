@@ -6,7 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Timers;
+using Microsoft.Data.Entity;
 using MyNetSensors.Gateways;
 
 namespace MyNetSensors.Repositories.EF.SQLite
@@ -31,12 +33,17 @@ namespace MyNetSensors.Repositories.EF.SQLite
         private Gateway gateway;
 
         private string connectionString;
-        private NodesDbContext nodesDbContext;
+        private NodesDbContext db;
 
         public SensorsHistoryRepositoryEF(NodesDbContext nodesDbContext)
         {
-            this.nodesDbContext = nodesDbContext;
-            // db = new SqlConnection(connectionString);
+            this.db = nodesDbContext;
+            CreateDb();
+        }
+
+        public void CreateDb()
+        {
+            db.Database.EnsureCreated();
         }
 
 
@@ -91,116 +98,46 @@ namespace MyNetSensors.Repositories.EF.SQLite
                         if (elapsedTime.TotalSeconds >= sensor.storeHistoryWithInterval)
                         {
                             sensor.storeHistoryLastDate = DateTime.Now;
-                            WriteSensorDataToHistory(sensor);
+
+                            SensorData data = new SensorData(sensor);
+                            db.SensorsData.Add(data);
                         }
                     }
                 }
+                db.SaveChanges();
             }
             catch { }
             updateDbTimer.Start();
         }
 
 
-        public List<SensorData> GetSensorHistory(int db_Id)
+        public List<SensorData> GetSensorHistory(int nodeId,int sensorId)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                string req = $"SELECT * FROM SensorHistory{db_Id}";
-
-                List<SensorData> list = null;
-                try
-                {
-                   // list = db.Query<SensorData>(req).ToList();
-                }
-                catch
-                {
-                }
-
-                return list;
-            }
+            return db.SensorsData.Where(x => x.nodeId == nodeId && x.sensorId == sensorId).ToList();
         }
 
 
 
-        public void DropSensorHistory(int db_Id)
+        public void DropSensorHistory(int nodeId, int sensorId)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                try
-                {
-                   // db.Query($"DROP TABLE [SensorHistory{db_Id}]");
-                }
-                catch { }
-            }
+            List<SensorData> data = GetSensorHistory(nodeId, sensorId);
+            db.SensorsData.RemoveRange(data);
+            db.SaveChanges();
         }
 
         public void DropHistory()
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                try
-                {
-                    //db.Query(
-                    //    @"  declare @sql varchar(8000) 
-                    //        set @sql='' 
-                    //        select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'SensorHistory%[0-9.]' 
-                    //        exec(@sql)");
-                }
-                catch { }
-            }
+            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [SensorHistory]");
         }
 
 
         private void WriteSensorDataToHistory(Sensor sensor)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                CreateTableForSensor(sensor);
-
-                if (sensor.state == null)
-                    return;
-
-
-                var sqlQuery = $"INSERT INTO SensorHistory{sensor.db_Id} (dataType, state, dateTime) "
-                    + "VALUES(@dataType,@state, @dateTime); "
-                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                //db.Execute(sqlQuery,new
-                //{
-                //    dataType= sensor.dataType,
-                //    state = sensor.state,
-                //    dateTime =DateTime.Now
-                //});
-
-            }
+            SensorData data=new SensorData(sensor);
+            db.SensorsData.Add(data);
+            db.SaveChanges();
         }
 
-        private void CreateTableForSensor(Sensor sensor)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                try
-                {
-             //       string req = $@"CREATE TABLE [dbo].[SensorHistory{sensor.db_Id}](
-	            //[db_Id] [int] IDENTITY(1,1) NOT NULL,
-	            //[dataType] [int] NULL,	        
-	            //[state] [nvarchar](max) NULL,	        
-	            //[dateTime] [datetime] NOT NULL ) ON [PRIMARY] ";
-
-             //       db.Query(req);
-                }
-                catch
-                {
-                }
-            }
-        }
+      
     }
 }

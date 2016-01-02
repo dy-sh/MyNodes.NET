@@ -124,7 +124,7 @@ namespace MyNetSensors.SerialControllers
                 //because I don`t want to reference Entity Framework to SerialController
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
-                historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
+               // historyDb = new SensorsHistoryRepositoryDapper(dataBaseConnectionString);
                 nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
             }
 

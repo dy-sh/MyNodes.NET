@@ -8,6 +8,7 @@ using Microsoft.Data.Entity.Infrastructure;
 using MyNetSensors.LogicalNodes;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
+using MyNetSensors.Gateways;
 
 namespace MyNetSensors.Repositories.EF.SQLite
 {
@@ -15,6 +16,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
     {
         public DbSet<LogicalNodeSerialized> LogicalNodesSerialized { get; set; }
         public DbSet<LogicalLink> LogicalLinks { get; set; }
+        public DbSet<SensorData> SensorsData { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{

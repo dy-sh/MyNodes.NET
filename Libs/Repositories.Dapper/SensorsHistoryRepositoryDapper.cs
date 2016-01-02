@@ -102,12 +102,12 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        public List<SensorData> GetSensorHistory(int db_Id)
+        public List<SensorData> GetSensorHistory(int nodeId, int sensorId)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string req = $"SELECT * FROM SensorHistory{db_Id}";
+                string req = $"SELECT * FROM [SensorHistory-{nodeId}-{sensorId}]";
 
                 List<SensorData> list = null;
                 try
@@ -124,7 +124,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public void DropSensorHistory(int db_Id)
+        public void DropSensorHistory(int nodeId, int sensorId)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -132,11 +132,15 @@ namespace MyNetSensors.Repositories.Dapper
 
                 try
                 {
-                    db.Query($"DROP TABLE [SensorHistory{db_Id}]");
+                    db.Query($"DROP TABLE [SensorHistory-{nodeId}-{sensorId}]");
                 }
                 catch { }
             }
         }
+
+
+
+
 
         public void DropHistory()
         {
@@ -149,7 +153,7 @@ namespace MyNetSensors.Repositories.Dapper
                     db.Query(
                         @"  declare @sql varchar(8000) 
                             set @sql='' 
-                            select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'SensorHistory%[0-9.]' 
+                            select @sql=@sql+' drop table '+table_name from INFORMATION_SCHEMA.TABLES where table_name like 'SensorHistory-%[0-9.]-%[0-9.]' 
                             exec(@sql)");
                 }
                 catch { }
@@ -169,7 +173,7 @@ namespace MyNetSensors.Repositories.Dapper
                     return;
 
 
-                var sqlQuery = $"INSERT INTO SensorHistory{sensor.db_Id} (dataType, state, dateTime) "
+                var sqlQuery = $"INSERT INTO [SensorHistory-{sensor.nodeId}-{sensor.sensorId}] (dataType, state, dateTime) "
                     + "VALUES(@dataType,@state, @dateTime); "
                     + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 db.Execute(sqlQuery,new
@@ -190,7 +194,7 @@ namespace MyNetSensors.Repositories.Dapper
 
                 try
                 {
-                    string req = $@"CREATE TABLE [dbo].[SensorHistory{sensor.db_Id}](
+                    string req = $@"CREATE TABLE [dbo].[SensorHistory-{sensor.nodeId}-{sensor.sensorId}](
 	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
 	            [dataType] [int] NULL,	        
 	            [state] [nvarchar](max) NULL,	        

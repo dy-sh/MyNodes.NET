@@ -9,6 +9,7 @@ namespace MyNetSensors.Gateways
 {
     public class SensorData:ICloneable
     {
+        public int Id { get; set; }
         public int nodeId { get; set; }
         public int sensorId { get; set; }
         public SensorDataType? dataType { get; set; }
@@ -21,12 +22,21 @@ namespace MyNetSensors.Gateways
             //for DB materialization
         }
 
-        public SensorData(int nodeId, int sensorId, SensorDataType? dataType, string state)
+        //public SensorData(int nodeId, int sensorId, SensorDataType? dataType, string state)
+        //{
+        //    this.nodeId = nodeId;
+        //    this.sensorId = sensorId;
+        //    this.dataType = dataType;
+        //    this.state = state;
+        //    dateTime = DateTime.Now;
+        //}
+
+        public SensorData(Sensor sensor)
         {
-            this.nodeId = nodeId;
-            this.sensorId = sensorId;
-            this.dataType = dataType;
-            this.state = state;
+            this.nodeId = sensor.nodeId;
+            this.sensorId = sensor.sensorId;
+            this.dataType = sensor.dataType;
+            this.state = sensor.state;
             dateTime = DateTime.Now;
         }
 

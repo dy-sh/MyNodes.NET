@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
 
 using MyNetSensors.Gateways;
@@ -50,7 +51,7 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.db_Id = sensor.db_Id;
             ViewBag.description = sensor.GetSimpleName1();
 
-            List<SensorData> samples = historyDb.GetSensorHistory(sensor.db_Id);
+            List<SensorData> samples = historyDb.GetSensorHistory(sensor.nodeId,sensor.sensorId);
             return View(samples);
         }
 
@@ -83,9 +84,11 @@ namespace MyNetSensors.WebController.Controllers
 
         public JsonResult GetSensorDataJsonByDbId(int id)
         {
-            List<SensorData> samples = historyDb.GetSensorHistory(id);
+            Sensor sensor = gatewayDb.GetSensor(id);
 
-            if (samples == null)
+            List<SensorData> samples = historyDb.GetSensorHistory(sensor.nodeId,sensor.sensorId);
+
+            if (!samples.Any())
                 return Json(new { });
 
             var chartData = new List<ChartData>();
@@ -128,7 +131,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult ClearHistory(int id, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id, id2);
-            historyDb.DropSensorHistory(sensor.db_Id);
+            historyDb.DropSensorHistory(sensor.nodeId, sensor.sensorId);
 
             return RedirectToAction("Chart", new { id = id, id2 = id2 });
         }
@@ -136,7 +139,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult ClearHistoryByDbId(int id)
         {
             Sensor sensor = gatewayDb.GetSensor(id);
-            historyDb.DropSensorHistory(id);
+            historyDb.DropSensorHistory(sensor.nodeId, sensor.sensorId);
 
             return RedirectToAction("Chart", new { id = sensor.nodeId, id2 = sensor.sensorId });
         }

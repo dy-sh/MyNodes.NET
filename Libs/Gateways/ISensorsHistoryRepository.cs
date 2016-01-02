@@ -9,8 +9,8 @@ namespace MyNetSensors.Gateways
 {
     public interface ISensorsHistoryRepository
     {
-        List<SensorData> GetSensorHistory(int db_Id);
-        void DropSensorHistory(int db_Id);
+        List<SensorData> GetSensorHistory(int nodeId, int sensorId);
+        void DropSensorHistory(int nodeId, int sensorId);
         void DropHistory();
 
         void ConnectToGateway(Gateway gateway);
