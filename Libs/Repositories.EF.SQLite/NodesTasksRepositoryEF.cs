@@ -179,7 +179,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         public void DisableTasks()
         {
             List<NodeTask> tasks = db.NodesTasks.Where(x => x.enabled == true).ToList();
-            if (!tasks.Any())
+            if (tasks==null || !tasks.Any())
                 return;
 
             foreach (var task in tasks)

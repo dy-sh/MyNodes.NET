@@ -28,7 +28,7 @@ namespace MyNetSensors.WebController.Controllers
                 return null;
 
             List<LogicalNode> nodes = engine.nodes;
-            if (!nodes.Any())
+            if (nodes==null || !nodes.Any())
                 return null;
 
             List<LiteGraph.Node> list = new List<LiteGraph.Node>();
@@ -131,7 +131,7 @@ namespace MyNetSensors.WebController.Controllers
                 return null;
 
             List<LogicalLink> links = engine.links;
-            if (!links.Any())
+            if (links==null || !links.Any())
                 return null;
 
             List<LiteGraph.Link> list = new List<Link>();

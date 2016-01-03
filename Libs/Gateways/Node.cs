@@ -69,7 +69,7 @@ namespace MyNetSensors.Gateways
             if (batteryLevel != null)
                 s += $"Battery: {batteryLevel.Value} %\r\n";
 
-            if (sensors.Any())
+            if (sensors!=null && sensors.Any())
             {
                 foreach (Sensor sensor in sensors)
                 {
