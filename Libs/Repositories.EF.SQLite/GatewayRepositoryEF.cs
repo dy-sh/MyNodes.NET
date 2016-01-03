@@ -168,6 +168,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public int AddNode(Node node)
         {
+            //todo EF change nodeID automaticaly!!!!
             db.Nodes.Add(node);
             db.SaveChanges();
             gateway.SetNodeDbId(node.nodeId, node.Id);

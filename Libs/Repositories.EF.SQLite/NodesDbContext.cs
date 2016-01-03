@@ -25,8 +25,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{
-        //    builder.Entity<LogicalNodeSerialized>().HasKey(m => m.Id);
-        //    base.OnModelCreating(builder);
+        //    //  builder.Entity<LogicalNodeSerialized>().HasKey(m => m.Id);
+        //    // base.OnModelCreating(builder);
         //}
     }
 }

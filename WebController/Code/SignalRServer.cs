@@ -41,12 +41,15 @@ namespace MyNetSensors.WebController.Code
             gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
             gateway.OnNewSensorEvent += OnNewSensorEvent;
 
-            logicalNodesEngine.OnNewNodeEvent += OnNewLogicalNodeEvent;
-            logicalNodesEngine.OnNodeUpdatedEvent += OnLogicalNodeUpdatedEvent;
-            logicalNodesEngine.OnNodeDeleteEvent += OnLogicalNodeDeleteEvent;
-            logicalNodesEngine.OnLinksUpdatedEvent += OnLinksUpdatedEvent;
-            logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
-            logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
+            if (logicalNodesEngine != null)
+            {
+                logicalNodesEngine.OnNewNodeEvent += OnNewLogicalNodeEvent;
+                logicalNodesEngine.OnNodeUpdatedEvent += OnLogicalNodeUpdatedEvent;
+                logicalNodesEngine.OnNodeDeleteEvent += OnLogicalNodeDeleteEvent;
+                logicalNodesEngine.OnLinksUpdatedEvent += OnLinksUpdatedEvent;
+                logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
+                logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
+            }
         }
 
 
