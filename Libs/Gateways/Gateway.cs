@@ -223,7 +223,7 @@ namespace MyNetSensors.Gateways
                 if (OnNewNodeEvent != null)
                     OnNewNodeEvent(node);
 
-                DebugGatewayState($"New node (id: {node.nodeId}) registered");
+                DebugGatewayState($"New node (id: {node.Id}) registered");
             }
 
             node.UpdateLastSeenNow();
@@ -248,7 +248,7 @@ namespace MyNetSensors.Gateways
                     if (OnNodeUpdatedEvent != null)
                         OnNodeUpdatedEvent(node);
 
-                    DebugGatewayState($"Node {node.nodeId} updated");
+                    DebugGatewayState($"Node {node.Id} updated");
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -259,7 +259,7 @@ namespace MyNetSensors.Gateways
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        DebugGatewayState($"Node {node.nodeId} updated");
+                        DebugGatewayState($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -268,7 +268,7 @@ namespace MyNetSensors.Gateways
                         if (OnNodeUpdatedEvent != null)
                             OnNodeUpdatedEvent(node);
 
-                        DebugGatewayState($"Node {node.nodeId} updated");
+                        DebugGatewayState($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -345,7 +345,7 @@ namespace MyNetSensors.Gateways
 
         public Node GetNode(int nodeId)
         {
-            Node node = nodes.FirstOrDefault(x => x.nodeId == nodeId);
+            Node node = nodes.FirstOrDefault(x => x.Id == nodeId);
             return node;
         }
 
@@ -414,7 +414,7 @@ namespace MyNetSensors.Gateways
 
                 foreach (var node in nodes)
                 {
-                    if (node.nodeId == i)
+                    if (node.Id == i)
                     {
                         found = true;
                         break;
@@ -500,12 +500,6 @@ namespace MyNetSensors.Gateways
             return info;
         }
 
-        public void SetNodeDbId(int nodeId, int dbId)
-        {
-            Node node = GetNode(nodeId);
-            node.Id = dbId;
-        }
-
         public void SetSensorDbId(int nodeId,int sensorId, int dbId)
         {
             Node node = GetNode(nodeId);
@@ -515,7 +509,7 @@ namespace MyNetSensors.Gateways
 
         public void UpdateNodeSettings(Node node)
         {
-            Node oldNode = GetNode(node.nodeId);
+            Node oldNode = GetNode(node.Id);
             oldNode.name = node.name;
             foreach (var sensor in node.sensors)
             {

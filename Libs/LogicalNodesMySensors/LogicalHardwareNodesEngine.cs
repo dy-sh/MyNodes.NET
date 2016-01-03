@@ -29,7 +29,7 @@ namespace MyNetSensors.LogicalNodesMySensors
 
         private void OnDeleteNodeEvent(Node node)
         {
-            LogicalHardwareNode oldNode = GetHardwareNode(node.nodeId);
+            LogicalHardwareNode oldNode = GetHardwareNode(node.Id);
             if (oldNode != null)
                 engine.RemoveNode(oldNode);
         }
@@ -57,7 +57,7 @@ namespace MyNetSensors.LogicalNodesMySensors
 
         private void CreateOrUpdateNode(Node node)
         {
-            LogicalHardwareNode oldNode = GetHardwareNode(node.nodeId);
+            LogicalHardwareNode oldNode = GetHardwareNode(node.Id);
             if (oldNode == null)
             {
                 LogicalHardwareNode newHardwareNode = new LogicalHardwareNode(node);
@@ -133,7 +133,7 @@ namespace MyNetSensors.LogicalNodesMySensors
 
             foreach (var node in gateway.GetNodes())
             {
-                if (GetHardwareNode(node.nodeId)!=null)
+                if (GetHardwareNode(node.Id)!=null)
                     continue;
 
                 LogicalHardwareNode newHardwareNode = new LogicalHardwareNode(node);

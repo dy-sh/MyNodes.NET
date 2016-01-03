@@ -45,7 +45,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult Settings(int id)
         {
-            Node node = gatewayDb.GetNodeByNodeId(id);
+            Node node = gatewayDb.GetNode(id);
             if (node == null)
                 return HttpNotFound();
 
@@ -56,7 +56,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult Settings()
         {
             int id = Int32.Parse(Request.Form["nodeId"]);
-            Node node = gatewayDb.GetNodeByNodeId(id);
+            Node node = gatewayDb.GetNode(id);
             string nodename = Request.Form["nodename"];
             if (nodename == "")
                 nodename = null;
@@ -101,15 +101,15 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Delete(int id)
         {
-            Node node = gatewayDb.GetNodeByNodeId(id);
+            Node node = gatewayDb.GetNode(id);
             if (node == null)
                 return HttpNotFound();
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.DeleteNode(node.nodeId);
+            gatewayApi.DeleteNode(node.Id);
 
-            gatewayDb.DeleteNodeByDbId(node.Id);
+            gatewayDb.DeleteNode(node.Id);
 
 
 

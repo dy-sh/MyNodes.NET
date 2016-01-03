@@ -10,7 +10,7 @@ namespace MyNetSensors.LogicalNodesMySensors
 
         public LogicalHardwareNode(Node node) : base(0, 0)
         {
-            this.nodeId = node.nodeId;
+            this.nodeId = node.Id;
             this.Title = node.GetSimpleName1();
             this.Type = "Nodes/HardwareNode";
             CreateInputsOutputs(node);

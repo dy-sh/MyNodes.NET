@@ -129,8 +129,7 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     db.Execute(
                         @" CREATE TABLE [dbo].[Nodes](
-	                [Id] [int] IDENTITY(1,1) NOT NULL,
-	                [nodeId] [int] NOT NULL,
+	                [Id] [int] NOT NULL,
 	                [registered] [datetime] NOT NULL,
 	                [lastSeen] [datetime] NOT NULL,
 	                [isRepeatingNode] [bit] NULL,
@@ -161,8 +160,8 @@ namespace MyNetSensors.Repositories.Dapper
 	                [remapFromMin] [nvarchar](max) NULL,
 	                [remapFromMax] [nvarchar](max) NULL,
 	                [remapToMin] [nvarchar](max) NULL,
-	                [remapToMax] [nvarchar](max) NULL,
-	                [Node_Id] [int] NULL) ON [PRIMARY] ");
+	                [remapToMax] [nvarchar](max) NULL
+	                ) ON [PRIMARY] ");
                 }
                 catch
                 {
@@ -258,7 +257,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id ORDER BY n.nodeId";
+                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.nodeId ORDER BY n.Id";
 
                 list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id")
                      .Where(y => y != null).ToList();
@@ -278,7 +277,7 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Open();
 
                 Node oldNode =
-                    db.Query<Node>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { node.nodeId }).SingleOrDefault();
+                    db.Query<Node>("SELECT * FROM Nodes WHERE Id = @Id", new { node.Id }).SingleOrDefault();
 
                 if (oldNode == null)
                 {
@@ -295,23 +294,22 @@ namespace MyNetSensors.Repositories.Dapper
 
         public int AddNode(Node node)
         {
-            int id;
 
             using (var db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "INSERT INTO Nodes (nodeId, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
+                var sqlQuery = "INSERT INTO Nodes (Id, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
                                +
-                               "VALUES(@nodeId, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                id = db.Query<int>(sqlQuery, node).Single();
-                gateway.SetNodeDbId(node.nodeId, id);
+                               "VALUES(@Id, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel)";
+                               
+                db.Query(sqlQuery, node);
+               // gateway.SetNodeDbId(node.nodeId, id);
             }
 
             foreach (var sensor in node.sensors)
             {
                 AddOrUpdateSensor(sensor);
             }
-            return id;
+            return node.Id;
         }
 
         public void UpdateNode(Node node)
@@ -319,15 +317,14 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 var sqlQuery =
-                    "UPDATE Nodes " +
-                    "SET nodeId = @nodeId, " +
-                    "registered  = @registered, " +
+                    "UPDATE Nodes SET " +
+                    "registered = @registered, " +
                     "lastSeen = @lastSeen, " +
                     "isRepeatingNode = @isRepeatingNode, " +
                     "name = @name, " +
                     "version = @version, " +
                     "batteryLevel = @batteryLevel " +
-                    "WHERE nodeId = @nodeId";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, node);
             }
 
@@ -367,14 +364,10 @@ namespace MyNetSensors.Repositories.Dapper
             int id;
             using (var db = new SqlConnection(connectionString))
             {
-                int node_Id =
-                    db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.nodeId })
-                    .SingleOrDefault()
-                    .Id;
 
-                var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax, Node_Id) "
+                var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
                                +
-                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax, @Node_Id); "
+                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 id = db.Query<int>(sqlQuery, new
                 {
@@ -392,8 +385,7 @@ namespace MyNetSensors.Repositories.Dapper
                     remapFromMin = sensor.remapFromMin,
                     remapFromMax = sensor.remapFromMax,
                     remapToMin = sensor.remapToMin,
-                    remapToMax = sensor.remapToMax,
-                    Node_Id = node_Id
+                    remapToMax = sensor.remapToMax
                 }).Single();
 
             }
@@ -406,10 +398,6 @@ namespace MyNetSensors.Repositories.Dapper
         {
             using (var db = new SqlConnection(connectionString))
             {
-                int node_Id =
-                      db.Query<Sensor>("SELECT * FROM Nodes WHERE nodeId = @nodeId", new { nodeId = sensor.nodeId })
-                      .SingleOrDefault()
-                      .Id;
 
                 var sqlQuery =
                     "UPDATE Sensors SET " +
@@ -427,8 +415,7 @@ namespace MyNetSensors.Repositories.Dapper
                     "remapFromMin = @remapFromMin, " +
                     "remapFromMax = @remapFromMax, " +
                     "remapToMin = @remapToMin, " +
-                    "remapToMax = @remapToMax, " +
-                    "Node_Id = @Node_Id " +
+                    "remapToMax = @remapToMax " +
                     "WHERE nodeId = @nodeId AND sensorId = @sensorId";
                 db.Execute(sqlQuery, new
                 {
@@ -446,8 +433,7 @@ namespace MyNetSensors.Repositories.Dapper
                     remapFromMin = sensor.remapFromMin,
                     remapFromMax = sensor.remapFromMax,
                     remapToMin = sensor.remapToMin,
-                    remapToMax = sensor.remapToMax,
-                    Node_Id = node_Id
+                    remapToMax = sensor.remapToMax
                 });
             }
         }
@@ -479,8 +465,8 @@ namespace MyNetSensors.Repositories.Dapper
             if (writeInterval == 0) AddOrUpdateNode(node);
             else
             {
-                if (!updatedNodesId.Contains(node.nodeId))
-                    updatedNodesId.Add(node.nodeId);
+                if (!updatedNodesId.Contains(node.Id))
+                    updatedNodesId.Add(node.Id);
             }
         }
 
@@ -506,7 +492,7 @@ namespace MyNetSensors.Repositories.Dapper
             List<Node> nodes = gateway.GetNodes();
             foreach (var id in nodesTemp)
             {
-                Node node = nodes.FirstOrDefault(x => x.nodeId == id);
+                Node node = nodes.FirstOrDefault(x => x.Id == id);
                 AddOrUpdateNode(node);
             }
         }
@@ -531,9 +517,9 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
+        
 
-
-        public Node GetNodeByNodeId(int nodeId)
+        public Node GetNode(int id)
         {
             var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
             {
@@ -547,39 +533,7 @@ namespace MyNetSensors.Repositories.Dapper
                 ParentKey = (node) => node.Id
             };
 
-
-            Node result;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id WHERE n.nodeId = {nodeId}";
-                result = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id").FirstOrDefault();
-                if (result == null)
-                {
-                    joinQuery = $"SELECT * FROM Nodes WHERE nodeId = {nodeId}";
-                    result = db.Query<Node>(joinQuery).FirstOrDefault();
-                }
-            }
-
-            return result;
-        }
-
-
-        public Node GetNodeByDbId(int id)
-        {
-            var mapper = new OneToManyDapperMapper<Node, Sensor, int>()
-            {
-                AddChildAction = (node, sensor) =>
-                {
-                    if (node.sensors == null)
-                        node.sensors = new List<Sensor>();
-
-                    node.sensors.Add(sensor);
-                },
-                ParentKey = (node) => node.Id
-            };
-
-            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.Node_Id WHERE n.Id = {id}";
+            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.nodeId WHERE n.Id = {id}";
 
             Node result;
             using (var db = new SqlConnection(connectionString))
@@ -623,7 +577,7 @@ namespace MyNetSensors.Repositories.Dapper
                 var sqlQuery =
                     "UPDATE Nodes SET " +
                     "name = @name " +
-                    "WHERE nodeId = @nodeId";
+                    "WHERE Id = @Id";
                 db.Execute(sqlQuery, node);
             }
 
@@ -669,7 +623,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteNodeByDbId(int id)
+        public void DeleteNode(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -681,28 +635,11 @@ namespace MyNetSensors.Repositories.Dapper
 
                 sqlQuery =
                     "Delete FROM Sensors " +
-                    "WHERE Node_Id = @Node_Id";
-                db.Execute(sqlQuery, new { Node_Id = id });
+                    "WHERE Id = @Id";
+                db.Execute(sqlQuery, new { Id = id });
             }
         }
-
-        public void DeleteNodeByNodeId(int nodeId)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "Delete FROM Nodes " +
-                    "WHERE nodeId = @nodeId";
-                db.Execute(sqlQuery, new { nodeId });
-
-
-                sqlQuery =
-                    "Delete FROM Sensors " +
-                    "WHERE nodeId = @nodeId";
-                db.Execute(sqlQuery, new { nodeId = nodeId });
-            }
-        }
+        
 
 
 
@@ -722,7 +659,8 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     updateDbTimer.Start();
                     return;
-                };
+                }
+                ;
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -732,10 +670,13 @@ namespace MyNetSensors.Repositories.Dapper
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
-                float messagesPerSec = (float)messages / (float)elapsed * 1000;
-                Log($"Writing to DB: {elapsed} ms ({messages} inserts, {(int)messagesPerSec} inserts/sec)");
+                float messagesPerSec = (float) messages/(float) elapsed*1000;
+                Log($"Writing to DB: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             updateDbTimer.Start();
         }

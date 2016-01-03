@@ -15,7 +15,6 @@ namespace MyNetSensors.Gateways
         public int Id { get; set; }
 
 
-        public int nodeId { get; set; }
         public DateTime registered { get; set; }
         public DateTime lastSeen { get; set; }
         public bool? isRepeatingNode { get; set; }
@@ -33,9 +32,9 @@ namespace MyNetSensors.Gateways
             sensors = new List<Sensor>();
         }
 
-        public Node(int nodeId)
+        public Node(int id)
         {
-            this.nodeId = nodeId;
+            this.Id = id;
             registered = DateTime.Now;
             lastSeen = DateTime.Now;
             sensors=new List<Sensor>();
@@ -48,7 +47,7 @@ namespace MyNetSensors.Gateways
 
         public override string ToString()
         {
-            string s = $"Node ID {nodeId}\r\n";
+            string s = $"Node ID {Id}\r\n";
 
 
             if (!String.IsNullOrEmpty(name))
@@ -104,15 +103,15 @@ namespace MyNetSensors.Gateways
             if (!String.IsNullOrEmpty(name))
                 return name;
 
-            return "Node "+nodeId;
+            return $"Node {Id}";
         }
 
         public string GetSimpleName2()
         {
             if (!String.IsNullOrEmpty(name))
-                return $"Node {nodeId} ({name})";
+                return $"Node {Id} ({name})";
 
-            return "Node " + nodeId;
+            return $"Node {Id}";
         }
     }
 }

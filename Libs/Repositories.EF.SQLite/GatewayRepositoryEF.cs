@@ -156,7 +156,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         {
             int id = node.Id;
 
-            Node oldNode = GetNodeByDbId(node.Id);
+            Node oldNode = GetNode(node.Id);
 
             if (oldNode == null)
                 id = AddNode(node);
@@ -171,7 +171,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
             //todo EF change nodeID automaticaly!!!!
             db.Nodes.Add(node);
             db.SaveChanges();
-            gateway.SetNodeDbId(node.nodeId, node.Id);
 
             foreach (var sensor in node.sensors)
             {
@@ -240,8 +239,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (writeInterval == 0) AddOrUpdateNode(node);
             else
             {
-                if (!updatedNodesId.Contains(node.nodeId))
-                    updatedNodesId.Add(node.nodeId);
+                if (!updatedNodesId.Contains(node.Id))
+                    updatedNodesId.Add(node.Id);
             }
         }
 
@@ -267,7 +266,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             List<Node> nodes = gateway.GetNodes();
             foreach (var id in nodesTemp)
             {
-                Node node = nodes.FirstOrDefault(x => x.nodeId == id);
+                Node node = nodes.FirstOrDefault(x => x.Id == id);
                 AddOrUpdateNode(node);
             }
         }
@@ -294,13 +293,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
-        public Node GetNodeByNodeId(int nodeId)
-        {
-            return db.Nodes.FirstOrDefault(x => x.nodeId == nodeId);
-        }
 
-
-        public Node GetNodeByDbId(int id)
+        public Node GetNode(int id)
         {
             return db.Nodes.FirstOrDefault(x => x.Id == id);
         }
@@ -326,7 +320,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void UpdateNodeSettings(Node node)
         {
-            Node oldNode = GetNodeByDbId(node.Id);
+            Node oldNode = GetNode(node.Id);
             oldNode.name = node.name;
             db.Nodes.Update(oldNode);
             db.SaveChanges();
@@ -355,7 +349,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DeleteNodeByDbId(int id)
+        public void DeleteNode(int id)
         {
             Node node = db.Nodes.FirstOrDefault(x => x.Id == id);
             if (node == null)
@@ -370,21 +364,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             
         }
 
-        public void DeleteNodeByNodeId(int nodeId)
-        {
-            Node node = db.Nodes.FirstOrDefault(x => x.nodeId == nodeId);
-            if (node == null)
-                return;
-
-            db.Nodes.Remove(node);
-            db.SaveChanges();
-
-            List<Sensor> sensors = db.Sensors.Where(x => x.nodeId == node.Id).ToList();
-            db.Sensors.RemoveRange(sensors);
-            db.SaveChanges();
-        }
-
-
+ 
 
 
 

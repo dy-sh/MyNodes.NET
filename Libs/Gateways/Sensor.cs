@@ -48,7 +48,7 @@ namespace MyNetSensors.Gateways
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
-            this.nodeId = ownerNode.nodeId;
+            this.nodeId = ownerNode.Id;
         }
 
         public override string ToString()
