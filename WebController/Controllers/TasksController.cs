@@ -45,7 +45,6 @@ namespace MyNetSensors.WebController.Controllers
 
                 ViewBag.nodeId = sensor.nodeId;
                 ViewBag.sensorId = sensor.sensorId;
-                ViewBag.db_Id = sensor.Id;
                 ViewBag.description = sensor.GetSimpleName1();
 
                 List<NodeTask> tasks = tasksDb.GetTasks(id.Value, id2.Value);

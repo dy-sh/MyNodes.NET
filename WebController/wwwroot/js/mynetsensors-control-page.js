@@ -188,7 +188,7 @@ function getSensorTitle(sensor) {
 
 
 function createOrUpdateNode(node) {
-    var nodePanel = $('#nodePanel' + node.nodeId);
+    var nodePanel = $('#nodePanel' + node.Id);
 
     if (nodePanel.length == 0) {
         //create new
@@ -207,11 +207,11 @@ function createOrUpdateNode(node) {
 
 
 function updateLastSeen(node) {
-    $('#activity' + node.nodeId).show().fadeOut(500);
+    $('#activity' + node.Id).show().fadeOut(500);
 }
 
 function updateBattery(node) {
-    var nodeBattery = $('#nodeBattery' + node.nodeId);
+    var nodeBattery = $('#nodeBattery' + node.Id);
 
     if (nodeBattery.length == 0)
         createOrUpdateNode(node);
@@ -219,7 +219,7 @@ function updateBattery(node) {
 }
 
 function updateNodeMenu(node) {
-    var nodeMenu = $('#nodeMenu' + node.nodeId);
+    var nodeMenu = $('#nodeMenu' + node.Id);
     nodeMenu.html(nodeMenuTemplate(node));
 }
 

@@ -46,16 +46,16 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public int AddOrUpdateTask(NodeTask task)
         {
-            int db_Id = task.Id;
+            int id = task.Id;
 
             NodeTask oldTask = GetTask(task.Id);
 
             if (oldTask == null)
-                db_Id = AddTask(task);
+                id = AddTask(task);
             else
                 UpdateTask(task);
 
-            return db_Id;
+            return id;
         }
 
         public int AddTask(NodeTask task)

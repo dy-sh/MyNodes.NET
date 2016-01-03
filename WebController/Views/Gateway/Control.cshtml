@@ -20,28 +20,28 @@
 
 
 <script id="nodeTemplate" type="text/x-handlebars-template">
-    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{nodeId}}" style="min-width: 290px; max-width: 500px">
+    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{Id}}" style="min-width: 290px; max-width: 500px">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <img src="@Url.Content("~/images/activity.gif")" id="activity{{nodeId}}" class="pull-right" style="display: none;" />
-                <div id="nodeTitle{{nodeId}}">
-                    Node {{nodeId}}
+                <img src="@Url.Content("~/images/activity.gif")" id="activity{{Id}}" class="pull-right" style="display: none;" />
+                <div id="nodeTitle{{Id}}">
+                    Node {{Id}}
                 </div>
             </div>
 
             <div class="panel-body">
                 {{#if name}} {{name}} <br /> {{/if}}
 
-                <div id="nodeBody{{nodeId}}"></div>
+                <div id="nodeBody{{Id}}"></div>
                 <br />
-                <ul class="list-group" id="sensorsContainer{{nodeId}}"></ul>
-                <div id="footer{{nodeId}}">
-                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{nodeId}}"> {{batteryLevel}} </span>{{/if}}
+                <ul class="list-group" id="sensorsContainer{{Id}}"></ul>
+                <div id="footer{{Id}}">
+                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span>{{/if}}
                     <div class="dropdown pull-right">
-                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu{{nodeId}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu{{Id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="nodeMenu{{nodeId}}"></ul>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="nodeMenu{{Id}}"></ul>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
 </script>
 
 <script id="nodeMenuTemplate" type="text/x-handlebars-template">
-    <li><a href="../Node/Settings/{{nodeId}}">Settings</a></li>
+    <li><a href="../Node/Settings/{{Id}}">Settings</a></li>
     <li> &nbsp </li>
     {{#each sensors}}
     <li id="dropdownMenuHistory{{sensor-id this}}"><a href="../History/Chart/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} History</a></li>

@@ -25,7 +25,6 @@ namespace MyNetSensors.Gateways
         void UpdateSensor(Sensor sensor);
         List<Node> GetNodes();
         Node GetNode(int id);
-        Sensor GetSensor(int id);
         Sensor GetSensor(int nodeId, int sensorId);
         void DropNodes();
         

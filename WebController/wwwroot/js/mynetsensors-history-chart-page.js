@@ -58,7 +58,7 @@ renderStep();
 $(document).ready(function () {
     //Loading data frow server
     $.ajax({
-        url: "../../GetSensorDataJsonByDbId/" + dbId, //get dbId from viewbag before
+        url: "../../GetSensorDataJson/" + nodeId+"/"+sensorId, //get Id-s from viewbag before
         dataType: "json",
         success: function (data) {
             if ("chartData" in data) {

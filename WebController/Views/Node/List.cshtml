@@ -16,7 +16,7 @@
 <div style="padding-left: 20px">
     @foreach (Node node in Model)
     {
-        @Html.ActionLink(node.GetSimpleName1(), "Settings", new { id = node.nodeId })
+        @Html.ActionLink(node.GetSimpleName1(), "Settings", new { id = node.Id })
         <br/>
     }
 </div>

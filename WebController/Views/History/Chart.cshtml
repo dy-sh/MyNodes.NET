@@ -63,7 +63,7 @@
                     <button type="button" class='btn btn-default' onclick="share()">
                         Share
                     </button>
-                    <a class='btn btn-default' href='../../ClearHistoryByDbId/@ViewBag.db_Id'>
+                    <a class='btn btn-default' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
                         Clear
                     </a>
                 </div>
@@ -105,7 +105,6 @@
     <script src="~/lib/vis/dist/vis.min.js"></script>
 
     <script type="text/javascript">
-        var dbId = '@ViewBag.db_Id';
         var sensorId = '@ViewBag.sensorId';
         var nodeId = '@ViewBag.nodeId';
 

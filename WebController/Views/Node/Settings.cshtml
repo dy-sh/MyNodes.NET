@@ -4,11 +4,11 @@
     ViewBag.Title = "Node Settings";
 }
 
-<h2>Node @Model.nodeId Settings</h2>
+<h2>Node @Model.Id Settings</h2>
 <p>
     < @Html.ActionLink("Control Nodes", "Control", "Gateway")
     < @Html.ActionLink("Nodes Settings", "Index", "Node")
-    @Html.ActionLink("Delete node", "Delete", new { id = Model.nodeId}, new { @class = "btn btn-primary pull-right" })
+    @Html.ActionLink("Delete node", "Delete", new { id = Model.Id}, new { @class = "btn btn-primary pull-right" })
 
 
 </p>
@@ -16,13 +16,13 @@
 
 <div class="panel panel-default" style="min-width: 390px; max-width: 390px">
     <div class="panel-heading">
-        Node @Model.nodeId
+        Node @Model.Id
     </div>
 
     <div class="panel-body">
         @using (Html.BeginForm())
         {
-            @Html.Hidden("nodeId", @Model.nodeId)
+            @Html.Hidden("nodeId", @Model.Id)
 
             <div class="form-group">
                 <div class="col-xs-4 ">Node name:</div>

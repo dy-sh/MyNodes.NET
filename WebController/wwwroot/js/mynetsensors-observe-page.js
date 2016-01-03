@@ -36,8 +36,8 @@ $(function () {
     };
 
     clientsHub.client.OnNodeLastSeenUpdatedEvent = function (node) {
-        lastSeens[node.nodeId] = node.lastSeen;
-        updateLastSeen(node.nodeId, node.lastSeen);
+        lastSeens[node.Id] = node.lastSeen;
+        updateLastSeen(node.Id, node.lastSeen);
     };
 
     clientsHub.client.OnNodeBatteryUpdatedEvent = function (node) {
@@ -174,7 +174,7 @@ function getDataType(sensor) {
 }
 
 function createOrUpdateNode(node) {
-    var nodePanel = $('#nodePanel' + node.nodeId);
+    var nodePanel = $('#nodePanel' + node.Id);
 
     if (nodePanel.length == 0) {
         //create new
@@ -191,7 +191,7 @@ function createOrUpdateNode(node) {
 
 
 function updateBattery(node) {
-    var nodeBattery = $('#nodeBattery' + node.nodeId);
+    var nodeBattery = $('#nodeBattery' + node.Id);
 
     if (nodeBattery.length == 0)
         createOrUpdateNode(node);

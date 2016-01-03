@@ -192,7 +192,7 @@ namespace MyNetSensors.Repositories.Dapper
                 try
                 {
                     string req = $@"CREATE TABLE [dbo].[SensorHistory-{sensor.nodeId}-{sensor.sensorId}](
-	            [db_Id] [int] IDENTITY(1,1) NOT NULL,
+	            [Id] [int] IDENTITY(1,1) NOT NULL,
 	            [dataType] [int] NULL,	        
 	            [state] [nvarchar](max) NULL,	        
 	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ";

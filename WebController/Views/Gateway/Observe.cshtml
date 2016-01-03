@@ -10,22 +10,22 @@
 </div>
 
 <script id="nodeTemplate" type="text/x-handlebars-template">
-    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{nodeId}}" style="min-width: 290px; max-width: 500px">
+    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{Id}}" style="min-width: 290px; max-width: 500px">
         <div class="panel panel-default">
-            <div class="panel-heading" id="nodeTitle{{nodeId}}">
-                Node id: {{nodeId}}
+            <div class="panel-heading" id="nodeTitle{{Id}}">
+                Node id: {{Id}}
             </div>
             <div class="panel-body">
-                <div id="nodeBody{{nodeId}}">
+                <div id="nodeBody{{Id}}">
                     {{#if name}} Name: {{name}} <br /> {{/if}}
                     {{#if version}} Version: {{version}} <br />{{/if}}
                     {{#if registered}} Registered: {{fullDate registered}} <br />{{/if}}
-                    {{#if lastSeen}} Last seen: <span id="nodeLastSeen{{nodeId}}"> {{fullDate lastSeen}} </span><br />{{/if}}
+                    {{#if lastSeen}} Last seen: <span id="nodeLastSeen{{Id}}"> {{fullDate lastSeen}} </span><br />{{/if}}
                     Repeating: {{yes-no isRepeatingNode}}<br />
-                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{nodeId}}"> {{batteryLevel}} </span><br />{{/if}}
+                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span><br />{{/if}}
                 </div>
                 <br />
-                <ul class="list-group" id="sensorsContainer{{nodeId}}"></ul>
+                <ul class="list-group" id="sensorsContainer{{Id}}"></ul>
             </div>
         </div>
     </div>
