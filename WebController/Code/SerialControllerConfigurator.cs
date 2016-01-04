@@ -40,11 +40,11 @@ namespace MyNetSensors.WebController.Code
             string portName = null;
             try
             {
-                SerialController.serialPortDebugState = Boolean.Parse(Configuration["SerialPort:DebugState"]);
-                SerialController.serialPortDebugTxRx = Boolean.Parse(Configuration["SerialPort:DebugTxRx"]);
                 SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
                 SerialController.gatewayDebugState = Boolean.Parse(Configuration["Gateway:DebugState"]);
                 SerialController.gatewayDebugTxRx = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
+                SerialController.gatewayDebugRawTxRx = Boolean.Parse(Configuration["Gateway:DebugRawTxRx"]);
+
 
                 SerialController.nodesTasksEnabled = Boolean.Parse(Configuration["NodesTasks:Enable"]);
                 SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
@@ -68,7 +68,7 @@ namespace MyNetSensors.WebController.Code
                 else
                     SerialController.dataBaseConnectionString = Configuration["DataBase:SqliteConnectionString"];
 
-                portName = Configuration["SerialPort:Name"];
+                portName = Configuration["Gateway:SerialPort"];
             }
             catch
             {

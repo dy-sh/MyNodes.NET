@@ -18,7 +18,7 @@ namespace MyNetSensors.Gateways
 
     public class Gateway
     {
-        private IComPort serialPort;
+        public IComPort serialPort;
         public bool storeMessages = true;
         public bool enableAutoAssignId = true;
 
@@ -41,6 +41,17 @@ namespace MyNetSensors.Gateways
         private List<Node> nodes = new List<Node>();
         private bool isConnected;
 
+
+        public Gateway(IComPort serialPort)
+        {
+            this.serialPort = serialPort;
+            this.serialPort.OnDataReceivedEvent += RecieveMessage;
+            this.serialPort.OnDisconnectedEvent += Disconnect;
+            this.serialPort.OnConnectedEvent += OnSerialPortConnectedEvent;
+        }
+
+
+
         private void DebugTxRx(string message)
         {
             OnDebugTxRxMessage?.Invoke(message);
@@ -51,14 +62,35 @@ namespace MyNetSensors.Gateways
             OnDebugGatewayStateMessage?.Invoke(message);
         }
 
-        public void Connect(IComPort serialPort)
+        public void Connect(string serialPortName)
         {
             if (isConnected)
                 Disconnect();
 
-            this.serialPort = serialPort;
-            this.serialPort.OnDataReceivedEvent += RecieveMessage;
-            this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
+            serialPort.Connect(serialPortName);
+        }
+
+        public void Disconnect()
+        {
+            isConnected = false;
+
+            if(serialPort.IsConnected())
+                serialPort.Disconnect();
+
+            DebugGatewayState("Gateway disconnected.");
+
+            OnDisconnectedEvent?.Invoke();
+        }
+
+        public bool IsConnected()
+        {
+            return isConnected;
+        }
+
+
+
+        private void OnSerialPortConnectedEvent()
+        {
             isConnected = true;
 
             DebugGatewayState("Gateway connected.");
@@ -66,63 +98,33 @@ namespace MyNetSensors.Gateways
             OnConnectedEvent?.Invoke();
         }
 
-        public void Disconnect()
-        {
-            isConnected = false;
-            if (serialPort != null)
-            {
-                serialPort.OnDataReceivedEvent -= RecieveMessage;
-                serialPort.OnDisconnectedEvent -= OnSerialPortDisconnectedEvent;
-                serialPort = null;
-            }
-
-            DebugGatewayState("Gateway disconnected.");
-
-
-            OnDisconnectedEvent?.Invoke();
-        }
-
-        public bool IsConnected()
-        {
-            return (isConnected && serialPort.IsConnected());
-        }
-
-        private void OnSerialPortDisconnectedEvent()
-        {
-            Disconnect();
-        }
-
-
-        private void SendToSerial(string message)
-        {
-            if (!isConnected)
-            {
-                throw new Exception("Failed to send message. Serial port is not connected.");
-            }
-
-            serialPort.SendMessage(message);
-        }
-
-
+        
 
         private void SendMessage(Message message)
         {
+            if (!isConnected)
+            {
+                DebugGatewayState("Failed to send message. Gateway is not connected.");
+                return;
+            }
+
             message.incoming = false;
 
             OnMessageSendEvent?.Invoke(message);
 
             UpdateSensorFromMessage(message);
 
-            //todo if (message.messageType == MessageType.C_SET)
-                //message = DeRemapMessage(message);
-
             DebugTxRx($"TX: {message.ToString()}");
 
-            string ack = (message.ack) ? "1" : "0";
-            string mes = $"{message.nodeId};{message.sensorId};{(int)message.messageType};{ack};{message.subType};{message.payload}\n";
+            string mes = $"{message.nodeId};" +
+                         $"{message.sensorId};" +
+                         $"{(int)message.messageType};" +
+                         $"{((message.ack) ? "1" : "0")};" +
+                         $"{message.subType};" +
+                         $"{message.payload}\n";
 
 
-            SendToSerial(mes);
+            serialPort.SendMessage(mes);
 
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
@@ -301,8 +303,7 @@ namespace MyNetSensors.Gateways
                 {
                     DebugGatewayState("Exception occurs when the serial port does not have time to write the data");
 
-                    throw new ArgumentOutOfRangeException(
-                        "Exception occurs when the serial port does not have time to write the data");
+                    return;
                 }
 
                 sensor.SetSensorType((SensorType)mes.subType);

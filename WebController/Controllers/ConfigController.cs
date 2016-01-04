@@ -54,8 +54,9 @@ namespace MyNetSensors.WebController.Controllers
             json.SerialPort.Name = port.PortName;
             WriteConfig(json);
 
+            SerialController.gateway.Disconnect();
             SerialController.serialPortName = port.PortName;
-            SerialController.ReconnectToSerialPort();
+            SerialController.gateway.Connect(port.PortName);
 
 
             return RedirectToAction("Messages", "Gateway");

@@ -15,9 +15,13 @@ namespace MyNetSensors.Gateways
         event OnDataReceivedEventHandler OnDataReceivedEvent;
         event Action OnConnectedEvent;
         event Action OnDisconnectedEvent;
+        event ExceptionEventHandler OnWritingError;
+        event ExceptionEventHandler OnConnectingError;
+        event DebugMessageEventHandler OnDebugTxRxMessage;
+        event DebugMessageEventHandler OnDebugPortStateMessage;
 
         List<string> GetPortsList();
-        void Connect(string portName, int baudRate);
+        void Connect(string portName, int baudRate= 115200);
         void Disconnect();
         void SendMessage(string message);
         bool IsConnected();

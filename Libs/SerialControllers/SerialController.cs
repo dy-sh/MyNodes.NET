@@ -23,10 +23,9 @@ namespace MyNetSensors.SerialControllers
 
         //SETTINGS
         public static string serialPortName = "COM1";
-        public static bool serialPortDebugTxRx = true;
-        public static bool serialPortDebugState = true;
         public static bool enableAutoAssignId = true;
         public static bool gatewayDebugTxRx = true;
+        public static bool gatewayDebugRawTxRx = false;
         public static bool gatewayDebugState = true;
 
         public static bool dataBaseEnabled = true;
@@ -52,7 +51,7 @@ namespace MyNetSensors.SerialControllers
 
         //VARIABLES
         public static ComPort comPort = new ComPort();
-        public static Gateway gateway = new Gateway();
+        public static Gateway gateway = new Gateway(comPort);
         public static IGatewayRepository gatewayDb;
         public static INodesHistoryRepository historyDb;
         public static INodesTasksRepository nodesTasksDb;
@@ -81,13 +80,13 @@ namespace MyNetSensors.SerialControllers
             OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
             ConnectToDB();
-            ConnectToSerialPort();
+            ConnectToGateway();
             ConnectNodesTasks();
             //ConnectToSoftNodesController();
             ConnectToLogicalNodesEngine();
 
             //reconnect if disconnected
-            gateway.OnDisconnectedEvent += ReconnectToSerialPort;
+            gateway.OnDisconnectedEvent += ReconnectToGateway;
 
             OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
 
@@ -96,7 +95,9 @@ namespace MyNetSensors.SerialControllers
 
         }
 
-        public static void ConnectToDB()
+
+
+        private static void ConnectToDB()
         {
 
             //connecting to DB
@@ -153,37 +154,10 @@ namespace MyNetSensors.SerialControllers
 
 
 
-        public static void ConnectToSerialPort()
-        {
-            if (serialPortDebugState)
-                comPort.OnDebugPortStateMessage += message => OnDebugStateMessage("SERIAL: " + message);
 
-            if (serialPortDebugTxRx)
-                comPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage("SERIAL: " + message);
 
-            ReconnectToSerialPort();
-        }
 
-        public static void ReconnectToSerialPort()
-        {
-            //connecting to serial port
-            OnDebugStateMessage("SERIAL: Connecting...");
-
-            bool connected = false;
-            while (!connected)
-            {
-                comPort.Connect(serialPortName);
-                connected = comPort.IsConnected();
-                if (!connected)
-                {
-                    Thread.Sleep(5000);
-                }
-            }
-
-            ConnectToGateway();
-        }
-
-        public static void ConnectToGateway()
+        private static void ConnectToGateway()
         {
             //connecting to gateway
             OnDebugStateMessage("GATEWAY: Connecting...");
@@ -194,12 +168,23 @@ namespace MyNetSensors.SerialControllers
                 gateway.OnDebugTxRxMessage += message => OnDebugTxRxMessage("GATEWAY: " + message);
 
             if (gatewayDebugState)
+            {
                 gateway.OnDebugGatewayStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
+                gateway.serialPort.OnDebugPortStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
+            }
 
+            if (gatewayDebugRawTxRx)
+                gateway.serialPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage("GATEWAY: RAW MESSAGE: " + message);
+
+            ReconnectToGateway();
+        }
+
+        private static void ReconnectToGateway()
+        {
             bool connected = false;
             while (!connected)
             {
-                gateway.Connect(comPort);
+                gateway.Connect(serialPortName);
                 connected = gateway.IsConnected();
                 if (!connected)
                 {

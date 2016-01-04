@@ -37,7 +37,7 @@ namespace MyNetSensors.SerialControllers
         }
         
 
-        public void Connect(string portName, int baudRate = 115200)
+        public void Connect(string portName, int baudRate)
         {
 
             try
@@ -49,21 +49,16 @@ namespace MyNetSensors.SerialControllers
                     StopBits = StopBits.One,
                     DataBits = 8
                 };
-
                 serialPort.DataReceived += serialPort_DataReceived;
-
                 serialPort.Open();
 
                 isConnected = true;
-
                 DebugPortState($"Connected to port {portName}.");
-
                 OnConnectedEvent?.Invoke();
             }
             catch (Exception ex)
             {
                 DebugPortState($"Failed to connect to port {portName}.");
-
                 OnConnectingError?.Invoke(ex);
             }
         }
@@ -99,14 +94,17 @@ namespace MyNetSensors.SerialControllers
 
         public void Disconnect()
         {
-            isConnected = false;
+            if (isConnected || serialPort != null)
+            {
+                isConnected = false;
 
-            DebugPortState("Port disconnected.");
+                DebugPortState("Port disconnected.");
 
-            serialPort?.Dispose();
-            serialPort = null;
+                serialPort?.Dispose();
+                serialPort = null;
 
-            OnDisconnectedEvent?.Invoke();
+                OnDisconnectedEvent?.Invoke();
+            }
         }
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
