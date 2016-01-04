@@ -350,9 +350,11 @@ namespace MyNetSensors.Gateways
             }
             catch
             {
-                mes = new Message();
-                mes.isValid = false;
-                mes.payload = message;
+                mes = new Message
+                {
+                    isValid = false,
+                    payload = message
+                };
             }
             return mes;
         }
@@ -379,13 +381,15 @@ namespace MyNetSensors.Gateways
 
         private void SendSensorState(Sensor sensor)
         {
-            Message message = new Message();
-            message.ack = false;
-            message.messageType = MessageType.C_SET;
-            message.nodeId = sensor.nodeId;
-            message.payload = sensor.state;
-            message.sensorId = sensor.sensorId;
-            message.subType = (int)sensor.dataType;
+            Message message = new Message
+            {
+                ack = false,
+                messageType = MessageType.C_SET,
+                nodeId = sensor.nodeId,
+                payload = sensor.state,
+                sensorId = sensor.sensorId,
+                subType = (int) sensor.dataType
+            };
             SendMessage(message);
         }
 
@@ -393,16 +397,8 @@ namespace MyNetSensors.Gateways
         {
             for (int i = 1; i < 254; i++)
             {
-                bool found = false;
+                bool found = nodes.Any(node => node.Id == i);
 
-                foreach (var node in nodes)
-                {
-                    if (node.Id == i)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
                 if (!found)
                 {
                     return i;
@@ -416,25 +412,29 @@ namespace MyNetSensors.Gateways
         {
             int freeId = GetFreeNodeId();
 
-            Message mess = new Message();
-            mess.nodeId = 255;
-            mess.sensorId = 255;
-            mess.messageType = MessageType.C_INTERNAL;
-            mess.ack = false;
-            mess.subType = (int)InternalDataType.I_ID_RESPONSE;
-            mess.payload = freeId.ToString();
+            Message mess = new Message
+            {
+                nodeId = 255,
+                sensorId = 255,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int) InternalDataType.I_ID_RESPONSE,
+                payload = freeId.ToString()
+            };
             SendMessage(mess);
         }
 
         private void SendMetricResponse(int nodeId)
         {
-            Message mess = new Message();
-            mess.nodeId = nodeId;
-            mess.sensorId = 255;
-            mess.messageType = MessageType.C_INTERNAL;
-            mess.ack = false;
-            mess.subType = (int)InternalDataType.I_CONFIG;
-            mess.payload = "M";
+            Message mess = new Message
+            {
+                nodeId = nodeId,
+                sensorId = 255,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int) InternalDataType.I_CONFIG,
+                payload = "M"
+            };
             SendMessage(mess);
         }
 
@@ -456,27 +456,28 @@ namespace MyNetSensors.Gateways
 
         public void SendReboot(int nodeId)
         {
-            Message message = new Message();
-            message.ack = false;
-            message.messageType = MessageType.C_INTERNAL;
-            message.nodeId = nodeId;
-            message.payload = "0";
-            message.sensorId = 0;
-            message.subType = (int)InternalDataType.I_REBOOT;
+            Message message = new Message
+            {
+                ack = false,
+                messageType = MessageType.C_INTERNAL,
+                nodeId = nodeId,
+                payload = "0",
+                sensorId = 0,
+                subType = (int) InternalDataType.I_REBOOT
+            };
             SendMessage(message);
         }
 
         public GatewayInfo GetGatewayInfo()
         {
-            GatewayInfo info =new GatewayInfo();
+            GatewayInfo info = new GatewayInfo
+            {
+                isGatewayConnected = IsConnected(),
+                gatewayNodesRegistered = nodes.Count
+            };
 
-            info.isGatewayConnected = IsConnected();
 
-            info.gatewayNodesRegistered = nodes.Count;
-
-            int sensors=0;
-            foreach (var node in nodes)
-                sensors += node.sensors.Count;
+            int sensors= nodes.Sum(node => node.sensors.Count);
             info.gatewaySensorsRegistered = sensors;
 
             return info;
