@@ -40,7 +40,7 @@ namespace MyNetSensors.SerialControllers
         }
 
 
-        public void FindDevices()
+        private void FindDevices()
         {
             portsList.Clear();
 

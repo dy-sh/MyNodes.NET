@@ -1,0 +1,51 @@
+﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
+
+@{
+    ViewData["Title"] = "About";
+}
+<br />
+
+<h2>Config - Serial Port</h2>
+
+<div>
+    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a> |
+</div>
+<hr />
+<br />
+
+<form  asp-controller="Config" asp-action="SerialPort" asp-anti-forgery="true">
+
+    <div class="form-horizontal">
+        <div class="validation" asp-validation-summary="ValidationSummary.All" />
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-6">
+                <label class="control-label">Select serial port that is connected to the gateway</label>
+                <br><br>
+                <select asp-for="PortName" asp-items=@ViewBag.ports class="selectpicker form-control"></select>
+                <br><br>
+
+                <div class="btn-group">
+                    <a asp-action="List" class="btn btn-default">Refrash</a>
+                    <input type="submit" value="Select" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section scripts
+{
+    <script>
+        $('.selectpicker').selectpicker();
+    </script>
+}
+
+
+
+
+
+
+
+
