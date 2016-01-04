@@ -43,14 +43,12 @@ namespace MyNetSensors.Gateways
 
         private void DebugTxRx(string message)
         {
-            if (OnDebugTxRxMessage != null)
-                OnDebugTxRxMessage(message);
+            OnDebugTxRxMessage?.Invoke(message);
         }
 
         private void DebugGatewayState(string message)
         {
-            if (OnDebugGatewayStateMessage != null)
-                OnDebugGatewayStateMessage(message);
+            OnDebugGatewayStateMessage?.Invoke(message);
         }
 
         public void Connect(IComPort serialPort)
@@ -65,8 +63,7 @@ namespace MyNetSensors.Gateways
 
             DebugGatewayState("Gateway connected.");
 
-            if (OnConnectedEvent != null)
-                OnConnectedEvent();
+            OnConnectedEvent?.Invoke();
         }
 
         public void Disconnect()
@@ -82,8 +79,7 @@ namespace MyNetSensors.Gateways
             DebugGatewayState("Gateway disconnected.");
 
 
-            if (OnDisconnectedEvent != null)
-                OnDisconnectedEvent();
+            OnDisconnectedEvent?.Invoke();
         }
 
         public bool IsConnected()
@@ -102,7 +98,6 @@ namespace MyNetSensors.Gateways
             if (!isConnected)
             {
                 throw new Exception("Failed to send message. Serial port is not connected.");
-                return;
             }
 
             serialPort.SendMessage(message);
@@ -114,8 +109,7 @@ namespace MyNetSensors.Gateways
         {
             message.incoming = false;
 
-            if (OnMessageSendEvent != null)
-                OnMessageSendEvent(message);
+            OnMessageSendEvent?.Invoke(message);
 
             UpdateSensorFromMessage(message);
 
@@ -150,8 +144,7 @@ namespace MyNetSensors.Gateways
 
             DebugTxRx($"RX: { message.ToString()}");
 
-            if (OnMessageRecievedEvent != null)
-                OnMessageRecievedEvent(message);
+            OnMessageRecievedEvent?.Invoke(message);
 
 
             if (message.isValid)
@@ -220,15 +213,13 @@ namespace MyNetSensors.Gateways
                 node = new Node(mes.nodeId);
                 nodes.Add(node);
 
-                if (OnNewNodeEvent != null)
-                    OnNewNodeEvent(node);
+                OnNewNodeEvent?.Invoke(node);
 
                 DebugGatewayState($"New node (id: {node.Id}) registered");
             }
 
             node.UpdateLastSeenNow();
-            if (OnNodeLastSeenUpdatedEvent != null)
-                OnNodeLastSeenUpdatedEvent(node);
+            OnNodeLastSeenUpdatedEvent?.Invoke(node);
 
 
             if (mes.sensorId == 255)
@@ -245,8 +236,7 @@ namespace MyNetSensors.Gateways
                     }
 
 
-                    if (OnNodeUpdatedEvent != null)
-                        OnNodeUpdatedEvent(node);
+                    OnNodeUpdatedEvent?.Invoke(node);
 
                     DebugGatewayState($"Node {node.Id} updated");
                 }
@@ -256,8 +246,7 @@ namespace MyNetSensors.Gateways
                     {
                         node.name = mes.payload;
 
-                        if (OnNodeUpdatedEvent != null)
-                            OnNodeUpdatedEvent(node);
+                        OnNodeUpdatedEvent?.Invoke(node);
 
                         DebugGatewayState($"Node {node.Id} updated");
                     }
@@ -265,17 +254,14 @@ namespace MyNetSensors.Gateways
                     {
                         node.version = mes.payload;
 
-                        if (OnNodeUpdatedEvent != null)
-                            OnNodeUpdatedEvent(node);
+                        OnNodeUpdatedEvent?.Invoke(node);
 
                         DebugGatewayState($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
                         node.batteryLevel = Int32.Parse(mes.payload);
-                        if (OnNodeBatteryUpdatedEvent != null)
-                            OnNodeBatteryUpdatedEvent(node);
-                        return;
+                        OnNodeBatteryUpdatedEvent?.Invoke(node);
                     }
                 }
             }
@@ -329,17 +315,14 @@ namespace MyNetSensors.Gateways
 
             if (isNewSensor)
             {
-                if (OnNewSensorEvent != null)
-                    OnNewSensorEvent(sensor);
+                OnNewSensorEvent?.Invoke(sensor);
 
                 DebugGatewayState($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
             }
             else
             {
-                if (OnSensorUpdatedEvent != null)
-                    OnSensorUpdatedEvent(sensor);
+                OnSensorUpdatedEvent?.Invoke(sensor);
             }
-
         }
 
 
@@ -459,8 +442,7 @@ namespace MyNetSensors.Gateways
         {
             nodes.Clear();
 
-            if (OnClearNodesListEvent != null)
-                OnClearNodesListEvent();
+            OnClearNodesListEvent?.Invoke();
         }
 
         public async Task SendRebootToAllNodes()

@@ -42,12 +42,14 @@ namespace MyNetSensors.SerialControllers
 
             try
             {
-                serialPort = new SerialPort(portName);
+                serialPort = new SerialPort(portName)
+                {
+                    BaudRate = baudRate,
+                    Parity = Parity.None,
+                    StopBits = StopBits.One,
+                    DataBits = 8
+                };
 
-                serialPort.BaudRate = baudRate;
-                serialPort.Parity = Parity.None;
-                serialPort.StopBits = StopBits.One;
-                serialPort.DataBits = 8;
                 serialPort.DataReceived += serialPort_DataReceived;
 
                 serialPort.Open();
@@ -56,15 +58,13 @@ namespace MyNetSensors.SerialControllers
 
                 DebugPortState($"Connected to port {portName}.");
 
-                if (OnConnectedEvent != null)
-                    OnConnectedEvent();
+                OnConnectedEvent?.Invoke();
             }
             catch (Exception ex)
             {
                 DebugPortState($"Failed to connect to port {portName}.");
 
-                if (OnConnectingError != null)
-                    OnConnectingError(ex);
+                OnConnectingError?.Invoke(ex);
             }
         }
 
@@ -90,8 +90,7 @@ namespace MyNetSensors.SerialControllers
             {
                 DebugPortState($"Failed to write data. {ex.Message}");
 
-                if (OnWritingError != null)
-                    OnWritingError(ex);
+                OnWritingError?.Invoke(ex);
 
                 Disconnect();
             }
@@ -104,14 +103,10 @@ namespace MyNetSensors.SerialControllers
 
             DebugPortState("Port disconnected.");
 
-            if (serialPort != null)
-            {
-                serialPort.Dispose();
-            }
+            serialPort?.Dispose();
             serialPort = null;
 
-            if (OnDisconnectedEvent != null)
-                OnDisconnectedEvent();
+            OnDisconnectedEvent?.Invoke();
         }
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -130,8 +125,7 @@ namespace MyNetSensors.SerialControllers
             {
                 DebugTxRx("RX: " + message);
 
-                if (OnDataReceivedEvent != null)
-                    OnDataReceivedEvent(message);
+                OnDataReceivedEvent?.Invoke(message);
             }
         }
 
