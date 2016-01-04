@@ -179,14 +179,11 @@ namespace MyNetSensors.WebController
 
             SignalRServer.Start(connectionManager);
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
-            StartSerialController(connectionManager);
+            SerialControllerConfigurator.Start(Configuration);
 
         }
 
-        public async Task StartSerialController(IConnectionManager connectionManager)
-        {
-            await Task.Run(() => SerialControllerConfigurator.Start(Configuration));
-        }
+
 
 
 

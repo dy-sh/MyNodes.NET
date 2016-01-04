@@ -18,7 +18,7 @@ namespace MyNetSensors.Gateways
         event ExceptionEventHandler OnWritingError;
         event ExceptionEventHandler OnConnectingError;
         event DebugMessageEventHandler OnDebugTxRxMessage;
-        event DebugMessageEventHandler OnDebugPortStateMessage;
+        event DebugMessageEventHandler OnDebugStateMessage;
 
         List<string> GetPortsList();
         void Connect(string portName, int baudRate= 115200);

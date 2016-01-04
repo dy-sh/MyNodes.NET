@@ -72,27 +72,31 @@ namespace MyNetSensors.SerialControllers
         public static event EventHandler OnStarted;
 
 
-        public static void Start(string serialPortName, string dbConnectionString = null)
+
+        public static async void Start(string serialPortName, string dbConnectionString = null)
         {
             SerialController.serialPortName = serialPortName;
 
 
-            OnDebugStateMessage("-------------STARTING GATEWAY--------------");
+            await Task.Run(() =>
+            {
 
-            ConnectToDB();
-            ConnectToGateway();
-            ConnectNodesTasks();
-            //ConnectToSoftNodesController();
-            ConnectToLogicalNodesEngine();
+                OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
-            //reconnect if disconnected
-            gateway.OnDisconnectedEvent += ReconnectToGateway;
+                ConnectToDB();
+                ConnectToGateway();
+                ConnectNodesTasks();
+                //ConnectToSoftNodesController();
+                ConnectToLogicalNodesEngine();
 
-            OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
+                //reconnect if disconnected
+                gateway.OnDisconnectedEvent += ReconnectToGateway;
 
-            OnStarted?.Invoke(null, EventArgs.Empty);
+                OnDebugStateMessage("-------------SARTUP COMPLETE--------------");
 
+                OnStarted?.Invoke(null, EventArgs.Empty);
 
+            });
         }
 
 
@@ -169,8 +173,8 @@ namespace MyNetSensors.SerialControllers
 
             if (gatewayDebugState)
             {
-                gateway.OnDebugGatewayStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
-                gateway.serialPort.OnDebugPortStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
+                gateway.OnDebugStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
+                gateway.serialPort.OnDebugStateMessage += message => OnDebugStateMessage("GATEWAY: " + message);
             }
 
             if (gatewayDebugRawTxRx)
@@ -179,18 +183,21 @@ namespace MyNetSensors.SerialControllers
             ReconnectToGateway();
         }
 
-        private static void ReconnectToGateway()
+        private static async void ReconnectToGateway()
         {
-            bool connected = false;
-            while (!connected)
+            await Task.Run(() =>
             {
-                gateway.Connect(serialPortName);
-                connected = gateway.IsConnected();
-                if (!connected)
+                bool connected = false;
+                while (!connected)
                 {
-                    Thread.Sleep(5000);
+                    gateway.Connect(serialPortName);
+                    connected = gateway.IsConnected();
+                    if (!connected)
+                    {
+                        Thread.Sleep(5000);
+                    }
                 }
-            }
+            });
         }
 
         //private static void ConnectToSoftNodesController()

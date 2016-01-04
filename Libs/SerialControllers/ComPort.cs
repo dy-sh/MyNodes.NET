@@ -19,7 +19,7 @@ namespace MyNetSensors.SerialControllers
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
         public event DebugMessageEventHandler OnDebugTxRxMessage;
-        public event DebugMessageEventHandler OnDebugPortStateMessage;
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         private bool isConnected;
         private SerialPort serialPort;
@@ -136,7 +136,7 @@ namespace MyNetSensors.SerialControllers
 
         private void DebugPortState(string message)
         {
-            OnDebugPortStateMessage?.Invoke(message);
+            OnDebugStateMessage?.Invoke(message);
         }
     }
 }

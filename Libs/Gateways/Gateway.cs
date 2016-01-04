@@ -35,7 +35,7 @@ namespace MyNetSensors.Gateways
         public event Action OnDisconnectedEvent;
         public event Action OnConnectedEvent;
         public event DebugMessageEventHandler OnDebugTxRxMessage;
-        public event DebugMessageEventHandler OnDebugGatewayStateMessage;
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -59,7 +59,7 @@ namespace MyNetSensors.Gateways
 
         private void DebugGatewayState(string message)
         {
-            OnDebugGatewayStateMessage?.Invoke(message);
+            OnDebugStateMessage?.Invoke(message);
         }
 
         public void Connect(string serialPortName)
@@ -93,7 +93,7 @@ namespace MyNetSensors.Gateways
         {
             isConnected = true;
 
-            DebugGatewayState("Gateway connected.");
+            //DebugGatewayState("Gateway connected.");
 
             OnConnectedEvent?.Invoke();
         }
