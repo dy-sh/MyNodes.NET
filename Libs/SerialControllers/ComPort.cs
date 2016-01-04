@@ -6,11 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using MyNetSensors.Gateways;
 
 namespace MyNetSensors.SerialControllers
 {
-
     public class ComPort : IComPort
     {
         public event OnDataReceivedEventHandler OnDataReceivedEvent;
@@ -23,7 +23,6 @@ namespace MyNetSensors.SerialControllers
 
         private bool isConnected;
         private SerialPort serialPort;
-        private List<string> portsList = new List<string>();
 
 
         public bool IsConnected()
@@ -34,29 +33,9 @@ namespace MyNetSensors.SerialControllers
 
         public List<string> GetPortsList()
         {
-            FindDevices();
-
-            return portsList;
+            return SerialPort.GetPortNames().ToList();
         }
-
-
-        private void FindDevices()
-        {
-            portsList.Clear();
-
-            foreach (string portName in SerialPort.GetPortNames())
-            {
-                portsList.Add(portName);
-            }
-
-        }
-
-
-        public void Connect(int portIndex, int baudRate = 115200)
-        {
-            string portName = portsList[portIndex];
-            Connect(portName, baudRate);
-        }
+        
 
         public void Connect(string portName, int baudRate = 115200)
         {
@@ -97,7 +76,7 @@ namespace MyNetSensors.SerialControllers
         {
             if (serialPort == null || !isConnected)
             {
-                DebugPortState("Failed to write to serial. Port closed.");
+                DebugPortState("Failed to write data. Port is not connected.");
                 return;
             }
 
@@ -109,7 +88,7 @@ namespace MyNetSensors.SerialControllers
             }
             catch (Exception ex)
             {
-                DebugPortState($"Failed to write to serial. {ex.Message}");
+                DebugPortState($"Failed to write data. {ex.Message}");
 
                 if (OnWritingError != null)
                     OnWritingError(ex);
@@ -135,8 +114,13 @@ namespace MyNetSensors.SerialControllers
                 OnDisconnectedEvent();
         }
 
+        private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            string data = serialPort.ReadExisting();
+            InvokeDataRecievedEvents(data);
+        }
 
-        private void SendDataRecievedEvents(string receivedData)
+        private void InvokeDataRecievedEvents(string receivedData)
         {
 
             string[] messages = receivedData.Split(new char[] { '\r', '\n' },
@@ -151,22 +135,16 @@ namespace MyNetSensors.SerialControllers
             }
         }
 
-        private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            string data = serialPort.ReadExisting();
-            SendDataRecievedEvents(data);
-        }
+
 
         private void DebugTxRx(string message)
         {
-            if (OnDebugTxRxMessage != null)
-                OnDebugTxRxMessage(message);
+            OnDebugTxRxMessage?.Invoke(message);
         }
 
         private void DebugPortState(string message)
         {
-            if (OnDebugPortStateMessage != null)
-                OnDebugPortStateMessage(message);
+            OnDebugPortStateMessage?.Invoke(message);
         }
     }
 }

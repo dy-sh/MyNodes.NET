@@ -17,7 +17,6 @@ namespace MyNetSensors.Gateways
         event Action OnDisconnectedEvent;
 
         List<string> GetPortsList();
-        void Connect(int portIndex, int baudRate);
         void Connect(string portName, int baudRate);
         void Disconnect();
         void SendMessage(string message);
