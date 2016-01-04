@@ -47,8 +47,9 @@ namespace MyNetSensors.WebController
         public void ConfigureServices(IServiceCollection services)
         {
             //database
-            string connectionString;
             bool useMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
+
+            string connectionString;
             if (useMSSQL)
                 connectionString = Configuration["DataBase:MSSQLConnectionString"];
             else
@@ -85,19 +86,22 @@ namespace MyNetSensors.WebController
 
             //Add all SignalR related services to IoC.
             services.AddSignalR();
+
+            services.AddSingleton(x => Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IHostingEnvironment env, 
-            ILoggerFactory loggerFactory, 
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
             IConnectionManager connectionManager,
             NodesDbContext nodesDbContext
             )
         {
             //Set up dot instead of comma in float values
-            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            System.Globalization.CultureInfo customCulture =
+                (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
@@ -179,7 +183,17 @@ namespace MyNetSensors.WebController
 
             SignalRServer.Start(connectionManager);
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
-            SerialControllerConfigurator.Start(Configuration);
+
+            bool firstRun = Boolean.Parse(Configuration["FirstRun"]);
+            if (!firstRun)
+                SerialControllerConfigurator.Start(Configuration);
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n"); // <-- see note
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+            }
 
         }
 

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using MyNetSensors.SerialControllers;
+using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.ViewModels.Config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,10 +19,41 @@ namespace MyNetSensors.WebController.Controllers
 
         private const string SETTINGS_FILE_NAME = "appsettings.json";
 
+
+
+
+
+        private IConfigurationRoot сonfiguration;
+
+        public ConfigController(IConfigurationRoot сonfiguration)
+        {
+            this.сonfiguration = сonfiguration;
+        }
+
+
+        private dynamic ReadConfig()
+        {
+            return JObject.Parse(System.IO.File.ReadAllText(SETTINGS_FILE_NAME));
+        }
+
+        private void WriteConfig(dynamic config)
+        {
+            System.IO.File.WriteAllText(SETTINGS_FILE_NAME, config.ToString());
+        }
+
         public IActionResult Index()
         {
-            return RedirectToAction("SerialPort");
+            bool firstRun = Boolean.Parse(сonfiguration["FirstRun"]);
+
+            if (firstRun)
+                return RedirectToAction("FirstRun");
+            else
+                return RedirectToAction("SerialPort");
+
+
+            // return View();
         }
+
 
 
 
@@ -33,7 +66,7 @@ namespace MyNetSensors.WebController.Controllers
             var list = new List<SelectListItem>();
             foreach (string port in ports)
             {
-                var item = new SelectListItem { Text = port, Value = port };
+                var item = new SelectListItem {Text = port, Value = port};
                 if (port == currentPort)
                     item.Selected = true;
 
@@ -51,25 +84,56 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult SerialPort(SerialPortViewModel port)
         {
             dynamic json = ReadConfig();
-            json.SerialPort.Name = port.PortName;
+            json.Gateway.SerialPort = port.PortName;
             WriteConfig(json);
 
-            SerialController.gateway.Disconnect();
-            SerialController.serialPortName = port.PortName;
-            SerialController.gateway.Connect(port.PortName);
+            SerialController.ReconnectToGateway(port.PortName);
 
+            return RedirectToAction("SerialPort");
 
-            return RedirectToAction("Messages", "Gateway");
+            //  return RedirectToAction("Messages", "Gateway");
         }
 
-        private dynamic ReadConfig()
+
+
+
+        [HttpGet]
+        public IActionResult FirstRun()
         {
-            return JObject.Parse(System.IO.File.ReadAllText(SETTINGS_FILE_NAME));
+            List<string> ports = SerialController.comPort.GetPortsList();
+            string currentPort = SerialController.serialPortName;
+
+            var list = new List<SelectListItem>();
+            foreach (string port in ports)
+            {
+                var item = new SelectListItem {Text = port, Value = port};
+                if (port == currentPort)
+                    item.Selected = true;
+
+                list.Add(item);
+            }
+
+            ViewBag.ports = list;
+
+
+            return View(new SerialPortViewModel());
         }
 
-        private void WriteConfig(dynamic config)
+
+        [HttpPost]
+        public IActionResult FirstRun(SerialPortViewModel port)
         {
-            System.IO.File.WriteAllText(SETTINGS_FILE_NAME, config.ToString());
+            dynamic json = ReadConfig();
+            json.Gateway.SerialPort = port.PortName;
+            json.FirstRun = false;
+            WriteConfig(json);
+
+            SerialControllerConfigurator.Start(сonfiguration);
+
+            return RedirectToAction("Control", "Gateway");
         }
+
     }
+
+
 }
