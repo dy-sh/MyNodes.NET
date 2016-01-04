@@ -25,10 +25,7 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Control");
         }
 
-        public ActionResult Messages()
-        {
-            return View();
-        }
+
 
 
         public ActionResult Settings()

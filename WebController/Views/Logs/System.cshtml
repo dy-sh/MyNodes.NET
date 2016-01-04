@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "System Logs";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <a asp-controller="Logs" asp-action="System">System Logs</a> |
+    <a asp-controller="Logs" asp-action="Messages">Network Messages</a> 
+</div>
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        System Log
+        @*<button type="button" class="btn btn-default pull-right" id="clear-log">
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+            Clear Log
+        </button><br><br>*@
+
+
+    </div>
+    <div class="panel-body" style="overflow-y: scroll;" id="log">
+    </div>
+
+</div>
+
+
+@section scripts
+{
+    <script src="~/js/mysensors.js"></script>
+    <script src="~/js/mynetsensors-logs-system-page.js"></script>
+}
+
+

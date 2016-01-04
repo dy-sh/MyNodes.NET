@@ -22,7 +22,11 @@ namespace MyNetSensors.WebController.Code
             hub = connectionManager.GetHubContext<ClientsHub>();
 
             SerialController.OnStarted += OnSerialControllerStarted;
+            SerialController.OnDebugStateMessage += OnSystemLogMessage;
+            SerialController.OnDebugTxRxMessage += OnSystemLogMessage;
         }
+
+
 
         private static void OnSerialControllerStarted(object sender, EventArgs e)
         {
@@ -151,6 +155,11 @@ namespace MyNetSensors.WebController.Code
         {
             hub.Clients.All.OnMessageSendEvent(message.ToString());
 
+        }
+
+        private static void OnSystemLogMessage(string message)
+        {
+            hub.Clients.All.OnSystemLogMessage(message);
         }
     }
 }

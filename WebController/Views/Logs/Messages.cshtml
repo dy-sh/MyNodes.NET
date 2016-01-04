@@ -1,4 +1,14 @@
-﻿<br />
+﻿@{
+    ViewBag.Title = "Network Messages";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <a asp-controller="Logs" asp-action="System">System Logs</a> |
+    <a asp-controller="Logs" asp-action="Messages">Network Messages</a> 
+</div>
+<hr />
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -19,7 +29,7 @@
 @section scripts
 {
     <script src="~/js/mysensors.js"></script>
-    <script src="~/js/mynetsensors-messages-page.js"></script>
+    <script src="~/js/mynetsensors-logs-messages-page.js"></script>
 }
 
 

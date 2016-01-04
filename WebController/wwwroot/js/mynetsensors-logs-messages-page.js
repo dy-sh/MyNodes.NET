@@ -55,20 +55,20 @@ $(function () {
     });
 
     getIsHardwareConnected();
-    getMessages();
+    getLog();
 
 
 
     //autoscroll
     $(function () {
         var window_height = $(window).height(),
-            content_height = window_height - 280;
+            content_height = window_height - 370;
         $('#log').height(content_height);
     });
 
     $(window).resize(function () {
         var window_height = $(window).height(),
-            content_height = window_height - 280;
+            content_height = window_height - 370;
         $('#log').height(content_height);
     });
 });
@@ -95,7 +95,7 @@ function hardwareStateChanged(connected) {
     gatewayHardwareConnected = connected;
 }
 
-function getMessages() {
+function getLog() {
     $.ajax({
         url: "/GatewayAPI/GetMessages/",
         type: "POST",

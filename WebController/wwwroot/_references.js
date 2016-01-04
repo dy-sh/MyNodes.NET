@@ -7,7 +7,8 @@
 /// <reference path="js/litegraph/nodes-list.js" />
 /// <reference path="js/mynetsensors-control-page.js" />
 /// <reference path="js/mynetsensors-history-chart-page.js" />
-/// <reference path="js/mynetsensors-messages-page.js" />
+/// <reference path="js/mynetsensors-logs-messages-page - copy.js" />
+/// <reference path="js/mynetsensors-logs-system-page.js" />
 /// <reference path="js/mynetsensors-observe-page.js" />
 /// <reference path="js/mynetsensors-settings-page.js" />
 /// <reference path="js/mysensors.js" />
