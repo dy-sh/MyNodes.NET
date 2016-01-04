@@ -42,14 +42,12 @@ namespace MyNetSensors.Gateways
 
             messages.Add(message);
 
-            if (OnNewMessageLogged != null)
-                OnNewMessageLogged(message);
+            OnNewMessageLogged?.Invoke(message);
         }
 
         public void ClearLog()
         {
-            if (OnClearMessages != null)
-                OnClearMessages();
+            OnClearMessages?.Invoke();
 
             messages.Clear();
         }
