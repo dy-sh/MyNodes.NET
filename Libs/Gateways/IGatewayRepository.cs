@@ -9,6 +9,8 @@ namespace MyNetSensors.Gateways
 {
     public interface IGatewayRepository
     {
+        event DebugMessageEventHandler OnDebugStateMessage;
+
         void ConnectToGateway(Gateway gateway);
 
 
@@ -33,11 +35,10 @@ namespace MyNetSensors.Gateways
         void SetWriteInterval(int ms);
         void SetStoreTxRxMessages(bool enable);
 
-        void ShowDebugInConsole(bool enable);
-
 
         void UpdateNodeSettings(Node node);
         void UpdateSensorSettings(Sensor sensor);
         void DeleteNode(int id);
+
     }
 }

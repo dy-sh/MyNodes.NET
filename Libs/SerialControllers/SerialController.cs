@@ -130,12 +130,15 @@ namespace MyNetSensors.SerialControllers
             }
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
-            gatewayDb.ShowDebugInConsole(dataBaseDebugState);
             gatewayDb.SetStoreTxRxMessages(dataBaseWriteTxRxMessages);
             gatewayDb.ConnectToGateway(gateway);
+            if (dataBaseDebugState)
+                gatewayDb.OnDebugStateMessage += message => OnDebugStateMessage("DB: " + message);
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
+
+
 
 
             OnDebugStateMessage("DATABASE: Connected");

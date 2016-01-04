@@ -22,8 +22,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
     {
         private string connectionString;
 
-        private bool showConsoleMessages = false;
-
         //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
         //but this greatly slows down the performance.
@@ -44,6 +42,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
         private List<Message> newMessages = new List<Message>();
 
         private NodesDbContext db;
+
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         public GatewayRepositoryEF(NodesDbContext nodesDbContext)
         {
@@ -277,11 +277,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
             return true;
         }
 
-        public void ShowDebugInConsole(bool enable)
-        {
-            showConsoleMessages = enable;
-        }
-
 
 
         public void SetStoreTxRxMessages(bool enable)
@@ -414,8 +409,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void Log(string message)
         {
-            if (showConsoleMessages)
-                Console.WriteLine(message);
+            OnDebugStateMessage?.Invoke(message);
         }
 
     }

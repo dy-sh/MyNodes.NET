@@ -20,8 +20,6 @@ namespace MyNetSensors.Repositories.Dapper
 
     public class GatewayRepositoryDapper : IGatewayRepository
     {
-        private bool showConsoleMessages = false;
-
         //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
         //but this greatly slows down the performance.
@@ -42,6 +40,8 @@ namespace MyNetSensors.Repositories.Dapper
         private List<Message> newMessages = new List<Message>();
 
         private string connectionString;
+
+        public event DebugMessageEventHandler OnDebugStateMessage;
 
         public GatewayRepositoryDapper(string connectionString)
         {
@@ -503,11 +503,6 @@ namespace MyNetSensors.Repositories.Dapper
             return true;
         }
 
-        public void ShowDebugInConsole(bool enable)
-        {
-            showConsoleMessages = enable;
-        }
-
 
 
         public void SetStoreTxRxMessages(bool enable)
@@ -695,8 +690,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         public void Log(string message)
         {
-            if (showConsoleMessages)
-                Console.WriteLine(message);
+            OnDebugStateMessage?.Invoke(message);
         }
 
     }
