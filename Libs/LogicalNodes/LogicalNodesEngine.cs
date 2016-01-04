@@ -118,8 +118,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
                 {
-                    if(db!=null)
-                        db.DeleteLink(link.Id);
+                    db?.DeleteLink(link.Id);
 
                     links.Remove(link);
                 }
@@ -175,8 +174,7 @@ namespace MyNetSensors.LogicalNodes
         {
             nodes.Add(node);
 
-            if (db != null)
-                db.AddNode(node);
+            db?.AddNode(node);
 
             DebugEngine($"New node {node.GetType().Name}");
 
@@ -195,8 +193,7 @@ namespace MyNetSensors.LogicalNodes
             OnNodeDeleteEvent?.Invoke(node);
             DebugEngine($"Remove node {node.GetType().Name}");
 
-            if (db != null)
-                db.DeleteNode(node.Id);
+            db?.DeleteNode(node.Id);
 
             nodes.Remove(node);
         }
@@ -216,8 +213,7 @@ namespace MyNetSensors.LogicalNodes
             oldNode.Title = node.Title;
             oldNode.Type = node.Type;
 
-            if (db != null)
-                db.UpdateNode(oldNode);
+            db?.UpdateNode(oldNode);
 
             OnNodeUpdatedEvent?.Invoke(node);
         }
@@ -234,8 +230,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 oldOutput.Name = name;
                 LogicalNode node = GetOutputOwner(oldOutput);
-                if (db != null)
-                    db.UpdateNode(node);
+                db?.UpdateNode(node);
             }
         }
 
@@ -249,8 +244,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 oldInput.Name = name;
                 LogicalNode node = GetInputOwner(oldInput);
-                if (db != null)
-                    db.UpdateNode(node);
+                db?.UpdateNode(node);
             }
 
         }
@@ -277,8 +271,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalLink link = new LogicalLink(output.Id, input.Id);
             links.Add(link);
 
-            if (db != null)
-                db.AddLink(link);
+            db?.AddLink(link);
 
             OnNewLinkEvent?.Invoke(link);
 
@@ -297,8 +290,7 @@ namespace MyNetSensors.LogicalNodes
 
             LogicalLink link = GetLink(output, input);
 
-            if (db != null)
-                db.DeleteLink(link.Id);
+            db?.DeleteLink(link.Id);
 
             OnLinkDeleteEvent?.Invoke(link);
             links.Remove(link);
@@ -365,39 +357,21 @@ namespace MyNetSensors.LogicalNodes
 
         public Input GetInput(string id)
         {
-            foreach (var node in nodes)
-            {
-                foreach (var input in node.Inputs)
-                {
-                    if (input.Id == id)
-                        return input;
-                }
-            }
-            return null;
+            return nodes.SelectMany(node => node.Inputs).FirstOrDefault(input => input.Id == id);
         }
 
         public Output GetOutput(string id)
         {
-            foreach (var node in nodes)
-            {
-                foreach (var output in node.Outputs)
-                {
-                    if (output.Id == id)
-                        return output;
-                }
-            }
-            return null;
+            return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
         }
-
-
-
-
 
 
         public string SerializeLinks()
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
             return JsonConvert.SerializeObject(links, settings);
         }
 
@@ -405,8 +379,10 @@ namespace MyNetSensors.LogicalNodes
         {
             links = new List<LogicalLink>();
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
 
             List<LogicalLink> newLinks = JsonConvert.DeserializeObject<List<LogicalLink>>(json, settings);
 
@@ -421,8 +397,10 @@ namespace MyNetSensors.LogicalNodes
 
         public string SerializeNodes()
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
             return JsonConvert.SerializeObject(nodes, settings);
         }
 
@@ -434,9 +412,11 @@ namespace MyNetSensors.LogicalNodes
 
             RemoveAllNodesAndLinks();
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
-            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                ObjectCreationHandling = ObjectCreationHandling.Replace
+            };
 
             nodes = JsonConvert.DeserializeObject<List<LogicalNode>>(json, settings);
 
@@ -479,48 +459,22 @@ namespace MyNetSensors.LogicalNodes
 
         public LogicalNode GetInputOwner(Input input)
         {
-            foreach (var node in nodes)
-            {
-                if (node.Inputs.Contains(input))
-                    return node;
-            }
-            return null;
+            return nodes.FirstOrDefault(node => node.Inputs.Contains(input));
         }
 
         public LogicalNode GetOutputOwner(Output output)
         {
-            foreach (var node in nodes)
-            {
-                if (node.Outputs.Contains(output))
-                    return node;
-            }
-            return null;
+            return nodes.FirstOrDefault(node => node.Outputs.Contains(output));
         }
 
         public LogicalNode GetInputOwner(string inputId)
         {
-            foreach (var node in nodes)
-            {
-                foreach (var input in node.Inputs)
-                {
-                    if (input.Id == inputId)
-                        return node;
-                }
-            }
-            return null;
+            return (from node in nodes from input in node.Inputs where input.Id == inputId select node).FirstOrDefault();
         }
 
         public LogicalNode GetOutputOwner(string outputId)
         {
-            foreach (var node in nodes)
-            {
-                foreach (var output in node.Outputs)
-                {
-                    if (output.Id == outputId)
-                        return node;
-                }
-            }
-            return null;
+            return (from node in nodes from output in node.Outputs where output.Id == outputId select node).FirstOrDefault();
         }
 
         public void OnInputChange(Input input)
@@ -545,8 +499,7 @@ namespace MyNetSensors.LogicalNodes
         {
             DebugEngine("Remove all nodes and links");
 
-            if (db != null)
-                db.DropNodes();
+            db?.DropNodes();
 
             links = new List<LogicalLink>();
             nodes = new List<LogicalNode>();
@@ -568,16 +521,12 @@ namespace MyNetSensors.LogicalNodes
 
         public void DebugNodes(string message)
         {
-            if (OnDebugNodeMessage != null)
-                OnDebugNodeMessage(message);
+            OnDebugNodeMessage?.Invoke(message);
         }
 
         public void DebugEngine(string message)
         {
-            if (OnDebugEngineMessage != null)
-                OnDebugEngineMessage(message);
+            OnDebugEngineMessage?.Invoke(message);
         }
-
-
     }
 }
