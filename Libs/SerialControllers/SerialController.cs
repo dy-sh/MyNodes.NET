@@ -80,6 +80,8 @@ namespace MyNetSensors.SerialControllers
 
             await Task.Run(() =>
             {
+                //waiting for starting web server
+                Thread.Sleep(500);
 
                 OnDebugStateMessage("-------------STARTING GATEWAY--------------");
 
@@ -183,7 +185,17 @@ namespace MyNetSensors.SerialControllers
             if (gatewayDebugRawTxRx)
                 gateway.serialPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage("GATEWAY: RAW MESSAGE: " + message);
 
-            ReconnectToGateway();
+
+            bool connected = false;
+            while (!connected)
+            {
+                gateway.Connect(serialPortName);
+                connected = gateway.IsConnected();
+                if (!connected)
+                {
+                    Thread.Sleep(5000);
+                }
+            }
         }
 
         private static async void ReconnectToGateway()
