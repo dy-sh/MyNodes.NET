@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace MyNetSensors.Gateways
 {
@@ -42,6 +43,12 @@ namespace MyNetSensors.Gateways
         private List<Node> nodes = new List<Node>();
         private bool isConnected;
 
+        public bool checkGatewayIsAlive = true;
+        public int checGatewayIsAliveInterval = 2000;
+        public DateTime checkGatewayLastRequestTime;
+        public DateTime checkGatewayLastResponseTime;
+        private Timer checkGatewayTimer = new Timer();
+
 
         public Gateway(IComPort serialPort)
         {
@@ -49,6 +56,43 @@ namespace MyNetSensors.Gateways
             this.serialPort.OnDataReceivedEvent += RecieveMessage;
             this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             this.serialPort.OnConnectedEvent += OnSerialPortConnectedEvent;
+
+            checkGatewayTimer.Elapsed += CheckGatewayAlive;
+            checkGatewayTimer.Interval = checGatewayIsAliveInterval;
+            checkGatewayTimer.Start();
+            checkGatewayLastResponseTime = DateTime.Now;
+            checkGatewayLastRequestTime = DateTime.Now;
+        }
+
+        private void CheckGatewayAlive(object sender, ElapsedEventArgs e)
+        {
+            if(!isConnected)
+                return;
+
+            checkGatewayTimer.Stop();
+            try
+            {
+                double lastResponseAgo = (DateTime.Now-checkGatewayLastResponseTime).TotalMilliseconds;
+                if (lastResponseAgo> checkGatewayTimer.Interval * 2)
+                {
+                    //gateway not responding
+                    LogState("Gateway not responding.");
+
+                    OnSerialPortDisconnectedEvent();
+                }
+                else
+                {
+                    //send new request
+                    checkGatewayLastRequestTime = DateTime.Now;
+                    SendGetwayVersionRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            checkGatewayTimer.Start();
         }
 
 
@@ -87,6 +131,10 @@ namespace MyNetSensors.Gateways
             if (isConnected)
             {
                 isConnected = false;
+
+                if (serialPort.IsConnected())
+                    serialPort.Disconnect();
+
                 LogState("Gateway unexpectedly disconnected.");
                 OnUnexpectedlyDisconnectedEvent?.Invoke();
             }
@@ -106,6 +154,8 @@ namespace MyNetSensors.Gateways
             //LogState("Gateway connected.");
 
             OnConnectedEvent?.Invoke();
+
+            SendGetwayVersionRequest();
         }
 
         
@@ -192,10 +242,24 @@ namespace MyNetSensors.Gateways
                 if (message.messageType == MessageType.C_REQ)
                     ProceedRequestMessage(message);
 
+                //Gateway vesrion (alive) respond
+                if (message.nodeId==0 
+                    && message.messageType==MessageType.C_INTERNAL
+                    && message.subType== (int)InternalDataType.I_VERSION)
+                    ProceedAliveMessage(message);
+
+                //request to node
+                if (message.nodeId==0)
+                    return;
 
                 UpdateNodeFromMessage(message);
                 UpdateSensorFromMessage(message);
             }
+        }
+
+        private void ProceedAliveMessage(Message message)
+        {
+            checkGatewayLastResponseTime = DateTime.Now;
         }
 
         private void ProceedRequestMessage(Message mes)
@@ -459,6 +523,23 @@ namespace MyNetSensors.Gateways
             };
             SendMessage(mess);
         }
+
+
+        public void SendGetwayVersionRequest()
+        {
+            Message mess = new Message
+            {
+                nodeId = 0,
+                sensorId = 0,
+                messageType = MessageType.C_INTERNAL,
+                ack = false,
+                subType = (int)InternalDataType.I_VERSION,
+                payload = ""
+            };
+            SendMessage(mess);
+        }
+
+
 
         public void ClearNodesList()
         {
