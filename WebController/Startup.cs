@@ -49,28 +49,23 @@ namespace MyNetSensors.WebController
             //database
             bool useMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
 
-            string connectionString;
-            if (useMSSQL)
-                connectionString = Configuration["DataBase:MSSQLConnectionString"];
-            else
-                connectionString = Configuration["DataBase:SqliteConnectionString"];
-
             if (useMSSQL)
             {
+                string connectionString = Configuration["DataBase:MSSQLConnectionString"];
                 services.AddEntityFramework()
                     .AddSqlServer()
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlServer(connectionString))
                     .AddDbContext<LogicalNodesDbContext>(options =>
-                        options.UseSqlServer("Data Source=LogicalNodes.sqlite"))
+                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesDbContext>(options =>
-                        options.UseSqlServer("Data Source=Nodes.sqlite"))
+                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesHistoryDbContext>(options =>
-                        options.UseSqlServer("Data Source=NodesHistory.sqlite"))
+                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesMessagesDbContext>(options =>
-                        options.UseSqlServer("Data Source=NodesMessages.sqlite"))
+                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesTasksDbContext>(options =>
-                        options.UseSqlServer("Data Source=NodesTasks.sqlite"));
+                        options.UseSqlServer(connectionString));
             }
             else
             {

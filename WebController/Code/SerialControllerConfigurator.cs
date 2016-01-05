@@ -65,8 +65,6 @@ namespace MyNetSensors.WebController.Code
 
                 if (SerialController.dataBadeUseMSSQL)
                     SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
-                else
-                    SerialController.dataBaseConnectionString = Configuration["DataBase:SqliteConnectionString"];
 
                 //SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
                 //SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
