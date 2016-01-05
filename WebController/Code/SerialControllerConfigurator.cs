@@ -40,12 +40,12 @@ namespace MyNetSensors.WebController.Code
             string portName = null;
             try
             {
-                SerialController.logs.enableGatewayStateEvent = Boolean.Parse(Configuration["Gateway:DebugState"]);
-                SerialController.logs.enableGatewayTxRxEvent = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
-                SerialController.logs.enableGatewayRawTxRxEvent = Boolean.Parse(Configuration["Gateway:DebugRawTxRx"]);
-                SerialController.logs.enableLogicalNodesEngineEvent = Boolean.Parse(Configuration["LogicalNodes:DebugEngine"]);
-                SerialController.logs.enableLogicalNodesEvent = Boolean.Parse(Configuration["LogicalNodes:DebugNodes"]);
-                SerialController.logs.enableDataBaseStateEvent = Boolean.Parse(Configuration["DataBase:DebugState"]);
+                SerialController.logs.enableGatewayStateLog = Boolean.Parse(Configuration["Gateway:DebugState"]);
+                SerialController.logs.enableGatewayTxRxLog = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
+                SerialController.logs.enableGatewayRawTxRxLog = Boolean.Parse(Configuration["Gateway:DebugRawTxRx"]);
+                SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:DebugEngine"]);
+                SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:DebugNodes"]);
+                SerialController.logs.enableDataBaseStateLog = Boolean.Parse(Configuration["DataBase:DebugState"]);
 
 
                 SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);

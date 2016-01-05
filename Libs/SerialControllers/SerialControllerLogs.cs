@@ -25,36 +25,42 @@ namespace MyNetSensors.SerialControllers
         public event LogMessageEventHandler OnLogicalNodesEngineLog;
         public event LogMessageEventHandler OnSerialControllerLog;
 
-        public bool enableGatewayStateEvent = true;
-        public bool enableGatewayTxRxEvent = true;
-        public bool enableGatewayRawTxRxEvent = false;
-        public bool enableDataBaseStateEvent = true;
-        public bool enableLogicalNodesEvent = true;
-        public bool enableLogicalNodesEngineEvent = true;
-        public bool enableSerialControllerEvent = true;
+        public bool enableGatewayStateLog = true;
+        public bool enableGatewayTxRxLog = true;
+        public bool enableGatewayRawTxRxLog = false;
+        public bool enableDataBaseStateLog = true;
+        public bool enableLogicalNodesLog = true;
+        public bool enableLogicalNodesEngineLog = true;
+        public bool enableSerialControllerLog = true;
 
 
         public void AddGatewayStateMessage(string message)
         {
+            if (!enableGatewayStateLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.GatewayState, message);
             gatewayStateLog.Add(logMessage);
-            if (enableGatewayStateEvent)
                 OnGatewayStateLog?.Invoke(logMessage);
         }
 
         public void AddGatewayTxRxMessage(string message)
         {
+            if (!enableGatewayTxRxLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.GatewayTxRx, message);
             gatewayTxRxLog.Add(logMessage);
-            if (enableGatewayTxRxEvent)
                 OnGatewayTxRxLog?.Invoke(logMessage);
         }
 
         public void AddGatewayRawTxRxMessage(string message)
         {
+            if (!enableGatewayRawTxRxLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.GatewayRawTxRx, message);
             gatewayRawTxRxLog.Add(logMessage);
-            if (enableGatewayRawTxRxEvent)
                 OnGatewayRawTxRxLog?.Invoke(logMessage);
         }
 
@@ -62,34 +68,57 @@ namespace MyNetSensors.SerialControllers
 
         public void AddDataBaseStateMessage(string message)
         {
+            if (!enableDataBaseStateLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.DataBaseState, message);
             dataBaseStateLog.Add(logMessage);
-            if (enableDataBaseStateEvent)
                 OnDataBaseStateLog?.Invoke(logMessage);
         }
 
         public void AddLogicalNodesMessage(string message)
         {
+            if (!enableLogicalNodesLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodes, message);
             logicalNodesLog.Add(logMessage);
-            if (enableLogicalNodesEvent)
                 OnLogicalNodesLog?.Invoke(logMessage);
         }
 
         public void AddLogicalNodesEngineMessage(string message)
         {
+            if (!enableLogicalNodesEngineLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodesEngine, message);
             logicalNodesEngineLog.Add(logMessage);
-            if (enableLogicalNodesEngineEvent)
                 OnLogicalNodesEngineLog?.Invoke(logMessage);
         }
 
         public void AddSerialControllerMessage(string message)
         {
+            if (!enableSerialControllerLog)
+                return;
+
             LogMessage logMessage = new LogMessage(LogMessageType.SerialController, message);
             serialControllerLog.Add(logMessage);
-            if (enableSerialControllerEvent)
                 OnSerialControllerLog?.Invoke(logMessage);
+        }
+
+
+
+        public List<LogMessage> GetAllLogs()
+        {
+            List<LogMessage>list=new List<LogMessage>();
+            list.AddRange(gatewayStateLog);
+            list.AddRange(gatewayTxRxLog);
+            list.AddRange(gatewayRawTxRxLog);
+            list.AddRange(logicalNodesEngineLog);
+            list.AddRange(logicalNodesLog);
+            list.AddRange(dataBaseStateLog);
+            list.AddRange(serialControllerLog);
+            return list.OrderBy(x=>x.Date).ToList();
         }
     }
 }

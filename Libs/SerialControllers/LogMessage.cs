@@ -29,6 +29,7 @@ namespace MyNetSensors.SerialControllers
         {
             Date = DateTime.Now;
             Message = message;
+            Type = type;
         }
 
         public override string ToString()
@@ -48,11 +49,10 @@ namespace MyNetSensors.SerialControllers
                 case LogMessageType.DataBaseState:
                     return $"{Date}: DATABASE: {Message}";
                 case LogMessageType.LogicalNodesEngine:
-                    return $"{Date}: LOGICAL NODES ENGINE: {Message}";
                 case LogMessageType.LogicalNodes:
                     return $"{Date}: LOGICAL NODES: {Message}";
                 case LogMessageType.SerialController:
-                    return $"{Date}: SERIAL CONTROLLER: {Message}";
+                    return $"{Date}: CONTROLLER: {Message}";
             }
             return null;
         }
