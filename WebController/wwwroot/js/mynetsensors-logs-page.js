@@ -14,19 +14,21 @@ $(function () {
 
     //var logType set from ViewBag in View
 
-    if (logType == "All" || logType == "GatewayState")
+    if (logType == "All")
+        clientsHub.client.OnLog = addMessage;
+    if (logType == "GatewayState")
         clientsHub.client.OnGatewayStateLog = addMessage;
-    if (logType == "All" || logType == "GatewayMessages")
+    if (logType == "GatewayMessages")
         clientsHub.client.OnGatewayMessagesLog = addMessage;
-    if (logType == "All" || logType == "GatewayRawMessages")
+    if (logType == "GatewayRawMessages")
         clientsHub.client.OnGatewayRawMessagesLog = addMessage;
-    if (logType == "All" || logType == "DataBaseState")
+    if (logType == "DataBase")
         clientsHub.client.OnDataBaseStateLog = addMessage;
-    if (logType == "All" || logType == "LogicalNodesEngine")
+    if (logType == "LogicalNodesEngine")
         clientsHub.client.OnLogicalNodesEngineLog = addMessage;
-    if (logType == "All" || logType == "LogicalNodes")
+    if (logType == "LogicalNodes")
         clientsHub.client.OnLogicalNodesLog = addMessage;
-    if (logType == "All" || logType == "Controller")
+    if (logType == "Controller")
         clientsHub.client.OnSerialControllerLog = addMessage;
 
 

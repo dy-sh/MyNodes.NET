@@ -152,6 +152,7 @@ namespace MyNetSensors.WebController.Code
         }
 
 
+
         private static void OnMessageRecievedEvent(Message message)
         {
             hub.Clients.All.OnMessageRecievedEvent(message.ToString());
@@ -163,39 +164,49 @@ namespace MyNetSensors.WebController.Code
 
         }
 
+
+
+
         private static void OnSerialControllerLog(LogRecord record)
         {
-            hub.Clients.All.OnSerialControllerLog(record.ToStringWithType());
+            hub.Clients.All.OnSerialControllerLog(record.ToString());
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnLogicalNodesEngineLog(LogRecord record)
         {
-            hub.Clients.All.OnLogicalNodesEngineLog(record.ToStringWithType());
+            hub.Clients.All.OnLogicalNodesEngineLog(record.ToString());
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnLogicalNodesLog(LogRecord record)
         {
-            hub.Clients.All.OnLogicalNodesLog(record.ToStringWithType());
+            hub.Clients.All.OnLogicalNodesLog(record.ToString());
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnDataBaseStateLog(LogRecord record)
         {
-            hub.Clients.All.OnDataBaseStateLog(record.ToStringWithType());
+            hub.Clients.All.OnDataBaseStateLog(record.ToString());
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnGatewayRawMessagesLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayRawMessagesLog(record.ToStringWithType());
+            hub.Clients.All.OnGatewayRawMessagesLog(record.ToString());
+            //hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnGatewayMessagesLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayMessagesLog(record.ToStringWithType());
+            hub.Clients.All.OnGatewayMessagesLog(record.Message);
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
 
         private static void OnGatewayStateLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayStateLog(record.ToStringWithType());
+            hub.Clients.All.OnGatewayStateLog(record.ToString());
+            hub.Clients.All.OnLog(record.ToStringWithType());
         }
     }
 }
