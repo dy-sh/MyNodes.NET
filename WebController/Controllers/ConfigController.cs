@@ -90,6 +90,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult SerialPort(SerialPortViewModel port)
         {
+            if (String.IsNullOrEmpty(port.PortName))
+                return RedirectToAction("SerialPort");
+
             dynamic json = ReadConfig();
             json.Gateway.SerialPort = port.PortName;
             WriteConfig(json);
@@ -131,6 +134,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult FirstRun(SerialPortViewModel port)
         {
+            if (String.IsNullOrEmpty(port.PortName))
+                return RedirectToAction("FirstRun");
+
             dynamic json = ReadConfig();
             json.Gateway.SerialPort = port.PortName;
             json.FirstRun = false;
