@@ -40,12 +40,12 @@ namespace MyNetSensors.WebController.Code
             string portName = null;
             try
             {
-                SerialController.logs.enableGatewayStateLog = Boolean.Parse(Configuration["Gateway:DebugState"]);
-                SerialController.logs.enableGatewayTxRxLog = Boolean.Parse(Configuration["Gateway:DebugTxRx"]);
-                SerialController.logs.enableGatewayRawTxRxLog = Boolean.Parse(Configuration["Gateway:DebugRawTxRx"]);
-                SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:DebugEngine"]);
-                SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:DebugNodes"]);
-                SerialController.logs.enableDataBaseStateLog = Boolean.Parse(Configuration["DataBase:DebugState"]);
+                SerialController.logs.enableGatewayStateLog = Boolean.Parse(Configuration["Gateway:LogState"]);
+                SerialController.logs.enableGatewayTxRxLog = Boolean.Parse(Configuration["Gateway:LogTxRx"]);
+                SerialController.logs.enableGatewayRawTxRxLog = Boolean.Parse(Configuration["Gateway:LogRawTxRx"]);
+                SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:LogEngine"]);
+                SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:LogNodes"]);
+                SerialController.logs.enableDataBaseStateLog = Boolean.Parse(Configuration["DataBase:LogState"]);
 
 
                 SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
@@ -54,8 +54,8 @@ namespace MyNetSensors.WebController.Code
                 SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
                 //SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
                 //SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
-                //SerialController.softNodesDebugTxRx = Boolean.Parse(Configuration["SoftNodes:DebugTxRx"]);
-                //SerialController.softNodesDebugState = Boolean.Parse(Configuration["SoftNodes:DebugState"]);
+                //SerialController.softNodesLogTxRx = Boolean.Parse(Configuration["SoftNodes:LogTxRx"]);
+                //SerialController.softNodesLogState = Boolean.Parse(Configuration["SoftNodes:LogState"]);
                 SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
                 SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
                 SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);

@@ -48,9 +48,9 @@ namespace MyNetSensors.LogicalNodes
 
 
 
-        public void Debug(string message)
+        public void Log(string message)
         {
-            LogicalNodesEngine.logicalNodesEngine.DebugNodes(message);
+            LogicalNodesEngine.logicalNodesEngine.LogNodes(message);
         }
 
         public abstract void Loop();

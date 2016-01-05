@@ -9,7 +9,7 @@ namespace MyNetSensors.Gateways
 {
     public interface IGatewayRepository
     {
-        event DebugMessageEventHandler OnDebugStateMessage;
+        event LogMessageEventHandler OnLogStateMessage;
 
         void ConnectToGateway(Gateway gateway);
 

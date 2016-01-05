@@ -46,7 +46,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 count++;
 
-                Debug($"Counter: {count}");
+                Log($"Counter: {count}");
 
                 Outputs[0].Value = count.ToString();
                 lastTime = DateTime.Now;
@@ -59,12 +59,12 @@ namespace MyNetSensors.LogicalNodes
             try
             {
                 freqInput = Int32.Parse(input.Value);
-                Debug($"Counter: frequency changed to {freqInput.Value} ms");
+                Log($"Counter: frequency changed to {freqInput.Value} ms");
             }
             catch
             {
                 freqInput = null;
-                Debug($"Counter: frequency changed to default value: {DEFAULT_VALUE} ms");
+                Log($"Counter: frequency changed to default value: {DEFAULT_VALUE} ms");
             }
 
         }

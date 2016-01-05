@@ -13,7 +13,7 @@ namespace MyNetSensors.Gateways
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);
     public delegate void SensorEventHandler(Sensor sensor);
-    public delegate void DebugMessageEventHandler(string message);
+    public delegate void LogMessageEventHandler(string message);
     public delegate void ExceptionEventHandler(Exception exception);
 
     public class Gateway
@@ -34,8 +34,8 @@ namespace MyNetSensors.Gateways
         public event Action OnClearNodesListEvent;
         public event Action OnDisconnectedEvent;
         public event Action OnConnectedEvent;
-        public event DebugMessageEventHandler OnDebugTxRxMessage;
-        public event DebugMessageEventHandler OnDebugStateMessage;
+        public event LogMessageEventHandler OnLogTxRxMessage;
+        public event LogMessageEventHandler OnLogStateMessage;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -52,14 +52,14 @@ namespace MyNetSensors.Gateways
 
 
 
-        private void DebugTxRx(string message)
+        private void LogTxRx(string message)
         {
-            OnDebugTxRxMessage?.Invoke(message);
+            OnLogTxRxMessage?.Invoke(message);
         }
 
-        private void DebugGatewayState(string message)
+        private void LogState(string message)
         {
-            OnDebugStateMessage?.Invoke(message);
+            OnLogStateMessage?.Invoke(message);
         }
 
         public void Connect(string serialPortName)
@@ -77,7 +77,7 @@ namespace MyNetSensors.Gateways
             if(serialPort.IsConnected())
                 serialPort.Disconnect();
 
-            DebugGatewayState("Gateway disconnected.");
+            LogState("Gateway disconnected.");
 
             OnDisconnectedEvent?.Invoke();
         }
@@ -93,7 +93,7 @@ namespace MyNetSensors.Gateways
         {
             isConnected = true;
 
-            //DebugGatewayState("Gateway connected.");
+            //LogState("Gateway connected.");
 
             OnConnectedEvent?.Invoke();
         }
@@ -104,7 +104,7 @@ namespace MyNetSensors.Gateways
         {
             if (!isConnected)
             {
-                DebugGatewayState("Failed to send message. Gateway is not connected.");
+                LogState("Failed to send message. Gateway is not connected.");
                 return;
             }
 
@@ -114,7 +114,7 @@ namespace MyNetSensors.Gateways
 
             UpdateSensorFromMessage(message);
 
-            DebugTxRx($"TX: {message.ToString()}");
+            LogTxRx($"TX: {message.ToString()}");
 
             string mes = $"{message.nodeId};" +
                          $"{message.sensorId};" +
@@ -144,7 +144,7 @@ namespace MyNetSensors.Gateways
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
-            DebugTxRx($"RX: { message.ToString()}");
+            LogTxRx($"RX: { message.ToString()}");
 
             OnMessageRecievedEvent?.Invoke(message);
 
@@ -217,7 +217,7 @@ namespace MyNetSensors.Gateways
 
                 OnNewNodeEvent?.Invoke(node);
 
-                DebugGatewayState($"New node (id: {node.Id}) registered");
+                LogState($"New node (id: {node.Id}) registered");
             }
 
             node.UpdateLastSeenNow();
@@ -240,7 +240,7 @@ namespace MyNetSensors.Gateways
 
                     OnNodeUpdatedEvent?.Invoke(node);
 
-                    DebugGatewayState($"Node {node.Id} updated");
+                    LogState($"Node {node.Id} updated");
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -250,7 +250,7 @@ namespace MyNetSensors.Gateways
 
                         OnNodeUpdatedEvent?.Invoke(node);
 
-                        DebugGatewayState($"Node {node.Id} updated");
+                        LogState($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -258,7 +258,7 @@ namespace MyNetSensors.Gateways
 
                         OnNodeUpdatedEvent?.Invoke(node);
 
-                        DebugGatewayState($"Node {node.Id} updated");
+                        LogState($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -301,7 +301,7 @@ namespace MyNetSensors.Gateways
             {
                 if (mes.subType < 0 || mes.subType > (int)Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
                 {
-                    DebugGatewayState("Exception occurs when the serial port does not have time to write the data");
+                    LogState("Exception occurs when the serial port does not have time to write the data");
 
                     return;
                 }
@@ -318,7 +318,7 @@ namespace MyNetSensors.Gateways
             {
                 OnNewSensorEvent?.Invoke(sensor);
 
-                DebugGatewayState($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
+                LogState($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
             }
             else
             {

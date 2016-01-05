@@ -41,7 +41,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         private string connectionString;
 
-        public event DebugMessageEventHandler OnDebugStateMessage;
+        public event LogMessageEventHandler OnLogStateMessage;
 
         public GatewayRepositoryDapper(string connectionString)
         {
@@ -690,7 +690,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         public void Log(string message)
         {
-            OnDebugStateMessage?.Invoke(message);
+            OnLogStateMessage?.Invoke(message);
         }
 
     }

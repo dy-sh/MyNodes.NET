@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public delegate void DebugMessageEventHandler(string message);
+    public delegate void LogMessageEventHandler(string message);
     public class LogicalNodesEngine
     {
         //If you have tons of logical nodes, and system perfomance decreased, increase this value,
@@ -29,8 +29,8 @@ namespace MyNetSensors.LogicalNodes
 
         public static LogicalNodesEngine logicalNodesEngine;
 
-        public event DebugMessageEventHandler OnDebugNodeMessage;
-        public event DebugMessageEventHandler OnDebugEngineMessage;
+        public event LogMessageEventHandler OnLogNodeMessage;
+        public event LogMessageEventHandler OnLogEngineMessage;
 
         public event LogicalNodesEventHandler OnNodesUpdatedEvent;
         public event LogicalNodeEventHandler OnNewNodeEvent;
@@ -83,7 +83,7 @@ namespace MyNetSensors.LogicalNodes
 
             UpdateStatesFromLinks();
 
-            DebugEngine("Started");
+            LogEngine("Started");
         }
 
 
@@ -91,7 +91,7 @@ namespace MyNetSensors.LogicalNodes
         {
             started = false;
             updateNodesTimer.Stop();
-            DebugEngine("Stopped");
+            LogEngine("Stopped");
         }
 
         public bool IsStarted()
@@ -176,7 +176,7 @@ namespace MyNetSensors.LogicalNodes
 
             db?.AddNode(node);
 
-            DebugEngine($"New node {node.GetType().Name}");
+            LogEngine($"New node {node.GetType().Name}");
 
             OnNewNodeEvent?.Invoke(node);
         }
@@ -191,7 +191,7 @@ namespace MyNetSensors.LogicalNodes
             }
 
             OnNodeDeleteEvent?.Invoke(node);
-            DebugEngine($"Remove node {node.GetType().Name}");
+            LogEngine($"Remove node {node.GetType().Name}");
 
             db?.DeleteNode(node.Id);
 
@@ -202,7 +202,7 @@ namespace MyNetSensors.LogicalNodes
 
         public void UpdateNode(LogicalNode node)
         {
-            DebugEngine($"Update node {node.GetType().Name}");
+            LogEngine($"Update node {node.GetType().Name}");
 
             LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
 
@@ -266,7 +266,7 @@ namespace MyNetSensors.LogicalNodes
             if (oldLink!=null)
                 DeleteLink(oldLink);
 
-            DebugEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+            LogEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = new LogicalLink(output.Id, input.Id);
             links.Add(link);
@@ -286,7 +286,7 @@ namespace MyNetSensors.LogicalNodes
         {
             LogicalNode inputNode = GetInputOwner(input);
             LogicalNode outputNode = GetOutputOwner(output);
-            DebugEngine($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+            LogEngine($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = GetLink(output, input);
 
@@ -423,7 +423,7 @@ namespace MyNetSensors.LogicalNodes
             foreach (var node in nodes)
             {
                 node.OnDeserialize();
-                DebugEngine($"New node {node.GetType().Name}");
+                LogEngine($"New node {node.GetType().Name}");
             }
 
             if (state)
@@ -480,7 +480,7 @@ namespace MyNetSensors.LogicalNodes
         public void OnInputChange(Input input)
         {
 
-            //DebugNodes($"Input changed: {input.Name}");
+            //LogNodes($"Input changed: {input.Name}");
 
             if (!started)
                 return;
@@ -497,7 +497,7 @@ namespace MyNetSensors.LogicalNodes
 
         public void RemoveAllNodesAndLinks()
         {
-            DebugEngine("Remove all nodes and links");
+            LogEngine("Remove all nodes and links");
 
             db?.DropNodes();
 
@@ -513,20 +513,20 @@ namespace MyNetSensors.LogicalNodes
 
         public void RemoveAllLinks()
         {
-            DebugEngine("Remove all links");
+            LogEngine("Remove all links");
 
             links = new List<LogicalLink>();
             OnLinksUpdatedEvent?.Invoke(links);
         }
 
-        public void DebugNodes(string message)
+        public void LogNodes(string message)
         {
-            OnDebugNodeMessage?.Invoke(message);
+            OnLogNodeMessage?.Invoke(message);
         }
 
-        public void DebugEngine(string message)
+        public void LogEngine(string message)
         {
-            OnDebugEngineMessage?.Invoke(message);
+            OnLogEngineMessage?.Invoke(message);
         }
     }
 }

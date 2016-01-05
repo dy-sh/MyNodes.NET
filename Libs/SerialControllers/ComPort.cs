@@ -18,8 +18,8 @@ namespace MyNetSensors.SerialControllers
         public event Action OnDisconnectedEvent;
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
-        public event DebugMessageEventHandler OnDebugTxRxMessage;
-        public event DebugMessageEventHandler OnDebugStateMessage;
+        public event Gateways.LogMessageEventHandler OnLogTxRxMessage;
+        public event Gateways.LogMessageEventHandler OnLogStateMessage;
 
         private bool isConnected;
         private SerialPort serialPort;
@@ -53,12 +53,12 @@ namespace MyNetSensors.SerialControllers
                 serialPort.Open();
 
                 isConnected = true;
-                DebugPortState($"Connected to port {portName}.");
+                LogPortState($"Connected to port {portName}.");
                 OnConnectedEvent?.Invoke();
             }
             catch (Exception ex)
             {
-                DebugPortState($"Failed to connect to port {portName}.");
+                LogPortState($"Failed to connect to port {portName}.");
                 OnConnectingError?.Invoke(ex);
             }
         }
@@ -71,11 +71,11 @@ namespace MyNetSensors.SerialControllers
         {
             if (serialPort == null || !isConnected)
             {
-                DebugPortState("Failed to write data. Port is not connected.");
+                LogPortState("Failed to write data. Port is not connected.");
                 return;
             }
 
-            DebugTxRx("TX: " + message.TrimEnd('\r', '\n'));
+            LogTxRx("TX: " + message.TrimEnd('\r', '\n'));
 
             try
             {
@@ -83,7 +83,7 @@ namespace MyNetSensors.SerialControllers
             }
             catch (Exception ex)
             {
-                DebugPortState($"Failed to write data. {ex.Message}");
+                LogPortState($"Failed to write data. {ex.Message}");
 
                 OnWritingError?.Invoke(ex);
 
@@ -98,7 +98,7 @@ namespace MyNetSensors.SerialControllers
             {
                 isConnected = false;
 
-                DebugPortState("Port disconnected.");
+                LogPortState("Port disconnected.");
 
                 serialPort?.Dispose();
                 serialPort = null;
@@ -121,7 +121,7 @@ namespace MyNetSensors.SerialControllers
 
             foreach (var message in messages)
             {
-                DebugTxRx("RX: " + message);
+                LogTxRx("RX: " + message);
 
                 OnDataReceivedEvent?.Invoke(message);
             }
@@ -129,14 +129,14 @@ namespace MyNetSensors.SerialControllers
 
 
 
-        private void DebugTxRx(string message)
+        private void LogTxRx(string message)
         {
-            OnDebugTxRxMessage?.Invoke(message);
+            OnLogTxRxMessage?.Invoke(message);
         }
 
-        private void DebugPortState(string message)
+        private void LogPortState(string message)
         {
-            OnDebugStateMessage?.Invoke(message);
+            OnLogStateMessage?.Invoke(message);
         }
     }
 }

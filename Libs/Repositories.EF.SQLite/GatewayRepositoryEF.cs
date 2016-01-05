@@ -43,7 +43,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private NodesDbContext db;
 
-        public event DebugMessageEventHandler OnDebugStateMessage;
+        public event LogMessageEventHandler OnLogStateMessage;
 
         public GatewayRepositoryEF(NodesDbContext nodesDbContext)
         {
@@ -409,7 +409,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void Log(string message)
         {
-            OnDebugStateMessage?.Invoke(message);
+            OnLogStateMessage?.Invoke(message);
         }
 
     }

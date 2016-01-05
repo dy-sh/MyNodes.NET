@@ -14,7 +14,6 @@ using MyNetSensors.LogicalNodesMySensors;
 using MyNetSensors.NodesTasks;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
-using DebugMessageEventHandler = MyNetSensors.Gateways.DebugMessageEventHandler;
 
 namespace MyNetSensors.SerialControllers
 {
@@ -37,8 +36,8 @@ namespace MyNetSensors.SerialControllers
 
         //public static bool softNodesEnabled = true;
         //public static int softNodesPort = 13122;
-        //public static bool softNodesDebugTxRx = true;
-        //public static bool softNodesDebugState = true;
+        //public static bool softNodesLogTxRx = true;
+        //public static bool softNodesLogState = true;
 
 
         //VARIABLES
@@ -132,7 +131,7 @@ namespace MyNetSensors.SerialControllers
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
             gatewayDb.ConnectToGateway(gateway);
 
-            gatewayDb.OnDebugStateMessage += logs.AddDataBaseStateMessage;
+            gatewayDb.OnLogStateMessage += logs.AddDataBaseStateMessage;
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
@@ -167,10 +166,10 @@ namespace MyNetSensors.SerialControllers
 
             gateway.enableAutoAssignId = enableAutoAssignId;
 
-            gateway.OnDebugTxRxMessage += logs.AddGatewayTxRxMessage;
-            gateway.OnDebugStateMessage += logs.AddGatewayStateMessage;
-            gateway.serialPort.OnDebugStateMessage += logs.AddGatewayStateMessage;
-            gateway.serialPort.OnDebugTxRxMessage += logs.AddGatewayRawTxRxMessage;
+            gateway.OnLogTxRxMessage += logs.AddGatewayTxRxMessage;
+            gateway.OnLogStateMessage += logs.AddGatewayStateMessage;
+            gateway.serialPort.OnLogStateMessage += logs.AddGatewayStateMessage;
+            gateway.serialPort.OnLogTxRxMessage += logs.AddGatewayRawTxRxMessage;
 
             bool connected = false;
             while (!connected)
@@ -217,17 +216,17 @@ namespace MyNetSensors.SerialControllers
         //{
         //    if (!softNodesEnabled) return;
 
-        //     OnDebugStateMessage?.Invoke("SOFT NODES SERVER: Starting...");
+        //     OnLogStateMessage?.Invoke("SOFT NODES SERVER: Starting...");
 
-        //    if (softNodesDebugState)
-        //        softNodesServer.OnDebugStateMessage += message =>  OnDebugStateMessage?.Invoke("SOFT NODES SERVER: " + message);
+        //    if (softNodesLogState)
+        //        softNodesServer.OnLogStateMessage += message =>  OnDebugStateMessage?.Invoke("SOFT NODES SERVER: " + message);
 
-        //    if (softNodesDebugTxRx)
-        //        softNodesServer.OnDebugTxRxMessage += message => OnDebugTxRxMessage?.Invoke("SOFT NODES SERVER: " + message);
+        //    if (softNodesLogTxRx)
+        //        softNodesServer.OnLoggTxRxMessage += message => OnDebugTxRxMessage?.Invoke("SOFT NODES SERVER: " + message);
 
         //    softNodesController = new SoftNodesController(softNodesServer, gateway);
         //    softNodesController.StartServer($"http://*:{softNodesPort}/");
-        //     OnDebugStateMessage?.Invoke("SOFT NODES SERVER: Started");
+        //     OnLogStateMessage?.Invoke("SOFT NODES SERVER: Started");
 
         //}
 
@@ -245,8 +244,8 @@ namespace MyNetSensors.SerialControllers
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
-             logicalNodesEngine.OnDebugEngineMessage += logs.AddLogicalNodesEngineMessage;
-             logicalNodesEngine.OnDebugNodeMessage += logs.AddLogicalNodesMessage;
+             logicalNodesEngine.OnLogEngineMessage += logs.AddLogicalNodesEngineMessage;
+             logicalNodesEngine.OnLogNodeMessage += logs.AddLogicalNodesMessage;
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
