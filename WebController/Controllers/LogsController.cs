@@ -58,8 +58,8 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult LogicalNodesEngine()
         {
-            ViewBag.LogType = "LogicalNodeEngine";
-            ViewBag.PageName = "Logical Node Engine";
+            ViewBag.LogType = "LogicalNodesEngine";
+            ViewBag.PageName = "Logical Nodes Engine";
             return View("Logs");
         }
 
