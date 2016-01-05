@@ -120,5 +120,16 @@ namespace MyNetSensors.SerialControllers
             list.AddRange(serialControllerLog);
             return list.OrderBy(x=>x.Date).ToList();
         }
+
+        public void ClearAllLogs()
+        {
+            gatewayStateLog.Clear();
+            gatewayTxRxLog.Clear();
+            gatewayRawTxRxLog.Clear();
+            logicalNodesEngineLog.Clear();
+            logicalNodesLog.Clear();
+            dataBaseStateLog.Clear();
+            serialControllerLog.Clear();
+        }
     }
 }

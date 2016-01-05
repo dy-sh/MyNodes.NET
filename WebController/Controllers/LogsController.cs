@@ -27,8 +27,13 @@ namespace MyNetSensors.WebController.Controllers
         public List<string> GetAllLogs()
         {
             List<LogMessage> list = SerialController.logs.GetAllLogs();
-
             return list.Select(logMessage => logMessage.ToStringWithType()).ToList();
+        }
+
+        public bool ClearAllLogs()
+        {
+            SerialController.logs.ClearAllLogs();
+            return true;
         }
     }
 }
