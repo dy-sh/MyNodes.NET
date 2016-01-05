@@ -89,9 +89,6 @@ namespace MyNetSensors.SerialControllers
                 //ConnectToSoftNodesController();
                 ConnectToLogicalNodesEngine();
 
-                //reconnect if disconnected
-                gateway.OnUnexpectedlyDisconnectedEvent += ReconnectToGateway;
-
                 logs.AddSerialControllerMessage("-------------SARTUP COMPLETE--------------");
 
                 OnStarted?.Invoke(null, EventArgs.Empty);
@@ -177,20 +174,9 @@ namespace MyNetSensors.SerialControllers
             gateway.OnLogStateMessage += logs.AddGatewayState;
             gateway.serialPort.OnLogState += logs.AddGatewayState;
             gateway.serialPort.OnLogMessage += logs.AddGatewayRawMessage;
+            gateway.endlessConnectionAttempts = true;
 
-            connecting = true;
-            while (connecting)
-            {
-                gateway.Connect(serialPortName);
-                //waiting 6000 ms for connecting
-                for (int i = 0; i < 24; i++)
-                {
-                    connecting = !gateway.IsConnected();
-                    if (!connecting)
-                        break;
-                    Thread.Sleep(250);
-                }
-            }
+            gateway.Connect(serialPortName).Wait();
 
             logs.AddSerialControllerMessage("Gateway connected.");
 
@@ -202,31 +188,10 @@ namespace MyNetSensors.SerialControllers
 
             SerialController.serialPortName = serialPortName;
 
-            if (!connecting)
-                ReconnectToGateway();
+            gateway.Connect(serialPortName).Wait();
         }
 
 
-        private static bool connecting;
-        private static async void ReconnectToGateway()
-        {
-            await Task.Run(() =>
-            {
-                connecting = true;
-                while (connecting)
-                {
-                    gateway.Connect(serialPortName);
-                    //waiting 6000 ms for connecting
-                    for (int i = 0; i < 24; i++)
-                    {
-                        connecting = !gateway.IsConnected();
-                        if (!connecting)
-                            break;
-                        Thread.Sleep(250);
-                    }
-                }
-            });
-        }
 
         //private static void ConnectToSoftNodesController()
         //{

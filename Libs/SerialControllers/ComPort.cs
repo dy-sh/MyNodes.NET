@@ -24,10 +24,16 @@ namespace MyNetSensors.SerialControllers
         private bool isConnected;
         private SerialPort serialPort;
 
+        private string portName;
 
         public bool IsConnected()
         {
             return isConnected;
+        }
+
+        public string GetPortName()
+        {
+            return portName;
         }
 
 
@@ -39,6 +45,7 @@ namespace MyNetSensors.SerialControllers
 
         public void Connect(string portName, int baudRate)
         {
+            this.portName = portName;
 
             try
             {

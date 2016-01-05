@@ -25,5 +25,6 @@ namespace MyNetSensors.Gateways
         void Disconnect();
         void SendMessage(string message);
         bool IsConnected();
+        string GetPortName();
     }
 }

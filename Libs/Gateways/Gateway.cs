@@ -32,6 +32,8 @@ namespace MyNetSensors.Gateways
         public IComPort serialPort;
         public bool storeMessages = true;
         public bool enableAutoAssignId = true;
+        public bool endlessConnectionAttempts = true;
+        public bool reconnectIfDisconnected = true;
         public int ATTEMPTS_TO_COMMUNICATE = 5;
 
         public event MessageEventHandler OnMessageRecievedEvent;
@@ -113,13 +115,29 @@ namespace MyNetSensors.Gateways
             OnGatewayStateChangedEvent?.Invoke(gatewayState);
         }
 
-        public void Connect(string serialPortName)
+        public async Task Connect(string serialPortName)
         {
             if (gatewayState != GatewayState.Disconnected)
                 Disconnect();
 
             SetGatewayState(GatewayState.ConnectingToPort);
-            serialPort.Connect(serialPortName);
+
+            if (endlessConnectionAttempts)
+            {
+                while (gatewayState == GatewayState.ConnectingToPort)
+                {
+                    serialPort.Connect(serialPortName);
+                    await Task.Delay(1000);
+                }
+                while (gatewayState == GatewayState.ConnectingToGateway)
+                {
+                    await Task.Delay(1000);
+                }
+            }
+            else
+            {
+                serialPort.Connect(serialPortName);
+            }
         }
 
         public void Disconnect()
@@ -142,6 +160,8 @@ namespace MyNetSensors.Gateways
                     serialPort.Disconnect();
 
                 OnUnexpectedlyDisconnectedEvent?.Invoke();
+                if (reconnectIfDisconnected)
+                    Connect(serialPort.GetPortName());
             }
         }
 
@@ -155,14 +175,35 @@ namespace MyNetSensors.Gateways
         {
             SetGatewayState(GatewayState.ConnectingToGateway);
 
-            for (int i = 0; i < ATTEMPTS_TO_COMMUNICATE; i++)
+            if (endlessConnectionAttempts)
             {
-                if (gatewayState!=GatewayState.ConnectingToGateway)
-                    return;
+                while (gatewayState==GatewayState.ConnectingToGateway)
+                {
+                    for (int i = 0; i < ATTEMPTS_TO_COMMUNICATE; i++)
+                    {
+                        if (gatewayState != GatewayState.ConnectingToGateway)
+                            return;
 
-                SendGetwayVersionRequest();
-                await Task.Delay(1000);
+                        SendGetwayVersionRequest();
+                        await Task.Delay(1000);
+                    }
+                    LogState("Gateway is not responding.");
+                }
             }
+            else
+            {
+                for (int i = 0; i < ATTEMPTS_TO_COMMUNICATE; i++)
+                {
+                    if (gatewayState != GatewayState.ConnectingToGateway)
+                        return;
+
+                    SendGetwayVersionRequest();
+                    await Task.Delay(1000);
+                }
+                LogState("Gateway is not responding.");
+            }
+
+
         }
 
 
