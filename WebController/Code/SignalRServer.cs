@@ -22,10 +22,16 @@ namespace MyNetSensors.WebController.Code
             hub = connectionManager.GetHubContext<ClientsHub>();
 
             SerialController.OnStarted += OnSerialControllerStarted;
-            SerialController.OnDebugStateMessage += OnSystemLogMessage;
-            SerialController.OnDebugTxRxMessage += OnSystemLogMessage;
+            SerialController.logs.OnGatewayStateLog += OnGatewayStateLog;
+            SerialController.logs.OnGatewayTxRxLog += OnGatewayTxRxLog;
+            SerialController.logs.OnGatewayRawTxRxLog += OnGatewayRawTxRxLog;
+            SerialController.logs.OnDataBaseStateLog += OnDataBaseStateLog;
+            SerialController.logs.OnLogicalNodesEngineLog += OnLogicalNodesEngineLog;
+            SerialController.logs.OnLogicalNodesLog += OnLogicalNodesLog;
+            SerialController.logs.OnSerialControllerLog += OnSerialControllerLog;
         }
 
+      
 
 
         private static void OnSerialControllerStarted(object sender, EventArgs e)
@@ -157,9 +163,39 @@ namespace MyNetSensors.WebController.Code
 
         }
 
-        private static void OnSystemLogMessage(string message)
+        private static void OnSerialControllerLog(LogMessage message)
         {
-            hub.Clients.All.OnSystemLogMessage(message);
+            hub.Clients.All.OnSerialControllerLog(message.ToString());
+        }
+
+        private static void OnLogicalNodesEngineLog(LogMessage message)
+        {
+            hub.Clients.All.OnLogicalNodesEngineLog(message.ToString());
+        }
+
+        private static void OnLogicalNodesLog(LogMessage message)
+        {
+            hub.Clients.All.OnLogicalNodesLog(message.ToString());
+        }
+
+        private static void OnDataBaseStateLog(LogMessage message)
+        {
+            hub.Clients.All.OnDataBaseStateLog(message.ToString());
+        }
+
+        private static void OnGatewayRawTxRxLog(LogMessage message)
+        {
+            hub.Clients.All.OnGatewayRawTxRxLog(message.ToString());
+        }
+
+        private static void OnGatewayTxRxLog(LogMessage message)
+        {
+            hub.Clients.All.OnGatewayTxRxLog(message.ToString());
+        }
+
+        private static void OnGatewayStateLog(LogMessage message)
+        {
+            hub.Clients.All.OnGatewayStateLog(message.ToString());
         }
     }
 }

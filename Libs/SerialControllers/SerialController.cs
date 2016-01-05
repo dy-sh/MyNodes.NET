@@ -20,34 +20,26 @@ namespace MyNetSensors.SerialControllers
 {
     public static class SerialController
     {
-
         //SETTINGS
         public static string serialPortName = "COM1";
         public static bool enableAutoAssignId = true;
-        public static bool gatewayDebugTxRx = true;
-        public static bool gatewayDebugRawTxRx = false;
-        public static bool gatewayDebugState = true;
 
         public static bool dataBaseEnabled = true;
         public static bool dataBadeUseMSSQL = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
-        public static bool dataBaseDebugState = true;
-        public static bool dataBaseWriteTxRxMessages = true;
 
         public static bool nodesTasksEnabled = true;
         public static int nodesTasksUpdateInterval = 10;
 
-
-        public static bool softNodesEnabled = true;
-        public static int softNodesPort = 13122;
-        public static bool softNodesDebugTxRx = true;
-        public static bool softNodesDebugState = true;
-
         public static bool logicalNodesEnabled = true;
         public static int logicalNodesUpdateInterval = 10;
-        public static bool logicalNodesDebugNodes = true;
-        public static bool logicalNodesDebugEngine = true;
+
+        //public static bool softNodesEnabled = true;
+        //public static int softNodesPort = 13122;
+        //public static bool softNodesDebugTxRx = true;
+        //public static bool softNodesDebugState = true;
+
 
         //VARIABLES
         public static ComPort comPort = new ComPort();
@@ -65,9 +57,8 @@ namespace MyNetSensors.SerialControllers
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
         public static ILogicalNodesRepository logicalNodesRepository;
 
+        public static SerialControllerLogs logs=new SerialControllerLogs();
 
-        public static event DebugMessageEventHandler OnDebugTxRxMessage;
-        public static event DebugMessageEventHandler OnDebugStateMessage;
 
         public static event EventHandler OnStarted;
 
@@ -77,7 +68,7 @@ namespace MyNetSensors.SerialControllers
         {
             if (isStarted)
             {
-                OnDebugStateMessage?.Invoke("Can`t start. Gateway already started.");
+                logs.AddGatewayStateMessage("Can`t start. Gateway already started.");
             }
 
             SerialController.serialPortName = serialPortName;
@@ -89,7 +80,7 @@ namespace MyNetSensors.SerialControllers
                 //waiting for starting web server
                 Thread.Sleep(500);
 
-                OnDebugStateMessage?.Invoke("-------------STARTING GATEWAY--------------");
+                logs.AddSerialControllerMessage("\n-------------STARTING CONTROLLER--------------");
 
                 ConnectToDB();
                 ConnectToGateway();
@@ -100,7 +91,7 @@ namespace MyNetSensors.SerialControllers
                 //reconnect if disconnected
                 gateway.OnDisconnectedEvent += ReconnectToGateway;
 
-                OnDebugStateMessage?.Invoke("-------------SARTUP COMPLETE--------------");
+                logs.AddSerialControllerMessage("-------------SARTUP COMPLETE--------------");
 
                 OnStarted?.Invoke(null, EventArgs.Empty);
 
@@ -116,14 +107,14 @@ namespace MyNetSensors.SerialControllers
             //connecting to DB
             if (!dataBaseEnabled) return;
 
-            OnDebugStateMessage?.Invoke("DATABASE: Connecting... ");
+            logs.AddSerialControllerMessage("Connecting to database... ");
 
 
             if (dataBadeUseMSSQL)
             {
                 if (dataBaseConnectionString == null)
                 {
-                     OnDebugStateMessage?.Invoke("DATABASE: Connection failed. Set ConnectionString in appsettings.json file.");
+                    logs.AddSerialControllerMessage("Database connection failed. Set ConnectionString in appsettings.json file.");
                     return;
                 }
 
@@ -139,18 +130,14 @@ namespace MyNetSensors.SerialControllers
             }
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
-            gatewayDb.SetStoreTxRxMessages(dataBaseWriteTxRxMessages);
             gatewayDb.ConnectToGateway(gateway);
-            if (dataBaseDebugState)
-                gatewayDb.OnDebugStateMessage += message =>  OnDebugStateMessage?.Invoke("DB: " + message);
+
+            gatewayDb.OnDebugStateMessage += logs.AddDataBaseStateMessage;
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
 
-
-
-
-             OnDebugStateMessage?.Invoke("DATABASE: Connected");
+            logs.AddSerialControllerMessage("Database connected.");
         }
 
 
@@ -159,12 +146,12 @@ namespace MyNetSensors.SerialControllers
             //connecting tasks
             if (!nodesTasksEnabled) return;
 
-             OnDebugStateMessage?.Invoke("TASKS ENGINE: Starting...");
+            logs.AddSerialControllerMessage("Starting Task Engine...");
 
             nodesTasksEngine = new NodesTasksEngine(gateway, nodesTasksDb);
             nodesTasksEngine.SetUpdateInterval(nodesTasksUpdateInterval);
 
-             OnDebugStateMessage?.Invoke("TASKS ENGINE: Started");
+            logs.AddSerialControllerMessage("Task Engine started.");
         }
 
 
@@ -176,22 +163,14 @@ namespace MyNetSensors.SerialControllers
         private static void ConnectToGateway()
         {
             //connecting to gateway
-             OnDebugStateMessage?.Invoke("GATEWAY: Connecting...");
+            logs.AddSerialControllerMessage("Connecting to gateway...");
 
             gateway.enableAutoAssignId = enableAutoAssignId;
 
-            if (gatewayDebugTxRx)
-                gateway.OnDebugTxRxMessage += message => OnDebugTxRxMessage?.Invoke("GATEWAY: " + message);
-
-            if (gatewayDebugState)
-            {
-                gateway.OnDebugStateMessage += message =>  OnDebugStateMessage?.Invoke("GATEWAY: " + message);
-                gateway.serialPort.OnDebugStateMessage += message =>  OnDebugStateMessage?.Invoke("GATEWAY: " + message);
-            }
-
-            if (gatewayDebugRawTxRx)
-                gateway.serialPort.OnDebugTxRxMessage += message => OnDebugTxRxMessage?.Invoke("GATEWAY: RAW MESSAGE: " + message);
-
+            gateway.OnDebugTxRxMessage += logs.AddGatewayTxRxMessage;
+            gateway.OnDebugStateMessage += logs.AddGatewayStateMessage;
+            gateway.serialPort.OnDebugStateMessage += logs.AddGatewayStateMessage;
+            gateway.serialPort.OnDebugTxRxMessage += logs.AddGatewayRawTxRxMessage;
 
             bool connected = false;
             while (!connected)
@@ -203,6 +182,9 @@ namespace MyNetSensors.SerialControllers
                     Thread.Sleep(5000);
                 }
             }
+
+            logs.AddSerialControllerMessage("Gateway connected.");
+
         }
 
         public static void ReconnectToGateway(string serialPortName)
@@ -255,7 +237,7 @@ namespace MyNetSensors.SerialControllers
             //connecting tasks
             if (!logicalNodesEnabled) return;
 
-             OnDebugStateMessage?.Invoke("LOGICAL NODES ENGINE: Starting... ");
+            logs.AddSerialControllerMessage("Starting logical nodes engine... ");
 
 
             logicalNodesEngine = new LogicalNodesEngine(logicalNodesRepository);
@@ -263,11 +245,8 @@ namespace MyNetSensors.SerialControllers
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
-            if (logicalNodesDebugEngine)
-                logicalNodesEngine.OnDebugEngineMessage += message =>  OnDebugStateMessage?.Invoke("LOGICAL NODES ENGINE: " + message);
-
-            if (logicalNodesDebugNodes)
-                logicalNodesEngine.OnDebugNodeMessage += message => OnDebugTxRxMessage?.Invoke("LOGICAL NODES ENGINE: " + message);
+             logicalNodesEngine.OnDebugEngineMessage += logs.AddLogicalNodesEngineMessage;
+             logicalNodesEngine.OnDebugNodeMessage += logs.AddLogicalNodesMessage;
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
@@ -289,7 +268,7 @@ namespace MyNetSensors.SerialControllers
             //logicalNodesEngine.DeserializeLinks(json2);
 
 
-             OnDebugStateMessage?.Invoke("LOGICAL NODES ENGINE: Started");
+            logs.AddSerialControllerMessage("Logical nodes engine started.");
         }
 
 

@@ -189,7 +189,7 @@ namespace MyNetSensors.WebController
                 SerialControllerConfigurator.Start(Configuration);
             else
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n"); // <-- see note
                 Console.ForegroundColor = ConsoleColor.Gray;
 
