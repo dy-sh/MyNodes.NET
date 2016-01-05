@@ -29,7 +29,7 @@ namespace MyNetSensors.Repositories.Dapper
         private int writeInterval = 5000;
 
         //slows down the performance, can cause to exception of a large flow of messages per second
-        public bool storeTxRxMessages = false;
+        public bool storeMessages = false;
 
         private Gateway gateway;
         private Timer updateDbTimer = new Timer();
@@ -41,7 +41,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         private string connectionString;
 
-        public event LogMessageEventHandler OnLogStateMessage;
+        public event LogEventHandler OnLogStateMessage;
 
         public GatewayRepositoryDapper(string connectionString)
         {
@@ -218,7 +218,7 @@ namespace MyNetSensors.Repositories.Dapper
 
         private void OnNewMessage(Message message)
         {
-            if (!storeTxRxMessages) return;
+            if (!storeMessages) return;
 
             if (writeInterval == 0)
                 AddMessage(message);
@@ -505,9 +505,9 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public void SetStoreTxRxMessages(bool enable)
+        public void SetStoreMessages(bool enable)
         {
-            storeTxRxMessages = enable;
+            storeMessages = enable;
         }
 
 

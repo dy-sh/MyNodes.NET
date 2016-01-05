@@ -18,8 +18,8 @@ namespace MyNetSensors.SerialControllers
         public event Action OnDisconnectedEvent;
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
-        public event Gateways.LogMessageEventHandler OnLogTxRxMessage;
-        public event Gateways.LogMessageEventHandler OnLogStateMessage;
+        public event Gateways.LogEventHandler OnLogMessage;
+        public event Gateways.LogEventHandler OnLogState;
 
         private bool isConnected;
         private SerialPort serialPort;
@@ -75,7 +75,7 @@ namespace MyNetSensors.SerialControllers
                 return;
             }
 
-            LogTxRx("TX: " + message.TrimEnd('\r', '\n'));
+            LogMessage("TX: " + message.TrimEnd('\r', '\n'));
 
             try
             {
@@ -121,7 +121,7 @@ namespace MyNetSensors.SerialControllers
 
             foreach (var message in messages)
             {
-                LogTxRx("RX: " + message);
+                LogMessage("RX: " + message);
 
                 OnDataReceivedEvent?.Invoke(message);
             }
@@ -129,14 +129,14 @@ namespace MyNetSensors.SerialControllers
 
 
 
-        private void LogTxRx(string message)
+        private void LogMessage(string message)
         {
-            OnLogTxRxMessage?.Invoke(message);
+            OnLogMessage?.Invoke(message);
         }
 
         private void LogPortState(string message)
         {
-            OnLogStateMessage?.Invoke(message);
+            OnLogState?.Invoke(message);
         }
     }
 }

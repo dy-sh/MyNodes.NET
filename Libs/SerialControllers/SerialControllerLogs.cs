@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.SerialControllers
 {
-    public delegate void LogMessageEventHandler(LogMessage message);
+    public delegate void LogMessageEventHandler(LogRecord record);
     public class SerialControllerLogs
     {
-        public List<LogMessage> gatewayTxRxLog = new List<LogMessage>();
-        public List<LogMessage> gatewayRawTxRxLog = new List<LogMessage>();
-        public List<LogMessage> gatewayStateLog = new List<LogMessage>();
-        public List<LogMessage> dataBaseStateLog = new List<LogMessage>();
-        public List<LogMessage> logicalNodesLog = new List<LogMessage>();
-        public List<LogMessage> logicalNodesEngineLog = new List<LogMessage>();
-        public List<LogMessage> serialControllerLog = new List<LogMessage>();
+        public List<LogRecord> gatewayMessagesLog = new List<LogRecord>();
+        public List<LogRecord> gatewayRawMessagesLog = new List<LogRecord>();
+        public List<LogRecord> gatewayStateLog = new List<LogRecord>();
+        public List<LogRecord> dataBaseStateLog = new List<LogRecord>();
+        public List<LogRecord> logicalNodesLog = new List<LogRecord>();
+        public List<LogRecord> logicalNodesEngineLog = new List<LogRecord>();
+        public List<LogRecord> serialControllerLog = new List<LogRecord>();
 
-        public event LogMessageEventHandler OnGatewayTxRxLog;
-        public event LogMessageEventHandler OnGatewayRawTxRxLog;
+        public event LogMessageEventHandler OnGatewayMessagesLog;
+        public event LogMessageEventHandler OnGatewayRawMessagesLog;
         public event LogMessageEventHandler OnGatewayStateLog;
         public event LogMessageEventHandler OnDataBaseStateLog;
         public event LogMessageEventHandler OnLogicalNodesLog;
@@ -26,56 +26,56 @@ namespace MyNetSensors.SerialControllers
         public event LogMessageEventHandler OnSerialControllerLog;
 
         public bool enableGatewayStateLog = true;
-        public bool enableGatewayTxRxLog = true;
-        public bool enableGatewayRawTxRxLog = false;
+        public bool enableGatewayMessagesLog = true;
+        public bool enableGatewayRawMessagesLog = false;
         public bool enableDataBaseStateLog = true;
         public bool enableLogicalNodesLog = true;
         public bool enableLogicalNodesEngineLog = true;
         public bool enableSerialControllerLog = true;
 
         public int maxGatewayStateRecords = 1000;
-        public int maxGatewayTxRxRecords = 1000;
-        public int maxGatewayRawTxRxRecords = 1000;
+        public int maxGatewayMessagesRecords = 1000;
+        public int maxGatewayRawMessagesRecords = 1000;
         public int maxDataBaseStateRecords = 1000;
         public int maxLogicalNodesRecords = 1000;
         public int maxLogicalNodesEngineRecords = 1000;
         public int maxSerialControllerRecords = 1000;
 
 
-        public void AddGatewayStateMessage(string message)
+        public void AddGatewayState(string message)
         {
             if (!enableGatewayStateLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.GatewayState, message);
-            gatewayStateLog.Add(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.GatewayState, message);
+            gatewayStateLog.Add(logRecord);
             if(gatewayStateLog.Count> maxGatewayStateRecords)
                 gatewayStateLog.RemoveAt(0);
-            OnGatewayStateLog?.Invoke(logMessage);
+            OnGatewayStateLog?.Invoke(logRecord);
         }
 
-        public void AddGatewayTxRxMessage(string message)
+        public void AddGatewayMessage(string message)
         {
-            if (!enableGatewayTxRxLog)
+            if (!enableGatewayMessagesLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.GatewayTxRx, message);
-            gatewayTxRxLog.Add(logMessage);
-            if (gatewayTxRxLog.Count > maxGatewayTxRxRecords)
-                gatewayTxRxLog.RemoveAt(0);
-            OnGatewayTxRxLog?.Invoke(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.GatewayMessages, message);
+            gatewayMessagesLog.Add(logRecord);
+            if (gatewayMessagesLog.Count > maxGatewayMessagesRecords)
+                gatewayMessagesLog.RemoveAt(0);
+            OnGatewayMessagesLog?.Invoke(logRecord);
         }
 
-        public void AddGatewayRawTxRxMessage(string message)
+        public void AddGatewayRawMessage(string message)
         {
-            if (!enableGatewayRawTxRxLog)
+            if (!enableGatewayRawMessagesLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.GatewayRawTxRx, message);
-            gatewayRawTxRxLog.Add(logMessage);
-            if (gatewayRawTxRxLog.Count > maxGatewayRawTxRxRecords)
-                gatewayRawTxRxLog.RemoveAt(0);
-            OnGatewayRawTxRxLog?.Invoke(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.GatewayRawMessages, message);
+            gatewayRawMessagesLog.Add(logRecord);
+            if (gatewayRawMessagesLog.Count > maxGatewayRawMessagesRecords)
+                gatewayRawMessagesLog.RemoveAt(0);
+            OnGatewayRawMessagesLog?.Invoke(logRecord);
         }
 
 
@@ -85,11 +85,11 @@ namespace MyNetSensors.SerialControllers
             if (!enableDataBaseStateLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.DataBaseState, message);
-            dataBaseStateLog.Add(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.DataBaseState, message);
+            dataBaseStateLog.Add(logRecord);
             if (dataBaseStateLog.Count > maxDataBaseStateRecords)
                 dataBaseStateLog.RemoveAt(0);
-            OnDataBaseStateLog?.Invoke(logMessage);
+            OnDataBaseStateLog?.Invoke(logRecord);
         }
 
         public void AddLogicalNodesEngineMessage(string message)
@@ -97,11 +97,11 @@ namespace MyNetSensors.SerialControllers
             if (!enableLogicalNodesEngineLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodesEngine, message);
-            logicalNodesEngineLog.Add(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.LogicalNodesEngine, message);
+            logicalNodesEngineLog.Add(logRecord);
             if (logicalNodesEngineLog.Count > maxLogicalNodesEngineRecords)
                 logicalNodesEngineLog.RemoveAt(0);
-            OnLogicalNodesEngineLog?.Invoke(logMessage);
+            OnLogicalNodesEngineLog?.Invoke(logRecord);
         }
 
         public void AddLogicalNodesMessage(string message)
@@ -109,11 +109,11 @@ namespace MyNetSensors.SerialControllers
             if (!enableLogicalNodesLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodes, message);
-            logicalNodesLog.Add(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.LogicalNodes, message);
+            logicalNodesLog.Add(logRecord);
             if (logicalNodesLog.Count > maxLogicalNodesRecords)
                 logicalNodesLog.RemoveAt(0);
-            OnLogicalNodesLog?.Invoke(logMessage);
+            OnLogicalNodesLog?.Invoke(logRecord);
         }
 
 
@@ -123,21 +123,21 @@ namespace MyNetSensors.SerialControllers
             if (!enableSerialControllerLog)
                 return;
 
-            LogMessage logMessage = new LogMessage(LogMessageType.SerialController, message);
-            serialControllerLog.Add(logMessage);
+            LogRecord logRecord = new LogRecord(LogRecordType.SerialController, message);
+            serialControllerLog.Add(logRecord);
             if (serialControllerLog.Count > maxSerialControllerRecords)
                 serialControllerLog.RemoveAt(0);
-            OnSerialControllerLog?.Invoke(logMessage);
+            OnSerialControllerLog?.Invoke(logRecord);
         }
 
 
 
-        public List<LogMessage> GetAllLogs()
+        public List<LogRecord> GetAllLogs()
         {
-            List<LogMessage> list = new List<LogMessage>();
+            List<LogRecord> list = new List<LogRecord>();
             list.AddRange(gatewayStateLog);
-            list.AddRange(gatewayTxRxLog);
-            list.AddRange(gatewayRawTxRxLog);
+            list.AddRange(gatewayMessagesLog);
+            list.AddRange(gatewayRawMessagesLog);
             list.AddRange(logicalNodesEngineLog);
             list.AddRange(logicalNodesLog);
             list.AddRange(dataBaseStateLog);
@@ -148,8 +148,8 @@ namespace MyNetSensors.SerialControllers
         public void ClearAllLogs()
         {
             gatewayStateLog.Clear();
-            gatewayTxRxLog.Clear();
-            gatewayRawTxRxLog.Clear();
+            gatewayMessagesLog.Clear();
+            gatewayRawMessagesLog.Clear();
             logicalNodesEngineLog.Clear();
             logicalNodesLog.Clear();
             dataBaseStateLog.Clear();

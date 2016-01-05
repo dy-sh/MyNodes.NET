@@ -13,7 +13,7 @@ namespace MyNetSensors.Gateways
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);
     public delegate void SensorEventHandler(Sensor sensor);
-    public delegate void LogMessageEventHandler(string message);
+    public delegate void LogEventHandler(string message);
     public delegate void ExceptionEventHandler(Exception exception);
 
     public class Gateway
@@ -34,8 +34,8 @@ namespace MyNetSensors.Gateways
         public event Action OnClearNodesListEvent;
         public event Action OnDisconnectedEvent;
         public event Action OnConnectedEvent;
-        public event LogMessageEventHandler OnLogTxRxMessage;
-        public event LogMessageEventHandler OnLogStateMessage;
+        public event LogEventHandler OnLogMessage;
+        public event LogEventHandler OnLogStateMessage;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -52,9 +52,9 @@ namespace MyNetSensors.Gateways
 
 
 
-        private void LogTxRx(string message)
+        private void LogMessage(string message)
         {
-            OnLogTxRxMessage?.Invoke(message);
+            OnLogMessage?.Invoke(message);
         }
 
         private void LogState(string message)
@@ -114,7 +114,7 @@ namespace MyNetSensors.Gateways
 
             UpdateSensorFromMessage(message);
 
-            LogTxRx(message.ToString());
+            LogMessage(message.ToString());
 
             string mes = $"{message.nodeId};" +
                          $"{message.sensorId};" +
@@ -144,7 +144,7 @@ namespace MyNetSensors.Gateways
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
-            LogTxRx( message.ToString());
+            LogMessage( message.ToString());
 
             OnMessageRecievedEvent?.Invoke(message);
 

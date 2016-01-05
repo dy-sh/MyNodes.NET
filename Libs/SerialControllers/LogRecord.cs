@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.SerialControllers
 {
-    public enum LogMessageType
+    public enum LogRecordType
     {
         GatewayState,
-        GatewayTxRx,
-        GatewayRawTxRx,
+        GatewayMessages,
+        GatewayRawMessages,
         DataBaseState,
         LogicalNodesEngine,
         LogicalNodes,
         SerialController
     }
 
-    public class LogMessage
+    public class LogRecord
     {
-        public LogMessageType Type { get; set; }
+        public LogRecordType Type { get; set; }
         public string Message { get; set; }
         public DateTime Date { get; set; }
 
-        public LogMessage(){}
+        public LogRecord(){}
 
-        public LogMessage(LogMessageType type, string message)
+        public LogRecord(LogRecordType type, string message)
         {
             Date = DateTime.Now;
             Message = message;
@@ -41,17 +41,17 @@ namespace MyNetSensors.SerialControllers
         {
             switch (Type)
             {
-                case LogMessageType.GatewayState:
-                case LogMessageType.GatewayTxRx:
+                case LogRecordType.GatewayState:
+                case LogRecordType.GatewayMessages:
                     return $"{Date}: GATEWAY: {Message}";
-                case LogMessageType.GatewayRawTxRx:
+                case LogRecordType.GatewayRawMessages:
                     return $"{Date}: GATEWAY: RAW: {Message}";
-                case LogMessageType.DataBaseState:
+                case LogRecordType.DataBaseState:
                     return $"{Date}: DATABASE: {Message}";
-                case LogMessageType.LogicalNodesEngine:
-                case LogMessageType.LogicalNodes:
+                case LogRecordType.LogicalNodesEngine:
+                case LogRecordType.LogicalNodes:
                     return $"{Date}: LOGICAL NODES: {Message}";
-                case LogMessageType.SerialController:
+                case LogRecordType.SerialController:
                     return $"{Date}: CONTROLLER: {Message}";
             }
             return null;

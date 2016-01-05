@@ -41,8 +41,8 @@ namespace MyNetSensors.WebController.Code
             try
             {
                 SerialController.logs.enableGatewayStateLog = Boolean.Parse(Configuration["Gateway:LogState"]);
-                SerialController.logs.enableGatewayTxRxLog = Boolean.Parse(Configuration["Gateway:LogTxRx"]);
-                SerialController.logs.enableGatewayRawTxRxLog = Boolean.Parse(Configuration["Gateway:LogRawTxRx"]);
+                SerialController.logs.enableGatewayMessagesLog = Boolean.Parse(Configuration["Gateway:LogMessages"]);
+                SerialController.logs.enableGatewayRawMessagesLog = Boolean.Parse(Configuration["Gateway:LogRawMessages"]);
                 SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:LogEngine"]);
                 SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:LogNodes"]);
                 SerialController.logs.enableDataBaseStateLog = Boolean.Parse(Configuration["DataBase:LogState"]);
@@ -54,7 +54,7 @@ namespace MyNetSensors.WebController.Code
                 SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
                 //SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
                 //SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
-                //SerialController.softNodesLogTxRx = Boolean.Parse(Configuration["SoftNodes:LogTxRx"]);
+                //SerialController.softNodesLogMessages = Boolean.Parse(Configuration["SoftNodes:LogMessages"]);
                 //SerialController.softNodesLogState = Boolean.Parse(Configuration["SoftNodes:LogState"]);
                 SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
                 SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
@@ -71,7 +71,7 @@ namespace MyNetSensors.WebController.Code
             }
             catch
             {
-                Log(new LogMessage(LogMessageType.SerialController, "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
+                Log(new LogRecord(LogRecordType.SerialController, "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
                 throw new Exception("Bad configuration in appsettings.json file.");
             }
 
@@ -89,8 +89,8 @@ namespace MyNetSensors.WebController.Code
             if (portName != null)
             {
                 SerialController.logs.OnGatewayStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
-                SerialController.logs.OnGatewayTxRxLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
-               // SerialController.logs.OnGatewayRawTxRxLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
+                SerialController.logs.OnGatewayMessagesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
+                // SerialController.logs.OnGatewayRawMessagesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
                 SerialController.logs.OnDataBaseStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Gray); };
                 SerialController.logs.OnLogicalNodesEngineLog += (logMessage) => { Log(logMessage, ConsoleColor.Cyan); };
                 SerialController.logs.OnLogicalNodesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkCyan); };
@@ -102,10 +102,10 @@ namespace MyNetSensors.WebController.Code
             }
         }
 
-        public static void Log(LogMessage message, ConsoleColor color)
+        public static void Log(LogRecord record, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(message.ToStringWithType());
+            Console.WriteLine(record.ToStringWithType());
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 

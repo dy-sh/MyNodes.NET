@@ -133,6 +133,30 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Control", "Gateway");
         }
 
+
+
+        [HttpGet]
+        public IActionResult Logs()
+        {
+
+
+
+            return View(new SerialPortViewModel());
+        }
+
+
+        [HttpPost]
+        public IActionResult Logs(SerialPortViewModel port)
+        {
+            dynamic json = ReadConfig();
+            json.Gateway.SerialPort = port.PortName;
+            json.FirstRun = false;
+            WriteConfig(json);
+
+            SerialControllerConfigurator.Start(сonfiguration);
+
+            return RedirectToAction("Control", "Gateway");
+        }
     }
 
 

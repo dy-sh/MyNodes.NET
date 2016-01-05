@@ -31,7 +31,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         private int writeInterval = 5000;
 
         //slows down the performance, can cause to exception of a large flow of messages per second
-        public bool storeTxRxMessages = false;
+        public bool storeMessages = false;
 
         private Gateway gateway;
         private Timer updateDbTimer = new Timer();
@@ -43,7 +43,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private NodesDbContext db;
 
-        public event LogMessageEventHandler OnLogStateMessage;
+        public event LogEventHandler OnLogStateMessage;
 
         public GatewayRepositoryEF(NodesDbContext nodesDbContext)
         {
@@ -129,7 +129,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private void OnNewMessage(Message message)
         {
-            if (!storeTxRxMessages) return;
+            if (!storeMessages) return;
 
             if (writeInterval == 0)
                 AddMessage(message);
@@ -279,9 +279,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
-        public void SetStoreTxRxMessages(bool enable)
+        public void SetStoreMessages(bool enable)
         {
-            storeTxRxMessages = enable;
+            storeMessages = enable;
         }
 
 

@@ -36,7 +36,7 @@ namespace MyNetSensors.SerialControllers
 
         //public static bool softNodesEnabled = true;
         //public static int softNodesPort = 13122;
-        //public static bool softNodesLogTxRx = true;
+        //public static bool softNodesLogMessages = true;
         //public static bool softNodesLogState = true;
 
 
@@ -67,7 +67,7 @@ namespace MyNetSensors.SerialControllers
         {
             if (isStarted)
             {
-                logs.AddGatewayStateMessage("Can`t start. Gateway already started.");
+                logs.AddGatewayState("Can`t start. Gateway already started.");
             }
 
             SerialController.serialPortName = serialPortName;
@@ -166,10 +166,10 @@ namespace MyNetSensors.SerialControllers
 
             gateway.enableAutoAssignId = enableAutoAssignId;
 
-            gateway.OnLogTxRxMessage += logs.AddGatewayTxRxMessage;
-            gateway.OnLogStateMessage += logs.AddGatewayStateMessage;
-            gateway.serialPort.OnLogStateMessage += logs.AddGatewayStateMessage;
-            gateway.serialPort.OnLogTxRxMessage += logs.AddGatewayRawTxRxMessage;
+            gateway.OnLogMessage += logs.AddGatewayMessage;
+            gateway.OnLogStateMessage += logs.AddGatewayState;
+            gateway.serialPort.OnLogState += logs.AddGatewayState;
+            gateway.serialPort.OnLogMessage += logs.AddGatewayRawMessage;
 
             bool connected = false;
             while (!connected)
@@ -221,8 +221,8 @@ namespace MyNetSensors.SerialControllers
         //    if (softNodesLogState)
         //        softNodesServer.OnLogStateMessage += message =>  OnDebugStateMessage?.Invoke("SOFT NODES SERVER: " + message);
 
-        //    if (softNodesLogTxRx)
-        //        softNodesServer.OnLoggTxRxMessage += message => OnDebugTxRxMessage?.Invoke("SOFT NODES SERVER: " + message);
+        //    if (softNodesLogMessages)
+        //        softNodesServer.OnLogMessage += message => OnLogMessage?.Invoke("SOFT NODES SERVER: " + message);
 
         //    softNodesController = new SoftNodesController(softNodesServer, gateway);
         //    softNodesController.StartServer($"http://*:{softNodesPort}/");

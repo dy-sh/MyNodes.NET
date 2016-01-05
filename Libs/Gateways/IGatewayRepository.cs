@@ -9,7 +9,7 @@ namespace MyNetSensors.Gateways
 {
     public interface IGatewayRepository
     {
-        event LogMessageEventHandler OnLogStateMessage;
+        event LogEventHandler OnLogStateMessage;
 
         void ConnectToGateway(Gateway gateway);
 
@@ -33,7 +33,7 @@ namespace MyNetSensors.Gateways
 
         bool IsDbExist();
         void SetWriteInterval(int ms);
-        void SetStoreTxRxMessages(bool enable);
+        void SetStoreMessages(bool enable);
 
 
         void UpdateNodeSettings(Node node);

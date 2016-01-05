@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComPort.cs" />
-    <Compile Include="LogMessage.cs" />
+    <Compile Include="LogRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialController.cs" />
     <Compile Include="SerialControllerLogs.cs" />

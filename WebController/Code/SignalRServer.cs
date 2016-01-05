@@ -23,8 +23,8 @@ namespace MyNetSensors.WebController.Code
 
             SerialController.OnStarted += OnSerialControllerStarted;
             SerialController.logs.OnGatewayStateLog += OnGatewayStateLog;
-            SerialController.logs.OnGatewayTxRxLog += OnGatewayTxRxLog;
-            SerialController.logs.OnGatewayRawTxRxLog += OnGatewayRawTxRxLog;
+            SerialController.logs.OnGatewayMessagesLog += OnGatewayMessagesLog;
+            SerialController.logs.OnGatewayRawMessagesLog += OnGatewayRawMessagesLog;
             SerialController.logs.OnDataBaseStateLog += OnDataBaseStateLog;
             SerialController.logs.OnLogicalNodesEngineLog += OnLogicalNodesEngineLog;
             SerialController.logs.OnLogicalNodesLog += OnLogicalNodesLog;
@@ -163,39 +163,39 @@ namespace MyNetSensors.WebController.Code
 
         }
 
-        private static void OnSerialControllerLog(LogMessage message)
+        private static void OnSerialControllerLog(LogRecord record)
         {
-            hub.Clients.All.OnSerialControllerLog(message.ToStringWithType());
+            hub.Clients.All.OnSerialControllerLog(record.ToStringWithType());
         }
 
-        private static void OnLogicalNodesEngineLog(LogMessage message)
+        private static void OnLogicalNodesEngineLog(LogRecord record)
         {
-            hub.Clients.All.OnLogicalNodesEngineLog(message.ToStringWithType());
+            hub.Clients.All.OnLogicalNodesEngineLog(record.ToStringWithType());
         }
 
-        private static void OnLogicalNodesLog(LogMessage message)
+        private static void OnLogicalNodesLog(LogRecord record)
         {
-            hub.Clients.All.OnLogicalNodesLog(message.ToStringWithType());
+            hub.Clients.All.OnLogicalNodesLog(record.ToStringWithType());
         }
 
-        private static void OnDataBaseStateLog(LogMessage message)
+        private static void OnDataBaseStateLog(LogRecord record)
         {
-            hub.Clients.All.OnDataBaseStateLog(message.ToStringWithType());
+            hub.Clients.All.OnDataBaseStateLog(record.ToStringWithType());
         }
 
-        private static void OnGatewayRawTxRxLog(LogMessage message)
+        private static void OnGatewayRawMessagesLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayRawTxRxLog(message.ToStringWithType());
+            hub.Clients.All.OnGatewayRawMessagesLog(record.ToStringWithType());
         }
 
-        private static void OnGatewayTxRxLog(LogMessage message)
+        private static void OnGatewayMessagesLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayTxRxLog(message.ToStringWithType());
+            hub.Clients.All.OnGatewayMessagesLog(record.ToStringWithType());
         }
 
-        private static void OnGatewayStateLog(LogMessage message)
+        private static void OnGatewayStateLog(LogRecord record)
         {
-            hub.Clients.All.OnGatewayStateLog(message.ToStringWithType());
+            hub.Clients.All.OnGatewayStateLog(record.ToStringWithType());
         }
     }
 }

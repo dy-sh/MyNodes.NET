@@ -74,42 +74,42 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (logType == "All")
             {
-                List<LogMessage> list = SerialController.logs.GetAllLogs();
+                List<LogRecord> list = SerialController.logs.GetAllLogs();
                 return list.Select(logMessage => logMessage.ToStringWithType()).ToList();
             }
             else if (logType == "Controller")
             {
-                List<LogMessage> list = SerialController.logs.serialControllerLog;
+                List<LogRecord> list = SerialController.logs.serialControllerLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "GatewayState")
             {
-                List<LogMessage> list = SerialController.logs.gatewayStateLog;
+                List<LogRecord> list = SerialController.logs.gatewayStateLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "GatewayMessages")
             {
-                List<LogMessage> list = SerialController.logs.gatewayTxRxLog;
+                List<LogRecord> list = SerialController.logs.gatewayMessagesLog;
                 return list.Select(logMessage => logMessage.Message).ToList();
             }
             else if (logType == "GatewayRawMessages")
             {
-                List<LogMessage> list = SerialController.logs.gatewayRawTxRxLog;
+                List<LogRecord> list = SerialController.logs.gatewayRawMessagesLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "LogicalNodes")
             {
-                List<LogMessage> list = SerialController.logs.logicalNodesLog;
+                List<LogRecord> list = SerialController.logs.logicalNodesLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "LogicalNodesEngine")
             {
-                List<LogMessage> list = SerialController.logs.logicalNodesEngineLog;
+                List<LogRecord> list = SerialController.logs.logicalNodesEngineLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "DataBase")
             {
-                List<LogMessage> list = SerialController.logs.dataBaseStateLog;
+                List<LogRecord> list = SerialController.logs.dataBaseStateLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             return null;
@@ -131,11 +131,11 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (logType == "GatewayMessages")
             {
-                SerialController.logs.gatewayTxRxLog.Clear();
+                SerialController.logs.gatewayMessagesLog.Clear();
             }
             else if (logType == "GatewayRawMessages")
             {
-                SerialController.logs.gatewayRawTxRxLog.Clear();
+                SerialController.logs.gatewayRawMessagesLog.Clear();
             }
             else if (logType == "LogicalNodes")
             {

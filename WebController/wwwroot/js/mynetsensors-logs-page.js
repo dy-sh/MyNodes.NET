@@ -17,9 +17,9 @@ $(function () {
     if (logType == "All" || logType == "GatewayState")
         clientsHub.client.OnGatewayStateLog = addMessage;
     if (logType == "All" || logType == "GatewayMessages")
-        clientsHub.client.OnGatewayTxRxLog = addMessage;
+        clientsHub.client.OnGatewayMessagesLog = addMessage;
     if (logType == "All" || logType == "GatewayRawMessages")
-        clientsHub.client.OnGatewayRawTxRxLog = addMessage;
+        clientsHub.client.OnGatewayRawMessagesLog = addMessage;
     if (logType == "All" || logType == "DataBaseState")
         clientsHub.client.OnDataBaseStateLog = addMessage;
     if (logType == "All" || logType == "LogicalNodesEngine")
