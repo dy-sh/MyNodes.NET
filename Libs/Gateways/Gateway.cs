@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -16,12 +17,22 @@ namespace MyNetSensors.Gateways
     public delegate void SensorEventHandler(Sensor sensor);
     public delegate void LogEventHandler(string message);
     public delegate void ExceptionEventHandler(Exception exception);
+    public delegate void GatewayStateEventHandler(GatewayState gatewayState);
+
+    public enum GatewayState
+    {
+        Disconnected,
+        ConnectingToPort,
+        ConnectingToGateway,
+        Connected
+    }
 
     public class Gateway
     {
         public IComPort serialPort;
         public bool storeMessages = true;
         public bool enableAutoAssignId = true;
+        public int ATTEMPTS_TO_COMMUNICATE = 5;
 
         public event MessageEventHandler OnMessageRecievedEvent;
         public event MessageEventHandler OnMessageSendEvent;
@@ -36,14 +47,16 @@ namespace MyNetSensors.Gateways
         public event Action OnDisconnectedEvent;
         public event Action OnUnexpectedlyDisconnectedEvent;
         public event Action OnConnectedEvent;
+        public event GatewayStateEventHandler OnGatewayStateChangedEvent;
         public event LogEventHandler OnLogMessage;
         public event LogEventHandler OnLogStateMessage;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
-        private bool isConnected;
 
         GatewayAliveChecker gatewayAliveChecker;
+
+        private GatewayState gatewayState = GatewayState.Disconnected;
 
 
         public Gateway(IComPort serialPort)
@@ -53,10 +66,10 @@ namespace MyNetSensors.Gateways
             this.serialPort = serialPort;
             this.serialPort.OnDataReceivedEvent += RecieveMessage;
             this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
-            this.serialPort.OnConnectedEvent += OnSerialPortConnectedEvent;
+            this.serialPort.OnConnectedEvent += TryToCommunicateWithGateway;
         }
 
-       
+
 
 
         private void LogMessage(string message)
@@ -69,36 +82,64 @@ namespace MyNetSensors.Gateways
             OnLogStateMessage?.Invoke(message);
         }
 
+
+        public GatewayState GetGatewayState()
+        {
+            return gatewayState;
+        }
+
+        private void SetGatewayState(GatewayState state)
+        {
+            gatewayState = state;
+
+            switch (gatewayState)
+            {
+                case GatewayState.Disconnected:
+                    LogState("Disconnected.");
+                    OnDisconnectedEvent?.Invoke();
+                    break;
+                case GatewayState.ConnectingToPort:
+                    LogState("Trying to connect...");
+                    break;
+                case GatewayState.ConnectingToGateway:
+                    LogState("Trying to communicate...");
+                    break;
+                case GatewayState.Connected:
+                    LogState("Gateway connected.");
+                    OnConnectedEvent?.Invoke();
+                    break;
+            }
+
+            OnGatewayStateChangedEvent?.Invoke(gatewayState);
+        }
+
         public void Connect(string serialPortName)
         {
-            if (isConnected)
+            if (gatewayState != GatewayState.Disconnected)
                 Disconnect();
 
+            SetGatewayState(GatewayState.ConnectingToPort);
             serialPort.Connect(serialPortName);
         }
 
         public void Disconnect()
         {
-            isConnected = false;
+            SetGatewayState(GatewayState.Disconnected);
 
             if (serialPort.IsConnected())
                 serialPort.Disconnect();
-
-            LogState("Gateway disconnected.");
-
-            OnDisconnectedEvent?.Invoke();
         }
 
         internal void OnSerialPortDisconnectedEvent()
         {
-            if (isConnected)
+            if (gatewayState == GatewayState.Connected)
             {
-                isConnected = false;
+                LogState("Port unexpectedly disconnected.");
+
+                SetGatewayState(GatewayState.Disconnected);
 
                 if (serialPort.IsConnected())
                     serialPort.Disconnect();
-
-                LogState("Gateway unexpectedly disconnected.");
 
                 OnUnexpectedlyDisconnectedEvent?.Invoke();
             }
@@ -106,27 +147,29 @@ namespace MyNetSensors.Gateways
 
         public bool IsConnected()
         {
-            return isConnected;
+            return gatewayState == GatewayState.Connected;
         }
 
 
-
-        private void OnSerialPortConnectedEvent()
+        private async void TryToCommunicateWithGateway()
         {
-            isConnected = true;
+            SetGatewayState(GatewayState.ConnectingToGateway);
 
-            //LogState("Gateway connected.");
+            for (int i = 0; i < ATTEMPTS_TO_COMMUNICATE; i++)
+            {
+                if (gatewayState!=GatewayState.ConnectingToGateway)
+                    return;
 
-            OnConnectedEvent?.Invoke();
-
-            SendGetwayVersionRequest();
+                SendGetwayVersionRequest();
+                await Task.Delay(1000);
+            }
         }
-
 
 
         private void SendMessage(Message message)
         {
-            if (!isConnected)
+            if (gatewayState != GatewayState.Connected
+                && gatewayState != GatewayState.ConnectingToGateway)
             {
                 LogState("Failed to send message. Gateway is not connected.");
                 return;
@@ -140,12 +183,7 @@ namespace MyNetSensors.Gateways
 
             LogMessage(message.ToString());
 
-            string mes = $"{message.nodeId};" +
-                         $"{message.sensorId};" +
-                         $"{(int)message.messageType};" +
-                         $"{((message.ack) ? "1" : "0")};" +
-                         $"{message.subType};" +
-                         $"{message.payload}\n";
+            string mes = $"{message.nodeId};" + $"{message.sensorId};" + $"{(int)message.messageType};" + $"{((message.ack) ? "1" : "0")};" + $"{message.subType};" + $"{message.payload}\n";
 
 
             serialPort.SendMessage(mes);
@@ -176,21 +214,18 @@ namespace MyNetSensors.Gateways
             if (message.isValid)
             {
                 //Gateway ready
-                if (message.messageType == MessageType.C_INTERNAL
-                    && message.subType == (int)InternalDataType.I_GATEWAY_READY)
+                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_GATEWAY_READY)
                     return;
 
 
                 //Gateway log message
-                if (message.messageType == MessageType.C_INTERNAL
-                    && message.subType == (int)InternalDataType.I_LOG_MESSAGE)
+                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_LOG_MESSAGE)
                     return;
 
                 //New ID request
                 if (message.nodeId == 255)
                 {
-                    if (message.messageType == MessageType.C_INTERNAL
-                        && message.subType == (int)InternalDataType.I_ID_REQUEST)
+                    if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_ID_REQUEST)
                         if (enableAutoAssignId)
                             SendNewIdResponse();
 
@@ -198,14 +233,21 @@ namespace MyNetSensors.Gateways
                 }
 
                 //Metric system request
-                if (message.messageType == MessageType.C_INTERNAL
-                    && message.subType == (int)InternalDataType.I_CONFIG)
+                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_CONFIG)
                     SendMetricResponse(message.nodeId);
 
                 //Sensor request
                 if (message.messageType == MessageType.C_REQ)
                     ProceedRequestMessage(message);
 
+                //Gateway vesrion (alive) response
+                if (message.nodeId == 0
+                    && message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_VERSION)
+                {
+                    if (gatewayState != GatewayState.Connected)
+                        SetGatewayState(GatewayState.Connected);
+                }
 
                 //request to node
                 if (message.nodeId == 0)
@@ -215,6 +257,7 @@ namespace MyNetSensors.Gateways
                 UpdateSensorFromMessage(message);
             }
         }
+
 
 
 
@@ -297,7 +340,6 @@ namespace MyNetSensors.Gateways
                     }
                 }
             }
-
         }
 
         public void UpdateSensorFromMessage(Message mes)
@@ -306,8 +348,7 @@ namespace MyNetSensors.Gateways
             if (mes.sensorId == 255)
                 return;
 
-            if (mes.messageType != MessageType.C_PRESENTATION
-                && mes.messageType != MessageType.C_SET)
+            if (mes.messageType != MessageType.C_PRESENTATION && mes.messageType != MessageType.C_SET)
                 return;
 
             Node node = GetNode(mes.nodeId);
@@ -343,7 +384,6 @@ namespace MyNetSensors.Gateways
             }
 
 
-
             if (isNewSensor)
             {
                 OnNewSensorEvent?.Invoke(sensor);
@@ -362,10 +402,6 @@ namespace MyNetSensors.Gateways
             Node node = nodes.FirstOrDefault(x => x.Id == nodeId);
             return node;
         }
-
-
-
-
 
 
         public List<Node> GetNodes()
@@ -471,7 +507,6 @@ namespace MyNetSensors.Gateways
             };
             SendMessage(mess);
         }
-
 
 
         public void ClearNodesList()

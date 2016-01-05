@@ -56,7 +56,7 @@ namespace MyNetSensors.SerialControllers
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
         public static ILogicalNodesRepository logicalNodesDb;
 
-        public static SerialControllerLogs logs=new SerialControllerLogs();
+        public static SerialControllerLogs logs = new SerialControllerLogs();
 
         //public static ISoftNodesServer softNodesServer;
         //public static SoftNodesController softNodesController;
@@ -178,14 +178,17 @@ namespace MyNetSensors.SerialControllers
             gateway.serialPort.OnLogState += logs.AddGatewayState;
             gateway.serialPort.OnLogMessage += logs.AddGatewayRawMessage;
 
-            bool connected = false;
-            while (!connected)
+            connecting = true;
+            while (connecting)
             {
                 gateway.Connect(serialPortName);
-                connected = gateway.IsConnected();
-                if (!connected)
+                //waiting 6000 ms for connecting
+                for (int i = 0; i < 24; i++)
                 {
-                    Thread.Sleep(5000);
+                    connecting = !gateway.IsConnected();
+                    if (!connecting)
+                        break;
+                    Thread.Sleep(250);
                 }
             }
 
@@ -199,21 +202,27 @@ namespace MyNetSensors.SerialControllers
 
             SerialController.serialPortName = serialPortName;
 
-            ReconnectToGateway();
+            if (!connecting)
+                ReconnectToGateway();
         }
 
+
+        private static bool connecting;
         private static async void ReconnectToGateway()
         {
             await Task.Run(() =>
             {
-                bool connected = false;
-                while (!connected)
+                connecting = true;
+                while (connecting)
                 {
                     gateway.Connect(serialPortName);
-                    connected = gateway.IsConnected();
-                    if (!connected)
+                    //waiting 6000 ms for connecting
+                    for (int i = 0; i < 24; i++)
                     {
-                        Thread.Sleep(5000);
+                        connecting = !gateway.IsConnected();
+                        if (!connecting)
+                            break;
+                        Thread.Sleep(250);
                     }
                 }
             });
@@ -251,8 +260,8 @@ namespace MyNetSensors.SerialControllers
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
-             logicalNodesEngine.OnLogEngineMessage += logs.AddLogicalNodesEngineMessage;
-             logicalNodesEngine.OnLogNodeMessage += logs.AddLogicalNodesMessage;
+            logicalNodesEngine.OnLogEngineMessage += logs.AddLogicalNodesEngineMessage;
+            logicalNodesEngine.OnLogNodeMessage += logs.AddLogicalNodesMessage;
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);

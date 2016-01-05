@@ -9,7 +9,7 @@ using System;
 
 namespace MyNetSensors.Gateways
 {
-    public class Message:ICloneable
+    public class Message : ICloneable
     {
         public int Id { get; set; }
 
@@ -70,6 +70,7 @@ namespace MyNetSensors.Gateways
 
         public void ParseFromString(string message)
         {
+            dateTime = DateTime.Now;
             try
             {
                 string[] arguments = message.Split(new char[] { ';' }, 6);
@@ -79,6 +80,7 @@ namespace MyNetSensors.Gateways
                 ack = arguments[3] == "1";
                 subType = Int32.Parse(arguments[4]);
                 payload = arguments[5];
+                isValid = true;
             }
             catch
             {

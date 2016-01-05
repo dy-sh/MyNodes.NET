@@ -98,7 +98,7 @@ namespace MyNetSensors.SerialControllers
             {
                 isConnected = false;
 
-                LogPortState("Port disconnected.");
+                //LogPortState("Port disconnected.");
 
                 serialPort?.Dispose();
                 serialPort = null;
