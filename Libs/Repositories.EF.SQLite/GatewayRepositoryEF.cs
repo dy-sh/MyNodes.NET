@@ -30,16 +30,11 @@ namespace MyNetSensors.Repositories.EF.SQLite
         //writeInterval should be large enough (3000 ms is ok)
         private int writeInterval = 5000;
 
-        //slows down the performance, can cause to exception of a large flow of messages per second
-        public bool storeMessages = false;
-
         private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
-        //messages list, to write to db by timer
-        private List<Message> newMessages = new List<Message>();
 
         private NodesDbContext db;
 
@@ -59,16 +54,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             this.gateway = gateway;
 
-            List<Message> messages = GetMessages();
-            foreach (var message in messages)
-                gateway.messagesLog.AddNewMessage(message);
-
             List<Node> nodes = GetNodes();
             foreach (var node in nodes)
                 gateway.AddNode(node);
-
-            gateway.messagesLog.OnNewMessageLogged += OnNewMessage;
-            gateway.messagesLog.OnClearMessages += OnClearMessages;
 
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
 
@@ -122,28 +110,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        public List<Message> GetMessages()
-        {
-            return db.Messages.ToList();
-        }
-
-        private void OnNewMessage(Message message)
-        {
-            if (!storeMessages) return;
-
-            if (writeInterval == 0)
-                AddMessage(message);
-            else
-                newMessages.Add(message);
-        }
-
-        public void AddMessage(Message message)
-        {
-            db.Messages.Add(message);
-            db.SaveChanges();
-        }
-
-
+      
  
 
         public List<Node> GetNodes()
@@ -222,16 +189,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        private void WriteNewMessages()
-        {
-
-            Message[] messages = new Message[newMessages.Count];
-            newMessages.CopyTo(messages);
-            newMessages.Clear();
-
-            db.Messages.AddRange(messages);
-            db.SaveChanges();
-        }
 
 
         private void OnNodeUpdated(Node node)
@@ -276,14 +233,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
             //todo check if db exist
             return true;
         }
-
-
-
-        public void SetStoreMessages(bool enable)
-        {
-            storeMessages = enable;
-        }
-
 
 
 
@@ -370,20 +319,17 @@ namespace MyNetSensors.Repositories.EF.SQLite
             updateDbTimer.Stop();
             try
             {
-                int nodesCount = updatedNodesId.Count;
-                int messagesCount = newMessages.Count;
-                int messages = nodesCount + messagesCount;
+                int messages = updatedNodesId.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
                     return;
-                };
+                }
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-
                 WriteUpdatedNodes();
-                WriteNewMessages();
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;

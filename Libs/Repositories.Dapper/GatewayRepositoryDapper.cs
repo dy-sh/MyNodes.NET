@@ -28,16 +28,11 @@ namespace MyNetSensors.Repositories.Dapper
         //writeInterval should be large enough (3000 ms is ok)
         private int writeInterval = 5000;
 
-        //slows down the performance, can cause to exception of a large flow of messages per second
-        public bool storeMessages = false;
-
         private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //store id-s of updated nodes, to write to db by timer
         private List<int> updatedNodesId = new List<int>();
-        //messages list, to write to db by timer
-        private List<Message> newMessages = new List<Message>();
 
         private string connectionString;
 
@@ -57,16 +52,9 @@ namespace MyNetSensors.Repositories.Dapper
 
             this.gateway = gateway;
 
-            List<Message> messages = GetMessages();
-            foreach (var message in messages)
-                gateway.messagesLog.AddNewMessage(message);
-
             List<Node> nodes = GetNodes();
             foreach (var node in nodes)
                 gateway.AddNode(node);
-
-            gateway.messagesLog.OnNewMessageLogged += OnNewMessage;
-            gateway.messagesLog.OnClearMessages += OnClearMessages;
 
             gateway.OnClearNodesListEvent += OnClearNodesListEvent;
 
@@ -104,26 +92,6 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
 
-                try
-                {
-                    db.Open();
-
-                    db.Execute(
-                        @"CREATE TABLE [dbo].[Messages](
-	            [Id] [int] IDENTITY(1,1) NOT NULL,
-	            [nodeId] [int] NOT NULL,
-	            [sensorId] [int] NOT NULL,
-	            [messageType] [int] NOT NULL,
-	            [ack] [bit] NOT NULL,
-	            [subType] [int] NOT NULL,
-	            [payload] [nvarchar](max) NULL,
-	            [isValid] [bit] NOT NULL,
-	            [incoming] [bit] NOT NULL,
-	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
-                }
-                catch
-                {
-                }
 
                 try
                 {
@@ -169,17 +137,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DropMessages()
-        {
-            newMessages.Clear();
-
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                db.Query("TRUNCATE TABLE [Messages]");
-            }
-        }
+    
 
         public void DropNodes()
         {
@@ -194,10 +152,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        private void OnClearMessages()
-        {
-            DropMessages();
-        }
+      
 
         private void OnClearNodesListEvent()
         {
@@ -205,39 +160,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        public List<Message> GetMessages()
-        {
-            List<Message> messages;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                messages = db.Query<Message>("SELECT * FROM Messages").ToList();
-            }
-            return messages;
-        }
-
-        private void OnNewMessage(Message message)
-        {
-            if (!storeMessages) return;
-
-            if (writeInterval == 0)
-                AddMessage(message);
-            else
-                newMessages.Add(message);
-        }
-
-        public void AddMessage(Message message)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                               +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Query(sqlQuery, message);
-            }
-        }
+     
 
         public List<Node> GetNodes()
         {
@@ -441,24 +364,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        private void WriteNewMessages()
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                //to prevent changing of collection while writing to db is not yet finished
-                Message[] messages = new Message[newMessages.Count];
-                newMessages.CopyTo(messages);
-                newMessages.Clear();
-
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                               +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Execute(sqlQuery, messages);
-            }
-        }
-
+     
 
         private void OnNodeUpdated(Node node)
         {
@@ -505,11 +411,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public void SetStoreMessages(bool enable)
-        {
-            storeMessages = enable;
-        }
-
+    
 
 
         
@@ -647,21 +549,17 @@ namespace MyNetSensors.Repositories.Dapper
             updateDbTimer.Stop();
             try
             {
-                int nodesCount = updatedNodesId.Count;
-                int messagesCount = newMessages.Count;
-                int messages = nodesCount + messagesCount;
+                int messages = updatedNodesId.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
                     return;
                 }
-                ;
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-
                 WriteUpdatedNodes();
-                WriteNewMessages();
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;

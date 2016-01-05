@@ -374,7 +374,18 @@ namespace MyNetSensors.Gateways
 
         public void SendSensorState(int nodeId,int sensorId,string state)
         {
-            Sensor sensor = GetNode(nodeId).GetSensor(sensorId);
+            Node node = GetNode(nodeId);
+            if (node == null)
+            {
+                LogState($"Can`t send message. Node{nodeId} does not exist.");
+                return;
+            }
+            Sensor sensor = node.GetSensor(sensorId);
+            if (sensor == null)
+            {
+                LogState($"Can`t send message. Node{nodeId} Sensor{sensorId} does not exist.");
+                return;
+            }
             sensor.state = state;
             sensor.UnRemapSensorData();
             SendSensorState(sensor);

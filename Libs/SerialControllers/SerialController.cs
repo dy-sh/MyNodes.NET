@@ -27,6 +27,7 @@ namespace MyNetSensors.SerialControllers
         public static bool dataBadeUseMSSQL = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
+        public static bool writeNodesMessagesToDataBase = false;
 
         public static bool nodesTasksEnabled = true;
         public static int nodesTasksUpdateInterval = 10;
@@ -43,21 +44,22 @@ namespace MyNetSensors.SerialControllers
         //VARIABLES
         public static ComPort comPort = new ComPort();
         public static Gateway gateway = new Gateway(comPort);
+
         public static IGatewayRepository gatewayDb;
         public static INodesHistoryRepository historyDb;
-        public static INodesTasksRepository nodesTasksDb;
+        public static INodesMessagesRepository messagesDb;
+
         public static NodesTasksEngine nodesTasksEngine;
-        //       public static ISoftNodesServer softNodesServer;
-        //        public static SoftNodesController softNodesController;
-
-
+        public static INodesTasksRepository nodesTasksDb;
 
         public static LogicalNodesEngine logicalNodesEngine;
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
-        public static ILogicalNodesRepository logicalNodesRepository;
+        public static ILogicalNodesRepository logicalNodesDb;
 
         public static SerialControllerLogs logs=new SerialControllerLogs();
 
+        //public static ISoftNodesServer softNodesServer;
+        //public static SoftNodesController softNodesController;
 
         public static event EventHandler OnStarted;
 
@@ -119,8 +121,9 @@ namespace MyNetSensors.SerialControllers
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
                 historyDb = new NodesHistoryRepositoryDapper(dataBaseConnectionString);
+                messagesDb = new NodesMessagesRepositoryDapper(dataBaseConnectionString);
                 nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
-                logicalNodesRepository = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
+                logicalNodesDb = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
             }
             else
             {
@@ -130,11 +133,15 @@ namespace MyNetSensors.SerialControllers
 
             gatewayDb.SetWriteInterval(dataBaseWriteInterval);
             gatewayDb.ConnectToGateway(gateway);
-
             gatewayDb.OnLogStateMessage += logs.AddDataBaseStateMessage;
 
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
+
+            messagesDb.SetWriteInterval(dataBaseWriteInterval+900);
+            messagesDb.ConnectToGateway(gateway);
+            messagesDb.OnLogStateMessage += logs.AddDataBaseStateMessage;
+            messagesDb.Enable(writeNodesMessagesToDataBase);
 
             logs.AddSerialControllerMessage("Database connected.");
         }
@@ -239,7 +246,7 @@ namespace MyNetSensors.SerialControllers
             logs.AddSerialControllerMessage("Starting logical nodes engine... ");
 
 
-            logicalNodesEngine = new LogicalNodesEngine(logicalNodesRepository);
+            logicalNodesEngine = new LogicalNodesEngine(logicalNodesDb);
             //logicalNodesEngine=new LogicalNodesEngine();
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);

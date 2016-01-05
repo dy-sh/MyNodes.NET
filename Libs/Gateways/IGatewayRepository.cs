@@ -14,9 +14,7 @@ namespace MyNetSensors.Gateways
         void ConnectToGateway(Gateway gateway);
 
 
-        void AddMessage(Message message);
-        List<Message> GetMessages();
-        void DropMessages();
+
 
 
         int AddOrUpdateNode(Node node);
@@ -33,7 +31,6 @@ namespace MyNetSensors.Gateways
 
         bool IsDbExist();
         void SetWriteInterval(int ms);
-        void SetStoreMessages(bool enable);
 
 
         void UpdateNodeSettings(Node node);

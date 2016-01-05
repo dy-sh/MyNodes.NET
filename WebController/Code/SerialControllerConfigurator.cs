@@ -52,20 +52,22 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.nodesTasksEnabled = Boolean.Parse(Configuration["NodesTasks:Enable"]);
                 SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
-                //SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
-                //SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
-                //SerialController.softNodesLogMessages = Boolean.Parse(Configuration["SoftNodes:LogMessages"]);
-                //SerialController.softNodesLogState = Boolean.Parse(Configuration["SoftNodes:LogState"]);
                 SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
                 SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
                 SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
                 SerialController.dataBadeUseMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
                 SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
+                SerialController.writeNodesMessagesToDataBase = Boolean.Parse(Configuration["Gateway:WriteNodesMessagesToDataBase"]);
 
                 if (SerialController.dataBadeUseMSSQL)
                     SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
                 else
                     SerialController.dataBaseConnectionString = Configuration["DataBase:SqliteConnectionString"];
+
+                //SerialController.softNodesEnabled = Boolean.Parse(Configuration["SoftNodes:Enable"]);
+                //SerialController.softNodesPort = Int32.Parse(Configuration["SoftNodes:Port"]);
+                //SerialController.softNodesLogMessages = Boolean.Parse(Configuration["SoftNodes:LogMessages"]);
+                //SerialController.softNodesLogState = Boolean.Parse(Configuration["SoftNodes:LogState"]);
 
                 portName = Configuration["Gateway:SerialPort"];
             }
@@ -82,8 +84,9 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
                 SerialController.historyDb = new NodesHistoryRepositoryEf(nodesDbContext);
+                SerialController.messagesDb = new NodesMessagesRepositoryEF(nodesDbContext);
                 SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesDbContext);
-                SerialController.logicalNodesRepository = new LogicalNodesRepositoryEF(nodesDbContext);
+                SerialController.logicalNodesDb = new LogicalNodesRepositoryEF(nodesDbContext);
             }
 
             if (portName != null)

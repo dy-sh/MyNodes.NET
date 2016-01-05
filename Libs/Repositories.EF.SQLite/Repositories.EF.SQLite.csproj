@@ -130,6 +130,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NodesMessagesRepositoryEF.cs" />
     <Compile Include="GatewayRepositoryEF.cs" />
     <Compile Include="LogicalNodeSerialized.cs" />
     <Compile Include="LogicalNodesRepositoryEF.cs" />
