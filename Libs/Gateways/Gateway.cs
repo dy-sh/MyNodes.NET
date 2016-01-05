@@ -114,7 +114,7 @@ namespace MyNetSensors.Gateways
 
             UpdateSensorFromMessage(message);
 
-            LogTxRx($"TX: {message.ToString()}");
+            LogTxRx(message.ToString());
 
             string mes = $"{message.nodeId};" +
                          $"{message.sensorId};" +
@@ -144,7 +144,7 @@ namespace MyNetSensors.Gateways
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
-            LogTxRx($"RX: { message.ToString()}");
+            LogTxRx( message.ToString());
 
             OnMessageRecievedEvent?.Invoke(message);
 

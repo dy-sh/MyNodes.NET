@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "System Logs";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <a asp-controller="Logs" asp-action="All">All</a> |
+    <a asp-controller="Logs" asp-action="Controller">Controller</a> |
+    <a asp-controller="Logs" asp-action="GatewayState">Gateway State</a> |
+    <a asp-controller="Logs" asp-action="GatewayMessages">Gateway Messages</a> |
+    <a asp-controller="Logs" asp-action="GatewayRawMessages">Gateway Raw Messages</a> |
+    <a asp-controller="Logs" asp-action="LogicalNodesEngine">Logical Nodes Engine</a> | 
+    <a asp-controller="Logs" asp-action="LogicalNodes">Logical Nodes</a> |
+    <a asp-controller="Logs" asp-action="DataBase">DataBase</a>
+</div>
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @ViewBag.PageName
+        <button type="button" class="btn btn-default pull-right" id="clear-log">
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+            Clear Log
+        </button><br><br>
+
+
+    </div>
+    <div class="panel-body" style="overflow-y: scroll;" id="log">
+    </div>
+
+</div>
+
+
+@section scripts
+{
+    <script src="~/js/mysensors.js"></script>
+    <script> 
+        var logType="@ViewBag.LogType";
+    </script>
+    <script src="~/js/mynetsensors-logs-page.js"></script>
+}
+
+

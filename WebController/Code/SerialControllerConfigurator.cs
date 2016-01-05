@@ -90,7 +90,7 @@ namespace MyNetSensors.WebController.Code
             {
                 SerialController.logs.OnGatewayStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
                 SerialController.logs.OnGatewayTxRxLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
-                SerialController.logs.OnGatewayRawTxRxLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
+               // SerialController.logs.OnGatewayRawTxRxLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
                 SerialController.logs.OnDataBaseStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Gray); };
                 SerialController.logs.OnLogicalNodesEngineLog += (logMessage) => { Log(logMessage, ConsoleColor.Cyan); };
                 SerialController.logs.OnLogicalNodesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkCyan); };

@@ -33,23 +33,23 @@ namespace MyNetSensors.WebController.Controllers
             return gateway.IsConnected();
         }
 
-        public string GetMessages()
-        {
-            List<Message> messages = gateway.messagesLog.GetAllMessages();
-            string text = null;
-            foreach (var message in messages)
-            {
-                text += message.ToString();
-                text += " <br>\n";
-            }
-            return text;
-        }
+        //public string GetMessages()
+        //{
+        //    List<Message> messages = gateway.messagesLog.GetAllMessages();
+        //    string text = null;
+        //    foreach (var message in messages)
+        //    {
+        //        text += message.ToString();
+        //        text += " <br>\n";
+        //    }
+        //    return text;
+        //}
 
-        public bool ClearMessages()
-        {
-            gateway.messagesLog.ClearLog();
-            return true;
-        }
+        //public bool ClearMessages()
+        //{
+        //    gateway.messagesLog.ClearLog();
+        //    return true;
+        //}
 
         public bool SendMessage(int nodeId, int sensorId, string state)
         {

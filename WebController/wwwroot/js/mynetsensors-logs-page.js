@@ -12,16 +12,23 @@ $(function () {
     //configure signalr
     var clientsHub = $.connection.clientsHub;
 
+    //var logType set from ViewBag in View
 
-    clientsHub.client.OnMessageRecievedEvent = function (message) {
-        $('#log').append(message + "<br/>");
-        $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-    };
+    if (logType == "All" || logType == "GatewayState")
+        clientsHub.client.OnGatewayStateLog = addMessage;
+    if (logType == "All" || logType == "GatewayMessages")
+        clientsHub.client.OnGatewayTxRxLog = addMessage;
+    if (logType == "All" || logType == "GatewayRawMessages")
+        clientsHub.client.OnGatewayRawTxRxLog = addMessage;
+    if (logType == "All" || logType == "DataBaseState")
+        clientsHub.client.OnDataBaseStateLog = addMessage;
+    if (logType == "All" || logType == "LogicalNodesEngine")
+        clientsHub.client.OnLogicalNodesEngineLog = addMessage;
+    if (logType == "All" || logType == "LogicalNodes")
+        clientsHub.client.OnLogicalNodesLog = addMessage;
+    if (logType == "All" || logType == "Controller")
+        clientsHub.client.OnSerialControllerLog = addMessage;
 
-    clientsHub.client.OnMessageSendEvent = function (message) {
-        $('#log').append(message + "<br/>");
-        $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
-    };
 
     clientsHub.client.OnConnectedEvent = function () {
         hardwareStateChanged(true);
@@ -51,11 +58,17 @@ $(function () {
     //clear messages button
     $('#clear-log').on('click', function () {
         $('#log').html("");
-        $.ajax({ url: "/GatewayAPI/ClearMessages/" });
+        $.ajax({
+            url: "/Logs/ClearLogs/",
+            data: { logType: logType },
+            success: function () {
+                $('#log').html();
+            }
+        });
     });
 
     getIsHardwareConnected();
-    getLog();
+    getLogs();
 
 
 
@@ -95,10 +108,11 @@ function hardwareStateChanged(connected) {
     gatewayHardwareConnected = connected;
 }
 
-function getLog() {
+function getLogs() {
     $.ajax({
-        url: "/GatewayAPI/GetMessages/",
+        url: "/Logs/GetLogs/",
         type: "POST",
+        data: { logType: logType },
         success: function (messages) {
             onReturnMessages(messages);
         }
@@ -106,6 +120,14 @@ function getLog() {
 }
 
 function onReturnMessages(messages) {
-    $('#log').html(messages);
+    for (var i = 0; i < messages.length; i++) {
+        $('#log').append(messages[i] + "<br/>");
+    }
+    $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
+};
+
+
+function addMessage(message) {
+    $('#log').append(message + "<br/>");
     $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
 };
