@@ -137,7 +137,7 @@ namespace MyNetSensors.SerialControllers
             List<LogRecord> list = new List<LogRecord>();
             list.AddRange(gatewayStateLog);
             list.AddRange(gatewayMessagesLog);
-            list.AddRange(gatewayRawMessagesLog);
+           // list.AddRange(gatewayRawMessagesLog);
             list.AddRange(logicalNodesEngineLog);
             list.AddRange(logicalNodesLog);
             list.AddRange(dataBaseStateLog);

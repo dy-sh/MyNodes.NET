@@ -14,7 +14,7 @@ namespace MyNetSensors.Gateways
     public class MessagesLog
     {
         //store last N messages
-        public int maxMessaages=100;
+        public int maxMessaages=1000;
 
         private List<Message> messages = new List<Message>();
 

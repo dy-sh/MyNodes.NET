@@ -86,6 +86,7 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.Gateway.SerialPort = port.PortName;
             WriteConfig(json);
+            сonfiguration.Reload();
 
             SerialController.ReconnectToGateway(port.PortName);
 
@@ -127,6 +128,7 @@ namespace MyNetSensors.WebController.Controllers
             json.Gateway.SerialPort = port.PortName;
             json.FirstRun = false;
             WriteConfig(json);
+            сonfiguration.Reload();
 
             SerialControllerConfigurator.Start(сonfiguration);
 
