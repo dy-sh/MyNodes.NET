@@ -80,7 +80,7 @@ namespace MyNetSensors.SerialControllers
                 //waiting for starting web server
                 Thread.Sleep(500);
 
-                logs.AddSerialControllerMessage("\n-------------STARTING CONTROLLER--------------");
+                logs.AddSerialControllerMessage("-------------STARTING CONTROLLER--------------");
 
                 ConnectToDB();
                 ConnectToGateway();

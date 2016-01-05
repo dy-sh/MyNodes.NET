@@ -36,7 +36,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddGatewayStateMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.GatewayState, message);
             gatewayStateLog.Add(logMessage);
             if (enableGatewayStateEvent)
                 OnGatewayStateLog?.Invoke(logMessage);
@@ -44,7 +44,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddGatewayTxRxMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.GatewayTxRx, message);
             gatewayTxRxLog.Add(logMessage);
             if (enableGatewayTxRxEvent)
                 OnGatewayTxRxLog?.Invoke(logMessage);
@@ -52,7 +52,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddGatewayRawTxRxMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.GatewayRawTxRx, message);
             gatewayRawTxRxLog.Add(logMessage);
             if (enableGatewayRawTxRxEvent)
                 OnGatewayRawTxRxLog?.Invoke(logMessage);
@@ -62,7 +62,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddDataBaseStateMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.DataBaseState, message);
             dataBaseStateLog.Add(logMessage);
             if (enableDataBaseStateEvent)
                 OnDataBaseStateLog?.Invoke(logMessage);
@@ -70,7 +70,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddLogicalNodesMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodes, message);
             logicalNodesLog.Add(logMessage);
             if (enableLogicalNodesEvent)
                 OnLogicalNodesLog?.Invoke(logMessage);
@@ -78,7 +78,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddLogicalNodesEngineMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.LogicalNodesEngine, message);
             logicalNodesEngineLog.Add(logMessage);
             if (enableLogicalNodesEngineEvent)
                 OnLogicalNodesEngineLog?.Invoke(logMessage);
@@ -86,7 +86,7 @@ namespace MyNetSensors.SerialControllers
 
         public void AddSerialControllerMessage(string message)
         {
-            LogMessage logMessage = new LogMessage(message);
+            LogMessage logMessage = new LogMessage(LogMessageType.SerialController, message);
             serialControllerLog.Add(logMessage);
             if (enableSerialControllerEvent)
                 OnSerialControllerLog?.Invoke(logMessage);

@@ -165,37 +165,37 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnSerialControllerLog(LogMessage message)
         {
-            hub.Clients.All.OnSerialControllerLog(message.ToString());
+            hub.Clients.All.OnSerialControllerLog(message.ToStringWithType());
         }
 
         private static void OnLogicalNodesEngineLog(LogMessage message)
         {
-            hub.Clients.All.OnLogicalNodesEngineLog(message.ToString());
+            hub.Clients.All.OnLogicalNodesEngineLog(message.ToStringWithType());
         }
 
         private static void OnLogicalNodesLog(LogMessage message)
         {
-            hub.Clients.All.OnLogicalNodesLog(message.ToString());
+            hub.Clients.All.OnLogicalNodesLog(message.ToStringWithType());
         }
 
         private static void OnDataBaseStateLog(LogMessage message)
         {
-            hub.Clients.All.OnDataBaseStateLog(message.ToString());
+            hub.Clients.All.OnDataBaseStateLog(message.ToStringWithType());
         }
 
         private static void OnGatewayRawTxRxLog(LogMessage message)
         {
-            hub.Clients.All.OnGatewayRawTxRxLog(message.ToString());
+            hub.Clients.All.OnGatewayRawTxRxLog(message.ToStringWithType());
         }
 
         private static void OnGatewayTxRxLog(LogMessage message)
         {
-            hub.Clients.All.OnGatewayTxRxLog(message.ToString());
+            hub.Clients.All.OnGatewayTxRxLog(message.ToStringWithType());
         }
 
         private static void OnGatewayStateLog(LogMessage message)
         {
-            hub.Clients.All.OnGatewayStateLog(message.ToString());
+            hub.Clients.All.OnGatewayStateLog(message.ToStringWithType());
         }
     }
 }

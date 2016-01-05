@@ -71,7 +71,7 @@ namespace MyNetSensors.WebController.Code
             }
             catch
             {
-                Log(new LogMessage("ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
+                Log(new LogMessage(LogMessageType.SerialController, "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
                 throw new Exception("Bad configuration in appsettings.json file.");
             }
 
@@ -105,7 +105,7 @@ namespace MyNetSensors.WebController.Code
         public static void Log(LogMessage message, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(message.Message);
+            Console.WriteLine(message.ToStringWithType());
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
