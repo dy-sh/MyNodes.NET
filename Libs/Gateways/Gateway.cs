@@ -44,7 +44,7 @@ namespace MyNetSensors.Gateways
         private bool isConnected;
 
         public bool checkGatewayIsAlive = true;
-        public int checGatewayIsAliveInterval = 2000;
+        public int checkGatewayIsAliveInterval = 2000;
         public DateTime checkGatewayLastRequestTime;
         public DateTime checkGatewayLastResponseTime;
         private Timer checkGatewayTimer = new Timer();
@@ -58,41 +58,40 @@ namespace MyNetSensors.Gateways
             this.serialPort.OnConnectedEvent += OnSerialPortConnectedEvent;
 
             checkGatewayTimer.Elapsed += CheckGatewayAlive;
-            checkGatewayTimer.Interval = checGatewayIsAliveInterval;
-            checkGatewayTimer.Start();
-            checkGatewayLastResponseTime = DateTime.Now;
-            checkGatewayLastRequestTime = DateTime.Now;
         }
 
         private void CheckGatewayAlive(object sender, ElapsedEventArgs e)
         {
-            if(!isConnected)
+            if (!isConnected)
                 return;
 
-            checkGatewayTimer.Stop();
-            try
+            double lastResponseAgo = (DateTime.Now - checkGatewayLastResponseTime).TotalMilliseconds;
+            if (lastResponseAgo > checkGatewayTimer.Interval * 2)
             {
-                double lastResponseAgo = (DateTime.Now-checkGatewayLastResponseTime).TotalMilliseconds;
-                if (lastResponseAgo> checkGatewayTimer.Interval * 2)
-                {
-                    //gateway not responding
-                    LogState("Gateway not responding.");
+                //gateway not responding
+                LogState("Gateway not responding.");
 
-                    OnSerialPortDisconnectedEvent();
-                }
-                else
-                {
-                    //send new request
-                    checkGatewayLastRequestTime = DateTime.Now;
-                    SendGetwayVersionRequest();
-                }
+                OnSerialPortDisconnectedEvent();
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                //send new request
+                checkGatewayLastRequestTime = DateTime.Now;
+                SendGetwayVersionRequest();
             }
+        }
 
+        public void StartCheckGatewayAlive()
+        {
+            checkGatewayLastResponseTime = DateTime.Now;
+            checkGatewayLastRequestTime = DateTime.Now;
+            checkGatewayTimer.Interval = checkGatewayIsAliveInterval;
             checkGatewayTimer.Start();
+        }
+
+        public void StopCheckGatewayAlive()
+        {
+            checkGatewayTimer.Stop();
         }
 
 
@@ -118,11 +117,12 @@ namespace MyNetSensors.Gateways
         {
             isConnected = false;
 
-            if(serialPort.IsConnected())
+            if (serialPort.IsConnected())
                 serialPort.Disconnect();
 
             LogState("Gateway disconnected.");
 
+            StopCheckGatewayAlive();
             OnDisconnectedEvent?.Invoke();
         }
 
@@ -136,6 +136,7 @@ namespace MyNetSensors.Gateways
                     serialPort.Disconnect();
 
                 LogState("Gateway unexpectedly disconnected.");
+                StopCheckGatewayAlive();
                 OnUnexpectedlyDisconnectedEvent?.Invoke();
             }
         }
@@ -153,12 +154,13 @@ namespace MyNetSensors.Gateways
 
             //LogState("Gateway connected.");
 
+            StartCheckGatewayAlive();
             OnConnectedEvent?.Invoke();
 
             SendGetwayVersionRequest();
         }
 
-        
+
 
         private void SendMessage(Message message)
         {
@@ -204,7 +206,7 @@ namespace MyNetSensors.Gateways
             if (storeMessages)
                 messagesLog.AddNewMessage(message);
 
-            LogMessage( message.ToString());
+            LogMessage(message.ToString());
 
             OnMessageRecievedEvent?.Invoke(message);
 
@@ -243,13 +245,13 @@ namespace MyNetSensors.Gateways
                     ProceedRequestMessage(message);
 
                 //Gateway vesrion (alive) respond
-                if (message.nodeId==0 
-                    && message.messageType==MessageType.C_INTERNAL
-                    && message.subType== (int)InternalDataType.I_VERSION)
+                if (message.nodeId == 0
+                    && message.messageType == MessageType.C_INTERNAL
+                    && message.subType == (int)InternalDataType.I_VERSION)
                     ProceedAliveMessage(message);
 
                 //request to node
-                if (message.nodeId==0)
+                if (message.nodeId == 0)
                     return;
 
                 UpdateNodeFromMessage(message);
@@ -367,7 +369,7 @@ namespace MyNetSensors.Gateways
 
             if (mes.messageType == MessageType.C_SET)
             {
-                sensor.dataType= (SensorDataType)mes.subType;
+                sensor.dataType = (SensorDataType)mes.subType;
                 sensor.state = mes.payload;
                 sensor.RemapSensorData();
             }
@@ -446,7 +448,7 @@ namespace MyNetSensors.Gateways
         }
 
 
-        public void SendSensorState(int nodeId,int sensorId,string state)
+        public void SendSensorState(int nodeId, int sensorId, string state)
         {
             Node node = GetNode(nodeId);
             if (node == null)
@@ -474,7 +476,7 @@ namespace MyNetSensors.Gateways
                 nodeId = sensor.nodeId,
                 payload = sensor.state,
                 sensorId = sensor.sensorId,
-                subType = (int) sensor.dataType
+                subType = (int)sensor.dataType
             };
             SendMessage(message);
         }
@@ -504,7 +506,7 @@ namespace MyNetSensors.Gateways
                 sensorId = 255,
                 messageType = MessageType.C_INTERNAL,
                 ack = false,
-                subType = (int) InternalDataType.I_ID_RESPONSE,
+                subType = (int)InternalDataType.I_ID_RESPONSE,
                 payload = freeId.ToString()
             };
             SendMessage(mess);
@@ -518,7 +520,7 @@ namespace MyNetSensors.Gateways
                 sensorId = 255,
                 messageType = MessageType.C_INTERNAL,
                 ack = false,
-                subType = (int) InternalDataType.I_CONFIG,
+                subType = (int)InternalDataType.I_CONFIG,
                 payload = "M"
             };
             SendMessage(mess);
@@ -566,7 +568,7 @@ namespace MyNetSensors.Gateways
                 nodeId = nodeId,
                 payload = "0",
                 sensorId = 0,
-                subType = (int) InternalDataType.I_REBOOT
+                subType = (int)InternalDataType.I_REBOOT
             };
             SendMessage(message);
         }
@@ -580,13 +582,13 @@ namespace MyNetSensors.Gateways
             };
 
 
-            int sensors= nodes.Sum(node => node.sensors.Count);
+            int sensors = nodes.Sum(node => node.sensors.Count);
             info.gatewaySensorsRegistered = sensors;
 
             return info;
         }
 
-        public void SetSensorDbId(int nodeId,int sensorId, int dbId)
+        public void SetSensorDbId(int nodeId, int sensorId, int dbId)
         {
             Node node = GetNode(nodeId);
             Sensor sensor = node.GetSensor(sensorId);
@@ -619,7 +621,7 @@ namespace MyNetSensors.Gateways
 
             OnDeleteNodeEvent?.Invoke(oldNode);
 
-            if (oldNode!=null) 
+            if (oldNode != null)
                 nodes.Remove(oldNode);
         }
     }
