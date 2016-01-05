@@ -33,6 +33,7 @@ namespace MyNetSensors.Gateways
         public event SensorEventHandler OnSensorUpdatedEvent;
         public event Action OnClearNodesListEvent;
         public event Action OnDisconnectedEvent;
+        public event Action OnUnexpectedlyDisconnectedEvent;
         public event Action OnConnectedEvent;
         public event LogEventHandler OnLogMessage;
         public event LogEventHandler OnLogStateMessage;
@@ -46,10 +47,9 @@ namespace MyNetSensors.Gateways
         {
             this.serialPort = serialPort;
             this.serialPort.OnDataReceivedEvent += RecieveMessage;
-            this.serialPort.OnDisconnectedEvent += Disconnect;
+            this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             this.serialPort.OnConnectedEvent += OnSerialPortConnectedEvent;
         }
-
 
 
         private void LogMessage(string message)
@@ -80,6 +80,16 @@ namespace MyNetSensors.Gateways
             LogState("Gateway disconnected.");
 
             OnDisconnectedEvent?.Invoke();
+        }
+
+        private void OnSerialPortDisconnectedEvent()
+        {
+            if (isConnected)
+            {
+                isConnected = false;
+                LogState("Gateway unexpectedly disconnected.");
+                OnUnexpectedlyDisconnectedEvent?.Invoke();
+            }
         }
 
         public bool IsConnected()

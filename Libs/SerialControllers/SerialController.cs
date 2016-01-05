@@ -90,7 +90,7 @@ namespace MyNetSensors.SerialControllers
                 ConnectToLogicalNodesEngine();
 
                 //reconnect if disconnected
-                gateway.OnDisconnectedEvent += ReconnectToGateway;
+                gateway.OnUnexpectedlyDisconnectedEvent += ReconnectToGateway;
 
                 logs.AddSerialControllerMessage("-------------SARTUP COMPLETE--------------");
 
