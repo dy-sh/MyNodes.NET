@@ -26,13 +26,6 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-
-
-        public ActionResult Settings()
-        {
-            return View();
-        }
-
         public ActionResult Observe()
         {
             return View();

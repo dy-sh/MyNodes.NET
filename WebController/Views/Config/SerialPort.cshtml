@@ -1,14 +1,14 @@
 ﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
 
 @{
-    ViewData["Title"] = "About";
+    ViewBag.Title = "Serial Port Config";
 }
-<br />
 
-<h2>Config - Serial Port</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a> |
+    <a asp-controller="Config" asp-action="Gateway">Gateway</a> |
+    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>
 </div>
 <hr />
 <br />

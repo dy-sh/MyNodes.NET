@@ -1,9 +1,16 @@
 ﻿
 @{
-    ViewBag.Title = "Settings";
+    ViewBag.Title = "Gateway Config";
 }
 
-<h2>Settings</h2>
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <a asp-controller="Config" asp-action="Gateway">Gateway</a> |
+    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>
+</div>
+<hr />
+<br />
 
 <div class="row">
 

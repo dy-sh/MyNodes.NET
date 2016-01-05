@@ -48,10 +48,17 @@ namespace MyNetSensors.WebController.Controllers
             if (firstRun)
                 return RedirectToAction("FirstRun");
             else
-                return RedirectToAction("SerialPort");
+                return RedirectToAction("Gateway");
 
 
             // return View();
+        }
+
+
+
+        public ActionResult Gateway()
+        {
+            return View();
         }
 
 
@@ -137,28 +144,6 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        [HttpGet]
-        public IActionResult Logs()
-        {
-
-
-
-            return View(new SerialPortViewModel());
-        }
-
-
-        [HttpPost]
-        public IActionResult Logs(SerialPortViewModel port)
-        {
-            dynamic json = ReadConfig();
-            json.Gateway.SerialPort = port.PortName;
-            json.FirstRun = false;
-            WriteConfig(json);
-
-            SerialControllerConfigurator.Start(сonfiguration);
-
-            return RedirectToAction("Control", "Gateway");
-        }
     }
 
 
