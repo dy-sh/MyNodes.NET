@@ -32,6 +32,13 @@ namespace MyNetSensors.Gateways
             isValid = true;
         }
 
+
+        //parse message from string
+        public Message(string message)
+        {
+            ParseFromString(message);
+        }
+
         public override string ToString()
         {
             string inc = incoming ? "RX" : "TX";
@@ -58,5 +65,51 @@ namespace MyNetSensors.Gateways
                 subTypeString = ((InternalDataType)subType).ToString();
             return subTypeString;
         }
+
+
+
+        public void ParseFromString(string message)
+        {
+            try
+            {
+                string[] arguments = message.Split(new char[] { ';' }, 6);
+                nodeId = Int32.Parse(arguments[0]);
+                sensorId = Int32.Parse(arguments[1]);
+                messageType = (MessageType)Int32.Parse(arguments[2]);
+                ack = arguments[3] == "1";
+                subType = Int32.Parse(arguments[4]);
+                payload = arguments[5];
+            }
+            catch
+            {
+                isValid = false;
+                payload = message;
+            }
+        }
+
+        //public Message ParseMessageFromString(string message)
+        //{
+        //    var mes = new Message();
+
+        //    try
+        //    {
+        //        string[] arguments = message.Split(new char[] { ';' }, 6);
+        //        mes.nodeId = Int32.Parse(arguments[0]);
+        //        mes.sensorId = Int32.Parse(arguments[1]);
+        //        mes.messageType = (MessageType)Int32.Parse(arguments[2]);
+        //        mes.ack = arguments[3] == "1";
+        //        mes.subType = Int32.Parse(arguments[4]);
+        //        mes.payload = arguments[5];
+        //    }
+        //    catch
+        //    {
+        //        mes = new Message
+        //        {
+        //            isValid = false,
+        //            payload = message
+        //        };
+        //    }
+        //    return mes;
+        //}
     }
 }

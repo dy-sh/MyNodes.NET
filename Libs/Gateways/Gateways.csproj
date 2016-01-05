@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GatewayAliveChecker.cs" />
     <Compile Include="GatewayInfo.cs" />
     <Compile Include="IComPort.cs" />
     <Compile Include="IGatewayRepository.cs" />
