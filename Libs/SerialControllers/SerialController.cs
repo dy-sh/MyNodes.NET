@@ -138,7 +138,7 @@ namespace MyNetSensors.SerialControllers
             historyDb.SetWriteInterval(dataBaseWriteInterval);
             historyDb.ConnectToGateway(gateway);
 
-            messagesDb.SetWriteInterval(dataBaseWriteInterval+900);
+            messagesDb.SetWriteInterval(dataBaseWriteInterval);
             messagesDb.ConnectToGateway(gateway);
             messagesDb.OnLogStateMessage += logs.AddDataBaseStateMessage;
             messagesDb.Enable(writeNodesMessagesToDataBase);

@@ -38,11 +38,11 @@ namespace MyNetSensors.Repositories.EF.SQLite
         //messages list, to write to db by timer
         private List<Message> newMessages = new List<Message>();
 
-        private NodesDbContext db;
+        private NodesMessagesDbContext db;
 
         public event LogEventHandler OnLogStateMessage;
 
-        public NodesMessagesRepositoryEF(NodesDbContext nodesDbContext)
+        public NodesMessagesRepositoryEF(NodesMessagesDbContext nodesDbContext)
         {
             updateDbTimer.Elapsed += UpdateDbTimerEvent;
 

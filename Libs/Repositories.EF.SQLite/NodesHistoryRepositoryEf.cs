@@ -29,9 +29,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private Gateway gateway;
 
-        private NodesDbContext db;
+        private NodesHistoryDbContext db;
 
-        public NodesHistoryRepositoryEf(NodesDbContext nodesDbContext)
+        public NodesHistoryRepositoryEf(NodesHistoryDbContext nodesDbContext)
         {
             this.db = nodesDbContext;
             CreateDb();

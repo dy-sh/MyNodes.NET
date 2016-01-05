@@ -15,9 +15,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
     public class NodesTasksRepositoryEF : INodesTasksRepository
     {
 
-        private NodesDbContext db;
+        private NodesTasksDbContext db;
 
-        public NodesTasksRepositoryEF(NodesDbContext nodesDbContext)
+        public NodesTasksRepositoryEF(NodesTasksDbContext nodesDbContext)
         {
             this.db = nodesDbContext;
         }

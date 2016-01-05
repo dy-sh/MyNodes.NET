@@ -9,9 +9,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
 {
     public class LogicalNodesRepositoryEF : ILogicalNodesRepository
     {
-        private NodesDbContext db;
+        private LogicalNodesDbContext db;
 
-        public LogicalNodesRepositoryEF(NodesDbContext nodesDbContext)
+        public LogicalNodesRepositoryEF(LogicalNodesDbContext nodesDbContext)
         {
             this.db = nodesDbContext;
             CreateDb();

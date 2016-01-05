@@ -61,17 +61,33 @@ namespace MyNetSensors.WebController
                     .AddSqlServer()
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlServer(connectionString))
+                    .AddDbContext<LogicalNodesDbContext>(options =>
+                        options.UseSqlServer("Data Source=LogicalNodes.sqlite"))
                     .AddDbContext<NodesDbContext>(options =>
-                        options.UseSqlServer(connectionString));
+                        options.UseSqlServer("Data Source=Nodes.sqlite"))
+                    .AddDbContext<NodesHistoryDbContext>(options =>
+                        options.UseSqlServer("Data Source=NodesHistory.sqlite"))
+                    .AddDbContext<NodesMessagesDbContext>(options =>
+                        options.UseSqlServer("Data Source=NodesMessages.sqlite"))
+                    .AddDbContext<NodesTasksDbContext>(options =>
+                        options.UseSqlServer("Data Source=NodesTasks.sqlite"));
             }
             else
             {
                 services.AddEntityFramework()
                     .AddSqlite()
                     .AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite(connectionString))
+                        options.UseSqlite("Data Source=Application.sqlite"))
+                    .AddDbContext<LogicalNodesDbContext>(options =>
+                        options.UseSqlite("Data Source=LogicalNodes.sqlite"))
                     .AddDbContext<NodesDbContext>(options =>
-                        options.UseSqlite(connectionString));
+                        options.UseSqlite("Data Source=Nodes.sqlite"))
+                    .AddDbContext<NodesHistoryDbContext>(options =>
+                        options.UseSqlite("Data Source=NodesHistory.sqlite"))
+                    .AddDbContext<NodesMessagesDbContext>(options =>
+                        options.UseSqlite("Data Source=NodesMessages.sqlite"))
+                    .AddDbContext<NodesTasksDbContext>(options =>
+                        options.UseSqlite("Data Source=NodesTasks.sqlite"));
             }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -96,7 +112,11 @@ namespace MyNetSensors.WebController
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IConnectionManager connectionManager,
-            NodesDbContext nodesDbContext
+            LogicalNodesDbContext logicalNodesDbContext,
+            NodesDbContext nodesDbContext,
+            NodesHistoryDbContext nodesHistoryDbContext,
+            NodesMessagesDbContext nodesMessagesDbContext,
+            NodesTasksDbContext nodesTasksDbContext
             )
         {
             //Set up dot instead of comma in float values
@@ -182,7 +202,11 @@ namespace MyNetSensors.WebController
 
 
             SignalRServer.Start(connectionManager);
+            SerialControllerConfigurator.logicalNodesDbContext = logicalNodesDbContext;
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
+            SerialControllerConfigurator.nodesHistoryDbContext = nodesHistoryDbContext;
+            SerialControllerConfigurator.nodesMessagesDbContext = nodesMessagesDbContext;
+            SerialControllerConfigurator.nodesTasksDbContext = nodesTasksDbContext;
 
             bool firstRun = Boolean.Parse(Configuration["FirstRun"]);
             if (!firstRun)
