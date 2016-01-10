@@ -87,7 +87,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DropMessages()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Messages]");
+            db.Messages.RemoveRange(db.Messages);
+            db.SaveChanges();
         }
 
 

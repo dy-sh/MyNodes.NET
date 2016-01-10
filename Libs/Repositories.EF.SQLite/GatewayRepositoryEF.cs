@@ -87,22 +87,13 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void DropMessages()
-        {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Messages]");
-        }
-
         public void DropNodes()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Nodes]");
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [Sensors]");
+            db.Sensors.RemoveRange(db.Sensors);
+            db.Nodes.RemoveRange(db.Nodes);
+            db.SaveChanges();
         }
 
-
-        private void OnClearMessages()
-        {
-            DropMessages();
-        }
 
         private void OnClearNodesListEvent()
         {

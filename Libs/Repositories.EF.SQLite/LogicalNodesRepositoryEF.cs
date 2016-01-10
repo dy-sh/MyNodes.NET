@@ -109,7 +109,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DropNodes()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [LogicalNodes]");
+            db.LogicalNodesSerialized.RemoveRange(db.LogicalNodesSerialized);
+            db.SaveChanges();
         }
 
 
@@ -165,7 +166,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DropLinks()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [LogicalLinks]");
+            db.LogicalLinks.RemoveRange(db.LogicalLinks);
+            db.SaveChanges();
         }
 
 

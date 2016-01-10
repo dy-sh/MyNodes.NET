@@ -132,7 +132,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DropTasks()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [NodesTasks]");
+            db.NodesTasks.RemoveRange(db.NodesTasks);
+            db.SaveChanges();
         }
 
         public void UpdateTask(int id, bool isCompleted, DateTime executionDate, string executionValue, int repeatingDoneCount)

@@ -131,7 +131,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DropHistory()
         {
-            db.Database.ExecuteSqlCommand("TRUNCATE TABLE [SensorHistory]");
+            db.SensorsData.RemoveRange(db.SensorsData);
+            db.SaveChanges();
         }
 
 
