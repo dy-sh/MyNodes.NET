@@ -23,16 +23,23 @@
 
 
 
-
-
-    @if (!Model.Any())
+    <div class="ui raised segments">
+        <div class="ui secondary clearing segment">
+            <b>@ViewBag.Title</b>
+            <a class='ui right floated small button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
+                <b>Clear</b>
+            </a>
+        </div>
+        <div class="ui attached segment">
+            
+            @if (!Model.Any())
             {
                 @:There are no history. Log shows realtime data only. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
                 <br/>
             }
 
-        <table class="ui striped table">
-            <thead>
+            <table class="ui striped table">
+                <thead>
                 <tr>
                     <th scope="col">
                         Date
@@ -41,8 +48,8 @@
                         State
                     </th>
                 </tr>
-            </thead>
-            <tbody id="history-table">
+                </thead>
+                <tbody id="history-table">
                 @foreach (SensorData item in Model)
                 {
                     <tr>
@@ -50,12 +57,14 @@
                         <td>@item.state</td>
                     </tr>
                 }
-            </tbody>
-            <tfoot>
-                <tr>
+                </tbody>
 
-                    <th colspan="3">
-                        @*todo <div class="ui pagination menu">
+                @*todo table pagination*@
+                @*<tfoot>
+                    <tr>
+
+                        <th colspan="3">
+                            <div class="ui pagination menu">
                                 <a class="icon item">
                                     <i class="left chevron icon"></i>
                                 </a>
@@ -66,17 +75,21 @@
                                 <a class="icon item">
                                     <i class="right chevron icon"></i>
                                 </a>
-                            </div>*@
-
-                        <a class='ui right floated button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
-                            Clear History
-                        </a>
-                    </th>
+                            </div>
+                        </th>
 
 
-                </tr>
-            </tfoot>
-        </table>
+                    </tr>
+                </tfoot>*@
+            </table>
+        </div>
+        </div>
+
+
+
+
+
+  
 
 
 </div>
