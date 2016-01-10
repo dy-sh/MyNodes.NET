@@ -27,10 +27,10 @@
 
     @if (!Model.Any())
             {
-                @:There are no entries in history. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
+                @:There are no history. Log shows realtime data only. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
+                <br/>
             }
-            else
-            {
+
         <table class="ui striped table">
             <thead>
                 <tr>
@@ -42,7 +42,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="history-table">
                 @foreach (SensorData item in Model)
                 {
                     <tr>
@@ -79,7 +79,16 @@
         </table>
 
 
-    }
 </div>
 
 <br />
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var sensorId = '@ViewBag.sensorId';
+        var nodeId = '@ViewBag.nodeId';
+    </script>
+    <script src="~/js/mynetsensors-history-log-page.js"></script>
+}
