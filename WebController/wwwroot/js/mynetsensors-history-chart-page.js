@@ -15,8 +15,7 @@ groups.add({ id: 0 });
 
 var DELAY = 1000; // delay in ms to add new data points
 
-var autoscroll = $("#autoscroll");
-var charttype = $("#charttype");
+
 
 // create a graph2d with an (currently empty) dataset
 var container = document.getElementById('visualization');
@@ -26,11 +25,16 @@ var options ;
 var graph2d = new vis.Graph2d(container, dataset, groups, options);
 
 
+function onAutoscrollChange() {
+    autoScroll = $("#autoscroll").dropdown('get value')[0];
+}
+
+
 function renderStep() {
     var now = vis.moment();
     var range = graph2d.getWindow();
     var interval = range.end - range.start;
-    switch (autoscroll.dropdown('get value')[0]) {
+    switch (autoScroll) {
         case 'continuous':
             graph2d.setWindow(now - interval, now, { animation: false });
             requestAnimationFrame(renderStep);
@@ -71,6 +75,8 @@ $(document).ready(function () {
                 $('#chartPanel').fadeIn(elementsFadeTime);
                 showNow();
             }
+            $("#charttype").dropdown('set selected', charType);
+            $("#autoscroll").dropdown('set selected', autoScroll);
         },
         error: function () {
             $('#infoPanel').html("<p class='text-danger'>Failed to get data from server!</p>");
@@ -118,8 +124,14 @@ function addChartData(chartData) {
 
 }
 
+
+function onCharTypeChange() {
+    charType = $("#charttype").dropdown('get value')[0];
+    updateCharType();
+}
+
 function updateCharType() {
-    switch (charttype.dropdown('get value')[0]) {
+    switch (charType) {
         case 'bars':
             options = {
                 height: '370px',
@@ -269,8 +281,9 @@ function OnSensorUpdatedEvent(sensor) {
 
 var zoomTimer;
 function showNow() {
+
     clearTimeout(zoomTimer);
-    autoscroll.dropdown('set selected', "none");
+    $("#autoscroll").dropdown('set selected', "none");
     var window = {
         start: vis.moment().add(-30, 'seconds'),
         end: vis.moment()
@@ -278,14 +291,18 @@ function showNow() {
     graph2d.setWindow(window);
     //timer needed for prevent zoomin freeze bug
     zoomTimer = setTimeout(function (parameters) {
-        autoscroll.dropdown('set selected', "continuous");
+        $("#autoscroll").dropdown('set selected', "continuous");
     }, 1000);
+
+
+  
+
 
 }
 
 function showAll() {
     clearTimeout(zoomTimer);
-    autoscroll.dropdown('set selected', "none");
+    $("#autoscroll").dropdown('set selected', "none");
     graph2d.fit();
 }
   
@@ -293,8 +310,8 @@ function share() {
     var url = $(location).attr('host') + $(location).attr('pathname');
     var start = graph2d.getWindow().start;
     var end = graph2d.getWindow().end;
-    url += "?autoscroll=" + autoscroll.dropdown('get value')[0];
-    url += "&style=" + charttype.dropdown('get value')[0];
+    url += "?autoscroll=" + $("#autoscroll").dropdown('get value')[0];
+    url += "&style=" + $("#charttype").dropdown('get value')[0];
     url += "&start=" + start.getTime();
     url += "&end=" + end.getTime();
     $('#shareModal').modal('setting', 'transition', 'vertical flip').modal('show');

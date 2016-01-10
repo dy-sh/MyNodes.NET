@@ -39,17 +39,17 @@
                     <div class="ui fields">
                         <div class="ui field">
                             <label>Auto scroll:</label>
-                            <select id="autoscroll">
+                            <select id="autoscroll" onchange="onAutoscrollChange()">
                                 <option value="none" selected>None</option>
                                 <option value="continuous">Continuous</option>
-                                <option value="discrete">Discrete</option>
+                                @*<option value="discrete">Discrete</option>*@
                                 <option value="static">Static</option>
                             </select>
                         </div>
 
                         <div class="ui field">
                             <label>Style:</label>
-                            <select id="charttype" onchange="updateCharType()">
+                            <select id="charttype" onchange="onCharTypeChange()">
                                 <option value="bars" selected>Bars</option>
                                 <option value="splines">Splines</option>
                                 <option value="shadedsplines">Shaded Splines</option>
@@ -120,18 +120,21 @@
         var urlStart = @ViewBag.start;
         var urlEnd = @ViewBag.end;
 
+        var autoScroll = "none";
+        var charType = "bars";
+
         @if (@ViewBag.autoscroll != null)
         {
-            @:$("#autoscroll").dropdown('set selected', "@ViewBag.autoscroll");
+            @:autoScroll = "@ViewBag.autoscroll";
         }
+
 
         @if (@ViewBag.style != null)
         {
-            @:$("#charttype").dropdown('set selected', "@ViewBag.style");
-        }
+            @:charType = "@ViewBag.style";
+       }
 
         $('#autoscroll').dropdown();
-
         $('#charttype').dropdown();
 
     </script>
