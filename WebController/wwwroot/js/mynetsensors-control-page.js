@@ -8,7 +8,7 @@
 var gatewayHardwareConnected = null;
 var signalRServerConnected = null;
 
-var sliderUpdateInterval = 40; //increase this interval if you get excaption on moving slider
+var sliderUpdateInterval = 50; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 300;
 
 var nodes;
@@ -221,6 +221,10 @@ function updateBattery(node) {
 function updateNodeMenu(node) {
     var nodeMenu = $('#nodeMenu' + node.Id);
     nodeMenu.html(nodeMenuTemplate(node));
+    // show dropdown
+    $('.ui.dropdown').dropdown({
+        on: 'click'
+    });
 }
 
 
@@ -240,183 +244,202 @@ function createOrUpdateSensor(sensor) {
 }
 
 
+
+
+
 function createOrUpdateSensorData(sensor) {
 
 
     var id = sensor.nodeId + "-" + sensor.sensorId;
 
-        //update body
+    //update body
 
-        //ON-OFF BUTTON
+    //ON-OFF BUTTON
     if (sensor.dataType == mySensors.sensorDataType.V_TRIPPED
             || sensor.dataType == mySensors.sensorDataType.V_STATUS) {
-            if ($("[name='toggle-" + id + "']").length == 0) {
-                //create new
-                $(toggleTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+        if ($("[name='toggle-" + id + "']").length == 0) {
+            //create new
+            $(toggleTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
 
-                $("[name='toggle-" + id + "']").bootstrapSwitch('state', sensor.state == "1");
+            $("[name='toggle-" + id + "']").prop('checked', sensor.state == "1");
 
-                $("[name='toggle-" + id + "']").on('switchChange.bootstrapSwitch', function (event, state) {
-                    if (ignoreSendingSwitchId == id)
-                        return;
-                    var toggle = this.name.split("-");
-                    var val = state == true ? 1 : 0;
-                    sendSensor(toggle[1], toggle[2], val);
-                });
-            } else {
-                //update
-                ignoreSendingSwitchId = id;
-                $("[name='toggle-" + id + "']").bootstrapSwitch('state', sensor.state == "1");
-                ignoreSendingSwitchId = null;
-            }
+            $("[name='toggle-" + id + "']").click(function () {
+                if (ignoreSendingSwitchId == id)
+                    return;
+
+                var state = $(this).is(":checked");
+
+                var toggle = this.name.split("-");
+                var val = state == true ? 1 : 0;
+                sendSensor(toggle[1], toggle[2], val);
+            });
+        } else {
+            //update
+            ignoreSendingSwitchId = id;
+            $("[name='toggle-" + id + "']").prop('checked', sensor.state == "1");
+            ignoreSendingSwitchId = null;
         }
-            //0-100% SLIDER
+    }
+        //0-100% SLIDER
     else if (sensor.dataType == mySensors.sensorDataType.V_PERCENTAGE
             || sensor.dataType == mySensors.sensorDataType.V_LIGHT_LEVEL) {
 
         if (isNaN(sensor.state)) sensor.state = 0;
 
-            if ($("[name='slider-" + id + "']").length == 0) {
-                //create new
-                $(sliderTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+        if ($("[name='slider-" + id + "']").length == 0) {
+            //create new
+            $(sliderTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
 
-                $("[name='slider-" + id + "']").slider({ value: sensor.state, range: "min" });
+            var slider = $("[name='slider-" + id + "']")[0];
+            noUiSlider.create(slider, { start: [sensor.state], connect: 'lower', animate: false, range: { 'min': 0, 'max': 100 } });
 
-                $('#dataPanel' + id).removeClass("pull-right");
+            $('#dataPanel' + id).removeClass("pull-right");
 
 
-                slidersArray.push({
-                    sliderId: id,
-                    nodeId: sensor.nodeId,
-                    sensorId: sensor.sensorId,
-                    lastVal: sensor.state
-                });
-            } else {
-                //update
-                $("[name='slider-" + id + "']").slider("value", sensor.state);
-                updateSliderInArray(id, sensor.state);
+            slidersArray.push({
+                sliderId: id,
+                nodeId: sensor.nodeId,
+                sensorId: sensor.sensorId,
+                lastVal: sensor.state
+            });
+        } else {
+            //update
 
-            }
+            var slider = $("[name='slider-" + id + "']")[0];
+            slider.noUiSlider.set(sensor.state);
+
+            updateSliderInArray(id, sensor.state);
+
         }
-            //RGB SLIDERS
+    }
+        //RGB SLIDERS
     else if (sensor.dataType == mySensors.sensorDataType.V_RGB) {
 
         var r = hexToRgb(sensor.state).r;
         var g = hexToRgb(sensor.state).g;
         var b = hexToRgb(sensor.state).b;
-            if (isNaN(r)) r = 0;
-            if (isNaN(g)) g = 0;
-            if (isNaN(b)) b = 0;
+        if (isNaN(r)) r = 0;
+        if (isNaN(g)) g = 0;
+        if (isNaN(b)) b = 0;
 
 
-            if ($("[name='slider-" + id + "-r']").length == 0) {
-                //create new
-                $(rgbSlidersTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+        if ($("[name='slider-" + id + "-r']").length == 0) {
+            //create new
+            $(rgbSlidersTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+
+            var sliderR = $("[name='slider-" + id + "-r']")[0];
+            var sliderG = $("[name='slider-" + id + "-g']")[0];
+            var sliderB = $("[name='slider-" + id + "-b']")[0];
+
+            noUiSlider.create(sliderR, { start: [r], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+            noUiSlider.create(sliderG, { start: [g], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+            noUiSlider.create(sliderB, { start: [b], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+
+            $('#dataPanel' + id).removeClass("pull-right");
 
 
-                $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
-                $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
-                $("[name='slider-" + id + "-b']").slider({ value: b, range: "min", max: 255 });
+            rgbSlidersArray.push({
+                sliderId: id,
+                nodeId: sensor.nodeId,
+                sensorId: sensor.sensorId,
+                lastR: r,
+                lastG: g,
+                lastB: b
+            });
+        } else {
 
-                $('#dataPanel' + id).removeClass("pull-right");
+            $("[name='slider-" + id + "-r']")[0].noUiSlider.set(r);
+            $("[name='slider-" + id + "-g']")[0].noUiSlider.set(g);
+            $("[name='slider-" + id + "-b']")[0].noUiSlider.set(b);
 
-
-                rgbSlidersArray.push({
-                    sliderId: id,
-                    nodeId: sensor.nodeId,
-                    sensorId: sensor.sensorId,
-                    lastR: r,
-                    lastG: g,
-                    lastB: b
-                });
-            } else {
-                //update
-                $("[name='slider-" + id + "-r']").slider({ value: r });
-                $("[name='slider-" + id + "-g']").slider({ value: g });
-                $("[name='slider-" + id + "-b']").slider({ value: b });
-                updateRgbSlidersInArray(id, sensor.state);
-            }
-
+            updateRgbSlidersInArray(id, sensor.state);
         }
-            //RGBW SLIDERS
+
+    }
+        //RGBW SLIDERS
     else if (sensor.dataType == mySensors.sensorDataType.V_RGBW) {
 
         var r = hexToRgbw(sensor.state).r;
         var g = hexToRgbw(sensor.state).g;
         var b = hexToRgbw(sensor.state).b;
         var w = hexToRgbw(sensor.state).w;
-            if (isNaN(r)) r = 0;
-            if (isNaN(g)) g = 0;
-            if (isNaN(b)) b = 0;
-            if (isNaN(w)) w = 0;
+        if (isNaN(r)) r = 0;
+        if (isNaN(g)) g = 0;
+        if (isNaN(b)) b = 0;
+        if (isNaN(w)) w = 0;
 
-            if ($("[name='slider-" + id + "-r']").length == 0) {
-                //create new
-                $(rgbwSlidersTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+        if ($("[name='slider-" + id + "-r']").length == 0) {
+            //create new
+            $(rgbwSlidersTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
+
+            var sliderR = $("[name='slider-" + id + "-r']")[0];
+            var sliderG = $("[name='slider-" + id + "-g']")[0];
+            var sliderB = $("[name='slider-" + id + "-b']")[0];
+            var sliderW = $("[name='slider-" + id + "-w']")[0];
+
+            noUiSlider.create(sliderR, { start: [r], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+            noUiSlider.create(sliderG, { start: [g], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+            noUiSlider.create(sliderB, { start: [b], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+            noUiSlider.create(sliderW, { start: [w], connect: 'lower', animate: false, range: { 'min': 0, 'max': 255 } });
+
+            $('#dataPanel' + id).removeClass("pull-right");
 
 
-                $("[name='slider-" + id + "-r']").slider({ value: r, range: "min", max: 255 });
-                $("[name='slider-" + id + "-g']").slider({ value: g, range: "min", max: 255 });
-                $("[name='slider-" + id + "-b']").slider({ value: b, range: "min", max: 255 });
-                $("[name='slider-" + id + "-w']").slider({ value: w, range: "min", max: 255 });
-
-                $('#dataPanel' + id).removeClass("pull-right");
-
-
-                rgbwSlidersArray.push({
-                    sliderId: id,
-                    nodeId: sensor.nodeId,
-                    sensorId: sensor.sensorId,
-                    lastR: r,
-                    lastG: g,
-                    lastB: b,
-                    lastW: w
-                });
-            } else {
-                //update
-                $("[name='slider-" + id + "-r']").slider({ value: r });
-                $("[name='slider-" + id + "-g']").slider({ value: g });
-                $("[name='slider-" + id + "-b']").slider({ value: b });
-                updateRgbSlidersInArray(id, sensor.state);
-            }
-
+            rgbwSlidersArray.push({
+                sliderId: id,
+                nodeId: sensor.nodeId,
+                sensorId: sensor.sensorId,
+                lastR: r,
+                lastG: g,
+                lastB: b,
+                lastW: w
+            });
+        } else {
+            //update
+            $("[name='slider-" + id + "-r']")[0].noUiSlider.set(r);
+            $("[name='slider-" + id + "-g']")[0].noUiSlider.set(g);
+            $("[name='slider-" + id + "-b']")[0].noUiSlider.set(b);
+            $("[name='slider-" + id + "-w']")[0].noUiSlider.set(w);
+            updateRgbSlidersInArray(id, sensor.state);
         }
-            //IR SEND
+
+    }
+        //IR SEND
     else if (sensor.dataType == mySensors.sensorDataType.V_IR_SEND) {
 
 
-            if ($("[name='textbox-" + id + "']").length == 0) {
-                //create new
-                $(irSendTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
-
-                $('#dataPanel' + id).removeClass("pull-right");
-                $('#dataPanel' + id).removeClass("pull-up");
-
-                $("[name='button-" + id + "']").click(function () {
-                    var code = $("[name='textbox-" + id + "']").val();
-                    sendSensor(sensor.nodeId, sensor.sensorId, code);
-                });
-
-            } else {
-                //update
-
-            }
-        }
-            //IR RECEIVE
-    else if (sensor.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
-            $('#dataPanel' + id)
-                .html("<br/>IR receive: " + sensor.state);
+        if ($("[name='textbox-" + id + "']").length == 0) {
+            //create new
+            $(irSendTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
 
             $('#dataPanel' + id).removeClass("pull-right");
             $('#dataPanel' + id).removeClass("pull-up");
 
+            $("[name='button-" + id + "']").click(function () {
+                var code = $("[name='textbox-" + id + "']").val();
+                sendSensor(sensor.nodeId, sensor.sensorId, code);
+            });
+
+        } else {
+            //update
+
         }
-            //Simple text
-        else {
-            $('#dataPanel' + id)
-                .html(sensor.state);
-        }
- 
+    }
+        //IR RECEIVE
+    else if (sensor.dataType == mySensors.sensorDataType.V_IR_RECEIVE) {
+        $('#dataPanel' + id)
+            .html("<br/>IR receive: " + sensor.state);
+
+        $('#dataPanel' + id).removeClass("pull-right");
+        $('#dataPanel' + id).removeClass("pull-up");
+
+    }
+        //Simple text
+    else {
+        $('#dataPanel' + id)
+            .html(sensor.state);
+    }
+
 
 }
 
@@ -432,7 +455,8 @@ function sendSliders() {
 
     for (var i = 0; i < slidersArray.length; i++) {
         var id = slidersArray[i].sliderId;
-        var currentVal = $("[name='slider-" + id + "']").slider("value");
+        var currentVal = $("[name='slider-" + id + "']")[0].noUiSlider.get();
+        currentVal = Math.round(currentVal);
 
         if (!isNaN(currentVal) && currentVal != slidersArray[i].lastVal) {
 
@@ -445,9 +469,14 @@ function sendSliders() {
 
     for (var i = 0; i < rgbSlidersArray.length; i++) {
         var id = rgbSlidersArray[i].sliderId;
-        var currentR = $("[name='slider-" + id + "-r']").slider("value");
-        var currentG = $("[name='slider-" + id + "-g']").slider("value");
-        var currentB = $("[name='slider-" + id + "-b']").slider("value");
+        var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
+        var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
+        var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
+
+        currentR = Math.round(currentR);
+        currentG = Math.round(currentG);
+        currentB = Math.round(currentB);
+
 
         if (currentR != rgbSlidersArray[i].lastR ||
             currentG != rgbSlidersArray[i].lastG ||
@@ -464,10 +493,15 @@ function sendSliders() {
 
     for (var i = 0; i < rgbwSlidersArray.length; i++) {
         var id = rgbwSlidersArray[i].sliderId;
-        var currentR = $("[name='slider-" + id + "-r']").slider("value");
-        var currentG = $("[name='slider-" + id + "-g']").slider("value");
-        var currentB = $("[name='slider-" + id + "-b']").slider("value");
-        var currentW = $("[name='slider-" + id + "-w']").slider("value");
+        var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
+        var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
+        var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
+        var currentW = $("[name='slider-" + id + "-w']")[0].noUiSlider.get();
+
+        currentR = Math.round(currentR);
+        currentG = Math.round(currentG);
+        currentB = Math.round(currentB);
+        currentW = Math.round(currentW);
 
         if (currentR != rgbwSlidersArray[i].lastR ||
             currentG != rgbwSlidersArray[i].lastG ||

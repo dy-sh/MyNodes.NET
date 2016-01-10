@@ -1,29 +1,58 @@
-﻿
-
-<div id="main"/></div>
-
-
-@*<a href="#" id="sendButton" class="pull-right"> Send to server </a>*@
+﻿@{
+    Layout = null;
+}
 
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
 
-@section styles
-{
+
+
+    <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/css/litegraph.css">
     <link rel="stylesheet" type="text/css" href="~/css/litegraph-editor.css">
-}
+</head>
+<body>
+
+    <!-- Header Menu-->
+    <div class="ui inverted fixed big borderless main menu">
+        <div class="ui container">
+
+            <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
+
+            @*<a asp-controller="Gateway" asp-action="Control" class="ui item hidesmall fadebefore">Control</a>*@
 
 
+            <div class="right menu">
+                <div class="item">
+
+                    <button  type="button" class="ui black button" id="reset-view-button">Reset</button>
+                    <button  type="button" class="ui black button" id="minimap-button">Map</button>
+                    <button type="button" class="ui black button" id="fullscreen-button">Full screen</button>
+                    <a asp-controller="Gateway" asp-action="Control" class="ui black button fadebefore">X</a>
+                </div>
+            </div>
 
 
-@section scripts
-{
+        </div>
+    </div>
+    <br />
+    <br />
+<br/>
+<div id="main"/></div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph-editor.js"></script>
-
     <script type="text/javascript" src="~/js/litegraph/nodes-list.js"></script>
-
     <script type="text/javascript" src="~/js/litegraph/nodes-engine.js"></script>
-}
-
+    <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+</body>
+</html>

@@ -1,24 +1,45 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<br />
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="thumbnail">
-            <img class="img-responsive" src="~/images/banner2.png" alt="" />
+
+<br />
+<div class="body-content" style="visibility: hidden;">
+
+    <br />
+
+    <div class="ui container">
+        <div class="ui segment">
+            <img class="ui fluid image" src="~/images/logos/banner2.png">
 
         </div>
-    </div>
-</div>
 
+        <h1>Web Controller</h1>
 
-
-<h3>Web Controller</h3>
-<p>
-    <address>
+        <div class="ui divider"></div>
         Site: <a href="http://MyNetSensors.com"> MyNetSensors.com</a><br />
         Source: <a href="https://github.com/derwish-pro/MyNetSensors"> github.com/derwish-pro/MyNetSensors</a><br />
         Mail to: <a href="mailto:derwish.pro@gmail.com">info@MyNetSensors.com</a><br />
-    </address>
-</p>
+
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+
+
+        $(document).ready(function () {
+
+            //logo animation
+            $('.logo-img-home').transition('swing down');
+            $('.logo-text-home').transition('fade');
+
+            //body animation
+            $('.body-content').transition('fade');
+        });
+
+
+    </script>
+}

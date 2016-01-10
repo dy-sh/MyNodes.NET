@@ -17,10 +17,11 @@ function getGatewayInfo() {
         url: "/GatewayAPI/GetGatewayInfo/",
         type: "POST",
         success: function (gatewayInfo) {
+            $('#main-content').show();
             updateInfo(gatewayInfo);
         },
         error: function () {
-            $('#gateway-hardware-online').html("<p class='text-danger'>Web server is not responding <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>");
+            $('#main-content').hide();
         }
     });
 }
@@ -29,48 +30,58 @@ function getGatewayInfo() {
 
 function updateInfo(gatewayInfo) {
     if (gatewayInfo.isGatewayConnected) {
-        $('#gateway-hardware-online').html("<p class='text-success'>Gateway hardware is online <span class='glyphicon glyphicon-ok' aria-hidden='true'></span></p>");
+        $('#gateway-hardware-online').show();
+        $('#gateway-hardware-offline').hide();
     } else {
-        $('#gateway-hardware-online').html("<p class='text-danger'>Gateway hardware is offline <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>");
+        $('#gateway-hardware-online').hide();
+        $('#gateway-hardware-offline').show();
     }
 
     $('#nodes-registered').html(gatewayInfo.gatewayNodesRegistered);
     $('#sensors-registered').html(gatewayInfo.gatewaySensorsRegistered);
 }
 
-$(document).ready(function(){
-    $("#dropLinks").click(function(){
-        $.ajax({type: "POST", url: "/GatewayAPI/DropLinks",
-            success:function(result) {
-                if (result) noty({ text: 'Sensors links were deleted.' });
-            }});
-    });
+$(document).ready(function () {
 
     $("#dropHistory").click(function () {
-        $.ajax({
-            type: "POST", url: "/GatewayAPI/DropHistory",
-            success: function (result) {
-                if (result) noty({ text: 'History was deleted.' });
+        $('#confirm-delete-history-dialog').modal({
+            onApprove: function () {
+                $.ajax({
+                    type: "POST", url: "/GatewayAPI/DropHistory",
+                    success: function (result) {
+                        if (result) noty({ text: 'History was deleted.' });
+                    }
+                });
             }
-        });
+        })
+        .modal('setting', 'transition', 'fade up').modal('show');
     });
 
     $("#dropTasks").click(function () {
-        $.ajax({
-            type: "POST", url: "/GatewayAPI/DropTasks",
-            success: function (result) {
-                if (result) noty({ text: 'Tasks were deleted.' });
+        $('#confirm-delete-tasks-dialog').modal({
+            onApprove: function () {
+                $.ajax({
+                    type: "POST", url: "/GatewayAPI/DropTasks",
+                    success: function (result) {
+                        if (result) noty({ text: 'Tasks were deleted.' });
+                    }
+                });
             }
-        });
+        })
+        .modal('setting', 'transition', 'fade up').modal('show');
     });
 
     $("#dropNodes").click(function () {
-        $.ajax({
-            type: "POST", url: "/GatewayAPI/DropNodes",
-            success: function (result) {
-                if (result) noty({ text: 'Nodes were deleted.' });
+        $('#confirm-delete-nodes-dialog').modal({
+            onApprove: function () {
+                $.ajax({
+                    type: "POST", url: "/GatewayAPI/DropNodes",
+                    success: function (result) {
+                        if (result) noty({ text: 'Nodes were deleted.' });
+                    }
+                });
             }
-        });
+        }).modal('setting', 'transition', 'fade up').modal('show');
     });
 
     $("#stopWritingHistory").click(function () {

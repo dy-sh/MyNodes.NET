@@ -1,55 +1,89 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿
+/*scroolbars always visible for smooth animation fades*/
+body {
+    overflow: -moz-scrollbars-vertical;
+    overflow: scroll;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 350px;
+.nonvisible {
+    visibility: hidden;
 }
 
 
-.pull-up {
-    margin-top: -25px;
+.showsmall {
+    display: none;
+}
+
+.main.menu .showsmall.item {
+    display: none;
+}
+
+.main.menu {
+    border-radius: 0;
+    border: none;
+    /*box-shadow: none;*/
+    /*transition: box-shadow 0.5s ease, padding 0.5s ease;*/
+    font-size: 1.15em;
+}
+
+    .main.menu.fixed {
+        background-color: #FFFFFF;
+        border: 1px solid #DDD;
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+@media only screen and (max-width: 700px) {
+
+
+    .big.main.menu .hidesmall.item {
+        display: none;
+    }
+
+    .big.main.menu .showsmall.item {
+        display: block;
+    }
+
+    .showsmall {
+        display: block;
+    }
+
+    .hidesmall {
+        display: none;
+    }
+
+
+
+    .masthead h1.ui.header {
+        font-size: 2.2em;
+    }
+
+    .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.1em;
+    }
 }
 
 
-.ui-slider {
-    margin-top: 30px;
+
+
+
+
+/*main ui elements color*/
+
+
+.noUi-connect {
+    background: #41A5F0;
+    /*background: #777;*/
+    height: 12px;
 }
 
-.ui-slider-range.ui-widget-header {
-    background: #729fcf;
+.switch-input:checked ~ .switch-label {
+    background: #41A5F0;
+    /*background: #777;*/
 }
 
-.ui-slider .ui-slider-handle {
-    background: url("../images/handle.png") no-repeat center center scroll #fff !important;
-    background-position: 50% 50%;
-    background-size: 18px 18px !important;
-    width: 22px;
-    height: 22px;
-    margin-left: -10px;
-    top: -6px;
-}
 
-.ui-slider-handle:focus {
-    outline-width: 0;
-}
 
 
 
@@ -72,18 +106,4 @@ textarea {
 
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-major {
     border-color: #e5e5e5;
-}
-
-.small-margin {
-    margin-bottom: -5px;
-    margin-top: -5px;
-}
-
-.pull-up-button {
-    margin-top: -7px;
-}
-
-.bootstrap-switch-handle-on.bootstrap-switch-primary {
-  color: #fff;
-    background: #729fcf !important;
 }

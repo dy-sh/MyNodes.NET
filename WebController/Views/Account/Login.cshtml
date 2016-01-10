@@ -12,25 +12,25 @@
 <div class="row">
     <div class="col-md-8">
         <section>
-            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="ui form" role="form">
                 <h4>Use a local account to log in.</h4>
-                <hr />
+                <div class="ui divider"></div>
                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                <div class="form-group">
+                <div class="fields">
                     <label asp-for="Email" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Email" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="fields">
                     <label asp-for="Password" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Password" class="form-control" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="fields">
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
                             <input asp-for="RememberMe" />
@@ -38,9 +38,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="fields">
                     <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Log in</button>
+                        <button type="submit" class="ui button primary">Log in</button>
                     </div>
                 </div>
                 <p>
@@ -55,7 +55,7 @@
     <div class="col-md-4">
         <section>
             <h4>Use another service to log in.</h4>
-            <hr />
+            <div class="ui divider"></div>
             @{
                 var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
                 if (loginProviders.Count == 0)
@@ -69,12 +69,12 @@
                 }
                 else
                 {
-                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="ui form" role="form">
                         <div>
                             <p>
                                 @foreach (var provider in loginProviders)
                                 {
-                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                    <button type="submit" class="ui button primary" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
                                 }
                             </p>
                         </div>

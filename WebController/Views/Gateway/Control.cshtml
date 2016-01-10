@@ -1,70 +1,97 @@
-﻿
-
-@{
+﻿@{
     ViewBag.Title = "Control Nodes";
 }
 
-<h2>Control Nodes</h2>
-<p>
-    @Html.ActionLink("History", "List", "History") |
-    @Html.ActionLink("Tasks", "List", "Tasks") |
-    @Html.ActionLink("Settings", "List", "Node")
+<br />
+<div class="ui container">
 
-</p>
-<hr />
-<div class="container">
-    <div class="row" id="nodesContainer" style="display: none;">
+    <h2>@ViewBag.Title</h2>
+    <p>
+        <a asp-controller="NodesEditor" asp-action="Index">Editor</a> | 
+        <a asp-controller="History" asp-action="List">History</a> |
+        <a asp-controller="Tasks" asp-action="List">Tasks</a> |
+        <a asp-controller="Node" asp-action="List">Settings</a>
+    </p>
+    <div class="ui divider"></div>
+
+
+
+    <div class="ui four cards" id="nodesContainer" style="display: none;">
+
     </div>
-</div>
 
 
+    <script id="nodeTemplate" type="text/x-handlebars-template">
+        <div class="ui card" id="nodePanel{{Id}}" style="min-width: 250px; max-width: 250px;">
 
-<script id="nodeTemplate" type="text/x-handlebars-template">
-    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{Id}}" style="min-width: 290px; max-width: 500px">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <img src="@Url.Content("~/images/activity.gif")" id="activity{{Id}}" class="pull-right" style="display: none;" />
-                <div id="nodeTitle{{Id}}">
+            <div class="ui attached block header">
+                <div class="left floated" id="nodeTitle{{Id}}">
                     Node {{Id}}
+                </div>
+                <div class="right floated">
+                    <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{Id}}" class="ui right floated" style="display: none;" />
                 </div>
             </div>
 
-            <div class="panel-body">
+            <div class="content">
                 {{#if name}} {{name}} <br /> {{/if}}
 
                 <div id="nodeBody{{Id}}"></div>
-                <br />
-                <ul class="list-group" id="sensorsContainer{{Id}}"></ul>
-                <div id="footer{{Id}}">
+            </div>
+
+
+            <div id="sensorsContainer{{Id}}" class="content">
+            </div>
+
+            <div class="ui bottom attached content" id="footer{{Id}}">
+                <div class="left floated">
                     {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span>{{/if}}
-                    <div class="dropdown pull-right">
-                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu{{Id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu" id="nodeMenu{{Id}}"></ul>
+                </div>
+                <div class="right floated">
+                    <div class="ui dropdown">
+                        <i class="sidebar icon"></i>
+                        <div class="menu" id="nodeMenu{{Id}}">
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
-</script>
+    </script>
 
 
 
 
-<script id="sensorTemplate" type="text/x-handlebars-template">
-    <li class="list-group-item" id="sensorPanel{{sensor-id this}}">
-        <span id="sensorTitle{{sensor-id this}}">{{sensor-title this}}</span><br />
-        <div class="pull-right pull-up" id="dataPanel{{sensor-id this}}">
+    <script id="sensorTemplate" type="text/x-handlebars-template">
+        <div class="" id="sensorPanel{{sensor-id this}}">
+
+            <div class="left floated">
+                <span id="sensorTitle{{sensor-id this}}">{{sensor-title this}}</span><br />
+
+            </div>
+            <div class="right floated">
+                <div id="dataPanel{{sensor-id this}}">
+                </div>
+            </div>
+
+
+            <br />
+            <br />
         </div>
-    </li>
-</script>
+    </script>
 
+
+
+</div>
+<br/>
 
 
 <script id="toggleTemplate" type="text/x-handlebars-template">
-    <input type="checkbox" name="toggle-{{sensor-id this}}" data-label-width="0" data-size="small">
+    <label class="switch">
+        <input type="checkbox" class="switch-input" name="toggle-{{sensor-id this}}">
+        <span class="switch-label" data-on="On" data-off="Off"></span>
+        <span class="switch-handle"></span>
+    </label>
+
 </script>
 
 <script id="sliderTemplate" type="text/x-handlebars-template">
@@ -75,6 +102,7 @@
     <div id="slider" name="slider-{{sensor-id this}}-r"></div>
     <div id="slider" name="slider-{{sensor-id this}}-g"></div>
     <div id="slider" name="slider-{{sensor-id this}}-b"></div>
+
 </script>
 
 <script id="rgbwSlidersTemplate" type="text/x-handlebars-template">
@@ -89,21 +117,37 @@
     <div class="input-group">
         <input type="text" class="form-control" placeholder="IR code..." name="textbox-{{sensor-id this}}">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="button" name="button-{{sensor-id this}}">Send</button>
+            <button class="ui button" type="button" name="button-{{sensor-id this}}">Send</button>
         </span>
     </div>
 </script>
 
 <script id="nodeMenuTemplate" type="text/x-handlebars-template">
-    <li><a href="../Node/Settings/{{Id}}">Settings</a></li>
-    <li> &nbsp </li>
-    {{#each sensors}}
-    <li id="dropdownMenuHistory{{sensor-id this}}"><a href="../History/Chart/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} History</a></li>
-    {{/each}}
-    <li> &nbsp </li>
-    {{#each sensors}}
-    <li id="dropdownMenuTasks{{sensor-id this}}"><a href="../Tasks/List/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} Tasks</a></li>
-    {{/each}}
+    <a class="item" href="../Node/Settings/{{Id}}">Settings</a>
+    <div class="divider"></div>
+
+    <div class="item">
+        <i class="dropdown icon"></i>
+        Hisotry
+        <div class="menu" id="dropdownMenuHistory{{sensor-id this}}">
+            {{#each sensors}}
+            <a class="item" href="../History/Chart/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} History</a>
+            {{/each}}
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="item">
+        <i class="dropdown icon"></i>
+        Tasks
+        <div class="menu" id="dropdownMenuTasks{{sensor-id this}}">
+            {{#each sensors}}
+            <a class="item" href="../Tasks/List/{{this.nodeId}}/{{this.sensorId}}">{{sensor-title this}} Tasks</a>
+            {{/each}}
+        </div>
+    </div>
+
+
 </script>
 
 

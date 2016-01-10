@@ -128,6 +128,47 @@ $("#sendButton").click(function () {
 });
 
 
+$("#reset-view-button").click(function () {
+    editor.graphcanvas.offset = [0, 0];
+    editor.graphcanvas.scale = 1;
+    editor.graphcanvas.setZoom(1, [1, 1]);
+});
+
+$("#minimap-button").click(function () {
+    editor.addMiniWindow(200, 200);
+});
+
+
+$("#fullscreen-button").click(function () {
+    // editor.goFullscreen();
+
+    var elem = document.documentElement;
+
+    var fullscreenElement =
+  document.fullscreenElement ||
+  document.mozFullscreenElement ||
+  document.webkitFullscreenElement;
+
+    if (fullscreenElement==null) {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        }
+    } else {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        }
+    }
+});
+
+
 function send_create_link(link) {
 
     $.ajax({

@@ -1,46 +1,75 @@
 ﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
 
 @{
-    ViewBag.Title = "Serial Port Config";
+    ViewBag.Title = "Serial Port";
 }
 
-<h2>@ViewBag.Title</h2>
-
-<div>
-    <a asp-controller="Config" asp-action="Gateway">Gateway</a> |
-    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>
-</div>
-<hr />
 <br />
+<div class="ui container">
 
-<form  asp-controller="Config" asp-action="SerialPort" asp-anti-forgery="true">
+    <h2>@ViewBag.Title</h2>
 
-    <div class="form-horizontal">
-        <div class="validation" asp-validation-summary="ValidationSummary.All" />
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-6">
-                <label class="control-label">Select serial port that is connected to the gateway</label>
-                <br><br>
-                <select asp-for="PortName" asp-items=@ViewBag.ports class="selectpicker form-control"></select>
-                <br><br>
+    <p>
+        < <a asp-controller="Config" asp-action="Gateway">Gateway Config</a>
+    </p>
+    <div class="ui divider"></div>
 
-                <div class="btn-group">
-                    <a asp-action="List" class="btn btn-default">Refrash</a>
-                    <input type="submit" value="Select" class="btn btn-primary" />
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>Serial Port</h4>
                 </div>
+
+                <form asp-action="SerialPort" asp-anti-forgery="true" class="ui form">
+                    <div class="ui attached segment">
+
+
+                                <h5>Select serial port that is connected to the gateway</h5>
+                            <div class="field">
+                                <div class="ui buttons">
+                                    <div class="ui selection button dropdown">
+                                        <input type="hidden" name="PortName" value="@ViewBag.currentPort">
+                                        <i class="dropdown icon"></i>
+                                        @if (String.IsNullOrEmpty(ViewBag.currentPort))
+                                        {
+                                            <div class="default text">Serial Port</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text">@ViewBag.currentPort</div>
+                                        }
+                                        <div class="menu">
+                                            @foreach (string port in @ViewBag.ports)
+                                            {
+                                                <div class="item" data-value="@port">@port</div>
+                                            }
+                                        </div>
+                                    </div>
+                                <a asp-action="SerialPort" class="ui button">Refrash</a>
+                                </div>
+
+                        </div>
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Gateway" class="ui button">Cancel</a>
+                            <input type="submit" value="Select" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </div>
+
     </div>
-</form>
+</div>
 
 
-
-@section scripts
-{
-    <script>
-        $('.selectpicker').selectpicker();
-    </script>
-}
 
 
 

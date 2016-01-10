@@ -15,8 +15,8 @@ groups.add({ id: 0 });
 
 var DELAY = 1000; // delay in ms to add new data points
 
-var autoscroll = document.getElementById('autoscroll');
-var charttype = document.getElementById('charttype');
+var autoscroll = $("#autoscroll");
+var charttype = $("#charttype");
 
 // create a graph2d with an (currently empty) dataset
 var container = document.getElementById('visualization');
@@ -30,7 +30,7 @@ function renderStep() {
     var now = vis.moment();
     var range = graph2d.getWindow();
     var interval = range.end - range.start;
-    switch (autoscroll.value) {
+    switch (autoscroll.dropdown('get value')[0]) {
         case 'continuous':
             graph2d.setWindow(now - interval, now, { animation: false });
             requestAnimationFrame(renderStep);
@@ -114,7 +114,7 @@ function addChartData(chartData) {
 }
 
 function updateCharType() {
-    switch (charttype.value) {
+    switch (charttype.dropdown('get value')[0]) {
         case 'bars':
             options = {
                 height: '370px',
@@ -266,7 +266,7 @@ function OnSensorUpdatedEvent(sensor) {
 var zoomTimer;
 function showNow() {
     clearTimeout(zoomTimer);
-    autoscroll.value = "none";
+    autoscroll.dropdown('set selected', "none");
     var window = {
         start: vis.moment().add(-30, 'seconds'),
         end: vis.moment()
@@ -274,26 +274,26 @@ function showNow() {
     graph2d.setWindow(window);
     //timer needed for prevent zoomin freeze bug
     zoomTimer = setTimeout(function (parameters) {
-        autoscroll.value = "continuous";
+        autoscroll.dropdown('set selected', "continuous");
     }, 1000);
 
 }
 
 function showAll() {
     clearTimeout(zoomTimer);
-    autoscroll.value = "none";
+    autoscroll.dropdown('set selected', "none");
     graph2d.fit();
 }
-
+  
 function share() {
     var url = $(location).attr('host') + $(location).attr('pathname');
     var start = graph2d.getWindow().start;
     var end = graph2d.getWindow().end;
-    url += "?autoscroll=" + autoscroll.value;
-    url += "&style=" + charttype.value;
+    url += "?autoscroll=" + autoscroll.dropdown('get value')[0];
+    url += "&style=" + charttype.dropdown('get value')[0];
     url += "&start=" + start.getTime();
     url += "&end=" + end.getTime();
-    $('#shareModal').modal();
+    $('#shareModal').modal('setting', 'transition', 'vertical flip').modal('show');
     $('#url').val(url);
 
 }

@@ -161,7 +161,8 @@ namespace MyNetSensors.WebController.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateNodesTasks();
 
-            return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
+           // return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
+            return RedirectToAction("List");
         }
 
 
@@ -184,10 +185,10 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult Edit(NodeTask task)
         {
-            Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
+           // Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
 
-            if (sensor == null)
-                return new HttpNotFoundResult();
+            //if (sensor == null)
+            //    return new HttpNotFoundResult();
 
             if (task.isRepeating)
                 task.executionValue = task.repeatingBValue;
@@ -197,7 +198,8 @@ namespace MyNetSensors.WebController.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateNodesTasks();
 
-            return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
+            // return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
+            return RedirectToAction("List");
         }
 
         public ActionResult Delete(int id)

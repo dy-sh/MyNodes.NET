@@ -2,48 +2,56 @@
     ViewBag.Title = "Observe Nodes";
 }
 
-<h2>@ViewBag.Title</h2>
+<br />
+<div class="ui container">
 
-<div>
-    @*<a asp-controller="Config" asp-action="Gateway">Gateway</a> |*@
-    <br/>
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        @*<a asp-controller="Config" asp-action="Gateway">Gateway</a> |*@
+        <br />
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui four column grid" id="nodesContainer" style="display: none;">
+    </div>
+
+
 </div>
-<hr />
-
-
-<div class="row" id="nodesContainer" style="display: none;">
-</div>
+<br />
 
 <script id="nodeTemplate" type="text/x-handlebars-template">
-    <div class="col-xs-6 col-sm-4 col-md-3" id="nodePanel{{Id}}" style="min-width: 290px; max-width: 500px">
-        <div class="panel panel-default">
-            <div class="panel-heading" id="nodeTitle{{Id}}">
+    <div class="column" id="nodePanel{{Id}}" style="min-width: 290px;">
+        <h4 class="ui top attached inverted header" id="nodeTitle{{Id}}">
+            @*<h4 class="ui top attached block header id="nodeTitle{{Id}}">*@
+            <span class="ui floated left">
                 Node id: {{Id}}
+            </span>
+        </h4>
+        <div class="ui attached segment">
+            <div id="nodeBody{{Id}}">
+                {{#if name}} Name: {{name}} <br /> {{/if}}
+                {{#if version}} Version: {{version}} <br />{{/if}}
+                {{#if registered}} Registered: {{fullDate registered}} <br />{{/if}}
+                {{#if lastSeen}} Last seen: <span id="nodeLastSeen{{Id}}"> {{fullDate lastSeen}} </span><br />{{/if}}
+                Repeating: {{yes-no isRepeatingNode}}<br />
+                {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span><br />{{/if}}
             </div>
-            <div class="panel-body">
-                <div id="nodeBody{{Id}}">
-                    {{#if name}} Name: {{name}} <br /> {{/if}}
-                    {{#if version}} Version: {{version}} <br />{{/if}}
-                    {{#if registered}} Registered: {{fullDate registered}} <br />{{/if}}
-                    {{#if lastSeen}} Last seen: <span id="nodeLastSeen{{Id}}"> {{fullDate lastSeen}} </span><br />{{/if}}
-                    Repeating: {{yes-no isRepeatingNode}}<br />
-                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span><br />{{/if}}
-                </div>
-                <br />
-                <ul class="list-group" id="sensorsContainer{{Id}}"></ul>
-            </div>
+            <br />
+            <div class="ui segments" id="sensorsContainer{{Id}}"></div>
         </div>
     </div>
 </script>
 
 <script id="sensorTemplate" type="text/x-handlebars-template">
-    <li class="list-group-item" id="sensorPanel{{sensor-id this}}">
-        Sensor Id: {{sensorId}} <br />        
+    <div class="ui segment">
+        Sensor Id: {{sensorId}} <br />
         Type: <span id="sensorType{{sensor-id this}}"> {{sensor-type this}} </span><br />
         {{#if description}} Description: {{description}} <br />{{/if}}
-        Data Type: <span id="dataType{{sensor-id this}}"> </span><br /> 
+        Data Type: <span id="dataType{{sensor-id this}}"> </span><br />
         State: <span id="state{{sensor-id this}}"> </span><br />
-    </li>
+    </div>
 </script>
 
 
@@ -51,8 +59,8 @@
 @section scripts
 {
 
-<script src="~/js/mysensors.js"></script>
-<script src="~/js/mynetsensors-observe-page.js"></script>
+    <script src="~/js/mysensors.js"></script>
+    <script src="~/js/mynetsensors-observe-page.js"></script>
 }
 
 

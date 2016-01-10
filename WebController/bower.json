@@ -15,10 +15,13 @@
     "noty": "~2.3.7",
     "animate.css": "3.4.0",
     "font-awesome": "4.4.0",
-    "signalr": "~2.2.0"
+    "signalr": "~2.2.0",
+    "semantic-ui": "2.1.7",
+    "nouislider": "8.2.1"
   },
   "resolutions": {
     "bootstrap": ">=2.3.2",
-    "jquery": ">=1.6"
+    "jquery": ">=1.6",
+    "moment": ">= 2.6.0"
   }
 }

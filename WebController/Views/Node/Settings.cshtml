@@ -1,181 +1,214 @@
 ﻿@model MyNetSensors.Gateways.Node
 
 @{
-    ViewBag.Title = "Node Settings";
+    ViewBag.Title = $"Node{Model.Id} Settings";
 }
 
-<h2>Node @Model.Id Settings</h2>
-<p>
-    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
-    < @Html.ActionLink("Nodes Settings", "Index", "Node")
-    @Html.ActionLink("Delete node", "Delete", new { id = Model.Id}, new { @class = "btn btn-primary pull-right" })
+<br />
+<div class="ui container">
 
 
-</p>
-<hr/>
+    <h2>@ViewBag.Title</h2>
 
-<div class="panel panel-default" style="min-width: 390px; max-width: 390px">
-    <div class="panel-heading">
-        Node @Model.Id
-    </div>
+    <p>
+        < <a asp-controller="Gateway" asp-action="Control">Control Nodes</a>
+        < <a asp-controller="Node" asp-action="Index">Nodes Settings</a>
+    </p>
+    <div class="ui divider"></div>
 
-    <div class="panel-body">
-        @using (Html.BeginForm())
-        {
-            @Html.Hidden("nodeId", @Model.Id)
+    <div class="ui two column stackable centered grid">
 
-            <div class="form-group">
-                <div class="col-xs-4 ">Node name:</div>
-                <div class="col-xs-8">
-                    @Html.TextBox("nodename", Model.name, new { @class = "form-control", @style = "margin-top: -7px" })
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Node @Model.Id</b>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="ui small right floated button">Delete node</a>
+
                 </div>
-            </div>
 
+                    <form asp-action="Settings" asp-anti-forgery="true" class="ui form">
+                        <div class="ui attached segment">
 
-            <br />
-            <br />
-            foreach (var sensor in Model.sensors)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Sensor @sensor.sensorId @*- @sensor.GetSimpleName1()*@
-                    </div>
+                            @Html.Hidden("nodeId", @Model.Id)
 
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-xs-4 ">Description:</div>
-                            <div class="col-xs-8">
-                                @Html.TextBox("sensordescription" + sensor.sensorId, sensor.description, new { @class = "form-control", @style = "margin-top: -7px"})
+                            <div class="inline field">
+                                Node name:
+                                <input type="text" name="nodename" value="@Model.name">
                             </div>
+                            @foreach (var sensor in Model.sensors)
+                            {
+
+                                <div class="ui segments">
+
+                                    <div class="ui segment">
+                                        <div class="inline field">
+                                            <b>Sensor @sensor.sensorId @*- @sensor.GetSimpleName1()*@</b>
+                                            Description:
+                                            <input type="text" name="sensordescription-@sensor.sensorId" value="@sensor.description">
+                                        </div>
+                                    </div>
+
+                                    @*<div class="ui segment">
+                        <div class="inline field">
+                            Description:
+                            <input type="text" name="sensordescription-@sensor.sensorId" value="@sensor.description">
                         </div>
-                        <br />
-                        <ul class="list-group" style="margin-bottom: -7px">
+                    </div>*@
 
-                            <li class="list-group-item">
-                                Invert data
-                                <div class="pull-right">
-                                    @Html.CheckBox("invertData" + sensor.sensorId, sensor.invertData, new { @class = "switch invertData-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId })
+                                    <div class="ui segment">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="invertData-@sensor.sensorId"
+                                                   @if (sensor.invertData) { @: checked
+                                                                                                                                                                                                                                                                                                                     }>
+                                            <input type="hidden" name="invertData-@sensor.sensorId" value="false">
+                                            <label>Invert data</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui segment">
+
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="remapData-@sensor.sensorId" class="remapData-switch" panel-id="@sensor.sensorId"
+                                                   @if (sensor.remapEnabled) { @: checked
+                                                                                                                                                                                                                                                                                                                         }>
+                                            <input type="hidden" name="remapData-@sensor.sensorId" value="false">
+                                            <label>Remap data</label>
+                                        </div>
+
+                                        <div id="remapPanel-@sensor.sensorId" style="display: none">
+                                            <br />
+                                            <div class="fields">
+                                                <div class="ui  field">
+                                                    From min
+                                                    <input type="text" name="remapFromMin-@sensor.sensorId" value="@sensor.remapFromMin">
+                                                </div>
+                                                <div class="ui  field">
+                                                    From max
+                                                    <input type="text" name="remapFromMax-@sensor.sensorId" value="@sensor.remapFromMax">
+                                                </div>
+                                            </div>
+
+                                            <div class="fields">
+                                                <div class="ui  field">
+                                                    To min
+                                                    <input type="text" name="remapToMin-@sensor.sensorId" value="@sensor.remapToMin">
+                                                </div>
+                                                <div class="ui  field">
+                                                    To max
+                                                    <input type="text" name="remapToMax-@sensor.sensorId" value="@sensor.remapToMax">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="ui segment">
+
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="storehistory-@sensor.sensorId" class="storehistory-switch" panel-id="@sensor.sensorId"
+                                                   @if (sensor.storeHistoryEnabled) { @: checked
+                                                                                                                                                                                                                                                                                                                         }>
+                                            <input type="hidden" name="storehistory-@sensor.sensorId" value="false">
+                                            <label>Write sensor history in database</label>
+                                        </div>
+
+
+                                        <div id="historyPanel-@sensor.sensorId" style="display: none">
+                                            <br />
+
+                                            <div class="ui field">
+                                                <div class="ui toggle checkbox">
+                                                    <input type="checkbox" name="writeeverychange-@sensor.sensorId"
+                                                           @if (sensor.storeHistoryEveryChange) { @: checked
+                                                                                                                                                                                                                                                                                                                                                                             }>
+                                                    <input type="hidden" name="writeeverychange-@sensor.sensorId" value="false">
+                                                    <label>Every change</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="ui inline field">
+                                                With interval (sec):
+                                                <input type="text" name="writeinterval-@sensor.sensorId" value="@sensor.storeHistoryWithInterval">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </li>
-                            <li class="list-group-item">
-                                Remap data
-                                <div class="pull-right">
-                                    @Html.CheckBox("remapData" + sensor.sensorId, sensor.remapEnabled, new { @class = "switch remapData-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId })
-                                </div>
-                            </li>
-                            <div id="remapPanel-@sensor.sensorId" style="display:none">
-                                <li class="list-group-item">
-                                    Remap from min
-                                    <div class="pull-right">
-                                        @Html.TextBox("remapFromMin" + sensor.sensorId, sensor.remapFromMin, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    Remap from max
-                                    <div class="pull-right">
-                                        @Html.TextBox("remapFromMax" + sensor.sensorId, sensor.remapFromMax, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    Remap to min
-                                    <div class="pull-right">
-                                        @Html.TextBox("remapToMin" + sensor.sensorId, sensor.remapToMin, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    Remap to max
-                                    <div class="pull-right">
-                                        @Html.TextBox("remapToMax" + sensor.sensorId, sensor.remapToMax, new { @class = "form-control", @style = "width: 80px; margin-top: -7px" })
-                                    </div>
-                                </li>
+                            }
+
+
+                        </div>
+
+                        <div class="ui center aligned attached segment">
+                            <div class="ui buttons">
+                                <a asp-controller="Gateway" asp-action="Control" class="ui button">Cancel</a>
+                                <input type="submit" value="Save changes" class="ui button primary" />
                             </div>
 
-                            <li class="list-group-item">
-                                Store history in database
-                                <div class="pull-right">
-                                    @Html.CheckBox("storehistory" + sensor.sensorId, sensor.storeHistoryEnabled, new {@class = "switch storehistory-switch", @data_size = "small", @data_label_width = "0", @panel_id = @sensor.sensorId})
-                                </div>
-                            </li>
-                            <div id="historyPanel-@sensor.sensorId" style="display: none">
-                                <li class="list-group-item">
-                                    Write every change
-                                    <div class="pull-right">
-                                        @Html.CheckBox("writeeverychange" + sensor.sensorId, sensor.storeHistoryEveryChange, new {@class = "switch", @data_size = "small", @data_label_width = "0"})
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    Write with interval (sec)
-                                    <div class="pull-right">
-                                        @Html.TextBox("writeinterval" + sensor.sensorId, sensor.storeHistoryWithInterval, new {@class = "form-control", @style = "width: 80px; margin-top: -7px"})
-                                    </div>
-                                </li>
-                            </div>
 
-                        </ul>
-                    </div>
-                </div>
-            }
-            <div class="btn-group pull-right" role="group" style="padding-right: 10px;">
-                <input type="submit" value="Save changes" class="btn btn-primary" />
-                @Html.ActionLink("Cancel", "Control", "Gateway", null, new { @class = "btn btn-default" })
+
+                        </div>
+                    </form>
+
             </div>
-        }
 
 
+        </div>
     </div>
-</div>
+        </div>
 
 
+        <br />
 
-
-
-
-@section scripts
+        @section scripts
 {
 
 
-    <script src="~/js/mysensors.js"></script>
+            <script src="~/js/mysensors.js"></script>
 
-    <script>
-        $(".switch").bootstrapSwitch();
+            <script>
 
-        var fade = 300;
+                var fade = 300;
 
-        $(".storehistory-switch").on('switchChange.bootstrapSwitch', function(event, state) {
-            var id = this.getAttribute("panel-id");
-            if (state) {
-                $('#historyPanel-' + id).fadeIn(fade);
-            } else {
-                $('#historyPanel-' + id).fadeOut(fade);
-            }
-        });
+                $(".storehistory-switch").click(function () {
+                    var id = $(this).attr("panel-id");
+                    if ($(this).is(":checked")) {
+                        $('#historyPanel-' + id).fadeIn(fade);
+                    } else {
+                        $('#historyPanel-' + id).fadeOut(fade);
+                    }
+                });
 
-        $(".remapData-switch").on('switchChange.bootstrapSwitch', function (event, state) {
-            var id = this.getAttribute("panel-id");
-            if (state) {
-                $('#remapPanel-' + id).fadeIn(fade);
-            } else {
-                $('#remapPanel-' + id).fadeOut(fade);
-            }
-        });
+                $(".remapData-switch").click(function () {
+                    var id = $(this).attr("panel-id");
+                    if ($(this).is(":checked")) {
+                        $('#remapPanel-' + id).fadeIn(fade);
+                    } else {
+                        $('#remapPanel-' + id).fadeOut(fade);
+                    }
+                });
 
-        var switches = $(".storehistory-switch");
-        for (var i = 0; i < switches.length; i++) {
-            if (switches[i].checked) {
-                var id = switches[i].getAttribute("panel-id");
-                if (id!=null)
-                    $('#historyPanel-' + id).show();
-            }
+                var switches = $(".storehistory-switch");
+                for (var i = 0; i < switches.length; i++) {
+                    if (switches[i].checked) {
+                        var id = switches[i].getAttribute("panel-id");
+                        if (id != null)
+                            $('#historyPanel-' + id).show();
+                    }
+                }
+
+                switches = $(".remapData-switch");
+                for (var i = 0; i < switches.length; i++) {
+                    if (switches[i].checked) {
+                        var id = switches[i].getAttribute("panel-id");
+                        if (id != null)
+                            $('#remapPanel-' + id).show();
+                    }
+                }
+
+            </script>
         }
-
-        switches = $(".remapData-switch");
-        for (var i = 0; i < switches.length; i++) {
-            if (switches[i].checked) {
-                var id = switches[i].getAttribute("panel-id");
-                if (id != null)
-                    $('#remapPanel-' + id).show();
-            }
-        }
-
-    </script>
-}

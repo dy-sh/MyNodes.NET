@@ -3,140 +3,136 @@
 
 
 @{
-    ViewBag.Title = "Tasks";
-}
-
-@if (@ViewBag.description == null)
-{
-    <h2>Tasks</h2>
-}
-else
-{
-    <h2>Tasks for @ViewBag.description</h2>
-}
-
-<p>
-    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
-    @if (ViewBag.description!=null)
+    if (ViewBag.description == null)
     {
-       @: | @Html.ActionLink("Show tasks for all nodes", "Index", "Tasks")
+        ViewBag.Title = "Tasks";
     }
-</p>
-<hr />
+    else
+    {
+        ViewBag.Title = "Tasks for " + @ViewBag.description;
+    }
+}
 
 
+@if (ViewBag.description == null)
+{
+    <br />
+}
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="btn-group pull-right" style="margin-top: -7px">
-            @Html.ActionLink("New task", "New", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
+<div class="ui container">
+
+    @if (ViewBag.description != null)
+    {
+        <a asp-controller="Tasks" asp-action="Index" class="ui button right floated">Show tasks for all nodes</a>
+    }
+
+
+    <h2>@ViewBag.Title</h2>
+    <p>
+        < <a asp-controller="Gateway" asp-action="Control">Control Nodes</a>
+    </p>
+    <div class="ui divider"></div>
+
+    <div class="ui raised segments">
+        <div class="ui secondary clearing segment">
+            <b>Tasks</b>
+            <a asp-action="New" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui right floated small primary button">New Task</a>
         </div>
-        Tasks
-    </div>
-
-    <div class="panel-body">
         @if (Model == null || Model.Count() == 0)
+        {
+            <div class="ui attached segment">
+                No tasks
+            </div>
+        }
+        else
+        {
+            foreach (var task in Model)
             {
-            @:No tasks
-            }
-            else
-            {
-            <ul class="list-group">
-                @foreach (var task in Model)
-                {
-                    <li class="list-group-item">
-                        <p class="list-group-item-text">
-                            <h4 class="list-group-item-heading">
-                                Task @task.Id
-                                @if (task.description != null)
-                                {
-                                    @: : @task.description
-                                }
-                            </h4>
-                            <div class="btn-group pull-right">
-                                @if (!task.isCompleted)
-                                {
-                                    if (task.enabled)
-                                    {
-                                        @Html.ActionLink("Disable", "Disable", new {id = task.Id})
-                                        @: |
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Enable", "Enable", new {id = task.Id})
-                                        @: |
-                                    }
-
-                                    if (task.isRepeating)
-                                    {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.Id})
-                                        @: |
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.Id})
-                                        @: |
-                                    }
-                                }
-                                else
-                                {
-                                    if (task.isRepeating)
-                                    {
-                                        @Html.ActionLink("Restart", "ExecuteNow", new {id = task.Id})
-                                        @: |
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Execute", "ExecuteNow", new {id = task.Id})
-                                        @: |
-                                    }
-                                }
-                                @Html.ActionLink("Edit", "Edit", new {id = task.Id}) |
-                                @Html.ActionLink("Delete", "Delete", new {id = task.Id})
-                            </div>
+                <div class="ui attached clearing segment">
 
 
-
-                            @if (task.isCompleted)
+                    <h4>
+                        Task @task.Id
+                        @if (task.description != null)
+                        {
+                            @: : @task.description
+                        }
+                    </h4>
+                    <div class="ui right floated basic tiny buttons">
+                        @if (!task.isCompleted)
+                        {
+                            if (task.enabled)
                             {
-                                <h5><span class="label label-success">Completed</span></h5>
-                            }
-                            else if (!task.enabled)
-                            {
-                                <h5><span class="label label-default">Disabled</span></h5>
+                                <a asp-action="Disable" class="ui button" asp-route-id="@task.Id"><b>Disable</b></a>
                             }
                             else
                             {
-                                <h5><span class="label label-primary">Active</span></h5>
+                                <a asp-action="Enable" class="ui button" asp-route-id="@task.Id"><b>Enable</b></a>
                             }
 
-
-                            @task.sensorDescription<br>
-
-                            Execution date: @task.executionDate<br>
-                            Set value:@task.executionValue<br>
-                            @if (task.isRepeating)
+                            if (task.isRepeating)
                             {
-                                @:Repeat values: @task.repeatingAValue / @task.repeatingBValue<br>
-                                @:Repeat interval: @task.repeatingInterval<br>
-                                @:Executions done:@task.repeatingDoneCount<br>
-                                if (task.repeatingNeededCount > 0)
-                                {
-                                    @:Executions left:@(task.repeatingNeededCount - task.repeatingDoneCount)<br>
-                                }
-
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
                             }
-                        </p>
-                    </li>
-                }
-            </ul>
-            <div class="btn-group pull-right" style="margin-top: -10px">
-                @Html.ActionLink("Delete completed", "DeleteCompleted", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Delete all", "DeleteAll", new { id = ViewBag.nodeId, id2 = ViewBag.sensorId }, new { @class = "btn btn-primary" })
+                            else
+                            {
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Execute</b></a>
+                            }
+                        }
+                        else
+                        {
+                            if (task.isRepeating)
+                            {
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
+                            }
+                            else
+                            {
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Execute</b></a>
+                            }
+                        }
+                        <a asp-action="Edit" class="ui button" asp-route-id="@task.Id"><b>Edit</b></a>
+                        <a asp-action="Delete" class="ui button" asp-route-id="@task.Id"><b>Delete</b></a>
+                    </div>
+
+                    @if (task.isCompleted)
+                    {
+                        <span class="ui tiny green ribbon label">COMPLETED</span>
+                    }
+                    else if (!task.enabled)
+                    {
+                        <span class="ui tiny ribbon label">DISABLED</span>
+                    }
+                    else
+                    {
+                        <span class="ui tiny blue ribbon label">ACTIVE</span>
+                    }
+                    <br />
+                    <br/>
+                    @task.sensorDescription<br>
+
+                    Execution date: @task.executionDate<br>
+                    Set value:@task.executionValue<br>
+                    @if (task.isRepeating)
+                    {
+                        @:Repeat values: @task.repeatingAValue / @task.repeatingBValue<br>
+                        @:Repeat interval: @task.repeatingInterval<br>
+                        @:Executions done:@task.repeatingDoneCount<br>
+                        if (task.repeatingNeededCount > 0)
+                        {
+                            @:Executions left:@(task.repeatingNeededCount - task.repeatingDoneCount)<br>
+                        }
+
+                    }
+                </div>
+            }
+            <div class="ui right aligned attached segment">
+                <div class="ui small buttons">
+                <a asp-controller="Tasks" asp-action="DeleteAll" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui button">Delete all</a>
+                    <a asp-controller="Tasks" asp-action="DeleteCompleted" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui primary button">Delete completed</a>
+                    </div>
             </div>
         }
-
-        <br />
     </div>
-
 </div>
+
+<br/>

@@ -1,220 +1,154 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Gateway Config";
 }
 
-<h2>@ViewBag.Title</h2>
-
-<div>
-    <a asp-controller="Config" asp-action="Gateway">Gateway</a> |
-    <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>
-</div>
-<hr />
 <br />
+<div class="ui container">
 
-<div class="row">
+    <h2>@ViewBag.Title</h2>
 
+    <div>
+        @*<a asp-controller="Config" asp-action="Gateway">Gateway</a> |
+        <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>*@
+        <br/>
+    </div>
+    <div class="ui divider"></div>
 
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Serial gateway</div>
-            <div class="panel-body">
-                <div id="gateway-hardware-online">
-                    <p class='text-success'>Loading data...</p>
+    <div class="ui two column stackable centered grid" id="main-content" style="display: none;">
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Gateway</b>
+                </div>
+                <div class="ui attached segment" id="gateway-hardware-online">
+                    <i class="big green toggle on icon"></i>
+                    Gateway hardware is online
+                </div>
+                <div class="ui attached segment" id="gateway-hardware-offline">
+                    <i class="big red toggle off icon"></i>
+                    Gateway hardware is offline
                 </div>
 
-                <ul class="list-group small-margin">
-                    <li class="list-group-item">
-                        Nodes registered
-                        <div class="pull-right" id="nodes-registered"></div>
-                    </li>
-                    <li class="list-group-item">
-                        Sensors registered
-                        <div class="pull-right" id="sensors-registered"></div>
-                    </li>
-                    <li class="list-group-item">
-                        Stop writing history
-                        <div class="pull-right pull-up-button">
-                            <button type="button" class="btn btn-default" id="stopWritingHistory">Stop</button>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        Delete all nodes
-                        <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="/GatewayApi/DropNodes/" data-toggle="modal" data-target="#confirm-nodes-delete">
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Links</div>
-            <div class="panel-body">
-                <ul class="list-group small-margin">
-                    <li class="list-group-item">
-                        Delete all sensors links
-                        <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="/GatewayApi/DropLinks/" data-toggle="modal" data-target="#confirm-links-delete">
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">History</div>
-            <div class="panel-body">
-                <ul class="list-group small-margin">
-                    <li class="list-group-item">
-                        Delete all nodes history
-                        <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="/GatewayApi/DropHistory/" data-toggle="modal" data-target="#confirm-history-delete">
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Web server</div>
-            <div class="panel-body">
-                <div id="webserver-info">
-                    <ul class="list-group small-margin">
-                        <li class="list-group-item">
-                            Clients connected
-                            <div class="pull-right" id="users-online">Unknown</div>
-                        </li>
-                    </ul>
+                <div class="ui attached clearing segment">
+                    <div class="ui blue basic label" id="nodes-registered">-</div>
+                    Nodes registered
+                    <br/>
+                    <br/>
+                    <div class="ui blue basic label" id="sensors-registered">-</div>
+                    Sensors registered
+                </div>
+                <div class="ui attached center aligned segment">
+                    <a asp-controller="Config" asp-action="SerialPort" class="ui button">Select serial port</a>
+                    <button class="ui button" id="dropNodes">Delete all nodes</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Tasks</div>
-            <div class="panel-body">
-                <ul class="list-group small-margin">
-                    <li class="list-group-item">
-                        Disable all tasks
-                        <div class="pull-right pull-up-button">
-                            <button type="button" class="btn btn-default" id="disableTasks">Disable</button>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        Delete all tasks
-                        <div class="pull-right pull-up-button">
-                            <button class="btn btn-default" data-href="/GatewayApi/DropTasks/" data-toggle="modal" data-target="#confirm-tasks-delete">
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                </ul>
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>History</b>
+                </div>
+                <div class="ui attached center aligned segment">
+                    <button type="button" class="ui button" id="stopWritingHistory">Stop writing history</button>
+                    <button class="ui button" id="dropHistory">Clear history</button>
+                </div>
+            </div>
+
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Tasks</b>
+                </div>
+                <div class="ui attached center aligned segment">
+                    <button type="button" class="ui button" id="disableTasks">Disable all tasks</button>
+                    <button class="ui button" id="dropTasks">Delete all tasks</button>
+                </div>
             </div>
         </div>
+
+
+        @*<div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Web server</b>
+                </div>
+                <div class="ui attached clearing segment">
+                    <div class="ui blue basic label" id="users-online">-</div>
+                    Clients connected
+                </div>
+            </div>
+        </div>*@
+
     </div>
 
-</div>
 
-<div class="modal fade" id="confirm-nodes-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete all nodes
+    <div class="ui modal" id="confirm-delete-nodes-dialog">
+        <div class="header">
+            Delete all nodes
+        </div>
+        <div class="image content">
+            <div class="ui image">
+                @*<i class="massive settings icon"></i>*@
+                <i class="red massive warning sign icon"></i>
             </div>
-            <div class="modal-body">
+            <div class="description">
                 Deleting nodes from the database will release their ID.
                 After that, you will need to turn on all
                 previously registered nodes to reinitialize the database.
                 If this is not done, any new node will take the ID
-                of the other device, and there is a conflict! <br /><br />
-                If there is a conflict, you should:
-                1. Turn off all nodes.
-                2. Delete all nodes from the database.
-                3. Erase EEPROM on conflicty nodes and reflash again firmwares.
-                4. Turn on all non-conflicting nodes.
-                5. Turn on conflicty nodes. <br /><br />
+                of the other device, and there is a conflict! <br/><br/>
+                If there is a conflict, you should:<br />
+                1. Turn off all nodes.<br />
+                2. Delete all nodes from the database.<br />
+                3. Erase EEPROM on conflicty nodes and reflash again firmwares.<br />
+                4. Turn on all non-conflicting nodes.<br />
+                5. Turn on conflicty nodes. <br/><br/>
                 Again. After deleting nodes from the database,
                 do not run the new nodes (which has not received the ID previously)
                 before turn on all known nodes!
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropNodes">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <div class="ui red approve button">Delete</div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="confirm-history-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete all nodes history
+
+    <div class="ui modal" id="confirm-delete-history-dialog">
+        <div class="header">Delete all nodes history</div>
+        <div class="image content">
+            <div class="ui image">
+                <i class="massive settings icon"></i>
             </div>
-            <div class="modal-body">
+            <div class="description">
                 Are you sure you want to delete all nodes history?
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropHistory">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <div class="ui red approve button">Delete</div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="confirm-tasks-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete all nodes tasks
+    <div class="ui modal" id="confirm-delete-tasks-dialog">
+        <div class="header">Delete all nodes tasks</div>
+        <div class="image content">
+            <div class="ui image">
+                <i class="massive settings icon"></i>
             </div>
-            <div class="modal-body">
+            <div class="description">
                 Are you sure you want to delete all nodes tasks?
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropTasks">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <div class="ui red approve button">Delete</div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="confirm-links-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete all sensors links
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete all sensors links?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-ok" data-dismiss="modal" id="dropLinks">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
 </div>
-
 
 @section scripts
 {

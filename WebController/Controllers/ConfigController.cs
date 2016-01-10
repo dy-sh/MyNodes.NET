@@ -70,18 +70,10 @@ namespace MyNetSensors.WebController.Controllers
             List<string> ports = SerialController.comPort.GetPortsList();
             string currentPort = SerialController.serialPortName;
 
-            var list = new List<SelectListItem>();
-            foreach (string port in ports)
-            {
-                var item = new SelectListItem {Text = port, Value = port};
-                if (port == currentPort)
-                    item.Selected = true;
+            ViewBag.ports = ports;
 
-                list.Add(item);
-            }
-
-            ViewBag.ports = list;
-
+            if (ports.Contains(currentPort))
+                ViewBag.currentPort = currentPort;
 
             return View(new SerialPortViewModel());
         }
@@ -100,9 +92,7 @@ namespace MyNetSensors.WebController.Controllers
 
             SerialController.ReconnectToGateway(port.PortName);
 
-            return RedirectToAction("SerialPort");
-
-            //  return RedirectToAction("Messages", "Gateway");
+            return RedirectToAction("Gateway");
         }
 
 
@@ -114,18 +104,10 @@ namespace MyNetSensors.WebController.Controllers
             List<string> ports = SerialController.comPort.GetPortsList();
             string currentPort = SerialController.serialPortName;
 
-            var list = new List<SelectListItem>();
-            foreach (string port in ports)
-            {
-                var item = new SelectListItem {Text = port, Value = port};
-                if (port == currentPort)
-                    item.Selected = true;
+            ViewBag.ports = ports;
 
-                list.Add(item);
-            }
-
-            ViewBag.ports = list;
-
+            if (ports.Contains(currentPort))
+                ViewBag.currentPort = currentPort;
 
             return View(new SerialPortViewModel());
         }

@@ -44,6 +44,7 @@ namespace MyNetSensors.WebController.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
+            return RedirectToAction("Index", "Home");
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }

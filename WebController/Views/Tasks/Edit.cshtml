@@ -2,111 +2,120 @@
 @model MyNetSensors.NodesTasks.NodeTask
 
 @{
-    ViewBag.Title = "Edit Task";
+    ViewBag.Title = "Edit Task for " + @ViewBag.description;
 }
 
-<h2>Edit Task for @ViewBag.description</h2>
-<div>
-    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
-    < @Html.ActionLink("Tasks List", "List", new { id = Model.nodeId, id2 = Model.sensorId })
-</div>
-<hr />
-<br/>
+<br />
+<div class="ui container">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.nodeId)
-    @Html.HiddenFor(model => model.sensorId)
-    @Html.HiddenFor(model => model.dataType)
-    @Html.HiddenFor(model => model.Id)
-    @Html.HiddenFor(model => model.enabled)
+    <h2>@ViewBag.Title</h2>
+    <div>
+        < <a asp-controller="Gateway" asp-action="Control">Control Nodes</a>
+        < <a asp-controller="Tasks" asp-action="List">Tasks</a>
+    </div>
+    <div class="ui divider"></div>
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <label class="control-label col-sm-3">Task description</label>
-            <div class="col-sm-9">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            <label class="control-label col-sm-3">Execution date</label>
-            <div class="col-sm-9">
-                @Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control", @id = "datetimepicker1" } })
-                @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-
-        <div class="form-group">
-            <label class="control-label col-sm-3">Repeat task</label>
-            <div class="col-sm-9">
-                @Html.CheckBoxFor(model => model.isRepeating, new { @class = "switch", @data_size = "small", @data_label_width = "0", @id = "repeatTask" })
-            </div>
-        </div>
-
-
-        <div id="nonRepeatingPanel">
-            <div class="form-group">
-                <label class="control-label col-sm-3">Set value</label>
-                <div class="col-sm-9">
-                    @Html.EditorFor(model => model.executionValue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
+    <div class="ui two column stackable centered grid">
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>Edit Task @Model.Id</h4>
                 </div>
-            </div>
-        </div>
 
-        <div id="repeatingPanel" style="display:none">
-            <div class="form-group">
-                <label class="control-label col-sm-3">Repeat A value</label>
-                <div class="col-sm-9">
-                    @Html.EditorFor(model => model.repeatingAValue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                <form asp-action="Edit" asp-anti-forgery="true" class="ui form">
+                    <div class="ui attached segment">
 
-            <div class="form-group">
-                <label class="control-label col-sm-3">Repeat B value</label>
-                <div class="col-sm-9">
-                    @Html.EditorFor(model => model.repeatingBValue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        @Html.HiddenFor(model => model.nodeId)
+                        @Html.HiddenFor(model => model.sensorId)
+                        @Html.HiddenFor(model => model.sensorDbId)
+                        @Html.HiddenFor(model => model.sensorDescription)
+                        @Html.HiddenFor(model => model.dataType)
+                        @Html.HiddenFor(model => model.enabled)
+                        @Html.HiddenFor(model => model.Id)
 
-            <div class="form-group">
-                <label class="control-label col-sm-3">Repeat interval (ms)</label>
-                <div class="col-sm-9">
-                    @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-sm-3">Repeat count<br /> (0 for infinity)</label>
-                <div class="col-sm-9">
-                    @Html.EditorFor(model => model.repeatingNeededCount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.repeatingNeededCount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="field">
+                            <label>Task description</label>
+                            @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-9">
-                <div class="btn-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    @Html.ActionLink("Cancel", "List", new { id = Model.nodeId, id2 = Model.sensorId }, new { @class = "btn btn-default" })
-                </div>
+                        <div class="field">
+                            <label>Execution date</label>
+                            <input type="text" asp-for="executionDate" id="datetimepicker1">
+
+                            @*@Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control", @id = "datetimepicker1" } })*@
+                            @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" id="repeatTask"
+                                       @if (Model.isRepeating) { @: checked
+                                                                                                                                                                                                   }>
+                                <input type="hidden" id="repeatTask" value="false">
+                                <label>Repeat task</label>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div id="nonRepeatingPanel">
+                            <div class="field">
+                                <label>Set value</label>
+                                @Html.EditorFor(model => model.executionValue, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div id="repeatingPanel" style="display: none">
+                            <div class="fields">
+                                <div class="field">
+                                    <label>Repeat A value</label>
+                                    @Html.EditorFor(model => model.repeatingAValue, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="field">
+                                    <label>Repeat B value</label>
+                                    @Html.EditorFor(model => model.repeatingBValue, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="fields">
+
+                                <div class="field">
+                                    <label>Repeat count (0 for infinity)</label>
+                                    @Html.EditorFor(model => model.repeatingNeededCount, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.repeatingNeededCount, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="field">
+                                    <label>Repeat interval (ms)</label>
+                                    @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="ui center aligned attached segment">
+                        <div class="ui centered  buttons">
+                            <a asp-controller="Tasks" asp-action="List" class="ui button">Cancel</a>
+                            <input type="submit" value="Create" class="ui primary button" />
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
-}
+</div>
 
 
 
@@ -117,10 +126,9 @@
     <script>
         var fade = 500;
 
-        $(".switch").bootstrapSwitch();
 
-        $("#repeatTask").on('switchChange.bootstrapSwitch', function (event, state) {
-            if (state) {
+        $("#repeatTask").click(function () {
+            if ($(this).is(":checked")) {
                 $('#repeatingPanel').fadeIn(fade);
                 $('#nonRepeatingPanel').hide();
             } else {
@@ -129,15 +137,14 @@
             }
         });
 
-        if ($("#repeatTask").attr("checked"))
-        {
-            $('#repeatingPanel').show();
-            $('#nonRepeatingPanel').hide();
-        }
-
         $(function () {
-            $('#datetimepicker1').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm:ss'
+            $('#datetimepicker1').daterangepicker({
+                format: 'DD.MM.YYYY HH:mm:ss',
+                "singleDatePicker": true,
+                "timePicker": true,
+                "timePickerIncrement": 1,
+                "timePicker12Hour": false,
+                "timePickerSeconds": true
             });
         });
     </script>

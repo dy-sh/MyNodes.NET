@@ -77,13 +77,13 @@ $(function () {
     //autoscroll
     $(function () {
         var window_height = $(window).height(),
-            content_height = window_height - 370;
+            content_height = window_height - 320;
         $('#log').height(content_height);
     });
 
     $(window).resize(function () {
         var window_height = $(window).height(),
-            content_height = window_height - 370;
+            content_height = window_height - 320;
         $('#log').height(content_height);
     });
 });

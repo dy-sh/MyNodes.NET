@@ -5,18 +5,23 @@
     ViewBag.Title = "Nodes Settings";
 }
 
-<h2>Nodes Settings</h2>
+<br />
+<div class="ui container">
 
-<p>
-    < @Html.ActionLink("Control Nodes", "Control", "Gateway")
-</p>
-<hr />
+    <h2>@ViewBag.Title</h2>
 
-<h4>Nodes:</h4>
-<div style="padding-left: 20px">
-    @foreach (Node node in Model)
-    {
-        @Html.ActionLink(node.GetSimpleName1(), "Settings", new { id = node.Id })
-        <br/>
-    }
+    <p>
+        < <a asp-controller="Gateway" asp-action="Control">Control Nodes</a>
+    </p>
+    <div class="ui divider"></div>
+
+    <h4>Nodes:</h4>
+    <div style="padding-left: 20px">
+        @foreach (Node node in Model)
+        {
+            <a asp-action="Settings" asp-route-id="@node.Id">@node.GetSimpleName1()</a>
+            <br />
+        }
+    </div>
+    
 </div>

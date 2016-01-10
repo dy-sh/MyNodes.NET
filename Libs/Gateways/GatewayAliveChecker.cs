@@ -12,7 +12,7 @@ namespace MyNetSensors.Gateways
 
        // public bool checkGatewayIsAlive = true;
         public bool checkGatewayIsAlive = true;
-        public int checkGatewayIsAliveInterval = 5000;
+        public int checkGatewayIsAliveInterval = 10000;
         private DateTime checkGatewayLastRequestTime;
         private DateTime checkGatewayLastResponseTime;
 

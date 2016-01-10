@@ -7,80 +7,122 @@
     <title>@ViewData["Title"]</title>
 
     <environment names="Development">
-        <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
+        @*<link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />*@
+        @*<link href="~/css/slider/jquery-ui.min.css" rel="stylesheet" />*@
         <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
-        <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet"/> 
-        @RenderSection("styles", required: false)
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+            <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet" />*@
+        @*<link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />*@
+        <link href="~/lib/semantic-ui/dist/semantic.css" rel="stylesheet" />
+        <link href="~/css/daterangepicker/daterangepicker.css" rel="stylesheet" />
+        <link href="~/css/slider/nouislider.css" rel="stylesheet" />
+        <link href="~/css/switch/switch.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
     </environment>
     <environment names="Staging,Production">
-        <link href="~/lib/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+        @*<link href="~/lib/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet" />*@
         <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
-        <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-        @RenderSection("styles", required: false)
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
+            <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+            <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />*@
+        <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
+        <link href="~/css/daterangepicker/daterangepicker.min.css" rel="stylesheet" />
+        <link href="~/css/slider/nouislider.css" rel="stylesheet" />
+        <link href="~/css/switch/switch.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
     </environment>
-
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand">MyNetSensors</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-controller="Gateway" asp-action="Control" class="fadebefore">Control</a></li>
-                    <li><a asp-controller="Gateway" asp-action="Observe" class="fadebefore">Observe</a></li>
-                    <li><a asp-controller="NodesEditor" asp-action="Index" class="fadebefore">Editor</a></li>
-                    <li><a asp-controller="Logs" asp-action="Index" class="fadebefore">Logs</a></li>
-                    <li><a asp-controller="Config" asp-action="Index" class="fadebefore">Config</a></li>
-                    <li><a asp-controller="Home" asp-action="About" class="fadebefore">About</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+
+
+    <!-- Sidebar Menu -->
+    <div class="ui inverted vertical menu sidebar thin">
+        <div class="ui container">
+            <a asp-controller="Gateway" asp-action="Control" class="item fadebefore">Control</a>
+            <a asp-controller="Gateway" asp-action="Observe" class="item fadebefore">Observe</a>
+            <a asp-controller="NodesEditor" asp-action="Index" class="item fadebefore">Editor</a>
+            <a asp-controller="Logs" asp-action="Index" class="item fadebefore">Logs</a>
+            <a asp-controller="Config" asp-action="Index" class="item fadebefore">Config</a>
+            <a asp-controller="Home" asp-action="About" class="item fadebefore">About</a>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
+
+
+
+
+
+
+    <!-- Header Menu-->
+    <div class="ui fixed big borderless main menu">
+        <div class="ui container">
+            <a class="sidebar-button showsmall item">
+                <i class="sidebar icon"></i>
+            </a>
+
+            <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
+
+            <a asp-controller="Gateway" asp-action="Control" class="ui item hidesmall fadebefore">Control</a>
+            <a asp-controller="Gateway" asp-action="Observe" class="ui item hidesmall fadebefore">Observe</a>
+            <a asp-controller="Logs" asp-action="Index" class="ui item hidesmall fadebefore">Logs</a>
+            <a asp-controller="Config" asp-action="Index" class="ui item hidesmall fadebefore">Config</a>
+
+
+            <div class="right menu">
+                <div class="item">
+                    <a asp-controller="Account" asp-action="Login" class="ui primary button fadebefore">Login</a>
+                </div>
+            </div>
+
+
+        </div>
     </div>
+
+
+    <div class="pusher">
+    <br />
+    <br />
+    <br />
+
+    @RenderBody()
+
+
+    </div>
+
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-        <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
-        <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+        @*<script src="~/lib/jquery-ui/jquery-ui.js"></script>*@
+        @*<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+            <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>*@
         <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/js/handlebars.js"></script>
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet"/>
-
+        <script src="~/lib/semantic-ui/dist/semantic.js"></script>
+        <script src="~/js/daterangepicker/daterangepicker.js"></script>
+        <script src="~/js/slider/nouislider.js"></script>
         <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
         <script src="~/signalr/hubs" type="text/javascript"></script>
 
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
-        <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-        <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
+        @*<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>*@
+        @*<script src="~/js/slider/jquery-ui.min.js"></script>*@
+        @*<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+            <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.min.js"></script>*@
+
         <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
         <script src="~/lib/moment/min/moment.min.js"></script>
         <script src="~/js/handlebars.min.js"></script>
-        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-
+        <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
+        <script src="~/js/daterangepicker/daterangepicker.js"></script>
+        <script src="~/js/slider/nouislider.min.js"></script>
         <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
         <script src="~/signalr/hubs" type="text/javascript"></script>
     </environment>
@@ -107,7 +149,6 @@
         //});
 
 
-
         // noty settings
         $.noty.defaults.layout = 'bottomRight';
         $.noty.defaults.theme = 'relax';
@@ -118,6 +159,22 @@
             easing: 'swing', // unavailable - no need
             speed: 500 // unavailable - no need
         };
+
+
+        $(document)
+    .ready(function () {
+
+        // show dropdown
+        $('.ui.dropdown').dropdown({
+            on: 'click'
+        });
+
+        // create sidebar and attach to menu open
+        $('.ui.sidebar')
+            .sidebar('attach events', '.sidebar-button');
+    });
+
+
     </script>
 </body>
 </html>

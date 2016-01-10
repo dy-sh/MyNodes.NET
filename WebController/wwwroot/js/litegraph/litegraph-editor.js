@@ -3,8 +3,8 @@
 function Editor(container_id, options)
 {
 	//fill container
-	var html = "<div class='header'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
-	html += "<div class='content'><div class='editor-area'><canvas class='graphcanvas' width='1000' height='500' tabindex=10></canvas></div></div>";
+	//var html = "<div class='header'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
+	var html = "<div class='content'><div class='editor-area'><canvas class='graphcanvas' width='1000' height='500' tabindex=10></canvas></div></div>";
 	html += "<div class='footer'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
 	
 	var root = document.createElement("div");
@@ -21,16 +21,10 @@ function Editor(container_id, options)
 	graph.onAfterExecute = function() { graphcanvas.draw(true) };
 
 	//add stuff
-    //this.addToolsButton("loadsession_button","Load","images/litegraph/icon-load.png", this.onLoadButton.bind(this), ".tools-left" );
-    //this.addToolsButton("savesession_button","Save","images/litegraph/icon-save.png", this.onSaveButton.bind(this), ".tools-left" );
-	//this.addLoadCounter();
-    //this.addToolsButton("playnode_button","Play","images/litegraph/icon-play.png", this.onPlayButton.bind(this), ".tools-right" );
-    //this.addToolsButton("playstepnode_button","Step","images/litegraph/icon-playstep.png", this.onPlayStepButton.bind(this), ".tools-right" );
-	
-    //this.addToolsButton("livemode_button","Live","images/litegraph/icon-record.png", this.onLiveButton.bind(this), ".tools-right" );
-	this.addToolsButton("minimap_button", "", "images/litegraph/icon-edit.png", this.onMinimapButton.bind(this), ".tools-right");
-	this.addToolsButton("reset_button", "", "images/litegraph/icon-stop.png", this.onResetButton.bind(this), ".tools-right");
-	this.addToolsButton("maximize_button", "", "images/litegraph/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right");
+
+	//this.addToolsButton("minimap_button", "", "images/litegraph/icon-edit.png", this.onMinimapButton.bind(this), ".tools-right");
+	//this.addToolsButton("reset_button", "", "images/litegraph/icon-stop.png", this.onResetButton.bind(this), ".tools-right");
+	//this.addToolsButton("maximize_button", "", "images/litegraph/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right");
 
 	this.addMiniWindow(200,200);
 
@@ -168,21 +162,8 @@ Editor.prototype.goFullscreen = function()
 	},100);
 }
 
-//derwish added
-Editor.prototype.onResetButton = function () {
-    this.graphcanvas.offset = [0, 0];
-    this.graphcanvas.scale = 1;
-    this.graphcanvas.setZoom(1, [1, 1]);
-}
-//derwish added
-Editor.prototype.onMinimapButton = function () {
-    this.addMiniWindow(200,200);
-}
 
-Editor.prototype.onFullscreenButton = function()
-{
-	this.goFullscreen();
-}
+
 
 Editor.prototype.onMaximizeButton = function()
 {

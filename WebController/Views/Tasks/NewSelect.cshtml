@@ -1,57 +1,74 @@
 ﻿@using MyNetSensors.Gateways
 
 @{
-    ViewBag.Title = "New Link";
+    ViewBag.Title = "New Task";
 }
 
-<h2>New Task</h2>
-<div>
-    < @Html.ActionLink("Control Nodes", "Control","Gateway")
-    < @Html.ActionLink("Tasks", "List")
-</div>
-<hr />
-<br/>
+<br />
+<div class="ui container">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    <h2>@ViewBag.Title</h2>
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <label class="control-label col-sm-3">Select sensor</label>
-            <div class="col-sm-7">
-                <select class="selectpicker form-control" name="sensor">
-                    @foreach (Node node in ViewBag.nodes)
-                    {
-                        <optgroup label="@node.GetSimpleName1()">
-                            @foreach (Sensor sensor in node.sensors)
-                            {
-                                    <option value="@node.Id-@sensor.sensorId">@sensor.GetSimpleName1()</option>
-                            }
-                        </optgroup>
-                    }
-                </select>
-            </div>
-        </div>
+    <div>
+        < <a asp-controller="Gateway" asp-action="Control">Control Nodes</a>
+        < <a asp-controller="Tasks" asp-action="List">Tasks</a>
+    </div>
+    <div class="ui divider"></div>
 
+    <div class="ui two column stackable centered grid">
 
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-7">
-                <div class="btn-group">
-                    <input type="submit" value="Select" class="btn btn-primary" />
-                    <a asp-action="List" class="btn btn-default">Cancel</a>
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>New Task</h4>
                 </div>
+
+                <form asp-action="NewSelect" asp-anti-forgery="true" class="ui form">
+                    <div class="ui attached segment">
+
+
+                        <h5>Select sensor for which you want to create a task</h5>
+                        <div class="field">
+
+                            <div class="ui labeled selection dropdown">
+                                <input type="hidden" name="sensor">
+                                <i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu">
+                                    <div class="ui icon search input">
+                                        <i class="search icon"></i>
+                                        <input type="text" placeholder="Search...">
+                                    </div>
+                                    @foreach (Node node in ViewBag.nodes)
+                                    {
+                                        <div class="header"><h4>@node.GetSimpleName1()</h4></div>
+
+                                        foreach (Sensor sensor in node.sensors)
+                                        {
+                                            <div class="item" data-value="@node.Id-@sensor.sensorId">@sensor.GetSimpleName1()</div>
+                                        }
+                                        <div class="divider"></div>
+                                    }
+                                </div>
+                            </div>
+                            <br><br>
+
+                        </div>
+
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="List" class="ui button">Cancel</a>
+                            <input type="submit" value="Select" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
-}
+</div>
 
-
-
-@section scripts
-{
-    <script>
-        $('.selectpicker').selectpicker();
-    </script>
-}
