@@ -25,17 +25,9 @@
 
 
 
-    @if (Model == null)
+    @if (!Model.Any())
             {
-        @:There are no entries in history. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
-
-
-
-
-
-
-
-
+                @:There are no entries in history. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
             }
             else
             {
@@ -60,29 +52,29 @@
                 }
             </tbody>
             <tfoot>
-            <tr>
+                <tr>
 
-                <th colspan="3">
-                    @*todo <div class="ui pagination menu">
-                        <a class="icon item">
-                            <i class="left chevron icon"></i>
+                    <th colspan="3">
+                        @*todo <div class="ui pagination menu">
+                                <a class="icon item">
+                                    <i class="left chevron icon"></i>
+                                </a>
+                                <a class="item">1</a>
+                                <a class="item">2</a>
+                                <a class="item">3</a>
+                                <a class="item">4</a>
+                                <a class="icon item">
+                                    <i class="right chevron icon"></i>
+                                </a>
+                            </div>*@
+
+                        <a class='ui right floated button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
+                            Clear History
                         </a>
-                        <a class="item">1</a>
-                        <a class="item">2</a>
-                        <a class="item">3</a>
-                        <a class="item">4</a>
-                        <a class="icon item">
-                            <i class="right chevron icon"></i>
-                        </a>
-                    </div>*@
-
-                    <a class='ui right floated button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
-                        Clear History
-                    </a>
-                </th>
+                    </th>
 
 
-            </tr>
+                </tr>
             </tfoot>
         </table>
 
@@ -90,4 +82,4 @@
     }
 </div>
 
-<br/>
+<br />
