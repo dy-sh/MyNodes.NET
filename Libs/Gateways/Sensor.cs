@@ -226,7 +226,7 @@ namespace MyNetSensors.Gateways
 
             try
             {
-                if (IsBinary(dataType))
+                if (CheckTypeIsBinary(dataType))
                 {
                     if (invertData)
                     {
@@ -236,7 +236,7 @@ namespace MyNetSensors.Gateways
                     }
                 }
 
-                if (IsPercentage(dataType))
+                if (CheckTypeIsPercentage(dataType))
                 {
                     int val = Int32.Parse(state);
 
@@ -340,7 +340,7 @@ namespace MyNetSensors.Gateways
 
             try
             {
-                if (IsBinary(dataType))
+                if (CheckTypeIsBinary(dataType))
                 {
                     if (invertData)
                     {
@@ -350,7 +350,7 @@ namespace MyNetSensors.Gateways
                     }
                 }
 
-                if (IsPercentage(dataType))
+                if (CheckTypeIsPercentage(dataType))
                 {
                     int val = Int32.Parse(state);
 
@@ -453,8 +453,8 @@ namespace MyNetSensors.Gateways
         {
 
             //convert binary to percentage 
-            if (IsBinary(this.dataType)
-                && IsPercentage(newDataType))
+            if (CheckTypeIsBinary(this.dataType)
+                && CheckTypeIsPercentage(newDataType))
             {
                 if (this.state == "0")
                     return ("0");
@@ -463,8 +463,8 @@ namespace MyNetSensors.Gateways
             }
 
             //convert  percentage to binary
-            if (IsBinary(newDataType)
-                && IsPercentage(this.dataType))
+            if (CheckTypeIsBinary(newDataType)
+                && CheckTypeIsPercentage(this.dataType))
             {
                 if (this.state == "0")
                     return ("0");
@@ -475,7 +475,17 @@ namespace MyNetSensors.Gateways
             return this.state;
         }
 
-        public bool IsBinary(SensorDataType? dataType)
+        public bool IsBinary()
+        {
+            return CheckTypeIsBinary(dataType);
+        }
+
+        public bool IsPercentage()
+        {
+            return CheckTypeIsPercentage(dataType);
+        }
+
+        private bool CheckTypeIsBinary(SensorDataType? dataType)
         {
             return (dataType == SensorDataType.V_STATUS ||
                     dataType == SensorDataType.V_LIGHT ||
@@ -484,7 +494,7 @@ namespace MyNetSensors.Gateways
                     dataType == SensorDataType.V_LOCK_STATUS);
         }
 
-        public bool IsPercentage(SensorDataType? dataType)
+        private bool CheckTypeIsPercentage(SensorDataType? dataType)
         {
             return (dataType == SensorDataType.V_PERCENTAGE ||
                  dataType == SensorDataType.V_DIMMER ||

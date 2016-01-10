@@ -82,7 +82,7 @@ namespace MyNetSensors.WebController.Controllers
 
  
 
-        public JsonResult GetSensorDataJson(int id, int id2)
+        public JsonResult GetHistoryChartData(int id, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id, id2);
 
@@ -93,7 +93,7 @@ namespace MyNetSensors.WebController.Controllers
 
             var chartData = new List<ChartData>();
 
-            if (samples[0].dataType == SensorDataType.V_TRIPPED)
+            if (sensor.IsBinary())
             {
                 foreach (var item in samples)
                 {

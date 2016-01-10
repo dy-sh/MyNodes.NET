@@ -21,12 +21,8 @@
     <div class="ui raised segments">
         <div class="ui secondary clearing segment">
             <b>@ViewBag.Title</b>
-            <button type="button" class='ui right floated small button' onclick="share()">
-                <b>Share</b>
-            </button>
-            <a class='ui right floated small button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
-                <b>Clear</b>
-            </a>
+            <button type="button" class='ui right floated small button' id="share-button"><b>Share</b></button>
+            <button type="button" class="ui right floated small button" id="clear-button">Clear</button>
         </div>
         <div class="ui segment">
             <div id="infoPanel">

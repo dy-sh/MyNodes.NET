@@ -58,7 +58,7 @@ renderStep();
 $(document).ready(function () {
     //Loading data frow server
     $.ajax({
-        url: "../../GetSensorDataJson/" + nodeId+"/"+sensorId, //get Id-s from viewbag before
+        url: "/History/GetHistoryChartData/" + nodeId+"/"+sensorId, //get Id-s from viewbag before
         dataType: "json",
         success: function (data) {
             if ("chartData" in data) {
@@ -67,7 +67,7 @@ $(document).ready(function () {
                 $('#infoPanel').hide();
                 $('#chartPanel').fadeIn(elementsFadeTime);
             } else {
-                $('#infoPanel').html("There are no history. Chart shows realtime data only. Check node <a href='../../../Node/Settings/" + nodeId + "'>settings</a>.");
+                $('#infoPanel').html("There are no history. Chart shows realtime data only. Check node <a href='/Node/Settings/" + nodeId + "'>settings</a>.");
                 $('#chartPanel').fadeIn(elementsFadeTime);
                 showNow();
             }
@@ -83,6 +83,7 @@ $(document).ready(function () {
 });
 
 
+
 function addChartData(chartData) {
     dataset.add(chartData);
     
@@ -94,6 +95,10 @@ function addChartData(chartData) {
 
     if (urlEnd != "0")
         end = new Date(urlEnd);
+    else {
+        end = new Date(new Date().getTime() + (10*60 * 1000));//now + 10 minutes
+    }
+
 
     var options = {
         start: start,
@@ -211,7 +216,6 @@ $(function () {
             if (signalRServerConnected == false) {
                 noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
                 getIsHardwareConnected();
-                getNodes();
             }
             signalRServerConnected = true;
         }
@@ -297,3 +301,15 @@ function share() {
     $('#url').val(url);
 
 }
+
+$('#clear-button').click(function () {
+    $.ajax({
+        url: "/History/ClearHistory/" + nodeId + "/" + sensorId,
+        type: "POST",
+        success: function (connected) {
+            dataset.clear();
+        }
+    });
+});
+
+$('#share-button').click(function() { share() });

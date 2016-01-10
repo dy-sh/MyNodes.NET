@@ -26,15 +26,13 @@
     <div class="ui raised segments">
         <div class="ui secondary clearing segment">
             <b>@ViewBag.Title</b>
-            <a class='ui right floated small button' href='../../ClearHistory/@ViewBag.nodeId/@ViewBag.sensorId'>
-                <b>Clear</b>
-            </a>
+            <button type="button" class="ui right floated small button" id="clear-button">Clear</button>
         </div>
         <div class="ui attached segment">
             
             @if (!Model.Any())
             {
-                @:There are no history. Log shows realtime data only. Check node <a href="../../../Node/Settings/@ViewBag.nodeId">settings</a>
+                @:There are no history. Log shows realtime data only. Check node <a href="/Node/Settings/@ViewBag.nodeId">settings</a>
                 <br/>
             }
 

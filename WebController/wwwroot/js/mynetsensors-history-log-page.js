@@ -68,3 +68,12 @@ function OnSensorUpdatedEvent(sensor) {
     $('#history-table').append("<tr><td>" + now + "</td><td>" + sensor.state+ "</td></tr>");
 }
 
+$('#clear-button').click(function() {
+    $.ajax({
+        url: "/History/ClearHistory/" + nodeId + "/" + sensorId,
+        type: "POST",
+        success: function (connected) {
+            $('#history-table').html(null);
+        }
+    });
+});
