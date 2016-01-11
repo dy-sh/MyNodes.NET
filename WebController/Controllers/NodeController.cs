@@ -61,7 +61,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult Settings()
         {
-            int id = Int32.Parse(Request.Form["nodeId"]);
+            int id = Int32.Parse(Request.Form["Id"]);
             Node node = gatewayDb.GetNode(id);
             string nodename = Request.Form["nodename"];
             if (nodename == "")

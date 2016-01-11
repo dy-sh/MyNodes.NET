@@ -107,30 +107,27 @@ namespace MyNetSensors.WebController.Controllers
                     enabled = true
                 };
 
-                SensorDataType? dataType = sensor.dataType;
-                task.dataType = dataType;
+                task.dataType = sensor.dataType;
 
-                if (dataType == SensorDataType.V_ARMED ||
-                    dataType == SensorDataType.V_TRIPPED)
+                if (sensor.IsBinary())
                 {
                     task.executionValue = "1";
                     task.repeatingAValue = "0";
                     task.repeatingBValue = "1";
                 }
-                else if (dataType == SensorDataType.V_RGB)
+                else if (sensor.dataType == SensorDataType.V_RGB)
                 {
                     task.executionValue = "FFFFFF";
                     task.repeatingAValue = "000000";
                     task.repeatingBValue = "FFFFFF";
                 }
-                else if (dataType == SensorDataType.V_RGBW)
+                else if (sensor.dataType == SensorDataType.V_RGBW)
                 {
                     task.executionValue = "FFFFFFFF";
                     task.repeatingAValue = "FFFFFF00";
                     task.repeatingBValue = "FFFFFFFF";
                 }
-                else if (dataType == SensorDataType.V_PERCENTAGE ||
-                         dataType == SensorDataType.V_DIMMER)
+                else if (sensor.IsPercentage())
                 {
                     task.executionValue = "100";
                     task.repeatingAValue = "0";
@@ -154,6 +151,7 @@ namespace MyNetSensors.WebController.Controllers
             if (sensor == null)
                 return new HttpNotFoundResult();
 
+            task.isRepeating= Request.Form["isRepeating"] != "false";
             if (task.isRepeating)
                 task.executionValue = task.repeatingBValue;
 
@@ -191,6 +189,7 @@ namespace MyNetSensors.WebController.Controllers
             //if (sensor == null)
             //    return new HttpNotFoundResult();
 
+            task.isRepeating= Request.Form["isRepeating"] != "false";
             if (task.isRepeating)
                 task.executionValue = task.repeatingBValue;
 

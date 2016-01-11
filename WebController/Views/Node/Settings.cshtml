@@ -29,15 +29,18 @@
                     <form asp-action="Settings" asp-anti-forgery="true" class="ui form">
                         <div class="ui attached segment">
 
-                            @Html.Hidden("nodeId", @Model.Id)
+                            <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                            <input type="hidden" asp-for="Id" />
 
                             <div class="inline field">
                                 Node name:
                                 <input type="text" name="nodename" value="@Model.name">
                             </div>
+
+
                             @foreach (var sensor in Model.sensors)
                             {
-
                                 <div class="ui segments">
 
                                     <div class="ui segment">
@@ -58,8 +61,10 @@
                                     <div class="ui segment">
                                         <div class="ui toggle checkbox">
                                             <input type="checkbox" name="invertData-@sensor.sensorId"
-                                                   @if (sensor.invertData) { @: checked
-                                                                                                                                                                                                                                                                                                                     }>
+                                                   @if (sensor.invertData)
+                                                   {
+                                                       @: checked
+                                                   }>
                                             <input type="hidden" name="invertData-@sensor.sensorId" value="false">
                                             <label>Invert data</label>
                                         </div>
@@ -69,14 +74,16 @@
 
                                         <div class="ui toggle checkbox">
                                             <input type="checkbox" name="remapData-@sensor.sensorId" class="remapData-switch" panel-id="@sensor.sensorId"
-                                                   @if (sensor.remapEnabled) { @: checked
-                                                                                                                                                                                                                                                                                                                         }>
+                                                   @if (sensor.remapEnabled)
+                                                   {
+                                                       @: checked
+                                                   }>
                                             <input type="hidden" name="remapData-@sensor.sensorId" value="false">
                                             <label>Remap data</label>
                                         </div>
 
                                         <div id="remapPanel-@sensor.sensorId" style="display: none">
-                                            <br />
+                                            <br/>
                                             <div class="fields">
                                                 <div class="ui  field">
                                                     From min
@@ -109,21 +116,25 @@
 
                                         <div class="ui toggle checkbox">
                                             <input type="checkbox" name="storehistory-@sensor.sensorId" class="storehistory-switch" panel-id="@sensor.sensorId"
-                                                   @if (sensor.storeHistoryEnabled) { @: checked
-                                                                                                                                                                                                                                                                                                                         }>
+                                                   @if (sensor.storeHistoryEnabled)
+                                                   {
+                                                       @: checked
+                                                   }>
                                             <input type="hidden" name="storehistory-@sensor.sensorId" value="false">
                                             <label>Write sensor history in database</label>
                                         </div>
 
 
                                         <div id="historyPanel-@sensor.sensorId" style="display: none">
-                                            <br />
+                                            <br/>
 
                                             <div class="ui field">
                                                 <div class="ui toggle checkbox">
                                                     <input type="checkbox" name="writeeverychange-@sensor.sensorId"
-                                                           @if (sensor.storeHistoryEveryChange) { @: checked
-                                                                                                                                                                                                                                                                                                                                                                             }>
+                                                           @if (sensor.storeHistoryEveryChange)
+                                                           {
+                                                               @: checked
+                                                           }>
                                                     <input type="hidden" name="writeeverychange-@sensor.sensorId" value="false">
                                                     <label>Every change</label>
                                                 </div>
@@ -142,6 +153,7 @@
 
 
                         </div>
+
 
                         <div class="ui center aligned attached segment">
                             <div class="ui buttons">

@@ -25,34 +25,36 @@
                 <form asp-action="New" asp-anti-forgery="true" class="ui form">
                     <div class="ui attached segment">
 
-                        @Html.HiddenFor(model => model.nodeId)
-                        @Html.HiddenFor(model => model.sensorId)
-                        @Html.HiddenFor(model => model.sensorDbId)
-                        @Html.HiddenFor(model => model.sensorDescription)
-                        @Html.HiddenFor(model => model.dataType)
-                        @Html.HiddenFor(model => model.enabled)
+                        <input type="hidden" asp-for="nodeId" />
+                        <input type="hidden" asp-for="sensorId" />
+                        <input type="hidden" asp-for="sensorDbId" />
+                        <input type="hidden" asp-for="sensorDescription" />
+                        <input type="hidden" asp-for="dataType" />
+                        <input type="hidden" asp-for="enabled" />
 
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
                         <div class="field">
                             <label>Task description</label>
-                            @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                            <input type="text" asp-for="description">
                         </div>
 
                         <div class="field">
                             <label>Execution date</label>
-                            <input type="text" asp-for="executionDate" id="datetimepicker1">
-
-                            @*@Html.EditorFor(model => model.executionDate, new { htmlAttributes = new { @class = "form-control", @id = "datetimepicker1" } })*@
-                            @Html.ValidationMessageFor(model => model.executionDate, "", new { @class = "text-danger" })
+                            <input type="text" asp-for="executionDate">
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input type="checkbox" id="repeatTask"
-                                       @if (Model.isRepeating) { @: checked
-                                                                                                                                                            }>
-                                <input type="hidden" id="repeatTask" value="false">
+                                @if (Model.isRepeating)
+                                {
+                                    <input type="checkbox" name="isRepeating" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="isRepeating">
+                                }
+                                <input type="hidden" name="isRepeating" value="false">
                                 <label>Repeat task</label>
                             </div>
                         </div>
@@ -64,8 +66,7 @@
                         <div id="nonRepeatingPanel">
                             <div class="field">
                                 <label>Set value</label>
-                                @Html.EditorFor(model => model.executionValue, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.executionValue, "", new { @class = "text-danger" })
+                                <input type="text" asp-for="executionValue">
                             </div>
                         </div>
 
@@ -73,28 +74,24 @@
                             <div class="fields">
                                 <div class="field">
                                     <label>Repeat A value</label>
-                                    @Html.EditorFor(model => model.repeatingAValue, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.repeatingAValue, "", new { @class = "text-danger" })
+                                    <input type="text" asp-for="repeatingAValue">
                                 </div>
 
                                 <div class="field">
                                     <label>Repeat B value</label>
-                                    @Html.EditorFor(model => model.repeatingBValue, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.repeatingBValue, "", new { @class = "text-danger" })
+                                    <input type="text" asp-for="repeatingBValue">
                                 </div>
                             </div>
                             <div class="fields">
 
                                 <div class="field">
                                     <label>Repeat count (0 for infinity)</label>
-                                    @Html.EditorFor(model => model.repeatingNeededCount, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.repeatingNeededCount, "", new { @class = "text-danger" })
+                                    <input type="text" asp-for="repeatingNeededCount">
                                 </div>
 
                                 <div class="field">
                                     <label>Repeat interval (ms)</label>
-                                    @Html.EditorFor(model => model.repeatingInterval, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.repeatingInterval, "", new { @class = "text-danger" })
+                                    <input type="text" asp-for="repeatingInterval">
                                 </div>
 
 
@@ -125,7 +122,7 @@
         var fade = 500;
 
 
-        $("#repeatTask").click(function () {
+        $("[name=isRepeating]").click(function () {
             if ($(this).is(":checked")) {
                 $('#repeatingPanel').fadeIn(fade);
                 $('#nonRepeatingPanel').hide();
@@ -136,7 +133,7 @@
         });
 
         $(function () {
-            $('#datetimepicker1').daterangepicker({
+            $('[name=executionDate]').daterangepicker({
                 format: 'DD.MM.YYYY HH:mm:ss',
                 "singleDatePicker": true,
                 "timePicker": true,
