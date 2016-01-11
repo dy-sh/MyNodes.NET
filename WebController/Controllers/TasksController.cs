@@ -19,6 +19,8 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class TasksController : Controller
     {
+        const int MIN_REPEAT_INTERVAL = 20;
+
 
         private INodesTasksRepository tasksDb;
         private IGatewayRepository gatewayDb;
@@ -155,6 +157,13 @@ namespace MyNetSensors.WebController.Controllers
             if (task.isRepeating)
                 task.executionValue = task.repeatingBValue;
 
+            if (task.isRepeating && task.repeatingInterval < MIN_REPEAT_INTERVAL)
+            {
+                ModelState.Clear();
+                ModelState.AddModelError("", "Repeating Interval must be at least 20 ms");
+                return View(task);
+            }
+
             tasksDb.AddTask(task);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
@@ -192,6 +201,13 @@ namespace MyNetSensors.WebController.Controllers
             task.isRepeating= Request.Form["isRepeating"] != "false";
             if (task.isRepeating)
                 task.executionValue = task.repeatingBValue;
+
+            if (task.isRepeating && task.repeatingInterval < MIN_REPEAT_INTERVAL)
+            {
+                ModelState.Clear();
+                ModelState.AddModelError("", "Repeating Interval must be at least 20 ms");
+                return View(task);
+            }
 
             tasksDb.UpdateTask(task);
 

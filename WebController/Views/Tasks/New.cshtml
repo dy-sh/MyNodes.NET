@@ -3,6 +3,9 @@
 
 @{
     ViewBag.Title = "New Task for " + @ViewBag.description;
+
+    string repeatingPanelDisplay = Model.isRepeating ? "" : "display: none";
+    string nonRepeatingPanelDisplay = Model.isRepeating ? "display: none" : "";
 }
 
 <br />
@@ -63,14 +66,14 @@
 
 
 
-                        <div id="nonRepeatingPanel">
+                        <div id="nonRepeatingPanel" style="@nonRepeatingPanelDisplay">
                             <div class="field">
                                 <label>Set value</label>
                                 <input type="text" asp-for="executionValue">
                             </div>
                         </div>
 
-                        <div id="repeatingPanel" style="display: none">
+                        <div id="repeatingPanel" style="@repeatingPanelDisplay">
                             <div class="fields">
                                 <div class="field">
                                     <label>Repeat A value</label>
