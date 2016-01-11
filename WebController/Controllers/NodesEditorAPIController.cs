@@ -70,8 +70,9 @@ namespace MyNetSensors.WebController.Controllers
                     node.inputs.Add(new Input
                     {
                         name = input.Name,
-                        type = "string",
-                        link = engine.GetLinkForInput(input)?.Id
+                        type = "string"
+                        //we will get links in separate request. otherwise we will get a double links
+                        // link = engine.GetLinkForInput(input)?.Id
                     });
                 }
  
@@ -90,8 +91,9 @@ namespace MyNetSensors.WebController.Controllers
                         node.outputs.Add(new Output
                         {
                             name = output.Name,
-                            type = "string",
-                            links = linksIds
+                            type = "string"
+                            //we will get links in separate request. otherwise we will get a double links
+                            // links = linksIds
                         });
                     }
                     else
