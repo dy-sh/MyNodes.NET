@@ -45,7 +45,7 @@
 </script>
 
 <script id="sensorTemplate" type="text/x-handlebars-template">
-    <div class="ui segment">
+    <div class="ui segment" id="sensorPanel{{sensor-id this}}">
         Sensor Id: {{sensorId}} <br />
         Type: <span id="sensorType{{sensor-id this}}"> {{sensor-type this}} </span><br />
         {{#if description}} Description: {{description}} <br />{{/if}}
