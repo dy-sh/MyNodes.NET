@@ -257,6 +257,14 @@ function onReturnNodes(nodes) {
     if (!nodes) return;
 
     for (var i = 0; i < nodes.length; i++) {
+        //remove links, because we will get them later
+        for (var k = 0; k < nodes[i].outputs.length; k++) {
+            nodes[i].outputs[k].links = null;
+        }
+        for (var k = 0; k < nodes[i].inputs.length; k++) {
+            nodes[i].inputs[k].link = null;
+        }
+
         createOrUpdateNode(nodes[i]);
     }
 

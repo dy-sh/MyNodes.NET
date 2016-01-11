@@ -70,9 +70,8 @@ namespace MyNetSensors.WebController.Controllers
                     node.inputs.Add(new Input
                     {
                         name = input.Name,
-                        type = "string"
-                        //we will get links in separate request. otherwise we will get a double links
-                        // link = engine.GetLinkForInput(input)?.Id
+                        type = "string",
+                        link = engine.GetLinkForInput(input)?.Id
                     });
                 }
  
@@ -91,9 +90,8 @@ namespace MyNetSensors.WebController.Controllers
                         node.outputs.Add(new Output
                         {
                             name = output.Name,
-                            type = "string"
-                            //we will get links in separate request. otherwise we will get a double links
-                            // links = linksIds
+                            type = "string",
+                            links = linksIds
                         });
                     }
                     else
@@ -197,6 +195,10 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
             LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+
+            if (outNode == null || inNode==null)
+                return false;
+
             engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             return true;
         }
