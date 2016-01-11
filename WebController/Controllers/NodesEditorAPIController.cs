@@ -226,6 +226,8 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
 
             LogicalNode oldNode = engine.GetNode(node.id);
+            if (oldNode == null)
+                return false;
 
             engine.RemoveNode(oldNode);
             return true;
@@ -237,6 +239,8 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
 
             LogicalNode oldNode = engine.GetNode(node.id);
+            if (oldNode == null)
+                return false;
 
             oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };

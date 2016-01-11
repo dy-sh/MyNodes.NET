@@ -2952,10 +2952,10 @@ LGraphCanvas.prototype.processMouseMove = function(e)
 		if(this.resizing_node && !this.live_mode)
 		{
 			this.resizing_node.size[0] += delta[0] / this.scale;
-			this.resizing_node.size[1] += delta[1] / this.scale;
+			//this.resizing_node.size[1] += delta[1] / this.scale;
 			var max_slots = Math.max( this.resizing_node.inputs ? this.resizing_node.inputs.length : 0, this.resizing_node.outputs ? this.resizing_node.outputs.length : 0);
-			if(this.resizing_node.size[1] < max_slots * LiteGraph.NODE_SLOT_HEIGHT + 4)
-				this.resizing_node.size[1] = max_slots * LiteGraph.NODE_SLOT_HEIGHT + 4;
+		//	if(this.resizing_node.size[1] < max_slots * LiteGraph.NODE_SLOT_HEIGHT + 4)
+		//		this.resizing_node.size[1] = max_slots * LiteGraph.NODE_SLOT_HEIGHT + 4;
 			if(this.resizing_node.size[0] < LiteGraph.NODE_MIN_WIDTH)
 				this.resizing_node.size[0] = LiteGraph.NODE_MIN_WIDTH;
 
