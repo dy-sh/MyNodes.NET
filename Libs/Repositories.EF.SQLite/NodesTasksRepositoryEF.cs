@@ -68,7 +68,24 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void UpdateTask(NodeTask task)
         {
-            db.NodesTasks.Update(task);
+            NodeTask oldTask = GetTask(task.Id);
+            oldTask.dataType = task.dataType;
+            oldTask.description = task.description;
+            oldTask.enabled = task.enabled;
+            oldTask.executionDate = task.executionDate;
+            oldTask.executionValue = task.executionValue;
+            oldTask.isCompleted = task.isCompleted;
+            oldTask.isRepeating = task.isRepeating;
+            oldTask.nodeId = task.nodeId;
+            oldTask.repeatingAValue = task.repeatingAValue;
+            oldTask.repeatingBValue = task.repeatingBValue;
+            oldTask.repeatingDoneCount = task.repeatingDoneCount;
+            oldTask.repeatingInterval = task.repeatingInterval;
+            oldTask.repeatingNeededCount = task.repeatingNeededCount;
+            oldTask.sensorDbId = task.sensorDbId;
+            oldTask.sensorId = task.sensorId;
+            oldTask.repeatingInterval = task.repeatingInterval;
+
             db.SaveChanges();
         }
 

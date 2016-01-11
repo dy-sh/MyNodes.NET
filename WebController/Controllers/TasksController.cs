@@ -148,6 +148,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult New(NodeTask task)
         {
+            task.Id = 0;
             Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
 
             if (sensor == null)

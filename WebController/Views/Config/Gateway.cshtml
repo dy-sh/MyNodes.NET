@@ -30,12 +30,16 @@
                 </div>
 
                 <div class="ui attached clearing segment">
+                    @*span needed to prevent marign for first and last labels*@
+                    <span></span>
                     <div class="ui blue basic label" id="nodes-registered">-</div>
                     Nodes registered
                     <br/>
                     <br/>
                     <div class="ui blue basic label" id="sensors-registered">-</div>
                     Sensors registered
+                    <span></span>
+
                 </div>
                 <div class="ui attached center aligned segment">
                     <a asp-controller="Config" asp-action="SerialPort" class="ui button">Select serial port</a>
