@@ -46,7 +46,7 @@
 
 
 <script id="labelTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
         @*span needed to prevent marign for first and last labels*@
         <span></span>
         <span class="ui right floated" id="labelName-{{this.Id}}"></span>
