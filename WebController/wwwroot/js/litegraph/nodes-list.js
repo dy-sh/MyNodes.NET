@@ -8,54 +8,47 @@
         this.clonable = false;
         this.removable = false;
     }
-
     LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);
 
 
     //SystemConsole
     function SystemConsole() {
-        this.addInput("in", "string");
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
     }
-    SystemConsole.title = "System Console";
-
+    SystemConsole.title = "Console";
     LiteGraph.registerNodeType("System/Console", SystemConsole);
 
 
     //LogicCounter
     function LogicCounter() {
-        this.addInput("Frequency", "string");
-        this.addOutput("Out", "string");
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
     }
-    LogicCounter.title = "Logic Counter";
-
+    LogicCounter.title = "Counter";
     LiteGraph.registerNodeType("Logic/Counter", LogicCounter);
 
 
     //LogicInvert
     function LogicInvert() {
-        this.addInput("in", "string");
-        this.addOutput("out", "string");
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
-
     }
-    LogicInvert.title = "Logic Invert";
-
+    LogicInvert.title = "Invert";
     LiteGraph.registerNodeType("Logic/Invert", LogicInvert);
 
 
     //MathPlus
     function MathPlus() {
-        this.addInput("in1", "string");
-        this.addInput("in2", "string");
-        this.addOutput("out", "string");
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
-
     }
-    MathPlus.title = "MathPlus";
-
+    MathPlus.title = "Plus";
     LiteGraph.registerNodeType("Math/Plus", MathPlus);
+
+
+    //UI Label
+    function UILabel() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeUILabel" };
+    }
+    UILabel.title = "Label";
+    LiteGraph.registerNodeType("UI/Label", UILabel);
 
 
 

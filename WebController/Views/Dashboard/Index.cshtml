@@ -1,0 +1,55 @@
+﻿@using System.Threading.Tasks
+@using MyNetSensors.LogicalNodes
+@model List<MyNetSensors.LogicalNodes.LogicalNode>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        @*<a asp-controller="Config" asp-action="Gateway">Gateway</a> |
+        <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>*@
+        <br/>
+    </div>
+    <div class="ui divider"></div>
+
+    <div class="ui two column stackable centered grid" id="main-content" @*style="display: none;"*@>
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Dashboard</b>
+                </div>
+
+                @foreach (LogicalNode n in Model)
+                {
+                    if (n is LogicalNodeUILabel)
+                    {
+                        LogicalNodeUILabel node = (LogicalNodeUILabel)n;
+
+                        <div class="ui attached clearing segment">
+                            @*span needed to prevent marign for first and last labels*@
+                            <span></span>
+                            <div class="ui blue basic label" id="nodes-registered">@node.Value</div>
+                            UI Label
+                            <span></span>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+@section scripts
+{
+    <script src="~/js/mysensors.js"></script>
+    <script src="~/js/mynetsensors-dashboard-page.js"></script>
+}

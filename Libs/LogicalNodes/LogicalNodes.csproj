@@ -51,6 +51,7 @@
     <Compile Include="LogicalNodeConsole.cs" />
     <Compile Include="LogicalNodeConst.cs" />
     <Compile Include="LogicalNodeCounter.cs" />
+    <Compile Include="LogicalNodeUILabel.cs" />
     <Compile Include="LogicalNodeInvert.cs" />
     <Compile Include="LogicalNodeMathPlus.cs" />
     <Compile Include="LogicalNodesEngine.cs" />
