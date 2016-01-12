@@ -14,75 +14,71 @@
     </p>
     <div class="ui divider"></div>
 
-
-
     <div class="ui four cards" id="nodesContainer" style="display: none;">
-
     </div>
 
+</div>
+<br/>
 
-    <script id="nodeTemplate" type="text/x-handlebars-template">
-        <div class="ui card" id="nodePanel{{Id}}" style="min-width: 250px; max-width: 250px;">
 
-            <div class="ui attached block header">
-                <div class="left floated" id="nodeTitle{{Id}}">
-                    Node {{Id}}
-                </div>
-                <div class="right floated">
-                    <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{Id}}" class="ui right floated" style="display: none;" />
-                </div>
+<script id="nodeTemplate" type="text/x-handlebars-template">
+    <div class="ui card" id="nodePanel{{Id}}" style="min-width: 250px; max-width: 250px;">
+
+        <div class="ui attached block header">
+            <div class="left floated" id="nodeTitle{{Id}}">
+                Node {{Id}}
             </div>
-
-            <div class="content">
-                {{#if name}} {{name}} <br /> {{/if}}
-
-                <div id="nodeBody{{Id}}"></div>
+            <div class="right floated">
+                <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{Id}}" class="ui right floated" style="display: none;" />
             </div>
+        </div>
+
+        <div class="content">
+            {{#if name}} {{name}} <br /> {{/if}}
+
+            <div id="nodeBody{{Id}}"></div>
+        </div>
 
 
-            <div id="sensorsContainer{{Id}}" class="content">
+        <div id="sensorsContainer{{Id}}" class="content">
+        </div>
+
+        <div class="ui bottom attached content" id="footer{{Id}}">
+            <div class="left floated">
+                {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span>{{/if}}
             </div>
-
-            <div class="ui bottom attached content" id="footer{{Id}}">
-                <div class="left floated">
-                    {{#if batteryLevel}} Battery: <span id="nodeBattery{{Id}}"> {{batteryLevel}} </span>{{/if}}
-                </div>
-                <div class="right floated">
-                    <div class="ui dropdown">
-                        <i class="sidebar icon"></i>
-                        <div class="menu" id="nodeMenu{{Id}}">
-                        </div>
+            <div class="right floated">
+                <div class="ui dropdown">
+                    <i class="sidebar icon"></i>
+                    <div class="menu" id="nodeMenu{{Id}}">
                     </div>
                 </div>
             </div>
         </div>
-    </script>
+    </div>
+</script>
 
 
 
 
-    <script id="sensorTemplate" type="text/x-handlebars-template">
-        <div class="" id="sensorPanel{{sensor-id this}}">
+<script id="sensorTemplate" type="text/x-handlebars-template">
+    <div class="" id="sensorPanel{{sensor-id this}}">
 
-            <div class="left floated">
-                <span id="sensorTitle{{sensor-id this}}">{{sensor-title this}}</span><br />
+        <div class="left floated">
+            <span id="sensorTitle{{sensor-id this}}">{{sensor-title this}}</span><br />
 
-            </div>
-            <div class="right floated">
-                <div id="dataPanel{{sensor-id this}}">
-                </div>
-            </div>
-
-
-            <br />
-            <br />
         </div>
-    </script>
+        <div class="right floated">
+            <div id="dataPanel{{sensor-id this}}">
+            </div>
+        </div>
 
 
+        <br />
+        <br />
+    </div>
+</script>
 
-</div>
-<br/>
 
 
 <script id="toggleTemplate" type="text/x-handlebars-template">

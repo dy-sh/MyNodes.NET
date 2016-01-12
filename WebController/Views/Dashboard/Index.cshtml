@@ -1,8 +1,4 @@
-﻿@using System.Threading.Tasks
-@using MyNetSensors.LogicalNodes
-@model List<MyNetSensors.LogicalNodes.LogicalNode>
-
-@{
+﻿@{
     ViewBag.Title = "Dashboard";
 }
 
@@ -10,46 +6,59 @@
 <div class="ui container">
 
     <h2>@ViewBag.Title</h2>
-
-    <div>
-        @*<a asp-controller="Config" asp-action="Gateway">Gateway</a> |
-        <a asp-controller="Config" asp-action="SerialPort">Serial Port</a>*@
-        <br/>
-    </div>
+    <p>
+        <a asp-controller="Dashboard" asp-action="Index">Dashboard</a> |
+        <a asp-controller="Control" asp-action="Index">Control</a> |
+        <a asp-controller="NodesEditor" asp-action="Index">Editor</a> |
+        <a asp-controller="History" asp-action="List">History</a> |
+        <a asp-controller="Tasks" asp-action="List">Tasks</a> |
+        <a asp-controller="Node" asp-action="List">Settings</a>
+    </p>
     <div class="ui divider"></div>
 
-    <div class="ui two column stackable centered grid" id="main-content" @*style="display: none;"*@>
-        <div class="column">
-            <div class="ui raised segments">
-                <div class="ui secondary clearing segment">
-                    <b>Dashboard</b>
-                </div>
-
-                @foreach (LogicalNode n in Model)
-                {
-                    if (n is LogicalNodeUILabel)
-                    {
-                        LogicalNodeUILabel node = (LogicalNodeUILabel)n;
-
-                        <div class="ui attached clearing segment">
-                            @*span needed to prevent marign for first and last labels*@
-                            <span></span>
-                            <div class="ui blue basic label" id="nodes-registered">@node.Value</div>
-                            UI Label
-                            <span></span>
-                        </div>
-                    }
-                }
-
-            </div>
-        </div>
+    <div class="ui four cards" id="panelsContainer" style="display: none;">
     </div>
-    
 
 </div>
+<br />
+
+
+<script id="panelTemplate" type="text/x-handlebars-template">
+    <div class="ui card" id="panel{{this.PanelId}}" style="min-width: 250px; max-width: 250px;">
+
+        <div class="ui attached block header">
+            <div class="left floated" id="panelTitle{{this.PanelId}}">
+                Panel {{this.PanelId}}
+            </div>
+            <div class="right floated">
+                <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{this.PanelId}}" class="ui right floated" style="display: none;" />
+            </div>
+        </div>
+
+
+        <div id="uiContainer{{this.PanelId}}" class="content">
+        </div>       
+    </div>
+</script>
+
+
+
+
+<script id="labelTemplate" type="text/x-handlebars-template">
+    <div id="label-{{this.Id}}">
+        <div class="left floated" id="labelName-{{this.Id}}">{{this.Name}}</div>
+        <div class="right floated" id="labelValue-{{this.Id}}">{{this.Value}}</div>
+        <br/>
+    </div>
+</script>
+
+
+
+
 
 @section scripts
 {
     <script src="~/js/mysensors.js"></script>
     <script src="~/js/mynetsensors-dashboard-page.js"></script>
 }
+

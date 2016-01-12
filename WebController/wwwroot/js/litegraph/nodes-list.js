@@ -45,7 +45,7 @@
 
     //UI Label
     function UILabel() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeUILabel" };
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
     }
     UILabel.title = "Label";
     LiteGraph.registerNodeType("UI/Label", UILabel);

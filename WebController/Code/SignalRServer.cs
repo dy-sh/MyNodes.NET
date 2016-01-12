@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateways;
 using MyNetSensors.LogicalNodes;
+using MyNetSensors.LogicalNodesUI;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Controllers;
 
@@ -16,6 +17,7 @@ namespace MyNetSensors.WebController.Code
         private static IHubContext hub;
         private static Gateway gateway;
         private static LogicalNodesEngine logicalNodesEngine;
+        private static LogicalNodesUIEngine logicalNodesUiEngine;
 
         public static void Start(IConnectionManager connectionManager)
         {
@@ -43,6 +45,7 @@ namespace MyNetSensors.WebController.Code
         {
             gateway = SerialController.gateway;
             logicalNodesEngine = SerialController.logicalNodesEngine;
+            logicalNodesUiEngine = SerialController.logicalNodesUIEngine;
 
             gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             gateway.OnMessageSendEvent += OnMessageSendEvent;
@@ -65,6 +68,28 @@ namespace MyNetSensors.WebController.Code
                 logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
                 logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
             }
+
+            if (logicalNodesUiEngine != null)
+            {
+                logicalNodesUiEngine.OnUINodeUpdatedEvent += OnUINodeUpdatedEvent;
+                logicalNodesUiEngine.OnNewUINodeEvent += OnNewUINodeEvent;
+                logicalNodesUiEngine.OnUINodeDeleteEvent += OnUINodeDeleteEvent;
+            }
+        }
+
+        private static void OnUINodeDeleteEvent(LogicalNodeUI node)
+        {
+            hub.Clients.All.OnUINodeDeleteEvent(node);
+        }
+
+        private static void OnNewUINodeEvent(LogicalNodeUI node)
+        {
+            hub.Clients.All.OnNewUINodeEvent(node);
+        }
+
+        private static void OnUINodeUpdatedEvent(LogicalNodeUI node)
+        {
+            hub.Clients.All.OnUINodeUpdatedEvent(node);
         }
 
 
@@ -108,6 +133,9 @@ namespace MyNetSensors.WebController.Code
             LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertLogicalNodeToLitegraphNode(node);
             hub.Clients.All.OnNewLogicalNodeEvent(liteGraphNode);
         }
+
+
+
 
 
 

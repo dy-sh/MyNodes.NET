@@ -14,7 +14,8 @@
         "LogicalNodesMySensors": "1.0.0-*",
         "NodesTasks": "1.0.0-*",
         "Repositories.Dapper": "1.0.0-*",
-        "Repositories.EF.SQLite": "1.0.0-*"
+        "Repositories.EF.SQLite": "1.0.0-*",
+        "LogicalNodesUI": "1.0.0-*"
       }
     }
   }

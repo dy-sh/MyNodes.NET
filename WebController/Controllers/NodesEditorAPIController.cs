@@ -209,8 +209,9 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
 
             string type = node.properties["objectType"];
+            string assemblyName = type.Split('.')[1];
 
-            var newObject = Activator.CreateInstance("LogicalNodes", type);
+            var newObject = Activator.CreateInstance(assemblyName, type);
             LogicalNode newNode = (LogicalNode)newObject.Unwrap();
 
             //LogicalNode newNode = newObject as LogicalNode;

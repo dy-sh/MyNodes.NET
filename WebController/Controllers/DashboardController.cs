@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.LogicalNodes;
+using MyNetSensors.LogicalNodesUI;
 using MyNetSensors.SerialControllers;
 
 namespace MyNetSensors.WebController.Controllers
@@ -11,18 +12,22 @@ namespace MyNetSensors.WebController.Controllers
     public class DashboardController:Controller
     {
 
-        private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
-
+        private LogicalNodesUIEngine engineUI = SerialController.logicalNodesUIEngine;
 
 
         public IActionResult Index()
         {
-            if (engine == null)
+            return View();
+        }
+
+
+        public List<LogicalNodeUI> GetUINodes()
+        {
+            if (engineUI == null)
                 return null;
 
-            List<LogicalNode> nodes = engine.nodes;
-
-            return View(nodes);
+            return engineUI.GetUINodes();
         }
+
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using MyNetSensors.Gateways;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
+using MyNetSensors.LogicalNodesUI;
 using MyNetSensors.NodesTasks;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
@@ -54,6 +55,7 @@ namespace MyNetSensors.SerialControllers
 
         public static LogicalNodesEngine logicalNodesEngine;
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
+        public static LogicalNodesUIEngine logicalNodesUIEngine;
         public static ILogicalNodesRepository logicalNodesDb;
 
         public static SerialControllerLogs logs = new SerialControllerLogs();
@@ -239,6 +241,7 @@ namespace MyNetSensors.SerialControllers
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
+            logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine);
 
             logicalNodesEngine.Start();
 
