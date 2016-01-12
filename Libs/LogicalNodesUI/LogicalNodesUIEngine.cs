@@ -22,6 +22,15 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
             engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
+            engine.OnNewLinkEvent += OnNewLinkEvent;
+        }
+
+        public List<LogicalNodeUI> GetUINodes()
+        {
+            return engine.nodes
+                .Where(n => n is LogicalNodeUI)
+                .Cast<LogicalNodeUI>()
+                .ToList();
         }
 
         private void OnInputUpdatedEvent(Input input)
@@ -56,12 +65,30 @@ namespace MyNetSensors.LogicalNodesUI
                 OnNewUINodeEvent?.Invoke((LogicalNodeUI)node);
         }
 
-        public List<LogicalNodeUI> GetUINodes()
+        private void OnNewLinkEvent(LogicalLink link)
         {
-            return engine.nodes
-                .Where(n => n is LogicalNodeUI)
-                .Cast<LogicalNodeUI>()
-                .ToList();
+            LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
+            LogicalNode inNode= engine.GetInputOwner(link.InputId);
+
+            Output output = engine.GetOutput(link.OutputId);
+            Input input = engine.GetInput(link.InputId);
+
+            if (inNode is LogicalNodeUI)
+            {
+                LogicalNodeUI node = (LogicalNodeUI)inNode;
+                node.Name = $"{outNode.Title} {output.Name}";
+                engine.UpdateNode(node);
+            }
+
+            if (outNode is LogicalNodeUI)
+            {
+                LogicalNodeUI node = (LogicalNodeUI)outNode;
+                node.Name = $"{inNode.Title} {input.Name}";
+                engine.UpdateNode(node);
+            }
+
         }
+
+
     }
 }

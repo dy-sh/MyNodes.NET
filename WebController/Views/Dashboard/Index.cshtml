@@ -16,7 +16,7 @@
     </p>
     <div class="ui divider"></div>
 
-    <div class="ui two column stackable grid" id="panelsContainer" style="display: none;">
+    <div class="ui stackable grid" id="panelsContainer" style="display: none;">
     </div>
 
 </div>
@@ -24,28 +24,22 @@
 
 
 <script id="panelTemplate" type="text/x-handlebars-template">
-    
-    <div class="column" id="panel{{this.PanelId}}" style="min-width: 250px; max-width: 250px;">
+    <div class="column" id="panel{{this.PanelId}}" style="width:360px; max-width:360px">
         <div class="ui raised segments">
-
 
             <div class="ui secondary clearing segment" id="panelTitle{{this.PanelId}}">
                 <b>Panel {{this.PanelId}}</b>
+
                 <div class="ui right floated basic disabled button nonbutton">
-                    <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{this.PanelId}}" class="ui right floated" style="display: none;" />
+                    <i class="square outline icon" id="activity{{this.PanelId}}"></i>
+                    @*<img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{this.PanelId}}" class="ui right floated" style="display: none;" />*@
                 </div>
             </div>
-            
-
 
             <div id="uiContainer{{this.PanelId}}" class="content">
-            </div>   
-
-
+            </div>
         </div>
     </div>
-    
-
 </script>
 
 
@@ -55,8 +49,10 @@
     <div class="ui attached clearing segment">
         @*span needed to prevent marign for first and last labels*@
         <span></span>
-        <span class="ui blue basic label" id="labelValue-{{this.Id}}">{{this.Value}}</span>
-        <span class="ui right floated" id="labelName-{{this.Id}}">{{this.Name}}N</span>
+        <span class="ui right floated" id="labelName-{{this.Id}}"></span>
+        <div class="ui right floated basic disabled button nonbutton">
+            <span class="ui blue basic label" id="labelValue-{{this.Id}}"></span>
+        </div>
         <span></span>
     </div>
 </script>

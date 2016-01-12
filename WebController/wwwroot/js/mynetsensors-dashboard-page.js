@@ -156,12 +156,17 @@ function createNode(node) {
     if (node.Type == "UI/Label") {
         $(labelTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
     }
+
+    updateNode(node);
 }
 
 function updateNode(node) {
-    $('#activity' + node.PanelId).show().fadeOut(500);
+    $('#activity' + node.PanelId).show().fadeOut(150);
 
     if (node.Type == "UI/Label") {
+        if (node.Value == null)
+            node.Value = "NULL";
+
         $('#labelName-' + node.Id).html(node.Name);
         $('#labelValue-' + node.Id).html(node.Value);
     }
