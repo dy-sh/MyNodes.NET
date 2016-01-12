@@ -51,7 +51,8 @@ namespace MyNetSensors.Gateways
         public event Action OnConnectedEvent;
         public event GatewayStateEventHandler OnGatewayStateChangedEvent;
         public event LogEventHandler OnLogMessage;
-        public event LogEventHandler OnLogStateMessage;
+        public event LogEventHandler OnLogInfo;
+        public event LogEventHandler OnLogError;
 
         public MessagesLog messagesLog = new MessagesLog();
         private List<Node> nodes = new List<Node>();
@@ -79,9 +80,14 @@ namespace MyNetSensors.Gateways
             OnLogMessage?.Invoke(message);
         }
 
-        internal void LogState(string message)
+        internal void LogInfo(string message)
         {
-            OnLogStateMessage?.Invoke(message);
+            OnLogInfo?.Invoke(message);
+        }
+
+        internal void LogError(string message)
+        {
+            OnLogError?.Invoke(message);
         }
 
 
@@ -97,17 +103,17 @@ namespace MyNetSensors.Gateways
             switch (gatewayState)
             {
                 case GatewayState.Disconnected:
-                    LogState("Disconnected.");
+                    LogInfo("Disconnected.");
                     OnDisconnectedEvent?.Invoke();
                     break;
                 case GatewayState.ConnectingToPort:
-                    LogState("Trying to connect...");
+                    LogInfo("Trying to connect...");
                     break;
                 case GatewayState.ConnectingToGateway:
-                    LogState("Trying to communicate...");
+                    LogInfo("Trying to communicate...");
                     break;
                 case GatewayState.Connected:
-                    LogState("Gateway connected.");
+                    LogInfo("Gateway connected.");
                     OnConnectedEvent?.Invoke();
                     break;
             }
@@ -152,7 +158,7 @@ namespace MyNetSensors.Gateways
         {
             if (gatewayState == GatewayState.Connected)
             {
-                LogState("Port unexpectedly disconnected.");
+                LogError("Port unexpectedly disconnected.");
 
                 SetGatewayState(GatewayState.Disconnected);
 
@@ -187,7 +193,7 @@ namespace MyNetSensors.Gateways
                         SendGetwayVersionRequest();
                         await Task.Delay(1000);
                     }
-                    LogState("Gateway is not responding.");
+                    LogError("Gateway is not responding.");
                 }
             }
             else
@@ -200,7 +206,7 @@ namespace MyNetSensors.Gateways
                     SendGetwayVersionRequest();
                     await Task.Delay(1000);
                 }
-                LogState("Gateway is not responding.");
+                LogError("Gateway is not responding.");
             }
 
 
@@ -212,7 +218,7 @@ namespace MyNetSensors.Gateways
             if (gatewayState != GatewayState.Connected
                 && gatewayState != GatewayState.ConnectingToGateway)
             {
-                LogState("Failed to send message. Gateway is not connected.");
+                LogError("Failed to send message. Gateway is not connected.");
                 return;
             }
 
@@ -331,7 +337,7 @@ namespace MyNetSensors.Gateways
 
                 OnNewNodeEvent?.Invoke(node);
 
-                LogState($"New node (id: {node.Id}) registered");
+                LogInfo($"New node (id: {node.Id}) registered");
             }
 
             node.UpdateLastSeenNow();
@@ -354,7 +360,7 @@ namespace MyNetSensors.Gateways
 
                     OnNodeUpdatedEvent?.Invoke(node);
 
-                    LogState($"Node {node.Id} updated");
+                    LogInfo($"Node {node.Id} updated");
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
                 {
@@ -364,7 +370,7 @@ namespace MyNetSensors.Gateways
 
                         OnNodeUpdatedEvent?.Invoke(node);
 
-                        LogState($"Node {node.Id} updated");
+                        LogInfo($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
@@ -372,7 +378,7 @@ namespace MyNetSensors.Gateways
 
                         OnNodeUpdatedEvent?.Invoke(node);
 
-                        LogState($"Node {node.Id} updated");
+                        LogInfo($"Node {node.Id} updated");
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
@@ -413,7 +419,7 @@ namespace MyNetSensors.Gateways
             {
                 if (mes.subType < 0 || mes.subType > (int)Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Max())
                 {
-                    LogState("Exception occurs when the serial port does not have time to write the data");
+                    LogError("Exception occurs when the serial port does not have time to write the data");
 
                     return;
                 }
@@ -429,7 +435,7 @@ namespace MyNetSensors.Gateways
             {
                 OnNewSensorEvent?.Invoke(sensor);
 
-                LogState($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
+                LogInfo($"New sensor (node id {sensor.nodeId}, sensor id: {sensor.sensorId}) registered");
             }
             else
             {
@@ -461,13 +467,13 @@ namespace MyNetSensors.Gateways
             Node node = GetNode(nodeId);
             if (node == null)
             {
-                LogState($"Can`t send message. Node{nodeId} does not exist.");
+                LogError($"Can`t send message. Node{nodeId} does not exist.");
                 return;
             }
             Sensor sensor = node.GetSensor(sensorId);
             if (sensor == null)
             {
-                LogState($"Can`t send message. Node{nodeId} Sensor{sensorId} does not exist.");
+                LogError($"Can`t send message. Node{nodeId} Sensor{sensorId} does not exist.");
                 return;
             }
             sensor.state = state;

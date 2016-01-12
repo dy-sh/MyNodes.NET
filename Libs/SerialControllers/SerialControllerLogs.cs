@@ -9,150 +9,207 @@ namespace MyNetSensors.SerialControllers
     public delegate void LogMessageEventHandler(LogRecord record);
     public class SerialControllerLogs
     {
-        public List<LogRecord> gatewayMessagesLog = new List<LogRecord>();
-        public List<LogRecord> gatewayRawMessagesLog = new List<LogRecord>();
-        public List<LogRecord> gatewayStateLog = new List<LogRecord>();
-        public List<LogRecord> dataBaseStateLog = new List<LogRecord>();
-        public List<LogRecord> logicalNodesLog = new List<LogRecord>();
+        public List<LogRecord> gatewayLog = new List<LogRecord>();
+        public List<LogRecord> nodesLog = new List<LogRecord>();
+        public List<LogRecord> dataBaseLog = new List<LogRecord>();
         public List<LogRecord> logicalNodesEngineLog = new List<LogRecord>();
+        public List<LogRecord> logicalNodesLog = new List<LogRecord>();
         public List<LogRecord> serialControllerLog = new List<LogRecord>();
 
-        public event LogMessageEventHandler OnGatewayMessagesLog;
-        public event LogMessageEventHandler OnGatewayRawMessagesLog;
-        public event LogMessageEventHandler OnGatewayStateLog;
-        public event LogMessageEventHandler OnDataBaseStateLog;
-        public event LogMessageEventHandler OnLogicalNodesLog;
-        public event LogMessageEventHandler OnLogicalNodesEngineLog;
-        public event LogMessageEventHandler OnSerialControllerLog;
+        public event LogMessageEventHandler OnGatewayLogInfo;
+        public event LogMessageEventHandler OnGatewayLogError;
+        public event LogMessageEventHandler OnNodeLogInfo;
+        public event LogMessageEventHandler OnNodeLogError;
+        public event LogMessageEventHandler OnDataBaseLogInfo;
+        public event LogMessageEventHandler OnDataBaseLogError;
+        public event LogMessageEventHandler OnLogicalNodesEngineLogInfo;
+        public event LogMessageEventHandler OnLogicalNodesEngineLogError;
+        public event LogMessageEventHandler OnLogicalNodeLogInfo;
+        public event LogMessageEventHandler OnLogicalNodeLogError;
+        public event LogMessageEventHandler OnSerialControllerLogInfo;
+        public event LogMessageEventHandler OnSerialControllerLogError;
 
-        public bool enableGatewayStateLog = true;
-        public bool enableGatewayMessagesLog = true;
-        public bool enableGatewayRawMessagesLog = false;
-        public bool enableDataBaseStateLog = true;
-        public bool enableLogicalNodesLog = true;
+        public bool enableGatewayLog = true;
+        public bool enableNodesLog = true;
+        public bool enableDataBaseLog = true;
         public bool enableLogicalNodesEngineLog = true;
+        public bool enableLogicalNodesLog = true;
         public bool enableSerialControllerLog = true;
 
-        public int maxGatewayStateRecords = 1000;
-        public int maxGatewayMessagesRecords = 1000;
-        public int maxGatewayRawMessagesRecords = 1000;
-        public int maxDataBaseStateRecords = 1000;
-        public int maxLogicalNodesRecords = 1000;
+        public int maxGatewayRecords = 1000;
+        public int maxNodesRecords = 1000;
+        public int maxDataBaseRecords = 1000;
         public int maxLogicalNodesEngineRecords = 1000;
+        public int maxLogicalNodesRecords = 1000;
         public int maxSerialControllerRecords = 1000;
 
 
-        public void AddGatewayState(string message)
+        public void AddGatewayInfo(string message)
         {
-            if (!enableGatewayStateLog)
+            if (!enableGatewayLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.GatewayState, message);
-            gatewayStateLog.Add(logRecord);
-            if(gatewayStateLog.Count> maxGatewayStateRecords)
-                gatewayStateLog.RemoveAt(0);
-            OnGatewayStateLog?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Info, message);
+            gatewayLog.Add(logRecord);
+            if(gatewayLog.Count> maxGatewayRecords)
+                gatewayLog.RemoveAt(0);
+            OnGatewayLogInfo?.Invoke(logRecord);
         }
 
-        public void AddGatewayMessage(string message)
+        public void AddGatewayError(string message)
         {
-            if (!enableGatewayMessagesLog)
+            if (!enableGatewayLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.GatewayMessages, message);
-            gatewayMessagesLog.Add(logRecord);
-            if (gatewayMessagesLog.Count > maxGatewayMessagesRecords)
-                gatewayMessagesLog.RemoveAt(0);
-            OnGatewayMessagesLog?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Error, message);
+            gatewayLog.Add(logRecord);
+            if (gatewayLog.Count > maxGatewayRecords)
+                gatewayLog.RemoveAt(0);
+            OnGatewayLogError?.Invoke(logRecord);
         }
 
-        public void AddGatewayRawMessage(string message)
+        public void AddNodeInfo(string message)
         {
-            if (!enableGatewayRawMessagesLog)
+            if (!enableNodesLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.GatewayRawMessages, message);
-            gatewayRawMessagesLog.Add(logRecord);
-            if (gatewayRawMessagesLog.Count > maxGatewayRawMessagesRecords)
-                gatewayRawMessagesLog.RemoveAt(0);
-            OnGatewayRawMessagesLog?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.Node, LogRecordType.Info, message);
+            nodesLog.Add(logRecord);
+            if (nodesLog.Count > maxNodesRecords)
+                nodesLog.RemoveAt(0);
+            OnNodeLogInfo?.Invoke(logRecord);
         }
 
-
-
-        public void AddDataBaseStateMessage(string message)
+        public void AddNodeError(string message)
         {
-            if (!enableDataBaseStateLog)
+            if (!enableNodesLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.DataBaseState, message);
-            dataBaseStateLog.Add(logRecord);
-            if (dataBaseStateLog.Count > maxDataBaseStateRecords)
-                dataBaseStateLog.RemoveAt(0);
-            OnDataBaseStateLog?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.Node, LogRecordType.Error, message);
+            nodesLog.Add(logRecord);
+            if (nodesLog.Count > maxNodesRecords)
+                nodesLog.RemoveAt(0);
+            OnNodeLogError?.Invoke(logRecord);
         }
 
-        public void AddLogicalNodesEngineMessage(string message)
+    
+
+
+        public void AddDataBaseInfo(string message)
+        {
+            if (!enableDataBaseLog)
+                return;
+
+            LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Info, message);
+            dataBaseLog.Add(logRecord);
+            if (dataBaseLog.Count > maxDataBaseRecords)
+                dataBaseLog.RemoveAt(0);
+            OnDataBaseLogInfo?.Invoke(logRecord);
+        }
+
+        public void AddDataBaseError(string message)
+        {
+            if (!enableDataBaseLog)
+                return;
+
+            LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Error, message);
+            dataBaseLog.Add(logRecord);
+            if (dataBaseLog.Count > maxDataBaseRecords)
+                dataBaseLog.RemoveAt(0);
+            OnDataBaseLogError?.Invoke(logRecord);
+        }
+
+        public void AddLogicalNodesEngineInfo(string message)
         {
             if (!enableLogicalNodesEngineLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.LogicalNodesEngine, message);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.LogicalNodesEngine, LogRecordType.Info, message);
             logicalNodesEngineLog.Add(logRecord);
             if (logicalNodesEngineLog.Count > maxLogicalNodesEngineRecords)
                 logicalNodesEngineLog.RemoveAt(0);
-            OnLogicalNodesEngineLog?.Invoke(logRecord);
+            OnLogicalNodesEngineLogInfo?.Invoke(logRecord);
         }
 
-        public void AddLogicalNodesMessage(string message)
+        public void AddLogicalNodesEngineError(string message)
+        {
+            if (!enableLogicalNodesEngineLog)
+                return;
+
+            LogRecord logRecord = new LogRecord(LogRecordOwner.LogicalNodesEngine, LogRecordType.Error, message);
+            logicalNodesEngineLog.Add(logRecord);
+            if (logicalNodesEngineLog.Count > maxLogicalNodesEngineRecords)
+                logicalNodesEngineLog.RemoveAt(0);
+            OnLogicalNodesEngineLogError?.Invoke(logRecord);
+        }
+
+        public void AddLogicalNodeInfo(string message)
         {
             if (!enableLogicalNodesLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.LogicalNodes, message);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.LogicalNode, LogRecordType.Info, message);
             logicalNodesLog.Add(logRecord);
             if (logicalNodesLog.Count > maxLogicalNodesRecords)
                 logicalNodesLog.RemoveAt(0);
-            OnLogicalNodesLog?.Invoke(logRecord);
+            OnLogicalNodeLogInfo?.Invoke(logRecord);
+        }
+        public void AddLogicalNodeError(string message)
+        {
+            if (!enableLogicalNodesLog)
+                return;
+
+            LogRecord logRecord = new LogRecord(LogRecordOwner.LogicalNode, LogRecordType.Error, message);
+            logicalNodesLog.Add(logRecord);
+            if (logicalNodesLog.Count > maxLogicalNodesRecords)
+                logicalNodesLog.RemoveAt(0);
+            OnLogicalNodeLogError?.Invoke(logRecord);
         }
 
 
-
-        public void AddSerialControllerMessage(string message)
+        public void AddSerialControllerInfo(string message)
         {
             if (!enableSerialControllerLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordType.SerialController, message);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.SerialController, LogRecordType.Info, message);
             serialControllerLog.Add(logRecord);
             if (serialControllerLog.Count > maxSerialControllerRecords)
                 serialControllerLog.RemoveAt(0);
-            OnSerialControllerLog?.Invoke(logRecord);
+            OnSerialControllerLogInfo?.Invoke(logRecord);
         }
 
+        public void AddSerialControllerError(string message)
+        {
+            if (!enableSerialControllerLog)
+                return;
 
+            LogRecord logRecord = new LogRecord(LogRecordOwner.SerialController, LogRecordType.Error, message);
+            serialControllerLog.Add(logRecord);
+            if (serialControllerLog.Count > maxSerialControllerRecords)
+                serialControllerLog.RemoveAt(0);
+            OnSerialControllerLogError?.Invoke(logRecord);
+        }
 
         public List<LogRecord> GetAllLogs()
         {
             List<LogRecord> list = new List<LogRecord>();
-            list.AddRange(gatewayStateLog);
-            list.AddRange(gatewayMessagesLog);
-           // list.AddRange(gatewayRawMessagesLog);
+            list.AddRange(gatewayLog);
+            list.AddRange(nodesLog);
             list.AddRange(logicalNodesEngineLog);
             list.AddRange(logicalNodesLog);
-            list.AddRange(dataBaseStateLog);
+            list.AddRange(dataBaseLog);
             list.AddRange(serialControllerLog);
             return list.OrderBy(x => x.Date).ToList();
         }
 
         public void ClearAllLogs()
         {
-            gatewayStateLog.Clear();
-            gatewayMessagesLog.Clear();
-            gatewayRawMessagesLog.Clear();
+            gatewayLog.Clear();
+            nodesLog.Clear();
             logicalNodesEngineLog.Clear();
             logicalNodesLog.Clear();
-            dataBaseStateLog.Clear();
+            dataBaseLog.Clear();
             serialControllerLog.Clear();
         }
     }

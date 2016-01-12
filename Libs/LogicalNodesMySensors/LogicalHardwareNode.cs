@@ -35,7 +35,7 @@ namespace MyNetSensors.LogicalNodesMySensors
             
             HardwareInput hardwareInput = (HardwareInput)input;
 
-            Log($"Hardware Node{hardwareInput.nodeId} Sensor{hardwareInput.sensorId} input: {input.Value}");
+            LogInfo($"Hardware Node{hardwareInput.nodeId} Sensor{hardwareInput.sensorId} input: {input.Value}");
 
             LogicalHardwareNodesEngine.gateway.SendSensorState(hardwareInput.nodeId, hardwareInput.sensorId, input.Value);
 
@@ -45,7 +45,7 @@ namespace MyNetSensors.LogicalNodesMySensors
         {
             HardwareOutput hardwareOutput = (HardwareOutput)output;
 
-            Log($"Hardware Node{hardwareOutput.nodeId} Sensor{hardwareOutput.sensorId} output: {output.Value}");
+            LogInfo($"Hardware Node{hardwareOutput.nodeId} Sensor{hardwareOutput.sensorId} output: {output.Value}");
         }
 
         private void CreateInputsOutputs(Node node)

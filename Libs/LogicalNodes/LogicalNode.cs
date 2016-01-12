@@ -48,9 +48,14 @@ namespace MyNetSensors.LogicalNodes
 
 
 
-        public void Log(string message)
+        public void LogInfo(string message)
         {
-            LogicalNodesEngine.logicalNodesEngine.LogNodes(message);
+            LogicalNodesEngine.logicalNodesEngine.LogNodesInfo(message);
+        }
+
+        public void LogError(string message)
+        {
+            LogicalNodesEngine.logicalNodesEngine.LogNodesInfo(message);
         }
 
         public abstract void Loop();

@@ -29,8 +29,10 @@ namespace MyNetSensors.LogicalNodes
 
         public static LogicalNodesEngine logicalNodesEngine;
 
-        public event LogMessageEventHandler OnLogNodeMessage;
-        public event LogMessageEventHandler OnLogEngineMessage;
+        public event LogMessageEventHandler OnLogNodeInfo;
+        public event LogMessageEventHandler OnLogNodeError;
+        public event LogMessageEventHandler OnLogEngineInfo;
+        public event LogMessageEventHandler OnLogEngineError;
 
         public event LogicalNodesEventHandler OnNodesUpdatedEvent;
         public event LogicalNodeEventHandler OnNewNodeEvent;
@@ -83,7 +85,7 @@ namespace MyNetSensors.LogicalNodes
 
             UpdateStatesFromLinks();
 
-            LogEngine("Started");
+            LogEngineInfo("Started");
         }
 
 
@@ -91,7 +93,7 @@ namespace MyNetSensors.LogicalNodes
         {
             started = false;
             updateNodesTimer.Stop();
-            LogEngine("Stopped");
+            LogEngineInfo("Stopped");
         }
 
         public bool IsStarted()
@@ -176,7 +178,7 @@ namespace MyNetSensors.LogicalNodes
 
             db?.AddNode(node);
 
-            LogEngine($"New node {node.GetType().Name}");
+            LogEngineInfo($"New node {node.GetType().Name}");
 
             OnNewNodeEvent?.Invoke(node);
         }
@@ -191,7 +193,7 @@ namespace MyNetSensors.LogicalNodes
             }
 
             OnNodeDeleteEvent?.Invoke(node);
-            LogEngine($"Remove node {node.GetType().Name}");
+            LogEngineInfo($"Remove node {node.GetType().Name}");
 
             db?.DeleteNode(node.Id);
 
@@ -202,7 +204,7 @@ namespace MyNetSensors.LogicalNodes
 
         public void UpdateNode(LogicalNode node)
         {
-            LogEngine($"Update node {node.GetType().Name}");
+            LogEngineInfo($"Update node {node.GetType().Name}");
 
             LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
 
@@ -266,7 +268,7 @@ namespace MyNetSensors.LogicalNodes
             if (oldLink!=null)
                 DeleteLink(oldLink);
 
-            LogEngine($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+            LogEngineInfo($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = new LogicalLink(output.Id, input.Id);
             links.Add(link);
@@ -286,7 +288,7 @@ namespace MyNetSensors.LogicalNodes
         {
             LogicalNode inputNode = GetInputOwner(input);
             LogicalNode outputNode = GetOutputOwner(output);
-            LogEngine($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+            LogEngineInfo($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = GetLink(output, input);
 
@@ -423,7 +425,7 @@ namespace MyNetSensors.LogicalNodes
             foreach (var node in nodes)
             {
                 node.OnDeserialize();
-                LogEngine($"New node {node.GetType().Name}");
+                LogEngineInfo($"New node {node.GetType().Name}");
             }
 
             if (state)
@@ -497,7 +499,7 @@ namespace MyNetSensors.LogicalNodes
 
         public void RemoveAllNodesAndLinks()
         {
-            LogEngine("Remove all nodes and links");
+            LogEngineInfo("Remove all nodes and links");
 
             db?.DropNodes();
 
@@ -513,20 +515,30 @@ namespace MyNetSensors.LogicalNodes
 
         public void RemoveAllLinks()
         {
-            LogEngine("Remove all links");
+            LogEngineInfo("Remove all links");
 
             links = new List<LogicalLink>();
             OnLinksUpdatedEvent?.Invoke(links);
         }
 
-        public void LogNodes(string message)
+        public void LogNodesInfo(string message)
         {
-            OnLogNodeMessage?.Invoke(message);
+            OnLogNodeInfo?.Invoke(message);
         }
 
-        public void LogEngine(string message)
+        public void LogNodesError(string message)
         {
-            OnLogEngineMessage?.Invoke(message);
+            OnLogNodeError?.Invoke(message);
+        }
+
+        public void LogEngineInfo(string message)
+        {
+            OnLogEngineInfo?.Invoke(message);
+        }
+
+        public void LogEngineError(string message)
+        {
+            OnLogEngineError?.Invoke(message);
         }
     }
 }

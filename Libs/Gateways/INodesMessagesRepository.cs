@@ -8,7 +8,8 @@ namespace MyNetSensors.Gateways
 {
     public interface INodesMessagesRepository
     {
-        event LogEventHandler OnLogStateMessage;
+        event LogEventHandler OnLogInfo;
+        event LogEventHandler OnLogError;
 
         void ConnectToGateway(Gateway gateway);
 

@@ -20,8 +20,6 @@ $(function () {
         clientsHub.client.OnGatewayStateLog = addMessage;
     if (logType == "GatewayMessages")
         clientsHub.client.OnGatewayMessagesLog = addMessage;
-    if (logType == "GatewayRawMessages")
-        clientsHub.client.OnGatewayRawMessagesLog = addMessage;
     if (logType == "DataBase")
         clientsHub.client.OnDataBaseStateLog = addMessage;
     if (logType == "LogicalNodesEngine")

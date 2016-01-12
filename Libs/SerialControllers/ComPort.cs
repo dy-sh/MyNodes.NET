@@ -18,8 +18,9 @@ namespace MyNetSensors.SerialControllers
         public event Action OnDisconnectedEvent;
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
-        public event Gateways.LogEventHandler OnLogMessage;
-        public event Gateways.LogEventHandler OnLogState;
+        public event LogEventHandler OnLogMessage;
+        public event LogEventHandler OnLogInfo;
+        public event LogEventHandler OnLogError;
 
         private bool isConnected;
         private SerialPort serialPort;
@@ -60,12 +61,12 @@ namespace MyNetSensors.SerialControllers
                 serialPort.Open();
 
                 isConnected = true;
-                LogPortState($"Connected to port {portName}.");
+                LogInfo($"Connected to port {portName}.");
                 OnConnectedEvent?.Invoke();
             }
             catch (Exception ex)
             {
-                LogPortState($"Failed to connect to port {portName}.");
+                LogError($"Failed to connect to port {portName}.");
                 OnConnectingError?.Invoke(ex);
             }
         }
@@ -78,7 +79,7 @@ namespace MyNetSensors.SerialControllers
         {
             if (serialPort == null || !isConnected)
             {
-                LogPortState("Failed to write data. Port is not connected.");
+                LogError("Failed to write data. Port is not connected.");
                 return;
             }
 
@@ -90,7 +91,7 @@ namespace MyNetSensors.SerialControllers
             }
             catch (Exception ex)
             {
-                LogPortState($"Failed to write data. {ex.Message}");
+                LogError($"Failed to write data. {ex.Message}");
 
                 OnWritingError?.Invoke(ex);
 
@@ -141,9 +142,14 @@ namespace MyNetSensors.SerialControllers
             OnLogMessage?.Invoke(message);
         }
 
-        private void LogPortState(string message)
+        private void LogInfo(string message)
         {
-            OnLogState?.Invoke(message);
+            OnLogInfo?.Invoke(message);
+        }
+
+        private void LogError(string message)
+        {
+            OnLogError?.Invoke(message);
         }
     }
 }

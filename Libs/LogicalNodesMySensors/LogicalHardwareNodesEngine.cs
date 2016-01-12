@@ -147,7 +147,7 @@ namespace MyNetSensors.LogicalNodesMySensors
 
         public void RemoveAllNonHardwareNodes()
         {
-            engine.LogEngine("Remove all non-hardware nodes");
+            engine.LogEngineInfo("Remove all non-hardware nodes");
 
             //to prevent changing of collection while writing 
             LogicalNode[] nodes = engine.nodes.ToArray();

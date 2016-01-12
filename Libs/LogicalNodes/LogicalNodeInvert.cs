@@ -36,7 +36,7 @@ namespace MyNetSensors.LogicalNodes
             else
                 result = "0";
 
-            Log($"Invert: from {Inputs[0].Value} to {result}");
+            LogInfo($"Invert: from {Inputs[0].Value} to {result}");
 
             Outputs[0].Value = result;
         }

@@ -41,7 +41,7 @@ namespace MyNetSensors.Gateways
             if (lastResponseAgo > checkGatewayTimer.Interval * 2)
             {
                 //gateway not responding
-                gateway.LogState("Gateway not responding.");
+                gateway.LogError("Gateway not responding.");
 
                 gateway.OnSerialPortDisconnectedEvent();
             }

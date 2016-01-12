@@ -42,12 +42,6 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
-        public IActionResult GatewayRawMessages()
-        {
-            ViewBag.LogType = "GatewayRawMessages";
-            ViewBag.PageName = "Gateway Raw Messages";
-            return View("Logs");
-        }
 
         public IActionResult LogicalNodes()
         {
@@ -84,18 +78,13 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (logType == "GatewayState")
             {
-                List<LogRecord> list = SerialController.logs.gatewayStateLog;
+                List<LogRecord> list = SerialController.logs.gatewayLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "GatewayMessages")
             {
-                List<LogRecord> list = SerialController.logs.gatewayMessagesLog;
+                List<LogRecord> list = SerialController.logs.nodesLog;
                 return list.Select(logMessage => logMessage.Message).ToList();
-            }
-            else if (logType == "GatewayRawMessages")
-            {
-                List<LogRecord> list = SerialController.logs.gatewayRawMessagesLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             else if (logType == "LogicalNodes")
             {
@@ -109,7 +98,7 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (logType == "DataBase")
             {
-                List<LogRecord> list = SerialController.logs.dataBaseStateLog;
+                List<LogRecord> list = SerialController.logs.dataBaseLog;
                 return list.Select(logMessage => logMessage.ToString()).ToList();
             }
             return null;
@@ -127,15 +116,11 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (logType == "GatewayState")
             {
-                SerialController.logs.gatewayStateLog.Clear();
+                SerialController.logs.gatewayLog.Clear();
             }
             else if (logType == "GatewayMessages")
             {
-                SerialController.logs.gatewayMessagesLog.Clear();
-            }
-            else if (logType == "GatewayRawMessages")
-            {
-                SerialController.logs.gatewayRawMessagesLog.Clear();
+                SerialController.logs.nodesLog.Clear();
             }
             else if (logType == "LogicalNodes")
             {
@@ -147,7 +132,7 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (logType == "DataBase")
             {
-                SerialController.logs.dataBaseStateLog.Clear();
+                SerialController.logs.dataBaseLog.Clear();
             }
 
             return true;

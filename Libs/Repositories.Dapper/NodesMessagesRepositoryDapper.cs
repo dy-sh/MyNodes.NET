@@ -38,7 +38,8 @@ namespace MyNetSensors.Repositories.Dapper
 
         private string connectionString;
 
-        public event LogEventHandler OnLogStateMessage;
+        public event LogEventHandler OnLogInfo;
+        public event LogEventHandler OnLogError;
 
         public NodesMessagesRepositoryDapper(string connectionString)
         {
@@ -230,7 +231,7 @@ namespace MyNetSensors.Repositories.Dapper
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
                 float messagesPerSec = (float) messages/(float) elapsed*1000;
-                Log($"Writing to DB: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
+                LogInfo($"Writing to DB: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
             }
             catch (Exception ex)
             {
@@ -252,11 +253,14 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void Log(string message)
+        public void LogInfo(string message)
         {
-            OnLogStateMessage?.Invoke(message);
+            OnLogInfo?.Invoke(message);
         }
-
+        public void LogError(string message)
+        {
+            OnLogError?.Invoke(message);
+        }
     }
 
 

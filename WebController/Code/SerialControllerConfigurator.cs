@@ -44,12 +44,11 @@ namespace MyNetSensors.WebController.Code
             string portName = null;
             try
             {
-                SerialController.logs.enableGatewayStateLog = Boolean.Parse(Configuration["Gateway:LogState"]);
-                SerialController.logs.enableGatewayMessagesLog = Boolean.Parse(Configuration["Gateway:LogMessages"]);
-                SerialController.logs.enableGatewayRawMessagesLog = Boolean.Parse(Configuration["Gateway:LogRawMessages"]);
+                SerialController.logs.enableGatewayLog = Boolean.Parse(Configuration["Gateway:LogState"]);
+                SerialController.logs.enableNodesLog = Boolean.Parse(Configuration["Gateway:LogMessages"]);
                 SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:LogEngine"]);
                 SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:LogNodes"]);
-                SerialController.logs.enableDataBaseStateLog = Boolean.Parse(Configuration["DataBase:LogState"]);
+                SerialController.logs.enableDataBaseLog = Boolean.Parse(Configuration["DataBase:LogState"]);
 
 
                 SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
@@ -75,7 +74,7 @@ namespace MyNetSensors.WebController.Code
             }
             catch
             {
-                Log(new LogRecord(LogRecordType.SerialController, "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
+                Log(new LogRecord(LogRecordOwner.SerialController,LogRecordType.Error,  "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
                 throw new Exception("Bad configuration in appsettings.json file.");
             }
 
@@ -93,13 +92,18 @@ namespace MyNetSensors.WebController.Code
 
             if (portName != null)
             {
-                SerialController.logs.OnGatewayStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
-                SerialController.logs.OnGatewayMessagesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
-                // SerialController.logs.OnGatewayRawMessagesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
-                SerialController.logs.OnDataBaseStateLog += (logMessage) => { Log(logMessage, ConsoleColor.Gray); };
-                SerialController.logs.OnLogicalNodesEngineLog += (logMessage) => { Log(logMessage, ConsoleColor.Cyan); };
-                SerialController.logs.OnLogicalNodesLog += (logMessage) => { Log(logMessage, ConsoleColor.DarkCyan); };
-                SerialController.logs.OnSerialControllerLog += (logMessage) => { Log(logMessage, ConsoleColor.White); };
+                SerialController.logs.OnGatewayLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
+                SerialController.logs.OnGatewayLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
+                SerialController.logs.OnNodeLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
+                SerialController.logs.OnNodeLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
+                SerialController.logs.OnDataBaseLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Gray); };
+                SerialController.logs.OnDataBaseLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
+                SerialController.logs.OnLogicalNodesEngineLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Cyan); };
+                SerialController.logs.OnLogicalNodesEngineLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
+                SerialController.logs.OnLogicalNodeLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.DarkCyan); };
+                SerialController.logs.OnLogicalNodeLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
+                SerialController.logs.OnSerialControllerLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.White); };
+                SerialController.logs.OnSerialControllerLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
 
 
 
