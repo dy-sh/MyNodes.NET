@@ -203,6 +203,18 @@ namespace MyNetSensors.SerialControllers
             return list.OrderBy(x => x.Date).ToList();
         }
 
+        public List<LogRecord> GetAllErrorLogs()
+        {
+            List<LogRecord> list = new List<LogRecord>();
+            list.AddRange(gatewayLog.Where(x=>x.Type==LogRecordType.Error));
+            list.AddRange(nodesLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(logicalNodesEngineLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(logicalNodesLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(dataBaseLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(serialControllerLog.Where(x => x.Type == LogRecordType.Error));
+            return list.OrderBy(x => x.Date).ToList();
+        }
+
         public void ClearAllLogs()
         {
             gatewayLog.Clear();

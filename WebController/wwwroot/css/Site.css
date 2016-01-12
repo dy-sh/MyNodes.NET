@@ -1,4 +1,9 @@
-﻿
+﻿/*error log message*/
+.error-log-message {
+    color: #ff0000;
+}
+
+
 /*scroolbars always visible for smooth animation fades*/
 body {
     overflow: -moz-scrollbars-vertical;

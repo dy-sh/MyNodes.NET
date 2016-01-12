@@ -45,9 +45,10 @@ namespace MyNetSensors.Gateways
 
             if (isValid)
                 return
-                    $"{dateTime}: {inc}: {nodeId}; {sensorId}; {messageType}; {ack}; {GetDecodedSubType()}; {payload}";
-            else return $"{dateTime}: {inc}: {payload}";
+                    $"{inc}: {nodeId}; {sensorId}; {messageType}; {ack}; {GetDecodedSubType()}; {payload}";
+            else return $"{inc}: {payload}";
         }
+
 
         public object Clone()
         {

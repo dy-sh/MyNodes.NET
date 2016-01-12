@@ -22,12 +22,18 @@ namespace MyNetSensors.WebController.Code
             hub = connectionManager.GetHubContext<ClientsHub>();
 
             SerialController.OnStarted += OnSerialControllerStarted;
-            SerialController.logs.OnGatewayLogInfo += OnGatewayLogInfo;
-            SerialController.logs.OnNodeLogInfo += OnNodeLogInfo;
-            SerialController.logs.OnDataBaseLogInfo += OnDataBaseLogInfo;
-            SerialController.logs.OnLogicalNodesEngineLogInfo += OnLogicalNodesEngineLogInfo;
-            SerialController.logs.OnLogicalNodeLogInfo += OnLogicalNodeLogInfo;
-            SerialController.logs.OnSerialControllerLogInfo += OnSerialControllerLogInfo;
+            SerialController.logs.OnGatewayLogInfo += OnLogRecord;
+            SerialController.logs.OnGatewayLogError += OnLogRecord;
+            SerialController.logs.OnNodeLogInfo += OnLogRecord;
+            SerialController.logs.OnNodeLogError += OnLogRecord;
+            SerialController.logs.OnDataBaseLogInfo += OnLogRecord;
+            SerialController.logs.OnDataBaseLogError += OnLogRecord;
+            SerialController.logs.OnLogicalNodesEngineLogInfo += OnLogRecord;
+            SerialController.logs.OnLogicalNodesEngineLogError += OnLogRecord;
+            SerialController.logs.OnLogicalNodeLogInfo += OnLogRecord;
+            SerialController.logs.OnLogicalNodeLogError += OnLogRecord;
+            SerialController.logs.OnSerialControllerLogInfo += OnLogRecord;
+            SerialController.logs.OnSerialControllerLogError += OnLogRecord;
         }
 
       
@@ -166,41 +172,10 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void OnSerialControllerLogInfo(LogRecord record)
+        private static void OnLogRecord(LogRecord record)
         {
-            hub.Clients.All.OnSerialControllerLog(record.ToString());
-            hub.Clients.All.OnLog(record.ToStringWithType());
+            hub.Clients.All.OnLogRecord(record);
         }
-
-        private static void OnLogicalNodesEngineLogInfo(LogRecord record)
-        {
-            hub.Clients.All.OnLogicalNodesEngineLog(record.ToString());
-            hub.Clients.All.OnLog(record.ToStringWithType());
-        }
-
-        private static void OnLogicalNodeLogInfo(LogRecord record)
-        {
-            hub.Clients.All.OnLogicalNodesLog(record.ToString());
-            hub.Clients.All.OnLog(record.ToStringWithType());
-        }
-
-        private static void OnDataBaseLogInfo(LogRecord record)
-        {
-            hub.Clients.All.OnDataBaseStateLog(record.ToString());
-            hub.Clients.All.OnLog(record.ToStringWithType());
-        }
-
-
-        private static void OnNodeLogInfo(LogRecord record)
-        {
-            hub.Clients.All.OnGatewayMessagesLog(record.Message);
-            hub.Clients.All.OnLog(record.ToStringWithType());
-        }
-
-        private static void OnGatewayLogInfo(LogRecord record)
-        {
-            hub.Clients.All.OnGatewayStateLog(record.ToString());
-            hub.Clients.All.OnLog(record.ToStringWithType());
-        }
+        
     }
 }

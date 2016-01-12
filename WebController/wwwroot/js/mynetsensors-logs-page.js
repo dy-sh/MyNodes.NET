@@ -3,6 +3,24 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+var LogRecord = {
+    LogRecordOwner:
+    {
+        Gateway:0,
+        Node:1,
+        DataBase:2,
+        LogicalNodesEngine:3,
+        LogicalNode:4,
+        SerialController:5
+
+    },
+
+    LogRecordType:
+    {
+        Info:0,
+        Error:1
+    }
+}
 
 
 var gatewayHardwareConnected = null;
@@ -14,20 +32,7 @@ $(function () {
 
     //var logType set from ViewBag in View
 
-    if (logType == "All")
-        clientsHub.client.OnLog = addMessage;
-    if (logType == "GatewayState")
-        clientsHub.client.OnGatewayStateLog = addMessage;
-    if (logType == "GatewayMessages")
-        clientsHub.client.OnGatewayMessagesLog = addMessage;
-    if (logType == "DataBase")
-        clientsHub.client.OnDataBaseStateLog = addMessage;
-    if (logType == "LogicalNodesEngine")
-        clientsHub.client.OnLogicalNodesEngineLog = addMessage;
-    if (logType == "LogicalNodes")
-        clientsHub.client.OnLogicalNodesLog = addMessage;
-    if (logType == "Controller")
-        clientsHub.client.OnSerialControllerLog = addMessage;
+    clientsHub.client.OnLogRecord = OnLogRecord;
 
 
     clientsHub.client.OnConnectedEvent = function () {
@@ -119,15 +124,75 @@ function getLogs() {
     });
 }
 
-function onReturnMessages(messages) {
-    for (var i = 0; i < messages.length; i++) {
-        $('#log').append(messages[i] + "<br/>");
+function onReturnMessages(logRecords) {
+    for (var i = 0; i < logRecords.length; i++) {
+        addRecord(logRecords[i]);
     }
     $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
 };
 
 
-function addMessage(message) {
-    $('#log').append(message + "<br/>");
+function OnLogRecord(logRecord) {
+    addRecord(logRecord);
     $('#log').animate({ scrollTop: $('#log').get(0).scrollHeight }, 0);
 };
+
+
+function addRecord(logRecord) {
+    if (logType == "AllErrors" && logRecord.Type != LogRecord.LogRecordType.Error)
+        return;
+    if (logType == "Controller" && logRecord.Owner != LogRecord.LogRecordOwner.SerialController)
+        return;
+    if (logType == "Gateway" && logRecord.Owner != LogRecord.LogRecordOwner.Gateway)
+        return;
+    if (logType == "GatewayMessages" && logRecord.Owner != LogRecord.LogRecordOwner.Node)
+        return;
+    if (logType == "LogicalNodes" && logRecord.Owner != LogRecord.LogRecordOwner.LogicalNode)
+        return;
+    if (logType == "LogicalNodesEngine" && logRecord.Owner != LogRecord.LogRecordOwner.LogicalNodesEngine)
+        return;
+    if (logType == "DataBase" && logRecord.Owner != LogRecord.LogRecordOwner.DataBase)
+        return;
+
+    if (logType == "All")
+        addOwner(logRecord);
+
+    addDate(logRecord);
+
+
+
+    if (logRecord.Type == LogRecord.LogRecordType.Error) {
+        $('#log').append("<span class='error-log-message'>" + logRecord.Message + "</span><br/>");
+    } else {
+        $('#log').append( logRecord.Message+"<br/>");
+    }
+};
+
+function addOwner(logRecord) {
+    switch (logRecord.Owner)
+    {
+        case LogRecord.LogRecordOwner.Gateway:
+            logRecord.Message= "GATEWAY: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordOwner.Node:
+            logRecord.Message = "GATEWAY: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordOwner.DataBase:
+            logRecord.Message = "DATABASE: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordOwner.LogicalNodesEngine:
+            logRecord.Message = "LOGICAL NODES ENGINE: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordOwner.LogicalNode:
+            logRecord.Message = "LOGICAL NODE: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordOwner.SerialController:
+            logRecord.Message = "CONTROLLER: " + logRecord.Message;
+            break;
+    }
+}
+
+function addDate(logRecord) {
+    logRecord.Message = moment(logRecord.Date).format("DD.MM.YYYY H:mm:ss") + ": " + logRecord.Message;
+    return logRecord;
+}

@@ -9,8 +9,9 @@
 
     <div>
         <a asp-controller="Logs" asp-action="All">All</a> |
+        <a asp-controller="Logs" asp-action="AllErrors">Errors</a> |
         <a asp-controller="Logs" asp-action="Controller">Controller</a> |
-        <a asp-controller="Logs" asp-action="GatewayState">Gateway State</a> |
+        <a asp-controller="Logs" asp-action="Gateway">Gateway</a> |
         <a asp-controller="Logs" asp-action="GatewayMessages">Gateway Messages</a> |
         <a asp-controller="Logs" asp-action="LogicalNodesEngine">Logical Nodes Engine</a> |
         <a asp-controller="Logs" asp-action="LogicalNodes">Logical Nodes</a> |
@@ -21,7 +22,10 @@
     <div class="ui raised segments">
         <div class="ui secondary clearing segment">
             <b>@ViewBag.PageName</b>
-            <button type="button" class="ui right floated small button" id="clear-log">Clear Log</button>
+            @if (ViewBag.LogType != "AllErrors")
+            {
+                <button type="button" class="ui right floated small button" id="clear-log">Clear Log</button>
+            }
         </div>
         <div class="ui segment" style="overflow-y: scroll;" id="log">
         </div>

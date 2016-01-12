@@ -70,6 +70,8 @@ namespace MyNetSensors.Gateways
             this.serialPort.OnDataReceivedEvent += RecieveMessage;
             this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
             this.serialPort.OnConnectedEvent += TryToCommunicateWithGateway;
+            this.serialPort.OnLogError += LogError;
+            this.serialPort.OnLogInfo += OnLogInfo;
         }
 
 

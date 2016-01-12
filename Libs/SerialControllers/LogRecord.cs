@@ -50,24 +50,16 @@ namespace MyNetSensors.SerialControllers
             {
                 case LogRecordOwner.Gateway:
                     return $"{Date}: GATEWAY: {Message}";
-                    break;
                 case LogRecordOwner.Node:
                     return $"{Date}: GATEWAY: {Message}";
-                    break;
                 case LogRecordOwner.DataBase:
                     return $"{Date}: DATABASE: {Message}";
-                    break;
                 case LogRecordOwner.LogicalNodesEngine:
                     return $"{Date}: LOGICAL NODES ENGINE: {Message}";
-                    break;
                 case LogRecordOwner.LogicalNode:
                     return $"{Date}: LOGICAL NODE: {Message}";
-                    break;
                 case LogRecordOwner.SerialController:
                     return $"{Date}: CONTROLLER: {Message}";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
             return null;
         }

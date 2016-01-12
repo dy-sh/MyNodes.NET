@@ -21,6 +21,13 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
+        public IActionResult AllErrors()
+        {
+            ViewBag.LogType = "AllErrors";
+            ViewBag.PageName = "Errors";
+            return View("Logs");
+        }
+
         public IActionResult Controller()
         {
             ViewBag.LogType = "Controller";
@@ -28,9 +35,9 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
-        public IActionResult GatewayState()
+        public IActionResult Gateway()
         {
-            ViewBag.LogType = "GatewayState";
+            ViewBag.LogType = "Gateway";
             ViewBag.PageName = "Gateway State";
             return View("Logs");
         }
@@ -64,42 +71,39 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
-        public List<string> GetLogs(string logType)
+        public List<LogRecord> GetLogs(string logType)
         {
             if (logType == "All")
             {
-                List<LogRecord> list = SerialController.logs.GetAllLogs();
-                return list.Select(logMessage => logMessage.ToStringWithType()).ToList();
+                return SerialController.logs.GetAllLogs();
+            }
+            else if(logType == "AllErrors")
+            {
+                return SerialController.logs.GetAllErrorLogs();
             }
             else if (logType == "Controller")
             {
-                List<LogRecord> list = SerialController.logs.serialControllerLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
+                return SerialController.logs.serialControllerLog;
             }
-            else if (logType == "GatewayState")
+            else if (logType == "Gateway")
             {
-                List<LogRecord> list = SerialController.logs.gatewayLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
+                return SerialController.logs.gatewayLog;
             }
             else if (logType == "GatewayMessages")
             {
-                List<LogRecord> list = SerialController.logs.nodesLog;
-                return list.Select(logMessage => logMessage.Message).ToList();
+                return SerialController.logs.nodesLog;
             }
             else if (logType == "LogicalNodes")
             {
-                List<LogRecord> list = SerialController.logs.logicalNodesLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
+                return SerialController.logs.logicalNodesLog;
             }
             else if (logType == "LogicalNodesEngine")
             {
-                List<LogRecord> list = SerialController.logs.logicalNodesEngineLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
+                return SerialController.logs.logicalNodesEngineLog;
             }
             else if (logType == "DataBase")
             {
-                List<LogRecord> list = SerialController.logs.dataBaseLog;
-                return list.Select(logMessage => logMessage.ToString()).ToList();
+                return SerialController.logs.dataBaseLog;
             }
             return null;
         }
@@ -114,7 +118,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 SerialController.logs.serialControllerLog.Clear();
             }
-            else if (logType == "GatewayState")
+            else if (logType == "Gateway")
             {
                 SerialController.logs.gatewayLog.Clear();
             }
