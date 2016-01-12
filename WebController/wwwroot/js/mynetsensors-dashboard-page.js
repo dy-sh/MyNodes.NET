@@ -137,6 +137,7 @@ function onReturnNodes(nodes) {
 
 var panelTemplate = Handlebars.compile($('#panelTemplate').html());
 var labelTemplate = Handlebars.compile($('#labelTemplate').html());
+var progressTemplate = Handlebars.compile($('#progressTemplate').html());
 
 
 function createPanel(node) {
@@ -157,6 +158,10 @@ function createNode(node) {
         $(labelTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
+    if (node.Type == "UI/Progress") {
+        $(progressTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+    }
+
     updateNode(node);
 }
 
@@ -169,6 +174,23 @@ function updateNode(node) {
 
         $('#labelName-' + node.Id).html(node.Name);
         $('#labelValue-' + node.Id).html(node.Value);
+    }
+
+    if (node.Type == "UI/Progress") {
+        if (node.Value == null)
+            node.Value = 0;
+
+        if (node.Value >100)
+            node.Value = 100;
+
+        if (node.Value < 0)
+            node.Value = 0;
+
+        $('#progressName-' + node.Id).html(node.Name);
+        $('#progressBar-' + node.Id).progress({
+            percent: node.Value,
+            showActivity: false
+        });
     }
 }
 

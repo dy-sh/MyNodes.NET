@@ -49,6 +49,10 @@ input[type="checkbox"].input-validation-error {
 
 /*semantic ui*/
 
+.ui.progress, .ui.progress:last-child, .ui.progress:first-child {
+    margin: 0.2em 0em 0em;
+}
+
 
 
 .ui.button.nonbutton {

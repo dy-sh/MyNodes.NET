@@ -49,7 +49,7 @@
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         @*span needed to prevent marign for first and last labels*@
         <span></span>
-        <span class="ui right floated" id="labelName-{{this.Id}}"></span>
+        <span id="labelName-{{this.Id}}"></span>
         <div class="ui right floated basic disabled button nonbutton">
             <span class="ui blue basic label" id="labelValue-{{this.Id}}"></span>
         </div>
@@ -58,7 +58,17 @@
 </script>
 
 
-
+<script id="progressTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        @*span needed to prevent marign for first and last labels*@
+        <span id="progressName-{{this.Id}}"></span>
+        <div class="ui indicating small progress" id="progressBar-{{this.Id}}">
+            <div class="bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+</script>
 
 
 @section scripts

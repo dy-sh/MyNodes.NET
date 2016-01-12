@@ -51,5 +51,32 @@
     LiteGraph.registerNodeType("UI/Label", UILabel);
 
 
+    //UI Progress
+    function UIProgress() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
+    }
+    UIProgress.title = "Progress";
+    LiteGraph.registerNodeType("UI/Progress", UIProgress);
+
+    //UI Button
+    function UIButton() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton" };
+    }
+    UIButton.title = "Button";
+    LiteGraph.registerNodeType("UI/Button", UIButton);
+
+    //UI Switch Button
+    function UISwitchButton() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitchButton" };
+    }
+    UISwitchButton.title = "Switch Button";
+    LiteGraph.registerNodeType("UI/Switch Button", UISwitchButton);
+
+    //UI Slider
+    function UISlider() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
+    }
+    UISlider.title = "Slider";
+    LiteGraph.registerNodeType("UI/Slider", UISlider);
 
 })();
