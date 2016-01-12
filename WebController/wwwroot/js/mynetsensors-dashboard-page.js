@@ -159,6 +159,8 @@ function createNode(node) {
 }
 
 function updateNode(node) {
+    $('#activity' + node.PanelId).show().fadeOut(500);
+
     if (node.Type == "UI/Label") {
         $('#labelName-' + node.Id).html(node.Name);
         $('#labelValue-' + node.Id).html(node.Value);
