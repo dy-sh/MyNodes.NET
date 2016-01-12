@@ -185,13 +185,17 @@ namespace MyNetSensors.SerialControllers
 
         }
 
-        public static void ReconnectToGateway(string serialPortName)
+        public static async void ReconnectToGateway(string serialPortName)
         {
-            gateway.Disconnect();
+            await Task.Run(() =>
+            {
+                gateway.Disconnect();
 
-            SerialController.serialPortName = serialPortName;
+                SerialController.serialPortName = serialPortName;
 
-            gateway.Connect(serialPortName).Wait();
+                gateway.Connect(serialPortName).Wait();
+
+            });
         }
 
 
