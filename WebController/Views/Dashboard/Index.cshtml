@@ -8,7 +8,7 @@
     <h2>@ViewBag.Title</h2>
     <p>
         <a asp-controller="Dashboard" asp-action="Index">Dashboard</a> |
-        <a asp-controller="Control" asp-action="Index">Control</a> |
+        <a asp-controller="Gateway" asp-action="Control">Control</a> |
         <a asp-controller="NodesEditor" asp-action="Index">Editor</a> |
         <a asp-controller="History" asp-action="List">History</a> |
         <a asp-controller="Tasks" asp-action="List">Tasks</a> |
@@ -16,7 +16,7 @@
     </p>
     <div class="ui divider"></div>
 
-    <div class="ui four cards" id="panelsContainer" style="display: none;">
+    <div class="ui two column stackable grid" id="panelsContainer" style="display: none;">
     </div>
 
 </div>
@@ -24,31 +24,40 @@
 
 
 <script id="panelTemplate" type="text/x-handlebars-template">
-    <div class="ui card" id="panel{{this.PanelId}}" style="min-width: 250px; max-width: 250px;">
+    
+    <div class="column" id="panel{{this.PanelId}}" style="min-width: 250px; max-width: 250px;">
+        <div class="ui raised segments">
 
-        <div class="ui attached block header">
-            <div class="left floated" id="panelTitle{{this.PanelId}}">
-                Panel {{this.PanelId}}
+
+            <div class="ui secondary clearing segment" id="panelTitle{{this.PanelId}}">
+                <b>Panel {{this.PanelId}}</b>
+                <div class="ui right floated basic disabled button nonbutton">
+                    <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{this.PanelId}}" class="ui right floated" style="display: none;" />
+                </div>
             </div>
-            <div class="right floated">
-                <img src="@Url.Content("~/images/nodes/activity.gif")" id="activity{{this.PanelId}}" class="ui right floated" style="display: none;" />
-            </div>
+            
+
+
+            <div id="uiContainer{{this.PanelId}}" class="content">
+            </div>   
+
+
         </div>
-
-
-        <div id="uiContainer{{this.PanelId}}" class="content">
-        </div>       
     </div>
+    
+
 </script>
 
 
 
 
 <script id="labelTemplate" type="text/x-handlebars-template">
-    <div id="label-{{this.Id}}">
-        <div class="left floated" id="labelName-{{this.Id}}">{{this.Name}}</div>
-        <div class="right floated" id="labelValue-{{this.Id}}">{{this.Value}}</div>
-        <br/>
+    <div class="ui attached clearing segment">
+        @*span needed to prevent marign for first and last labels*@
+        <span></span>
+        <span class="ui blue basic label" id="labelValue-{{this.Id}}">{{this.Value}}</span>
+        <span class="ui right floated" id="labelName-{{this.Id}}">{{this.Name}}N</span>
+        <span></span>
     </div>
 </script>
 
