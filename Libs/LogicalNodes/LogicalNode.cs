@@ -29,14 +29,19 @@ namespace MyNetSensors.LogicalNodes
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
             {
-                Outputs.Add(new Output { Name = $"Out {i}" });
+                if (outputsCount==1)
+                Outputs.Add(new Output { Name = "Out" });
+                else
+                Outputs.Add(new Output { Name = $"Out {i+1}" });
             }
 
             Inputs = new List<Input>();
             for (int i = 0; i < inputsCount; i++)
             {
-                Input input = new Input { Name = $"In {i}" };
-                Inputs.Add(input);
+                if (inputsCount == 1)
+                    Inputs.Add(new Input { Name = "In" });
+                else
+                    Inputs.Add(new Input { Name = $"In {i+1}" });
             }
         }
 

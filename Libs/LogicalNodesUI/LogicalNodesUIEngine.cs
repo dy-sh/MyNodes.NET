@@ -54,6 +54,16 @@ namespace MyNetSensors.LogicalNodesUI
             node.Toggle();
         }
 
+        public void SliderChange(string nodeId, int value)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUISlider))
+                return;
+
+            LogicalNodeUISlider node = (LogicalNodeUISlider)n;
+            node.SetValue(value);
+        }
+
         private void OnInputUpdatedEvent(Input input)
         {
             LogicalNode node = engine.GetInputOwner(input);

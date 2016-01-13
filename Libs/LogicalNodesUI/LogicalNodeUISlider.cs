@@ -7,14 +7,16 @@ using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
 {
-  public class UISlider : LogicalNodeUI
+  public class LogicalNodeUISlider : LogicalNodeUI
     {
-      public string Value { get; set; }
+      public int Value { get; set; }
 
-      public UISlider() : base(0, 1)
+      public LogicalNodeUISlider() : base(0, 1)
       {
             this.Title = "UI Slider";
             this.Type = "UI/Slider";
+            Value = 0;
+           Outputs[0].Value = Value.ToString();
         }
 
         public override void Loop()
@@ -23,9 +25,13 @@ namespace MyNetSensors.LogicalNodesUI
 
         public override void OnInputChange(Input input)
         {
-            Value = input.Value;
         }
 
-
+        public void SetValue(int value)
+        {
+            Value = value;
+            LogInfo($"UI Slider [{Name}]: {Value}");
+            Outputs[0].Value = Value.ToString();
+        }
     }
 }

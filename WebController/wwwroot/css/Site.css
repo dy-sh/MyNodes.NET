@@ -128,13 +128,15 @@ input[type="checkbox"].input-validation-error {
 
 
 .noUi-connect {
-    background: #41A5F0;
+    background: #2185D0;
+    /*background: #41A5F0;*/
     /*background: #777;*/
-    height: 12px;
+    height: 13px;
 }
 
 .switch-input:checked ~ .switch-label {
-    background: #41A5F0;
+    background: #2185D0;
+    /*background: #41A5F0;*/
     /*background: #777;*/
 }
 

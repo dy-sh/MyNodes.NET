@@ -13,10 +13,10 @@ var elementsFadeTime = 300;
 
 //var nodes;
 
-//var slidersArray = [];
-//var rgbSlidersArray = [];
-//var rgbwSlidersArray = [];
-//setInterval(sendSliders, sliderUpdateInterval);
+var slidersArray = [];
+var rgbSlidersArray = [];
+var rgbwSlidersArray = [];
+setInterval(sendSliders, sliderUpdateInterval);
 //var ignoreSendingSwitchId;
 
 
@@ -120,12 +120,12 @@ function getNodes() {
 }
 
 function onReturnNodes(nodes) {
-    //var temp = elementsFadeTime;
-    //elementsFadeTime = 0;
-    //$('#panelsContainer').html(null);
-    //slidersArray.length = 0;
-    //rgbSlidersArray.length = 0;
-    //rgbwSlidersArray.length = 0;
+    //    var temp = elementsFadeTime;
+    //   elementsFadeTime = 0;
+    //  $('#panelsContainer').html(null);
+    //  slidersArray.length = 0;
+    //  rgbSlidersArray.length = 0;
+    //  rgbwSlidersArray.length = 0;
 
     for (var i = 0; i < nodes.length; i++) {
         createNode(nodes[i]);
@@ -140,6 +140,7 @@ var labelTemplate = Handlebars.compile($('#labelTemplate').html());
 var progressTemplate = Handlebars.compile($('#progressTemplate').html());
 var buttonTemplate = Handlebars.compile($('#buttonTemplate').html());
 var toggleButtonTemplate = Handlebars.compile($('#toggleButtonTemplate').html());
+var sliderTemplate = Handlebars.compile($('#sliderTemplate').html());
 
 
 function createPanel(node) {
@@ -175,6 +176,18 @@ function createNode(node) {
         $(toggleButtonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
         $('#button-' + node.Id).click(function () {
             sendToggleButtonClick(node.Id);
+        });
+    }
+
+    if (node.Type == "UI/Slider") {
+        $(sliderTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+
+        var slider = $("#slider-" + node.Id)[0];
+        noUiSlider.create(slider, { start: 0, connect: 'lower', animate: false, range: { 'min': 0, 'max': 100 } });
+        
+        slidersArray.push({
+            Id: node.Id,
+            lastVal: node.Value
         });
     }
 
@@ -214,11 +227,18 @@ function updateNode(node) {
     }
 
     if (node.Type == "UI/Toggle Button") {
-        if (node.Value=="1")
+        if (node.Value == "1")
             $('#button-' + node.Id).addClass("blue");
         else
             $('#button-' + node.Id).removeClass("blue");
     }
+
+    if (node.Type == "UI/Slider") {
+        $('#sliderName-' + node.Id).html(node.Name);
+        $("#slider-" + node.Id)[0].noUiSlider.set(node.Value);
+        updateSliderInArray(node.Id, node.Value);
+    }
+
 }
 
 
@@ -247,7 +267,13 @@ function sendToggleButtonClick(nodeId) {
     });
 }
 
-
+function sendSliderChange(nodeId,value) {
+    $.ajax({
+        url: "/Dashboard/SliderChange/",
+        type: "POST",
+        data: { 'nodeId': nodeId, 'value': value }
+    });
+}
 
 
 
@@ -452,99 +478,97 @@ function sendToggleButtonClick(nodeId) {
 
 
 
-//function sendSliders() {
+function sendSliders() {
 
-//    for (var i = 0; i < slidersArray.length; i++) {
-//        var id = slidersArray[i].sliderId;
-//        var currentVal = $("[name='slider-" + id + "']")[0].noUiSlider.get();
-//        currentVal = Math.round(currentVal);
+    for (var i = 0; i < slidersArray.length; i++) {
+        var id = slidersArray[i].Id;
+        var currentVal = $("#slider-" + id)[0].noUiSlider.get();
+        currentVal = Math.round(currentVal);
 
-//        if (!isNaN(currentVal) && currentVal != slidersArray[i].lastVal) {
+        if (!isNaN(currentVal) && currentVal != slidersArray[i].lastVal) {
 
-//            slidersArray[i].lastVal = currentVal;
-//            sendSensor(slidersArray[i].nodeId,
-//                slidersArray[i].sensorId,
-//                slidersArray[i].lastVal);
-//        }
-//    }
+            slidersArray[i].lastVal = currentVal;
+            sendSliderChange(slidersArray[i].Id, slidersArray[i].lastVal);
+        }
+    }
 
-//    for (var i = 0; i < rgbSlidersArray.length; i++) {
-//        var id = rgbSlidersArray[i].sliderId;
-//        var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
-//        var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
-//        var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
+    //for (var i = 0; i < rgbSlidersArray.length; i++) {
+    //    var id = rgbSlidersArray[i].sliderId;
+    //    var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
+    //    var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
+    //    var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
 
-//        currentR = Math.round(currentR);
-//        currentG = Math.round(currentG);
-//        currentB = Math.round(currentB);
+    //    currentR = Math.round(currentR);
+    //    currentG = Math.round(currentG);
+    //    currentB = Math.round(currentB);
 
 
-//        if (currentR != rgbSlidersArray[i].lastR ||
-//            currentG != rgbSlidersArray[i].lastG ||
-//            currentB != rgbSlidersArray[i].lastB) {
+    //    if (currentR != rgbSlidersArray[i].lastR ||
+    //        currentG != rgbSlidersArray[i].lastG ||
+    //        currentB != rgbSlidersArray[i].lastB) {
 
-//            var hex = RgbToHex(currentR, currentG, currentB);
-//            updateRgbSlidersInArray(id, hex);
+    //        var hex = RgbToHex(currentR, currentG, currentB);
+    //        updateRgbSlidersInArray(id, hex);
 
-//            sendSensor(rgbSlidersArray[i].nodeId,
-//                rgbSlidersArray[i].sensorId,
-//                hex);
-//        }
-//    }
+    //        sendSensor(rgbSlidersArray[i].nodeId,
+    //            rgbSlidersArray[i].sensorId,
+    //            hex);
+    //    }
+    //}
 
-//    for (var i = 0; i < rgbwSlidersArray.length; i++) {
-//        var id = rgbwSlidersArray[i].sliderId;
-//        var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
-//        var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
-//        var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
-//        var currentW = $("[name='slider-" + id + "-w']")[0].noUiSlider.get();
+    //for (var i = 0; i < rgbwSlidersArray.length; i++) {
+    //    var id = rgbwSlidersArray[i].sliderId;
+    //    var currentR = $("[name='slider-" + id + "-r']")[0].noUiSlider.get();
+    //    var currentG = $("[name='slider-" + id + "-g']")[0].noUiSlider.get();
+    //    var currentB = $("[name='slider-" + id + "-b']")[0].noUiSlider.get();
+    //    var currentW = $("[name='slider-" + id + "-w']")[0].noUiSlider.get();
 
-//        currentR = Math.round(currentR);
-//        currentG = Math.round(currentG);
-//        currentB = Math.round(currentB);
-//        currentW = Math.round(currentW);
+    //    currentR = Math.round(currentR);
+    //    currentG = Math.round(currentG);
+    //    currentB = Math.round(currentB);
+    //    currentW = Math.round(currentW);
 
-//        if (currentR != rgbwSlidersArray[i].lastR ||
-//            currentG != rgbwSlidersArray[i].lastG ||
-//            currentB != rgbwSlidersArray[i].lastB ||
-//            currentW != rgbwSlidersArray[i].lastW) {
+    //    if (currentR != rgbwSlidersArray[i].lastR ||
+    //        currentG != rgbwSlidersArray[i].lastG ||
+    //        currentB != rgbwSlidersArray[i].lastB ||
+    //        currentW != rgbwSlidersArray[i].lastW) {
 
-//            var hex = RgbwToHex(currentR, currentG, currentB);
-//            updateRgbwSlidersInArray(id, hex);
+    //        var hex = RgbwToHex(currentR, currentG, currentB);
+    //        updateRgbwSlidersInArray(id, hex);
 
-//            sendSensor(rgbwSlidersArray[i].nodeId,
-//                rgbwSlidersArray[i].sensorId,
-//                hex);
-//        }
-//    }
-//}
+    //        sendSensor(rgbwSlidersArray[i].nodeId,
+    //            rgbwSlidersArray[i].sensorId,
+    //            hex);
+    //    }
+    //}
+}
 
-//function updateSliderInArray(sliderId, lastVal) {
-//    for (var i = 0; i < slidersArray.length; i++) {
-//        if (slidersArray[i].sliderId == sliderId)
-//            slidersArray[i].lastVal = lastVal;
-//    }
-//}
+function updateSliderInArray(sliderId, lastVal) {
+    for (var i = 0; i < slidersArray.length; i++) {
+        if (slidersArray[i].sliderId == sliderId)
+            slidersArray[i].lastVal = lastVal;
+    }
+}
 
-//function updateRgbSlidersInArray(sliderId, lastHex) {
-//    for (var i = 0; i < rgbSlidersArray.length; i++) {
-//        if (rgbSlidersArray[i].sliderId == sliderId) {
-//            rgbSlidersArray[i].lastR = hexToRgb(lastHex).r;
-//            rgbSlidersArray[i].lastG = hexToRgb(lastHex).g;
-//            rgbSlidersArray[i].lastB = hexToRgb(lastHex).b;
-//        }
-//    }
-//}
+function updateRgbSlidersInArray(sliderId, lastHex) {
+    for (var i = 0; i < rgbSlidersArray.length; i++) {
+        if (rgbSlidersArray[i].sliderId == sliderId) {
+            rgbSlidersArray[i].lastR = hexToRgb(lastHex).r;
+            rgbSlidersArray[i].lastG = hexToRgb(lastHex).g;
+            rgbSlidersArray[i].lastB = hexToRgb(lastHex).b;
+        }
+    }
+}
 
 
-//function updateRgbwSlidersInArray(sliderId, lastHex) {
-//    for (var i = 0; i < rgbwSlidersArray.length; i++) {
-//        if (rgbwSlidersArray[i].sliderId == sliderId) {
-//            rgbwSlidersArray[i].lastR = hexToRgbw(lastHex).r;
-//            rgbwSlidersArray[i].lastG = hexToRgbw(lastHex).g;
-//            rgbwSlidersArray[i].lastB = hexToRgbw(lastHex).b;
-//            rgbwSlidersArray[i].lastW = hexToRgbw(lastHex).w;
-//        }
-//    }
-//}
+function updateRgbwSlidersInArray(sliderId, lastHex) {
+    for (var i = 0; i < rgbwSlidersArray.length; i++) {
+        if (rgbwSlidersArray[i].sliderId == sliderId) {
+            rgbwSlidersArray[i].lastR = hexToRgbw(lastHex).r;
+            rgbwSlidersArray[i].lastG = hexToRgbw(lastHex).g;
+            rgbwSlidersArray[i].lastB = hexToRgbw(lastHex).b;
+            rgbwSlidersArray[i].lastW = hexToRgbw(lastHex).w;
+        }
+    }
+}
 

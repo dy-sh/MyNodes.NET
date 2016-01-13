@@ -439,10 +439,12 @@ namespace MyNetSensors.LogicalNodes
             if (!started)
                 return;
 
+            LogicalNode owner = GetOutputOwner(output);
+            if(owner==null)
+                return;
+
             OnOutputUpdatedEvent?.Invoke(output);
 
-
-            LogicalNode owner = GetOutputOwner(output);
             owner.OnOutputChange(output);
 
             List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
