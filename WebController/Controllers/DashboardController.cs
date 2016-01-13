@@ -47,6 +47,19 @@ namespace MyNetSensors.WebController.Controllers
             engineUI.SliderChange(nodeId,value);
             return true;
         }
+
+        public bool RGBSlidersChange(string nodeId, string value)
+        {
+            engineUI.RGBSlidersChange(nodeId, value);
+            return true;
+        }
+
+        public bool RGBWSlidersChange(string nodeId, string value)
+        {
+            engineUI.RGBWSlidersChange(nodeId, value);
+            return true;
+        }
+
         
     }
 }

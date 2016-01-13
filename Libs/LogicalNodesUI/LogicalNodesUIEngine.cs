@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using MyNetSensors.LogicalNodes;
@@ -44,6 +45,8 @@ namespace MyNetSensors.LogicalNodesUI
             node.Click();
         }
 
+
+
         public void ToggleButtonClick(string nodeId)
         {
             LogicalNode n = engine.GetNode(nodeId);
@@ -63,6 +66,30 @@ namespace MyNetSensors.LogicalNodesUI
             LogicalNodeUISlider node = (LogicalNodeUISlider)n;
             node.SetValue(value);
         }
+
+
+        public void RGBSlidersChange(string nodeId, string value)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUIRGBSliders))
+                return;
+
+            LogicalNodeUIRGBSliders node = (LogicalNodeUIRGBSliders)n;
+            node.SetValue(value);
+        }
+
+
+        public void RGBWSlidersChange(string nodeId, string value)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUIRGBWSliders))
+                return;
+
+            LogicalNodeUIRGBWSliders node = (LogicalNodeUIRGBWSliders)n;
+            node.SetValue(value);
+        }
+
+
 
         private void OnInputUpdatedEvent(Input input)
         {

@@ -27,8 +27,8 @@
     <div class="column" id="panel{{this.PanelId}}" style="width:360px; max-width:360px">
         <div class="ui raised segments">
 
-            <div class="ui secondary clearing segment" id="panelTitle{{this.PanelId}}">
-                <b>Panel {{this.PanelId}}</b>
+            <div class="ui secondary clearing segment">
+                <b><span id="panelTitle{{this.PanelId}}">Panel {{this.PanelId}}</span></b>
 
                 <div class="ui right floated basic disabled button nonbutton">
                     <i class="square outline icon" id="activity{{this.PanelId}}"></i>
@@ -93,6 +93,27 @@
     </div>
 </script>
 
+
+<script id="rgbSlidersTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="sliderName-{{this.Id}}"></span>
+        <br />
+        <div id="slider-{{this.Id}}-r" class="spacebottom"></div>
+        <div id="slider-{{this.Id}}-g" class="spacebottom"></div>
+        <div id="slider-{{this.Id}}-b"></div>
+    </div>
+</script>
+
+<script id="rgbwSlidersTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="sliderName-{{this.Id}}"></span>
+        <br />
+        <div id="slider-{{this.Id}}-r" class="spacebottom"></div>
+        <div id="slider-{{this.Id}}-g" class="spacebottom"></div>
+        <div id="slider-{{this.Id}}-b" class="spacebottom"></div>
+        <div id="slider-{{this.Id}}-w"></div>
+    </div>
+</script>
 
 
 @section scripts

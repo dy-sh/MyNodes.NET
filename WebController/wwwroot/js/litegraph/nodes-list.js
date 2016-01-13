@@ -79,4 +79,18 @@
     UISlider.title = "Slider";
     LiteGraph.registerNodeType("UI/Slider", UISlider);
 
+    //UI RGB Sliders
+    function UIRGBSliders() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders" };
+    }
+    UIRGBSliders.title = "RGB Sliders";
+    LiteGraph.registerNodeType("UI/RGB Sliders", UIRGBSliders);
+
+    //UI RGBW Sliders
+    function UIRGBWSliders() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders" };
+    }
+    UIRGBWSliders.title = "RGBW Sliders";
+    LiteGraph.registerNodeType("UI/RGBW Sliders", UIRGBWSliders);
+
 })();
