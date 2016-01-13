@@ -67,6 +67,8 @@ namespace MyNetSensors.WebController.Code
                 logicalNodesEngine.OnLinksUpdatedEvent += OnLinksUpdatedEvent;
                 logicalNodesEngine.OnLinkDeleteEvent += OnLinkDeleteEvent;
                 logicalNodesEngine.OnNewLinkEvent += OnNewLinkEvent;
+                logicalNodesEngine.OnInputUpdatedEvent += OnInputUpdatedEvent;
+                logicalNodesEngine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
             }
 
             if (logicalNodesUiEngine != null)
@@ -75,6 +77,18 @@ namespace MyNetSensors.WebController.Code
                 logicalNodesUiEngine.OnNewUINodeEvent += OnNewUINodeEvent;
                 logicalNodesUiEngine.OnUINodeDeleteEvent += OnUINodeDeleteEvent;
             }
+        }
+
+        private static void OnOutputUpdatedEvent(Output output)
+        {
+            LogicalNode node = logicalNodesEngine.GetOutputOwner(output);
+            hub.Clients.All.OnNodeActivity(node.Id);
+        }
+
+        private static void OnInputUpdatedEvent(Input input)
+        {
+            LogicalNode node = logicalNodesEngine.GetInputOwner(input);
+            hub.Clients.All.OnNodeActivity(node.Id);
         }
 
         private static void OnUINodeDeleteEvent(LogicalNodeUI node)

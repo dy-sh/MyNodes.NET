@@ -30,6 +30,16 @@ $(function () {
         hardwareStateChanged(false);
     };
 
+    clientsHub.client.OnNodeActivity = function (nodeId) {
+        var node = graph.getNodeById(nodeId);
+        node.boxcolor = LiteGraph.NODE_ACTIVE_BOXCOLOR;
+        node.setDirtyCanvas(true, true);
+        setTimeout(function () {
+            node.boxcolor = LiteGraph.NODE_DEFAULT_BOXCOLOR;
+            node.setDirtyCanvas(true, true);
+        }, 100);
+    };
+
 
 
     clientsHub.client.OnLogicalNodeDeleteEvent = function (node) {
