@@ -66,6 +66,21 @@
 </script>
 
 
+<script id="textBoxTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="textBoxName-{{this.Id}}"></span>
+        <div class="ui form text-box-form">
+            <div class="ui field">
+                <div class="ui small action input">
+                    <input type="text" id="textBoxText-{{this.Id}}">
+                    <button type="button" class="ui small button" id="textBoxSend-{{this.Id}}">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
 <script id="logTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         <span id="logName-{{this.Id}}"></span>

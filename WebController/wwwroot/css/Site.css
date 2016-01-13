@@ -53,6 +53,9 @@ input[type="checkbox"].input-validation-error {
     margin: 0.2em 0em 0em;
 }
 
+.text-box-form {
+    margin: 0.3em 0em 0em;
+}
 
 
 .ui.button.nonbutton {

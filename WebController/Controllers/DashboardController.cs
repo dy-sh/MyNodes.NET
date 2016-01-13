@@ -37,6 +37,14 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool TextBoxSend(string nodeId,string value)
+        {
+            engineUI.TextBoxSend(nodeId,value);
+            return true;
+        }
+
+        
+
         public bool ButtonClick(string nodeId)
         {
             engineUI.ButtonClick(nodeId);

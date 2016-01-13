@@ -1,5 +1,5 @@
 ﻿/*  MyNetSensors 
-    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    Copyright (C) 2015-2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
@@ -11,13 +11,10 @@ var signalRServerConnected = null;
 var sliderUpdateInterval = 50; //increase this interval if you get excaption on moving slider
 var elementsFadeTime = 300;
 
-//var nodes;
-
 var slidersArray = [];
 var rgbSlidersArray = [];
 var rgbwSlidersArray = [];
 setInterval(sendSliders, sliderUpdateInterval);
-//var ignoreSendingSwitchId;
 
 
 $(function () {
@@ -146,6 +143,7 @@ var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
 var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
 var logTemplate = Handlebars.compile($('#logTemplate').html());
 var stateTemplate = Handlebars.compile($('#stateTemplate').html());
+var textBoxTemplate = Handlebars.compile($('#textBoxTemplate').html());
 
 
 function createPanel(node) {
@@ -176,6 +174,13 @@ function createNode(node) {
         $(logTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
         $('#clear-log-'+node.Id).click(function () {
             sendClearLog(node.Id);
+        });
+    }
+
+    if (node.Type == "UI/TextBox") {
+        $(textBoxTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $('#textBoxSend-' + node.Id).click(function () {
+            sendTextBox(node.Id);
         });
     }
 
@@ -278,6 +283,13 @@ function createNode(node) {
     updateNode(node);
 }
 
+
+
+
+
+
+
+
 function updateNode(node) {
     $('#activity' + node.PanelId).show().fadeOut(150);
 
@@ -306,6 +318,12 @@ function updateNode(node) {
         }
 
         $('#stateName-' + node.Id).html(node.Name);
+    }
+
+
+    if (node.Type == "UI/TextBox") {
+        $('#textBoxName-' + node.Id).html(node.Name);
+        $('#textBoxText-' + node.Id).val(node.Value);
     }
 
     if (node.Type == "UI/Log") {
@@ -396,6 +414,17 @@ function deleteNode(node) {
 }
 
 
+
+
+
+function sendTextBox(nodeId) {
+    var val = $('#textBoxText-' + nodeId).val();
+    $.ajax({
+        url: "/DashBoard/TextBoxSend/",
+        type: "POST",
+        data: { 'nodeId': nodeId, 'value': val }
+    });
+}
 
 
 

@@ -70,6 +70,13 @@
     UILog.title = "Log";
     LiteGraph.registerNodeType("UI/Log", UILog);
 
+    //UI TextBox
+    function UITextBox() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
+    }
+    UITextBox.title = "TextBox";
+    LiteGraph.registerNodeType("UI/TextBox", UITextBox);
+
 
     //UI Progress
     function UIProgress() {
