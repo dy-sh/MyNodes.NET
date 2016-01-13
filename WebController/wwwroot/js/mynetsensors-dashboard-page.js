@@ -144,6 +144,7 @@ var switchTemplate = Handlebars.compile($('#switchTemplate').html());
 var sliderTemplate = Handlebars.compile($('#sliderTemplate').html());
 var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
 var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
+var logTemplate = Handlebars.compile($('#logTemplate').html());
 
 
 function createPanel(node) {
@@ -164,6 +165,13 @@ function createNode(node) {
 
     if (node.Type == "UI/Label") {
         $(labelTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+    }
+
+    if (node.Type == "UI/Log") {
+        $(logTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $('#clear-log-'+node.Id).click(function () {
+            sendClearLog(node.Id);
+        });
     }
 
     if (node.Type == "UI/Progress") {
@@ -276,6 +284,12 @@ function updateNode(node) {
         $('#labelValue-' + node.Id).html(node.Value);
     }
 
+    if (node.Type == "UI/Log") {
+        $('#logName-' + node.Id).html(node.Name);
+        $('#log-' + node.Id).html(node.Log);
+        $('#log-' + node.Id).animate({ scrollTop: $('#log-' + node.Id).get(0).scrollHeight }, 0);
+    }
+
     if (node.Type == "UI/Progress") {
         //if (node.Value == null)
         //    node.Value = 0;
@@ -360,6 +374,14 @@ function deleteNode(node) {
 
 
 
+
+function sendClearLog(nodeId) {
+    $.ajax({
+        url: "/DashBoard/ClearLog/",
+        type: "POST",
+        data: { 'nodeId': nodeId }
+    });
+}
 
 function sendButtonClick(nodeId) {
     $.ajax({

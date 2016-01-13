@@ -62,7 +62,6 @@ $(function () {
 
     //clear messages button
     $('#clear-log').on('click', function () {
-        $('#log').html("");
         $.ajax({
             url: "/Logs/ClearLogs/",
             data: { logType: logType },

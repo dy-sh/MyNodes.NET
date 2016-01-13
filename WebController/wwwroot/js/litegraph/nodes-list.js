@@ -56,6 +56,13 @@
     LiteGraph.registerNodeType("UI/Label", UILabel);
 
 
+    //UI Log
+    function UILog() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog" };
+    }
+    UILog.title = "Log";
+    LiteGraph.registerNodeType("UI/Log", UILog);
+
 
     //UI Progress
     function UIProgress() {

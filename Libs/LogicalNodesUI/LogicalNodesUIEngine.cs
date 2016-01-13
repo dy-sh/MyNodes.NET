@@ -35,6 +35,21 @@ namespace MyNetSensors.LogicalNodesUI
                 .ToList();
         }
 
+
+        public void ClearLog(string nodeId)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUILog))
+                return;
+
+            LogicalNodeUILog node = (LogicalNodeUILog)n;
+            node.ClearLog();
+
+            //send update ivent
+            engine.UpdateNode(node);
+        }
+
+
         public void ButtonClick(string nodeId)
         {
             LogicalNode n = engine.GetNode(nodeId);

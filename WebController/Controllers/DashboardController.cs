@@ -30,6 +30,13 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool ClearLog(string nodeId)
+        {
+            engineUI.ClearLog(nodeId);
+            return true;
+        }
+
+
         public bool ButtonClick(string nodeId)
         {
             engineUI.ButtonClick(nodeId);

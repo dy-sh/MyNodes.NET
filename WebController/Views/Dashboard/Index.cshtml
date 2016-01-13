@@ -58,6 +58,16 @@
 </script>
 
 
+<script id="logTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="logName-{{this.Id}}"></span>
+        <button type="button" class="ui right floated tiny button" id="clear-log-{{this.Id}}">Clear</button>
+        <br />
+        <div class="ui segment" style="overflow-y: scroll; height: 150px;" id="log-{{this.Id}}"></div>
+    </div>
+</script>
+
+
 <script id="progressTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         <span id="progressName-{{this.Id}}"></span>
@@ -70,9 +80,9 @@
 </script>
 
 <script id="buttonTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node{{this.Id}}">        
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
         <button class="ui right floated small button" id="button-{{this.Id}}">
-            &nbsp <span id="buttonName-{{this.Id}}"></span> &nbsp 
+            &nbsp <span id="buttonName-{{this.Id}}"></span> &nbsp
         </button>
     </div>
 </script>
@@ -80,7 +90,7 @@
 <script id="toggleButtonTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         <button class="ui right floated small toggle button" id="button-{{this.Id}}">
-            &nbsp <span id="buttonName-{{this.Id}}"></span> &nbsp 
+            &nbsp <span id="buttonName-{{this.Id}}"></span> &nbsp
         </button>
     </div>
 </script>
@@ -101,7 +111,7 @@
 <script id="sliderTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         <span id="sliderName-{{this.Id}}"></span>
-        <br/>
+        <br />
         <div id="slider-{{this.Id}}"></div>
     </div>
 </script>
