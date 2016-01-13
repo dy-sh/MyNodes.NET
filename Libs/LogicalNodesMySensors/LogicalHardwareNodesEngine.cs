@@ -65,6 +65,7 @@ namespace MyNetSensors.LogicalNodesMySensors
             }
             else
             {
+                //todo update inputs names
                 oldNode.Title = node.GetSimpleName1();
                 engine.UpdateNode(oldNode);
             }

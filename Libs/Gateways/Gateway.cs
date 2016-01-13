@@ -415,7 +415,14 @@ namespace MyNetSensors.Gateways
             {
                 sensor.dataType = (SensorDataType)mes.subType;
                 sensor.state = mes.payload;
-                sensor.RemapSensorData();
+                try
+                {
+                    sensor.RemapSensorData();
+                }
+                catch
+                {
+                    LogError($"Incorrect data in Node{sensor.nodeId} Sensor{sensor.sensorId}");
+                }
             }
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
@@ -479,7 +486,15 @@ namespace MyNetSensors.Gateways
                 return;
             }
             sensor.state = state;
-            sensor.UnRemapSensorData();
+            
+            try
+            {
+                sensor.UnRemapSensorData();
+            }
+            catch
+            {
+                LogError($"Incorrect data in Node{sensor.nodeId} Sensor{sensor.sensorId}");
+            }
             SendSensorState(sensor);
         }
 

@@ -224,8 +224,7 @@ namespace MyNetSensors.Gateways
             if (!remapEnabled && !invertData)
                 return;
 
-            try
-            {
+       
                 if (CheckTypeIsBinary(dataType))
                 {
                     if (invertData)
@@ -328,18 +327,13 @@ namespace MyNetSensors.Gateways
                     state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
 
                 }
-            }
-            catch
-            {
-                Console.WriteLine($"Can't remap data from Node{nodeId} Sensor{sensorId}");
-            }
+ 
         }
 
         public void UnRemapSensorData()
         {
 
-            try
-            {
+      
                 if (CheckTypeIsBinary(dataType))
                 {
                     if (invertData)
@@ -442,11 +436,7 @@ namespace MyNetSensors.Gateways
                     state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
 
                 }
-            }
-            catch
-            {
-                Console.WriteLine($"Can't remap data from Node{nodeId} Sensor{sensorId}");
-            }
+  
         }
 
         public string ConvertSensorData(SensorDataType? newDataType)
