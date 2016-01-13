@@ -55,6 +55,13 @@
     UILabel.title = "Label";
     LiteGraph.registerNodeType("UI/Label", UILabel);
 
+    //UI Label
+    function UIState() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
+    }
+    UIState.title = "State";
+    LiteGraph.registerNodeType("UI/State", UIState);
+
 
     //UI Log
     function UILog() {

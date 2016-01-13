@@ -47,13 +47,21 @@
 
 <script id="labelTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
-        @*span needed to prevent marign for first and last labels*@
-        <span></span>
         <span id="labelName-{{this.Id}}"></span>
         <div class="ui right floated basic disabled button nonbutton">
             <span class="ui blue basic label" id="labelValue-{{this.Id}}"></span>
         </div>
-        <span></span>
+    </div>
+</script>
+
+<script id="stateTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="stateName-{{this.Id}}"></span>
+        <div class="ui right floated basic disabled button nonbutton">
+            <i class="big green toggle on icon" id="state-on-{{this.Id}}" style="display:none"></i>
+            <i class="big red toggle off icon" id="state-off-{{this.Id}}" style="display:none"></i>
+            <i class="big toggle off icon" id="state-null-{{this.Id}}" style="display:none"></i>
+        </div>
     </div>
 </script>
 

@@ -145,6 +145,7 @@ var sliderTemplate = Handlebars.compile($('#sliderTemplate').html());
 var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
 var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
 var logTemplate = Handlebars.compile($('#logTemplate').html());
+var stateTemplate = Handlebars.compile($('#stateTemplate').html());
 
 
 function createPanel(node) {
@@ -165,6 +166,10 @@ function createNode(node) {
 
     if (node.Type == "UI/Label") {
         $(labelTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+    }
+
+    if (node.Type == "UI/State") {
+        $(stateTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
     if (node.Type == "UI/Log") {
@@ -282,6 +287,25 @@ function updateNode(node) {
 
         $('#labelName-' + node.Id).html(node.Name);
         $('#labelValue-' + node.Id).html(node.Value);
+    }
+
+    if (node.Type == "UI/State") {
+        if (node.Value == "1") {
+            $('#state-on-' + node.Id).show();
+            $('#state-off-' + node.Id).hide();
+            $('#state-null-' + node.Id).hide();
+        }
+        else if (node.Value == "0") {
+            $('#state-on-' + node.Id).hide();
+            $('#state-off-' + node.Id).show();
+            $('#state-null-' + node.Id).hide();
+        } else {
+            $('#state-on-' + node.Id).hide();
+            $('#state-off-' + node.Id).hide();
+            $('#state-null-' + node.Id).show();
+        }
+
+        $('#stateName-' + node.Id).html(node.Name);
     }
 
     if (node.Type == "UI/Log") {
