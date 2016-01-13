@@ -1842,10 +1842,10 @@ LGraphNode.prototype.connect = function(slot, node, target_slot,linkId)
 			console.log("Connect: Error, slot number not found");
 		return false;
 	}
-
+    //derwish removed
 	//if there is something already plugged there, disconnect
-	if(target_slot != -1 && node.inputs[target_slot].link != null)
-		node.disconnectInput(target_slot);
+	//if(target_slot != -1 && node.inputs[target_slot].link != null)
+	//	node.disconnectInput(target_slot);
 
 	this.setDirtyCanvas(false,true);
 	this.graph.onConnectionChange();
@@ -1875,8 +1875,13 @@ LGraphNode.prototype.connect = function(slot, node, target_slot,linkId)
 		this.graph.links[ link.id ] = link;
 
 		//connect
-		if( output.links == null )	output.links = [];
-		output.links.push( link.id );
+		if (output.links == null) output.links = [];
+
+        //derwish added - do not push if exists
+		if (output.links.indexOf(link.id) == -1) {
+		    output.links.push(link.id);
+		}
+
 		node.inputs[target_slot].link = link.id;
 
 	}

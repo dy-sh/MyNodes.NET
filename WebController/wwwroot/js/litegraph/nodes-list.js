@@ -48,6 +48,11 @@
 
 
 
+
+
+
+
+
     //UI Label
     function UILabel() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
@@ -55,13 +60,19 @@
     UILabel.title = "Label";
     LiteGraph.registerNodeType("UI/Label", UILabel);
 
-    //UI Label
+    //UI State
     function UIState() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
     }
     UIState.title = "State";
     LiteGraph.registerNodeType("UI/State", UIState);
 
+    //UI Progress
+    function UIProgress() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
+    }
+    UIProgress.title = "Progress";
+    LiteGraph.registerNodeType("UI/Progress", UIProgress);
 
     //UI Log
     function UILog() {
@@ -70,20 +81,12 @@
     UILog.title = "Log";
     LiteGraph.registerNodeType("UI/Log", UILog);
 
-    //UI TextBox
-    function UITextBox() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
-    }
-    UITextBox.title = "TextBox";
-    LiteGraph.registerNodeType("UI/TextBox", UITextBox);
 
 
-    //UI Progress
-    function UIProgress() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
-    }
-    UIProgress.title = "Progress";
-    LiteGraph.registerNodeType("UI/Progress", UIProgress);
+
+
+
+
 
 
 
@@ -112,6 +115,15 @@
     UISwitch.title = "Switch";
     LiteGraph.registerNodeType("UI/Switch", UISwitch);
 
+    
+
+    //UI TextBox
+    function UITextBox() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
+    }
+    UITextBox.title = "TextBox";
+    LiteGraph.registerNodeType("UI/TextBox", UITextBox);
+    
 
 
     //UI Slider
