@@ -7,14 +7,13 @@ using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
 {
-  public class LogicalNodeUIButton : LogicalNodeUI
+    public class LogicalNodeUIButton : LogicalNodeUI
     {
-      public string Value { get; set; }
-
-      public LogicalNodeUIButton() : base(1, 0)
-      {
+        public LogicalNodeUIButton() : base(0, 1)
+        {
             this.Title = "UI Button";
             this.Type = "UI/Button";
+            Outputs[0].Value = "0";
         }
 
         public override void Loop()
@@ -23,9 +22,14 @@ namespace MyNetSensors.LogicalNodesUI
 
         public override void OnInputChange(Input input)
         {
-            Value = input.Value;
         }
 
-
+        public void Click()
+        {
+            LogInfo($"UI Button [{Name}]: 1");
+            Outputs[0].Value = "1";
+            LogInfo($"UI Button [{Name}]: 0");
+            Outputs[0].Value = "0";
+        }
     }
 }

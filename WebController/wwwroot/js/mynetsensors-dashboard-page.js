@@ -138,6 +138,8 @@ function onReturnNodes(nodes) {
 var panelTemplate = Handlebars.compile($('#panelTemplate').html());
 var labelTemplate = Handlebars.compile($('#labelTemplate').html());
 var progressTemplate = Handlebars.compile($('#progressTemplate').html());
+var buttonTemplate = Handlebars.compile($('#buttonTemplate').html());
+var toggleButtonTemplate = Handlebars.compile($('#toggleButtonTemplate').html());
 
 
 function createPanel(node) {
@@ -162,6 +164,20 @@ function createNode(node) {
         $(progressTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
+    if (node.Type == "UI/Button") {
+        $(buttonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $('#button-' + node.Id).click(function () {
+            sendButtonClick(node.Id);
+        });
+    }
+
+    if (node.Type == "UI/Toggle Button") {
+        $(toggleButtonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $('#button-' + node.Id).click(function () {
+            sendToggleButtonClick(node.Id);
+        });
+    }
+
     updateNode(node);
 }
 
@@ -177,10 +193,10 @@ function updateNode(node) {
     }
 
     if (node.Type == "UI/Progress") {
-        if (node.Value == null)
-            node.Value = 0;
+        //if (node.Value == null)
+        //    node.Value = 0;
 
-        if (node.Value >100)
+        if (node.Value > 100)
             node.Value = 100;
 
         if (node.Value < 0)
@@ -192,13 +208,48 @@ function updateNode(node) {
             showActivity: false
         });
     }
+
+    if (node.Type == "UI/Button" || node.Type == "UI/Toggle Button") {
+        $('#buttonName-' + node.Id).html(node.Name);
+    }
+
+    if (node.Type == "UI/Toggle Button") {
+        if (node.Value=="1")
+            $('#button-' + node.Id).addClass("blue");
+        else
+            $('#button-' + node.Id).removeClass("blue");
+    }
 }
 
 
 
 function deleteNode(node) {
-    $('#node' + node.Id).fadeOut(elementsFadeTime,function () { $(this).remove(); });
+    $('#node' + node.Id).fadeOut(elementsFadeTime, function () { $(this).remove(); });
 }
+
+
+
+
+
+function sendButtonClick(nodeId) {
+    $.ajax({
+        url: "/Dashboard/ButtonClick/",
+        type: "POST",
+        data: { 'nodeId': nodeId }
+    });
+}
+
+function sendToggleButtonClick(nodeId) {
+    $.ajax({
+        url: "/Dashboard/ToggleButtonClick/",
+        type: "POST",
+        data: { 'nodeId': nodeId }
+    });
+}
+
+
+
+
 
 
 
@@ -399,13 +450,7 @@ function deleteNode(node) {
 
 //}
 
-//function sendSensor(nodeId, sensorId, state) {
-//    $.ajax({
-//        url: "/GatewayAPI/SendMessage/",
-//        type: "POST",
-//        data: { 'nodeId': nodeId, 'sensorId': sensorId, 'state': state }
-//    });
-//}
+
 
 //function sendSliders() {
 

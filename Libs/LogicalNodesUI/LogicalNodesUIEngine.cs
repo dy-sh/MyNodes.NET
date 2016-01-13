@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
@@ -31,6 +32,26 @@ namespace MyNetSensors.LogicalNodesUI
                 .Where(n => n is LogicalNodeUI)
                 .Cast<LogicalNodeUI>()
                 .ToList();
+        }
+
+        public void ButtonClick(string nodeId)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUIButton))
+                return;
+
+            LogicalNodeUIButton node = (LogicalNodeUIButton)n;
+            node.Click();
+        }
+
+        public void ToggleButtonClick(string nodeId)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUIToggleButton))
+                return;
+
+            LogicalNodeUIToggleButton node = (LogicalNodeUIToggleButton)n;
+            node.Toggle();
         }
 
         private void OnInputUpdatedEvent(Input input)
@@ -68,7 +89,7 @@ namespace MyNetSensors.LogicalNodesUI
         private void OnNewLinkEvent(LogicalLink link)
         {
             LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
-            LogicalNode inNode= engine.GetInputOwner(link.InputId);
+            LogicalNode inNode = engine.GetInputOwner(link.InputId);
 
             Output output = engine.GetOutput(link.OutputId);
             Input input = engine.GetInput(link.InputId);

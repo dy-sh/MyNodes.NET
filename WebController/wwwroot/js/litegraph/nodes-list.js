@@ -65,12 +65,12 @@
     UIButton.title = "Button";
     LiteGraph.registerNodeType("UI/Button", UIButton);
 
-    //UI Switch Button
-    function UISwitchButton() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitchButton" };
+    //UI Toggle Button
+    function UIToggleButton() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton" };
     }
-    UISwitchButton.title = "Switch Button";
-    LiteGraph.registerNodeType("UI/Switch Button", UISwitchButton);
+    UIToggleButton.title = "Toggle Button";
+    LiteGraph.registerNodeType("UI/Toggle Button", UIToggleButton);
 
     //UI Slider
     function UISlider() {

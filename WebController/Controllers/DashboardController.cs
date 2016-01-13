@@ -29,5 +29,18 @@ namespace MyNetSensors.WebController.Controllers
             return engineUI.GetUINodes();
         }
 
+
+        public bool ButtonClick(string nodeId)
+        {
+            engineUI.ButtonClick(nodeId);
+            return true;
+        }
+
+        public bool ToggleButtonClick(string nodeId)
+        {
+            engineUI.ToggleButtonClick(nodeId);
+            return true;
+        }
+
     }
 }

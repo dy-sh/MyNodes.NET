@@ -11,7 +11,7 @@ namespace MyNetSensors.LogicalNodesUI
     {
       public string Value { get; set; }
 
-      public UISlider() : base(1, 0)
+      public UISlider() : base(0, 1)
       {
             this.Title = "UI Slider";
             this.Type = "UI/Slider";
