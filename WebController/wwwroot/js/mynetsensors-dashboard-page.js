@@ -413,34 +413,6 @@ function sendRGBWSlidersChange(nodeId, value) {
 
 
 
-//    //ON-OFF BUTTON
-//    if (sensor.dataType == mySensors.sensorDataType.V_TRIPPED
-//            || sensor.dataType == mySensors.sensorDataType.V_STATUS) {
-//        if ($("[name='toggle-" + id + "']").length == 0) {
-//            //create new
-//            $(toggleTemplate(sensor)).hide().appendTo("#dataPanel" + id).fadeIn(elementsFadeTime);
-
-//            $("[name='toggle-" + id + "']").prop('checked', sensor.state == "1");
-
-//            $("[name='toggle-" + id + "']").click(function () {
-//                if (ignoreSendingSwitchId == id)
-//                    return;
-
-//                var state = $(this).is(":checked");
-
-//                var toggle = this.name.split("-");
-//                var val = state == true ? 1 : 0;
-//                sendSensor(toggle[1], toggle[2], val);
-//            });
-//        } else {
-//            //update
-//            ignoreSendingSwitchId = id;
-//            $("[name='toggle-" + id + "']").prop('checked', sensor.state == "1");
-//            ignoreSendingSwitchId = null;
-//        }
-//    }
-
-
 //    }
 //        //IR SEND
 //    else if (sensor.dataType == mySensors.sensorDataType.V_IR_SEND) {
@@ -469,6 +441,14 @@ function sendSliders() {
 
     for (var i = 0; i < slidersArray.length; i++) {
         var id = slidersArray[i].Id;
+
+        //if slider was removed
+        if ($("#slider-" + id)[0] == null) {
+            slidersArray.splice(i, 1);
+            i--;
+            continue;
+        }
+
         var currentVal = $("#slider-" + id)[0].noUiSlider.get();
         currentVal = Math.round(currentVal);
 
@@ -481,6 +461,14 @@ function sendSliders() {
 
     for (var i = 0; i < rgbSlidersArray.length; i++) {
         var id = rgbSlidersArray[i].Id;
+
+        //if slider was removed
+        if ($("#slider-" + id + "-r")[0] == null) {
+            rgbSlidersArray.splice(i, 1);
+            i--;
+            continue;
+        }
+
         var currentR = $("#slider-" + id + "-r")[0].noUiSlider.get();
         var currentG = $("#slider-" + id + "-g")[0].noUiSlider.get();
         var currentB = $("#slider-" + id + "-b")[0].noUiSlider.get();
@@ -503,6 +491,14 @@ function sendSliders() {
 
     for (var i = 0; i < rgbwSlidersArray.length; i++) {
         var id = rgbwSlidersArray[i].Id;
+
+        //if slider was removed
+        if ($("#slider-" + id + "-r")[0] == null) {
+            rgbwSlidersArray.splice(i, 1);
+            i--;
+            continue;
+        }
+
         var currentR = $("#slider-" + id + "-r")[0].noUiSlider.get();
         var currentG = $("#slider-" + id + "-g")[0].noUiSlider.get();
         var currentB = $("#slider-" + id + "-b")[0].noUiSlider.get();
