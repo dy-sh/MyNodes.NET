@@ -45,6 +45,7 @@
     <Compile Include="LogicalNodeUIButton.cs" />
     <Compile Include="LogicalNodeUIRGBWSliders.cs" />
     <Compile Include="LogicalNodeUIRGBSliders.cs" />
+    <Compile Include="LogicalNodeUISwitch.cs" />
     <Compile Include="LogicalNodeUIToggleButton.cs" />
     <Compile Include="LogicalNodeUISlider.cs" />
     <Compile Include="LogicalNodeUIProgress.cs" />

@@ -57,6 +57,16 @@ namespace MyNetSensors.LogicalNodesUI
             node.Toggle();
         }
 
+        public void SwitchClick(string nodeId)
+        {
+            LogicalNode n = engine.GetNode(nodeId);
+            if (!(n is LogicalNodeUISwitch))
+                return;
+
+            LogicalNodeUISwitch node = (LogicalNodeUISwitch)n;
+            node.Toggle();
+        }
+
         public void SliderChange(string nodeId, int value)
         {
             LogicalNode n = engine.GetNode(nodeId);
@@ -146,6 +156,7 @@ namespace MyNetSensors.LogicalNodesUI
             }
 
         }
+
 
 
     }

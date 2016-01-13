@@ -85,6 +85,19 @@
     </div>
 </script>
 
+<script id="switchTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node{{this.Id}}">
+        <span id="switchName-{{this.Id}}"></span>
+        <div class="ui right floated basic  button nonbutton">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" id="switch-{{this.Id}}">
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label>
+        </div>
+    </div>
+</script>
+
 <script id="sliderTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node{{this.Id}}">
         <span id="sliderName-{{this.Id}}"></span>

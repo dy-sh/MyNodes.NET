@@ -140,6 +140,7 @@ var labelTemplate = Handlebars.compile($('#labelTemplate').html());
 var progressTemplate = Handlebars.compile($('#progressTemplate').html());
 var buttonTemplate = Handlebars.compile($('#buttonTemplate').html());
 var toggleButtonTemplate = Handlebars.compile($('#toggleButtonTemplate').html());
+var switchTemplate = Handlebars.compile($('#switchTemplate').html());
 var sliderTemplate = Handlebars.compile($('#sliderTemplate').html());
 var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
 var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
@@ -180,6 +181,14 @@ function createNode(node) {
         $(toggleButtonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
         $('#button-' + node.Id).click(function () {
             sendToggleButtonClick(node.Id);
+        });
+    }
+
+    if (node.Type == "UI/Switch") {
+        $(switchTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+
+        $('#switch-' + node.Id).click(function () {
+            sendSwitchClick(node.Id);
         });
     }
 
@@ -284,15 +293,22 @@ function updateNode(node) {
         });
     }
 
-    if (node.Type == "UI/Button" || node.Type == "UI/Toggle Button") {
+    if (node.Type == "UI/Button") {
         $('#buttonName-' + node.Id).html(node.Name);
     }
 
     if (node.Type == "UI/Toggle Button") {
+        $('#buttonName-' + node.Id).html(node.Name);
         if (node.Value == "1")
             $('#button-' + node.Id).addClass("blue");
         else
             $('#button-' + node.Id).removeClass("blue");
+    }
+
+    if (node.Type == "UI/Switch") {
+        $('#switchName-' + node.Id).html(node.Name);
+        $('#switch-' + node.Id).html(node.Name);
+        $('#switch-' + node.Id).prop('checked', node.Value == "1");
     }
 
     if (node.Type == "UI/Slider") {
@@ -356,6 +372,14 @@ function sendButtonClick(nodeId) {
 function sendToggleButtonClick(nodeId) {
     $.ajax({
         url: "/Dashboard/ToggleButtonClick/",
+        type: "POST",
+        data: { 'nodeId': nodeId }
+    });
+}
+
+function sendSwitchClick(nodeId) {
+    $.ajax({
+        url: "/Dashboard/SwitchClick/",
         type: "POST",
         data: { 'nodeId': nodeId }
     });
@@ -473,7 +497,7 @@ function sendSliders() {
             var hex = RgbToHex(currentR, currentG, currentB);
             updateRgbSlidersInArray(id, hex);
 
-            sendRGBSlidersChange(rgbSlidersArray[i].Id,hex);
+            sendRGBSlidersChange(rgbSlidersArray[i].Id, hex);
         }
     }
 
