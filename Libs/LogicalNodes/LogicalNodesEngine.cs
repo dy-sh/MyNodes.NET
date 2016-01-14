@@ -615,7 +615,10 @@ namespace MyNetSensors.LogicalNodes
             node.OnInputChange(input);
 
             if (node is LogicalNodePanel)
-                GetNode(input.Id).Outputs[0].Value = input.Value;
+               GetNode(input.Id).Outputs[0].Value = input.Value;
+
+            if (node is LogicalNodePanelOutput)
+                GetOutput(node.Id).Value = input.Value;
 
             OnInputUpdatedEvent?.Invoke(input);
         }
