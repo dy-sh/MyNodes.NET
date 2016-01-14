@@ -25,13 +25,10 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
             engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
             engine.OnNewLinkEvent += OnNewLinkEvent;
+            engine.OnRemoveLinkEvent += OnRemoveLinkEvent;
         }
 
-
-
-
-
-
+ 
         private void OnInputUpdatedEvent(Input input)
         {
             LogicalNode node = engine.GetInputOwner(input);
@@ -72,6 +69,8 @@ namespace MyNetSensors.LogicalNodesUI
             Output output = engine.GetOutput(link.OutputId);
             Input input = engine.GetInput(link.InputId);
 
+
+            //auto naming
             if (inNode is LogicalNodeUI)
             {
                 LogicalNodeUI node = (LogicalNodeUI)inNode;
@@ -85,10 +84,28 @@ namespace MyNetSensors.LogicalNodesUI
                 node.Name = $"{inNode.Title} {input.Name}";
                 engine.UpdateNode(node);
             }
-
         }
 
+        private void OnRemoveLinkEvent(LogicalLink link)
+        {
+            LogicalNode inNode = engine.GetInputOwner(link.InputId);
+            LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
 
+            //auto naming
+            if (inNode is LogicalNodeUI)
+            {
+                LogicalNodeUI node = (LogicalNodeUI)inNode;
+                node.Name = null;
+                engine.UpdateNode(node);
+            }
+
+            if (outNode is LogicalNodeUI)
+            {
+                LogicalNodeUI node = (LogicalNodeUI)outNode;
+                node.Name = null;
+                engine.UpdateNode(node);
+            }
+        }
 
 
 

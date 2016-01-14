@@ -296,6 +296,8 @@ namespace MyNetSensors.LogicalNodes
 
             OnRemoveLinkEvent?.Invoke(link);
             links.Remove(link);
+
+            input.Value = null;
         }
 
         public void RemoveLink(LogicalLink link)

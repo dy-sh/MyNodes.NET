@@ -33,10 +33,13 @@ namespace MyNetSensors.LogicalNodes
 
             if (Inputs[0].Value == "0")
                 result = "1";
-            else
+            else if (Inputs[0].Value == "1")
                 result = "0";
+            else 
+                result = null;
 
-            LogInfo($"Invert: from {Inputs[0].Value} to {result}");
+            LogInfo($"Invert: from [{Inputs[0].Value ?? "NULL"}] to [{result ?? "NULL"}]");
+
 
             Outputs[0].Value = result;
         }

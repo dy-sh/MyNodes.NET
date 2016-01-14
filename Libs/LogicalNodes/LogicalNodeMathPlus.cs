@@ -37,7 +37,7 @@ namespace MyNetSensors.LogicalNodes
             if (Inputs[1].Value != null)
                 b = Int32.Parse(Inputs[1].Value);
 
-            LogInfo($"MathPlus: {Inputs[0].Value} + {Inputs[1].Value}  = {Outputs[0].Value}");
+            LogInfo($"MathPlus: [{Inputs[0].Value??"NULL"}] + [{Inputs[1].Value??"NULL"}]  = [{Outputs[0].Value??"NULL"}]");
 
             Outputs[0].Value = (a + b).ToString();
 

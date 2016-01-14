@@ -24,7 +24,7 @@ namespace MyNetSensors.LogicalNodesUI
 
         public override void OnInputChange(Input input)
         {
-            Log += $"{DateTime.Now}: {input.Value}<br/>";
+            Log += $"{DateTime.Now}: {input.Value??"NULL"}<br/>";
         }
 
 
