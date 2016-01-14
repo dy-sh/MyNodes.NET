@@ -26,8 +26,7 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (panelId != null)
             {
-                LogicalNodePanel panel =
-                    (LogicalNodePanel) engine.nodes.FirstOrDefault(n => n is LogicalNodePanel && n.Id == panelId);
+                LogicalNodePanel panel = engine.GetPanelNode(panelId);
 
                 if (panel==null)
                     return HttpNotFound();

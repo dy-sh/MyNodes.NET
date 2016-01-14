@@ -4571,10 +4571,17 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function()
 
 	    if (window.this_panel_id != null && window.this_panel_id != "") {
 	        options.push(null);
+
+	        var back_url = "/NodesEditor/";
+
+	        if (window.owner_panel_id != null && window.owner_panel_id != "")
+	            back_url += "?panelId=" + window.owner_panel_id;
+
 	        options.push({
 	                content: "Close Panel",
-	                callback: function() {window.location = "/NodesEditor/?panelId=" + window.owner_panel_id;}
+	                callback: function () { window.location = back_url }
 	        });
+
 	    };
 
 		if(this._graph_stack && this._graph_stack.length > 0)
