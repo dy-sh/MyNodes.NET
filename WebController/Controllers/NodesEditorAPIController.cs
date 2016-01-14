@@ -22,7 +22,7 @@ namespace MyNetSensors.WebController.Controllers
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
    
-        public List<LiteGraph.Node> GetNodes()
+        public List<LiteGraph.Node> GetNodes(string panelId)
         {
             if (engine == null)
                 return null;
@@ -31,15 +31,10 @@ namespace MyNetSensors.WebController.Controllers
             if (nodes==null || !nodes.Any())
                 return null;
 
-            List<LiteGraph.Node> list = new List<LiteGraph.Node>();
-
-            foreach (var node in nodes)
-            {
-                LiteGraph.Node newNode = ConvertLogicalNodeToLitegraphNode(node);
-                list.Add(newNode);
-            }
-
-            return list;
+            return (
+                from node in nodes
+                where node.PanelId == panelId
+                select ConvertLogicalNodeToLitegraphNode(node)).ToList();
         }
 
 
@@ -49,7 +44,8 @@ namespace MyNetSensors.WebController.Controllers
             {
                 title = logicalNode.Title,
                 type = logicalNode.Type,
-                id = logicalNode.Id
+                id = logicalNode.Id,
+                panel_id = logicalNode.PanelId
             };
 
 
@@ -118,14 +114,15 @@ namespace MyNetSensors.WebController.Controllers
                 target_id = engine.GetInputOwner(logicalLink.InputId).Id,
                 origin_slot = GetOutputSlot(logicalLink.OutputId),
                 target_slot = GetInputSlot(logicalLink.InputId),
-                id = logicalLink.Id
+                id = logicalLink.Id,
+                panel_id = logicalLink.PanelId
             };
 
             return link;
         }
 
 
-        public List<LiteGraph.Link> GetLinks()
+        public List<LiteGraph.Link> GetLinks(string panelId)
         {
             if (engine == null)
                 return null;
@@ -134,15 +131,10 @@ namespace MyNetSensors.WebController.Controllers
             if (links==null || !links.Any())
                 return null;
 
-            List<LiteGraph.Link> list = new List<Link>();
-
-            foreach (var link in links)
-            {
-                list.Add(ConvertLogicalNodeToLitegraphLink(link));
-
-            }
-
-            return list;
+            return (
+                from link in links
+                where link.PanelId == panelId
+                select ConvertLogicalNodeToLitegraphLink(link)).ToList();
         }
 
 
@@ -218,6 +210,7 @@ namespace MyNetSensors.WebController.Controllers
             newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
             newNode.Id = node.id;
+            newNode.PanelId = node.panel_id;
 
             engine.AddNode(newNode);
             return true;

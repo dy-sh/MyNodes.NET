@@ -23,6 +23,8 @@ namespace LiteGraph
     public class Node
     {
         public string id { get; set; }
+        public string panel_id { get; set; }
+        
         public string title { get; set; }
         public string type { get; set; }
         public int[] pos { get; set; }
@@ -61,6 +63,7 @@ namespace LiteGraph
         public int origin_slot { get; set; }
         public string target_id { get; set; }
         public int target_slot { get; set; }
+        public string panel_id { get; set; }
         //public string data { get; set; }
 
     }

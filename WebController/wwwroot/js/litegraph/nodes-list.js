@@ -2,6 +2,53 @@
 
 
 
+    //Panel: a node that contains a subgraph
+    function Panel() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodePanel" };
+        this.bgcolor = "#565656";
+    }
+    Panel.title = "Panel";
+    Panel.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{
+            content: "Open", callback:
+                function () {
+                    window.location = "/NodesEditor/?panelId=" + that.id;
+                }
+        },null];//null for horizontal line
+    }
+    LiteGraph.registerNodeType("Main/Panel", Panel);
+
+
+    //Panel Input
+    function PanelInput() {
+        this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelInput" };
+        this.bgcolor = "#151515";
+
+    }
+    PanelInput.title = "Panel Input";
+    LiteGraph.registerNodeType("Main/Panel Input", PanelInput);
+
+
+
+    //Panel Output
+    function PanelOutput() {
+        this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelOutput" };
+        this.bgcolor = "#151515";
+    }
+    PanelOutput.title = "Panel Output";
+    LiteGraph.registerNodeType("Main/Panel Output", PanelOutput);
+
+
+
+
+    
+
+
+
+
+
+
     //HardwareNode
     function HardwareNode() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
@@ -9,6 +56,10 @@
         this.removable = false;
     }
     LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);
+
+
+
+
 
 
 
@@ -115,7 +166,7 @@
     UISwitch.title = "Switch";
     LiteGraph.registerNodeType("UI/Switch", UISwitch);
 
-    
+
 
     //UI TextBox
     function UITextBox() {
@@ -123,7 +174,7 @@
     }
     UITextBox.title = "TextBox";
     LiteGraph.registerNodeType("UI/TextBox", UITextBox);
-    
+
 
 
     //UI Slider

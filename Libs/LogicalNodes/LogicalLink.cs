@@ -12,8 +12,9 @@ namespace MyNetSensors.LogicalNodes
 
         public string InputId { get; set; }
         public string OutputId { get; set; }
+        public string PanelId { get; set; }
 
-        
+
         //public LogicalLink( Output output, Input input)
         //{
         //    InputId = input.Id;

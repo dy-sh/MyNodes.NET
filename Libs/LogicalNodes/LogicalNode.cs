@@ -14,6 +14,7 @@ namespace MyNetSensors.LogicalNodes
     public abstract class LogicalNode
     {
         public string Id { get; set; }
+        public string PanelId { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public Position Position { get; set; }

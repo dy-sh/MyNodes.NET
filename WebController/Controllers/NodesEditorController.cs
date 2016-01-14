@@ -20,15 +20,24 @@ namespace MyNetSensors.WebController.Controllers
 
     public class NodesEditorController : Controller
     {
-        public NodesEditorController()
-        {
-        }
+        private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
-        //private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
-
-        public IActionResult Index()
+        public IActionResult Index(string panelId)
         {
-              return View();
+            if (panelId != null)
+            {
+                LogicalNodePanel panel =
+                    (LogicalNodePanel) engine.nodes.FirstOrDefault(n => n is LogicalNodePanel && n.Id == panelId);
+
+                if (panel==null)
+                    return HttpNotFound();
+
+                ViewBag.panelId = panel.Id;
+                ViewBag.ownerPanelId = panel.PanelId;
+            }
+
+            //panelId==null - main graph
+            return View();
         }
 
     }

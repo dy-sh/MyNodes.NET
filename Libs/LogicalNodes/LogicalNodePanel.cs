@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class LogicalNodeConst:LogicalNode
+    public class LogicalNodePanel:LogicalNode
     {
-        public LogicalNodeConst() : base(0, 1)
+        public LogicalNodePanel() : base(0, 0)
         {
+            this.Title = "Panel";
+            this.Type = "Main/Panel";
         }
 
         public override void Loop()

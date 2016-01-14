@@ -32,6 +32,9 @@ $(function () {
 
     clientsHub.client.OnNodeActivity = function (nodeId) {
         var node = graph.getNodeById(nodeId);
+        if (node==null)
+            return;
+
         node.boxcolor = LiteGraph.NODE_ACTIVE_BOXCOLOR;
         node.setDirtyCanvas(true, true);
         setTimeout(function () {
@@ -43,21 +46,35 @@ $(function () {
 
 
     clientsHub.client.OnLogicalNodeRemoveEvent = function (nodeId) {
-        var oldNode = graph.getNodeById(nodeId);
-        graph.remove(oldNode);
+        var node = graph.getNodeById(nodeId);
+        if (node == null)
+            return;
+
+        graph.remove(node);
         graph.setDirtyCanvas(true, true);
     };
 
+
     clientsHub.client.OnLogicalNodeUpdatedEvent = function (node) {
+        if (node.panel_id != window.this_panel_id)
+            return;
+
         createOrUpdateNode(node);
     };
 
+
     clientsHub.client.OnNewLogicalNodeEvent = function (node) {
+        if (node.panel_id != window.this_panel_id)
+            return;
+
         createOrUpdateNode(node);
     };
 
 
     clientsHub.client.OnRemoveLinkEvent = function (link) {
+        if (link.panel_id != window.this_panel_id)
+            return;
+
         var node = graph.getNodeById(link.origin_id);
         var targetNode = graph.getNodeById(link.target_id);
         node.disconnectOutput(link.target_slot, targetNode);
@@ -65,16 +82,19 @@ $(function () {
     };
 
     clientsHub.client.OnNewLinkEvent = function (link) {
+        if (link.panel_id != window.this_panel_id)
+            return;
+
         var node = graph.getNodeById(link.origin_id);
         var targetNode = graph.getNodeById(link.target_id);
-        node.connect(link.origin_slot, targetNode, link.target_slot,link.id);
-      //  graph.change();
+        node.connect(link.origin_slot, targetNode, link.target_slot, link.id);
+        //  graph.change();
 
     };
 
-    clientsHub.client.OnLinksUpdatedEvent = function (links) {
+    //clientsHub.client.OnLinksUpdatedEvent = function (links) {
 
-    };
+    //};
 
 
     $.connection.hub.start();
@@ -159,7 +179,7 @@ $("#fullscreen-button").click(function () {
   document.mozFullscreenElement ||
   document.webkitFullscreenElement;
 
-    if (fullscreenElement==null) {
+    if (fullscreenElement == null) {
         if (elem.requestFullscreen) {
             elem.requestFullscreen();
         } else if (elem.mozRequestFullScreen) {
@@ -202,7 +222,6 @@ function send_remove_link(link) {
 };
 
 function send_create_node(node) {
-
     var serializedNode = node.serialize();
     $.ajax({
         url: '/NodesEditorAPI/CreateNode',
@@ -254,6 +273,7 @@ function getNodes() {
     $.ajax({
         url: "/NodesEditorAPI/GetNodes",
         type: "POST",
+        data: { 'panelId': window.this_panel_id },
         success: function (nodes) {
             onReturnNodes(nodes);
         }
@@ -275,11 +295,20 @@ function onReturnNodes(nodes) {
 
 
 function createOrUpdateNode(node) {
+
+    //var currentGraph = editor.graphcanvas.graph;
+    ////check node subgraph is current graph
+    //if (node.subgraph_id && !currentGraph._is_subgraph)
+    //    return;
+    //else if (node.subgraph_id && currentGraph._is_subgraph && node.subgraph_id != currentGraph._subgraph_node.id)
+    //    return;
+
+    
+
     var oldNode = graph.getNodeById(node.id);
     if (!oldNode) {
         //create new
         var newNode = LiteGraph.createNode(node.type);
-        //newNode.title = node.title + " [" + node.id+"]";
         newNode.title = node.title;
         newNode.inputs = node.inputs;
         newNode.outputs = node.outputs;
@@ -323,7 +352,7 @@ function createOrUpdateNode(node) {
             oldNode.size[1] = minHeight;
 
         //calculate pos
-       if (node.pos)
+        if (node.pos)
             oldNode.pos = node.pos;
 
 
@@ -338,6 +367,7 @@ function getLinks() {
     $.ajax({
         url: "/NodesEditorAPI/GetLinks",
         type: "POST",
+        data: { 'panelId': window.this_panel_id },
         success: function (links) {
             onReturnLinks(links);
         }
@@ -360,7 +390,7 @@ function onReturnLinks(links) {
 function createOrUpdateLink(link) {
     var target = graph.getNodeById(link.target_id);
     graph.getNodeById(link.origin_id)
-        .connect(link.origin_slot, target, link.target_slot,link.id);
+        .connect(link.origin_slot, target, link.target_slot, link.id);
 }
 
 
@@ -379,7 +409,7 @@ function calculateNodeMinHeight(node) {
 
     var slotsSize = (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
 
-    return slotsSize +5;
+    return slotsSize + 5;
 }
 
 

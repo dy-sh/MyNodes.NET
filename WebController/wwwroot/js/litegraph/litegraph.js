@@ -39,7 +39,7 @@ var LiteGraph = {
 	CANVAS_GRID_SIZE: 10,
 	NODE_TITLE_COLOR: "#222",
 	NODE_DEFAULT_COLOR: "#999",
-	NODE_DEFAULT_BGCOLOR: "#444",
+	NODE_DEFAULT_BGCOLOR: "#373737",
 	NODE_DEFAULT_BOXCOLOR: "#000",
 	NODE_ACTIVE_BOXCOLOR: "#AEF",
 	NODE_DEFAULT_SHAPE: "box",
@@ -1311,7 +1311,8 @@ LGraphNode.prototype.serialize = function()
 		data: this.data,
 		flags: LiteGraph.cloneObject(this.flags),
 		inputs: this.inputs,
-		outputs: this.outputs
+		outputs: this.outputs,
+		panel_id: this.panel_id
 	};
 
 	if(this.properties)
@@ -4376,7 +4377,13 @@ LGraphCanvas.onMenuAdd = function(node, e, prev_menu, canvas, first_event )
 		    //derwish added
 		    node.pos[0] = Math.round(node.pos[0]);
 		    node.pos[1] = Math.round(node.pos[1]);
-		    send_create_node(node);
+
+		    //derwish added
+		    if (window.this_panel_id!=null)
+		    node.panel_id = window.this_panel_id;//this_panel_id initialized from ViewBag
+
+
+            send_create_node(node);
 		}
 	}
 
@@ -4553,18 +4560,26 @@ LGraphCanvas.node_colors = {
 
 LGraphCanvas.prototype.getCanvasMenuOptions = function()
 {
-	var options = null;
+	var options = [];
 	if(this.getMenuOptions)
 		options = this.getMenuOptions();
 	else
 	{
-		options = [
-			{content:"Add Node", is_menu: true, callback: LGraphCanvas.onMenuAdd },
+	    options.push ({ content: "Add Node", is_menu: true, callback: LGraphCanvas.onMenuAdd });
 			//{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
-		];
+
+
+	    if (window.this_panel_id != null && window.this_panel_id != "") {
+	        options.push(null);
+	        options.push({
+	                content: "Close Panel",
+	                callback: function() {window.location = "/NodesEditor/?panelId=" + window.owner_panel_id;}
+	        });
+	    };
 
 		if(this._graph_stack && this._graph_stack.length > 0)
-			options = [{content:"Close subgraph", callback: this.closeSubgraph.bind(this) },null].concat(options);
+		    options.push({ content: "Close subgraph", callback: this.closeSubgraph.bind(this) });
+		
 	}
 
 	if(this.getExtraMenuOptions)
@@ -4591,13 +4606,13 @@ LGraphCanvas.prototype.getNodeMenuOptions = function(node)
             //derwish remove
 			//{ content: "Inputs", is_menu: true, disabled: true, callback: LGraphCanvas.onMenuNodeInputs },
 			//{content:"Outputs", is_menu: true, disabled:true, callback: LGraphCanvas.onMenuNodeOutputs },
-			null,
-			{ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse },
+			//null,
+			{ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse }
             //derwish remove
 			//{content:"Pin", callback: LGraphCanvas.onMenuNodePin },
 			//{content:"Colors", is_menu: true, callback: LGraphCanvas.onMenuNodeColors },
 			//{content:"Shapes", is_menu: true, callback: LGraphCanvas.onMenuNodeShapes },
-			null
+			//null
 		];
 
 	if(node.getExtraMenuOptions)
@@ -4605,7 +4620,7 @@ LGraphCanvas.prototype.getNodeMenuOptions = function(node)
 		var extra = node.getExtraMenuOptions(this);
 		if(extra)
 		{
-			extra.push(null);
+			//extra.push(null);
 			options = extra.concat( options );
 		}
 	}
@@ -4613,7 +4628,7 @@ LGraphCanvas.prototype.getNodeMenuOptions = function(node)
 	if( node.clonable !== false )
 			options.push({content:"Clone", callback: LGraphCanvas.onMenuNodeClone });
 	if( node.removable !== false )
-			options.push(null,{content:"Remove", callback: LGraphCanvas.onMenuNodeRemove });
+			options.push({content:"Remove", callback: LGraphCanvas.onMenuNodeRemove });
 
 	if(node.onGetInputs)
 	{

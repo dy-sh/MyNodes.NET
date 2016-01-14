@@ -263,6 +263,12 @@ namespace MyNetSensors.LogicalNodes
             LogicalNode inputNode = GetInputOwner(input);
             LogicalNode outputNode = GetOutputOwner(output);
 
+            if (inputNode.PanelId != outputNode.PanelId)
+            {
+                LogEngineError($"Can`t create link from {outputNode.GetType().Name} to {inputNode.GetType().Name}. Nodes on different panels.");
+                return;
+            }
+
             //prevent two links to one input
             LogicalLink oldLink = GetLinkForInput(input);
             if (oldLink!=null)
@@ -271,6 +277,7 @@ namespace MyNetSensors.LogicalNodes
             LogEngineInfo($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = new LogicalLink(output.Id, input.Id);
+            link.PanelId = inputNode.PanelId;
             links.Add(link);
 
             db?.AddLink(link);

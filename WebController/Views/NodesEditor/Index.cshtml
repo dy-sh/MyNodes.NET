@@ -47,7 +47,16 @@
 <br/>
 <div id="main"/></div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+<script>
+    //this var used in litegraph.js
+    var this_panel_id = "@ViewBag.panelId";
+    var owner_panel_id = "@ViewBag.ownerPanelId";
+</script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph-editor.js"></script>
