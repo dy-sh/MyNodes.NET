@@ -77,11 +77,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool RemoveAllNodes()
-        {
-            gateway.RemoveAllNodes();
-            return true;
-        }
+
 
 
 
@@ -100,11 +96,11 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public async Task<bool> DropNodes()
+        public async Task<bool> RemoveAllNodes()
         {
-            await DropHistory();
+            await ClearHistory();
 
-            RemoveAllNodes();
+            gateway.RemoveAllNodes();
 
             return true;
         }
@@ -116,7 +112,7 @@ namespace MyNetSensors.WebController.Controllers
 
   
 
-        public async Task<ActionResult> DropHistory()
+        public async Task<ActionResult> ClearHistory()
         {
             await StopWritingHistory();
             //waiting for all history writings finished
@@ -138,7 +134,7 @@ namespace MyNetSensors.WebController.Controllers
              return Json(true);
         }
 
-        public async Task<ActionResult> DropTasks()
+        public async Task<ActionResult> RemoveAllTasks()
         {
             DisableTasks();
             await Task.Delay(1000);
