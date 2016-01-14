@@ -42,8 +42,8 @@ $(function () {
 
 
 
-    clientsHub.client.OnLogicalNodeDeleteEvent = function (node) {
-        var oldNode = graph.getNodeById(node.id);
+    clientsHub.client.OnLogicalNodeDeleteEvent = function (nodeId) {
+        var oldNode = graph.getNodeById(nodeId);
         graph.remove(oldNode);
         graph.setDirtyCanvas(true, true);
     };

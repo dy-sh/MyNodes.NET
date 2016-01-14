@@ -36,12 +36,12 @@ namespace MyNetSensors.LogicalNodes
 
         public event LogicalNodesEventHandler OnNodesUpdatedEvent;
         public event LogicalNodeEventHandler OnNewNodeEvent;
-        public event LogicalNodeEventHandler OnNodeDeleteEvent;
+        public event LogicalNodeEventHandler OnRemoveNodeEvent;
         public event LogicalNodeEventHandler OnNodeUpdatedEvent;
         public event LogicalInputEventHandler OnInputUpdatedEvent;
         public event LogicalOutputEventHandler OnOutputUpdatedEvent;
         public event LogicalLinkEventHandler OnNewLinkEvent;
-        public event LogicalLinkEventHandler OnLinkDeleteEvent;
+        public event LogicalLinkEventHandler OnRemoveLinkEvent;
         public event LogicalLinksEventHandler OnLinksUpdatedEvent;
 
         public delegate void LogicalNodeEventHandler(LogicalNode node);
@@ -114,13 +114,13 @@ namespace MyNetSensors.LogicalNodes
             if (db != null)
                 links = db.GetAllLinks();
 
-            //delete link if node is not exist
+            //remove link if node is not exist
             LogicalLink[] oldLinks = links.ToArray();
             foreach (var link in oldLinks)
             {
                 if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
                 {
-                    db?.DeleteLink(link.Id);
+                    db?.RemoveLink(link.Id);
 
                     links.Remove(link);
                 }
@@ -189,13 +189,13 @@ namespace MyNetSensors.LogicalNodes
             List<LogicalLink> links = GetLinksForNode(node);
             foreach (var link in links)
             {
-                    DeleteLink(link);
+                    RemoveLink(link);
             }
 
-            OnNodeDeleteEvent?.Invoke(node);
+            OnRemoveNodeEvent?.Invoke(node);
             LogEngineInfo($"Remove node {node.GetType().Name}");
 
-            db?.DeleteNode(node.Id);
+            db?.RemoveNode(node.Id);
 
             nodes.Remove(node);
         }
@@ -266,7 +266,7 @@ namespace MyNetSensors.LogicalNodes
             //prevent two links to one input
             LogicalLink oldLink = GetLinkForInput(input);
             if (oldLink!=null)
-                DeleteLink(oldLink);
+                RemoveLink(oldLink);
 
             LogEngineInfo($"New link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
@@ -284,25 +284,25 @@ namespace MyNetSensors.LogicalNodes
 
         }
 
-        public void DeleteLink(Output output, Input input)
+        public void RemoveLink(Output output, Input input)
         {
             LogicalNode inputNode = GetInputOwner(input);
             LogicalNode outputNode = GetOutputOwner(output);
-            LogEngineInfo($"Delete link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
+            LogEngineInfo($"Remove link from {outputNode.GetType().Name} to {inputNode.GetType().Name}");
 
             LogicalLink link = GetLink(output, input);
 
-            db?.DeleteLink(link.Id);
+            db?.RemoveLink(link.Id);
 
-            OnLinkDeleteEvent?.Invoke(link);
+            OnRemoveLinkEvent?.Invoke(link);
             links.Remove(link);
         }
 
-        public void DeleteLink(LogicalLink link)
+        public void RemoveLink(LogicalLink link)
         {
             Output output=GetOutput(link.OutputId);
             Input input=GetInput(link.InputId);
-            DeleteLink(output,input);
+            RemoveLink(output,input);
         }
 
         public LogicalLink GetLink(Output output, Input input)
@@ -503,7 +503,7 @@ namespace MyNetSensors.LogicalNodes
         {
             LogEngineInfo("Remove all nodes and links");
 
-            db?.DropNodes();
+            db?.RemoveAllNodes();
 
             links = new List<LogicalLink>();
             nodes = new List<LogicalNode>();

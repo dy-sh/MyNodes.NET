@@ -112,7 +112,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DropMessages()
+        public void RemoveAllMessages()
         {
             newMessages.Clear();
 
@@ -127,7 +127,7 @@ namespace MyNetSensors.Repositories.Dapper
       
         private void OnClearMessages()
         {
-            DropMessages();
+            RemoveAllMessages();
         }
 
    

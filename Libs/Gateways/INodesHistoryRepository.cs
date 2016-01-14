@@ -10,8 +10,8 @@ namespace MyNetSensors.Gateways
     public interface INodesHistoryRepository
     {
         List<SensorData> GetSensorHistory(int nodeId, int sensorId);
-        void DropSensorHistory(int nodeId, int sensorId);
-        void DropHistory();
+        void ClearSensorHistory(int nodeId, int sensorId);
+        void ClearAllHistory();
 
         void ConnectToGateway(Gateway gateway);
         bool IsDbExist();

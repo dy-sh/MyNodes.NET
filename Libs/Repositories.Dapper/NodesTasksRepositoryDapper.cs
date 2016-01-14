@@ -170,7 +170,7 @@ namespace MyNetSensors.Repositories.Dapper
             return list;
         }
 
-        public void DeleteTask(int id)
+        public void RemoveTask(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -180,7 +180,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteTasks(int nodeId, int sensorId)
+        public void RemoveTasks(int nodeId, int sensorId)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -191,7 +191,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        public void DeleteCompleted()
+        public void RemoveCompletedTasks()
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -200,7 +200,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteCompleted(int nodeId, int sensorId)
+        public void RemoveCompletedTasks(int nodeId, int sensorId)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -210,7 +210,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DropTasks()
+        public void RemoveAllTasks()
         {
             using (var db = new SqlConnection(connectionString))
             {

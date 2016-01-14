@@ -11,7 +11,7 @@ namespace MyNetSensors.LogicalNodesUI
     public class LogicalNodesUIEngine
     {
         public event LogicalNodeUIEventHandler OnNewUINodeEvent;
-        public event LogicalNodeUIEventHandler OnUINodeDeleteEvent;
+        public event LogicalNodeUIEventHandler OnRemoveUINodeEvent;
         public event LogicalNodeUIEventHandler OnUINodeUpdatedEvent;
 
         private static LogicalNodesEngine engine;
@@ -20,7 +20,7 @@ namespace MyNetSensors.LogicalNodesUI
         {
             LogicalNodesUIEngine.engine = engine;
             engine.OnNewNodeEvent += OnNewNodeEvent;
-            engine.OnNodeDeleteEvent += OnNodeDeleteEvent;
+            engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
             engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
             engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
@@ -52,10 +52,10 @@ namespace MyNetSensors.LogicalNodesUI
                 OnUINodeUpdatedEvent?.Invoke((LogicalNodeUI)node);
         }
 
-        private void OnNodeDeleteEvent(LogicalNode node)
+        private void OnRemoveNodeEvent(LogicalNode node)
         {
             if (node is LogicalNodeUI)
-                OnUINodeDeleteEvent?.Invoke((LogicalNodeUI)node);
+                OnRemoveUINodeEvent?.Invoke((LogicalNodeUI)node);
         }
 
         private void OnNewNodeEvent(LogicalNode node)

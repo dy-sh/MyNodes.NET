@@ -15,7 +15,7 @@ namespace MyNetSensors.Gateways
 
         void AddMessage(Message message);
         List<Message> GetMessages();
-        void DropMessages();
+        void RemoveAllMessages();
 
 
         bool IsDbExist();

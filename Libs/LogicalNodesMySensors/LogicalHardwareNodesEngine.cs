@@ -22,19 +22,19 @@ namespace MyNetSensors.LogicalNodesMySensors
             gateway.OnNodeUpdatedEvent += CreateOrUpdateNode;
             gateway.OnNewSensorEvent += CreateOrUpdateSensor;
             gateway.OnSensorUpdatedEvent += CreateOrUpdateSensor;
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
-            gateway.OnDeleteNodeEvent += OnDeleteNodeEvent;
+            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
+            gateway.OnRemoveNodeEvent += OnRemoveNodeEvent;
             CreateAndAddHardwareNodes();
         }
 
-        private void OnDeleteNodeEvent(Node node)
+        private void OnRemoveNodeEvent(Node node)
         {
             LogicalHardwareNode oldNode = GetHardwareNode(node.Id);
             if (oldNode != null)
                 engine.RemoveNode(oldNode);
         }
 
-        private void OnClearNodesListEvent()
+        private void OnRemoveAllNodesEvent()
         {
             engine.RemoveAllNodesAndLinks();
         }

@@ -125,7 +125,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult ClearHistory(int id, int id2)
         {
             Sensor sensor = gatewayDb.GetSensor(id, id2);
-            historyDb.DropSensorHistory(sensor.nodeId, sensor.sensorId);
+            historyDb.ClearSensorHistory(sensor.nodeId, sensor.sensorId);
 
             return RedirectToAction("Chart", new { id = id, id2 = id2 });
         }

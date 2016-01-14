@@ -21,11 +21,11 @@ namespace MyNetSensors.NodesTasks
         NodeTask GetTask(int id);
         List<NodeTask> GetTasks(int nodeId, int sensorId);
         List<NodeTask> GetAllTasks();
-        void DeleteTask(int id);
-        void DeleteTasks(int nodeId,int sensorId);
-        void DeleteCompleted();
-        void DeleteCompleted(int nodeId, int sensorId);
-        void DropTasks();
+        void RemoveTask(int id);
+        void RemoveTasks(int nodeId,int sensorId);
+        void RemoveCompletedTasks();
+        void RemoveCompletedTasks(int nodeId, int sensorId);
+        void RemoveAllTasks();
         void DisableTasks();
     }
 }

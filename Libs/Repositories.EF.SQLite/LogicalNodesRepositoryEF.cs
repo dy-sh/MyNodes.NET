@@ -98,7 +98,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             return nodes;
         }
 
-        public void DeleteNode(string id)
+        public void RemoveNode(string id)
         {
             LogicalNodeSerialized node = db.LogicalNodesSerialized.FirstOrDefault(x => x.Id == id);
             if (node==null)
@@ -107,7 +107,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DropNodes()
+        public void RemoveAllNodes()
         {
             db.LogicalNodesSerialized.RemoveRange(db.LogicalNodesSerialized);
             db.SaveChanges();
@@ -155,7 +155,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             return db.LogicalLinks.ToList();
         }
 
-        public void DeleteLink(string id)
+        public void RemoveLink(string id)
         {
             LogicalLink link = db.LogicalLinks.FirstOrDefault(x => x.Id == id);
             if (link == null)
@@ -164,7 +164,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DropLinks()
+        public void RemoveAllLinks()
         {
             db.LogicalLinks.RemoveRange(db.LogicalLinks);
             db.SaveChanges();

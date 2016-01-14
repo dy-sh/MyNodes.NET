@@ -115,7 +115,7 @@ namespace MyNetSensors.WebController.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.DeleteNode(node.Id);
 
-            gatewayDb.DeleteNode(node.Id);
+            gatewayDb.RemoveNode(node.Id);
 
 
 
@@ -123,8 +123,8 @@ namespace MyNetSensors.WebController.Controllers
 
             foreach (var sensor in node.sensors)
             {
-                historyDb.DropSensorHistory(sensor.nodeId,sensor.sensorId);
-                tasksDb.DeleteTasks(sensor.nodeId, sensor.sensorId);
+                historyDb.ClearSensorHistory(sensor.nodeId,sensor.sensorId);
+                tasksDb.RemoveTasks(sensor.nodeId, sensor.sensorId);
             }
 
             gatewayApi.UpdateNodesTasks();

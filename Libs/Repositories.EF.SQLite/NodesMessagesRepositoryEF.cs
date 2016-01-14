@@ -86,7 +86,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void DropMessages()
+        public void RemoveAllMessages()
         {
             db.Messages.RemoveRange(db.Messages);
             db.SaveChanges();
@@ -95,7 +95,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private void OnClearMessages()
         {
-            DropMessages();
+            RemoveAllMessages();
         }
 
      

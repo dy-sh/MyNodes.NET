@@ -184,7 +184,7 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
             LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
-            engine.DeleteLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+            engine.RemoveLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             return true;
         }
 

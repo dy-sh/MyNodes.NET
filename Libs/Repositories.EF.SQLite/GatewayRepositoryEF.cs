@@ -59,7 +59,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             foreach (var node in nodes)
                 gateway.AddNode(node);
 
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
 
             gateway.OnNewNodeEvent += OnNodeUpdated;
             gateway.OnNodeUpdatedEvent += OnNodeUpdated;
@@ -88,7 +88,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void DropNodes()
+        public void RemoveAllNodes()
         {
             db.Sensors.RemoveRange(db.Sensors);
             db.Nodes.RemoveRange(db.Nodes);
@@ -96,9 +96,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        private void OnClearNodesListEvent()
+        private void OnRemoveAllNodesEvent()
         {
-            DropNodes();
+            RemoveAllNodes();
         }
 
 
@@ -285,7 +285,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DeleteNode(int id)
+        public void RemoveNode(int id)
         {
             Node node = db.Nodes.FirstOrDefault(x => x.Id == id);
             if (node == null)

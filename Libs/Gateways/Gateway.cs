@@ -38,14 +38,14 @@ namespace MyNetSensors.Gateways
 
         public event MessageEventHandler OnMessageRecievedEvent;
         public event MessageEventHandler OnMessageSendEvent;
-        public event NodeEventHandler OnDeleteNodeEvent;
+        public event NodeEventHandler OnRemoveNodeEvent;
         public event NodeEventHandler OnNewNodeEvent;
         public event NodeEventHandler OnNodeUpdatedEvent;
         public event NodeEventHandler OnNodeLastSeenUpdatedEvent;
         public event NodeEventHandler OnNodeBatteryUpdatedEvent;
         public event SensorEventHandler OnNewSensorEvent;
         public event SensorEventHandler OnSensorUpdatedEvent;
-        public event Action OnClearNodesListEvent;
+        public event Action OnRemoveAllNodesEvent;
         public event Action OnDisconnectedEvent;
         public event Action OnUnexpectedlyDisconnectedEvent;
         public event Action OnConnectedEvent;
@@ -577,7 +577,7 @@ namespace MyNetSensors.Gateways
         {
             nodes.Clear();
 
-            OnClearNodesListEvent?.Invoke();
+            OnRemoveAllNodesEvent?.Invoke();
         }
 
         public async Task SendRebootToAllNodes()
@@ -649,7 +649,7 @@ namespace MyNetSensors.Gateways
         {
             Node oldNode = GetNode(nodeId);
 
-            OnDeleteNodeEvent?.Invoke(oldNode);
+            OnRemoveNodeEvent?.Invoke(oldNode);
 
             if (oldNode != null)
                 nodes.Remove(oldNode);

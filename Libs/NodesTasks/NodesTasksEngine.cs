@@ -29,7 +29,7 @@ namespace MyNetSensors.NodesTasks
             this.db = db;
             this.gateway = gateway;
 
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
 
             updateTasksTimer.Elapsed += UpdateTasks;
             updateTasksTimer.Interval = updateTasksInterval;
@@ -75,10 +75,10 @@ namespace MyNetSensors.NodesTasks
             updateTasksTimer.Start();
         }
 
-        private void OnClearNodesListEvent()
+        private void OnRemoveAllNodesEvent()
         {
             tasks.Clear();
-            db.DropTasks();
+            db.RemoveAllTasks();
         }
 
         private void Execute(NodeTask task)

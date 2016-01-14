@@ -121,7 +121,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public void DropSensorHistory(int nodeId, int sensorId)
+        public void ClearSensorHistory(int nodeId, int sensorId)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -139,7 +139,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public void DropHistory()
+        public void ClearAllHistory()
         {
             using (var db = new SqlConnection(connectionString))
             {

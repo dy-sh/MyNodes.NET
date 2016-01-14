@@ -122,7 +122,7 @@ namespace MyNetSensors.WebController.Controllers
             //waiting for all history writings finished
             await Task.Delay(2000);
 
-            SerialController.historyDb.DropHistory();
+            SerialController.historyDb.ClearAllHistory();
 
             return Json(true);
 
@@ -142,7 +142,7 @@ namespace MyNetSensors.WebController.Controllers
         {
             DisableTasks();
             await Task.Delay(1000);
-            SerialController.nodesTasksDb.DropTasks();
+            SerialController.nodesTasksDb.RemoveAllTasks();
 
             UpdateNodesTasks();
              return Json(true);

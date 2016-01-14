@@ -19,15 +19,15 @@ namespace MyNetSensors.LogicalNodes
         void UpdateNode(LogicalNode node);
         LogicalNode GetNode(string id);
         List<LogicalNode> GetAllNodes();
-        void DeleteNode(string id);
-        void DropNodes();
+        void RemoveNode(string id);
+        void RemoveAllNodes();
 
         string AddOrUpdateLink(LogicalLink link);
         string AddLink(LogicalLink link);
         void UpdateLink(LogicalLink link);
         LogicalLink GetLink(string id);
         List<LogicalLink> GetAllLinks();
-        void DeleteLink(string id);
-        void DropLinks();
+        void RemoveLink(string id);
+        void RemoveAllLinks();
     }
 }

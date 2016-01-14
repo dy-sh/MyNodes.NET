@@ -225,7 +225,7 @@ namespace MyNetSensors.WebController.Controllers
             if (task == null)
                 return new HttpNotFoundResult();
 
-            tasksDb.DeleteTask(id);
+            tasksDb.RemoveTask(id);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateNodesTasks();
@@ -299,7 +299,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                tasksDb.DeleteTasks(id.Value, id2.Value);
+                tasksDb.RemoveTasks(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateNodesTasks();
@@ -310,7 +310,7 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (RouteData.Values.Count <= 2)
             {
-                tasksDb.DropTasks();
+                tasksDb.RemoveAllTasks();
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateNodesTasks();
@@ -332,7 +332,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (sensor == null)
                     return new HttpNotFoundResult();
 
-                tasksDb.DeleteCompleted(id.Value, id2.Value);
+                tasksDb.RemoveCompletedTasks(id.Value, id2.Value);
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateNodesTasks();
@@ -343,7 +343,7 @@ namespace MyNetSensors.WebController.Controllers
             }
             else if (RouteData.Values.Count <= 2)
             {
-                tasksDb.DeleteCompleted();
+                tasksDb.RemoveCompletedTasks();
 
                 GatewayAPIController gatewayApi = new GatewayAPIController();
                 gatewayApi.UpdateNodesTasks();

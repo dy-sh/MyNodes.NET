@@ -122,14 +122,14 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
-        public void DropSensorHistory(int nodeId, int sensorId)
+        public void ClearSensorHistory(int nodeId, int sensorId)
         {
             List<SensorData> data = GetSensorHistory(nodeId, sensorId);
             db.SensorsData.RemoveRange(data);
             db.SaveChanges();
         }
 
-        public void DropHistory()
+        public void ClearAllHistory()
         {
             db.SensorsData.RemoveRange(db.SensorsData);
             db.SaveChanges();

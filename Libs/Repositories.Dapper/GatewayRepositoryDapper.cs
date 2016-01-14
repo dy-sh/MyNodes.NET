@@ -57,7 +57,7 @@ namespace MyNetSensors.Repositories.Dapper
             foreach (var node in nodes)
                 gateway.AddNode(node);
 
-            gateway.OnClearNodesListEvent += OnClearNodesListEvent;
+            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
 
             gateway.OnNewNodeEvent += OnNodeUpdated;
             gateway.OnNodeUpdatedEvent += OnNodeUpdated;
@@ -140,7 +140,7 @@ namespace MyNetSensors.Repositories.Dapper
 
     
 
-        public void DropNodes()
+        public void RemoveAllNodes()
         {
             updatedNodesId.Clear();
 
@@ -155,9 +155,9 @@ namespace MyNetSensors.Repositories.Dapper
 
       
 
-        private void OnClearNodesListEvent()
+        private void OnRemoveAllNodesEvent()
         {
-            DropNodes();
+            RemoveAllNodes();
         }
 
 
@@ -521,7 +521,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DeleteNode(int id)
+        public void RemoveNode(int id)
         {
             using (var db = new SqlConnection(connectionString))
             {

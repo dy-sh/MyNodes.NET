@@ -151,7 +151,7 @@ namespace MyNetSensors.Repositories.Dapper
             return nodes;
         }
 
-        public void DeleteNode(string id)
+        public void RemoveNode(string id)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -160,7 +160,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DropNodes()
+        public void RemoveAllNodes()
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -240,7 +240,7 @@ namespace MyNetSensors.Repositories.Dapper
             return links;
         }
 
-        public void DeleteLink(string id)
+        public void RemoveLink(string id)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -249,7 +249,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void DropLinks()
+        public void RemoveAllLinks()
         {
             using (var db = new SqlConnection(connectionString))
             {

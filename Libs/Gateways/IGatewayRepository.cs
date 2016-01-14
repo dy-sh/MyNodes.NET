@@ -27,7 +27,7 @@ namespace MyNetSensors.Gateways
         List<Node> GetNodes();
         Node GetNode(int id);
         Sensor GetSensor(int nodeId, int sensorId);
-        void DropNodes();
+        void RemoveAllNodes();
         
 
         bool IsDbExist();
@@ -36,7 +36,7 @@ namespace MyNetSensors.Gateways
 
         void UpdateNodeSettings(Node node);
         void UpdateSensorSettings(Sensor sensor);
-        void DeleteNode(int id);
+        void RemoveNode(int id);
 
     }
 }

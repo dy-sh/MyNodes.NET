@@ -108,7 +108,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         }
 
-        public void DeleteTask(int id)
+        public void RemoveTask(int id)
         {
             NodeTask task = db.NodesTasks.FirstOrDefault(x => x.Id == id);
             if (task == null)
@@ -117,7 +117,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DeleteTasks(int nodeId, int sensorId)
+        public void RemoveTasks(int nodeId, int sensorId)
         {
             List<NodeTask> tasks = GetTasks(nodeId, sensorId);
             //if (!tasks.Any())
@@ -128,7 +128,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
-        public void DeleteCompleted()
+        public void RemoveCompletedTasks()
         {
             List<NodeTask> tasks = db.NodesTasks.Where(x => x.isCompleted == true).ToList();
 
@@ -136,7 +136,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DeleteCompleted(int nodeId, int sensorId)
+        public void RemoveCompletedTasks(int nodeId, int sensorId)
         {
             List<NodeTask> tasks = db.NodesTasks.Where(
                 x => x.nodeId == nodeId
@@ -147,7 +147,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void DropTasks()
+        public void RemoveAllTasks()
         {
             db.NodesTasks.RemoveRange(db.NodesTasks);
             db.SaveChanges();
