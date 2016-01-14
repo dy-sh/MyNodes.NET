@@ -573,7 +573,7 @@ namespace MyNetSensors.Gateways
         }
 
 
-        public void ClearNodesList()
+        public void RemoveAllNodes()
         {
             nodes.Clear();
 
@@ -645,7 +645,7 @@ namespace MyNetSensors.Gateways
             }
         }
 
-        public void DeleteNode(int nodeId)
+        public void RemoveNode(int nodeId)
         {
             Node oldNode = GetNode(nodeId);
 

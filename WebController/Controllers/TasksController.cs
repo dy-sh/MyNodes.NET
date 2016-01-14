@@ -218,7 +218,7 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List");
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Remove(int id)
         {
             NodeTask task = tasksDb.GetTask(id);
 
@@ -290,7 +290,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public ActionResult DeleteAll(int? id = null, int? id2 = null)
+        public ActionResult RemoveAll(int? id = null, int? id2 = null)
         {
             if (id != null && id2 != null)
             {
@@ -323,7 +323,7 @@ namespace MyNetSensors.WebController.Controllers
             return new HttpNotFoundResult();
         }
 
-        public ActionResult DeleteCompleted(int? id = null, int? id2 = null)
+        public ActionResult RemoveCompleted(int? id = null, int? id2 = null)
         {
             if (id != null && id2 != null)
             {

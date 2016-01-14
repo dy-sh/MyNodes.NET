@@ -91,7 +91,7 @@
                             }
                         }
                         <a asp-action="Edit" class="ui button" asp-route-id="@task.Id"><b>Edit</b></a>
-                        <a asp-action="Delete" class="ui button" asp-route-id="@task.Id"><b>Delete</b></a>
+                        <a asp-action="Remove" class="ui button" asp-route-id="@task.Id"><b>Delete</b></a>
                     </div>
 
                     @if (task.isCompleted)
@@ -127,8 +127,8 @@
             }
             <div class="ui right aligned attached segment">
                 <div class="ui small buttons">
-                <a asp-controller="Tasks" asp-action="DeleteAll" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui button">Delete all</a>
-                    <a asp-controller="Tasks" asp-action="DeleteCompleted" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui primary button">Delete completed</a>
+                <a asp-controller="Tasks" asp-action="RemoveAll" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui button">Delete all</a>
+                    <a asp-controller="Tasks" asp-action="RemoveCompleted" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui primary button">Delete completed</a>
                     </div>
             </div>
         }

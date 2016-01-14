@@ -174,7 +174,7 @@ namespace MyNetSensors.WebController.Controllers
 
     
 
-        public bool DeleteLink(Link link)
+        public bool RemoveLink(Link link)
         {
             if (engine == null)
                 return false;
@@ -223,7 +223,7 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool DeleteNode(LiteGraph.Node node)
+        public bool RemoveNode(LiteGraph.Node node)
         {
             if (engine == null)
                 return false;

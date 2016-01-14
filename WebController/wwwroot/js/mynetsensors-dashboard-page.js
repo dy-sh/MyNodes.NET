@@ -30,7 +30,7 @@ $(function () {
         hardwareStateChanged(false);
     };
 
-    clientsHub.client.OnClearNodesListEvent = function () {
+    clientsHub.client.OnRemoveAllNodesEvent = function () {
         var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
         $('#panelsContainer').html(null);
     };
@@ -44,8 +44,8 @@ $(function () {
         updateNode(node);
     };
 
-    clientsHub.client.OnUINodeDeleteEvent = function (sensor) {
-        deleteNode(sensor);
+    clientsHub.client.OnUINodeRemoveEvent = function (sensor) {
+        removeNode(sensor);
     };
 
 
@@ -409,7 +409,7 @@ function updateNode(node) {
 
 
 
-function deleteNode(node) {
+function removeNode(node) {
     $('#node' + node.Id).fadeOut(elementsFadeTime, function () { $(this).remove(); });
 }
 

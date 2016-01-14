@@ -33,7 +33,7 @@ $(function () {
         hardwareStateChanged(false);
     };
 
-    clientsHub.client.OnClearNodesListEvent = function () {
+    clientsHub.client.OnRemoveAllNodesEvent = function () {
         var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
         $('#nodesContainer').html(null);
     };

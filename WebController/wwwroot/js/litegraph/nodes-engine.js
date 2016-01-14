@@ -42,7 +42,7 @@ $(function () {
 
 
 
-    clientsHub.client.OnLogicalNodeDeleteEvent = function (nodeId) {
+    clientsHub.client.OnLogicalNodeRemoveEvent = function (nodeId) {
         var oldNode = graph.getNodeById(nodeId);
         graph.remove(oldNode);
         graph.setDirtyCanvas(true, true);
@@ -57,7 +57,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnDeleteLinkEvent = function (link) {
+    clientsHub.client.OnRemoveLinkEvent = function (link) {
         var node = graph.getNodeById(link.origin_id);
         var targetNode = graph.getNodeById(link.target_id);
         node.disconnectOutput(link.target_slot, targetNode);
@@ -190,10 +190,10 @@ function send_create_link(link) {
     });
 };
 
-function send_delete_link(link) {
+function send_remove_link(link) {
 
     $.ajax({
-        url: '/NodesEditorAPI/DeleteLink',
+        url: '/NodesEditorAPI/RemoveLink',
         type: 'POST',
         data: { 'link': link }
     }).done(function () {
@@ -213,11 +213,11 @@ function send_create_node(node) {
     });
 };
 
-function send_delete_node(node) {
+function send_remove_node(node) {
 
     var serializedNode = node.serialize();
     $.ajax({
-        url: '/NodesEditorAPI/DeleteNode',
+        url: '/NodesEditorAPI/RemoveNode',
         type: 'POST',
         data: { 'node': serializedNode }
     }).done(function () {

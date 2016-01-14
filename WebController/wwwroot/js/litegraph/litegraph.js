@@ -2742,7 +2742,7 @@ LGraphCanvas.prototype.processMouseDown = function(e)
 								//this.dirty_bgcanvas = true;
 
 							    //derwish added
-							    send_delete_link(graph.links[input.link]);
+							    send_remove_link(graph.links[input.link]);
 
 								skip_action = true;
 							}
@@ -4524,7 +4524,7 @@ LGraphCanvas.onMenuNodeShapes = function(node,e)
 LGraphCanvas.onMenuNodeRemove = function(node)
 {
 	if(node.removable == false) return;
-	send_delete_node(node);
+	send_remove_node(node);
     //derwish remove
 	//node.graph.remove(node);
 	//node.setDirtyCanvas(true, true);

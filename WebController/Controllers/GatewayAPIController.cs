@@ -77,9 +77,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool ClearNodes()
+        public bool RemoveAllNodes()
         {
-            gateway.ClearNodesList();
+            gateway.RemoveAllNodes();
             return true;
         }
 
@@ -91,11 +91,11 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool DeleteNode(int nodeId)
+        public bool RemoveNode(int nodeId)
         {
             if (gateway.GetNode(nodeId) == null)
                 return false;
-            gateway.DeleteNode(nodeId);
+            gateway.RemoveNode(nodeId);
             return true;
         }
 
@@ -104,7 +104,7 @@ namespace MyNetSensors.WebController.Controllers
         {
             await DropHistory();
 
-            ClearNodes();
+            RemoveAllNodes();
 
             return true;
         }

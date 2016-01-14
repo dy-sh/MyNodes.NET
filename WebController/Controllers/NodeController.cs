@@ -105,7 +105,7 @@ namespace MyNetSensors.WebController.Controllers
             // return View(node);
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Remove(int id)
         {
             Node node = gatewayDb.GetNode(id);
             if (node == null)
@@ -113,7 +113,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.DeleteNode(node.Id);
+            gatewayApi.RemoveNode(node.Id);
 
             gatewayDb.RemoveNode(node.Id);
 

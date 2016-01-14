@@ -93,7 +93,7 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnRemoveUiNodeEvent(LogicalNodeUI node)
         {
-            hub.Clients.All.OnUINodeDeleteEvent(node);
+            hub.Clients.All.OnUINodeRemoveEvent(node);
         }
 
         private static void OnNewUINodeEvent(LogicalNodeUI node)
@@ -118,7 +118,7 @@ namespace MyNetSensors.WebController.Code
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLogicalNodeToLitegraphLink(link);
-            hub.Clients.All.OnDeleteLinkEvent(liteGraphLink);
+            hub.Clients.All.OnRemoveLinkEvent(liteGraphLink);
         }
 
         private static void OnLinksUpdatedEvent(List<LogicalLink> link)
@@ -130,7 +130,7 @@ namespace MyNetSensors.WebController.Code
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertLogicalNodeToLitegraphNode(node);
-            hub.Clients.All.OnLogicalNodeDeleteEvent(liteGraphNode.id);
+            hub.Clients.All.OnLogicalNodeRemoveEvent(liteGraphNode.id);
         }
 
         private static void OnLogicalNodeUpdatedEvent(LogicalNode node)
@@ -185,7 +185,7 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnRemoveAllNodesEvent()
         {
-            hub.Clients.All.OnClearNodesListEvent();
+            hub.Clients.All.OnRemoveAllNodesEvent();
         }
 
         private static void OnDisconnectedEvent()
