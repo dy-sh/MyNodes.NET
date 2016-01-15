@@ -96,7 +96,20 @@ namespace MyNetSensors.LogicalNodesUI
             LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
         }
 
+        public List<LogicalNodePanel> GetPanels()
+        {
+            return engine.nodes
+                .Where(n => n is LogicalNodePanel)
+                .Cast<LogicalNodePanel>()
+                .ToList();
+        }
 
+        public LogicalNodePanel GetPanel(string id)
+        {
+            LogicalNode node = engine.GetNode(id);
+
+            return node as LogicalNodePanel;
+        }
 
 
         public List<LogicalNodeUI> GetUINodes()
@@ -207,5 +220,7 @@ namespace MyNetSensors.LogicalNodesUI
             LogicalNodeUITextBox node = (LogicalNodeUITextBox)n;
             node.Send(value);
         }
+
+
     }
 }

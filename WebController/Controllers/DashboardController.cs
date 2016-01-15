@@ -21,6 +21,25 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public List<LogicalNodePanel> GetPanels()
+        {
+            if (engineUI == null)
+                return null;
+
+            return engineUI.GetPanels();
+        }
+
+        public string GetNameForPanel(string id)
+        {
+            if (engineUI == null)
+                return null;
+
+            LogicalNodePanel panel = engineUI.GetPanel(id);
+            if (panel == null)
+                return null;
+            else return panel.Name;
+        }
+
         public List<LogicalNodeUI> GetUINodes()
         {
             if (engineUI == null)

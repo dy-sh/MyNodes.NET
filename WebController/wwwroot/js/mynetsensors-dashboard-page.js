@@ -150,8 +150,19 @@ function createPanel(node) {
     //create new
     $(panelTemplate(node)).hide().appendTo("#panelsContainer").fadeIn(elementsFadeTime);
 
-    if (node.PanelId  ==MAIN_PANEL_ID )
+
+    if (node.PanelId == MAIN_PANEL_ID)
         $('#panelTitle-' + node.PanelId).html("Main Panel");
+    else {
+        $.ajax({
+            url: "/DashBoard/GetNameForPanel/",
+            type: "POST",
+            data: { 'id': node.PanelId },
+            success: function (panelName) {
+                $('#panelTitle-' + node.PanelId).html(panelName);
+            }
+        });
+    }
 }
 
 
