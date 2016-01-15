@@ -319,7 +319,13 @@ namespace MyNetSensors.LogicalNodes
                 LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
+
             Input input = GetInput(node.Id);
+
+            LogicalLink link = GetLinkForInput(input);
+            if (link!=null)
+                RemoveLink(link);
+
             panel.Inputs.Remove(input);
             UpdateNode(panel);
             return true;
@@ -333,7 +339,13 @@ namespace MyNetSensors.LogicalNodes
                 LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
+
             Output output = GetOutput(node.Id);
+
+            List<LogicalLink> links = GetLinksForOutput(output);
+            foreach (var link in links)
+                RemoveLink(link);
+
             panel.Outputs.Remove(output);
             UpdateNode(panel);
             return true;
@@ -468,19 +480,6 @@ namespace MyNetSensors.LogicalNodes
         }
 
 
-        //public void RemoveLink(string outputId, string inputId)
-        //{
-        //    Input input = GetInput(inputId);
-        //    Output output = GetOutput(outputId);
-
-        //    if (input == null || output == null)
-        //    {
-        //        LogEngineError($"Can`t remove link from [{outputId}] to [{inputId}]. Does not exist.");
-        //        return;
-        //    }
-
-        //    RemoveLink(output,input);
-        //}
 
         public void RemoveLink(Output output, Input input)
         {
