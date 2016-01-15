@@ -20,12 +20,38 @@
     Panel.title = "Panel";
     Panel.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
-        return [{
-            content: "Open", callback:
-                function () {
-                    window.location = "/NodesEditor/?panelId=" + that.id;
-                }
-        }, null];//null for horizontal line
+        return [
+            { content: "Open", callback: function () { window.location = "/NodesEditor/?panelId=" + that.id; } },
+            null, //null for horizontal line
+            { content: "Settings", callback: function () { PanelSettings(that) } },
+            null
+        ];
+    }
+    function PanelSettings(node) {
+        $('#node-settings-title').html(node.type);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(node.properties['panelname']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/PanelSettings/",
+                    type: "POST",
+                    data: {
+                        panelname: $('#node-settings-name').val(),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     LiteGraph.registerNodeType("Main/Panel", Panel);
 
@@ -96,7 +122,7 @@
 
 
     function UINodeSettings(node) {
-        $('#node-settings-title').html(node.title);
+        $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
             '<div class="ui form"><div class="fields">' +
@@ -240,8 +266,8 @@
         var that = this;
         return [{ content: "Settings", callback: function () { UISliderSettings(that) } }, null];
     }
-    function UISliderSettings(that) {
-        $('#node-settings-title').html(that.title);
+    function UISliderSettings(node) {
+        $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
             '<div class="ui form"><div class="fields">' +
@@ -251,9 +277,9 @@
             '</div></div>'
         );
 
-        $('#node-settings-name').val(that.properties['name']);
-        $('#node-settings-min').val(that.properties['min']);
-        $('#node-settings-max').val(that.properties['max']);
+        $('#node-settings-name').val(node.properties['name']);
+        $('#node-settings-min').val(node.properties['min']);
+        $('#node-settings-max').val(node.properties['max']);
 
 
         $('#node-settings-panel').modal({
@@ -266,7 +292,7 @@
                         name: $('#node-settings-name').val(),
                         min: $('#node-settings-min').val(),
                         max: $('#node-settings-max').val(),
-                        id: that.id
+                        id: node.id
                     }
                 });
             }
@@ -324,8 +350,8 @@
         var that = this;
         return [{ content: "Settings", callback: function () { ConstantSettings(that) } }, null];
     }
-    function ConstantSettings(that) {
-        $('#node-settings-title').html(that.title);
+    function ConstantSettings(node) {
+        $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
             '<div class="ui form"><div class="fields">' +
@@ -333,7 +359,7 @@
             '</div></div>'
         );
 
-        $('#node-settings-value').val(that.properties['value']);
+        $('#node-settings-value').val(node.properties['value']);
 
 
         $('#node-settings-panel').modal({
@@ -344,7 +370,7 @@
                     type: "POST",
                     data: {
                         value: $('#node-settings-value').val(),
-                        id: that.id
+                        id: node.id
                     }
                 });
             }

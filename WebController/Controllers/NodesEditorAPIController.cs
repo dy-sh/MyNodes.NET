@@ -123,6 +123,12 @@ namespace MyNetSensors.WebController.Controllers
                 node.properties["value"] = n.Value;
             }
 
+            if (logicalNode is LogicalNodePanel)
+            {
+                LogicalNodePanel n = (LogicalNodePanel)logicalNode;
+                node.properties["panelname"] = n.Name;
+            }
+
             return node;
         }
 
@@ -297,7 +303,21 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool PanelSettings(string id, string panelname)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Panel [{id}]. Does not exist.");
+                return false;
+            }
 
+            LogicalNodePanel node = (LogicalNodePanel)n;
+            node.Name = panelname;
+            engine.UpdateNode(node);
+
+            return true;
+        }
 
         public bool UINodeSettings(string id, string name)
         {

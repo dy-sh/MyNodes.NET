@@ -1,4 +1,5 @@
-﻿@{
+﻿@using MyNetSensors.LogicalNodes
+@{
     Layout = null;
     ViewBag.Title = "Nodes Editor";
 }
@@ -40,12 +41,12 @@
         <div class="ui tiny buttons">
             <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
             @{
-                List<string> panelsIdStack = ViewBag.panelsIdStack;
-                if (panelsIdStack != null && panelsIdStack.Any())
+                List<LogicalNodePanel> panelsStack = ViewBag.panelsStack;
+                if (panelsStack != null && panelsStack.Any())
                 {
-                    foreach (string panelId in panelsIdStack)
+                    foreach (LogicalNodePanel panel in panelsStack)
                     {
-                        <a asp-controller="NodesEditor" asp-route-panelId="@panelId" class="ui inverted tiny basic button"> Panel</a>
+                        <a asp-controller="NodesEditor" asp-route-panelId="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
                     }
                 }
             }

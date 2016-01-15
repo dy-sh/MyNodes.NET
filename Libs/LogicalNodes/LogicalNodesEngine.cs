@@ -183,6 +183,11 @@ namespace MyNetSensors.LogicalNodes
             }
 
 
+            if (node is LogicalNodePanel)
+            {
+                if (!AddPanel((LogicalNodePanel)node))
+                    return;
+            }
             if (node is LogicalNodePanelInput)
             {
                 if (!AddPanelInput((LogicalNodePanelInput)node))
@@ -203,6 +208,26 @@ namespace MyNetSensors.LogicalNodes
             OnNewNodeEvent?.Invoke(node);
         }
 
+
+
+        private string GeneratePanelName(LogicalNodePanel node)
+        {
+            //auto naming
+            List<LogicalNodePanel> nodes = GetPanelNodes();
+            List<string> names = nodes.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"{node.Name} {i}"))
+                    return $"{node.Name} {i}";
+            }
+            return null;
+        }
+
+        private bool AddPanel(LogicalNodePanel node)
+        {
+            node.Name = GeneratePanelName(node);
+            return true;
+        }
 
         private bool AddPanelInput(LogicalNodePanelInput node)
         {
@@ -308,6 +333,11 @@ namespace MyNetSensors.LogicalNodes
         private List<LogicalNode> GetNodesForPanel(LogicalNodePanel node)
         {
             return nodes.Where(n => n.PanelId == node.Id).ToList();
+        }
+
+        private List<LogicalNodePanel> GetPanelNodes()
+        {
+            return nodes.Where(n=>n is LogicalNodePanel).Cast<LogicalNodePanel>().ToList();
         }
 
 

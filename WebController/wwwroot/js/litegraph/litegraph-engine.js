@@ -227,7 +227,8 @@ function send_remove_link(link) {
 };
 
 function send_create_node(node) {
-    node.size = null;
+    node.size = null;//reset size for autosizing
+
     var serializedNode = node.serialize();
     $.ajax({
         url: '/NodesEditorAPI/CreateNode',
@@ -312,6 +313,9 @@ function createOrUpdateNode(node) {
         if (node.properties['name'] != null)
             newNode.title += " [" + node.properties['name'] + "]";
 
+        if (node.properties['panelname'] != null)
+            newNode.title = node.properties['panelname'];
+
         newNode.inputs = node.inputs;
         newNode.outputs = node.outputs;
         newNode.id = node.id;
@@ -336,11 +340,13 @@ function createOrUpdateNode(node) {
         graph.add(newNode);
     } else {
         //update
-        //newNode.title = node.title + " [" + node.id+"]";
         oldNode.title = node.title;
 
         if (node.properties['name'] != null)
             oldNode.title += " [" + node.properties['name'] + "]";
+
+        if (node.properties['panelname'] != null)
+            oldNode.title = node.properties['panelname'];
 
         oldNode.inputs = node.inputs;
         oldNode.outputs = node.outputs;

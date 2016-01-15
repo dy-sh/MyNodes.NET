@@ -13,10 +13,13 @@ namespace MyNetSensors.LogicalNodes
 {
     public class LogicalNodePanel:LogicalNode
     {
+        public string Name { get; set; }
+
         public LogicalNodePanel() : base(0, 0)
         {
             this.Title = "Panel";
             this.Type = "Main/Panel";
+            this.Name = "Panel";
         }
 
         public override void Loop()
