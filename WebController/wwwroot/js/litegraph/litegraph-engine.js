@@ -301,15 +301,6 @@ function onReturnNodes(nodes) {
 
 function createOrUpdateNode(node) {
 
-    //var currentGraph = editor.graphcanvas.graph;
-    ////check node subgraph is current graph
-    //if (node.subgraph_id && !currentGraph._is_subgraph)
-    //    return;
-    //else if (node.subgraph_id && currentGraph._is_subgraph && node.subgraph_id != currentGraph._subgraph_node.id)
-    //    return;
-
-    
-
     var oldNode = graph.getNodeById(node.id);
     if (!oldNode) {
         //create new

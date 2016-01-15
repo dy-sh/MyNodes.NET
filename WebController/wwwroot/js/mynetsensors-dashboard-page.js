@@ -215,7 +215,7 @@ function createNode(node) {
         $(sliderTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         var slider = $("#slider-" + node.Id)[0];
-        noUiSlider.create(slider, { start: 0, connect: 'lower', animate: false, range: { 'min': 0, 'max': 100 } });
+        noUiSlider.create(slider, { start: 0, connect: 'lower', animate: false, range: { 'min': node.Min, 'max': node.Max } });
 
         slidersArray.push({
             Id: node.Id,
@@ -283,6 +283,9 @@ function createNode(node) {
 
     updateNode(node);
 }
+
+
+
 
 
 
@@ -370,7 +373,15 @@ function updateNode(node) {
 
     if (node.Type == "UI/Slider") {
         $('#sliderName-' + node.Id).html(node.Name);
+        $("#slider-" + node.Id)[0].noUiSlider.updateOptions({
+            range: {
+                'min': node.Min,
+                'max': node.Max
+            }
+        });;
+
         $("#slider-" + node.Id)[0].noUiSlider.set(node.Value);
+
         updateSliderInArray(node.Id, node.Value);
     }
 
