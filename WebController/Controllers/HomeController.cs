@@ -23,7 +23,7 @@ namespace MyNetSensors.WebController.Controllers
             if (firstRun)
                 return RedirectToAction("Index", "Config");
             else
-                return RedirectToAction("Index", "Gateway");
+                return RedirectToAction("Index", "Dashboard");
 
             // return View();
         }
