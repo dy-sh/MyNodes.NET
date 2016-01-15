@@ -18,10 +18,10 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class NodesEditorAPIController : Controller
     {
-        const string MAIN_PANEL_ID="Main";
+        const string MAIN_PANEL_ID = "Main";
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
-   
+
         public List<LiteGraph.Node> GetNodes(string panelId)
         {
             if (engine == null)
@@ -31,7 +31,7 @@ namespace MyNetSensors.WebController.Controllers
                 panelId = MAIN_PANEL_ID;
 
             List<LogicalNode> nodes = engine.nodes;
-            if (nodes==null || !nodes.Any())
+            if (nodes == null || !nodes.Any())
                 return null;
 
             return (
@@ -73,7 +73,7 @@ namespace MyNetSensors.WebController.Controllers
                         link = engine.GetLinkForInput(input)?.Id
                     });
                 }
- 
+
 
             if (logicalNode.Outputs != null)
                 foreach (var output in logicalNode.Outputs)
@@ -131,7 +131,7 @@ namespace MyNetSensors.WebController.Controllers
                 return null;
 
             List<LogicalLink> links = engine.links;
-            if (links==null || !links.Any())
+            if (links == null || !links.Any())
                 return null;
 
             return (
@@ -167,7 +167,7 @@ namespace MyNetSensors.WebController.Controllers
             return -1;
         }
 
-    
+
 
         public bool RemoveLink(Link link)
         {
@@ -179,7 +179,13 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
             LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            if (outNode == null || inNode == null)
+            {
+                engine.LogEngineError($"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. Does not exist.");
+                return false;
+            }
             engine.RemoveLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+
             return true;
         }
 
@@ -191,8 +197,11 @@ namespace MyNetSensors.WebController.Controllers
             LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
             LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
 
-            if (outNode == null || inNode==null)
+            if (outNode == null || inNode == null)
+            {
+                engine.LogEngineError($"Can`t create link from [{link.origin_id}] to [{link.target_id}]. Does not exist.");
                 return false;
+            }
 
             engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
             return true;
@@ -203,19 +212,31 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            string type = node.properties["objectType"];
-            string assemblyName = type.Split('.')[1];
+            LogicalNode newNode;
 
-            var newObject = Activator.CreateInstance(assemblyName, type);
-            LogicalNode newNode = (LogicalNode)newObject.Unwrap();
+            try
+            {
+                string type = node.properties["objectType"];
+                string assemblyName = type.Split('.')[1];
 
-            //LogicalNode newNode = newObject as LogicalNode;
-            newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-            newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
-            newNode.Id = node.id;
-            newNode.PanelId = node.panel_id?? MAIN_PANEL_ID;
+                var newObject = Activator.CreateInstance(assemblyName, type);
+                newNode = (LogicalNode) newObject.Unwrap();
+
+
+                //LogicalNode newNode = newObject as LogicalNode;
+                newNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
+                newNode.Size = new Size {Width = node.size[0], Height = node.size[1]};
+                newNode.Id = node.id;
+                newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
+            }
+            catch
+            {
+                engine.LogEngineError($"Can`t create node [{node.properties["objectType"]}]. Type does not exist.");
+                return false;
+            }
 
             engine.AddNode(newNode);
+
             return true;
         }
 
@@ -226,7 +247,10 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNode oldNode = engine.GetNode(node.id);
             if (oldNode == null)
+            {
+                engine.LogEngineError($"Can`t remove node [{node.id}]. Does not exist.");
                 return false;
+            }
 
             engine.RemoveNode(oldNode);
             return true;
@@ -239,7 +263,10 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNode oldNode = engine.GetNode(node.id);
             if (oldNode == null)
+            {
+                engine.LogEngineError($"Can`t update node [{node.id}]. Does not exist.");
                 return false;
+            }
 
             oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
