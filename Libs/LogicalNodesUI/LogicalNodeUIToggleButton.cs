@@ -32,7 +32,7 @@ namespace MyNetSensors.LogicalNodesUI
         public void Toggle()
         {
             Value = Value == "0" ? "1" : "0";
-            LogInfo($"UI Toggle Button [{Name}]: {Value}");
+            LogInfo($"UI Toggle Button [{Name}]: [{Value}]");
             Outputs[0].Value = Value;
         }
     }

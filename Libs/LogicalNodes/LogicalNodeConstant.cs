@@ -4,19 +4,21 @@
 */
 
 using System;
-using MyNetSensors.LogicalNodes;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MyNetSensors.LogicalNodesUI
+namespace MyNetSensors.LogicalNodes
 {
-    public class LogicalNodeUITextBox : LogicalNodeUI
+    public class LogicalNodeConstant : LogicalNode
     {
         public string Value { get; set; }
 
-        public LogicalNodeUITextBox() : base(0, 1)
+        public LogicalNodeConstant() : base(0,1)
         {
-            this.Title = "UI TextBox";
-            this.Type = "UI/TextBox";
-            this.Name = "TextBox";
+            this.Title = "Constant";
+            this.Type = "Basic/Constant";
         }
 
         public override void Loop()
@@ -27,10 +29,10 @@ namespace MyNetSensors.LogicalNodesUI
         {
         }
 
-        public void Send(string value)
+        public void SetValue(string value)
         {
             Value = value;
-            LogInfo($"UI TextBox [{Name}]: [{Value??"NULL"}]");
+            LogInfo($"Constant changed: [{Value??"NULL"}]");
             Outputs[0].Value = Value;
         }
     }

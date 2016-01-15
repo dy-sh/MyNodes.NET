@@ -31,7 +31,7 @@ namespace MyNetSensors.LogicalNodesUI
         public void SetValue(string value)
         {
             Value = value;
-            LogInfo($"UI RGB Sliders [{Name}]: {Value}");
+            LogInfo($"UI RGB Sliders [{Name}]: [{Value}]");
             Outputs[0].Value = Value;
         }
     }

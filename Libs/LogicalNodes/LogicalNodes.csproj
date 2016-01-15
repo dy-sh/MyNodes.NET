@@ -48,6 +48,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="LogicalNode.cs" />
+    <Compile Include="LogicalNodeConstant.cs" />
     <Compile Include="LogicalNodeConsole.cs" />
     <Compile Include="LogicalNodePanelOutput.cs" />
     <Compile Include="LogicalNodePanelInput.cs" />

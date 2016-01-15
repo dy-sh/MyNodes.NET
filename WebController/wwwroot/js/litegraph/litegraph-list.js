@@ -316,7 +316,42 @@
 
 
 
+    //Constant
+    function Constant() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConstant" };
+    }
+    Constant.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { ConstantSettings(that) } }, null];
+    }
+    function ConstantSettings(that) {
+        $('#node-settings-title').html(that.title);
 
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Value: <input type="text" id="node-settings-value"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-value').val(that.properties['value']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/ConstantSettings/",
+                    type: "POST",
+                    data: {
+                        value: $('#node-settings-value').val(),
+                        id: that.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    Constant.title = "Constant";
+    LiteGraph.registerNodeType("Basic/Constant", Constant);
 
 
 

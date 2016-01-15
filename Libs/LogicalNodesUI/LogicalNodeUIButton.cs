@@ -27,9 +27,9 @@ namespace MyNetSensors.LogicalNodesUI
 
         public void Click()
         {
-            LogInfo($"UI Button [{Name}]: 1");
+            LogInfo($"UI Button [{Name}]: [1]");
             Outputs[0].Value = "1";
-            LogInfo($"UI Button [{Name}]: 0");
+            LogInfo($"UI Button [{Name}]: [0]");
             Outputs[0].Value = "0";
         }
     }

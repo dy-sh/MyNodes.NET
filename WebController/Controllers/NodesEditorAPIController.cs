@@ -117,6 +117,12 @@ namespace MyNetSensors.WebController.Controllers
                 node.properties["max"] = n.Max.ToString();
             }
 
+            if (logicalNode is LogicalNodeConstant)
+            {
+                LogicalNodeConstant n = (LogicalNodeConstant)logicalNode;
+                node.properties["value"] = n.Value;
+            }
+
             return node;
         }
 
@@ -333,7 +339,21 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+        public bool ConstantSettings(string id, string value)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
 
+            LogicalNodeConstant node = (LogicalNodeConstant)n;
+            node.SetValue(value);
+            engine.UpdateNode(node);
+
+            return true;
+        }
 
 
         //private int CalculateNodeHeight(LiteGraph.Node node)
