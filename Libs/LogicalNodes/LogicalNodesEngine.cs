@@ -267,18 +267,34 @@ namespace MyNetSensors.LogicalNodes
                 RemoveLink(link);
             }
 
-            if (node is LogicalNodePanelInput)
-                RemovePanelInput((LogicalNodePanelInput)node);
-
-            if (node is LogicalNodePanelOutput)
-                RemovePanelOutput((LogicalNodePanelOutput)node);
-
             OnRemoveNodeEvent?.Invoke(node);
             LogEngineInfo($"Remove node {node.GetType().Name}");
+
+            if (node is LogicalNodePanelInput)
+                RemovePanelInput((LogicalNodePanelInput)node);
+            else if (node is LogicalNodePanelOutput)
+                RemovePanelOutput((LogicalNodePanelOutput)node);
+            else if (node is LogicalNodePanel)
+                RemovePanel((LogicalNodePanel)node);
+
 
             db?.RemoveNode(node.Id);
 
             nodes.Remove(node);
+        }
+
+        private void RemovePanel(LogicalNodePanel node)
+        {
+            List<LogicalNode> nodes = GetNodesForPanel(node);
+            foreach (var n in nodes)
+            {
+                RemoveNode(n);
+            }
+        }
+
+        private List<LogicalNode> GetNodesForPanel(LogicalNodePanel node)
+        {
+            return nodes.Where(n => n.PanelId == node.Id).ToList();
         }
 
 
