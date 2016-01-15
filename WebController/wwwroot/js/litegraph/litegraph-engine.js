@@ -227,6 +227,7 @@ function send_remove_link(link) {
 };
 
 function send_create_node(node) {
+    node.size = null;
     var serializedNode = node.serialize();
     $.ajax({
         url: '/NodesEditorAPI/CreateNode',

@@ -235,19 +235,19 @@ namespace MyNetSensors.WebController.Controllers
 
                 var newObject = Activator.CreateInstance(assemblyName, type);
                 newNode = (LogicalNode) newObject.Unwrap();
-
-
-                //LogicalNode newNode = newObject as LogicalNode;
-                newNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
-                newNode.Size = new Size {Width = node.size[0], Height = node.size[1]};
-                newNode.Id = node.id;
-                newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
             }
             catch
             {
                 engine.LogEngineError($"Can`t create node [{node.properties["objectType"]}]. Type does not exist.");
                 return false;
             }
+
+            //LogicalNode newNode = newObject as LogicalNode;
+            newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+            if (node.size.Length==2)
+                newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+            newNode.Id = node.id;
+            newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
 
             engine.AddNode(newNode);
 

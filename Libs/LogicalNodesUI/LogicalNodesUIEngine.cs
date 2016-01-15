@@ -61,22 +61,25 @@ namespace MyNetSensors.LogicalNodesUI
 
             LogicalNodeUI n = (LogicalNodeUI)node;
 
+            n.Name = GenerateName(n);
+            engine.UpdateNode(n);
+
+            OnNewUINodeEvent?.Invoke(n);
+        }
+
+        private string GenerateName(LogicalNodeUI node)
+        {
             //auto naming
             List<LogicalNodeUI> nodes = GetUINodesForPanel(node.PanelId);
             List<string> names = nodes.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
-                if (!names.Contains($"{n.Name} {i}"))
-                {
-                    n.Name = $"{n.Name} {i}";
-                    break;
-                }
+                if (!names.Contains($"{node.Name} {i}"))
+                    return $"{node.Name} {i}";
             }
-
-            engine.UpdateNode(n);
-
-            OnNewUINodeEvent?.Invoke(n);
+            return null;
         }
+
 
         private void OnNewLinkEvent(LogicalLink link)
         {
