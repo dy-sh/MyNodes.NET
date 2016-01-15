@@ -2,6 +2,16 @@
 
 
 
+
+    /*
+     -------------------------------- PANELS -------------------------------------
+    */
+
+
+
+
+
+
     //Panel: a node that contains a subgraph
     function Panel() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodePanel" };
@@ -46,6 +56,15 @@
 
 
 
+    /*
+     -------------------------------- HARDWARE -------------------------------------
+    */
+
+
+
+
+
+
 
 
 
@@ -56,6 +75,245 @@
         this.removable = false;
     }
     LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     -------------------------------- UI -------------------------------------
+    */
+
+
+
+
+    function UINodeSettings(node) {
+        $('#node-settings-title').html(node.title);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(node.properties['name']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/UINodeSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+
+
+
+
+    //UI Label
+    function UILabel() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
+    }
+    UILabel.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UILabel.title = "Label";
+    LiteGraph.registerNodeType("UI/Label", UILabel);
+
+
+
+    //UI State
+    function UIState() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
+    }
+    UIState.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIState.title = "State";
+    LiteGraph.registerNodeType("UI/State", UIState);
+
+
+
+    //UI Progress
+    function UIProgress() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
+    }
+    UIProgress.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIProgress.title = "Progress";
+    LiteGraph.registerNodeType("UI/Progress", UIProgress);
+
+
+
+    //UI Log
+    function UILog() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog" };
+    }
+    UILog.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UILog.title = "Log";
+    LiteGraph.registerNodeType("UI/Log", UILog);
+
+    
+
+    //UI Button
+    function UIButton() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton" };
+    }
+    UIButton.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIButton.title = "Button";
+    LiteGraph.registerNodeType("UI/Button", UIButton);
+
+
+
+    //UI Toggle Button
+    function UIToggleButton() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton" };
+    }
+    UIToggleButton.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIToggleButton.title = "Toggle Button";
+    LiteGraph.registerNodeType("UI/Toggle Button", UIToggleButton);
+
+
+
+    //UI Switch
+    function UISwitch() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitch" };
+    }
+    UISwitch.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UISwitch.title = "Switch";
+    LiteGraph.registerNodeType("UI/Switch", UISwitch);
+
+
+
+    //UI TextBox
+    function UITextBox() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
+    }
+    UITextBox.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UITextBox.title = "TextBox";
+    LiteGraph.registerNodeType("UI/TextBox", UITextBox);
+
+
+
+
+
+
+    //UI Slider
+    function UISlider() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
+    }
+    UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UISliderSettings(that) } }, null];
+    }
+    function UISliderSettings(that) {
+        $('#node-settings-title').html(that.title);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
+            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(that.properties['name']);
+        $('#node-settings-min').val(that.properties['min']);
+        $('#node-settings-max').val(that.properties['max']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: {opacity: 0.3},
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/UISliderSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        min: $('#node-settings-min').val(),
+                        max: $('#node-settings-max').val(),
+                        id: that.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    UISlider.title = "Slider";
+    LiteGraph.registerNodeType("UI/Slider", UISlider);
+
+
+
+
+
+    //UI RGB Sliders
+    function UIRGBSliders() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders" };
+    }
+    UIRGBSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIRGBSliders.title = "RGB Sliders";
+    LiteGraph.registerNodeType("UI/RGB Sliders", UIRGBSliders);
+
+
+
+    //UI RGBW Sliders
+    function UIRGBWSliders() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders" };
+    }
+    UIRGBWSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+    }
+    UIRGBWSliders.title = "RGBW Sliders";
+    LiteGraph.registerNodeType("UI/RGBW Sliders", UIRGBWSliders);
+
+
+
+
+
+
+
+
+    /*
+     -------------------------------- OTHER -------------------------------------
+    */
+
 
 
 
@@ -98,152 +356,6 @@
     LiteGraph.registerNodeType("Math/Plus", MathPlus);
 
 
-
-
-
-
-
-
-    //UI Label
-    function UILabel() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
-    }
-    UILabel.title = "Label";
-    LiteGraph.registerNodeType("UI/Label", UILabel);
-
-    //UI State
-    function UIState() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
-    }
-    UIState.title = "State";
-    LiteGraph.registerNodeType("UI/State", UIState);
-
-    //UI Progress
-    function UIProgress() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
-    }
-    UIProgress.title = "Progress";
-    LiteGraph.registerNodeType("UI/Progress", UIProgress);
-
-    //UI Log
-    function UILog() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog" };
-    }
-    UILog.title = "Log";
-    LiteGraph.registerNodeType("UI/Log", UILog);
-
-
-
-
-
-
-
-
-
-
-    //UI Button
-    function UIButton() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton" };
-    }
-    UIButton.title = "Button";
-    LiteGraph.registerNodeType("UI/Button", UIButton);
-
-
-
-    //UI Toggle Button
-    function UIToggleButton() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton" };
-    }
-    UIToggleButton.title = "Toggle Button";
-    LiteGraph.registerNodeType("UI/Toggle Button", UIToggleButton);
-
-
-
-    //UI Switch
-    function UISwitch() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitch" };
-    }
-    UISwitch.title = "Switch";
-    LiteGraph.registerNodeType("UI/Switch", UISwitch);
-
-
-
-    //UI TextBox
-    function UITextBox() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
-    }
-    UITextBox.title = "TextBox";
-    LiteGraph.registerNodeType("UI/TextBox", UITextBox);
-
-
-
-
-
-
-    //UI Slider
-    function UISlider() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
-    }
-
-    UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UISliderSettings(that) } }, null];
-    }
-    function UISliderSettings(that) {
-        $('#node-settings-title').html(that.title);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
-            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(that.properties['name']);
-        $('#node-settings-min').val(that.properties['min']);
-        $('#node-settings-max').val(that.properties['max']);
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: {opacity: 0.3},
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/SliderSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        min: $('#node-settings-min').val(),
-                        max: $('#node-settings-max').val(),
-                        id: that.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
-
-    UISlider.title = "Slider";
-    LiteGraph.registerNodeType("UI/Slider", UISlider);
-
-
-
-
-
-    //UI RGB Sliders
-    function UIRGBSliders() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders" };
-    }
-    UIRGBSliders.title = "RGB Sliders";
-    LiteGraph.registerNodeType("UI/RGB Sliders", UIRGBSliders);
-
-
-
-    //UI RGBW Sliders
-    function UIRGBWSliders() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders" };
-    }
-    UIRGBWSliders.title = "RGBW Sliders";
-    LiteGraph.registerNodeType("UI/RGBW Sliders", UIRGBWSliders);
 
 
 

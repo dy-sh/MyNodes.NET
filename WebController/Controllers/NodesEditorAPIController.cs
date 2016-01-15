@@ -293,17 +293,34 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public bool SliderSettings(string id, string name, int min,int max)
+        public bool UINodeSettings(string id, string name)
         {
             LogicalNode n = engine.GetNode(id);
             if (n == null)
             {
-                engine.LogEngineError($"Can`t set settings for Slider [{id}]. Does not exist.");
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
+
+            LogicalNodeUI node = (LogicalNodeUI)n;
+            node.Name = name;
+            engine.UpdateNode(node);
+
+            return true;
+        }
+
+
+        public bool UISliderSettings(string id, string name, int min,int max)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
                 return false;
             }
             if (min >= max)
             {
-                engine.LogEngineError($"Can`t set settings for Slider [{id}]. Min must be > Max.");
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Min must be > Max.");
                 return false;
             }
 
