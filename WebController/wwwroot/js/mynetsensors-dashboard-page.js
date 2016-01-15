@@ -3,7 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-
+var MAIN_PANEL_ID = "Main";
 
 var gatewayHardwareConnected = null;
 var signalRServerConnected = null;
@@ -149,8 +149,9 @@ var textBoxTemplate = Handlebars.compile($('#textBoxTemplate').html());
 function createPanel(node) {
     //create new
     $(panelTemplate(node)).hide().appendTo("#panelsContainer").fadeIn(elementsFadeTime);
-    if (node.PanelId == 0)
-        $('#panelTitle' + node.PanelId).html("Main Panel");
+
+    if (node.PanelId  ==MAIN_PANEL_ID )
+        $('#panelTitle-' + node.PanelId).html("Main Panel");
 }
 
 
@@ -158,52 +159,52 @@ function createPanel(node) {
 
 function createNode(node) {
     //create new panel
-    if ($('#panel' + node.PanelId).length == 0) {
+    if ($('#panel-' + node.PanelId).length == 0) {
         createPanel(node);
     }
 
     if (node.Type == "UI/Label") {
-        $(labelTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(labelTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
     if (node.Type == "UI/State") {
-        $(stateTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(stateTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
     if (node.Type == "UI/Log") {
-        $(logTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(logTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
         $('#clear-log-'+node.Id).click(function () {
             sendClearLog(node.Id);
         });
     }
 
     if (node.Type == "UI/TextBox") {
-        $(textBoxTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(textBoxTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
         $('#textBoxSend-' + node.Id).click(function () {
             sendTextBox(node.Id);
         });
     }
 
     if (node.Type == "UI/Progress") {
-        $(progressTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(progressTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
     }
 
     if (node.Type == "UI/Button") {
-        $(buttonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(buttonTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
         $('#button-' + node.Id).click(function () {
             sendButtonClick(node.Id);
         });
     }
 
     if (node.Type == "UI/Toggle Button") {
-        $(toggleButtonTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(toggleButtonTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
         $('#button-' + node.Id).click(function () {
             sendToggleButtonClick(node.Id);
         });
     }
 
     if (node.Type == "UI/Switch") {
-        $(switchTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(switchTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         $('#switch-' + node.Id).click(function () {
             sendSwitchClick(node.Id);
@@ -211,7 +212,7 @@ function createNode(node) {
     }
 
     if (node.Type == "UI/Slider") {
-        $(sliderTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(sliderTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         var slider = $("#slider-" + node.Id)[0];
         noUiSlider.create(slider, { start: 0, connect: 'lower', animate: false, range: { 'min': 0, 'max': 100 } });
@@ -223,7 +224,7 @@ function createNode(node) {
     }
 
     if (node.Type == "UI/RGB Sliders") {
-        $(rgbSlidersTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(rgbSlidersTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         var r = hexToRgb(node.Value).r;
         var g = hexToRgb(node.Value).g;
@@ -250,7 +251,7 @@ function createNode(node) {
 
 
     if (node.Type == "UI/RGBW Sliders") {
-        $(rgbwSlidersTemplate(node)).hide().appendTo("#uiContainer" + node.PanelId).fadeIn(elementsFadeTime);
+        $(rgbwSlidersTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         var r = hexToRgbw(node.Value).r;
         var g = hexToRgbw(node.Value).g;
@@ -291,7 +292,7 @@ function createNode(node) {
 
 
 function updateNode(node) {
-    $('#activity' + node.PanelId).show().fadeOut(150);
+    $('#activity-' + node.PanelId).show().fadeOut(150);
 
     if (node.Type == "UI/Label") {
         if (node.Value == null)
@@ -410,7 +411,7 @@ function updateNode(node) {
 
 
 function removeNode(node) {
-    $('#node' + node.Id).fadeOut(elementsFadeTime, function () { $(this).remove(); });
+    $('#node-' + node.Id).fadeOut(elementsFadeTime, function () { $(this).remove(); });
 }
 
 

@@ -9,8 +9,7 @@ namespace MyNetSensors.LogicalNodesUI
 {
     public abstract class LogicalNodeUI : LogicalNode
     {
-        public int PanelId { get; set; }
-        public int OrderIndex { get; set; }
+        public int PanelOrderIndex { get; set; }
         public string Name { get; set; }
 
         public LogicalNodeUI(int inputsCount, int outputsCount) : base(inputsCount, outputsCount) { }

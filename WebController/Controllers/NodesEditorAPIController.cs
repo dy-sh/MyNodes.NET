@@ -18,7 +18,7 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class NodesEditorAPIController : Controller
     {
-
+        const string MAIN_PANEL_ID="Main";
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
    
@@ -26,6 +26,9 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (engine == null)
                 return null;
+
+            if (panelId == null)
+                panelId = MAIN_PANEL_ID;
 
             List<LogicalNode> nodes = engine.nodes;
             if (nodes==null || !nodes.Any())
@@ -210,7 +213,7 @@ namespace MyNetSensors.WebController.Controllers
             newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
             newNode.Id = node.id;
-            newNode.PanelId = node.panel_id;
+            newNode.PanelId = node.panel_id?? MAIN_PANEL_ID;
 
             engine.AddNode(newNode);
             return true;

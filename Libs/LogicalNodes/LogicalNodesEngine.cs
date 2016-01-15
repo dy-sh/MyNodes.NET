@@ -15,6 +15,8 @@ namespace MyNetSensors.LogicalNodes
     public delegate void LogMessageEventHandler(string message);
     public class LogicalNodesEngine
     {
+        const string MAIN_PANEL_ID = "Main";
+
         //If you have tons of logical nodes, and system perfomance decreased, increase this value,
         //and you will get less nodes updating frequency 
         private int updateNodesInterval = 1;
@@ -197,7 +199,7 @@ namespace MyNetSensors.LogicalNodes
 
         private bool AddPanelInput(LogicalNodePanelInput node)
         {
-            if (string.IsNullOrEmpty(node.PanelId))
+            if (node.PanelId== MAIN_PANEL_ID)
             {
                 LogEngineError("Can`t create input for main panel.");
                 return false;
@@ -206,7 +208,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalNodePanel panel = GetPanelNode(node.PanelId);
             if (panel == null)
             {
-                LogEngineError($"Can`t create panel input. Panel [{node.PanelId}] is not exist.");
+                LogEngineError($"Can`t create panel input. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
 
@@ -227,7 +229,7 @@ namespace MyNetSensors.LogicalNodes
 
         private bool AddPanelOutput(LogicalNodePanelOutput node)
         {
-            if (string.IsNullOrEmpty(node.PanelId))
+            if (node.PanelId== MAIN_PANEL_ID)
             {
                 LogEngineError("Can`t create output for main panel.");
                 return false;
@@ -236,7 +238,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalNodePanel panel = GetPanelNode(node.PanelId);
             if (panel == null)
             {
-                LogEngineError($"Can`t create panel output. Panel [{node.PanelId}] is not exist.");
+                LogEngineError($"Can`t create panel output. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
 
@@ -285,7 +287,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalNodePanel panel = GetPanelNode(node.PanelId);
             if (panel == null)
             {
-                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] is not exist.");
+                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
             Input input = GetInput(node.Id);
@@ -299,7 +301,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalNodePanel panel = GetPanelNode(node.PanelId);
             if (panel == null)
             {
-                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] is not exist.");
+                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
                 return false;
             }
             Output output = GetOutput(node.Id);

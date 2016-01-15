@@ -23,6 +23,7 @@ function guid() {
       s4() + '-' + s4() + s4() + s4();
 }
 
+var MAIN_PANEL_ID = "Main";
 
 
 
@@ -4569,12 +4570,12 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function()
 			//{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
 
 
-	    if (window.this_panel_id != null && window.this_panel_id != "") {
+	    if (window.owner_panel_id != null && window.owner_panel_id != "") {
 	        options.push(null);
 
 	        var back_url = "/NodesEditor/";
 
-	        if (window.owner_panel_id != null && window.owner_panel_id != "")
+	        if (window.owner_panel_id != MAIN_PANEL_ID)
 	            back_url += "?panelId=" + window.owner_panel_id;
 
 	        options.push({

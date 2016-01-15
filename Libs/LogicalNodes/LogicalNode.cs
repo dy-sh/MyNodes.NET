@@ -44,12 +44,15 @@ namespace MyNetSensors.LogicalNodes
                 else
                     Inputs.Add(new Input { Name = $"In {i+1}" });
             }
+
+            PanelId = "Main";
         }
 
         public LogicalNode()
         {
             Inputs = new List<Input>();
             Outputs = new List<Output>();
+            PanelId = "Main";
         }
 
 

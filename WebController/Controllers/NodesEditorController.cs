@@ -20,10 +20,15 @@ namespace MyNetSensors.WebController.Controllers
 
     public class NodesEditorController : Controller
     {
+        const string MAIN_PANEL_ID = "Main";
+
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
         public IActionResult Index(string panelId)
         {
+            ViewBag.panelId = MAIN_PANEL_ID;
+           // ViewBag.ownerPanelId = MAIN_PANEL_ID;
+
             if (panelId != null)
             {
                 LogicalNodePanel panel = engine.GetPanelNode(panelId);
@@ -35,7 +40,6 @@ namespace MyNetSensors.WebController.Controllers
                 ViewBag.ownerPanelId = panel.PanelId;
             }
 
-            //panelId==null - main graph
             return View();
         }
 
