@@ -15,6 +15,7 @@ namespace MyNetSensors.LogicalNodesUI
       {
             this.Title = "UI RGB Sliders";
             this.Type = "UI/RGB Sliders";
+            this.Name = "RGB";
             Value = "000000";
             Outputs[0].Value = Value.ToString();
         }

@@ -28,7 +28,7 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnRemoveLinkEvent += OnRemoveLinkEvent;
         }
 
- 
+
         private void OnInputUpdatedEvent(Input input)
         {
             LogicalNode node = engine.GetInputOwner(input);
@@ -57,8 +57,25 @@ namespace MyNetSensors.LogicalNodesUI
 
         private void OnNewNodeEvent(LogicalNode node)
         {
-            if (node is LogicalNodeUI)
-                OnNewUINodeEvent?.Invoke((LogicalNodeUI)node);
+            if (!(node is LogicalNodeUI)) return;
+
+            LogicalNodeUI n = (LogicalNodeUI)node;
+
+            //auto naming
+            List<LogicalNodeUI> nodes = GetUINodesForPanel(node.PanelId);
+            List<string> names = nodes.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"{n.Name} {i}"))
+                {
+                    n.Name = $"{n.Name} {i}";
+                    break;
+                }
+            }
+
+            engine.UpdateNode(n);
+
+            OnNewUINodeEvent?.Invoke(n);
         }
 
         private void OnNewLinkEvent(LogicalLink link)
@@ -68,43 +85,12 @@ namespace MyNetSensors.LogicalNodesUI
 
             Output output = engine.GetOutput(link.OutputId);
             Input input = engine.GetInput(link.InputId);
-
-
-            //auto naming
-            if (inNode is LogicalNodeUI)
-            {
-                LogicalNodeUI node = (LogicalNodeUI)inNode;
-                node.Name = $"{outNode.Title} {output.Name}";
-                engine.UpdateNode(node);
-            }
-
-            if (outNode is LogicalNodeUI)
-            {
-                LogicalNodeUI node = (LogicalNodeUI)outNode;
-                node.Name = $"{inNode.Title} {input.Name}";
-                engine.UpdateNode(node);
-            }
         }
 
         private void OnRemoveLinkEvent(LogicalLink link)
         {
             LogicalNode inNode = engine.GetInputOwner(link.InputId);
             LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
-
-            //auto naming
-            if (inNode is LogicalNodeUI)
-            {
-                LogicalNodeUI node = (LogicalNodeUI)inNode;
-                node.Name = null;
-                engine.UpdateNode(node);
-            }
-
-            if (outNode is LogicalNodeUI)
-            {
-                LogicalNodeUI node = (LogicalNodeUI)outNode;
-                node.Name = null;
-                engine.UpdateNode(node);
-            }
         }
 
 
@@ -114,6 +100,14 @@ namespace MyNetSensors.LogicalNodesUI
         {
             return engine.nodes
                 .Where(n => n is LogicalNodeUI)
+                .Cast<LogicalNodeUI>()
+                .ToList();
+        }
+
+        public List<LogicalNodeUI> GetUINodesForPanel(string panelId)
+        {
+            return engine.nodes
+                .Where(n => n is LogicalNodeUI && n.PanelId==panelId)
                 .Cast<LogicalNodeUI>()
                 .ToList();
         }

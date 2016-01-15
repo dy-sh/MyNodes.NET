@@ -15,6 +15,7 @@ namespace MyNetSensors.LogicalNodesUI
       {
             this.Title = "UI Progress";
             this.Type = "UI/Progress";
+            this.Name = "Progress";
         }
 
         public override void Loop()

@@ -104,6 +104,12 @@ namespace MyNetSensors.WebController.Controllers
                     }
                 }
 
+            if (logicalNode is LogicalNodeUI)
+            {
+                LogicalNodeUI n = (LogicalNodeUI)logicalNode;
+                node.properties["name"] = n.Name;
+            }
+
             if (logicalNode is LogicalNodeUISlider)
             {
                 LogicalNodeUISlider n = (LogicalNodeUISlider) logicalNode;

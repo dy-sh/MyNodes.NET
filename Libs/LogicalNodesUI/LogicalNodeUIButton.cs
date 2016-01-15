@@ -13,6 +13,7 @@ namespace MyNetSensors.LogicalNodesUI
         {
             this.Title = "UI Button";
             this.Type = "UI/Button";
+            this.Name = "Button";
             Outputs[0].Value = "0";
         }
 

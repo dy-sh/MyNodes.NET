@@ -305,7 +305,12 @@ function createOrUpdateNode(node) {
     if (!oldNode) {
         //create new
         var newNode = LiteGraph.createNode(node.type);
+
         newNode.title = node.title;
+
+        if (node.properties['name'] != null)
+            newNode.title += " [" + node.properties['name'] + "]";
+
         newNode.inputs = node.inputs;
         newNode.outputs = node.outputs;
         newNode.id = node.id;
@@ -332,6 +337,10 @@ function createOrUpdateNode(node) {
         //update
         //newNode.title = node.title + " [" + node.id+"]";
         oldNode.title = node.title;
+
+        if (node.properties['name'] != null)
+            oldNode.title += " [" + node.properties['name'] + "]";
+
         oldNode.inputs = node.inputs;
         oldNode.outputs = node.outputs;
         oldNode.id = node.id;

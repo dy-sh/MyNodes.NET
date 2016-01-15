@@ -7,14 +7,15 @@ using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
 {
-  public class LogicalNodeUILabel : LogicalNodeUI
+    public class LogicalNodeUILabel : LogicalNodeUI
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public LogicalNodeUILabel() : base(1, 0)
-      {
+        public LogicalNodeUILabel() : base(1, 0)
+        {
             this.Title = "UI Label";
             this.Type = "UI/Label";
+            this.Name = "Label";
         }
 
         public override void Loop()

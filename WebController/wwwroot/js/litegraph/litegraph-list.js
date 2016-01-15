@@ -200,7 +200,7 @@
             '</div></div>'
         );
 
-        $('#node-settings-name').val(that.title);
+        $('#node-settings-name').val(that.properties['name']);
         $('#node-settings-min').val(that.properties['min']);
         $('#node-settings-max').val(that.properties['max']);
 

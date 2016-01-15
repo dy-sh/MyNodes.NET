@@ -13,9 +13,11 @@ namespace MyNetSensors.LogicalNodesUI
 
       public LogicalNodeUIToggleButton() : base(0, 1)
       {
-            this.Title = "Toggle Button";
+            this.Title = "UI Toggle";
             this.Type = "UI/Toggle Button";
-           Value = "0";
+            this.Name = "Toggle";
+
+            Value = "0";
             Outputs[0].Value = Value;
         }
 

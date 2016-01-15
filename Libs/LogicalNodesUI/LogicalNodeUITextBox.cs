@@ -16,6 +16,7 @@ namespace MyNetSensors.LogicalNodesUI
         {
             this.Title = "UI TextBox";
             this.Type = "UI/TextBox";
+            this.Name = "TextBox";
         }
 
         public override void Loop()

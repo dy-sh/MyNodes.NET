@@ -15,6 +15,7 @@ namespace MyNetSensors.LogicalNodesUI
       {
             this.Title = "UI State";
             this.Type = "UI/State";
+            this.Name = "State";
         }
 
         public override void Loop()

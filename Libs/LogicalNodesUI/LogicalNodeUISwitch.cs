@@ -13,8 +13,9 @@ namespace MyNetSensors.LogicalNodesUI
 
       public LogicalNodeUISwitch() : base(0, 1)
       {
-            this.Title = "Switch";
+            this.Title = "UI Switch";
             this.Type = "UI/Switch";
+            this.Name = "Switch";
            Value = "0";
             Outputs[0].Value = Value;
         }
