@@ -13,10 +13,13 @@ namespace MyNetSensors.LogicalNodes
 {
     public class LogicalNodePanelOutput : LogicalNode
     {
+        public string Name { get; set; }
+
         public LogicalNodePanelOutput() : base(1, 0)
         {
-            this.Title = "Panel Output";
+            this.Title = "Output";
             this.Type = "Main/Panel Output";
+            this.Name = "Out";
         }
 
         public override void Loop()

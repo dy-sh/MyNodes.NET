@@ -244,13 +244,12 @@ namespace MyNetSensors.LogicalNodes
                 return false;
             }
 
-            string name = "In " + new Random().Next(100);
-            node.Title = name;
+            node.Name = GenerateInputName(panel, node);
 
             Input input = new Input
             {
                 Id = node.Id,
-                Name = name
+                Name = node.Name
             };
             panel.Inputs.Add(input);
 
@@ -258,6 +257,8 @@ namespace MyNetSensors.LogicalNodes
 
             return true;
         }
+
+
 
         private bool AddPanelOutput(LogicalNodePanelOutput node)
         {
@@ -274,14 +275,13 @@ namespace MyNetSensors.LogicalNodes
                 return false;
             }
 
-            string name = "Out " + new Random().Next(100);
-            node.Title = name;
+            node.Name = GenerateOutputName(panel, node);
 
 
             Output output = new Output
             {
                 Id = node.Id,
-                Name = name
+                Name = node.Name
             };
             panel.Outputs.Add(output);
 
@@ -289,6 +289,31 @@ namespace MyNetSensors.LogicalNodes
             return true;
         }
 
+
+
+        private string GenerateInputName(LogicalNodePanel panel, LogicalNodePanelInput node)
+        {
+            //auto naming
+            List<string> names = panel.Inputs.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"{node.Name} {i}"))
+                    return $"{node.Name} {i}";
+            }
+            return null;
+        }
+
+        private string GenerateOutputName(LogicalNodePanel panel, LogicalNodePanelOutput node)
+        {
+            //auto naming
+            List<string> names = panel.Outputs.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"{node.Name} {i}"))
+                    return $"{node.Name} {i}";
+            }
+            return null;
+        }
 
 
         public void RemoveNode(LogicalNode node)
@@ -337,7 +362,7 @@ namespace MyNetSensors.LogicalNodes
 
         private List<LogicalNodePanel> GetPanelNodes()
         {
-            return nodes.Where(n=>n is LogicalNodePanel).Cast<LogicalNodePanel>().ToList();
+            return nodes.Where(n => n is LogicalNodePanel).Cast<LogicalNodePanel>().ToList();
         }
 
 
@@ -353,7 +378,7 @@ namespace MyNetSensors.LogicalNodes
             Input input = GetInput(node.Id);
 
             LogicalLink link = GetLinkForInput(input);
-            if (link!=null)
+            if (link != null)
                 RemoveLink(link);
 
             panel.Inputs.Remove(input);
@@ -386,13 +411,18 @@ namespace MyNetSensors.LogicalNodes
         {
             LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
 
-            if (oldNode==null)
+            if (oldNode == null)
             {
                 LogEngineError($"Can`t update node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
                 return;
             }
 
             LogEngineInfo($"Update node [{node.GetType().Name}]");
+
+            if (node is LogicalNodePanelInput)
+                UpdatePanelInput((LogicalNodePanelInput)node);
+            if (node is LogicalNodePanelOutput)
+                UpdatePanelOutput((LogicalNodePanelOutput)node);
 
 
             oldNode.Inputs = node.Inputs;
@@ -405,6 +435,23 @@ namespace MyNetSensors.LogicalNodes
             db?.UpdateNode(oldNode);
 
             OnNodeUpdatedEvent?.Invoke(node);
+        }
+
+        private void UpdatePanelInput(LogicalNodePanelInput node)
+        {
+            Input input = GetInput(node.Id);
+            input.Name = node.Name;
+            LogicalNode panel = GetPanelNode(node.PanelId);
+
+            UpdateNode(panel);
+        }
+        private void UpdatePanelOutput(LogicalNodePanelOutput node)
+        {
+            Output output = GetOutput(node.Id);
+            output.Name = node.Name;
+            LogicalNode panel = GetPanelNode(node.PanelId);
+
+            UpdateNode(panel);
         }
 
 
@@ -461,7 +508,7 @@ namespace MyNetSensors.LogicalNodes
             Input input = GetInput(inputId);
             Output output = GetOutput(outputId);
 
-            if (input==null|| output==null)
+            if (input == null || output == null)
             {
                 LogEngineError($"Can`t create link from [{outputId}] to [{inputId}]. Does not exist.");
                 return;

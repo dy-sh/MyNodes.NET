@@ -8,11 +8,12 @@
     */
 
 
+ 
 
 
 
 
-    //Panel: a node that contains a subgraph
+    //Panel
     function Panel() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodePanel" };
         this.bgcolor = "#565656";
@@ -56,14 +57,22 @@
     LiteGraph.registerNodeType("Main/Panel", Panel);
 
 
+
+
     //Panel Input
     function PanelInput() {
         this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelInput" };
         this.bgcolor = "#151515";
 
     }
+    PanelInput.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { InputOutputSettings(that) } }, null];
+    }
     PanelInput.title = "Panel Input";
     LiteGraph.registerNodeType("Main/Panel Input", PanelInput);
+
+
 
 
 
@@ -72,11 +81,40 @@
         this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelOutput" };
         this.bgcolor = "#151515";
     }
+    PanelOutput.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { InputOutputSettings(that) } }, null];
+    }
     PanelOutput.title = "Panel Output";
     LiteGraph.registerNodeType("Main/Panel Output", PanelOutput);
 
 
+    function InputOutputSettings(node) {
+        $('#node-settings-title').html(node.type);
 
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(node.properties['name']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/InputOutputSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
 
 
 

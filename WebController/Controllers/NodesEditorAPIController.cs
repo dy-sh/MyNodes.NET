@@ -129,6 +129,18 @@ namespace MyNetSensors.WebController.Controllers
                 node.properties["panelname"] = n.Name;
             }
 
+            if (logicalNode is LogicalNodePanelInput)
+            {
+                LogicalNodePanelInput n = (LogicalNodePanelInput)logicalNode;
+                node.properties["name"] = n.Name;
+            }
+
+            if (logicalNode is LogicalNodePanelOutput)
+            {
+                LogicalNodePanelOutput n = (LogicalNodePanelOutput)logicalNode;
+                node.properties["name"] = n.Name;
+            }
+
             return node;
         }
 
@@ -315,6 +327,32 @@ namespace MyNetSensors.WebController.Controllers
             LogicalNodePanel node = (LogicalNodePanel)n;
             node.Name = panelname;
             engine.UpdateNode(node);
+
+            return true;
+        }
+
+        public bool InputOutputSettings(string id, string name)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Input/Output [{id}]. Does not exist.");
+                return false;
+            }
+
+            if (n is LogicalNodePanelInput)
+            {
+                LogicalNodePanelInput node = (LogicalNodePanelInput)n;
+                node.Name = name;
+                engine.UpdateNode(node);
+            }
+
+            if (n is LogicalNodePanelOutput)
+            {
+                LogicalNodePanelOutput node = (LogicalNodePanelOutput)n;
+                node.Name = name;
+                engine.UpdateNode(node);
+            }
 
             return true;
         }
