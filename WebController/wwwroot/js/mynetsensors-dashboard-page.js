@@ -146,24 +146,6 @@ var stateTemplate = Handlebars.compile($('#stateTemplate').html());
 var textBoxTemplate = Handlebars.compile($('#textBoxTemplate').html());
 
 
-function createPanel(node) {
-    //create new
-    $(panelTemplate(node)).hide().appendTo("#panelsContainer").fadeIn(elementsFadeTime);
-
-
-    if (node.PanelId == MAIN_PANEL_ID)
-        $('#panelTitle-' + node.PanelId).html("Main Panel");
-    else {
-        $.ajax({
-            url: "/DashBoard/GetNameForPanel/",
-            type: "POST",
-            data: { 'id': node.PanelId },
-            success: function (panelName) {
-                $('#panelTitle-' + node.PanelId).html(panelName);
-            }
-        });
-    }
-}
 
 
 
@@ -433,11 +415,43 @@ function updateNode(node) {
 
 
 function removeNode(node) {
-    $('#node-' + node.Id).fadeOut(elementsFadeTime, function () { $(this).remove(); });
+    $('#node-' + node.Id).fadeOut(elementsFadeTime, function() {
+        $(this).remove();
+        checkPanelForRemove(node.PanelId);
+    });
+}
+
+function checkPanelForRemove(panelId) {
+    var panelBody = $('#uiContainer-' + panelId);
+    if (panelBody.children().length == 0)
+        removePanel(panelId);
 }
 
 
+function createPanel(node) {
+    //create new
+    $(panelTemplate(node)).hide().appendTo("#panelsContainer").fadeIn(elementsFadeTime);
 
+
+    if (node.PanelId == MAIN_PANEL_ID)
+        $('#panelTitle-' + node.PanelId).html("Main Panel");
+    else {
+        $.ajax({
+            url: "/DashBoard/GetNameForPanel/",
+            type: "POST",
+            data: { 'id': node.PanelId },
+            success: function (panelName) {
+                $('#panelTitle-' + node.PanelId).html(panelName);
+            }
+        });
+    }
+}
+
+function removePanel(panelId) {
+    $('#panel-' + panelId).fadeOut(elementsFadeTime, function () {
+        $(this).remove();
+    });
+}
 
 
 function sendTextBox(nodeId) {
