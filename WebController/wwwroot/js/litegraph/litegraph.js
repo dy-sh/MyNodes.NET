@@ -4849,10 +4849,10 @@ LiteGraph.createContextualMenu = function(values,options, ref_window)
 	style.position = "fixed";
 	style.top = "100px";
 	style.left = "100px";
-	style.color = "#AAF";
+	style.color = "#BBD";
 	style.padding = "2px";
-	style.borderBottom = "2px solid #AAF";
-	style.backgroundColor = "#444";
+	style.borderBottom = "1px solid #BBD";
+	style.backgroundColor = "#353535";
 
 	//title
 	if(options.title)

@@ -14,72 +14,56 @@
 
 
     <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/css/litegraph.css">
     <link rel="stylesheet" type="text/css" href="~/css/litegraph-editor.css">
+    <link rel="stylesheet" type="text/css" href="~/css/site-black.css">
 </head>
 <body>
 
     <!-- Header Menu-->
     <div class="ui inverted fixed big borderless main menu">
         <div class="ui container">
-
             <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
-
-            @*<a asp-controller="Gateway" asp-action="Control" class="ui item hidesmall fadebefore">Control</a>*@
-
-
-            <div class="right menu">
-                <div class="item">
-
-                    @*<button  type="button" class="ui black button" id="reset-view-button">Reset</button>
-                    <button  type="button" class="ui black button" id="minimap-button">Map</button>
-                    <button type="button" class="ui black button" id="fullscreen-button">Full screen</button>
-                    <a asp-controller="Gateway" asp-action="Control" class="ui black button fadebefore">X</a>*@
-                </div>
-            </div>
-
-
         </div>
     </div>
     <br />
     <br />
-<br/>
-<div class="ui inverted container">
-    <div class="ui tiny right floated buttons">
-        <button type="button" class="ui black button" id="reset-view-button">Reset</button>
-        <button type="button" class="ui black button" id="minimap-button">Map</button>
-        <button type="button" class="ui black button" id="fullscreen-button">Full screen</button>
-        <a asp-controller="Dashboard" asp-action="Index" class="ui black button fadebefore">X</a>
-    </div>
+    <br />
+    <div class="ui inverted container">
+        <div class="ui tiny right floated buttons">
+            <button type="button" class="ui black button" id="reset-view-button">Reset</button>
+            <button type="button" class="ui black button" id="minimap-button">Map</button>
+            <button type="button" class="ui black button" id="fullscreen-button">Full screen</button>
+            <a asp-controller="Dashboard" asp-action="Index" class="ui black button fadebefore">X</a>
+        </div>
         <a asp-controller="Dashboard" asp-action="Index" class="ui inverted tiny basic button">Dashboard</a>
-    <div class="ui tiny buttons">
-        <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
-        @{
-            List<string> panelsIdStack = ViewBag.panelsIdStack;
-            if (panelsIdStack!=null && panelsIdStack.Any())
-            {
-                foreach (string panelId in panelsIdStack)
+        <div class="ui tiny buttons">
+            <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
+            @{
+                List<string> panelsIdStack = ViewBag.panelsIdStack;
+                if (panelsIdStack != null && panelsIdStack.Any())
                 {
-                    <a asp-controller="NodesEditor" asp-route-panelId="@panelId" class="ui inverted tiny basic button"> Panel</a>
+                    foreach (string panelId in panelsIdStack)
+                    {
+                        <a asp-controller="NodesEditor" asp-route-panelId="@panelId" class="ui inverted tiny basic button"> Panel</a>
+                    }
                 }
             }
-        }
         </div>
     </div>
-        <br />
-        <div id="main" ></div>
+    <br />
+    <div id="main"></div>
 
 
 
-<script>
-    //this var used in litegraph.js
-    var this_panel_id = "@ViewBag.panelId";
-    var owner_panel_id = "@ViewBag.ownerPanelId";
-</script>
+    <script>
+        //this var used in litegraph.js
+        var this_panel_id = "@ViewBag.panelId";
+        var owner_panel_id = "@ViewBag.ownerPanelId";
+    </script>
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph.js"></script>
     <script type="text/javascript" src="~/js/litegraph/litegraph-editor.js"></script>
@@ -87,5 +71,7 @@
     <script type="text/javascript" src="~/js/litegraph/litegraph-engine.js"></script>
     <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
     <script src="~/signalr/hubs" type="text/javascript"></script>
+
+
 </body>
 </html>
