@@ -327,9 +327,7 @@ function createOrUpdateNode(node) {
         else
             newNode.size = newNode.computeSize();
 
-        var minHeight = calculateNodeMinHeight(newNode);
-        if (newNode.size[1] < minHeight)
-            newNode.size[1] = minHeight;
+        newNode.size[1] = calculateNodeMinHeight(newNode);
 
         //calculate pos
         if (node.pos)
@@ -359,9 +357,7 @@ function createOrUpdateNode(node) {
         else
             oldNode.size = oldNode.computeSize();
 
-        var minHeight = calculateNodeMinHeight(oldNode);
-        if (oldNode.size[1] < minHeight)
-            oldNode.size[1] = minHeight;
+        oldNode.size[1] = calculateNodeMinHeight(oldNode);
 
         //calculate pos
         if (node.pos)
@@ -412,16 +408,13 @@ function createOrUpdateLink(link) {
 
 function calculateNodeMinHeight(node) {
 
-    var sizeOutY = 0, sizeInY = 0;
+    var slotsMax = (node.outputs.length > node.inputs.length) ? node.outputs.length : node.inputs.length;
+    if (slotsMax == 0)
+        slotsMax = 1;
 
-    if (node.outputs)
-        sizeOutY += LiteGraph.NODE_SLOT_HEIGHT * node.outputs.length;
-    if (node.inputs)
-        sizeInY += LiteGraph.NODE_SLOT_HEIGHT * node.inputs.length;
+    var height = LiteGraph.NODE_SLOT_HEIGHT * slotsMax;
 
-    var slotsSize = (sizeOutY > sizeInY) ? sizeOutY : sizeInY;
-
-    return slotsSize + 5;
+    return height + 5;
 }
 
 
