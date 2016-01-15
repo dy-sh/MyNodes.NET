@@ -1,11 +1,7 @@
 /*Semantic UI*/
 
-.ui.modal {
-        border-radius: 0px;
-}
-
-.ui.modal>.header,.ui.modal>.content, .ui.modal>.actions{
-    background: #eee;
+.ui.modal>.header{
+    background: #ddd;
 }
 
 
@@ -21,7 +17,7 @@ html,body {
 
 body {
 	background-color: #1B1C1D;
-	color: #EEE;
+	/*color: #EEE;*/
 	font: 14px Tahoma;
 }
 
@@ -35,7 +31,9 @@ h2 {
 
 #main {
 	width: 100%;
-	height: 100%;
+    	height: -moz-calc(100% - 50px);
+	height: -webkit-calc(100% - 50px);
+	height: calc(100% - 50px);
 	background-color: #222;
 }
 

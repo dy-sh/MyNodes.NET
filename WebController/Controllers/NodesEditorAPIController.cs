@@ -8,6 +8,7 @@ using MyNetSensors.Gateways;
 using LiteGraph;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
+using MyNetSensors.LogicalNodesUI;
 using MyNetSensors.SerialControllers;
 using Newtonsoft.Json;
 using Input = LiteGraph.Input;
@@ -102,6 +103,13 @@ namespace MyNetSensors.WebController.Controllers
                         });
                     }
                 }
+
+            if (logicalNode is LogicalNodeUISlider)
+            {
+                LogicalNodeUISlider n = (LogicalNodeUISlider) logicalNode;
+                node.properties["min"] = n.Min.ToString();
+                node.properties["max"] = n.Max.ToString();
+            }
 
             return node;
         }
@@ -276,6 +284,25 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+
+        public bool SliderSettings(string id, string name, int min,int max)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
+            LogicalNodeUISlider node = (LogicalNodeUISlider)n;
+            node.Name = name;
+            node.Min = min;
+            node.Max = max;
+            engine.UpdateNode(node);
+
+            return true;
+        }
 
 
 

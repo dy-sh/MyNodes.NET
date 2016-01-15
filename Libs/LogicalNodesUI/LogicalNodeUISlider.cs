@@ -10,12 +10,18 @@ namespace MyNetSensors.LogicalNodesUI
   public class LogicalNodeUISlider : LogicalNodeUI
     {
       public int Value { get; set; }
+      public int Min { get; set; }
+      public int Max { get; set; }
 
-      public LogicalNodeUISlider() : base(0, 1)
+        public LogicalNodeUISlider() : base(0, 1)
       {
             this.Title = "UI Slider";
             this.Type = "UI/Slider";
+
             Value = 0;
+            Min = 0;
+            Max = 100;
+
            Outputs[0].Value = Value.ToString();
         }
 

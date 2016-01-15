@@ -15,7 +15,7 @@
                 function () {
                     window.location = "/NodesEditor/?panelId=" + that.id;
                 }
-        },null];//null for horizontal line
+        }, null];//null for horizontal line
     }
     LiteGraph.registerNodeType("Main/Panel", Panel);
 
@@ -42,7 +42,7 @@
 
 
 
-    
+
 
 
 
@@ -177,12 +177,55 @@
 
 
 
+
+
+
     //UI Slider
     function UISlider() {
         this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
     }
+
+    UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UISliderSettings(that) } }, null];
+    }
+    function UISliderSettings(that) {
+        $('#node-settings-title').html(that.title);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
+            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(that.title);
+        $('#node-settings-min').val(that.properties['min']);
+        $('#node-settings-max').val(that.properties['max']);
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: {opacity: 0.3},
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/SliderSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        min: $('#node-settings-min').val(),
+                        max: $('#node-settings-max').val(),
+                        id: that.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+
     UISlider.title = "Slider";
     LiteGraph.registerNodeType("UI/Slider", UISlider);
+
+
 
 
 
@@ -201,5 +244,11 @@
     }
     UIRGBWSliders.title = "RGBW Sliders";
     LiteGraph.registerNodeType("UI/RGBW Sliders", UIRGBWSliders);
+
+
+
+
+
+
 
 })();
