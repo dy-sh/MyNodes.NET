@@ -31,9 +31,9 @@ h2 {
 
 #main {
 	width: 100%;
-    	height: -moz-calc(100% - 50px);
-	height: -webkit-calc(100% - 50px);
-	height: calc(100% - 50px);
+    	height: -moz-calc(100% - 135px);
+	height: -webkit-calc(100% - 135px);
+	height: calc(100% - 135px);
 	background-color: #222;
 }
 

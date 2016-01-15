@@ -43,7 +43,7 @@
 .litegraph-editor .content {
 	position: relative;
 	width: 100%;
-	height: calc( 100% - 80px );
+	height:  100%;
 	background-color: #292929;
 }
 
