@@ -46,6 +46,11 @@ $(function () {
 
 
     clientsHub.client.OnLogicalNodeRemoveEvent = function (nodeId) {
+        //if current panel removed
+        if (nodeId == this_panel_id) {
+            window.location = "/NodesEditor/";
+        }
+
         var node = graph.getNodeById(nodeId);
         if (node == null)
             return;
