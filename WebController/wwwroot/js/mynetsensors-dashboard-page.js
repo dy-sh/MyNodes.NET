@@ -166,7 +166,7 @@ function createNode(node) {
 
     if (node.Type == "UI/Log") {
         $(logTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
-        $('#clear-log-'+node.Id).click(function () {
+        $('#clear-log-' + node.Id).click(function () {
             sendClearLog(node.Id);
         });
     }
@@ -326,7 +326,9 @@ function updateNode(node) {
     if (node.Type == "UI/Log") {
         $('#logName-' + node.Id).html(node.Name);
         $('#log-' + node.Id).html(node.Log);
-        $('#log-' + node.Id).animate({ scrollTop: $('#log-' + node.Id).get(0).scrollHeight }, 0);
+
+        if ($('#log-' + node.Id).get(0) != null)
+            $('#log-' + node.Id).animate({ scrollTop: $('#log-' + node.Id).get(0).scrollHeight }, 0);
     }
 
     if (node.Type == "UI/Progress") {
@@ -371,7 +373,7 @@ function updateNode(node) {
                 'min': node.Min,
                 'max': node.Max
             }
-        });;
+        });
 
         $("#slider-" + node.Id)[0].noUiSlider.set(node.Value);
 
@@ -415,7 +417,7 @@ function updateNode(node) {
 
 
 function removeNode(node) {
-    $('#node-' + node.Id).fadeOut(elementsFadeTime, function() {
+    $('#node-' + node.Id).fadeOut(elementsFadeTime, function () {
         $(this).remove();
         checkPanelForRemove(node.PanelId);
     });

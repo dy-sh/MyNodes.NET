@@ -61,10 +61,10 @@ namespace MyNetSensors.LogicalNodesUI
 
             LogicalNodeUI n = (LogicalNodeUI)node;
 
+            OnNewUINodeEvent?.Invoke(n);
+
             n.Name = GenerateName(n);
             engine.UpdateNode(n);
-
-            OnNewUINodeEvent?.Invoke(n);
         }
 
         private string GenerateName(LogicalNodeUI node)
