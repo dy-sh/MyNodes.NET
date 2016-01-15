@@ -38,6 +38,24 @@ namespace MyNetSensors.WebController.Controllers
 
                 ViewBag.panelId = panel.Id;
                 ViewBag.ownerPanelId = panel.PanelId;
+
+                //create menu stack
+                List<string> panelsIdStack=new List<string>();
+
+                bool findNext=true;
+                while (findNext)
+                {
+                    panelsIdStack.Add(panel.Id);
+                    if (panel.PanelId == MAIN_PANEL_ID)
+                        findNext = false;
+                    else
+                    {
+                        panel= engine.GetPanelNode(panel.PanelId);
+                    }
+                }
+
+                panelsIdStack.Reverse();
+                ViewBag.panelsIdStack = panelsIdStack;
             }
 
             return View();
