@@ -122,6 +122,14 @@ namespace MyNetSensors.LogicalNodesUI
                 .ToList();
         }
 
+        public List<LogicalNodeUI> GetUINodesForMainPage()
+        {
+            return engine.nodes
+                .Where(n => n is LogicalNodeUI && ((LogicalNodeUI)n).ShowOnMainPage)
+                .Cast<LogicalNodeUI>()
+                .ToList();
+        }
+
         public List<LogicalNodeUI> GetUINodesForPanel(string panelId)
         {
             return engine.nodes

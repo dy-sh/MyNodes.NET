@@ -12,7 +12,12 @@ namespace MyNetSensors.LogicalNodesUI
         public int PanelOrderIndex { get; set; }
         public string Name { get; set; }
 
-        public LogicalNodeUI(int inputsCount, int outputsCount) : base(inputsCount, outputsCount) { }
+        public bool ShowOnMainPage { get; set; }
+
+        public LogicalNodeUI(int inputsCount, int outputsCount) : base(inputsCount, outputsCount)
+        {
+            ShowOnMainPage = true;
+        }
 
     }
 }

@@ -108,6 +108,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 LogicalNodeUI n = (LogicalNodeUI)logicalNode;
                 node.properties["name"] = n.Name;
+                node.properties["show"] = n.ShowOnMainPage ? "true" : "false";
             }
 
             if (logicalNode is LogicalNodeUISlider)
@@ -115,6 +116,7 @@ namespace MyNetSensors.WebController.Controllers
                 LogicalNodeUISlider n = (LogicalNodeUISlider) logicalNode;
                 node.properties["min"] = n.Min.ToString();
                 node.properties["max"] = n.Max.ToString();
+                node.properties["show"] = n.ShowOnMainPage ? "true" : "false";
             }
 
             if (logicalNode is LogicalNodeConstant)
@@ -357,7 +359,7 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool UINodeSettings(string id, string name)
+        public bool UINodeSettings(string id, string name,bool show)
         {
             LogicalNode n = engine.GetNode(id);
             if (n == null)
@@ -368,13 +370,14 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNodeUI node = (LogicalNodeUI)n;
             node.Name = name;
+            node.ShowOnMainPage = show;
             engine.UpdateNode(node);
 
             return true;
         }
 
 
-        public bool UISliderSettings(string id, string name, int min,int max)
+        public bool UISliderSettings(string id, string name, int min,int max,bool show)
         {
             LogicalNode n = engine.GetNode(id);
             if (n == null)
@@ -392,6 +395,7 @@ namespace MyNetSensors.WebController.Controllers
             node.Name = name;
             node.Min = min;
             node.Max = max;
+            node.ShowOnMainPage = show;
             engine.UpdateNode(node);
 
             return true;

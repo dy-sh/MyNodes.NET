@@ -167,10 +167,14 @@
         $('#node-settings-body').html(
             '<div class="ui form"><div class="fields">' +
             '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div><div class="fields">' +
+            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
+
             '</div></div>'
         );
 
         $('#node-settings-name').val(node.properties['name']);
+        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
 
 
         $('#node-settings-panel').modal({
@@ -181,6 +185,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        show: $('#node-settings-show').prop('checked'),
                         id: node.id
                     }
                 });
@@ -314,12 +319,16 @@
             '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
             '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
             '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
+            '</div><div class="fields">' +
+            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
+
             '</div></div>'
         );
 
         $('#node-settings-name').val(node.properties['name']);
         $('#node-settings-min').val(node.properties['min']);
         $('#node-settings-max').val(node.properties['max']);
+        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
 
 
         $('#node-settings-panel').modal({
@@ -332,6 +341,7 @@
                         name: $('#node-settings-name').val(),
                         min: $('#node-settings-min').val(),
                         max: $('#node-settings-max').val(),
+                        show: $('#node-settings-show').prop('checked'),
                         id: node.id
                     }
                 });

@@ -9,7 +9,7 @@ using MyNetSensors.SerialControllers;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class DashboardController:Controller
+    public class DashboardController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
 
@@ -23,10 +23,10 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Panel(string id)
         {
-            if (id == null|| id == MAIN_PANEL_ID)
+            if (id == null || id == MAIN_PANEL_ID)
             {
                 id = MAIN_PANEL_ID;
-                ViewBag.panelName ="Main Panel";
+                ViewBag.panelName = "Main Panel";
             }
             else
             {
@@ -70,19 +70,23 @@ namespace MyNetSensors.WebController.Controllers
                 return null;
 
             LogicalNodePanel panel = engineUI.GetPanel(id);
-            if (panel == null)
-                return null;
-            else return panel.Name;
+
+            return panel?.Name;
         }
 
-        public List<LogicalNodeUI> GetUINodes(string panelId)
+        public List<LogicalNodeUI> GetUINodesForMainPage()
         {
             if (engineUI == null)
                 return null;
 
-            if (panelId==null)
-            return engineUI.GetUINodes();
-            else
+            return engineUI.GetUINodesForMainPage();
+        }
+
+        public List<LogicalNodeUI> GetUINodesForPanel(string panelId)
+        {
+            if (engineUI == null)
+                return null;
+
             return engineUI.GetUINodesForPanel(panelId);
         }
 
@@ -94,13 +98,13 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool TextBoxSend(string nodeId,string value)
+        public bool TextBoxSend(string nodeId, string value)
         {
-            engineUI.TextBoxSend(nodeId,value);
+            engineUI.TextBoxSend(nodeId, value);
             return true;
         }
 
-        
+
 
         public bool ButtonClick(string nodeId)
         {
@@ -122,7 +126,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool SliderChange(string nodeId, int value)
         {
-            engineUI.SliderChange(nodeId,value);
+            engineUI.SliderChange(nodeId, value);
             return true;
         }
 
@@ -138,6 +142,6 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        
+
     }
 }

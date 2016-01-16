@@ -40,18 +40,37 @@ $(function () {
 
 
     clientsHub.client.OnNewUINodeEvent = function (node) {
-        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
-            createNode(node);
+        if (this_panel_id != null && this_panel_id != "") {
+            if (node.PanelId != this_panel_id)
+                return;
+        } else if (!node.ShowOnMainPage)
+            return;
+
+        createNode(node);
     };
 
     clientsHub.client.OnUINodeUpdatedEvent = function (node) {
-        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
-            updateNode(node);
+        if (this_panel_id != null && this_panel_id != "") {
+            if (node.PanelId != this_panel_id)
+                return;
+        } else if (!node.ShowOnMainPage) {
+            //if ShowOnMainPage changed to false
+            if ($('#node-' + node.Id).length != 0)
+                removeNode(node);
+            return;
+        }
+
+        updateNode(node);
     };
 
     clientsHub.client.OnUINodeRemoveEvent = function (node) {
-        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
-            removeNode(node);
+        if (this_panel_id != null && this_panel_id != "") {
+            if (node.PanelId != this_panel_id)
+                return;
+        } else if (!node.ShowOnMainPage)
+            return;
+
+        removeNode(node);
     };
 
 
@@ -113,14 +132,24 @@ function hardwareStateChanged(connected) {
 
 
 function getNodes() {
-    $.ajax({
-        url: "/Dashboard/GetUINodes/",
-        type: "POST",
-        data: { 'panelId': window.this_panel_id },
-        success: function (nodes) {
-            onReturnNodes(nodes);
-        }
-    });
+    if (window.this_panel_id == null || window.this_panel_id == "") {
+        $.ajax({
+            url: "/Dashboard/GetUINodesForMainPage/",
+            type: "POST",
+            success: function (nodes) {
+                onReturnNodes(nodes);
+            }
+        });
+    } else {
+        $.ajax({
+            url: "/Dashboard/GetUINodesForPanel/",
+            type: "POST",
+            data: { 'panelId': window.this_panel_id },
+            success: function (nodes) {
+                onReturnNodes(nodes);
+            }
+        });
+    }
 }
 
 function onReturnNodes(nodes) {
@@ -292,6 +321,10 @@ function createNode(node) {
 
 
 function updateNode(node) {
+    //if ShowOnMainPage option changed to true
+    if ($('#node-' + node.Id).length==0)
+        createNode(node);
+
     $('#activity-' + node.PanelId).show().fadeOut(150);
 
     if (node.Type == "UI/Label") {
