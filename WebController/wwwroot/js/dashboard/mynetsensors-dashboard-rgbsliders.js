@@ -3,12 +3,14 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-var sliderUpdateInterval = 50; //increase this interval if you get excaption on moving slider
+var SLIDERS_UPDATE_INTERVAL = 50; //increase this interval if you get excaption on moving slider
 
+var rgbSlidersTemplate = Handlebars.compile($('#rgbSlidersTemplate').html());
+var rgbwSlidersTemplate = Handlebars.compile($('#rgbwSlidersTemplate').html());
 
 var rgbSlidersArray = [];
 var rgbwSlidersArray = [];
-setInterval(sendSliders, sliderUpdateInterval);
+setInterval(sendSliders, SLIDERS_UPDATE_INTERVAL);
 
 
 

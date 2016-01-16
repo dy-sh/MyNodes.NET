@@ -1,5 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-chart.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-main.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-page.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-signalr.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-slider - copy.js" />
