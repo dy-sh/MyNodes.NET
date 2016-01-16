@@ -187,6 +187,8 @@ namespace MyNetSensors.WebController
 
                 // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
+                app.UseStatusCodePages();
+
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(

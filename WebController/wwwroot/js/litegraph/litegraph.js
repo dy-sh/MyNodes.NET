@@ -4573,6 +4573,13 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function()
 	    if (window.owner_panel_id != null && window.owner_panel_id != "") {
 	        options.push(null);
 
+	        options.push({
+	            content: "Show on Dashboard",
+	            callback: function () { var win = window.open("/Dashboard/Panel/" + window.this_panel_id, '_blank'); win.focus(); }
+	        });
+
+	        options.push(null);
+
 	        var back_url = "/NodesEditor/";
 
 	        if (window.owner_panel_id != MAIN_PANEL_ID)

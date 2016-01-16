@@ -8,7 +8,7 @@
     */
 
 
- 
+
 
 
 
@@ -23,6 +23,8 @@
         var that = this;
         return [
             { content: "Open", callback: function () { window.location = "/NodesEditor/?panelId=" + that.id; } },
+            null, //null for horizontal line
+            { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
             null, //null for horizontal line
             { content: "Settings", callback: function () { PanelSettings(that) } },
             null
@@ -239,7 +241,7 @@
     UILog.title = "Log";
     LiteGraph.registerNodeType("UI/Log", UILog);
 
-    
+
 
     //UI Button
     function UIButton() {
@@ -321,7 +323,7 @@
 
 
         $('#node-settings-panel').modal({
-            dimmerSettings: {opacity: 0.3},
+            dimmerSettings: { opacity: 0.3 },
             onApprove: function () {
                 $.ajax({
                     url: "/NodesEditorAPI/UISliderSettings/",

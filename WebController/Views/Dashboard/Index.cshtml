@@ -1,8 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Dashboard";
+    if (ViewBag.panelId == null)
+    {
+        ViewBag.Title = "Dashboard";
+    }
+    else
+    {
+        ViewBag.Title = ViewBag.PanelName;
+    }
 }
 
-<br />
+
 <div class="ui container">
     <a asp-action="List" class="ui button right floated">Dashboard Panels</a>
 
@@ -10,26 +17,54 @@
 
     <h2>@ViewBag.Title</h2>
     <p>
-        @*<a asp-controller="Dashboard" asp-action="Index">Dashboard</a> |*@
-        <a asp-controller="NodesEditor" asp-action="Index">Editor</a> |
-        <a asp-controller="History" asp-action="List">History</a> |
-        <a asp-controller="Tasks" asp-action="List">Tasks</a> |
-        @*<a asp-controller="Gateway" asp-action="Observe">Observe</a> |*@
-        @*<a asp-controller="Gateway" asp-action="Control">Direct Control</a> |*@
-        <a asp-controller="Node" asp-action="List">Settings</a>
+        @if (ViewBag.panelId == null)
+        {
+            <a asp-controller="NodesEditor" asp-action="Index">Editor</a>
+            @:|
+            <a asp-controller="History" asp-action="List">History</a>
+            @:|
+            <a asp-controller="Tasks" asp-action="List">Tasks</a>
+            @:|
+            <a asp-controller="Node" asp-action="List">Settings</a>
+        }
+        else
+        {
+            @:<
+            <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+        }
     </p>
     <div class="ui divider"></div>
 
     <div class="ui message" id="empty-message" style="display:none">
-        <p>Dashboard is empty. To create controls, go to the <a asp-controller="NodesEditor" asp-action="Index">Nodes Editor</a>.
+        <p>
+            @if (ViewBag.panelId == null)
+            {
+                @: Dashboard is empty. To create controls, go to the
+                <a asp-controller="NodesEditor" asp-action="Index">Nodes Editor</a>
+                @:.
+            }
+            else
+            {
+                @: Panel is empty. To create controls, go to the
+                <a asp-controller="NodesEditor" asp-action="Index" asp-route-panelId="@ViewBag.panelId">Nodes Editor</a>
+                @:.
+            }
+
+
+
+
         </p>
+
+
     </div>
+
+
 
     <div class="ui stackable centered grid" id="panelsContainer" style="display: none;">
     </div>
 
 </div>
-<br/>
+<br />
 
 
 
@@ -176,7 +211,7 @@
 @section scripts
 {
     <script>
-        var this_panel_id="@ViewBag.panelId";
+        var this_panel_id = "@ViewBag.panelId";
     </script>
     <script src="~/js/mysensors.js"></script>
     <script src="~/js/mynetsensors-dashboard-page.js"></script>

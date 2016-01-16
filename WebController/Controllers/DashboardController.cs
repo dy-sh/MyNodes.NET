@@ -23,8 +23,18 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Panel(string id)
         {
-            if (id == null)
+            if (id == null|| id == MAIN_PANEL_ID)
+            {
                 id = MAIN_PANEL_ID;
+                ViewBag.panelName ="Main Panel";
+            }
+            else
+            {
+                LogicalNodePanel panel = engineUI.GetPanel(id);
+                if (panel == null)
+                    return HttpNotFound();
+                ViewBag.panelName = panel.Name;
+            }
 
             ViewBag.panelId = id;
             return View("Index");
