@@ -528,11 +528,19 @@ namespace MyNetSensors.LogicalNodes
                 return;
             }
 
+            if (inputNode == outputNode )
+            {
+                LogEngineError($"Can`t create link from [{output.Id}] to [{input.Id}]. Input and output belong to the same node.");
+                return;
+            }
+
             if (inputNode.PanelId != outputNode.PanelId)
             {
                 LogEngineError($"Can`t create link from {outputNode.GetType().Name} to {inputNode.GetType().Name}. Nodes are on different panels.");
                 return;
             }
+
+
 
             //prevent two links to one input
             LogicalLink oldLink = GetLinkForInput(input);
