@@ -117,17 +117,14 @@ function getNodes() {
 }
 
 function onReturnNodes(nodes) {
-    //    var temp = elementsFadeTime;
-    //   elementsFadeTime = 0;
-    //  $('#panelsContainer').html(null);
-    //  slidersArray.length = 0;
-    //  rgbSlidersArray.length = 0;
-    //  rgbwSlidersArray.length = 0;
+    if (!nodes || nodes.length == 0) {
+        $('#empty-message').show();
+        return;
+    }
 
     for (var i = 0; i < nodes.length; i++) {
         createNode(nodes[i]);
     }
-    //elementsFadeTime = temp;
 }
 
 
@@ -431,6 +428,8 @@ function checkPanelForRemove(panelId) {
 
 
 function createPanel(node) {
+    $('#empty-message').hide();
+
     //create new
     $(panelTemplate(node)).hide().appendTo("#panelsContainer").fadeIn(elementsFadeTime);
 

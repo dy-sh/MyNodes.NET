@@ -17,11 +17,18 @@
     </p>
     <div class="ui divider"></div>
 
+    <div class="ui message" id="empty-message" style="display:none">
+        <p>Dashboard is empty. To create controls, go to the <a asp-controller="NodesEditor" asp-action="Index">Nodes Editor</a>.
+        </p>
+    </div>
+
     <div class="ui stackable grid" id="panelsContainer" style="display: none;">
     </div>
 
 </div>
-<br />
+<br/>
+
+
 
 
 <script id="panelTemplate" type="text/x-handlebars-template">
