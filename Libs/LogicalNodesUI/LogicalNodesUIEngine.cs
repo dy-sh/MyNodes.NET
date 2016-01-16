@@ -104,6 +104,8 @@ namespace MyNetSensors.LogicalNodesUI
                 .ToList();
         }
 
+
+
         public LogicalNodePanel GetPanel(string id)
         {
             LogicalNode node = engine.GetNode(id);

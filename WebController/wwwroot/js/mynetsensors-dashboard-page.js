@@ -5,6 +5,9 @@
 
 var MAIN_PANEL_ID = "Main";
 
+//window.this_panel_id initialized from ViewBag
+
+
 var gatewayHardwareConnected = null;
 var signalRServerConnected = null;
 
@@ -37,15 +40,18 @@ $(function () {
 
 
     clientsHub.client.OnNewUINodeEvent = function (node) {
-        createNode(node);
+        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
+            createNode(node);
     };
 
     clientsHub.client.OnUINodeUpdatedEvent = function (node) {
-        updateNode(node);
+        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
+            updateNode(node);
     };
 
-    clientsHub.client.OnUINodeRemoveEvent = function (sensor) {
-        removeNode(sensor);
+    clientsHub.client.OnUINodeRemoveEvent = function (node) {
+        if (this_panel_id == null || this_panel_id == "" || node.PanelId == this_panel_id)
+            removeNode(node);
     };
 
 
@@ -110,6 +116,7 @@ function getNodes() {
     $.ajax({
         url: "/Dashboard/GetUINodes/",
         type: "POST",
+        data: { 'panelId': window.this_panel_id },
         success: function (nodes) {
             onReturnNodes(nodes);
         }

@@ -11,6 +11,7 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class DashboardController:Controller
     {
+        const string MAIN_PANEL_ID = "Main";
 
         private LogicalNodesUIEngine engineUI = SerialController.logicalNodesUIEngine;
 
@@ -20,14 +21,38 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
-
-        public List<LogicalNodePanel> GetPanels()
+        public IActionResult Panel(string id)
         {
-            if (engineUI == null)
-                return null;
+            if (id == null)
+                id = MAIN_PANEL_ID;
 
-            return engineUI.GetPanels();
+            ViewBag.panelId = id;
+            return View("Index");
         }
+
+        public IActionResult List()
+        {
+            ViewBag.showMainPanel = engineUI.GetUINodesForPanel(MAIN_PANEL_ID).Any();
+
+            List<LogicalNodePanel> allPanels = engineUI.GetPanels();
+            List<LogicalNodePanel> notEmptyPanels = new List<LogicalNodePanel>();
+            foreach (var panel in allPanels)
+            {
+                if (engineUI.GetUINodesForPanel(panel.Id).Any())
+                    notEmptyPanels.Add(panel);
+            }
+
+            return View(notEmptyPanels);
+        }
+
+
+        //public List<LogicalNodePanel> GetPanels()
+        //{
+        //    if (engineUI == null)
+        //        return null;
+
+        //    return engineUI.GetPanels();
+        //}
 
         public string GetNameForPanel(string id)
         {
@@ -40,12 +65,15 @@ namespace MyNetSensors.WebController.Controllers
             else return panel.Name;
         }
 
-        public List<LogicalNodeUI> GetUINodes()
+        public List<LogicalNodeUI> GetUINodes(string panelId)
         {
             if (engineUI == null)
                 return null;
 
+            if (panelId==null)
             return engineUI.GetUINodes();
+            else
+            return engineUI.GetUINodesForPanel(panelId);
         }
 
 

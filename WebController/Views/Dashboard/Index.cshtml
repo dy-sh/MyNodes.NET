@@ -4,6 +4,9 @@
 
 <br />
 <div class="ui container">
+    <a asp-action="List" class="ui button right floated">Dashboard Panels</a>
+
+
 
     <h2>@ViewBag.Title</h2>
     <p>
@@ -22,7 +25,7 @@
         </p>
     </div>
 
-    <div class="ui stackable grid" id="panelsContainer" style="display: none;">
+    <div class="ui stackable centered grid" id="panelsContainer" style="display: none;">
     </div>
 
 </div>
@@ -172,6 +175,9 @@
 
 @section scripts
 {
+    <script>
+        var this_panel_id="@ViewBag.panelId";
+    </script>
     <script src="~/js/mysensors.js"></script>
     <script src="~/js/mynetsensors-dashboard-page.js"></script>
 }
