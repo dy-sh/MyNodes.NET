@@ -723,18 +723,48 @@ namespace MyNetSensors.LogicalNodes
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
+        // this list used for infinite loop detection
+        List<Input> changedInputsStack=new List<Input>();
+
+        public void OnInputChange(Input input)
+        {
+            if (!started)
+                return;
+
+            LogicalNode node = GetInputOwner(input.Id);
+
+            if (changedInputsStack.Contains(input))
+            {
+                LogEngineError($"Infinite loop detected in Node [{node.Type}] [{node.Id}].");
+                return;
+            }
+            changedInputsStack.Add(input);
+
+            node.OnInputChange(input);
+
+            if (node is LogicalNodePanel)
+                GetNode(input.Id).Outputs[0].Value = input.Value;
+
+            if (node is LogicalNodePanelOutput)
+                GetOutput(node.Id).Value = input.Value;
+
+            OnInputUpdatedEvent?.Invoke(input);
+
+            changedInputsStack.Remove(input);
+        }
+
         public void OnOutputChange(Output output)
         {
             if (!started)
                 return;
 
-            LogicalNode owner = GetOutputOwner(output);
-            if (owner == null)
+            LogicalNode node = GetOutputOwner(output);
+            if (node == null)
                 return;
 
             OnOutputUpdatedEvent?.Invoke(output);
 
-            owner.OnOutputChange(output);
+            node.OnOutputChange(output);
 
             List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
 
@@ -770,25 +800,7 @@ namespace MyNetSensors.LogicalNodes
             return (from node in nodes from output in node.Outputs where output.Id == outputId select node).FirstOrDefault();
         }
 
-        public void OnInputChange(Input input)
-        {
-
-            //LogNodes($"Input changed: {input.Name}");
-
-            if (!started)
-                return;
-
-            LogicalNode node = GetInputOwner(input.Id);
-            node.OnInputChange(input);
-
-            if (node is LogicalNodePanel)
-                GetNode(input.Id).Outputs[0].Value = input.Value;
-
-            if (node is LogicalNodePanelOutput)
-                GetOutput(node.Id).Value = input.Value;
-
-            OnInputUpdatedEvent?.Invoke(input);
-        }
+      
 
 
         public void RemoveAllNodesAndLinks()
