@@ -22,7 +22,7 @@
     Panel.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
         return [
-            { content: "Open", callback: function () { window.location = "/NodesEditor/?panelId=" + that.id; } },
+            { content: "Open", callback: function () { window.location = "/NodesEditor/Panel/" + that.id; } },
             null, //null for horizontal line
             { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
             null, //null for horizontal line

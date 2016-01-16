@@ -25,33 +25,39 @@
     <div class="ui inverted fixed big borderless main menu">
         <div class="ui container">
             <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
-        </div>
+            <div class="right menu">
+
+            </div>
+            </div>
     </div>
     <br />
     <br />
     <br />
-    <div class="ui container">
-        <div class="ui tiny right floated buttons">
-            <button type="button" class="ui black button" id="reset-view-button">Reset View</button>
-            <button type="button" class="ui black button" id="minimap-button">Show Map</button>
-            @*<button type="button" class="ui black button" id="fullscreen-button">Full Screen</button>*@
-            @*   <a asp-controller="Dashboard" asp-action="Index" class="ui black button fadebefore">X</a>*@
-        </div>
-        <a asp-controller="Dashboard" asp-action="Index" class="ui inverted tiny basic button">Dashboard</a>
-        <div class="ui tiny buttons">
-            <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
-            @{
-                List<LogicalNodePanel> panelsStack = ViewBag.panelsStack;
-                if (panelsStack != null && panelsStack.Any())
+<div class="ui container">
+    @if (@ViewBag.panelId != "Main")
+    {
+        <a asp-controller="Dashboard" asp-action="Panel" asp-route-id="@ViewBag.panelId" class="ui inverted small basic right floated button">Dashboard</a>
+    }
+    else
+    {
+        <a asp-controller="Dashboard" asp-action="Index" class="ui inverted small basic right floated button">Dashboard</a>
+        
+    }
+
+    <div class="ui tiny buttons">
+        <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
+        @{
+            List<LogicalNodePanel> panelsStack = ViewBag.panelsStack;
+            if (panelsStack != null && panelsStack.Any())
+            {
+                foreach (LogicalNodePanel panel in panelsStack)
                 {
-                    foreach (LogicalNodePanel panel in panelsStack)
-                    {
-                        <a asp-controller="NodesEditor" asp-route-panelId="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
-                    }
+                    <a asp-action="Panel" asp-route-id="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
                 }
             }
-        </div>
+        }
     </div>
+</div>
     <br />
     <div id="main"></div>
 

@@ -24,41 +24,46 @@ namespace MyNetSensors.WebController.Controllers
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
-        public IActionResult Index(string panelId)
+        public IActionResult Index()
         {
             ViewBag.panelId = MAIN_PANEL_ID;
-           // ViewBag.ownerPanelId = MAIN_PANEL_ID;
-
-            if (panelId != null)
-            {
-                LogicalNodePanel panel = engine.GetPanelNode(panelId);
-
-                if (panel==null)
-                    return HttpNotFound();
-
-                ViewBag.panelId = panel.Id;
-                ViewBag.ownerPanelId = panel.PanelId;
-
-                //create menu stack
-                List<LogicalNodePanel> panelsStack=new List<LogicalNodePanel>();
-
-                bool findNext=true;
-                while (findNext)
-                {
-                    panelsStack.Add(panel);
-                    if (panel.PanelId == MAIN_PANEL_ID)
-                        findNext = false;
-                    else
-                    {
-                        panel= engine.GetPanelNode(panel.PanelId);
-                    }
-                }
-
-                panelsStack.Reverse();
-                ViewBag.panelsStack = panelsStack;
-            }
 
             return View();
+        }
+
+        public IActionResult Panel(string id)
+        {
+            if (id == null || id== MAIN_PANEL_ID)
+                return RedirectToAction("Index");
+
+            LogicalNodePanel panel = engine.GetPanelNode(id);
+
+            if (panel == null)
+                return HttpNotFound();
+
+            ViewBag.panelId = panel.Id;
+            ViewBag.ownerPanelId = panel.PanelId;
+
+            //create menu stack
+            List<LogicalNodePanel> panelsStack = new List<LogicalNodePanel>();
+
+            bool findNext = true;
+            while (findNext)
+            {
+                panelsStack.Add(panel);
+                if (panel.PanelId == MAIN_PANEL_ID)
+                    findNext = false;
+                else
+                {
+                    panel = engine.GetPanelNode(panel.PanelId);
+                }
+            }
+
+            panelsStack.Reverse();
+            ViewBag.panelsStack = panelsStack;
+
+
+            return View("Index");
         }
 
     }

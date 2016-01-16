@@ -4569,21 +4569,33 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function()
 	    options.push ({ content: "Add Node", is_menu: true, callback: LGraphCanvas.onMenuAdd });
 			//{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
 
+	    options.push(null);
+
+	    options.push({
+	        content: "Reset View",
+	        callback: function() {
+	            editor.graphcanvas.offset = [0, 0];
+	            editor.graphcanvas.scale = 1;
+	            editor.graphcanvas.setZoom(1, [1, 1]);
+	        }
+	    });
+
+	    options.push({
+	        content: "Show Map",
+	        callback: function() {
+	            editor.addMiniWindow(200, 200);
+	        }
+	    });
 
 	    if (window.owner_panel_id != null && window.owner_panel_id != "") {
-	        options.push(null);
 
-	        options.push({
-	            content: "Show on Dashboard",
-	            callback: function () { var win = window.open("/Dashboard/Panel/" + window.this_panel_id, '_blank'); win.focus(); }
-	        });
 
 	        options.push(null);
 
 	        var back_url = "/NodesEditor/";
 
 	        if (window.owner_panel_id != MAIN_PANEL_ID)
-	            back_url += "?panelId=" + window.owner_panel_id;
+	            back_url += "Panel/" + window.owner_panel_id;
 
 	        options.push({
 	                content: "Close Panel",

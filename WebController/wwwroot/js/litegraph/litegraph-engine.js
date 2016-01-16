@@ -163,15 +163,6 @@ $("#sendButton").click(function () {
 });
 
 
-$("#reset-view-button").click(function () {
-    editor.graphcanvas.offset = [0, 0];
-    editor.graphcanvas.scale = 1;
-    editor.graphcanvas.setZoom(1, [1, 1]);
-});
-
-$("#minimap-button").click(function () {
-    editor.addMiniWindow(200, 200);
-});
 
 
 $("#fullscreen-button").click(function () {

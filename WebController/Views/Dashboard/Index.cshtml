@@ -11,7 +11,8 @@
 
 
 <div class="ui container">
-    <a asp-action="List" class="ui button right floated">Dashboard Panels</a>
+    <a asp-controller="NodesEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId" class="ui button right floated">Editor</a>
+
 
 
 
@@ -19,7 +20,7 @@
     <p>
         @if (ViewBag.panelId == null)
         {
-            <a asp-controller="NodesEditor" asp-action="Index">Editor</a>
+            <a asp-action="List">Panels</a>
             @:|
             <a asp-controller="History" asp-action="List">History</a>
             @:|
@@ -31,6 +32,9 @@
         {
             @:<
             <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+            @:<
+            <a asp-action="List">Panels</a>
+
         }
     </p>
     <div class="ui divider"></div>
@@ -46,7 +50,7 @@
             else
             {
                 @: Panel is empty. To create controls, go to the
-                <a asp-controller="NodesEditor" asp-action="Index" asp-route-panelId="@ViewBag.panelId">Nodes Editor</a>
+                <a asp-controller="NodesEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId">Nodes Editor</a>
                 @:.
             }
 

@@ -2,7 +2,7 @@
 @model IEnumerable<MyNetSensors.LogicalNodes.LogicalNodePanel>
 
 @{
-    ViewBag.Title = "Dashboard Panels";
+    ViewBag.Title = "Panels";
 }
 
 <br />
@@ -21,7 +21,7 @@
         <h4>
             @if (ViewBag.showMainPanel)
             {
-                <a asp-action="Panel">Main Panel</a><br/>
+                <a asp-action="Panel" asp-route-id="Main">Main Panel</a><br/>
                 <div class="ui divider"></div>
             }
 
