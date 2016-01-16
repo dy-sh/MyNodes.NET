@@ -386,6 +386,54 @@
 
 
 
+    //UI Chart
+    function UIChart() {
+        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIChart" };
+    }
+    UIChart.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UIChartSettings(that) } }, null];
+    }
+    function UIChartSettings(node) {
+        $('#node-settings-title').html(node.type);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div><div class="fields">' +
+            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
+
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(node.properties['name']);
+        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/UIChartSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        show: $('#node-settings-show').prop('checked'),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    UIChart.title = "Chart";
+    LiteGraph.registerNodeType("UI/Chart", UIChart);
+
+
+
+
+
+
+
     /*
      -------------------------------- OTHER -------------------------------------
     */

@@ -743,6 +743,7 @@ namespace MyNetSensors.LogicalNodes
 
             if (changedInputsStack.Contains(input))
             {
+                changedInputsStack.Remove(input);
                 LogEngineError($"Infinite loop detected in Node [{node.Type}] [{node.Id}].");
                 return;
             }

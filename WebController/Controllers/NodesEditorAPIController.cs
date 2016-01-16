@@ -418,6 +418,34 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool UIChartSettings(string id, string name, bool show)
+        {
+            LogicalNode n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
+
+            LogicalNodeUISlider node = (LogicalNodeUISlider)n;
+            node.Name = name;
+            node.ShowOnMainPage = show;
+            engine.UpdateNode(node);
+
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         //private int CalculateNodeHeight(LiteGraph.Node node)
         //{
         //const int SLOT_SIZE = 15;

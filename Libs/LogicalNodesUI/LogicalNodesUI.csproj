@@ -43,6 +43,7 @@
     <Compile Include="LogicalNodesUIEngine.cs" />
     <Compile Include="LogicalNodeUI.cs" />
     <Compile Include="LogicalNodeUIButton.cs" />
+    <Compile Include="LogicalNodeUIChart.cs" />
     <Compile Include="LogicalNodeUITextBox.cs" />
     <Compile Include="LogicalNodeUIState.cs" />
     <Compile Include="LogicalNodeUILog.cs" />

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILogicalNodesRepository.cs" />
+    <Compile Include="ILogicalNodesDataRepository.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="LogicalNode.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="LogicalNodeMathPlus.cs" />
     <Compile Include="LogicalNodesEngine.cs" />
     <Compile Include="LogicalLink.cs" />
+    <Compile Include="NodeData.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
