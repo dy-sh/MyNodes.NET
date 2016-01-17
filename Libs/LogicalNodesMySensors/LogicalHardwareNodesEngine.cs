@@ -46,7 +46,7 @@ namespace MyNetSensors.LogicalNodesMySensors
             {
                 LogicalHardwareNode node = GetHardwareNode(sensor.nodeId);
                 node.AddInputOutput(sensor);
-                engine.UpdateNode(node);//for call event
+                engine.UpdateNode(node,true);//for call event
             }
             else
             {
@@ -67,7 +67,7 @@ namespace MyNetSensors.LogicalNodesMySensors
             {
                 //todo update inputs names
                 oldNode.Title = node.GetSimpleName1();
-                engine.UpdateNode(oldNode);
+                engine.UpdateNode(oldNode,true);
             }
         }
 

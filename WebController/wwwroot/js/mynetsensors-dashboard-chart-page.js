@@ -129,9 +129,6 @@ function hardwareStateChanged(connected) {
 function updateChart(node) {
     $('.chartName').html(node.Name);
 
-    if (node.State == null || node.State == "")
-        return;
-
     //Add new point to chart
     var now = vis.moment().format("YYYY-MM-DD HH:mm:ss:SSS");
     dataset.add({

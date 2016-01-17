@@ -8,12 +8,12 @@ using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
 {
-  public class LogicalNodeUILog : LogicalNodeUI
+    public class LogicalNodeUILog : LogicalNodeUI
     {
-      public string Log { get; set; }
+        public string Log { get; set; }
 
-      public LogicalNodeUILog() : base(1, 0)
-      {
+        public LogicalNodeUILog() : base(1, 0)
+        {
             this.Title = "UI Log";
             this.Type = "UI/Log";
             this.Name = "Log";
@@ -25,13 +25,15 @@ namespace MyNetSensors.LogicalNodesUI
 
         public override void OnInputChange(Input input)
         {
-            Log += $"{DateTime.Now}: {input.Value??"NULL"}<br/>";
+            Log += $"{DateTime.Now}: {input.Value ?? "NULL"}<br/>";
+            CallNodeUpdatedEvent(false);
         }
 
 
-      public void ClearLog()
-      {
-          Log = "";
-      }
+        public void ClearLog()
+        {
+            Log = "";
+            CallNodeUpdatedEvent(false);
+        }
     }
 }

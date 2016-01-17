@@ -318,7 +318,7 @@ namespace MyNetSensors.WebController.Controllers
             oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
 
-            engine.UpdateNode(oldNode);
+            engine.UpdateNode(oldNode, true);
 
             return true;
         }
@@ -335,7 +335,7 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNodePanel node = (LogicalNodePanel)n;
             node.Name = panelname;
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, true);
 
             return true;
         }
@@ -353,14 +353,14 @@ namespace MyNetSensors.WebController.Controllers
             {
                 LogicalNodePanelInput node = (LogicalNodePanelInput)n;
                 node.Name = name;
-                engine.UpdateNode(node);
+                engine.UpdateNode(node, true);
             }
 
             if (n is LogicalNodePanelOutput)
             {
                 LogicalNodePanelOutput node = (LogicalNodePanelOutput)n;
                 node.Name = name;
-                engine.UpdateNode(node);
+                engine.UpdateNode(node, true);
             }
 
             return true;
@@ -378,7 +378,7 @@ namespace MyNetSensors.WebController.Controllers
             LogicalNodeUI node = (LogicalNodeUI)n;
             node.Name = name;
             node.ShowOnMainPage = show;
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, true);
 
             return true;
         }
@@ -403,7 +403,7 @@ namespace MyNetSensors.WebController.Controllers
             node.Min = min;
             node.Max = max;
             node.ShowOnMainPage = show;
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, true);
 
             return true;
         }
@@ -419,7 +419,7 @@ namespace MyNetSensors.WebController.Controllers
 
             LogicalNodeConstant node = (LogicalNodeConstant)n;
             node.SetValue(value);
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, true);
 
             return true;
         }
@@ -439,7 +439,7 @@ namespace MyNetSensors.WebController.Controllers
             node.ShowOnMainPage = show;
             node.WriteInDatabase = writeInDatabase;
             node.WriteInDatabaseMinInterval = writeInDatabaseMinInterval;
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, true);
 
             return true;
         }

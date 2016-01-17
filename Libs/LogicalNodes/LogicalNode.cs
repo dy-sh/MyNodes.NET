@@ -23,6 +23,7 @@ namespace MyNetSensors.LogicalNodes
         public List<Input> Inputs { get; set; }
         public List<Output> Outputs { get; set; }
 
+
         public LogicalNode(int inputsCount, int outputsCount)
         {
             Id = Guid.NewGuid().ToString();
@@ -30,10 +31,10 @@ namespace MyNetSensors.LogicalNodes
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
             {
-                if (outputsCount==1)
-                Outputs.Add(new Output { Name = "Out" });
+                if (outputsCount == 1)
+                    Outputs.Add(new Output { Name = "Out" });
                 else
-                Outputs.Add(new Output { Name = $"Out {i+1}" });
+                    Outputs.Add(new Output { Name = $"Out {i + 1}" });
             }
 
             Inputs = new List<Input>();
@@ -42,7 +43,7 @@ namespace MyNetSensors.LogicalNodes
                 if (inputsCount == 1)
                     Inputs.Add(new Input { Name = "In" });
                 else
-                    Inputs.Add(new Input { Name = $"In {i+1}" });
+                    Inputs.Add(new Input { Name = $"In {i + 1}" });
             }
 
             PanelId = "Main";
@@ -72,6 +73,11 @@ namespace MyNetSensors.LogicalNodes
         public virtual void OnOutputChange(Output output) { }
 
         public virtual void OnDeserialize() { }
+
+        public void CallNodeUpdatedEvent(bool writeNodeToDb)
+        {
+            LogicalNodesEngine.logicalNodesEngine.UpdateNode(this, writeNodeToDb);
+        }
     }
 
 

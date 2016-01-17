@@ -25,6 +25,7 @@ namespace MyNetSensors.LogicalNodesUI
         public override void OnInputChange(Input input)
         {
             Value = input.Value;
+            CallNodeUpdatedEvent(false);
         }
 
 

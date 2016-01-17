@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Timers;
 using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.LogicalNodesUI
@@ -19,6 +19,7 @@ namespace MyNetSensors.LogicalNodesUI
         private ILogicalNodesStatesRepository statesDb;
 
 
+
         public LogicalNodesUIEngine(LogicalNodesEngine engine, ILogicalNodesStatesRepository statesDb = null)
         {
             this.statesDb = statesDb;
@@ -28,7 +29,6 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
             engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
-            engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
 
             GetStatesFromRepository();
         }
@@ -53,23 +53,6 @@ namespace MyNetSensors.LogicalNodesUI
         }
 
 
-        private void OnInputUpdatedEvent(Input input)
-        {
-            LogicalNode node = engine.GetInputOwner(input);
-
-            if (node is LogicalNodeUI)
-                OnUINodeUpdatedEvent?.Invoke((LogicalNodeUI)node);
-
-            if (node is LogicalNodeUIChart)
-            {
-                if (input.Value==null)
-                    return;
-
-                LogicalNodeUIChart chart = (LogicalNodeUIChart)node;
-                if (chart.WriteInDatabase && chart.GetStates().Count > 0)
-                    statesDb?.AddState(chart.GetStates().Last());
-            }
-        }
 
         private void OnOutputUpdatedEvent(Output output)
         {
@@ -82,6 +65,17 @@ namespace MyNetSensors.LogicalNodesUI
         {
             if (node is LogicalNodeUI)
                 OnUINodeUpdatedEvent?.Invoke((LogicalNodeUI)node);
+
+
+            if (node is LogicalNodeUIChart)
+            {
+                LogicalNodeUIChart chart = (LogicalNodeUIChart)node;
+                if (chart.WriteInDatabase && chart.State != null)
+                {
+                    engine.LogEngineError(chart.State.ToString());
+                    statesDb?.AddState(new NodeState(chart.Id, chart.State.ToString()));
+                }
+            }
         }
 
         private void OnRemoveNodeEvent(LogicalNode node)
@@ -102,7 +96,7 @@ namespace MyNetSensors.LogicalNodesUI
             OnNewUINodeEvent?.Invoke(n);
 
             n.Name = GenerateName(n);
-            engine.UpdateNode(n);
+            engine.UpdateNode(n, true);
         }
 
         private string GenerateName(LogicalNodeUI node)
@@ -175,9 +169,6 @@ namespace MyNetSensors.LogicalNodesUI
 
             LogicalNodeUILog node = (LogicalNodeUILog)n;
             node.ClearLog();
-
-            //send update ivent
-            engine.UpdateNode(node);
         }
 
 
@@ -270,7 +261,7 @@ namespace MyNetSensors.LogicalNodesUI
             statesDb?.RemoveStatesForNode(nodeId);
 
             //send update ivent
-            engine.UpdateNode(node);
+            engine.UpdateNode(node, false);
         }
     }
 }

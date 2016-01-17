@@ -101,9 +101,6 @@ function addChartData(chartData, nodeId) {
 function updateChart(node) {
     $('#chartName-' + node.Id).html(node.Name);
 
-    if (node.State == null || node.State == "")
-        return;
-
     //Add new point to chart
     var now = vis.moment().format("YYYY-MM-DD HH:mm:ss:SSS");
     dataset[node.Id].add({

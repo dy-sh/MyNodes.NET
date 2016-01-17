@@ -256,7 +256,7 @@ namespace MyNetSensors.LogicalNodes
             };
             panel.Inputs.Add(input);
 
-            UpdateNode(panel);
+            UpdateNode(panel,true);
 
             return true;
         }
@@ -288,7 +288,7 @@ namespace MyNetSensors.LogicalNodes
             };
             panel.Outputs.Add(output);
 
-            UpdateNode(panel);
+            UpdateNode(panel, true);
             return true;
         }
 
@@ -385,7 +385,7 @@ namespace MyNetSensors.LogicalNodes
                 RemoveLink(link);
 
             panel.Inputs.Remove(input);
-            UpdateNode(panel);
+            UpdateNode(panel, true);
             return true;
         }
 
@@ -405,37 +405,40 @@ namespace MyNetSensors.LogicalNodes
                 RemoveLink(link);
 
             panel.Outputs.Remove(output);
-            UpdateNode(panel);
+            UpdateNode(panel, true);
             return true;
         }
 
 
-        public void UpdateNode(LogicalNode node)
+        public void UpdateNode(LogicalNode node, bool writeNodeToDb)
         {
-            LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
-
-            if (oldNode == null)
+            if (writeNodeToDb)
             {
-                LogEngineError($"Can`t update node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
-                return;
+                LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
+
+                if (oldNode == null)
+                {
+                    LogEngineError($"Can`t update node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
+                    return;
+                }
+
+                LogEngineInfo($"Update node [{node.GetType().Name}]");
+
+                if (node is LogicalNodePanelInput)
+                    UpdatePanelInput((LogicalNodePanelInput) node);
+                if (node is LogicalNodePanelOutput)
+                    UpdatePanelOutput((LogicalNodePanelOutput) node);
+
+
+                oldNode.Inputs = node.Inputs;
+                oldNode.Outputs = node.Outputs;
+                oldNode.Position = node.Position;
+                oldNode.Size = node.Size;
+                oldNode.Title = node.Title;
+                oldNode.Type = node.Type;
+
+                nodesDb?.UpdateNode(oldNode);
             }
-
-            LogEngineInfo($"Update node [{node.GetType().Name}]");
-
-            if (node is LogicalNodePanelInput)
-                UpdatePanelInput((LogicalNodePanelInput)node);
-            if (node is LogicalNodePanelOutput)
-                UpdatePanelOutput((LogicalNodePanelOutput)node);
-
-
-            oldNode.Inputs = node.Inputs;
-            oldNode.Outputs = node.Outputs;
-            oldNode.Position = node.Position;
-            oldNode.Size = node.Size;
-            oldNode.Title = node.Title;
-            oldNode.Type = node.Type;
-
-            nodesDb?.UpdateNode(oldNode);
 
             OnNodeUpdatedEvent?.Invoke(node);
         }
@@ -446,7 +449,7 @@ namespace MyNetSensors.LogicalNodes
             input.Name = node.Name;
             LogicalNode panel = GetPanelNode(node.PanelId);
 
-            UpdateNode(panel);
+            UpdateNode(panel, true);
         }
         private void UpdatePanelOutput(LogicalNodePanelOutput node)
         {
@@ -454,7 +457,7 @@ namespace MyNetSensors.LogicalNodes
             output.Name = node.Name;
             LogicalNode panel = GetPanelNode(node.PanelId);
 
-            UpdateNode(panel);
+            UpdateNode(panel, true);
         }
 
 
