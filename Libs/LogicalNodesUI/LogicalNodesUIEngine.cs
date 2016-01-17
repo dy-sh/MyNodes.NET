@@ -29,8 +29,6 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
             engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
-            engine.OnNewLinkEvent += OnNewLinkEvent;
-            engine.OnRemoveLinkEvent += OnRemoveLinkEvent;
 
             GetStatesFromRepository();
         }
@@ -64,6 +62,9 @@ namespace MyNetSensors.LogicalNodesUI
 
             if (node is LogicalNodeUIChart)
             {
+                if (input.Value==null)
+                    return;
+
                 LogicalNodeUIChart chart = (LogicalNodeUIChart)node;
                 if (chart.WriteInDatabase && chart.GetStates().Count > 0)
                     statesDb?.AddState(chart.GetStates().Last());
@@ -117,21 +118,6 @@ namespace MyNetSensors.LogicalNodesUI
             return null;
         }
 
-
-        private void OnNewLinkEvent(LogicalLink link)
-        {
-            LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
-            LogicalNode inNode = engine.GetInputOwner(link.InputId);
-
-            Output output = engine.GetOutput(link.OutputId);
-            Input input = engine.GetInput(link.InputId);
-        }
-
-        private void OnRemoveLinkEvent(LogicalLink link)
-        {
-            LogicalNode inNode = engine.GetInputOwner(link.InputId);
-            LogicalNode outNode = engine.GetOutputOwner(link.OutputId);
-        }
 
         public List<LogicalNodePanel> GetPanels()
         {

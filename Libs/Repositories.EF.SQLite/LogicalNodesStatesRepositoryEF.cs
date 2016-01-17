@@ -51,6 +51,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         public void RemoveStatesForNode(string nodeId)
         {
             db.RemoveRange(db.NodesStates.Where(x => x.NodeId == nodeId));
+            db.SaveChanges();
         }
 
         public void RemoveAllStates()
