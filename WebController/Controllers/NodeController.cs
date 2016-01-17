@@ -22,13 +22,11 @@ namespace MyNetSensors.WebController.Controllers
 
 
       //  IHubContext clientsHub;
-        private INodesHistoryRepository historyDb;
         private IGatewayRepository gatewayDb;
 
         public NodeController()
         {
             gatewayDb = SerialController.gatewayDb;
-            historyDb = SerialController.historyDb;
         }
 
         public ActionResult Index()
@@ -75,12 +73,6 @@ namespace MyNetSensors.WebController.Controllers
                     sensordescription = null;
                 sensor.description = sensordescription;
 
-                bool storehistory = Request.Form["storehistory-" + sensor.sensorId] != "false";
-                bool writeeverychange = Request.Form["writeeverychange-" + sensor.sensorId] != "false";
-                int writeinterval = Int32.Parse(Request.Form["writeinterval-" + sensor.sensorId]);
-                sensor.storeHistoryEnabled = storehistory;
-                sensor.storeHistoryEveryChange = writeeverychange;
-                sensor.storeHistoryWithInterval = writeinterval;
 
                 bool invertData = Request.Form["invertData-" + sensor.sensorId] != "false";
                 bool remapEnabled = Request.Form["remapData-" + sensor.sensorId] != "false";
@@ -123,7 +115,6 @@ namespace MyNetSensors.WebController.Controllers
 
             foreach (var sensor in node.sensors)
             {
-                historyDb.ClearSensorHistory(sensor.nodeId,sensor.sensorId);
                 tasksDb.RemoveTasks(sensor.nodeId, sensor.sensorId);
             }
 

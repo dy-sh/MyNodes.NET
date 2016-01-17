@@ -47,7 +47,6 @@ namespace MyNetSensors.SerialControllers
         public static Gateway gateway = new Gateway(comPort);
 
         public static IGatewayRepository gatewayDb;
-        public static INodesHistoryRepository historyDb;
         public static INodesMessagesRepository messagesDb;
 
         public static NodesTasksEngine nodesTasksEngine;
@@ -120,7 +119,6 @@ namespace MyNetSensors.SerialControllers
                 }
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
-                historyDb = new NodesHistoryRepositoryDapper(dataBaseConnectionString);
                 messagesDb = new NodesMessagesRepositoryDapper(dataBaseConnectionString);
                 nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
                 logicalNodesDb = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
@@ -136,9 +134,6 @@ namespace MyNetSensors.SerialControllers
             gatewayDb.ConnectToGateway(gateway);
             gatewayDb.OnLogInfo += logs.AddDataBaseInfo;
             gatewayDb.OnLogError += logs.AddDataBaseError;
-
-            historyDb.SetWriteInterval(dataBaseWriteInterval);
-            historyDb.ConnectToGateway(gateway);
 
             messagesDb.SetWriteInterval(dataBaseWriteInterval);
             messagesDb.ConnectToGateway(gateway);

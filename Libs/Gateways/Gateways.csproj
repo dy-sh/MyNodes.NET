@@ -44,7 +44,6 @@
     <Compile Include="GatewayInfo.cs" />
     <Compile Include="IComPort.cs" />
     <Compile Include="IGatewayRepository.cs" />
-    <Compile Include="INodesHistoryRepository.cs" />
     <Compile Include="INodesMessagesRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessagesLog.cs" />

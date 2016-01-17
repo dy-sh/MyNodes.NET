@@ -633,9 +633,6 @@ namespace MyNetSensors.Gateways
             {
                 Sensor oldSensor = oldNode.GetSensor(sensor.sensorId);
                 oldSensor.description = sensor.description;
-                oldSensor.storeHistoryEnabled = sensor.storeHistoryEnabled;
-                oldSensor.storeHistoryEveryChange = sensor.storeHistoryEveryChange;
-                oldSensor.storeHistoryWithInterval = sensor.storeHistoryWithInterval;
                 oldSensor.invertData = sensor.invertData;
                 oldSensor.remapEnabled = sensor.remapEnabled;
                 oldSensor.remapFromMin = sensor.remapFromMin;

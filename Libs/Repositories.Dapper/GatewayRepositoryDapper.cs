@@ -121,9 +121,6 @@ namespace MyNetSensors.Repositories.Dapper
 	                [dataType] [int] NULL,
 	                [state] [nvarchar](max) NULL,
 	                [description] [nvarchar](max) NULL,
-	                [storeHistoryEnabled] [bit] NULL,
-	                [storeHistoryEveryChange] [bit] NULL,
-	                [storeHistoryWithInterval] [int] NULL,
 	                [invertData] [bit] NULL,
 	                [remapEnabled] [bit] NULL,
 	                [remapFromMin] [nvarchar](max) NULL,
@@ -289,9 +286,9 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
 
-                var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, storeHistoryEnabled, storeHistoryEveryChange, storeHistoryWithInterval, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
+                var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
                                +
-                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description,  @storeHistoryEnabled, @storeHistoryEveryChange, @storeHistoryWithInterval, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax); "
+                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 id = db.Query<int>(sqlQuery, new
                 {
@@ -301,9 +298,6 @@ namespace MyNetSensors.Repositories.Dapper
                     dataType = sensor.dataType,
                     state = sensor.state,
                     description = sensor.description,
-                    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
                     invertData = sensor.invertData,
                     remapEnabled = sensor.remapEnabled,
                     remapFromMin = sensor.remapFromMin,
@@ -331,9 +325,6 @@ namespace MyNetSensors.Repositories.Dapper
                     "dataType = @dataType, " +
                     "state = @state, " +
                     "description = @description, " +
-                    "storeHistoryEnabled = @storeHistoryEnabled, " +
-                    "storeHistoryWithInterval = @storeHistoryWithInterval, " +
-                    "storeHistoryEveryChange = @storeHistoryEveryChange, " +
                     "invertData = @invertData, " +
                     "remapEnabled = @remapEnabled, " +
                     "remapFromMin = @remapFromMin, " +
@@ -349,9 +340,6 @@ namespace MyNetSensors.Repositories.Dapper
                     dataType = sensor.dataType,
                     state = sensor.state,
                     description = sensor.description,
-                    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
-                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
                     invertData = sensor.invertData,
                     remapEnabled = sensor.remapEnabled,
                     remapFromMin = sensor.remapFromMin,
@@ -493,9 +481,6 @@ namespace MyNetSensors.Repositories.Dapper
                 var sqlQuery =
                     "UPDATE Sensors SET " +
                     "description = @description, " +
-                    "storeHistoryEnabled = @storeHistoryEnabled, " +
-                    "storeHistoryEveryChange = @storeHistoryEveryChange, " +
-                    "storeHistoryWithInterval = @storeHistoryWithInterval, " +
                     "invertData = @invertData, " +
                     "remapEnabled = @remapEnabled, " +
                     "remapFromMin = @remapFromMin, " +
@@ -506,9 +491,6 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Execute(sqlQuery, new
                 {
                     description = sensor.description,
-                    storeHistoryEnabled = sensor.storeHistoryEnabled,
-                    storeHistoryEveryChange = sensor.storeHistoryEveryChange,
-                    storeHistoryWithInterval = sensor.storeHistoryWithInterval,
                     invertData = sensor.invertData,
                     remapEnabled = sensor.remapEnabled,
                     remapFromMin = sensor.remapFromMin,

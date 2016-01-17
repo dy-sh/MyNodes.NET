@@ -62,8 +62,6 @@ namespace MyNetSensors.WebController
                         options.UseSqlServer(connectionString))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlServer(connectionString))
-                    .AddDbContext<NodesHistoryDbContext>(options =>
-                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesMessagesDbContext>(options =>
                         options.UseSqlServer(connectionString))
                     .AddDbContext<NodesTasksDbContext>(options =>
@@ -81,8 +79,6 @@ namespace MyNetSensors.WebController
                         options.UseSqlite("Data Source=LogicalNodesStates.sqlite"))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlite("Data Source=Nodes.sqlite"))
-                    .AddDbContext<NodesHistoryDbContext>(options =>
-                        options.UseSqlite("Data Source=NodesHistory.sqlite"))
                     .AddDbContext<NodesMessagesDbContext>(options =>
                         options.UseSqlite("Data Source=NodesMessages.sqlite"))
                     .AddDbContext<NodesTasksDbContext>(options =>
@@ -114,7 +110,6 @@ namespace MyNetSensors.WebController
             LogicalNodesDbContext logicalNodesDbContext,
             LogicalNodesStatesDbContext logicalNodesStatesDbContext,
             NodesDbContext nodesDbContext,
-            NodesHistoryDbContext nodesHistoryDbContext,
             NodesMessagesDbContext nodesMessagesDbContext,
             NodesTasksDbContext nodesTasksDbContext
             )
@@ -207,7 +202,6 @@ namespace MyNetSensors.WebController
             SerialControllerConfigurator.logicalNodesDbContext = logicalNodesDbContext;
             SerialControllerConfigurator.logicalNodesStatesDbContext = logicalNodesStatesDbContext;
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
-            SerialControllerConfigurator.nodesHistoryDbContext = nodesHistoryDbContext;
             SerialControllerConfigurator.nodesMessagesDbContext = nodesMessagesDbContext;
             SerialControllerConfigurator.nodesTasksDbContext = nodesTasksDbContext;
 

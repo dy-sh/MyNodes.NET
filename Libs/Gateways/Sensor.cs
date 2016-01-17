@@ -26,13 +26,6 @@ namespace MyNetSensors.Gateways
 
 
 
-        public bool storeHistoryEnabled { get; set; }
-        //interval in seconds. if 0, will not store by timer
-        public int storeHistoryWithInterval { get; set; }
-        public bool storeHistoryEveryChange { get; set; }
-        public DateTime storeHistoryLastDate { get; set; }
-
-
         public bool invertData { get; set; }
         public bool remapEnabled { get; set; }
         public string remapFromMin { get; set; }

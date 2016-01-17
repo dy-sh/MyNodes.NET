@@ -31,7 +31,6 @@ namespace MyNetSensors.WebController.Code
         public static LogicalNodesDbContext logicalNodesDbContext;
         public static LogicalNodesStatesDbContext logicalNodesStatesDbContext;
         public static NodesDbContext nodesDbContext;
-        public static NodesHistoryDbContext nodesHistoryDbContext;
         public static NodesMessagesDbContext nodesMessagesDbContext;
         public static NodesTasksDbContext nodesTasksDbContext;
 
@@ -85,7 +84,6 @@ namespace MyNetSensors.WebController.Code
                 SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
 
                 SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
-                SerialController.historyDb = new NodesHistoryRepositoryEf(nodesHistoryDbContext);
                 SerialController.messagesDb = new NodesMessagesRepositoryEF(nodesMessagesDbContext);
                 SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesTasksDbContext);
                 SerialController.logicalNodesDb = new LogicalNodesRepositoryEF(logicalNodesDbContext);

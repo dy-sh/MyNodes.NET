@@ -43,19 +43,6 @@ function updateInfo(gatewayInfo) {
 
 $(document).ready(function () {
 
-    $("#dropHistory").click(function () {
-        $('#confirm-delete-history-dialog').modal({
-            onApprove: function () {
-                $.ajax({
-                    type: "POST", url: "/GatewayAPI/ClearHistory",
-                    success: function (result) {
-                        if (result) noty({ text: 'History was deleted.' });
-                    }
-                });
-            }
-        })
-        .modal('setting', 'transition', 'fade up').modal('show');
-    });
 
     $("#dropTasks").click(function () {
         $('#confirm-delete-tasks-dialog').modal({
@@ -84,14 +71,6 @@ $(document).ready(function () {
         }).modal('setting', 'transition', 'fade up').modal('show');
     });
 
-    $("#stopWritingHistory").click(function () {
-        $.ajax({
-            type: "POST", url: "/GatewayAPI/StopWritingHistory",
-            success: function (result) {
-                if (result) noty({ text: 'History writing is stopped.' });
-            }
-        });
-    });
 
     $("#disableTasks").click(function () {
         $.ajax({

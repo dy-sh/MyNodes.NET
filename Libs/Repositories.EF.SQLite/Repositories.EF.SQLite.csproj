@@ -133,7 +133,6 @@
     <Compile Include="DbContext\LogicalNodesDbContext.cs" />
     <Compile Include="DbContext\NodesDbContext.cs" />
     <Compile Include="DbContext\LogicalNodesStatesDbContext.cs" />
-    <Compile Include="DbContext\NodesHistoryDbContext.cs" />
     <Compile Include="DbContext\NodesMessagesDbContext.cs" />
     <Compile Include="DbContext\NodesTasksDbContext.cs" />
     <Compile Include="LogicalNodesStatesRepositoryEF.cs" />
@@ -143,7 +142,6 @@
     <Compile Include="LogicalNodesRepositoryEF.cs" />
     <Compile Include="NodesTasksRepositoryEF.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NodesHistoryRepositoryEf.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gateways\Gateways.csproj">

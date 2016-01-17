@@ -109,45 +109,6 @@
                                     </div>
 
 
-
-
-
-                                    <div class="ui segment">
-
-                                        <div class="ui toggle checkbox">
-                                            <input type="checkbox" name="storehistory-@sensor.sensorId" class="storehistory-switch" panel-id="@sensor.sensorId"
-                                                   @if (sensor.storeHistoryEnabled)
-                                                   {
-                                                       @: checked
-                                                   }>
-                                            <input type="hidden" name="storehistory-@sensor.sensorId" value="false">
-                                            <label>Write sensor history in database</label>
-                                        </div>
-
-
-                                        <div id="historyPanel-@sensor.sensorId" style="display: none">
-                                            <br/>
-
-                                            <div class="ui field">
-                                                <div class="ui toggle checkbox">
-                                                    <input type="checkbox" name="writeeverychange-@sensor.sensorId"
-                                                           @if (sensor.storeHistoryEveryChange)
-                                                           {
-                                                               @: checked
-                                                           }>
-                                                    <input type="hidden" name="writeeverychange-@sensor.sensorId" value="false">
-                                                    <label>Every change</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="ui inline field">
-                                                With interval (sec):
-                                                <input type="text" name="writeinterval-@sensor.sensorId" value="@sensor.storeHistoryWithInterval">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             }
 
@@ -186,14 +147,6 @@
 
                 var fade = 300;
 
-                $(".storehistory-switch").click(function () {
-                    var id = $(this).attr("panel-id");
-                    if ($(this).is(":checked")) {
-                        $('#historyPanel-' + id).fadeIn(fade);
-                    } else {
-                        $('#historyPanel-' + id).fadeOut(fade);
-                    }
-                });
 
                 $(".remapData-switch").click(function () {
                     var id = $(this).attr("panel-id");
@@ -204,14 +157,6 @@
                     }
                 });
 
-                var switches = $(".storehistory-switch");
-                for (var i = 0; i < switches.length; i++) {
-                    if (switches[i].checked) {
-                        var id = switches[i].getAttribute("panel-id");
-                        if (id != null)
-                            $('#historyPanel-' + id).show();
-                    }
-                }
 
                 switches = $(".remapData-switch");
                 for (var i = 0; i < switches.length; i++) {

@@ -56,7 +56,6 @@
     <Compile Include="NodesTasksRepositoryDapper.cs" />
     <Compile Include="OneToManyDapperMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NodesHistoryRepositoryDapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gateways\Gateways.csproj">
