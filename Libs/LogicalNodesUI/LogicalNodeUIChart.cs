@@ -14,12 +14,22 @@ namespace MyNetSensors.LogicalNodesUI
         private List<NodeData> NodeData { get; set; }
         public int? State { get; set; }
 
+
+        public bool WriteInDatabase { get; set; }
+        public int WriteInDatabaseMinInterval { get; set; }
+        public DateTime WriteInDatabaseLastDate { get; set; }
+
+
         public LogicalNodeUIChart() : base(1, 0)
         {
             this.Title = "UI Chart";
             this.Type = "UI/Chart";
             this.Name = "Chart";
+
             NodeData = new List<NodeData>();
+            WriteInDatabase = false;
+            WriteInDatabaseMinInterval = 1000;
+            WriteInDatabaseLastDate = DateTime.Now;
         }
 
         public override void Loop()

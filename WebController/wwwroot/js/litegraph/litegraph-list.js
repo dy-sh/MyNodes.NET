@@ -15,7 +15,7 @@
 
     //Panel
     function Panel() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodePanel" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodePanel" };
         this.bgcolor = "#565656";
     }
     Panel.title = "Panel";
@@ -39,7 +39,7 @@
             '</div></div>'
         );
 
-        $('#node-settings-name').val(node.properties['panelname']);
+        $('#node-settings-name').val(node.properties['PanelName']);
 
 
         $('#node-settings-panel').modal({
@@ -63,7 +63,7 @@
 
     //Panel Input
     function PanelInput() {
-        this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelInput" };
+        this.properties = { ObjectType: "MyNetSensors.LogicalNodes.LogicalNodePanelInput" };
         this.bgcolor = "#151515";
 
     }
@@ -80,7 +80,7 @@
 
     //Panel Output
     function PanelOutput() {
-        this.properties = { objectType: "MyNetSensors.LogicalNodes.LogicalNodePanelOutput" };
+        this.properties = { ObjectType: "MyNetSensors.LogicalNodes.LogicalNodePanelOutput" };
         this.bgcolor = "#151515";
     }
     PanelOutput.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -100,7 +100,7 @@
             '</div></div>'
         );
 
-        $('#node-settings-name').val(node.properties['name']);
+        $('#node-settings-name').val(node.properties['Name']);
 
 
         $('#node-settings-panel').modal({
@@ -136,7 +136,7 @@
 
     //HardwareNode
     function HardwareNode() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode" };
         this.clonable = false;
         this.removable = false;
     }
@@ -173,8 +173,8 @@
             '</div></div>'
         );
 
-        $('#node-settings-name').val(node.properties['name']);
-        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
+        $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
 
 
         $('#node-settings-panel').modal({
@@ -198,7 +198,7 @@
 
     //UI Label
     function UILabel() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel" };
     }
     UILabel.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -211,7 +211,7 @@
 
     //UI State
     function UIState() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState" };
     }
     UIState.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -224,7 +224,7 @@
 
     //UI Progress
     function UIProgress() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress" };
     }
     UIProgress.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -237,7 +237,7 @@
 
     //UI Log
     function UILog() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog" };
     }
     UILog.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -250,7 +250,7 @@
 
     //UI Button
     function UIButton() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton" };
     }
     UIButton.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -263,7 +263,7 @@
 
     //UI Toggle Button
     function UIToggleButton() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton" };
     }
     UIToggleButton.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -276,7 +276,7 @@
 
     //UI Switch
     function UISwitch() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitch" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitch" };
     }
     UISwitch.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -289,7 +289,7 @@
 
     //UI TextBox
     function UITextBox() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox" };
     }
     UITextBox.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -305,7 +305,7 @@
 
     //UI Slider
     function UISlider() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider" };
     }
     UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -317,18 +317,18 @@
         $('#node-settings-body').html(
             '<div class="ui form"><div class="fields">' +
             '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
-            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
             '</div><div class="fields">' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
+            '</div><div class="ui divider"></div><div class="fields">' +
+            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
+            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
             '</div></div>'
         );
 
-        $('#node-settings-name').val(node.properties['name']);
-        $('#node-settings-min').val(node.properties['min']);
-        $('#node-settings-max').val(node.properties['max']);
-        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
+        $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-min').val(node.properties['Min']);
+        $('#node-settings-max').val(node.properties['Max']);
+        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
 
 
         $('#node-settings-panel').modal({
@@ -357,7 +357,7 @@
 
     //UI RGB Sliders
     function UIRGBSliders() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders" };
     }
     UIRGBSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -370,7 +370,7 @@
 
     //UI RGBW Sliders
     function UIRGBWSliders() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders" };
     }
     UIRGBWSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -388,7 +388,7 @@
 
     //UI Chart
     function UIChart() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIChart" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIChart" };
     }
     UIChart.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -402,12 +402,19 @@
             '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
             '</div><div class="fields">' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
+            '</div><div class="ui divider"></div><div class="fields">' +
+            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-usedb"><label>Write data in database</label></div></div>' +
+             '</div><div class="fields">' +
+            '<div class="field">Write in database min interval (ms): <input type="text" id="node-settings-dbinterval"></div>' +
 
             '</div></div>'
         );
 
-        $('#node-settings-name').val(node.properties['name']);
-        $('#node-settings-show').prop('checked', node.properties['show'] == "true");
+        $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
+        $('#node-settings-usedb').prop('checked', node.properties['WriteInDatabase'] == "true");
+        $('#node-settings-dbinterval').val(node.properties['WriteInDatabaseMinInterval']);
+
 
 
         $('#node-settings-panel').modal({
@@ -419,6 +426,8 @@
                     data: {
                         name: $('#node-settings-name').val(),
                         show: $('#node-settings-show').prop('checked'),
+                        writeInDatabase: $('#node-settings-usedb').prop('checked'),
+                        writeInDatabaseMinInterval: $('#node-settings-dbinterval').val(),
                         id: node.id
                     }
                 });
@@ -442,7 +451,7 @@
 
     //Constant
     function Constant() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConstant" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeConstant" };
     }
     Constant.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
@@ -457,7 +466,7 @@
             '</div></div>'
         );
 
-        $('#node-settings-value').val(node.properties['value']);
+        $('#node-settings-value').val(node.properties['Value']);
 
 
         $('#node-settings-panel').modal({
@@ -482,7 +491,7 @@
 
     //SystemConsole
     function SystemConsole() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole" };
     }
     SystemConsole.title = "Console";
     LiteGraph.registerNodeType("System/Console", SystemConsole);
@@ -491,7 +500,7 @@
 
     //LogicCounter
     function LogicCounter() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter" };
     }
     LogicCounter.title = "Counter";
     LiteGraph.registerNodeType("Logic/Counter", LogicCounter);
@@ -500,7 +509,7 @@
 
     //LogicInvert
     function LogicInvert() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert" };
     }
     LogicInvert.title = "Invert";
     LiteGraph.registerNodeType("Logic/Invert", LogicInvert);
@@ -509,7 +518,7 @@
 
     //MathPlus
     function MathPlus() {
-        this.properties = { 'objectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
+        this.properties = { 'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus" };
     }
     MathPlus.title = "Plus";
     LiteGraph.registerNodeType("Math/Plus", MathPlus);
