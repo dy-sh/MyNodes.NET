@@ -22,6 +22,8 @@ namespace MyNetSensors.WebController.Controllers
         const string MAIN_PANEL_ID = "Main";
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
+        private LogicalNodesUIEngine uiEngine = SerialController.logicalNodesUIEngine;
+
 
         public List<LiteGraph.Node> GetNodes(string panelId)
         {
@@ -435,11 +437,16 @@ namespace MyNetSensors.WebController.Controllers
             }
 
             LogicalNodeUIChart node = (LogicalNodeUIChart)n;
+
+            if (node.WriteInDatabase && !writeInDatabase)
+                uiEngine.ClearChart(node.Id);
+
             node.Name = name;
             node.ShowOnMainPage = show;
             node.WriteInDatabase = writeInDatabase;
             node.UpdateInterval = updateInterval;
             engine.UpdateNode(node, true);
+
 
             return true;
         }

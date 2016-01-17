@@ -66,7 +66,6 @@ function createChart(node) {
     dataset[node.Id] = new vis.DataSet();
     graph2d[node.Id] = new vis.Graph2d(container[node.Id], dataset[node.Id], options[node.Id]);
 
-    
 
 
 
@@ -77,8 +76,9 @@ function createChart(node) {
         success: function (chartData) {
             if (chartData != null) {
                 addChartData(chartData, node.Id);
+            } else {
+                showNow(node.Id);
             }
-
         }
     });
 }
@@ -96,20 +96,24 @@ function addChartData(chartData, nodeId) {
     graph2d[nodeId].setOptions(options);
 }
 
-
+var firstUpdate=true;
 
 function updateChart(node) {
     $('#chartName-' + node.Id).html(node.Name);
 
-    if (node.State == "0")
-        node.State = "-0.01";
+    if (!firstUpdate) {
+        if (node.State == "0")
+            node.State = "-0.01";
 
-    //Add new point to chart
-    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss.SSS");
-    dataset[node.Id].add({
-        x: now,
-        y: node.State
-    });
+        //Add new point to chart
+        var now = vis.moment().format("YYYY-MM-DD HH:mm:ss.SSS");
+        dataset[node.Id].add({
+            x: now,
+            y: node.State
+        });
+    }
+
+    firstUpdate = false;
 }
 
 
