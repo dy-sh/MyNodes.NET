@@ -58,6 +58,8 @@ namespace MyNetSensors.WebController
                         options.UseSqlServer(connectionString))
                     .AddDbContext<LogicalNodesDbContext>(options =>
                         options.UseSqlServer(connectionString))
+                    .AddDbContext<LogicalNodesStatesDbContext>(options =>
+                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlServer(connectionString))
                     .AddDbContext<NodesHistoryDbContext>(options =>
@@ -75,6 +77,8 @@ namespace MyNetSensors.WebController
                         options.UseSqlite("Data Source=Application.sqlite"))
                     .AddDbContext<LogicalNodesDbContext>(options =>
                         options.UseSqlite("Data Source=LogicalNodes.sqlite"))
+                    .AddDbContext<LogicalNodesStatesDbContext>(options =>
+                        options.UseSqlite("Data Source=LogicalNodesStates.sqlite"))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlite("Data Source=Nodes.sqlite"))
                     .AddDbContext<NodesHistoryDbContext>(options =>
@@ -108,6 +112,7 @@ namespace MyNetSensors.WebController
             ILoggerFactory loggerFactory,
             IConnectionManager connectionManager,
             LogicalNodesDbContext logicalNodesDbContext,
+            LogicalNodesStatesDbContext logicalNodesStatesDbContext,
             NodesDbContext nodesDbContext,
             NodesHistoryDbContext nodesHistoryDbContext,
             NodesMessagesDbContext nodesMessagesDbContext,
@@ -200,6 +205,7 @@ namespace MyNetSensors.WebController
 
             SignalRServer.Start(connectionManager);
             SerialControllerConfigurator.logicalNodesDbContext = logicalNodesDbContext;
+            SerialControllerConfigurator.logicalNodesStatesDbContext = logicalNodesStatesDbContext;
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
             SerialControllerConfigurator.nodesHistoryDbContext = nodesHistoryDbContext;
             SerialControllerConfigurator.nodesMessagesDbContext = nodesMessagesDbContext;

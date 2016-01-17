@@ -11,7 +11,7 @@ namespace MyNetSensors.LogicalNodesUI
 {
     public class LogicalNodeUIChart : LogicalNodeUI
     {
-        private List<NodeData> NodeData { get; set; }
+        private List<NodeState> NodeStates { get; set; }
         public int? State { get; set; }
 
 
@@ -26,7 +26,7 @@ namespace MyNetSensors.LogicalNodesUI
             this.Type = "UI/Chart";
             this.Name = "Chart";
 
-            NodeData = new List<NodeData>();
+            NodeStates = new List<NodeState>();
             WriteInDatabase = false;
             WriteInDatabaseMinInterval = 1000;
             WriteInDatabaseLastDate = DateTime.Now;
@@ -48,8 +48,8 @@ namespace MyNetSensors.LogicalNodesUI
             {
                 int val = Int32.Parse(input.Value);
 
-                NodeData nodeData = new NodeData(this.Id, val.ToString());
-                NodeData.Add(nodeData);
+                NodeState nodeState = new NodeState(this.Id, val.ToString());
+                NodeStates.Add(nodeState);
 
                 State = val;
             }
@@ -59,14 +59,19 @@ namespace MyNetSensors.LogicalNodesUI
             }
         }
 
-        public List<NodeData> GetChartData()
+        public List<NodeState> GetStates()
         {
-            return NodeData;
+            return NodeStates;
         }
 
-        public void ClearChart()
+        public void SetStates(List<NodeState> states)
         {
-            NodeData.Clear();
+            NodeStates= states ?? new List<NodeState>();
+        }
+
+        public void RemoveStates()
+        {
+            NodeStates.Clear();
             State = null;
         }
     }

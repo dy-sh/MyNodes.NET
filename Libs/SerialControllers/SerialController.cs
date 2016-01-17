@@ -57,6 +57,7 @@ namespace MyNetSensors.SerialControllers
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
         public static LogicalNodesUIEngine logicalNodesUIEngine;
         public static ILogicalNodesRepository logicalNodesDb;
+        public static ILogicalNodesStatesRepository logicalNodesStatesDb;
 
         public static SerialControllerLogs logs = new SerialControllerLogs();
 
@@ -123,6 +124,7 @@ namespace MyNetSensors.SerialControllers
                 messagesDb = new NodesMessagesRepositoryDapper(dataBaseConnectionString);
                 nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
                 logicalNodesDb = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
+                logicalNodesStatesDb = new LogicalNodesStatesRepositoryDapper(dataBaseConnectionString);
             }
             else
             {
@@ -230,7 +232,6 @@ namespace MyNetSensors.SerialControllers
 
 
             logicalNodesEngine = new LogicalNodesEngine(logicalNodesDb);
-            //logicalNodesEngine=new LogicalNodesEngine();
 
             logicalNodesEngine.SetUpdateInterval(logicalNodesUpdateInterval);
 
@@ -241,7 +242,7 @@ namespace MyNetSensors.SerialControllers
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
-            logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine);
+            logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine,logicalNodesStatesDb);
 
             logicalNodesEngine.Start();
 

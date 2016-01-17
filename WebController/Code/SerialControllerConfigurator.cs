@@ -29,6 +29,7 @@ namespace MyNetSensors.WebController.Code
         private static bool serialControllerStarted;
 
         public static LogicalNodesDbContext logicalNodesDbContext;
+        public static LogicalNodesStatesDbContext logicalNodesStatesDbContext;
         public static NodesDbContext nodesDbContext;
         public static NodesHistoryDbContext nodesHistoryDbContext;
         public static NodesMessagesDbContext nodesMessagesDbContext;
@@ -88,6 +89,7 @@ namespace MyNetSensors.WebController.Code
                 SerialController.messagesDb = new NodesMessagesRepositoryEF(nodesMessagesDbContext);
                 SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesTasksDbContext);
                 SerialController.logicalNodesDb = new LogicalNodesRepositoryEF(logicalNodesDbContext);
+                SerialController.logicalNodesStatesDb = new LogicalNodesStatesRepositoryEF(logicalNodesStatesDbContext);
             }
 
             if (portName != null)

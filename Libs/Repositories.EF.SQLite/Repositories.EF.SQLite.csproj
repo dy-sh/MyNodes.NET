@@ -132,9 +132,11 @@
   <ItemGroup>
     <Compile Include="DbContext\LogicalNodesDbContext.cs" />
     <Compile Include="DbContext\NodesDbContext.cs" />
+    <Compile Include="DbContext\LogicalNodesStatesDbContext.cs" />
     <Compile Include="DbContext\NodesHistoryDbContext.cs" />
     <Compile Include="DbContext\NodesMessagesDbContext.cs" />
     <Compile Include="DbContext\NodesTasksDbContext.cs" />
+    <Compile Include="LogicalNodesStatesRepositoryEF.cs" />
     <Compile Include="NodesMessagesRepositoryEF.cs" />
     <Compile Include="GatewayRepositoryEF.cs" />
     <Compile Include="LogicalNodeSerialized.cs" />

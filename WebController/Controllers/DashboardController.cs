@@ -164,16 +164,16 @@ namespace MyNetSensors.WebController.Controllers
             if (chart == null)
                 return null;
 
-            List<NodeData> nodeData = chart.GetChartData();
+            List<NodeState> nodeStates = chart.GetStates();
 
-            if (nodeData == null || !nodeData.Any())
+            if (nodeStates == null || !nodeStates.Any())
                 return null;
 
             //copy to array to prevent changing data error
-            NodeData[] nodeDataArray=new NodeData[nodeData.Count];
-            nodeData.CopyTo(nodeDataArray);
+            NodeState[] nodeStatesArray=new NodeState[nodeStates.Count];
+            nodeStates.CopyTo(nodeStatesArray);
 
-            return nodeDataArray.Select(item => new ChartData
+            return nodeStatesArray.Select(item => new ChartData
             {
                 x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss:fff}",
                 y = Int32.Parse(item.State)

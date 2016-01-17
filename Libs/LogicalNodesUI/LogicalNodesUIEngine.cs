@@ -16,8 +16,13 @@ namespace MyNetSensors.LogicalNodesUI
 
         private static LogicalNodesEngine engine;
 
-        public LogicalNodesUIEngine(LogicalNodesEngine engine)
+        private ILogicalNodesStatesRepository statesDb;
+
+
+        public LogicalNodesUIEngine(LogicalNodesEngine engine, ILogicalNodesStatesRepository statesDb = null)
         {
+            this.statesDb = statesDb;
+
             LogicalNodesUIEngine.engine = engine;
             engine.OnNewNodeEvent += OnNewNodeEvent;
             engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
@@ -26,14 +31,43 @@ namespace MyNetSensors.LogicalNodesUI
             engine.OnInputUpdatedEvent += OnInputUpdatedEvent;
             engine.OnNewLinkEvent += OnNewLinkEvent;
             engine.OnRemoveLinkEvent += OnRemoveLinkEvent;
+
+            GetStatesFromRepository();
+        }
+
+        private void GetStatesFromRepository()
+        {
+            if (statesDb == null)
+                return;
+
+            List<LogicalNodeUIChart> charts = engine.nodes
+                .Where(n => n is LogicalNodeUIChart)
+                .Cast<LogicalNodeUIChart>()
+                .ToList();
+
+            foreach (var chart in charts)
+            {
+                if (!chart.WriteInDatabase) continue;
+
+                List<NodeState> states = statesDb.GetStatesForNode(chart.Id);
+                chart.SetStates(states);
+            }
         }
 
 
         private void OnInputUpdatedEvent(Input input)
         {
             LogicalNode node = engine.GetInputOwner(input);
+
             if (node is LogicalNodeUI)
                 OnUINodeUpdatedEvent?.Invoke((LogicalNodeUI)node);
+
+            if (node is LogicalNodeUIChart)
+            {
+                LogicalNodeUIChart chart = (LogicalNodeUIChart)node;
+                if (chart.WriteInDatabase && chart.GetStates().Count > 0)
+                    statesDb?.AddState(chart.GetStates().Last());
+            }
         }
 
         private void OnOutputUpdatedEvent(Output output)
@@ -53,6 +87,9 @@ namespace MyNetSensors.LogicalNodesUI
         {
             if (node is LogicalNodeUI)
                 OnRemoveUINodeEvent?.Invoke((LogicalNodeUI)node);
+
+            if (node is LogicalNodeUIChart)
+                statesDb?.RemoveStatesForNode(node.Id);
         }
 
         private void OnNewNodeEvent(LogicalNode node)
@@ -115,7 +152,7 @@ namespace MyNetSensors.LogicalNodesUI
 
         public LogicalNodeUI GetUINode(string id)
         {
-            return engine.nodes.FirstOrDefault(n => n.Id==id) as LogicalNodeUI;
+            return engine.nodes.FirstOrDefault(n => n.Id == id) as LogicalNodeUI;
         }
 
 
@@ -138,7 +175,7 @@ namespace MyNetSensors.LogicalNodesUI
         public List<LogicalNodeUI> GetUINodesForPanel(string panelId)
         {
             return engine.nodes
-                .Where(n => n is LogicalNodeUI && n.PanelId==panelId)
+                .Where(n => n is LogicalNodeUI && n.PanelId == panelId)
                 .Cast<LogicalNodeUI>()
                 .ToList();
         }
@@ -240,10 +277,11 @@ namespace MyNetSensors.LogicalNodesUI
         public void ClearChart(string nodeId)
         {
             LogicalNodeUIChart node = engine.GetNode(nodeId) as LogicalNodeUIChart;
-            if (node==null)
+            if (node == null)
                 return;
 
-            node.ClearChart();
+            node.RemoveStates();
+            statesDb?.RemoveStatesForNode(nodeId);
 
             //send update ivent
             engine.UpdateNode(node);

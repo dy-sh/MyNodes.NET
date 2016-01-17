@@ -7,7 +7,7 @@ using System;
 
 namespace MyNetSensors.LogicalNodes
 {
-    public class NodeData:ICloneable
+    public class NodeState
     {
         public int Id { get; set; }
         public string NodeId { get; set; }
@@ -15,21 +15,16 @@ namespace MyNetSensors.LogicalNodes
         public DateTime DateTime { get; set; }
 
 
-        public NodeData()
+        public NodeState()
         {
             DateTime = DateTime.Now;
         }
 
-        public NodeData(string nodeId, string state)
+        public NodeState(string nodeId, string state)
         {
             NodeId = nodeId;
             State = state;
             DateTime = DateTime.Now;
-        }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
         }
     }
 }

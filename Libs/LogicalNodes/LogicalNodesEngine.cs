@@ -21,7 +21,7 @@ namespace MyNetSensors.LogicalNodes
         //and you will get less nodes updating frequency 
         private int updateNodesInterval = 1;
 
-        private ILogicalNodesRepository db;
+        private ILogicalNodesRepository nodesDb;
 
         private Timer updateNodesTimer = new Timer();
         public List<LogicalNode> nodes = new List<LogicalNode>();
@@ -54,7 +54,7 @@ namespace MyNetSensors.LogicalNodes
         public delegate void LogicalLinksEventHandler(List<LogicalLink> link);
 
 
-        public LogicalNodesEngine(ILogicalNodesRepository db = null)
+        public LogicalNodesEngine(ILogicalNodesRepository nodesDb = null)
         {
             //var x= AppDomain.CurrentDomain.GetAssemblies()
             //           .SelectMany(assembly => assembly.GetTypes())
@@ -63,15 +63,17 @@ namespace MyNetSensors.LogicalNodes
 
             LogicalNodesEngine.logicalNodesEngine = this;
 
-            this.db = db;
+            this.nodesDb = nodesDb;
+
+
 
 
             updateNodesTimer.Elapsed += UpdateNodes;
             updateNodesTimer.Interval = updateNodesInterval;
 
-            if (db != null)
+            if (nodesDb != null)
             {
-                db.CreateDb();
+                nodesDb.CreateDb();
                 GetNodesFromRepository();
                 GetLinksFromRepository();
             }
@@ -105,16 +107,16 @@ namespace MyNetSensors.LogicalNodes
 
         public void GetNodesFromRepository()
         {
-            if (db != null)
-                nodes = db.GetAllNodes();
+            if (nodesDb != null)
+                nodes = nodesDb.GetAllNodes();
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
         private void GetLinksFromRepository()
         {
-            if (db != null)
-                links = db.GetAllLinks();
+            if (nodesDb != null)
+                links = nodesDb.GetAllLinks();
 
             //remove link if node is not exist
             LogicalLink[] oldLinks = links.ToArray();
@@ -122,7 +124,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
                 {
-                    db?.RemoveLink(link.Id);
+                    nodesDb?.RemoveLink(link.Id);
 
                     links.Remove(link);
                 }
@@ -131,6 +133,7 @@ namespace MyNetSensors.LogicalNodes
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
+
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
         {
@@ -201,7 +204,7 @@ namespace MyNetSensors.LogicalNodes
 
             nodes.Add(node);
 
-            db?.AddNode(node);
+            nodesDb?.AddNode(node);
 
             LogEngineInfo($"New node [{node.GetType().Name}]");
 
@@ -341,7 +344,7 @@ namespace MyNetSensors.LogicalNodes
                 RemovePanel((LogicalNodePanel)node);
 
 
-            db?.RemoveNode(node.Id);
+            nodesDb?.RemoveNode(node.Id);
 
             nodes.Remove(node);
         }
@@ -432,7 +435,7 @@ namespace MyNetSensors.LogicalNodes
             oldNode.Title = node.Title;
             oldNode.Type = node.Type;
 
-            db?.UpdateNode(oldNode);
+            nodesDb?.UpdateNode(oldNode);
 
             OnNodeUpdatedEvent?.Invoke(node);
         }
@@ -478,7 +481,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 oldOutput.Name = name;
                 LogicalNode node = GetOutputOwner(oldOutput);
-                db?.UpdateNode(node);
+                nodesDb?.UpdateNode(node);
             }
         }
 
@@ -498,7 +501,7 @@ namespace MyNetSensors.LogicalNodes
             {
                 oldInput.Name = name;
                 LogicalNode node = GetInputOwner(oldInput);
-                db?.UpdateNode(node);
+                nodesDb?.UpdateNode(node);
             }
 
         }
@@ -553,7 +556,7 @@ namespace MyNetSensors.LogicalNodes
             link.PanelId = inputNode.PanelId;
             links.Add(link);
 
-            db?.AddLink(link);
+            nodesDb?.AddLink(link);
 
             OnNewLinkEvent?.Invoke(link);
 
@@ -580,7 +583,7 @@ namespace MyNetSensors.LogicalNodes
             LogicalNode outputNode = GetOutputOwner(output);
             LogEngineInfo($"Remove link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
-            db?.RemoveLink(link.Id);
+            nodesDb?.RemoveLink(link.Id);
 
             OnRemoveLinkEvent?.Invoke(link);
             links.Remove(link);
@@ -648,7 +651,6 @@ namespace MyNetSensors.LogicalNodes
                 Input input = GetInput(link.InputId);
                 Output output = GetOutput(link.OutputId);
                 input.Value = output.Value;
-                OnInputUpdatedEvent?.Invoke(input);
             }
         }
 
@@ -815,7 +817,7 @@ namespace MyNetSensors.LogicalNodes
         {
             LogEngineInfo("Remove all nodes and links");
 
-            db?.RemoveAllNodes();
+            nodesDb?.RemoveAllNodes();
 
             links = new List<LogicalLink>();
             nodes = new List<LogicalNode>();
