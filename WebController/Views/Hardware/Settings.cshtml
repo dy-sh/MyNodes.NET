@@ -11,8 +11,8 @@
     <h2>@ViewBag.Title</h2>
 
     <p>
-        < <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-        < <a asp-controller="Node" asp-action="Index">Nodes Settings</a>
+        < <a asp-action="Index">Hardware Nodes</a>
+        < <a asp-action="SettingsSelect">Settings</a>
     </p>
     <div class="ui divider"></div>
 
@@ -118,7 +118,7 @@
 
                         <div class="ui center aligned attached segment">
                             <div class="ui buttons">
-                                <a asp-controller="Gateway" asp-action="Control" class="ui button">Cancel</a>
+                                <a asp-action="Index" class="ui button">Cancel</a>
                                 <input type="submit" value="Save changes" class="ui button primary" />
                             </div>
 

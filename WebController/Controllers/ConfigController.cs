@@ -127,7 +127,7 @@ namespace MyNetSensors.WebController.Controllers
 
             SerialControllerConfigurator.Start(сonfiguration);
 
-            return RedirectToAction("Control", "Gateway");
+            return RedirectToAction("Control", "Hardware");
         }
 
 

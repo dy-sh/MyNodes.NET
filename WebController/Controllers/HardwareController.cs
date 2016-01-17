@@ -4,46 +4,59 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-
-
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateways;
-using MyNetSensors.LogicalNodes;
 using MyNetSensors.NodesTasks;
-using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.SerialControllers;
+using MyNetSensors.WebController.Code;
 
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class NodeController : Controller
+    [ResponseCache(Duration = 0)]
+    public class HardwareController : Controller
     {
-
-
-      //  IHubContext clientsHub;
         private IGatewayRepository gatewayDb;
 
-        public NodeController()
+        public HardwareController()
         {
             gatewayDb = SerialController.gatewayDb;
         }
 
         public ActionResult Index()
         {
-            return RedirectToAction("List");
+            return View();
         }
 
-        public ActionResult List()
+
+
+
+        public ActionResult Control()
+        {
+            return View();
+        }
+
+
+
+
+        public ActionResult SettingsSelect()
         {
             var nodes = gatewayDb.GetNodes();
             return View(nodes);
         }
 
         [HttpGet]
-        public ActionResult Settings(int id)
+        public ActionResult Settings(int? id)
         {
-            Node node = gatewayDb.GetNode(id);
+            if (id == null)
+                return RedirectToAction("SettingsSelect");
+
+            Node node = gatewayDb.GetNode(id.Value);
             if (node == null)
                 return HttpNotFound();
 
@@ -93,7 +106,7 @@ namespace MyNetSensors.WebController.Controllers
             gatewayApi.UpdateNodeSettings(node);
 
 
-            return RedirectToAction("Control", "Gateway");
+            return RedirectToAction("Index");
             // return View(node);
         }
 
@@ -122,8 +135,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-            return RedirectToAction("Control", "Gateway");
+            return RedirectToAction("Index");
         }
-
     }
 }
