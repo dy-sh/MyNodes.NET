@@ -72,7 +72,6 @@ namespace MyNetSensors.LogicalNodesUI
                 LogicalNodeUIChart chart = (LogicalNodeUIChart)node;
                 if (chart.WriteInDatabase && chart.State != null)
                 {
-                    engine.LogEngineError(chart.State.ToString());
                     statesDb?.AddState(new NodeState(chart.Id, chart.State.ToString()));
                 }
             }
