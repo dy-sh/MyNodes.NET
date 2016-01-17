@@ -116,7 +116,12 @@ namespace MyNetSensors.WebController.Controllers
                 LogicalNodeUISlider n = (LogicalNodeUISlider) logicalNode;
                 node.properties["min"] = n.Min.ToString();
                 node.properties["max"] = n.Max.ToString();
-                node.properties["show"] = n.ShowOnMainPage ? "true" : "false";
+            }
+
+            if (logicalNode is LogicalNodeUIChart)
+            {
+                LogicalNodeUIChart n = (LogicalNodeUIChart)logicalNode;
+                node.properties["state"] = n.State.ToString();
             }
 
             if (logicalNode is LogicalNodeConstant)

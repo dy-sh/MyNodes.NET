@@ -117,6 +117,15 @@ function updateNode(node) {
 
 function removeNode(node) {
     $('#node-' + node.Id).fadeOut(elementsFadeTime, function () {
+
+        switch (node.Type) {
+        case "UI/Chart":
+            removeChart(node);
+            break;
+        default:
+        }
+
+
         $(this).remove();
         checkPanelForRemove(node.PanelId);
     });

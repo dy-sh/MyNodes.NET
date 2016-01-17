@@ -775,15 +775,14 @@ namespace MyNetSensors.LogicalNodes
 
             node.OnOutputChange(output);
 
+            //send state to linked nodes
             List<LogicalLink> list = links.Where(x => x.OutputId == output.Id).ToList();
-
             foreach (var link in list)
             {
                 Input input = GetInput(link.InputId);
                 if (input != null)
                 {
                     input.Value = output.Value;
-                    OnInputUpdatedEvent?.Invoke(input);
                 }
             }
 
