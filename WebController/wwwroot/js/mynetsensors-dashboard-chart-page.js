@@ -133,7 +133,7 @@ function updateChart(node) {
         return;
 
     //Add new point to chart
-    var now = vis.moment();
+    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss:SSS");
     dataset.add({
         x: now,
         y: node.State
@@ -244,10 +244,6 @@ function addChartData(chartData) {
         end: end
     };
     graph2d.setOptions(options);
-
-
-
-
 }
 
 
@@ -366,8 +362,10 @@ function showAll() {
         start = vis.moment().add(-1, 'seconds');
         end = vis.moment().add(60, 'seconds');
     } else {
-        start = vis.moment(dataset.min('x').x).add(-1, 'seconds');
-        end = vis.moment(dataset.max('x').x).add(60 * 2, 'seconds');
+        var min = dataset.min('x');
+        var max = dataset.max('x');
+        start = vis.moment(min.x).add(-1, 'seconds');
+        end = vis.moment(max.x).add(60*2, 'seconds');
     }
 
     var window = {

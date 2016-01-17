@@ -48,28 +48,6 @@ function createChart(node) {
     });
 
 
-    //Loading data frow server
-    //$.ajax({
-    //    url: "/History/GetHistoryChartData/" + nodeId + "/" + sensorId, //get Id-s from viewbag before
-    //    dataType: "json",
-    //    success: function (data) {
-    //        if ("chartData" in data) {
-    //            // console.log(data);
-    //            addChartData(data.chartData);
-    //            $('#infoPanel').hide();
-    //            $('#chartPanel').fadeIn(elementsFadeTime);
-    //        } else {
-    //            $('#infoPanel').html("There are no history. Chart shows realtime data only. Check node <a href='/Node/Settings/" + nodeId + "'>settings</a>.");
-    //            $('#chartPanel').fadeIn(elementsFadeTime);
-    //            showNow(node.Id);
-    //        }
-    //        $("#charttype").dropdown('set selected', chartType);
-    //        $("#autoscroll").dropdown('set selected', autoScroll);
-    //    },
-    //    error: function () {
-    //        $('#infoPanel').html("<p class='text-danger'>Failed to get data from server!</p>");
-    //    }
-    //});
 
 
 
@@ -88,11 +66,36 @@ function createChart(node) {
     dataset[node.Id] = new vis.DataSet();
     graph2d[node.Id] = new vis.Graph2d(container[node.Id], dataset[node.Id], options[node.Id]);
 
-    showNow(node.Id);
+    
 
 
 
+    //Loading data frow server
+    $.ajax({
+        url: "/Dashboard/GetChartData/" + node.Id, //get nodeId from viewbag before
+        dataType: "json",
+        success: function (chartData) {
+            if (chartData != null) {
+                addChartData(chartData, node.Id);
+            }
+
+        }
+    });
 }
+
+
+
+function addChartData(chartData, nodeId) {
+    dataset[nodeId].add(chartData);
+
+    var options = {
+        start: vis.moment().add(-30, 'seconds'),
+        end: vis.moment()
+    };
+
+    graph2d[nodeId].setOptions(options);
+}
+
 
 
 function updateChart(node) {
@@ -102,7 +105,7 @@ function updateChart(node) {
         return;
 
     //Add new point to chart
-    var now = vis.moment();
+    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss:SSS");
     dataset[node.Id].add({
         x: now,
         y: node.State
@@ -261,8 +264,10 @@ function showAll(nodeId) {
         start = vis.moment().add(-1, 'seconds');
         end = vis.moment().add(60, 'seconds');
     } else {
-        start = vis.moment(dataset[nodeId].min('x').x).add(-1, 'seconds');
-        end = vis.moment(dataset[nodeId].max('x').x).add(60, 'seconds');
+        var min = dataset[nodeId].min('x');
+        var max = dataset[nodeId].max('x');
+        start = vis.moment(min.x).add(-1, 'seconds');
+        end = vis.moment(max.x).add(60, 'seconds');
     }
 
     var window = {
