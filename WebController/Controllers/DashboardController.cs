@@ -143,5 +143,48 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        public ActionResult Chart(string id, string autoscroll, string style, string start, string end)
+        {
+            LogicalNodeUIChart chart = engineUI.GetUINode(id) as LogicalNodeUIChart;
+            if (chart == null)
+                return new HttpNotFoundResult();
+
+            ViewBag.autoscroll = autoscroll;
+            ViewBag.style = style;
+            ViewBag.start = start ?? "0";
+            ViewBag.end = end ?? "0";
+
+            return View(chart);
+        }
+
+        public List<ChartData> GetChartData(string id)
+        {
+            LogicalNodeUIChart chart = engineUI.GetUINode(id) as LogicalNodeUIChart;
+            if (chart == null)
+                return null;
+
+            List<NodeData> nodeData = chart.GetChartData();
+
+            if (nodeData == null || !nodeData.Any())
+                return null;
+
+            //copy to array to prevent changing data error
+            NodeData[] nodeDataArray=new NodeData[nodeData.Count];
+            nodeData.CopyTo(nodeDataArray);
+
+            return nodeDataArray.Select(item => new ChartData
+            {
+                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss:fff}",
+                y = Int32.Parse(item.State)
+            }).ToList();
+        }
+
+
+        public bool ClearChart(string nodeId)
+        {
+            engineUI.ClearChart(nodeId);
+            return true;
+        }
     }
 }

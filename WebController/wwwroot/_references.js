@@ -13,6 +13,7 @@
 /// <reference path="js/litegraph/litegraph-engine.js" />
 /// <reference path="js/litegraph/litegraph-list.js" />
 /// <reference path="js/mynetsensors-control-page.js" />
+/// <reference path="js/mynetsensors-history-chart-page - copy.js" />
 /// <reference path="js/mynetsensors-history-chart-page.js" />
 /// <reference path="js/mynetsensors-history-log-page.js" />
 /// <reference path="js/mynetsensors-logs-page.js" />

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChartData.cs" />
     <Compile Include="LogicalNodesUIEngine.cs" />
     <Compile Include="LogicalNodeUI.cs" />
     <Compile Include="LogicalNodeUIButton.cs" />

@@ -113,6 +113,11 @@ namespace MyNetSensors.LogicalNodesUI
             return node as LogicalNodePanel;
         }
 
+        public LogicalNodeUI GetUINode(string id)
+        {
+            return engine.nodes.FirstOrDefault(n => n.Id==id) as LogicalNodeUI;
+        }
+
 
         public List<LogicalNodeUI> GetUINodes()
         {
@@ -232,5 +237,16 @@ namespace MyNetSensors.LogicalNodesUI
         }
 
 
+        public void ClearChart(string nodeId)
+        {
+            LogicalNodeUIChart node = engine.GetNode(nodeId) as LogicalNodeUIChart;
+            if (node==null)
+                return;
+
+            node.ClearChart();
+
+            //send update ivent
+            engine.UpdateNode(node);
+        }
     }
 }

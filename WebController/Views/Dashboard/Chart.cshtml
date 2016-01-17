@@ -1,0 +1,143 @@
+﻿@model MyNetSensors.LogicalNodesUI.LogicalNodeUIChart
+
+@{
+    ViewBag.Title = Model.Name;
+}
+<br/>
+<div class="ui container">
+
+    @*<a asp-action="Log" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui button right floated">Show Log</a>*@
+
+    <h2 class="chartName">@ViewBag.Title</h2>
+
+    <p>
+        < <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+    </p>
+    <div class="ui divider"></div>
+
+
+
+
+
+    <div class="ui raised segments">
+        <div class="ui secondary clearing segment">
+            <b class="chartName">@ViewBag.Title</b>
+            <button type="button" class='ui right floated small button' id="share-button"><b>Share</b></button>
+            <button type="button" class="ui right floated small button" id="clear-button">Clear</button>
+        </div>
+        <div class="ui segment">
+            <div id="infoPanel">
+                Requesting data...
+            </div>
+            <br />
+            <div id="chartPanel" style="display: none;">
+                <div id="visualization"></div>
+                <br />
+
+
+
+                <div class="ui form">
+                    <div class="ui fields">
+                        <div class="ui field">
+                            <label>Auto scroll:</label>
+                            <select id="autoscroll" onchange="onAutoscrollChange()">
+                                <option value="none" selected>None</option>
+                                <option value="continuous">Continuous</option>
+                                @*<option value="discrete">Discrete</option>*@
+                                <option value="static">Static</option>
+                            </select>
+                        </div>
+
+                        <div class="ui field">
+                            <label>Style:</label>
+                            <select id="charttype" onchange="onCharTypeChange()">
+                                <option value="bars" selected>Bars</option>
+                                <option value="splines">Splines</option>
+                                <option value="shadedsplines">Shaded Splines</option>
+                                <option value="lines">Lines</option>
+                                <option value="shadedlines">Shaded Lines</option>
+                                <option value="dots">Dots</option>
+                            </select>
+                        </div>
+
+                        <div class="ui field">
+                            <br>
+
+                            <div class="ui basic buttons">
+                                <button type="button" class='ui button' onclick="showAll()">
+                                    <b>Zoom All</b>
+                                </button>
+                                <button type="button" class='ui button' onclick="showNow()">
+                                    <b>Zoom Now</b>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui modal" id="shareModal">
+        <div class="header">
+            Chart share URL
+        </div>
+        <div class="content">
+            <div class="ui form">
+                <div class="field">
+                    <label>URL:</label>
+                    <textarea rows="3" id="url"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui positive right button">
+                OK
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+@section styles{
+    <link href="~/lib/vis/dist/vis.min.css" rel="stylesheet" />
+}
+
+@section scripts
+{
+    <script src="~/lib/vis/dist/vis.min.js"></script>
+
+    <script type="text/javascript">
+        var nodeId = '@Model.Id';
+
+        var urlStart = @ViewBag.start;
+        var urlEnd = @ViewBag.end;
+
+        var autoScroll = "none";
+        var charType = "bars";
+
+        @if (ViewBag.autoscroll != null)
+        {
+            @:autoScroll = "@ViewBag.autoscroll";
+        }
+
+
+        @if (ViewBag.style != null)
+        {
+            @:charType = "@ViewBag.style";
+       }
+
+        $('#autoscroll').dropdown();
+        $('#charttype').dropdown();
+
+    </script>
+
+    <script src="~/js/mynetsensors-dashboard-chart-page.js"></script>
+}

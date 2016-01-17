@@ -432,7 +432,7 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            LogicalNodeUISlider node = (LogicalNodeUISlider)n;
+            LogicalNodeUIChart node = (LogicalNodeUIChart)n;
             node.Name = name;
             node.ShowOnMainPage = show;
             engine.UpdateNode(node);

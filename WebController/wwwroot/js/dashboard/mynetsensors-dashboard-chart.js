@@ -29,14 +29,14 @@ function createChart(node) {
 
 
     $('#chart-clear-' + node.Id).click(function () {
-        dataset[node.Id].clear();
-        //$.ajax({
-        //    url: "/History/ClearHistory/" + nodeId + "/" + sensorId,
-        //    type: "POST",
-        //    success: function (connected) {
-        //        dataset[node.Id].clear();
-        //    }
-        //});
+        $.ajax({
+            url: "/Dashboard/ClearChart/",
+            type: "POST",
+            data: {nodeId: node.Id},
+            success: function () {
+                dataset[node.Id].clear();
+            }
+        });
     });
 
     $('#chart-now-' + node.Id).click(function () {

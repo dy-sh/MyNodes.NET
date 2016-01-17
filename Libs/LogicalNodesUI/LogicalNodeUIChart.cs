@@ -11,7 +11,7 @@ namespace MyNetSensors.LogicalNodesUI
 {
     public class LogicalNodeUIChart : LogicalNodeUI
     {
-        private List<NodeData> Log { get; set; }
+        private List<NodeData> NodeData { get; set; }
         public int? State { get; set; }
 
         public LogicalNodeUIChart() : base(1, 0)
@@ -19,7 +19,7 @@ namespace MyNetSensors.LogicalNodesUI
             this.Title = "UI Chart";
             this.Type = "UI/Chart";
             this.Name = "Chart";
-            Log = new List<NodeData>();
+            NodeData = new List<NodeData>();
         }
 
         public override void Loop()
@@ -39,7 +39,7 @@ namespace MyNetSensors.LogicalNodesUI
                 int val = Int32.Parse(input.Value);
 
                 NodeData nodeData = new NodeData(this.Id, val.ToString());
-                Log.Add(nodeData);
+                NodeData.Add(nodeData);
 
                 State = val;
             }
@@ -49,10 +49,14 @@ namespace MyNetSensors.LogicalNodesUI
             }
         }
 
-
-        public void ClearLog()
+        public List<NodeData> GetChartData()
         {
-            Log.Clear();
+            return NodeData;
+        }
+
+        public void ClearChart()
+        {
+            NodeData.Clear();
             State = null;
         }
     }
