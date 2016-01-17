@@ -101,8 +101,11 @@ function addChartData(chartData, nodeId) {
 function updateChart(node) {
     $('#chartName-' + node.Id).html(node.Name);
 
+    if (node.State == "0")
+        node.State = "-0.01";
+
     //Add new point to chart
-    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss:SSS");
+    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss.SSS");
     dataset[node.Id].add({
         x: now,
         y: node.State

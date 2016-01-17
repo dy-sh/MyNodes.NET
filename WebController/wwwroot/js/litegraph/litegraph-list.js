@@ -404,8 +404,8 @@
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
             '</div><div class="ui divider"></div><div class="fields">' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-usedb"><label>Write data in database</label></div></div>' +
-             '</div><div class="fields">' +
-            '<div class="field">Write in database min interval (ms): <input type="text" id="node-settings-dbinterval"></div>' +
+             '</div><div class="ui divider"></div><div class="fields">' +
+            '<div class="field">Update interval (ms): <input type="text" id="node-settings-update"></div>' +
 
             '</div></div>'
         );
@@ -413,7 +413,7 @@
         $('#node-settings-name').val(node.properties['Name']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
         $('#node-settings-usedb').prop('checked', node.properties['WriteInDatabase'] == "true");
-        $('#node-settings-dbinterval').val(node.properties['WriteInDatabaseMinInterval']);
+        $('#node-settings-update').val(node.properties['UpdateInterval']);
 
 
 
@@ -427,7 +427,7 @@
                         name: $('#node-settings-name').val(),
                         show: $('#node-settings-show').prop('checked'),
                         writeInDatabase: $('#node-settings-usedb').prop('checked'),
-                        writeInDatabaseMinInterval: $('#node-settings-dbinterval').val(),
+                        updateInterval: $('#node-settings-update').val(),
                         id: node.id
                     }
                 });

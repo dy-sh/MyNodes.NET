@@ -123,7 +123,7 @@ namespace MyNetSensors.WebController.Controllers
                 LogicalNodeUIChart n = (LogicalNodeUIChart)logicalNode;
                 node.properties["State"] = n.State.ToString();
                 node.properties["WriteInDatabase"] = n.WriteInDatabase ? "true" : "false";
-                node.properties["WriteInDatabaseMinInterval"] = n.WriteInDatabaseMinInterval.ToString();
+                node.properties["UpdateInterval"] = n.UpdateInterval.ToString();
             }
 
             if (logicalNode is LogicalNodeConstant)
@@ -425,7 +425,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool UIChartSettings(string id, string name, bool show, bool writeInDatabase, int writeInDatabaseMinInterval)
+        public bool UIChartSettings(string id, string name, bool show, bool writeInDatabase, int updateInterval)
         {
             LogicalNode n = engine.GetNode(id);
             if (n == null)
@@ -438,7 +438,7 @@ namespace MyNetSensors.WebController.Controllers
             node.Name = name;
             node.ShowOnMainPage = show;
             node.WriteInDatabase = writeInDatabase;
-            node.WriteInDatabaseMinInterval = writeInDatabaseMinInterval;
+            node.UpdateInterval = updateInterval;
             engine.UpdateNode(node, true);
 
             return true;

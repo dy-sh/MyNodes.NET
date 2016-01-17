@@ -146,6 +146,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Chart(string id, string autoscroll, string style, string start, string end)
         {
+            if (engineUI == null)
+                return null;
+
             LogicalNodeUIChart chart = engineUI.GetUINode(id) as LogicalNodeUIChart;
             if (chart == null)
                 return new HttpNotFoundResult();
@@ -175,8 +178,8 @@ namespace MyNetSensors.WebController.Controllers
 
             return nodeStatesArray.Select(item => new ChartData
             {
-                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss:fff}",
-                y = Int32.Parse(item.State)
+                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
+                y = item.State=="0"?"-0.01": item.State
             }).ToList();
         }
 

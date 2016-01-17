@@ -15,7 +15,7 @@ namespace MyNetSensors.LogicalNodesUI
         public int? State { get; set; }
 
         public bool WriteInDatabase { get; set; }
-        public int WriteInDatabaseMinInterval { get; set; }
+        public int UpdateInterval { get; set; }
         public DateTime WriteInDatabaseLastDate { get; set; }
 
 
@@ -32,7 +32,7 @@ namespace MyNetSensors.LogicalNodesUI
 
             NodeStates = new List<NodeState>();
             WriteInDatabase = false;
-            WriteInDatabaseMinInterval = 1000;
+            UpdateInterval = 500;
             WriteInDatabaseLastDate = DateTime.Now;
         }
 
@@ -41,7 +41,7 @@ namespace MyNetSensors.LogicalNodesUI
             if (!LastStateUpdated)
                 return;
 
-            if ((DateTime.Now - WriteInDatabaseLastDate).TotalMilliseconds < WriteInDatabaseMinInterval)
+            if ((DateTime.Now - WriteInDatabaseLastDate).TotalMilliseconds < UpdateInterval)
                 return;
 
             LastStateUpdated = false;
