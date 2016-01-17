@@ -215,17 +215,19 @@
 <script id="chartTemplate" type="text/x-handlebars-template">
     <div class="ui attached clearing segment" id="node-{{Id}}">
         <span id="chartName-{{Id}}"></span>
-        <button type="button" class="ui right floated tiny button" id="chart-now-{{Id}}">Now</button>
-        <button type="button" class="ui right floated tiny button" id="chart-all-{{Id}}">All</button>
-        <button type="button" class="ui right floated tiny button" id="chart-open-{{Id}}">Open</button>
-        <button type="button" class="ui right floated tiny button" id="chart-clear-{{Id}}">Clear</button>
+        <div class="ui mini right floated basic buttons">
+            <button type="button" class="ui button" id="chart-clear-{{Id}}">Clear</button>
+            <button type="button" class="ui button" id="chart-open-{{Id}}">Open</button>
+            <button type="button" class="ui button" id="chart-all-{{Id}}">All</button>
+            <button type="button" class="ui button" id="chart-now-{{Id}}">Now</button>
+        </div>
         <br />
         @*<div id="chart-info-panel-{{Id}}">
             Requesting data...
         </div>*@
         <br />
         <div id="chart-panel-{{Id}}-" @*style="display: none;"*@>
-            <div id="chart-body-{{Id}}"></div>
+                <div id="chart-body-{{Id}}"></div>
         </div>       
         
     </div>
