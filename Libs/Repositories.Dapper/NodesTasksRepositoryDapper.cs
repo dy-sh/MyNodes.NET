@@ -43,9 +43,6 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [isCompleted] [bit] NULL,       
 	                    [description] [nvarchar](max) NULL,	        
 	                    [nodeId] [int] NULL,
-	                    [sensorId] [int] NULL,
-	                    [sensorDbId] [int] NULL,
-	                    [sensorDescription] [nvarchar](max) NULL,
 	                    [executionDate] [datetime] NULL,
 	                    [dataType] [int] NULL,
 	                    [executionValue] [nvarchar](max) NULL,
@@ -93,8 +90,8 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO NodesTasks (enabled,isCompleted,description, nodeId, sensorId, sensorDbId,sensorDescription, executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
-                             + "VALUES(@enabled,@isCompleted,@description, @nodeId, @sensorId, @sensorDbId,@sensorDescription, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
+                var sqlQuery = "INSERT INTO NodesTasks (enabled,isCompleted,description, nodeId,  executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
+                             + "VALUES(@enabled,@isCompleted,@description, @nodeId, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 id = db.Query<int>(sqlQuery, task).Single();
@@ -113,9 +110,6 @@ namespace MyNetSensors.Repositories.Dapper
                     "isCompleted = @isCompleted, " +
                     "description = @description, " +
                     //"nodeId = @nodeId, " +
-                    //"sensorId = @sensorId, " +
-                    //"sensorDbId = @sensorDbId, " +
-                    //"sensorDescription = @sensorDescription, " +
                     "executionDate = @executionDate, " +
                     "dataType = @dataType, " +
                     "executionValue = @executionValue, " +
@@ -145,6 +139,19 @@ namespace MyNetSensors.Repositories.Dapper
             return task;
         }
 
+        public List<NodeTask> GetTasksForNode(string nodeId)
+        {
+            List<NodeTask> list;
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                list = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE nodeId=@nodeId",
+                    new { nodeId}).ToList();
+            }
+
+            return list;
+        }
+
         public List<NodeTask> GetAllTasks()
         {
             List<NodeTask> tasks;
@@ -157,18 +164,6 @@ namespace MyNetSensors.Repositories.Dapper
             return tasks;
         }
 
-        public List<NodeTask> GetTasks(int nodeId, int sensorId)
-        {
-            List<NodeTask> list;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                list = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
-                    new { nodeId, sensorId }).ToList();
-            }
-
-            return list;
-        }
 
         public void RemoveTask(int id)
         {
@@ -180,15 +175,17 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void RemoveTasks(int nodeId, int sensorId)
+        public void RemoveTasksForNode(string nodeId)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId",
-                    new { nodeId, sensorId });
+                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId",
+                    new { nodeId });
             }
         }
+
+
 
 
         public void RemoveCompletedTasks()
@@ -200,15 +197,16 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public void RemoveCompletedTasks(int nodeId, int sensorId)
+        public void RemoveCompletedTasksForNode(string nodeId)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND sensorId=@sensorId AND isCompleted=1",
-                    new { nodeId, sensorId });
+                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND isCompleted=1",
+                    new { nodeId });
             }
         }
+
 
         public void RemoveAllTasks()
         {

@@ -128,7 +128,7 @@ function hardwareStateChanged(connected) {
 function getNodes() {
     if (window.this_panel_id == null || window.this_panel_id == "") {
         $.ajax({
-            url: "/Dashboard/GetUINodesForMainPage/",
+            url: "/DashboardAPI/GetUINodesForMainPage/",
             type: "POST",
             success: function (nodes) {
                 onReturnNodes(nodes);
@@ -136,7 +136,7 @@ function getNodes() {
         });
     } else {
         $.ajax({
-            url: "/Dashboard/GetUINodesForPanel/",
+            url: "/DashboardAPI/GetUINodesForPanel/",
             type: "POST",
             data: { 'panelId': window.this_panel_id },
             success: function (nodes) {

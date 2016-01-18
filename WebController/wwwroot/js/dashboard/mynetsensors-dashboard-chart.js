@@ -30,7 +30,7 @@ function createChart(node) {
 
     $('#chart-clear-' + node.Id).click(function () {
         $.ajax({
-            url: "/Dashboard/ClearChart/",
+            url: "/DashboardAPI/ClearChart/",
             type: "POST",
             data: {nodeId: node.Id},
             success: function () {
@@ -71,7 +71,7 @@ function createChart(node) {
 
     //Loading data frow server
     $.ajax({
-        url: "/Dashboard/GetChartData/" + node.Id, //get nodeId from viewbag before
+        url: "/DashboardAPI/GetChartData/" + node.Id, //get nodeId from viewbag before
         dataType: "json",
         success: function (chartData) {
             if (chartData != null) {

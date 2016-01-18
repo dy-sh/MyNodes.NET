@@ -17,9 +17,10 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private NodesTasksDbContext db;
 
-        public NodesTasksRepositoryEF(NodesTasksDbContext nodesDbContext)
+        public NodesTasksRepositoryEF(NodesTasksDbContext dbContext)
         {
-            this.db = nodesDbContext;
+            this.db = dbContext;
+            CreateDb();
         }
 
 
@@ -37,11 +38,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         }
 
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
+
 
 
         public int AddOrUpdateTask(NodeTask task)
@@ -69,22 +66,19 @@ namespace MyNetSensors.Repositories.EF.SQLite
         public void UpdateTask(NodeTask task)
         {
             NodeTask oldTask = GetTask(task.Id);
-            oldTask.dataType = task.dataType;
-            oldTask.description = task.description;
-            oldTask.enabled = task.enabled;
-            oldTask.executionDate = task.executionDate;
-            oldTask.executionValue = task.executionValue;
-            oldTask.isCompleted = task.isCompleted;
-            oldTask.isRepeating = task.isRepeating;
-            oldTask.nodeId = task.nodeId;
-            oldTask.repeatingAValue = task.repeatingAValue;
-            oldTask.repeatingBValue = task.repeatingBValue;
-            oldTask.repeatingDoneCount = task.repeatingDoneCount;
-            oldTask.repeatingInterval = task.repeatingInterval;
-            oldTask.repeatingNeededCount = task.repeatingNeededCount;
-            oldTask.sensorDbId = task.sensorDbId;
-            oldTask.sensorId = task.sensorId;
-            oldTask.repeatingInterval = task.repeatingInterval;
+            oldTask.Description = task.Description;
+            oldTask.Enabled = task.Enabled;
+            oldTask.ExecutionDate = task.ExecutionDate;
+            oldTask.ExecutionValue = task.ExecutionValue;
+            oldTask.IsCompleted = task.IsCompleted;
+            oldTask.IsRepeating = task.IsRepeating;
+            oldTask.NodeId = task.NodeId;
+            oldTask.RepeatingAValue = task.RepeatingAValue;
+            oldTask.RepeatingBValue = task.RepeatingBValue;
+            oldTask.RepeatingDoneCount = task.RepeatingDoneCount;
+            oldTask.RepeatingInterval = task.RepeatingInterval;
+            oldTask.RepeatingNeededCount = task.RepeatingNeededCount;
+            oldTask.RepeatingInterval = task.RepeatingInterval;
 
             db.SaveChanges();
         }
@@ -97,16 +91,16 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         }
 
+        public List<NodeTask> GetTasksForNode(string nodeId)
+        {
+            return db.NodesTasks.Where(x => x.NodeId == nodeId).ToList();
+        }
+
         public List<NodeTask> GetAllTasks()
         {
             return db.NodesTasks.ToList();
         }
 
-        public List<NodeTask> GetTasks(int nodeId, int sensorId)
-        {
-            return db.NodesTasks.Where(x => x.nodeId == nodeId && x.sensorId == sensorId).ToList();
-
-        }
 
         public void RemoveTask(int id)
         {
@@ -117,9 +111,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.SaveChanges();
         }
 
-        public void RemoveTasks(int nodeId, int sensorId)
+        public void RemoveTasksForNode(string nodeId)
         {
-            List<NodeTask> tasks = GetTasks(nodeId, sensorId);
+            List<NodeTask> tasks = GetTasksForNode(nodeId);
             //if (!tasks.Any())
             //    return;
             db.NodesTasks.RemoveRange(tasks);
@@ -128,24 +122,27 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
+
+
         public void RemoveCompletedTasks()
         {
-            List<NodeTask> tasks = db.NodesTasks.Where(x => x.isCompleted == true).ToList();
+            List<NodeTask> tasks = db.NodesTasks.Where(x => x.IsCompleted == true).ToList();
 
             db.NodesTasks.RemoveRange(tasks);
             db.SaveChanges();
         }
 
-        public void RemoveCompletedTasks(int nodeId, int sensorId)
+        public void RemoveCompletedTasksForNode(string nodeId)
         {
             List<NodeTask> tasks = db.NodesTasks.Where(
-                x => x.nodeId == nodeId
-                && x.sensorId == sensorId
-                && x.isCompleted == true).ToList();
+                x => x.NodeId == nodeId
+                && x.IsCompleted == true).ToList();
 
             db.NodesTasks.RemoveRange(tasks);
             db.SaveChanges();
         }
+
+
 
         public void RemoveAllTasks()
         {
@@ -159,10 +156,10 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (task == null)
                 return;
 
-            task.isCompleted = isCompleted;
-            task.executionDate = executionDate;
-            task.executionValue = executionValue;
-            task.repeatingDoneCount = repeatingDoneCount;
+            task.IsCompleted = isCompleted;
+            task.ExecutionDate = executionDate;
+            task.ExecutionValue = executionValue;
+            task.RepeatingDoneCount = repeatingDoneCount;
 
             db.NodesTasks.Update(task);
             db.SaveChanges();
@@ -174,9 +171,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (task == null)
                 return;
 
-            task.isCompleted = isCompleted;
-            task.executionDate = executionDate;
-            task.repeatingDoneCount = repeatingDoneCount;
+            task.IsCompleted = isCompleted;
+            task.ExecutionDate = executionDate;
+            task.RepeatingDoneCount = repeatingDoneCount;
 
             db.NodesTasks.Update(task);
             db.SaveChanges();
@@ -188,7 +185,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (task == null)
                 return;
 
-            task.enabled = enabled;
+            task.Enabled = enabled;
 
             db.NodesTasks.Update(task);
             db.SaveChanges();
@@ -196,13 +193,13 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void DisableTasks()
         {
-            List<NodeTask> tasks = db.NodesTasks.Where(x => x.enabled == true).ToList();
+            List<NodeTask> tasks = db.NodesTasks.Where(x => x.Enabled == true).ToList();
             if (tasks==null || !tasks.Any())
                 return;
 
             foreach (var task in tasks)
             {
-                task.enabled = false;
+                task.Enabled = false;
             }
 
             db.NodesTasks.UpdateRange(tasks);

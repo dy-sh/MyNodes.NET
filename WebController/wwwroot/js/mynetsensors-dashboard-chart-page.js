@@ -190,7 +190,7 @@ renderStep();
 $(document).ready(function () {
     //Loading data frow server
     $.ajax({
-        url: "/Dashboard/GetChartData/" + nodeId, //get nodeId from viewbag before
+        url: "/DashboardAPI/GetChartData/" + nodeId, //get nodeId from viewbag before
         dataType: "json",
         success: function (chartData) {
             $('#infoPanel').hide();
@@ -394,7 +394,7 @@ function share() {
 
 $('#clear-button').click(function () {
     $.ajax({
-        url: "/Dashboard/ClearChart/",
+        url: "/DashboardAPI/ClearChart/",
         type: "POST",
         data: { nodeId: nodeId },
         success: function (connected) {

@@ -4,7 +4,6 @@
 */
 
 using System;
-using MyNetSensors.Gateways;
 
 namespace MyNetSensors.NodesTasks
 {
@@ -12,26 +11,18 @@ namespace MyNetSensors.NodesTasks
     {
 
         public int Id { get; set; }
-        public bool enabled { get; set; }
-        public bool isCompleted { get; set; }
-        public string description { get; set; }
-        public int nodeId { get; set; }
-        public int sensorId { get; set; }
-        public int sensorDbId { get; set; }
-        public string sensorDescription { get; set; }
-        public DateTime executionDate { get; set; }
-        public SensorDataType? dataType { get; set; }
-        public string executionValue { get; set; }
-        public bool isRepeating { get; set; }
-        public int repeatingInterval { get; set; }
-        public string repeatingAValue { get; set; }
-        public string repeatingBValue { get; set; }
+        public string NodeId { get; set; }
+        public bool Enabled { get; set; }
+        public bool IsCompleted { get; set; }
+        public string Description { get; set; }
+        public DateTime ExecutionDate { get; set; }
+        public string ExecutionValue { get; set; }
+        public bool IsRepeating { get; set; }
+        public int RepeatingInterval { get; set; }
+        public string RepeatingAValue { get; set; }
+        public string RepeatingBValue { get; set; }
         //if repeatingNeededCount==0, then will run indefinitely
-        public int repeatingNeededCount { get; set; }
-        public int repeatingDoneCount { get; set; }
-
-
-
-     
+        public int RepeatingNeededCount { get; set; }
+        public int RepeatingDoneCount { get; set; }
     }
 }

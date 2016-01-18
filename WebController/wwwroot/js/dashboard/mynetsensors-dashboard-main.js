@@ -171,7 +171,7 @@ function updateSwitch(node) {
 function sendTextBox(nodeId) {
     var val = $('#textBoxText-' + nodeId).val();
     $.ajax({
-        url: "/DashBoard/TextBoxSend/",
+        url: "/DashboardAPI/TextBoxSend/",
         type: "POST",
         data: { 'nodeId': nodeId, 'value': val }
     });
@@ -181,7 +181,7 @@ function sendTextBox(nodeId) {
 
 function sendClearLog(nodeId) {
     $.ajax({
-        url: "/DashBoard/ClearLog/",
+        url: "/DashboardAPI/ClearLog/",
         type: "POST",
         data: { 'nodeId': nodeId }
     });
@@ -189,7 +189,7 @@ function sendClearLog(nodeId) {
 
 function sendButtonClick(nodeId) {
     $.ajax({
-        url: "/Dashboard/ButtonClick/",
+        url: "/DashboardAPI/ButtonClick/",
         type: "POST",
         data: { 'nodeId': nodeId }
     });
@@ -197,7 +197,7 @@ function sendButtonClick(nodeId) {
 
 function sendToggleButtonClick(nodeId) {
     $.ajax({
-        url: "/Dashboard/ToggleButtonClick/",
+        url: "/DashboardAPI/ToggleButtonClick/",
         type: "POST",
         data: { 'nodeId': nodeId }
     });
@@ -205,7 +205,7 @@ function sendToggleButtonClick(nodeId) {
 
 function sendSwitchClick(nodeId) {
     $.ajax({
-        url: "/Dashboard/SwitchClick/",
+        url: "/DashboardAPI/SwitchClick/",
         type: "POST",
         data: { 'nodeId': nodeId }
     });

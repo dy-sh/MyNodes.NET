@@ -24,15 +24,18 @@ namespace MyNetSensors.WebController.Controllers
 
         private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
 
-        public IActionResult Index()
+        public IActionResult Index(bool split)
         {
+            ViewBag.split = split;
             ViewBag.panelId = MAIN_PANEL_ID;
 
             return View();
         }
 
-        public IActionResult Panel(string id)
+        public IActionResult Panel(string id, bool split)
         {
+            ViewBag.split = split;
+
             if (id == null || id== MAIN_PANEL_ID)
                 return RedirectToAction("Index");
 
@@ -66,5 +69,14 @@ namespace MyNetSensors.WebController.Controllers
             return View("Index");
         }
 
+
+        public IActionResult Split(string id)
+        {
+            if (id == null)
+                ViewBag.route = "";
+            else
+                ViewBag.route = "Panel/" + id;
+            return View();
+        }
     }
 }

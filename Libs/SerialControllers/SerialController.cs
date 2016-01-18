@@ -87,7 +87,6 @@ namespace MyNetSensors.SerialControllers
 
                 ConnectToDB();
                 ConnectToGateway();
-                ConnectNodesTasks();
                 //ConnectToSoftNodesController();
                 ConnectToLogicalNodesEngine();
 
@@ -145,18 +144,6 @@ namespace MyNetSensors.SerialControllers
         }
 
 
-        private static void ConnectNodesTasks()
-        {
-            //connecting tasks
-            if (!nodesTasksEnabled) return;
-
-            logs.AddSerialControllerInfo("Starting Task Engine...");
-
-            nodesTasksEngine = new NodesTasksEngine(gateway, nodesTasksDb);
-            nodesTasksEngine.SetUpdateInterval(nodesTasksUpdateInterval);
-
-            logs.AddSerialControllerInfo("Task Engine started.");
-        }
 
 
 
@@ -238,6 +225,8 @@ namespace MyNetSensors.SerialControllers
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
             logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine,logicalNodesStatesDb);
+            nodesTasksEngine = new NodesTasksEngine(logicalNodesEngine, nodesTasksDb);
+            nodesTasksEngine.SetUpdateInterval(nodesTasksUpdateInterval);
 
             logicalNodesEngine.Start();
 

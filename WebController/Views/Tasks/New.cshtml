@@ -4,8 +4,8 @@
 @{
     ViewBag.Title = "New Task for " + @ViewBag.description;
 
-    string repeatingPanelDisplay = Model.isRepeating ? "" : "display: none";
-    string nonRepeatingPanelDisplay = Model.isRepeating ? "display: none" : "";
+    string repeatingPanelDisplay = Model.IsRepeating ? "" : "display: none";
+    string nonRepeatingPanelDisplay = Model.IsRepeating ? "display: none" : "";
 }
 
 <br />
@@ -49,7 +49,7 @@
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                @if (Model.isRepeating)
+                                @if (Model.IsRepeating)
                                 {
                                     <input type="checkbox" name="isRepeating" checked>
                                 }

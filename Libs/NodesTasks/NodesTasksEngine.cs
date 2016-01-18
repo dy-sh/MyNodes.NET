@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
-using MyNetSensors.Gateways;
+using MyNetSensors.LogicalNodes;
+
 
 namespace MyNetSensors.NodesTasks
 {
@@ -19,25 +21,37 @@ namespace MyNetSensors.NodesTasks
 
         private Timer updateTasksTimer = new Timer();
 
-        private Gateway gateway;
+        private LogicalNodesEngine engine;
         private INodesTasksRepository db;
 
         private List<NodeTask> tasks = new List<NodeTask>();
 
-        public NodesTasksEngine(Gateway gateway, INodesTasksRepository db)
+        public NodesTasksEngine(LogicalNodesEngine engine, INodesTasksRepository db=null)
         {
             this.db = db;
-            this.gateway = gateway;
+            this.engine = engine;
 
-            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
+            engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
+
 
             updateTasksTimer.Elapsed += UpdateTasks;
             updateTasksTimer.Interval = updateTasksInterval;
 
-            db.CreateDb();
             GetTasksFromRepository();
 
             Start();
+        }
+
+        private void OnRemoveNodeEvent(LogicalNode node)
+        {
+
+            var list = tasks.Where(x => x.NodeId == node.Id).ToList();
+            foreach (var nodeTask in list)
+            {
+                tasks.Remove(nodeTask);
+            }
+
+            db?.RemoveTasksForNode(node.Id);
         }
 
         public void Start()
@@ -51,7 +65,7 @@ namespace MyNetSensors.NodesTasks
 
         public void GetTasksFromRepository()
         {
-            tasks = db.GetAllTasks();
+            tasks = db?.GetAllTasks();
         }
 
         private void UpdateTasks(object sender, ElapsedEventArgs e)
@@ -66,7 +80,7 @@ namespace MyNetSensors.NodesTasks
 
                 foreach (var task in tasksTemp)
                 {
-                    if (!task.isCompleted && task.enabled && task.executionDate <= DateTime.Now)
+                    if (!task.IsCompleted && task.Enabled && task.ExecutionDate <= DateTime.Now)
                         Execute(task);
                 }
             }
@@ -75,42 +89,43 @@ namespace MyNetSensors.NodesTasks
             updateTasksTimer.Start();
         }
 
-        private void OnRemoveAllNodesEvent()
-        {
-            tasks.Clear();
-            db.RemoveAllTasks();
-        }
+
 
         private void Execute(NodeTask task)
         {
-            task.repeatingDoneCount++;
+            task.RepeatingDoneCount++;
 
-            if (!task.isRepeating)
-                task.isCompleted = true;
+            if (!task.IsRepeating)
+                task.IsCompleted = true;
             else
             {
-                if (task.repeatingNeededCount!=0 
-                    && task.repeatingDoneCount >= task.repeatingNeededCount)
-                    task.isCompleted = true;
+                if (task.RepeatingNeededCount!=0 
+                    && task.RepeatingDoneCount >= task.RepeatingNeededCount)
+                    task.IsCompleted = true;
 
-                if (task.executionValue == task.repeatingAValue)
-                    task.executionValue = task.repeatingBValue;
+                if (task.ExecutionValue == task.RepeatingAValue)
+                    task.ExecutionValue = task.RepeatingBValue;
                 else
-                    task.executionValue = task.repeatingAValue;
+                    task.ExecutionValue = task.RepeatingAValue;
 
-                if (!task.isCompleted)
-                    task.executionDate = DateTime.Now.AddMilliseconds(task.repeatingInterval);
+                if (!task.IsCompleted)
+                    task.ExecutionDate = DateTime.Now.AddMilliseconds(task.RepeatingInterval);
             }
 
             //we should not update the whole record, because other parts of the record can be updated from outside
-            db.UpdateTask(
+            db?.UpdateTask(
                 task.Id,
-                task.isCompleted,
-                task.executionDate,
-                task.executionValue,
-                task.repeatingDoneCount);
+                task.IsCompleted,
+                task.ExecutionDate,
+                task.ExecutionValue,
+                task.RepeatingDoneCount);
 
-            gateway.SendSensorState(task.nodeId, task.sensorId, task.executionValue);
+            LogicalNodeTask node = engine.GetNode(task.NodeId) as LogicalNodeTask;
+            if (node == null)
+            {
+                engine.LogEngineError($"Can`t execute task for Node [{task.NodeId}]. Not found.");
+            }
+            node.SetState(task.ExecutionValue);
         }
 
         public void SetUpdateInterval(int ms)

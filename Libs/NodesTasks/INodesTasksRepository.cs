@@ -10,8 +10,6 @@ namespace MyNetSensors.NodesTasks
 {
     public interface INodesTasksRepository
     {
-        void CreateDb();
-        bool IsDbExist();
         int AddOrUpdateTask(NodeTask task);
         int AddTask(NodeTask task);
         void UpdateTask(NodeTask task);
@@ -19,12 +17,12 @@ namespace MyNetSensors.NodesTasks
         void UpdateTask(int id, bool enabled, bool isCompleted, DateTime executionDate, int repeatingDoneCount);
         void UpdateTaskEnabled(int id, bool enabled);
         NodeTask GetTask(int id);
-        List<NodeTask> GetTasks(int nodeId, int sensorId);
+        List<NodeTask> GetTasksForNode(string nodeId);
         List<NodeTask> GetAllTasks();
         void RemoveTask(int id);
-        void RemoveTasks(int nodeId,int sensorId);
+        void RemoveTasksForNode(string nodeId);
         void RemoveCompletedTasks();
-        void RemoveCompletedTasks(int nodeId, int sensorId);
+        void RemoveCompletedTasksForNode(string nodeId);
         void RemoveAllTasks();
         void DisableTasks();
     }

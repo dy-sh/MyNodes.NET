@@ -83,7 +83,7 @@ function sendSliders() {
 
 function sendSliderChange(nodeId, value) {
     $.ajax({
-        url: "/Dashboard/SliderChange/",
+        url: "/DashboardAPI/SliderChange/",
         type: "POST",
         data: { 'nodeId': nodeId, 'value': value }
     });

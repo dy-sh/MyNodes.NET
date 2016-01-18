@@ -123,18 +123,6 @@ namespace MyNetSensors.WebController.Controllers
             gatewayDb.RemoveNode(node.Id);
 
 
-
-            INodesTasksRepository tasksDb = SerialController.nodesTasksDb;
-
-            foreach (var sensor in node.sensors)
-            {
-                tasksDb.RemoveTasks(sensor.nodeId, sensor.sensorId);
-            }
-
-            gatewayApi.UpdateNodesTasks();
-
-
-
             return RedirectToAction("Index");
         }
     }

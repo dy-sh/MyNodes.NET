@@ -149,7 +149,7 @@ function createPanel(node) {
         $('#panelTitle-' + node.PanelId).html("Main Panel");
     else {
         $.ajax({
-            url: "/DashBoard/GetNameForPanel/",
+            url: "/DashboardAPI/GetNameForPanel/",
             type: "POST",
             data: { 'id': node.PanelId },
             success: function (panelName) {

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="INodesTasksRepository.cs" />
+    <Compile Include="LogicalNodeTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodesTasksEngine.cs" />
     <Compile Include="NodeTask.cs" />
@@ -53,9 +54,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gateways\Gateways.csproj">
-      <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateways</Name>
+    <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
+      <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
+      <Name>LogicalNodes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

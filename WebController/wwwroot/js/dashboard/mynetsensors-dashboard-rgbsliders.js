@@ -215,7 +215,7 @@ function sendSliders() {
 
 function sendRGBSlidersChange(nodeId, value) {
     $.ajax({
-        url: "/Dashboard/RGBSlidersChange/",
+        url: "/DashboardAPI/RGBSlidersChange/",
         type: "POST",
         data: { 'nodeId': nodeId, 'value': value }
     });
@@ -223,7 +223,7 @@ function sendRGBSlidersChange(nodeId, value) {
 
 function sendRGBWSlidersChange(nodeId, value) {
     $.ajax({
-        url: "/Dashboard/RGBWSlidersChange/",
+        url: "/DashboardAPI/RGBWSlidersChange/",
         type: "POST",
         data: { 'nodeId': nodeId, 'value': value }
     });

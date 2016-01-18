@@ -28,36 +28,53 @@
             <div class="right menu">
 
             </div>
-            </div>
+        </div>
     </div>
     <br />
     <br />
     <br />
-<div class="ui container">
-    @if (@ViewBag.panelId != "Main")
-    {
-        <a asp-controller="Dashboard" asp-action="Panel" asp-route-id="@ViewBag.panelId" class="ui inverted small basic right floated button">Dashboard</a>
-    }
-    else
-    {
-        <a asp-controller="Dashboard" asp-action="Index" class="ui inverted small basic right floated button">Dashboard</a>
-        
-    }
+    <div class="ui container">
 
-    <div class="ui tiny buttons">
-        <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
-        @{
-            List<LogicalNodePanel> panelsStack = ViewBag.panelsStack;
-            if (panelsStack != null && panelsStack.Any())
+        <p>
+            @if (@ViewBag.panelId == "Main")
             {
-                foreach (LogicalNodePanel panel in panelsStack)
+                <a asp-controller="Dashboard" asp-action="Index" target="_top" class="ui inverted small basic right floated button">Dashboard</a>
+                if (ViewBag.split == true)
                 {
-                    <a asp-action="Panel" asp-route-id="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
+                    <a asp-action="Index" target="_top" class="ui inverted small basic right floated button">Split</a>
+                }
+                else
+                {
+                    <a asp-action="Split" target="_top" class="ui inverted small basic right floated button">Split</a>
                 }
             }
-        }
+            else
+            {
+                <a asp-controller="Dashboard" asp-action="Panel" asp-route-id="@ViewBag.panelId" target="_top" class="ui inverted small basic right floated button">Dashboard</a>
+                if (ViewBag.split == true)
+                {
+                    <a asp-action="Panel" asp-route-id="@ViewBag.panelId" target="_top" class="ui inverted small basic right floated button">Split</a>
+                }
+                else
+                {
+                    <a asp-action="Split" asp-route-id="@ViewBag.panelId" target="_top" class="ui inverted small basic right floated button">Split</a>
+                }
+            }
+
+            <div class="ui tiny buttons">
+                <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
+                @{
+                    List<LogicalNodePanel> panelsStack = ViewBag.panelsStack;
+                    if (panelsStack != null && panelsStack.Any())
+                    {
+                        foreach (LogicalNodePanel panel in panelsStack)
+                        {
+                            <a asp-action="Panel" asp-route-id="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
+                        }
+                    }
+                }
+            </div>
     </div>
-</div>
     <br />
     <div id="main"></div>
 

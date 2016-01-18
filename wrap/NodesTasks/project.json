@@ -9,7 +9,8 @@
       },
       "dependencies": {
         "Dapper": "1.50.0-beta6",
-        "Gateways": "1.0.0-*"
+        "Gateways": "1.0.0-*",
+        "LogicalNodes": "1.0.0-*"
       }
     }
   }
