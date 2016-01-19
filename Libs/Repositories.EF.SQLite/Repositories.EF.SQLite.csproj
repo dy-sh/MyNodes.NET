@@ -134,13 +134,13 @@
     <Compile Include="DbContext\NodesDbContext.cs" />
     <Compile Include="DbContext\LogicalNodesStatesDbContext.cs" />
     <Compile Include="DbContext\NodesMessagesDbContext.cs" />
-    <Compile Include="DbContext\NodesTasksDbContext.cs" />
+    <Compile Include="DbContext\UITimerNodesDbContext.cs" />
     <Compile Include="LogicalNodesStatesRepositoryEF.cs" />
     <Compile Include="NodesMessagesRepositoryEF.cs" />
     <Compile Include="GatewayRepositoryEF.cs" />
     <Compile Include="LogicalNodeSerialized.cs" />
     <Compile Include="LogicalNodesRepositoryEF.cs" />
-    <Compile Include="NodesTasksRepositoryEF.cs" />
+    <Compile Include="UITimerNodesRepositoryEf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +152,9 @@
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>LogicalNodes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NodesTasks\NodesTasks.csproj">
+    <ProjectReference Include="..\Nodes.UITimer\Nodes.UITimer.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
-      <Name>NodesTasks</Name>
+      <Name>Nodes.UITimer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

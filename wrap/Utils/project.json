@@ -6,8 +6,7 @@
       "bin": {
         "assembly": "../../Libs/Utils/obj/{configuration}/Utils.dll",
         "pdb": "../../Libs/Utils/obj/{configuration}/Utils.pdb"
-      },
-      "dependencies": {}
+      }
     }
   }
 }

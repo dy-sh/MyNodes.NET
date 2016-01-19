@@ -40,10 +40,9 @@
       "dependencies": {
         "Gateways": "1.0.0-*",
         "LogicalNodes": "1.0.0-*",
-        "LogicalNodesMySensors": "1.0.0-*",
-        "NodesTasks": "1.0.0-*",
+        "Repositories.Dapper": "1.0.0-*",
+        "Repositories.EF.SQLite": "1.0.0-*",
         "SerialControllers": "1.0.0-*"
-
       }
     }
   },

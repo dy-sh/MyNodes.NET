@@ -64,7 +64,7 @@ namespace MyNetSensors.WebController
                         options.UseSqlServer(connectionString))
                     .AddDbContext<NodesMessagesDbContext>(options =>
                         options.UseSqlServer(connectionString))
-                    .AddDbContext<NodesTasksDbContext>(options =>
+                    .AddDbContext<UITimerNodesDbContext>(options =>
                         options.UseSqlServer(connectionString));
             }
             else
@@ -81,8 +81,8 @@ namespace MyNetSensors.WebController
                         options.UseSqlite("Data Source=Nodes.sqlite"))
                     .AddDbContext<NodesMessagesDbContext>(options =>
                         options.UseSqlite("Data Source=NodesMessages.sqlite"))
-                    .AddDbContext<NodesTasksDbContext>(options =>
-                        options.UseSqlite("Data Source=NodesTasks.sqlite"));
+                    .AddDbContext<UITimerNodesDbContext>(options =>
+                        options.UseSqlite("Data Source=UITimerNodes.sqlite"));
             }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -111,7 +111,7 @@ namespace MyNetSensors.WebController
             LogicalNodesStatesDbContext logicalNodesStatesDbContext,
             NodesDbContext nodesDbContext,
             NodesMessagesDbContext nodesMessagesDbContext,
-            NodesTasksDbContext nodesTasksDbContext
+            UITimerNodesDbContext uiTimerNodesDbContext
             )
         {
             //Set up dot instead of comma in float values
@@ -203,7 +203,7 @@ namespace MyNetSensors.WebController
             SerialControllerConfigurator.logicalNodesStatesDbContext = logicalNodesStatesDbContext;
             SerialControllerConfigurator.nodesDbContext = nodesDbContext;
             SerialControllerConfigurator.nodesMessagesDbContext = nodesMessagesDbContext;
-            SerialControllerConfigurator.nodesTasksDbContext = nodesTasksDbContext;
+            SerialControllerConfigurator.uiTimerNodesDbContext = uiTimerNodesDbContext;
 
             bool firstRun = Boolean.Parse(Configuration["FirstRun"]);
             if (!firstRun)

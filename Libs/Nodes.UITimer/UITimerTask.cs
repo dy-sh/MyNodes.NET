@@ -5,9 +5,9 @@
 
 using System;
 
-namespace MyNetSensors.NodesTasks
+namespace MyNetSensors.Nodes
 {
-    public class NodeTask
+    public class UITimerTask
     {
 
         public int Id { get; set; }
@@ -24,5 +24,6 @@ namespace MyNetSensors.NodesTasks
         //if repeatingNeededCount==0, then will run indefinitely
         public int RepeatingNeededCount { get; set; }
         public int RepeatingDoneCount { get; set; }
+
     }
 }

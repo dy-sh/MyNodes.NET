@@ -8,16 +8,16 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
-using MyNetSensors.NodesTasks;
+using MyNetSensors.Nodes;
 
 namespace MyNetSensors.Repositories.Dapper
 {
-    public class NodesTasksRepositoryDapper : INodesTasksRepository
+    public class UITimerNodesRepositoryDapper : IUITimerNodesRepository
     {
 
         private string connectionString;
 
-        public NodesTasksRepositoryDapper(string connectionString)
+        public UITimerNodesRepositoryDapper(string connectionString)
         {
             this.connectionString = connectionString;
         }
@@ -25,10 +25,10 @@ namespace MyNetSensors.Repositories.Dapper
 
         public void CreateDb()
         {
-            CreateNodesTasksTable();
+            CreateUITimerNodesTable();
         }
 
-        private void CreateNodesTasksTable()
+        private void CreateUITimerNodesTable()
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -36,8 +36,8 @@ namespace MyNetSensors.Repositories.Dapper
                 
                 try
                 {
-                    string req = 
-                        @"CREATE TABLE [dbo].[NodesTasks](
+                    string req =
+                        @"CREATE TABLE [dbo].[UITimerNodes](
 	                    [Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [enabled] [bit] NULL,       
 	                    [isCompleted] [bit] NULL,       
@@ -69,11 +69,11 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-        public int AddOrUpdateTask(NodeTask task)
+        public int AddOrUpdateTask(UITimerTask task)
         {
             int id=task.Id;
 
-            NodeTask oldTask = GetTask(task.Id);
+            UITimerTask oldTask = GetTask(task.Id);
 
             if (oldTask == null)
                 id= AddTask(task);
@@ -83,14 +83,14 @@ namespace MyNetSensors.Repositories.Dapper
             return id;
         }
 
-        public int AddTask(NodeTask task)
+        public int AddTask(UITimerTask task)
         {
             int id;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO NodesTasks (enabled,isCompleted,description, nodeId,  executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
+                var sqlQuery = "INSERT INTO UITimerNodes (enabled,isCompleted,description, nodeId,  executionDate,dataType, executionValue,  isRepeating ,repeatingInterval,repeatingAValue,repeatingBValue,repeatingNeededCount,repeatingDoneCount) "
                              + "VALUES(@enabled,@isCompleted,@description, @nodeId, @executionDate, @dataType, @executionValue,  @isRepeating, @repeatingInterval, @repeatingAValue, @repeatingBValue, @repeatingNeededCount,@repeatingDoneCount); "
                             + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -99,13 +99,13 @@ namespace MyNetSensors.Repositories.Dapper
             return id;
         }
 
-        public void UpdateTask(NodeTask task)
+        public void UpdateTask(UITimerTask task)
         {
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesTasks SET " +
+                    "UPDATE UITimerNodes SET " +
                     "enabled = @enabled, " +
                     "isCompleted = @isCompleted, " +
                     "description = @description, " +
@@ -124,41 +124,48 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-
-
-        public NodeTask GetTask(int id)
+        public void UpdateTasks(List<UITimerTask> tasks)
         {
-            NodeTask task;
+            foreach (var task in tasks)
+            {
+                UpdateTask(task);
+            }
+        }
+
+
+        public UITimerTask GetTask(int id)
+        {
+            UITimerTask task;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                task = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE Id=@Id",
+                task = db.Query<UITimerTask>("SELECT * FROM UITimerNodes WHERE Id=@Id",
                     new { id }).SingleOrDefault();
             }
 
             return task;
         }
 
-        public List<NodeTask> GetTasksForNode(string nodeId)
+        public List<UITimerTask> GetTasksForNode(string nodeId)
         {
-            List<NodeTask> list;
+            List<UITimerTask> list;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                list = db.Query<NodeTask>("SELECT * FROM NodesTasks WHERE nodeId=@nodeId",
+                list = db.Query<UITimerTask>("SELECT * FROM UITimerNodes WHERE nodeId=@nodeId",
                     new { nodeId}).ToList();
             }
 
             return list;
         }
 
-        public List<NodeTask> GetAllTasks()
+        public List<UITimerTask> GetAllTasks()
         {
-            List<NodeTask> tasks;
+            List<UITimerTask> tasks;
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                tasks = db.Query<NodeTask>("SELECT * FROM NodesTasks").ToList();
+                tasks = db.Query<UITimerTask>("SELECT * FROM UITimerNodes").ToList();
             }
 
             return tasks;
@@ -170,8 +177,16 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE Id=@Id",
+                db.Query("DELETE FROM UITimerNodes WHERE Id=@Id",
                     new { id });
+            }
+        }
+
+        public void RemoveTasks(List<UITimerTask> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                RemoveTask(task.Id);
             }
         }
 
@@ -180,7 +195,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId",
+                db.Query("DELETE FROM UITimerNodes WHERE nodeId=@nodeId",
                     new { nodeId });
             }
         }
@@ -193,7 +208,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE isCompleted=1");
+                db.Query("DELETE FROM UITimerNodes WHERE isCompleted=1");
             }
         }
 
@@ -202,7 +217,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("DELETE FROM NodesTasks WHERE nodeId=@nodeId AND isCompleted=1",
+                db.Query("DELETE FROM UITimerNodes WHERE nodeId=@nodeId AND isCompleted=1",
                     new { nodeId });
             }
         }
@@ -213,7 +228,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("TRUNCATE TABLE [NodesTasks]");
+                db.Query("TRUNCATE TABLE [UITimerNodes]");
             }
         }
 
@@ -223,7 +238,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesTasks SET " +
+                    "UPDATE UITimerNodes SET " +
                     "isCompleted = @isCompleted, " +
                     "executionDate = @executionDate, " +
                     "executionValue = @executionValue, " +
@@ -245,7 +260,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesTasks SET " +
+                    "UPDATE UITimerNodes SET " +
                     "enabled = @enabled, " +
                     "isCompleted = @isCompleted, " +
                     "executionDate = @executionDate, " +
@@ -268,7 +283,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesTasks SET " +
+                    "UPDATE UITimerNodes SET " +
                     "enabled = @enabled " +
                     "WHERE Id = @Id";
                 db.Execute(sqlQuery, new
@@ -285,7 +300,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE NodesTasks SET " +
+                    "UPDATE UITimerNodes SET " +
                     "enabled = 0 ";
                 db.Execute(sqlQuery);
             }

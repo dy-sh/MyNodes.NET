@@ -9,12 +9,12 @@ using MyNetSensors.LogicalNodes;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyNetSensors.Gateways;
-using MyNetSensors.NodesTasks;
+using MyNetSensors.Nodes;
 
 namespace MyNetSensors.Repositories.EF.SQLite
 {
-    public class NodesTasksDbContext : DbContext
+    public class UITimerNodesDbContext : DbContext
     {
-        public DbSet<NodeTask> NodesTasks { get; set; }
+        public DbSet<UITimerTask> UITimerNodes { get; set; }
     }
 }

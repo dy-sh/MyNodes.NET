@@ -73,11 +73,13 @@ namespace MyNetSensors.LogicalNodes
         public virtual void OnOutputChange(Output output) { }
 
         public virtual void OnDeserialize() { }
+        public virtual void OnRemove() {}
 
         public void CallNodeUpdatedEvent(bool writeNodeToDb)
         {
             LogicalNodesEngine.logicalNodesEngine.UpdateNode(this, writeNodeToDb);
         }
+
     }
 
 

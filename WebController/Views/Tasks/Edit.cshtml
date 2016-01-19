@@ -1,8 +1,8 @@
-﻿@using MyNetSensors.NodesTasks
-@model MyNetSensors.NodesTasks.NodeTask
+﻿@using MyNetSensors.Nodes
+@model MyNetSensors.Nodes.UITimerTask
 
 @{
-    ViewBag.Title = "Edit Task for " + @ViewBag.description;
+    ViewBag.Title = ViewBag.Name;
 
     string repeatingPanelDisplay = Model.IsRepeating ? "" : "display: none";
     string nonRepeatingPanelDisplay = Model.IsRepeating ? "display: none" : "";
@@ -28,24 +28,20 @@
                 <form asp-action="Edit" asp-anti-forgery="true" class="ui form">
                     <div class="ui attached segment">
 
-                        <input type="hidden" asp-for="nodeId" />
-                        <input type="hidden" asp-for="sensorId" />
-                        <input type="hidden" asp-for="sensorDbId" />
-                        <input type="hidden" asp-for="sensorDescription" />
-                        <input type="hidden" asp-for="dataType" />
-                        <input type="hidden" asp-for="enabled" />
+                        <input type="hidden" asp-for="NodeId" />
+                        <input type="hidden" asp-for="Enabled" />
                         <input type="hidden" asp-for="Id" />
 
                         <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
 
                         <div class="field">
                             <label>Task description</label>
-                            <input type="text" asp-for="description">
+                            <input type="text" asp-for="Description">
                         </div>
 
                         <div class="field">
                             <label>Execution date</label>
-                            <input type="text" asp-for="executionDate">
+                            <input type="text" asp-for="ExecutionDate">
                         </div>
 
                         <div class="field">
@@ -70,7 +66,7 @@
                         <div id="nonRepeatingPanel" style="@nonRepeatingPanelDisplay">
                             <div class="field">
                                 <label>Set value</label>
-                                <input type="text" asp-for="executionValue">
+                                <input type="text" asp-for="ExecutionValue">
                             </div>
                         </div>
 
@@ -78,24 +74,24 @@
                             <div class="fields">
                                 <div class="field">
                                     <label>Repeat A value</label>
-                                    <input type="text" asp-for="repeatingAValue">
+                                    <input type="text" asp-for="RepeatingAValue">
                                 </div>
 
                                 <div class="field">
                                     <label>Repeat B value</label>
-                                    <input type="text" asp-for="repeatingBValue">
+                                    <input type="text" asp-for="RepeatingBValue">
                                 </div>
                             </div>
                             <div class="fields">
 
                                 <div class="field">
                                     <label>Repeat count (0 for infinity)</label>
-                                    <input type="text" asp-for="repeatingNeededCount">
+                                    <input type="text" asp-for="RepeatingNeededCount">
                                 </div>
 
                                 <div class="field">
                                     <label>Repeat interval (ms)</label>
-                                    <input type="text" asp-for="repeatingInterval">
+                                    <input type="text" asp-for="RepeatingInterval">
                                 </div>
 
 

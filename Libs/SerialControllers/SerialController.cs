@@ -12,7 +12,7 @@ using MyNetSensors.Gateways;
 using MyNetSensors.LogicalNodes;
 using MyNetSensors.LogicalNodesMySensors;
 using MyNetSensors.LogicalNodesUI;
-using MyNetSensors.NodesTasks;
+using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
 
@@ -30,8 +30,6 @@ namespace MyNetSensors.SerialControllers
         public static int dataBaseWriteInterval = 5000;
         public static bool writeNodesMessagesToDataBase = false;
 
-        public static bool nodesTasksEnabled = true;
-        public static int nodesTasksUpdateInterval = 10;
 
         public static bool logicalNodesEnabled = true;
         public static int logicalNodesUpdateInterval = 10;
@@ -49,14 +47,14 @@ namespace MyNetSensors.SerialControllers
         public static IGatewayRepository gatewayDb;
         public static INodesMessagesRepository messagesDb;
 
-        public static NodesTasksEngine nodesTasksEngine;
-        public static INodesTasksRepository nodesTasksDb;
 
         public static LogicalNodesEngine logicalNodesEngine;
         public static LogicalHardwareNodesEngine logicalHardwareNodesEngine;
         public static LogicalNodesUIEngine logicalNodesUIEngine;
         public static ILogicalNodesRepository logicalNodesDb;
         public static ILogicalNodesStatesRepository logicalNodesStatesDb;
+        public static UITimerNodesEngine uiTimerNodesEngine;
+        public static IUITimerNodesRepository uiTimerNodesDb;
 
         public static SerialControllerLogs logs = new SerialControllerLogs();
 
@@ -119,7 +117,7 @@ namespace MyNetSensors.SerialControllers
 
                 gatewayDb = new GatewayRepositoryDapper(dataBaseConnectionString);
                 messagesDb = new NodesMessagesRepositoryDapper(dataBaseConnectionString);
-                nodesTasksDb = new NodesTasksRepositoryDapper(dataBaseConnectionString);
+                uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConnectionString);
                 logicalNodesDb = new LogicalNodesRepositoryDapper(dataBaseConnectionString);
                 logicalNodesStatesDb = new LogicalNodesStatesRepositoryDapper(dataBaseConnectionString);
             }
@@ -225,10 +223,10 @@ namespace MyNetSensors.SerialControllers
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
             logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine,logicalNodesStatesDb);
-            nodesTasksEngine = new NodesTasksEngine(logicalNodesEngine, nodesTasksDb);
-            nodesTasksEngine.SetUpdateInterval(nodesTasksUpdateInterval);
+            uiTimerNodesEngine = new UITimerNodesEngine(logicalNodesEngine, uiTimerNodesDb);
 
             logicalNodesEngine.Start();
+            
 
             //demo
             //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();

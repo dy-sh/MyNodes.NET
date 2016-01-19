@@ -80,13 +80,6 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-
-        public bool UpdateNodesTasks()
-        {
-            SerialController.nodesTasksEngine.GetTasksFromRepository();
-            return true;
-        }
-
         public bool RemoveNode(int nodeId)
         {
             if (gateway.GetNode(nodeId) == null)
@@ -108,32 +101,25 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-  
 
 
 
-        public ActionResult DisableTasks()
+
+        public bool DisableTasks()
         {
-            SerialController.nodesTasksDb.DisableTasks();
-            
-            UpdateNodesTasks();
-
-             return Json(true);
+            SerialController.uiTimerNodesEngine.DisableAllTasks();
+            return true;
         }
 
-        public async Task<ActionResult> RemoveAllTasks()
+        public bool RemoveAllTasks()
         {
-            DisableTasks();
-            await Task.Delay(1000);
-            SerialController.nodesTasksDb.RemoveAllTasks();
-
-            UpdateNodesTasks();
-             return Json(true);
+            SerialController.uiTimerNodesEngine.RemoveAllTasks();
+            return true;
         }
 
 
 
-     
+
 
     }
 }

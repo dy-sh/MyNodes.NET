@@ -11,7 +11,8 @@ using Microsoft.AspNet.Mvc;
 
 
 using MyNetSensors.Gateways;
-using MyNetSensors.NodesTasks;
+using MyNetSensors.LogicalNodes;
+using MyNetSensors.Nodes;
 using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 
@@ -19,158 +20,63 @@ namespace MyNetSensors.WebController.Controllers
 {
     public class TasksController : Controller
     {
-        const int MIN_REPEAT_INTERVAL = 20;
-
-
-        private INodesTasksRepository tasksDb;
-        private IGatewayRepository gatewayDb;
+        private UITimerNodesEngine tasksEngine;
+        private LogicalNodesEngine engine;
 
         public TasksController()
         {
-            gatewayDb = SerialController.gatewayDb;
-            tasksDb = SerialController.nodesTasksDb;
+            tasksEngine = SerialController.uiTimerNodesEngine;
+            engine = SerialController.logicalNodesEngine;
         }
 
-        public ActionResult Index()
+        public ActionResult List(string id)
         {
-            return RedirectToAction("List");
+            UITimer node = engine.GetNode(id) as UITimer;
+
+            if (node == null)
+                return HttpNotFound();
+
+            ViewBag.NodeId = node.Id;
+            ViewBag.Name = node.Name;
+
+            List<UITimerTask> tasks = tasksEngine.GetTasksForNode(id);
+
+            return View(tasks);
         }
-
-        public ActionResult List(int? id = null, int? id2 = null)
-        {
-            //if (id != null && id2 != null)
-            //{
-            //    Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
-
-            //    if (sensor == null)
-            //        return new HttpNotFoundResult();
-
-            //    ViewBag.nodeId = sensor.nodeId;
-            //    ViewBag.sensorId = sensor.sensorId;
-            //    ViewBag.description = sensor.GetSimpleName1();
-
-            //    List<NodeTask> tasks = tasksDb.GetTasks(id.Value, id2.Value);
-
-            //    return View(tasks);
-            //}
-
-            //else if (RouteData.Values.Count <= 2)
-            //{
-            //    List<NodeTask> tasks = tasksDb.GetAllTasks();
-            //    return View(tasks);
-            //}
-
-            return new HttpNotFoundResult();
-        }
-
 
 
         [HttpGet]
-        public ActionResult NewSelect()
+        public ActionResult New(string id)
         {
-            ViewBag.nodes = gatewayDb.GetNodes();
+            UITimer node = engine.GetNode(id) as UITimer;
 
-            return View();
+            if (node == null)
+                return HttpNotFound();
+
+            ViewBag.NodeId = node.Id;
+            ViewBag.Name = node.Name;
+
+            UITimerTask task = new UITimerTask
+            {
+                NodeId = id,
+                ExecutionDate = DateTime.Now,
+                RepeatingInterval = 1000,
+                Enabled = true
+            };
+
+            return View(task);
         }
 
         [HttpPost]
-        public ActionResult NewSelect(string sensor)
+        public ActionResult New(UITimerTask task)
         {
-            string[] args = sensor.Split('-');
-            int nodeId = Int32.Parse(args[0]);
-            int sensorId = Int32.Parse(args[1]);
+            task.IsRepeating = Request.Form["isRepeating"] != "false";
 
-            return RedirectToAction("New", new { id = nodeId, id2 = sensorId });
-        }
+            bool result = tasksEngine.AddTask(task);
+            if (!result)
+                return HttpBadRequest();
 
-
-
-        [HttpGet]
-        public ActionResult New(int? id = null, int? id2 = null)
-        {
-            //if (id != null && id2 != null)
-            //{
-            //    Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
-
-            //    if (sensor == null)
-            //        return new HttpNotFoundResult();
-
-            //    Node node = gatewayDb.GetNode(sensor.nodeId);
-            //    ViewBag.description = sensor.GetSimpleName1();
-
-            //    NodeTask task = new NodeTask
-            //    {
-            //        NodeId = id.Value,
-            //        sensorId = id2.Value,
-            //        sensorDbId = sensor.Id,
-            //        sensorDescription = $"{node.GetSimpleName1()} {sensor.GetSimpleName1()}",
-            //        ExecutionDate = DateTime.Now,
-            //        RepeatingInterval = 1000,
-            //        Enabled = true
-            //    };
-
-            //    task.dataType = sensor.dataType;
-
-            //    if (sensor.IsBinary())
-            //    {
-            //        task.ExecutionValue = "1";
-            //        task.RepeatingAValue = "0";
-            //        task.RepeatingBValue = "1";
-            //    }
-            //    else if (sensor.dataType == SensorDataType.V_RGB)
-            //    {
-            //        task.ExecutionValue = "FFFFFF";
-            //        task.RepeatingAValue = "000000";
-            //        task.RepeatingBValue = "FFFFFF";
-            //    }
-            //    else if (sensor.dataType == SensorDataType.V_RGBW)
-            //    {
-            //        task.ExecutionValue = "FFFFFFFF";
-            //        task.RepeatingAValue = "FFFFFF00";
-            //        task.RepeatingBValue = "FFFFFFFF";
-            //    }
-            //    else if (sensor.IsPercentage())
-            //    {
-            //        task.ExecutionValue = "100";
-            //        task.RepeatingAValue = "0";
-            //        task.RepeatingBValue = "100";
-            //    }
-            //    return View(task);
-            //}
-            //else if (RouteData.Values.Count <= 2)
-            //{
-            //    return RedirectToAction("NewSelect");
-            //}
-            return new HttpNotFoundResult();
-        }
-
-        [HttpPost]
-        public ActionResult New(NodeTask task)
-        {
-            //task.Id = 0;
-            //Sensor sensor = gatewayDb.GetSensor(task.NodeId, task.sensorId);
-
-            //if (sensor == null)
-            //    return new HttpNotFoundResult();
-
-            //task.IsRepeating= Request.Form["isRepeating"] != "false";
-            //if (task.IsRepeating)
-            //    task.ExecutionValue = task.RepeatingBValue;
-
-            //if (task.IsRepeating && task.RepeatingInterval < MIN_REPEAT_INTERVAL)
-            //{
-            //    ModelState.Clear();
-            //    ModelState.AddModelError("", "Repeating Interval must be at least 20 ms");
-            //    return View(task);
-            //}
-
-            //tasksDb.AddTask(task);
-
-            //GatewayAPIController gatewayApi = new GatewayAPIController();
-            //gatewayApi.UpdateNodesTasks();
-
-           // return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
-            return RedirectToAction("List");
+            return RedirectToAction("List", new { id = task.NodeId});
         }
 
 
@@ -178,58 +84,38 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            //NodeTask task = tasksDb.GetTask(id);
+            UITimerTask task = tasksEngine.GetTask(id);
 
-            //if (task == null)
-            //    return new HttpNotFoundResult();
+            if (task == null)
+                return HttpNotFound();
 
-            //Sensor sensor = gatewayDb.GetSensor(task.NodeId, task.sensorId);
+            UITimer node = engine.GetNode(task.NodeId) as UITimer;
 
-            //ViewBag.description = sensor.GetSimpleName1();
+            if (node == null)
+                return HttpNotFound();
 
-            //return View(task);
-            return null;
+            ViewBag.Name = node.Name;
+
+            return View(task);
         }
 
         [HttpPost]
-        public ActionResult Edit(NodeTask task)
+        public ActionResult Edit(UITimerTask task)
         {
-           // Sensor sensor = gatewayDb.GetSensor(task.nodeId, task.sensorId);
+            task.IsRepeating = Request.Form["isRepeating"] != "false";
 
-            //if (sensor == null)
-            //    return new HttpNotFoundResult();
+            bool result = tasksEngine.UpdateTask(task);
+            if (!result)
+                return HttpBadRequest();
 
-            task.IsRepeating= Request.Form["isRepeating"] != "false";
-            if (task.IsRepeating)
-                task.ExecutionValue = task.RepeatingBValue;
-
-            if (task.IsRepeating && task.RepeatingInterval < MIN_REPEAT_INTERVAL)
-            {
-                ModelState.Clear();
-                ModelState.AddModelError("", "Repeating Interval must be at least 20 ms");
-                return View(task);
-            }
-
-            tasksDb.UpdateTask(task);
-
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateNodesTasks();
-
-            // return RedirectToAction("List", new { id = task.nodeId, id2 = task.sensorId });
-            return RedirectToAction("List");
+            return RedirectToAction("List", new { id = task.NodeId });
         }
 
         public ActionResult Remove(int id)
         {
-            NodeTask task = tasksDb.GetTask(id);
-
-            if (task == null)
-                return new HttpNotFoundResult();
-
-            tasksDb.RemoveTask(id);
-
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateNodesTasks();
+            bool result = tasksEngine.RemoveTask(id);
+            if (!result)
+                return HttpBadRequest();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -238,16 +124,16 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Enable(int id)
         {
-            NodeTask task = tasksDb.GetTask(id);
+            UITimerTask task = tasksEngine.GetTask(id);
 
             if (task == null)
-                return new HttpNotFoundResult();
+                return HttpNotFound();
 
-            tasksDb.UpdateTaskEnabled(task.Id, true);
+            task.Enabled = true;
 
-
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateNodesTasks();
+            bool result = tasksEngine.UpdateTask(task);
+            if (!result)
+                return HttpBadRequest();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -256,16 +142,16 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Disable(int id)
         {
-            NodeTask task = tasksDb.GetTask(id);
+            UITimerTask task = tasksEngine.GetTask(id);
 
             if (task == null)
-                return new HttpNotFoundResult();
+                return HttpNotFound();
 
-            tasksDb.UpdateTaskEnabled(task.Id, false);
+            task.Enabled = false;
 
-
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateNodesTasks();
+            bool result = tasksEngine.UpdateTask(task);
+            if (!result)
+                return HttpBadRequest();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -274,16 +160,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult ExecuteNow(int id)
         {
-            NodeTask task = tasksDb.GetTask(id);
-
-            if (task == null)
-                return new HttpNotFoundResult();
-
-            tasksDb.UpdateTask(task.Id, true, false, DateTime.Now, 0);
-
-
-            GatewayAPIController gatewayApi = new GatewayAPIController();
-            gatewayApi.UpdateNodesTasks();
+            bool result = tasksEngine.ExecuteNowTask(id);
+            if (!result)
+                return HttpBadRequest();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -291,70 +170,27 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public ActionResult RemoveAll(int? id = null, int? id2 = null)
+        public ActionResult RemoveAll(string id)
         {
-            //if (id != null && id2 != null)
-            //{
-            //    Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
+            bool result = tasksEngine.RemoveTasksForNode(id);
+            if (!result)
+                return HttpBadRequest();
 
-            //    if (sensor == null)
-            //        return new HttpNotFoundResult();
-
-            //    tasksDb.RemoveTasks(id.Value, id2.Value);
-
-            //    GatewayAPIController gatewayApi = new GatewayAPIController();
-            //    gatewayApi.UpdateNodesTasks();
-
-            //    if (Request.Headers["Referer"].Any())
-            //        return Redirect(Request.Headers["Referer"].ToString());
-            //    else return RedirectToAction("List");
-            //}
-            //else if (RouteData.Values.Count <= 2)
-            //{
-            //    tasksDb.RemoveAllTasks();
-
-            //    GatewayAPIController gatewayApi = new GatewayAPIController();
-            //    gatewayApi.UpdateNodesTasks();
-
-            //    if (Request.Headers["Referer"].Any())
-            //        return Redirect(Request.Headers["Referer"].ToString());
-            //    else return RedirectToAction("List");
-            //}
-
-            return new HttpNotFoundResult();
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
+            else return RedirectToAction("List");
         }
 
-        public ActionResult RemoveCompleted(int? id = null, int? id2 = null)
+
+        public ActionResult RemoveCompleted(string id)
         {
-            //if (id != null && id2 != null)
-            //{
-            //    Sensor sensor = gatewayDb.GetSensor(id.Value, id2.Value);
+            bool result = tasksEngine.RemoveCompletedTasksForNode(id);
+            if (!result)
+                return HttpBadRequest();
 
-            //    if (sensor == null)
-            //        return new HttpNotFoundResult();
-
-            //    tasksDb.RemoveCompletedTasks(id.Value, id2.Value);
-
-            //    GatewayAPIController gatewayApi = new GatewayAPIController();
-            //    gatewayApi.UpdateNodesTasks();
-
-            //    if (Request.Headers["Referer"].Any())
-            //        return Redirect(Request.Headers["Referer"].ToString());
-            //    else return RedirectToAction("List");
-            //}
-            //else if (RouteData.Values.Count <= 2)
-            //{
-            //    tasksDb.RemoveCompletedTasks();
-
-            //    GatewayAPIController gatewayApi = new GatewayAPIController();
-            //    gatewayApi.UpdateNodesTasks();
-
-            //    if (Request.Headers["Referer"].Any())
-            //        return Redirect(Request.Headers["Referer"].ToString());
-            //    else return RedirectToAction("List");
-            //}
-
-            return new HttpNotFoundResult();
+            if (Request.Headers["Referer"].Any())
+                return Redirect(Request.Headers["Referer"].ToString());
+            else return RedirectToAction("List");
         }
 
 

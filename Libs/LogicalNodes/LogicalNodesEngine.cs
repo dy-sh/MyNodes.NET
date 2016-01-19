@@ -45,6 +45,9 @@ namespace MyNetSensors.LogicalNodes
         public event LogicalLinkEventHandler OnNewLinkEvent;
         public event LogicalLinkEventHandler OnRemoveLinkEvent;
         public event LogicalLinksEventHandler OnLinksUpdatedEvent;
+        public event Action OnStartEvent;
+        public event Action OnStopEvent;
+        public event Action OnUpdateEvent;
 
         public delegate void LogicalNodeEventHandler(LogicalNode node);
         public delegate void LogicalNodesEventHandler(List<LogicalNode> nodes);
@@ -52,6 +55,8 @@ namespace MyNetSensors.LogicalNodes
         public delegate void LogicalOutputEventHandler(Output output);
         public delegate void LogicalLinkEventHandler(LogicalLink link);
         public delegate void LogicalLinksEventHandler(List<LogicalLink> link);
+
+
 
 
         public LogicalNodesEngine(ILogicalNodesRepository nodesDb = null)
@@ -86,8 +91,9 @@ namespace MyNetSensors.LogicalNodes
         {
             started = true;
             updateNodesTimer.Start();
-
             UpdateStatesFromLinks();
+
+            OnStartEvent?.Invoke();
 
             LogEngineInfo("Started");
         }
@@ -96,6 +102,9 @@ namespace MyNetSensors.LogicalNodes
         public void Stop()
         {
             started = false;
+
+            OnStopEvent?.Invoke();
+
             updateNodesTimer.Stop();
             LogEngineInfo("Stopped");
         }
@@ -137,7 +146,7 @@ namespace MyNetSensors.LogicalNodes
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
         {
-            if (nodes == null)
+            if (nodes == null || !nodes.Any())
                 return;
 
             updateNodesTimer.Stop();
@@ -152,6 +161,8 @@ namespace MyNetSensors.LogicalNodes
                 {
                     node.Loop();
                 }
+
+                OnUpdateEvent?.Invoke();
             }
             catch { }
 
@@ -168,6 +179,11 @@ namespace MyNetSensors.LogicalNodes
             updateNodesTimer.Stop();
             updateNodesTimer.Interval = updateNodesInterval;
             updateNodesTimer.Start();
+        }
+
+        public int GetUpdateInterval()
+        {
+            return updateNodesInterval;
         }
 
 
@@ -333,6 +349,8 @@ namespace MyNetSensors.LogicalNodes
                 RemoveLink(link);
             }
 
+            node.OnRemove();
+
             OnRemoveNodeEvent?.Invoke(node);
             LogEngineInfo($"Remove node [{node.GetType().Name}]");
 
@@ -414,7 +432,7 @@ namespace MyNetSensors.LogicalNodes
         {
             if (writeNodeToDb)
             {
-                LogicalNode oldNode = nodes.FirstOrDefault(x => x.Id == node.Id);
+                LogicalNode oldNode = GetNode(node.Id);
 
                 if (oldNode == null)
                 {

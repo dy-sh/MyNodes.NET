@@ -72,9 +72,9 @@
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>LogicalNodes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NodesTasks\NodesTasks.csproj">
+    <ProjectReference Include="..\Nodes.UITimer\Nodes.UITimer.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
-      <Name>NodesTasks</Name>
+      <Name>Nodes.UITimer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repositories.Dapper\Repositories.Dapper.csproj">
       <Project>{80ce261c-2829-445c-8dd6-ceded5996ee9}</Project>

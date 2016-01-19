@@ -1,30 +1,15 @@
-﻿@using MyNetSensors.NodesTasks
-@model IEnumerable<MyNetSensors.NodesTasks.NodeTask>
+﻿@using MyNetSensors.Nodes
+@model IEnumerable<MyNetSensors.Nodes.UITimerTask>
 
 
 @{
-    if (ViewBag.description == null)
-    {
-        ViewBag.Title = "Tasks";
-    }
-    else
-    {
-        ViewBag.Title = "Tasks for " + @ViewBag.description;
-    }
+    ViewBag.Title = ViewBag.Name;
 }
 
 
-@if (ViewBag.description == null)
-{
+
     <br />
-}
-
 <div class="ui container">
-
-    @if (ViewBag.description != null)
-    {
-        <a asp-controller="Tasks" asp-action="Index" class="ui button right floated">Show tasks for all nodes</a>
-    }
 
 
     <h2>@ViewBag.Title</h2>
@@ -36,7 +21,7 @@
     <div class="ui raised segments">
         <div class="ui secondary clearing segment">
             <b>Tasks</b>
-            <a asp-action="New" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui right floated small primary button">New Task</a>
+            <a asp-action="New" asp-route-id="@ViewBag.NodeId" class="ui right floated small primary button">New Task</a>
         </div>
         @if (Model == null || Model.Count() == 0)
         {
@@ -53,15 +38,15 @@
 
                     <h4>
                         Task @task.Id
-                        @if (task.description != null)
+                        @if (task.Description != null)
                         {
-                            @: : @task.description
+                            @: : @task.Description
                         }
                     </h4>
                     <div class="ui right floated basic tiny buttons">
-                        @if (!task.isCompleted)
+                        @if (!task.IsCompleted)
                         {
-                            if (task.enabled)
+                            if (task.Enabled)
                             {
                                 <a asp-action="Disable" class="ui button" asp-route-id="@task.Id"><b>Disable</b></a>
                             }
@@ -70,7 +55,7 @@
                                 <a asp-action="Enable" class="ui button" asp-route-id="@task.Id"><b>Enable</b></a>
                             }
 
-                            if (task.isRepeating)
+                            if (task.IsRepeating)
                             {
                                 <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
                             }
@@ -81,7 +66,7 @@
                         }
                         else
                         {
-                            if (task.isRepeating)
+                            if (task.IsRepeating)
                             {
                                 <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
                             }
@@ -94,11 +79,11 @@
                         <a asp-action="Remove" class="ui button" asp-route-id="@task.Id"><b>Delete</b></a>
                     </div>
 
-                    @if (task.isCompleted)
+                    @if (task.IsCompleted)
                     {
                         <span class="ui tiny green ribbon label">COMPLETED</span>
                     }
-                    else if (!task.enabled)
+                    else if (!task.Enabled)
                     {
                         <span class="ui tiny ribbon label">DISABLED</span>
                     }
@@ -107,19 +92,18 @@
                         <span class="ui tiny blue ribbon label">ACTIVE</span>
                     }
                     <br />
-                    <br/>
-                    @task.sensorDescription<br>
+                    <br />
 
-                    Execution date: @task.executionDate<br>
-                    Set value:@task.executionValue<br>
-                    @if (task.isRepeating)
+                    Execution date: @task.ExecutionDate<br>
+                    Set value:@task.ExecutionValue<br>
+                    @if (task.IsRepeating)
                     {
-                        @:Repeat values: @task.repeatingAValue / @task.repeatingBValue<br>
-                        @:Repeat interval: @task.repeatingInterval<br>
-                        @:Executions done:@task.repeatingDoneCount<br>
-                        if (task.repeatingNeededCount > 0)
+                        @:Repeat values: @task.RepeatingAValue / @task.RepeatingBValue<br>
+                        @:Repeat interval: @task.RepeatingInterval<br>
+                        @:Executions done:@task.RepeatingDoneCount<br>
+                        if (task.RepeatingNeededCount > 0)
                         {
-                            @:Executions left:@(task.repeatingNeededCount - task.repeatingDoneCount)<br>
+                            @:Executions left:@(task.RepeatingNeededCount - task.RepeatingDoneCount)<br>
                         }
 
                     }
@@ -127,12 +111,12 @@
             }
             <div class="ui right aligned attached segment">
                 <div class="ui small buttons">
-                <a asp-controller="Tasks" asp-action="RemoveAll" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui button">Delete all</a>
-                    <a asp-controller="Tasks" asp-action="RemoveCompleted" asp-route-id="@ViewBag.nodeId" asp-route-id2="@ViewBag.sensorId" class="ui primary button">Delete completed</a>
-                    </div>
+                    <a asp-controller="Tasks" asp-action="RemoveAll" asp-route-id="@ViewBag.NodeId" class="ui button">Delete all</a>
+                    <a asp-controller="Tasks" asp-action="RemoveCompleted" asp-route-id="@ViewBag.NodeId" class="ui primary button">Delete completed</a>
+                </div>
             </div>
         }
     </div>
 </div>
 
-<br/>
+<br />

@@ -32,7 +32,7 @@ namespace MyNetSensors.WebController.Code
         public static LogicalNodesStatesDbContext logicalNodesStatesDbContext;
         public static NodesDbContext nodesDbContext;
         public static NodesMessagesDbContext nodesMessagesDbContext;
-        public static NodesTasksDbContext nodesTasksDbContext;
+        public static UITimerNodesDbContext uiTimerNodesDbContext;
 
         public static void Start(IConfigurationRoot Configuration)
         {
@@ -53,8 +53,6 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
 
-                SerialController.nodesTasksEnabled = Boolean.Parse(Configuration["NodesTasks:Enable"]);
-                SerialController.nodesTasksUpdateInterval = Int32.Parse(Configuration["NodesTasks:UpdateInterval"]);
                 SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
                 SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
                 SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
@@ -85,7 +83,7 @@ namespace MyNetSensors.WebController.Code
 
                 SerialController.gatewayDb = new GatewayRepositoryEF(nodesDbContext);
                 SerialController.messagesDb = new NodesMessagesRepositoryEF(nodesMessagesDbContext);
-                SerialController.nodesTasksDb = new NodesTasksRepositoryEF(nodesTasksDbContext);
+                SerialController.uiTimerNodesDb = new UITimerNodesRepositoryEf(uiTimerNodesDbContext);
                 SerialController.logicalNodesDb = new LogicalNodesRepositoryEF(logicalNodesDbContext);
                 SerialController.logicalNodesStatesDb = new LogicalNodesStatesRepositoryEF(logicalNodesStatesDbContext);
             }

@@ -55,6 +55,9 @@ function createNode(node) {
         case "UI/Chart":
             createChart(node);
             break;
+        case "UI/Timer":
+            createTimer(node);
+            break;
     default:
     }
 
@@ -107,6 +110,9 @@ function updateNode(node) {
             break;
         case "UI/Chart":
             updateChart(node);
+            break;
+        case "UI/Timer":
+            updateTimer(node);
             break;
         default:
     }

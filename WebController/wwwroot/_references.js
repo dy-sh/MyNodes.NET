@@ -1,11 +1,12 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-chart.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-main.js" />
-/// <reference path="js/dashboard/mynetsensors-dashboard-page.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-rgbsliders.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-signalr.js" />
-/// <reference path="js/dashboard/mynetsensors-dashboard-slider - copy.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-slider.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-timer.js" />
 /// <reference path="js/daterangepicker/daterangepicker.js" />
 /// <reference path="js/handlebars.min.js" />
 /// <reference path="js/litegraph/litegraph.js" />
@@ -13,7 +14,7 @@
 /// <reference path="js/litegraph/litegraph-engine.js" />
 /// <reference path="js/litegraph/litegraph-list.js" />
 /// <reference path="js/mynetsensors-control-page.js" />
-/// <reference path="js/mynetsensors-history-chart-page - copy.js" />
+/// <reference path="js/mynetsensors-dashboard-chart-page.js" />
 /// <reference path="js/mynetsensors-history-chart-page.js" />
 /// <reference path="js/mynetsensors-history-log-page.js" />
 /// <reference path="js/mynetsensors-logs-page.js" />

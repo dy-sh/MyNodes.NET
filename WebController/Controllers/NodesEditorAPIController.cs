@@ -266,7 +266,7 @@ namespace MyNetSensors.WebController.Controllers
             try
             {
                 string type = node.properties["ObjectType"];
-                string assemblyName = type.Split('.')[1];
+                string assemblyName = node.properties["Assembly"];
 
                 var newObject = Activator.CreateInstance(assemblyName, type);
                 newNode = (LogicalNode) newObject.Unwrap();

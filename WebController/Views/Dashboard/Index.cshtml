@@ -220,9 +220,19 @@
         <br />
         <br />
         <div id="chart-panel-{{Id}}-">
-                <div id="chart-body-{{Id}}"></div>
-        </div>       
-        
+            <div id="chart-body-{{Id}}"></div>
+        </div>
+
+    </div>
+</script>
+
+
+<script id="timerTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node-{{Id}}">
+        <span id="timer-name-{{Id}}"></span>
+        <div class="ui small right floated basic buttons">
+            <a href="/Tasks/List/{{Id}}" class="ui button" id="timer-open-{{Id}}">Open</a>
+        </div>
     </div>
 </script>
 
@@ -246,5 +256,6 @@
     <script src="~/js/dashboard/mynetsensors-dashboard-slider.js"></script>
     <script src="~/js/dashboard/mynetsensors-dashboard-rgbsliders.js"></script>
     <script src="~/js/dashboard/mynetsensors-dashboard-chart.js"></script>
+    <script src="~/js/dashboard/mynetsensors-dashboard-timer.js"></script>
 }
 

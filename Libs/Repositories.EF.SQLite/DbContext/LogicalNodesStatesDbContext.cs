@@ -9,7 +9,6 @@ using MyNetSensors.LogicalNodes;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyNetSensors.Gateways;
-using MyNetSensors.NodesTasks;
 
 namespace MyNetSensors.Repositories.EF.SQLite
 {

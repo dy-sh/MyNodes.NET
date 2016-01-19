@@ -7,8 +7,8 @@
     <ProjectGuid>{5C0BDA8E-7C8C-427D-9673-B18A05B05280}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.NodesTasks</RootNamespace>
-    <AssemblyName>NodesTasks</AssemblyName>
+    <RootNamespace>MyNetSensors.Nodes</RootNamespace>
+    <AssemblyName>Nodes.UITimer</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,16 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INodesTasksRepository.cs" />
-    <Compile Include="LogicalNodeTask.cs" />
+    <Compile Include="IUITimerNodesRepository.cs" />
+    <Compile Include="UITimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NodesTasksEngine.cs" />
-    <Compile Include="NodeTask.cs" />
+    <Compile Include="UITimerNodesEngine.cs" />
+    <Compile Include="UITimerTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LogicalNodesUI\LogicalNodesUI.csproj">
+      <Project>{55e6ee51-7da0-48f3-91ee-0b18962e589c}</Project>
+      <Name>LogicalNodesUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>LogicalNodes</Name>
