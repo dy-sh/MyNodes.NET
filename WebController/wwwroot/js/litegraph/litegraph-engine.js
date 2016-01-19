@@ -301,11 +301,11 @@ function createOrUpdateNode(node) {
 
         newNode.title = node.title;
 
-        if (node.properties['name'] != null)
-            newNode.title += " [" + node.properties['name'] + "]";
+        if (node.properties['Name'] != null)
+            newNode.title += " [" + node.properties['Name'] + "]";
 
-        if (node.properties['panelname'] != null)
-            newNode.title = node.properties['panelname'];
+        if (node.properties['PanelName'] != null)
+            newNode.title = node.properties['PanelName'];
 
         newNode.inputs = node.inputs;
         newNode.outputs = node.outputs;
@@ -331,11 +331,11 @@ function createOrUpdateNode(node) {
         //update
         oldNode.title = node.title;
 
-        if (node.properties['name'] != null)
-            oldNode.title += " [" + node.properties['name'] + "]";
+        if (node.properties['Name'] != null)
+            oldNode.title += " [" + node.properties['Name'] + "]";
 
-        if (node.properties['panelname'] != null)
-            oldNode.title = node.properties['panelname'];
+        if (node.properties['PanelName'] != null)
+            oldNode.title = node.properties['PanelName'];
 
         oldNode.inputs = node.inputs;
         oldNode.outputs = node.outputs;

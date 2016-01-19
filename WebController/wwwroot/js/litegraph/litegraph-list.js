@@ -497,7 +497,9 @@
     }
     UITimer.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
+        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null,
+            { content: "Open interface", callback: function () { var win = window.open("/UITimer/Tasks/" + that.id, '_blank'); win.focus(); } }, null
+        ];
     }
     UITimer.title = "Timer";
     LiteGraph.registerNodeType("UI/Timer", UITimer);
