@@ -18,18 +18,18 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class TasksController : Controller
+    public class UITimerController : Controller
     {
         private UITimerNodesEngine tasksEngine;
         private LogicalNodesEngine engine;
 
-        public TasksController()
+        public UITimerController()
         {
             tasksEngine = SerialController.uiTimerNodesEngine;
             engine = SerialController.logicalNodesEngine;
         }
 
-        public ActionResult List(string id)
+        public ActionResult Tasks(string id)
         {
             UITimer node = engine.GetNode(id) as UITimer;
 
@@ -76,7 +76,7 @@ namespace MyNetSensors.WebController.Controllers
             if (!result)
                 return HttpBadRequest();
 
-            return RedirectToAction("List", new { id = task.NodeId});
+            return RedirectToAction("Tasks", new { id = task.NodeId});
         }
 
 
@@ -108,7 +108,7 @@ namespace MyNetSensors.WebController.Controllers
             if (!result)
                 return HttpBadRequest();
 
-            return RedirectToAction("List", new { id = task.NodeId });
+            return RedirectToAction("Tasks", new { id = task.NodeId });
         }
 
         public ActionResult Remove(int id)
@@ -119,7 +119,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
         public ActionResult Enable(int id)
@@ -137,7 +137,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
         public ActionResult Disable(int id)
@@ -155,7 +155,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
         public ActionResult ExecuteNow(int id)
@@ -166,7 +166,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
 
@@ -178,7 +178,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
 
@@ -190,7 +190,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
-            else return RedirectToAction("List");
+            else return RedirectToAction("Tasks");
         }
 
 

@@ -14,7 +14,7 @@
     <h2>@ViewBag.Title</h2>
     <p>
         < <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-        < <a asp-controller="Tasks" asp-action="List">Tasks</a>
+        < <a asp-controller="Tasks" asp-action="Tasks">Tasks</a>
     </p>
     <div class="ui divider"></div>
 
@@ -100,7 +100,7 @@
                     </div>
                     <div class="ui center aligned attached segment">
                         <div class="ui buttons">
-                            <a asp-controller="Tasks" asp-action="List" class="ui button">Cancel</a>
+                            <a asp-action="Tasks" asp-route-id="@Model.NodeId" class="ui button">Cancel</a>
                             <input type="submit" value="Create" class="ui primary button" />
                         </div>
                     </div>

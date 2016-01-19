@@ -21,8 +21,6 @@
         @if (ViewBag.panelId == null)
         {
             <a asp-action="List">Panels</a>
-            @:|
-            <a asp-controller="Tasks" asp-action="List">Tasks</a>
         }
         else
         {
@@ -231,7 +229,7 @@
     <div class="ui attached clearing segment" id="node-{{Id}}">
         <span id="timer-name-{{Id}}"></span>
         <div class="ui small right floated basic buttons">
-            <a href="/Tasks/List/{{Id}}" class="ui button" id="timer-open-{{Id}}">Open</a>
+            <a href="/UITimer/Tasks/{{Id}}" class="ui button" id="timer-open-{{Id}}">Open</a>
         </div>
     </div>
 </script>
