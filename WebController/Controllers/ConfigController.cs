@@ -109,7 +109,6 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            if (SerialController.gateway.IsConnected())
             SerialController.gateway.Disconnect();
             SerialController.serialPortName = port.PortName;
 
@@ -120,14 +119,15 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [HttpPost]
-        public bool ConnectSerialController()
+        public async Task<bool> ConnectSerialController()
         {
             dynamic json = ReadConfig();
             json.SerialGateway.Enabled = true;
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SerialController.ReconnectToGateway(SerialController.serialPortName);
+            string portname = SerialController.serialPortName;
+            await SerialController.gateway.Connect(portname);
 
             return true;
         }
@@ -140,8 +140,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            if (SerialController.gateway.IsConnected())
-                SerialController.gateway.Disconnect();
+            SerialController.gateway.Disconnect();
 
             return true;
         }

@@ -113,7 +113,6 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool Disconnect()
         {
-            string portname = SerialController.gateway.serialPort.GetPortName();
             SerialController.gateway.Disconnect();
             return true;
         }

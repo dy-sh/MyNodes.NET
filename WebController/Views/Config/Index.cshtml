@@ -68,11 +68,11 @@
     
 
                 <div class="ui attached clearing segment" id="node-{{Id}}">
-                    <div class="ui right floated buttons">
-                        <a asp-controller="Config" asp-action="SerialPort" class="ui button">Select serial port</a>
-                        <button class="ui blue button" id="serial-gateway-connect">Connect</button>
-                        <button class="ui blue button" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
-                    </div>
+
+                        <button class="ui right floated blue button connectbutton" id="serial-gateway-connect">Connect</button>
+                        <button class="ui right floated button connectbutton" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
+                        <a asp-controller="Config" asp-action="SerialPort" class="ui right floated button">Select serial port</a>
+
                 </div>
             </div>
         </div>

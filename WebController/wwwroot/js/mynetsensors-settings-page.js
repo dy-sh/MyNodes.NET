@@ -97,8 +97,7 @@ $(document).ready(function () {
             type: "POST",
             url: "/Config/ConnectSerialController/",
             success:function() {
-                $("#serial-gateway-connect").hide();
-                $("#serial-gateway-disconnect").show();
+
             }
         });
     });
@@ -108,8 +107,7 @@ $(document).ready(function () {
             type: "POST",
             url: "/Config/DisconnectSerialController/",
             success: function () {
-                $("#serial-gateway-connect").show();
-                $("#serial-gateway-disconnect").hide();
+
             }
         });
     });
