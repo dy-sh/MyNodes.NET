@@ -15,7 +15,6 @@
 /// <reference path="js/litegraph/litegraph-list.js" />
 /// <reference path="js/mynetsensors-control-page.js" />
 /// <reference path="js/mynetsensors-dashboard-chart-page.js" />
-/// <reference path="js/mynetsensors-history-chart-page.js" />
 /// <reference path="js/mynetsensors-history-log-page.js" />
 /// <reference path="js/mynetsensors-logs-page.js" />
 /// <reference path="js/mynetsensors-observe-page.js" />

@@ -3,8 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-var gatewayHardwareConnected = null;
-var signalRServerConnected = null;
+var signalRServerConnected;
 
 
 var editor = new LiteGraph.Editor("main");
@@ -23,11 +22,11 @@ $(function () {
     var clientsHub = $.connection.clientsHub;
 
     clientsHub.client.OnConnectedEvent = function () {
-        hardwareStateChanged(true);
+        noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
     clientsHub.client.OnDisconnectedEvent = function () {
-        hardwareStateChanged(false);
+        noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
     clientsHub.client.OnNodeActivity = function (nodeId) {
@@ -119,30 +118,21 @@ $(function () {
         }
     });
 
-    getIsHardwareConnected();
     getNodes();
+    getGatewayInfo();
 });
 
-function getIsHardwareConnected() {
+
+function getGatewayInfo() {
     $.ajax({
-        url: "/GatewayAPI/IsHardwareConnected/",
+        url: "/GatewayAPI/GetGatewayInfo/",
         type: "POST",
-        success: function (connected) {
-            hardwareStateChanged(connected);
+        success: function (gatewayInfo) {
+            if (gatewayInfo.state == 1 || gatewayInfo.state == 2) {
+                noty({ text: 'Serial Gateway is not connected!', type: 'error', timeout: false });
+            }
         }
     });
-}
-
-
-
-function hardwareStateChanged(connected) {
-    if (connected && gatewayHardwareConnected === false) {
-        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
-    } else if (!connected) {
-        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
-    }
-
-    gatewayHardwareConnected = connected;
 }
 
 
