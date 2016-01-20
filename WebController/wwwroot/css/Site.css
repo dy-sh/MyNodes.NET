@@ -64,6 +64,10 @@ input[type="checkbox"].input-validation-error {
     opacity: 1 !important;
 }
 
+.ui.button > .icon:not(.button) {
+     margin: 0em ;
+}
+
 .nonvisible {
     visibility: hidden;
 }

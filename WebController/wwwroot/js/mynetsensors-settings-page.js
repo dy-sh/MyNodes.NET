@@ -4,6 +4,8 @@
 */
 
 
+var gatewayHardwareConnected = null;
+
 
 $(function () {
     getGatewayInfo();
@@ -29,12 +31,16 @@ function getGatewayInfo() {
 
 
 function updateInfo(gatewayInfo) {
-    if (gatewayInfo.isGatewayConnected) {
+    gatewayHardwareConnected = gatewayInfo.isGatewayConnected;
+
+    if (gatewayHardwareConnected) {
         $('#gateway-hardware-online').show();
         $('#gateway-hardware-offline').hide();
+        $("#serial-gateway-connect").html('Disconnect');
     } else {
         $('#gateway-hardware-online').hide();
         $('#gateway-hardware-offline').show();
+        $("#serial-gateway-connect").html('Connect');
     }
 
     $('#nodes-registered').html(gatewayInfo.gatewayNodesRegistered);
@@ -44,21 +50,7 @@ function updateInfo(gatewayInfo) {
 $(document).ready(function () {
 
 
-    $("#dropTasks").click(function () {
-        $('#confirm-delete-tasks-dialog').modal({
-            onApprove: function () {
-                $.ajax({
-                    type: "POST", url: "/GatewayAPI/RemoveAllTasks",
-                    success: function (result) {
-                        if (result) noty({ text: 'Tasks were deleted.' });
-                    }
-                });
-            }
-        })
-        .modal('setting', 'transition', 'fade up').modal('show');
-    });
-
-    $("#dropNodes").click(function () {
+    $("#serial-gateway-delete-nodes").click(function () {
         $('#confirm-delete-nodes-dialog').modal({
             onApprove: function () {
                 $.ajax({
@@ -71,13 +63,18 @@ $(document).ready(function () {
         }).modal('setting', 'transition', 'fade up').modal('show');
     });
 
-
-    $("#disableTasks").click(function () {
-        $.ajax({
-            type: "POST", url: "/GatewayAPI/DisableTasks",
-            success: function (result) {
-                if (result) noty({ text: 'Tasks were disabled.' });
-            }
-        });
+    $("#serial-gateway-connect").click(function () {
+        if (!gatewayHardwareConnected) {
+            $.ajax({
+                type: "POST",
+                url: "/GatewayAPI/Connect/"
+            });
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/GatewayAPI/Disconnect/"
+            });
+        }
     });
+
 });

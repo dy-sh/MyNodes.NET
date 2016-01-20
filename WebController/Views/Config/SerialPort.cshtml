@@ -26,29 +26,29 @@
                     <div class="ui attached segment">
 
 
-                                <h5>Select serial port that is connected to the gateway</h5>
-                            <div class="field">
-                                <div class="ui buttons">
-                                    <div class="ui selection button dropdown">
-                                        <input type="hidden" name="PortName" value="@ViewBag.currentPort">
-                                        <i class="dropdown icon"></i>
-                                        @if (String.IsNullOrEmpty(ViewBag.currentPort))
+                        <h5>Select serial port that is connected to the gateway</h5>
+                        <div class="field">
+                            <div class="ui buttons">
+                                <div class="ui selection button dropdown">
+                                    <input type="hidden" name="PortName" value="@ViewBag.currentPort">
+                                    <i class="dropdown icon"></i>
+                                    @if (String.IsNullOrEmpty(ViewBag.currentPort))
+                                    {
+                                        <div class="default text">Serial Port</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text">@ViewBag.currentPort</div>
+                                    }
+                                    <div class="menu">
+                                        @foreach (string port in @ViewBag.ports)
                                         {
-                                            <div class="default text">Serial Port</div>
+                                            <div class="item" data-value="@port">@port</div>
                                         }
-                                        else
-                                        {
-                                            <div class="text">@ViewBag.currentPort</div>
-                                        }
-                                        <div class="menu">
-                                            @foreach (string port in @ViewBag.ports)
-                                            {
-                                                <div class="item" data-value="@port">@port</div>
-                                            }
-                                        </div>
                                     </div>
-                                <a asp-action="SerialPort" class="ui button">Refrash</a>
                                 </div>
+                                <a asp-action="SerialPort" class="ui button">Refrash</a>
+                            </div>
 
                         </div>
                         <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
@@ -57,7 +57,7 @@
 
                     <div class="ui center aligned attached segment">
                         <div class="ui buttons">
-                            <a asp-action="Gateway" class="ui button">Cancel</a>
+                            <a asp-action="Index" class="ui button">Cancel</a>
                             <input type="submit" value="Select" class="ui button primary" />
                         </div>
                     </div>

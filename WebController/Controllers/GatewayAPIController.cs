@@ -60,25 +60,19 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-
-
-
+        
         public GatewayInfo GetGatewayInfo()
         {
             return gateway.GetGatewayInfo();
         }
-
-
+        
 
         public bool UpdateNodeSettings(Node node)
         {
             gateway.UpdateNodeSettings(node);
             return true;
         }
-
-
-
-
+        
 
         public bool RemoveNode(int nodeId)
         {
@@ -92,18 +86,9 @@ namespace MyNetSensors.WebController.Controllers
         public async Task<bool> RemoveAllNodes()
         {
             gateway.RemoveAllNodes();
-
             return true;
         }
-
-
-
-
-
-
-
-
-
+        
 
         public bool DisableTasks()
         {
@@ -111,15 +96,27 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
         public bool RemoveAllTasks()
         {
             SerialController.uiTimerNodesEngine.RemoveAllTasks();
             return true;
         }
+        
 
+        public async Task<bool> Connect()
+        {
+            string portname = SerialController.gateway.serialPort.GetPortName();
+            await SerialController.gateway.Connect(portname);
+            return true;
+        }
 
-
-
+        public bool Disconnect()
+        {
+            string portname = SerialController.gateway.serialPort.GetPortName();
+            SerialController.gateway.Disconnect();
+            return true;
+        }
 
     }
 }

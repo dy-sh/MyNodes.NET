@@ -18,18 +18,12 @@ namespace MyNetSensors.WebController.Controllers
     {
 
         private const string SETTINGS_FILE_NAME = "appsettings.json";
-
-
-
-
-
         private IConfigurationRoot сonfiguration;
 
         public ConfigController(IConfigurationRoot сonfiguration)
         {
             this.сonfiguration = сonfiguration;
         }
-
 
         private dynamic ReadConfig()
         {
@@ -47,21 +41,9 @@ namespace MyNetSensors.WebController.Controllers
 
             if (firstRun)
                 return RedirectToAction("FirstRun");
-            else
-                return RedirectToAction("Gateway");
 
-
-            // return View();
-        }
-
-
-
-        public ActionResult Gateway()
-        {
             return View();
         }
-
-
 
 
         [HttpGet]
@@ -86,13 +68,13 @@ namespace MyNetSensors.WebController.Controllers
                 return RedirectToAction("SerialPort");
 
             dynamic json = ReadConfig();
-            json.Gateway.SerialPort = port.PortName;
+            json.SerialGateway.SerialPort = port.PortName;
             WriteConfig(json);
             сonfiguration.Reload();
 
             SerialController.ReconnectToGateway(port.PortName);
 
-            return RedirectToAction("Gateway");
+            return RedirectToAction("Index");
         }
 
 
@@ -120,19 +102,15 @@ namespace MyNetSensors.WebController.Controllers
                 return RedirectToAction("FirstRun");
 
             dynamic json = ReadConfig();
-            json.Gateway.SerialPort = port.PortName;
+            json.SerialGateway.SerialPort = port.PortName;
             json.FirstRun = false;
             WriteConfig(json);
             сonfiguration.Reload();
 
             SerialControllerConfigurator.Start(сonfiguration);
 
-            return RedirectToAction("Control", "Hardware");
+            return RedirectToAction("Index", "Dashboard");
         }
-
-
-
     }
-
 
 }

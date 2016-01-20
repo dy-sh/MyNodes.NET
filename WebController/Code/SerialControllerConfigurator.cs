@@ -44,21 +44,23 @@ namespace MyNetSensors.WebController.Code
             string portName = null;
             try
             {
-                SerialController.logs.enableGatewayLog = Boolean.Parse(Configuration["Gateway:LogState"]);
-                SerialController.logs.enableNodesLog = Boolean.Parse(Configuration["Gateway:LogMessages"]);
+                SerialController.serialGatewayEnabled = Boolean.Parse(Configuration["SerialGateway:Enable"]);
+
+                SerialController.logs.enableGatewayLog = Boolean.Parse(Configuration["SerialGateway:LogState"]);
+                SerialController.logs.enableNodesLog = Boolean.Parse(Configuration["SerialGateway:LogMessages"]);
                 SerialController.logs.enableLogicalNodesEngineLog = Boolean.Parse(Configuration["LogicalNodes:LogEngine"]);
                 SerialController.logs.enableLogicalNodesLog = Boolean.Parse(Configuration["LogicalNodes:LogNodes"]);
                 SerialController.logs.enableDataBaseLog = Boolean.Parse(Configuration["DataBase:LogState"]);
 
 
-                SerialController.enableAutoAssignId = Boolean.Parse(Configuration["Gateway:EnableAutoAssignId"]);
+                SerialController.enableAutoAssignId = Boolean.Parse(Configuration["SerialGateway:EnableAutoAssignId"]);
 
                 SerialController.logicalNodesEnabled = Boolean.Parse(Configuration["LogicalNodes:Enable"]);
                 SerialController.logicalNodesUpdateInterval = Int32.Parse(Configuration["LogicalNodes:UpdateInterval"]);
                 SerialController.dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
                 SerialController.dataBadeUseMSSQL = Boolean.Parse(Configuration["DataBase:UseMSSQL"]);
                 SerialController.dataBaseWriteInterval = Int32.Parse(Configuration["DataBase:WriteInterval"]);
-                SerialController.writeNodesMessagesToDataBase = Boolean.Parse(Configuration["Gateway:WriteNodesMessagesToDataBase"]);
+                SerialController.writeNodesMessagesToDataBase = Boolean.Parse(Configuration["SerialGateway:WriteNodesMessagesToDataBase"]);
 
                 if (SerialController.dataBadeUseMSSQL)
                     SerialController.dataBaseConnectionString = Configuration["DataBase:MSSQLConnectionString"];
@@ -68,11 +70,11 @@ namespace MyNetSensors.WebController.Code
                 //SerialController.softNodesLogMessages = Boolean.Parse(Configuration["SoftNodes:LogMessages"]);
                 //SerialController.softNodesLogState = Boolean.Parse(Configuration["SoftNodes:LogState"]);
 
-                portName = Configuration["Gateway:SerialPort"];
+                portName = Configuration["SerialGateway:SerialPort"];
             }
             catch
             {
-                Log(new LogRecord(LogRecordOwner.SerialController,LogRecordType.Error,  "ERROR: Bad configuration in appsettings.json file."),ConsoleColor.Red);
+                Log(new LogRecord(LogRecordOwner.SerialController, LogRecordType.Error, "ERROR: Bad configuration in appsettings.json file."), ConsoleColor.Red);
                 throw new Exception("Bad configuration in appsettings.json file.");
             }
 

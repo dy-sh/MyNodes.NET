@@ -64,6 +64,7 @@ namespace MyNetSensors.SerialControllers
         public static event EventHandler OnStarted;
 
         private static bool isStarted;
+        public static bool serialGatewayEnabled;
 
         public static async void Start(string serialPortName)
         {
@@ -151,21 +152,24 @@ namespace MyNetSensors.SerialControllers
 
         private static void ConnectToGateway()
         {
-            //connecting to gateway
-            logs.AddSerialControllerInfo("Connecting to gateway...");
+            if (serialGatewayEnabled)
+            {
+                //connecting to gateway
+                logs.AddSerialControllerInfo("Connecting to gateway...");
 
-            gateway.enableAutoAssignId = enableAutoAssignId;
+                gateway.enableAutoAssignId = enableAutoAssignId;
 
-            gateway.OnLogMessage += logs.AddNodeInfo;
-            gateway.OnLogInfo += logs.AddGatewayInfo;
-            gateway.OnLogError += logs.AddGatewayError;
-            gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
-           // gateway.serialPort.OnLogMessage += logs.AddNodeInfo;
-            gateway.endlessConnectionAttempts = true;
+                gateway.OnLogMessage += logs.AddNodeInfo;
+                gateway.OnLogInfo += logs.AddGatewayInfo;
+                gateway.OnLogError += logs.AddGatewayError;
+                gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
+                // gateway.serialPort.OnLogMessage += logs.AddNodeInfo;
+                gateway.endlessConnectionAttempts = true;
 
-            gateway.Connect(serialPortName).Wait();
+                gateway.Connect(serialPortName).Wait();
 
-            logs.AddSerialControllerInfo("Gateway connected.");
+                logs.AddSerialControllerInfo("Gateway connected.");
+            }
 
         }
 
