@@ -9,7 +9,7 @@ var gatewayHardwareConnected = null;
 
 $(function () {
     getGatewayInfo();
-    setInterval(getGatewayInfo, 2000);
+    setInterval(getGatewayInfo, 1000);
 });
 
 
@@ -32,15 +32,44 @@ function getGatewayInfo() {
 
 function updateInfo(gatewayInfo) {
     gatewayHardwareConnected = gatewayInfo.isGatewayConnected;
+    $("#serial-gateway-state").removeClass("blue");
+    $("#serial-gateway-state").removeClass("red");
+
+    switch (gatewayInfo.state) {
+        case 0:
+            $("#serial-gateway-state").html('Disconnected');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").show();
+            $("#serial-gateway-disconnect").hide();
+            break;
+        case 1:
+            $("#serial-gateway-state").html('Connecting to port...');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        case 2:
+            $("#serial-gateway-state").html('Connecting to gateway...');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        case 3:
+            $("#serial-gateway-state").html('Connected');
+            $("#serial-gateway-state").addClass('blue');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        default:
+    }
+
 
     if (gatewayHardwareConnected) {
         $('#gateway-hardware-online').show();
         $('#gateway-hardware-offline').hide();
-        $("#serial-gateway-connect").html('Disconnect');
     } else {
         $('#gateway-hardware-online').hide();
         $('#gateway-hardware-offline').show();
-        $("#serial-gateway-connect").html('Connect');
     }
 
     $('#nodes-registered').html(gatewayInfo.gatewayNodesRegistered);
@@ -64,17 +93,25 @@ $(document).ready(function () {
     });
 
     $("#serial-gateway-connect").click(function () {
-        if (!gatewayHardwareConnected) {
-            $.ajax({
-                type: "POST",
-                url: "/GatewayAPI/Connect/"
-            });
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "/GatewayAPI/Disconnect/"
-            });
-        }
+        $.ajax({
+            type: "POST",
+            url: "/Config/ConnectSerialController/",
+            success:function() {
+                $("#serial-gateway-connect").hide();
+                $("#serial-gateway-disconnect").show();
+            }
+        });
+    });
+
+    $("#serial-gateway-disconnect").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Config/DisconnectSerialController/",
+            success: function () {
+                $("#serial-gateway-connect").show();
+                $("#serial-gateway-disconnect").hide();
+            }
+        });
     });
 
 });

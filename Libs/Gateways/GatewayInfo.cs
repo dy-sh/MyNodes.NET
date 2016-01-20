@@ -7,6 +7,7 @@ namespace MyNetSensors.Gateways
 {
     public class GatewayInfo
     {
+        public GatewayState state;
         public bool isGatewayConnected;
         public int gatewayNodesRegistered;
         public int gatewaySensorsRegistered;

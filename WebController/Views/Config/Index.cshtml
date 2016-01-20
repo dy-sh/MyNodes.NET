@@ -29,7 +29,7 @@
                 </div>*@
 
 
-                <div class="ui attached clearing segment" id="gateway-hardware-online">
+                @*<div class="ui attached clearing segment" id="gateway-hardware-online">
                     Gateway hardware is connected
                     <div class="ui right floated basic disabled button nonbutton">
                         <i class="big blue toggle on icon"></i>
@@ -39,6 +39,13 @@
                     Gateway hardware is disconnected
                     <div class="ui right floated basic disabled button nonbutton">
                         <i class="big red toggle off icon"></i>
+                    </div>
+                </div>*@
+
+                <div class="ui attached clearing segment">
+                    State
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="serial-gateway-state"></span>
                     </div>
                 </div>
 
@@ -64,6 +71,7 @@
                     <div class="ui right floated buttons">
                         <a asp-controller="Config" asp-action="SerialPort" class="ui button">Select serial port</a>
                         <button class="ui blue button" id="serial-gateway-connect">Connect</button>
+                        <button class="ui blue button" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
                     </div>
                 </div>
             </div>

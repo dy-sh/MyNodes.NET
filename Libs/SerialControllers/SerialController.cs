@@ -186,7 +186,7 @@ namespace MyNetSensors.SerialControllers
             });
         }
 
-
+ 
 
         //private static void ConnectToSoftNodesController()
         //{
@@ -226,11 +226,11 @@ namespace MyNetSensors.SerialControllers
 
 
             logicalHardwareNodesEngine = new LogicalHardwareNodesEngine(gateway, logicalNodesEngine);
-            logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine,logicalNodesStatesDb);
+            logicalNodesUIEngine = new LogicalNodesUIEngine(logicalNodesEngine, logicalNodesStatesDb);
             uiTimerNodesEngine = new UITimerNodesEngine(logicalNodesEngine, uiTimerNodesDb);
 
             logicalNodesEngine.Start();
-            
+
 
             //demo
             //LogicalNodeMathPlus nodeMathPlus = new LogicalNodeMathPlus();

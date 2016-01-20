@@ -46,37 +46,6 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult SerialPort()
-        {
-            List<string> ports = SerialController.comPort.GetPortsList();
-            string currentPort = SerialController.serialPortName;
-
-            ViewBag.ports = ports;
-
-            if (ports.Contains(currentPort))
-                ViewBag.currentPort = currentPort;
-
-            return View(new SerialPortViewModel());
-        }
-
-
-        [HttpPost]
-        public IActionResult SerialPort(SerialPortViewModel port)
-        {
-            if (String.IsNullOrEmpty(port.PortName))
-                return RedirectToAction("SerialPort");
-
-            dynamic json = ReadConfig();
-            json.SerialGateway.SerialPort = port.PortName;
-            WriteConfig(json);
-            сonfiguration.Reload();
-
-            SerialController.ReconnectToGateway(port.PortName);
-
-            return RedirectToAction("Index");
-        }
-
 
 
 
@@ -110,6 +79,71 @@ namespace MyNetSensors.WebController.Controllers
             SerialControllerConfigurator.Start(сonfiguration);
 
             return RedirectToAction("Index", "Dashboard");
+        }
+
+
+
+        [HttpGet]
+        public IActionResult SerialPort()
+        {
+            List<string> ports = SerialController.comPort.GetPortsList();
+            string currentPort = SerialController.serialPortName;
+
+            ViewBag.ports = ports;
+
+            if (ports.Contains(currentPort))
+                ViewBag.currentPort = currentPort;
+
+            return View(new SerialPortViewModel());
+        }
+
+
+        [HttpPost]
+        public IActionResult SerialPort(SerialPortViewModel port)
+        {
+            if (String.IsNullOrEmpty(port.PortName))
+                return RedirectToAction("SerialPort");
+
+            dynamic json = ReadConfig();
+            json.SerialGateway.SerialPort = port.PortName;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            if (SerialController.gateway.IsConnected())
+            SerialController.gateway.Disconnect();
+            SerialController.serialPortName = port.PortName;
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+        [HttpPost]
+        public bool ConnectSerialController()
+        {
+            dynamic json = ReadConfig();
+            json.SerialGateway.Enabled = true;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            SerialController.ReconnectToGateway(SerialController.serialPortName);
+
+            return true;
+        }
+
+        [HttpPost]
+        public bool DisconnectSerialController()
+        {
+            dynamic json = ReadConfig();
+            json.SerialGateway.Enabled = false;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            if (SerialController.gateway.IsConnected())
+                SerialController.gateway.Disconnect();
+
+            return true;
         }
     }
 

@@ -607,6 +607,7 @@ namespace MyNetSensors.Gateways
         {
             GatewayInfo info = new GatewayInfo
             {
+                state = gatewayState,
                 isGatewayConnected = IsConnected(),
                 gatewayNodesRegistered = nodes.Count
             };
