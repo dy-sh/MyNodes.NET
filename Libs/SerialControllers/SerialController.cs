@@ -152,19 +152,19 @@ namespace MyNetSensors.SerialControllers
 
         private static void ConnectToGateway()
         {
+            gateway.enableAutoAssignId = enableAutoAssignId;
+
+            gateway.OnLogMessage += logs.AddNodeInfo;
+            gateway.OnLogInfo += logs.AddGatewayInfo;
+            gateway.OnLogError += logs.AddGatewayError;
+            gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
+            // gateway.serialPort.OnLogMessage += logs.AddNodeInfo;
+            gateway.endlessConnectionAttempts = true;
+
             if (serialGatewayEnabled)
             {
                 //connecting to gateway
                 logs.AddSerialControllerInfo("Connecting to gateway...");
-
-                gateway.enableAutoAssignId = enableAutoAssignId;
-
-                gateway.OnLogMessage += logs.AddNodeInfo;
-                gateway.OnLogInfo += logs.AddGatewayInfo;
-                gateway.OnLogError += logs.AddGatewayError;
-                gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
-                // gateway.serialPort.OnLogMessage += logs.AddNodeInfo;
-                gateway.endlessConnectionAttempts = true;
 
                 gateway.Connect(serialPortName).Wait();
 

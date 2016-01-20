@@ -122,7 +122,7 @@ namespace MyNetSensors.WebController.Controllers
         public async Task<bool> ConnectSerialController()
         {
             dynamic json = ReadConfig();
-            json.SerialGateway.Enabled = true;
+            json.SerialGateway.Enable = true;
             WriteConfig(json);
             сonfiguration.Reload();
 
@@ -136,7 +136,7 @@ namespace MyNetSensors.WebController.Controllers
         public bool DisconnectSerialController()
         {
             dynamic json = ReadConfig();
-            json.SerialGateway.Enabled = false;
+            json.SerialGateway.Enable = false;
             WriteConfig(json);
             сonfiguration.Reload();
 

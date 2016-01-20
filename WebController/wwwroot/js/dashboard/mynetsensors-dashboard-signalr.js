@@ -7,8 +7,8 @@
 //window.this_panel_id initialized from ViewBag
 
 
-var gatewayHardwareConnected = null;
-var signalRServerConnected = null;
+
+var signalRServerConnected;
 
 
 
@@ -20,11 +20,11 @@ $(function () {
     var clientsHub = $.connection.clientsHub;
 
     clientsHub.client.OnConnectedEvent = function () {
-        hardwareStateChanged(true);
+        noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
     clientsHub.client.OnDisconnectedEvent = function () {
-        hardwareStateChanged(false);
+        noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
     clientsHub.client.OnRemoveAllNodesEvent = function () {
@@ -89,39 +89,25 @@ $(function () {
     // connection.stateChanged(signalrConnectionStateChanged);
     //connection.start({ waitForPageLoad: true });
 
-    getIsHardwareConnected();
+    getGatewayInfo();
     getNodes();
 });
 
 
-
-function getIsHardwareConnected() {
+function getGatewayInfo() {
     $.ajax({
-        url: "/GatewayAPI/IsHardwareConnected/",
+        url: "/GatewayAPI/GetGatewayInfo/",
         type: "POST",
-        success: function (connected) {
-            hardwareStateChanged(connected);
+        success: function (gatewayInfo) {
+            if (gatewayInfo.state == 1 || gatewayInfo.state == 2) {
+                noty({ text: 'Serial Gateway is not connected!', type: 'error', timeout: false });
+            }
         }
     });
 }
 
 
 
-function hardwareStateChanged(connected) {
-    if (connected) {
-        $('#panelsContainer').fadeIn(elementsFadeTime);
-    } else {
-        $('#panelsContainer').fadeOut(elementsFadeTime);
-    }
-
-    if (connected && gatewayHardwareConnected === false) {
-        noty({ text: 'Gateway hardware is online.', type: 'alert', timeout: false });
-    } else if (!connected) {
-        noty({ text: 'Gateway hardware is offline!', type: 'error', timeout: false });
-    }
-
-    gatewayHardwareConnected = connected;
-}
 
 
 

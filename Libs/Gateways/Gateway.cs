@@ -61,7 +61,6 @@ namespace MyNetSensors.Gateways
 
         private GatewayState gatewayState = GatewayState.Disconnected;
 
-
         public Gateway(IComPort serialPort)
         {
             gatewayAliveChecker = new GatewayAliveChecker(this);
@@ -98,15 +97,13 @@ namespace MyNetSensors.Gateways
             return gatewayState;
         }
 
-        private void SetGatewayState(GatewayState state)
+        private void SetGatewayState(GatewayState newState)
         {
-            gatewayState = state;
 
             switch (gatewayState)
             {
                 case GatewayState.Disconnected:
                     LogInfo("Disconnected.");
-                    OnDisconnectedEvent?.Invoke();
                     break;
                 case GatewayState.ConnectingToPort:
                     LogInfo("Trying to connect...");
@@ -116,10 +113,15 @@ namespace MyNetSensors.Gateways
                     break;
                 case GatewayState.Connected:
                     LogInfo("Gateway connected.");
-                    OnConnectedEvent?.Invoke();
                     break;
             }
 
+            if (gatewayState == GatewayState.Connected && newState != GatewayState.Connected)
+                OnDisconnectedEvent?.Invoke();
+            else if (gatewayState != GatewayState.Connected && newState == GatewayState.Connected)
+                OnConnectedEvent?.Invoke();
+
+            gatewayState = newState;
             OnGatewayStateChangedEvent?.Invoke(gatewayState);
         }
 
@@ -185,7 +187,7 @@ namespace MyNetSensors.Gateways
 
             if (endlessConnectionAttempts)
             {
-                while (gatewayState==GatewayState.ConnectingToGateway)
+                while (gatewayState == GatewayState.ConnectingToGateway)
                 {
                     for (int i = 0; i < ATTEMPTS_TO_COMMUNICATE; i++)
                     {
@@ -486,7 +488,7 @@ namespace MyNetSensors.Gateways
                 return;
             }
             sensor.state = state;
-            
+
             try
             {
                 sensor.UnRemapSensorData();
