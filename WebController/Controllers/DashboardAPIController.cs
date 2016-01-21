@@ -3,55 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.LogicalNodes;
-using MyNetSensors.LogicalNodesUI;
-using MyNetSensors.SerialControllers;
+using MyNetSensors.Nodes;
+using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
     public class DashboardAPIController : Controller
     {
 
-        private LogicalNodesUIEngine engineUI = SerialController.logicalNodesUIEngine;
+        private UiNodesEngine engine = NodesController.uiNodesEngine;
 
 
         public string GetNameForPanel(string id)
         {
-            if (engineUI == null)
+            if (engine == null)
                 return null;
 
-            LogicalNodePanel panel = engineUI.GetPanel(id);
+            PanelNode panel = engine.GetPanel(id);
 
             return panel?.Name;
         }
 
-        public List<LogicalNodeUI> GetUINodesForMainPage()
+        public List<UiNode> GetUINodesForMainPage()
         {
-            if (engineUI == null)
+            if (engine == null)
                 return null;
 
-            return engineUI.GetUINodesForMainPage();
+            return engine.GetUINodesForMainPage();
         }
 
-        public List<LogicalNodeUI> GetUINodesForPanel(string panelId)
+        public List<UiNode> GetUINodesForPanel(string panelId)
         {
-            if (engineUI == null)
+            if (engine == null)
                 return null;
 
-            return engineUI.GetUINodesForPanel(panelId);
+            return engine.GetUINodesForPanel(panelId);
         }
 
 
         public bool ClearLog(string nodeId)
         {
-            engineUI.ClearLog(nodeId);
+            engine.ClearLog(nodeId);
             return true;
         }
 
 
         public bool TextBoxSend(string nodeId, string value)
         {
-            engineUI.TextBoxSend(nodeId, value);
+            engine.TextBoxSend(nodeId, value);
             return true;
         }
 
@@ -59,37 +58,37 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool ButtonClick(string nodeId)
         {
-            engineUI.ButtonClick(nodeId);
+            engine.ButtonClick(nodeId);
             return true;
         }
 
         public bool ToggleButtonClick(string nodeId)
         {
-            engineUI.ToggleButtonClick(nodeId);
+            engine.ToggleButtonClick(nodeId);
             return true;
         }
 
         public bool SwitchClick(string nodeId)
         {
-            engineUI.SwitchClick(nodeId);
+            engine.SwitchClick(nodeId);
             return true;
         }
 
         public bool SliderChange(string nodeId, int value)
         {
-            engineUI.SliderChange(nodeId, value);
+            engine.SliderChange(nodeId, value);
             return true;
         }
 
         public bool RGBSlidersChange(string nodeId, string value)
         {
-            engineUI.RGBSlidersChange(nodeId, value);
+            engine.RGBSlidersChange(nodeId, value);
             return true;
         }
 
         public bool RGBWSlidersChange(string nodeId, string value)
         {
-            engineUI.RGBWSlidersChange(nodeId, value);
+            engine.RGBWSlidersChange(nodeId, value);
             return true;
         }
 
@@ -98,7 +97,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public List<ChartData> GetChartData(string id)
         {
-            LogicalNodeUIChart chart = engineUI.GetUINode(id) as LogicalNodeUIChart;
+            UiChartNode chart = engine.GetUINode(id) as UiChartNode;
             if (chart == null)
                 return null;
 
@@ -121,7 +120,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool ClearChart(string nodeId)
         {
-            engineUI.ClearChart(nodeId);
+            engine.ClearChart(nodeId);
             return true;
         }
     }

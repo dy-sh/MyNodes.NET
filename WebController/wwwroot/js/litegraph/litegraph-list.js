@@ -16,8 +16,8 @@
     //Panel
     function Panel() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodePanel",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.PanelNode",
+            'Assembly': "Nodes"
         };
         this.bgcolor = "#565656";
     }
@@ -67,8 +67,8 @@
     //Panel Input
     function PanelInput() {
         this.properties = {
-            ObjectType: "MyNetSensors.LogicalNodes.LogicalNodePanelInput",
-            'Assembly': "LogicalNodes"
+            ObjectType: "MyNetSensors.Nodes.PanelInputNode",
+            'Assembly': "Nodes"
         };
         this.bgcolor = "#151515";
 
@@ -87,8 +87,8 @@
     //Panel Output
     function PanelOutput() {
         this.properties = {
-            ObjectType: "MyNetSensors.LogicalNodes.LogicalNodePanelOutput",
-            'Assembly': "LogicalNodes"
+            ObjectType: "MyNetSensors.Nodes.PanelOutputNode",
+            'Assembly': "Nodes"
         };
         this.bgcolor = "#151515";
     }
@@ -143,16 +143,16 @@
 
 
 
-    //HardwareNode
-    function HardwareNode() {
+    //MySensorsNode
+    function MySensorsNode() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalHardwareNode",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.MySensorsNode",
+            'Assembly': "Nodes.MySensors"
         };
         this.clonable = false;
         this.removable = false;
     }
-    LiteGraph.registerNodeType("Nodes/HardwareNode", HardwareNode);
+    LiteGraph.registerNodeType("Nodes/Hardware", MySensorsNode);
 
 
 
@@ -211,8 +211,8 @@
     //UI Label
     function UILabel() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILabel",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiLabelNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UILabel.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -227,8 +227,8 @@
     //UI State
     function UIState() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIState",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiStateNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIState.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -243,8 +243,8 @@
     //UI Progress
     function UIProgress() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIProgress",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiProgressNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIProgress.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -259,8 +259,8 @@
     //UI Log
     function UILog() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUILog",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiLogNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UILog.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -275,8 +275,8 @@
     //UI Button
     function UIButton() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIButton",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiButtonNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIButton.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -291,8 +291,8 @@
     //UI Toggle Button
     function UIToggleButton() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIToggleButton",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiToggleButtonNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIToggleButton.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -307,8 +307,8 @@
     //UI Switch
     function UISwitch() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISwitch",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiSwitchNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UISwitch.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -323,8 +323,8 @@
     //UI TextBox
     function UITextBox() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUITextBox",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiTextBoxNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UITextBox.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -342,8 +342,8 @@
     //UI Slider
     function UISlider() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUISlider",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiSliderNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -397,8 +397,8 @@
     //UI RGB Sliders
     function UIRGBSliders() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBSliders",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiRgbSlidersNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIRGBSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -413,8 +413,8 @@
     //UI RGBW Sliders
     function UIRGBWSliders() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIRGBWSliders",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiRgbwSlidersNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIRGBWSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -434,8 +434,8 @@
     //UI Chart
     function UIChart() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodesUI.LogicalNodeUIChart",
-            'Assembly': "LogicalNodesUI"
+            'ObjectType': "MyNetSensors.Nodes.UiChartNode",
+            'Assembly': "Nodes.UI"
         };
     }
     UIChart.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -492,7 +492,7 @@
     //UI Timer
     function UITimer() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.UITimer",
+            'ObjectType': "MyNetSensors.Nodes.UiTimerNode",
             'Assembly': "Nodes.UITimer"};
     }
     UITimer.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -521,8 +521,8 @@
     //Constant
     function Constant() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeConstant",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.ConstantNode",
+            'Assembly': "Nodes"
         };
     }
     Constant.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -564,8 +564,8 @@
     //SystemConsole
     function SystemConsole() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeConsole",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.ConsoleNode",
+            'Assembly': "Nodes"
         };
     }
     SystemConsole.title = "Console";
@@ -576,8 +576,8 @@
     //LogicCounter
     function LogicCounter() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeCounter",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.CounterNode",
+            'Assembly': "Nodes"
         };
     }
     LogicCounter.title = "Counter";
@@ -588,8 +588,8 @@
     //LogicInvert
     function LogicInvert() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeInvert",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.InvertNode",
+            'Assembly': "Nodes"
         };
     }
     LogicInvert.title = "Invert";
@@ -600,8 +600,8 @@
     //MathPlus
     function MathPlus() {
         this.properties = {
-            'ObjectType': "MyNetSensors.LogicalNodes.LogicalNodeMathPlus",
-            'Assembly': "LogicalNodes"
+            'ObjectType': "MyNetSensors.Nodes.MathPlusNode",
+            'Assembly': "Nodes"
         };
     }
     MathPlus.title = "Plus";

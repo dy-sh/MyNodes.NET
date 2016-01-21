@@ -9,7 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
-using MyNetSensors.SerialControllers;
+using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
@@ -17,7 +18,7 @@ namespace MyNetSensors.WebController.Controllers
 
     public class GatewayAPIController : Controller
     {
-        private Gateway gateway = SerialController.gateway;
+        private Gateway gateway = NodesController.gateway;
 
 
         public List<Node> GetNodes()
@@ -25,7 +26,7 @@ namespace MyNetSensors.WebController.Controllers
             return gateway.GetNodes();
         }
 
-        public bool IsHardwareConnected()
+        public bool IsConnected()
         {
             if (gateway == null)
                 return false;
@@ -92,28 +93,28 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool DisableTasks()
         {
-            SerialController.uiTimerNodesEngine.DisableAllTasks();
+            NodesController.uiTimerNodesEngine.DisableAllTasks();
             return true;
         }
 
 
         public bool RemoveAllTasks()
         {
-            SerialController.uiTimerNodesEngine.RemoveAllTasks();
+            NodesController.uiTimerNodesEngine.RemoveAllTasks();
             return true;
         }
         
 
         public async Task<bool> Connect()
         {
-            string portname = SerialController.gateway.serialPort.GetPortName();
-            await SerialController.gateway.Connect(portname);
+            string portname = NodesController.gateway.serialPort.GetPortName();
+            await NodesController.gateway.Connect(portname);
             return true;
         }
 
         public bool Disconnect()
         {
-            SerialController.gateway.Disconnect();
+            NodesController.gateway.Disconnect();
             return true;
         }
 

@@ -12,7 +12,7 @@ var elementsFadeTime = 300;
 
 $(function () {
     //configure signalr
-    var clientsHub = $.connection.clientsHub;
+    var clientsHub = $.connection.nodesEngineHub;
 
     clientsHub.client.OnConnectedEvent = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
@@ -30,12 +30,12 @@ $(function () {
 
 
 
-    clientsHub.client.OnUINodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdatedEvent = function (node) {
         if (node.Id == nodeId)//nodeId initialized from ViewBag
             updateLog(node);
     };
 
-    clientsHub.client.OnUINodeRemoveEvent = function (node) {
+    clientsHub.client.OnRemoveNodeEvent = function (node) {
         if (node.Id == nodeId) {
             var n = noty({ text: 'This Node was removed!', type: 'error', timeout: false });
         }
@@ -52,8 +52,8 @@ $(function () {
         else if (change.newState === $.signalR.connectionState.connected) {
             if (signalRServerConnected == false) {
                 noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
-                getIsHardwareConnected();
                 getNodes();
+                getGatewayInfo();
             }
             signalRServerConnected = true;
         }

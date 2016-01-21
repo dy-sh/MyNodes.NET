@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.ViewModels.Config;
 using Newtonsoft.Json;
@@ -52,8 +51,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult FirstRun()
         {
-            List<string> ports = SerialController.comPort.GetPortsList();
-            string currentPort = SerialController.serialPortName;
+            List<string> ports = NodesController.comPort.GetPortsList();
+            string currentPort = NodesController.serialPortName;
 
             ViewBag.ports = ports;
 
@@ -76,7 +75,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SerialControllerConfigurator.Start(сonfiguration);
+            NodesControllerConfigurator.Start(сonfiguration);
 
             return RedirectToAction("Index", "Dashboard");
         }
@@ -86,8 +85,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult SerialPort()
         {
-            List<string> ports = SerialController.comPort.GetPortsList();
-            string currentPort = SerialController.serialPortName;
+            List<string> ports = NodesController.comPort.GetPortsList();
+            string currentPort = NodesController.serialPortName;
 
             ViewBag.ports = ports;
 
@@ -109,8 +108,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SerialController.gateway.Disconnect();
-            SerialController.serialPortName = port.PortName;
+            NodesController.gateway.Disconnect();
+            NodesController.serialPortName = port.PortName;
 
             return RedirectToAction("Index");
         }
@@ -126,8 +125,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            string portname = SerialController.serialPortName;
-            await SerialController.gateway.Connect(portname);
+            string portname = NodesController.serialPortName;
+            await NodesController.gateway.Connect(portname);
 
             return true;
         }
@@ -140,7 +139,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SerialController.gateway.Disconnect();
+            NodesController.gateway.Disconnect();
 
             return true;
         }

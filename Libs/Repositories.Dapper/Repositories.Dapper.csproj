@@ -48,31 +48,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogicalNodesStatesRepositoryDapper.cs" />
-    <Compile Include="NodesMessagesRepositoryDapper.cs" />
-    <Compile Include="GatewayRepositoryDapper.cs" />
-    <Compile Include="LogicalNodeSerialized.cs" />
-    <Compile Include="LogicalNodesRepositoryDapper.cs" />
+    <Compile Include="NodesStatesRepositoryDapper.cs" />
+    <Compile Include="MySensorsMessagesRepositoryDapper.cs" />
+    <Compile Include="MySensorsRepositoryDapper.cs" />
+    <Compile Include="SerializedNode.cs" />
+    <Compile Include="NodesRepositoryDapper.cs" />
     <Compile Include="UITimerNodesRepositoryDapper.cs" />
     <Compile Include="OneToManyDapperMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gateways\Gateways.csproj">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gateways.MySensors.Serial\Gateways.MySensors.Serial.csproj">
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateways</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
-      <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
-      <Name>LogicalNodes</Name>
+      <Name>Gateways.MySensors.Serial</Name>
     </ProjectReference>
     <ProjectReference Include="..\Nodes.UITimer\Nodes.UITimer.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
       <Name>Nodes.UITimer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Nodes\Nodes.csproj">
+      <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
+      <Name>Nodes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

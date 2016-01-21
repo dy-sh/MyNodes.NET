@@ -1,6 +1,7 @@
 ﻿@using System.Threading.Tasks
 @using MyNetSensors.Gateways
-@model List<SensorData>
+@using MyNetSensors.Gateways.MySensors.Serial
+@model List<MyNetSensors.Gateways.MySensors.Serial.SensorData>
 
 @{
     ViewBag.Title = ViewBag.description + " History";
@@ -31,7 +32,7 @@
             
             @if (!Model.Any())
             {
-                @:There are no history. Log shows realtime data only. Check node <a href="/Node/Settings/@ViewBag.nodeId">settings</a>
+                @:There are no history. Log shows realtime data only. Check node <a href="/Node/Settings/@ViewBag.uiNodeId">settings</a>
                 <br/>
             }
 

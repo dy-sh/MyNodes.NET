@@ -11,9 +11,7 @@ using Microsoft.AspNet.Mvc;
 
 
 using MyNetSensors.Gateways;
-using MyNetSensors.LogicalNodes;
 using MyNetSensors.Nodes;
-using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
@@ -21,17 +19,17 @@ namespace MyNetSensors.WebController.Controllers
     public class UITimerController : Controller
     {
         private UITimerNodesEngine tasksEngine;
-        private LogicalNodesEngine engine;
+        private NodesEngine engine;
 
         public UITimerController()
         {
-            tasksEngine = SerialController.uiTimerNodesEngine;
-            engine = SerialController.logicalNodesEngine;
+            tasksEngine = NodesController.uiTimerNodesEngine;
+            engine = NodesController.nodesEngine;
         }
 
         public ActionResult Tasks(string id)
         {
-            UITimer node = engine.GetNode(id) as UITimer;
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
 
             if (node == null)
                 return HttpNotFound();
@@ -48,7 +46,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult New(string id)
         {
-            UITimer node = engine.GetNode(id) as UITimer;
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
 
             if (node == null)
                 return HttpNotFound();
@@ -89,7 +87,7 @@ namespace MyNetSensors.WebController.Controllers
             if (task == null)
                 return HttpNotFound();
 
-            UITimer node = engine.GetNode(task.NodeId) as UITimer;
+            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
 
             if (node == null)
                 return HttpNotFound();

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
-using MyNetSensors.LogicalNodes;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyNetSensors.Gateways;

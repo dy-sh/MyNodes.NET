@@ -89,11 +89,11 @@
 <div class="container full">
     <h1>Network - nodes</h1>
 
-    <p>Handles the creation and deletion of nodes and contains the global node options and styles.</p>
+    <p>Handles the creation and deletion of nodes and contains the global uiNode options and styles.</p>
     <h3>Options</h3>
-    <p>The options for the nodes have to be contained in an object titled 'nodes'. All of these options can be supplied per node as well. Obviously, 'id' should not be defined globally but per node. Options defined
-        in the global nodes object, are applied to all nodes. If a node has options of its own, those will be used instead of the global options.</p>
-    <p><b><i>When you have given a node an option, you will override the global option for that property, and also the group option for that property if the node is in a group. If you then set that option to <code>null</code>,
+    <p>The options for the nodes have to be contained in an object titled 'uiNodes'. All of these options can be supplied per uiHardwareHardwareNodess as well. Obviously, 'id' should not be defined globally but per uiHardwareHardwareNodess. Options defined
+        in the global nodes object, are applied to all uiNodes. If a uiHardwareHardwareNodess has options of its own, those will be used instead of the global options.</p>
+    <p><b><i>When you have given a node an option, you will override the global option for that property, and also the group option for that property if the uiNode is in a group. If you then set that option to <code>null</code>,
         it will revert back to the default value.</i></b>
     </p>
     <p>Click on the full options or shorthand options to show how these options are supposed to be used.</p>
@@ -241,7 +241,7 @@ network.setOptions(options);
             <td><span parent="color" class="right-caret"></span> color</td>
             <td>Object or String</td>
             <td><code>Object</code></td>
-            <td>The color object contains the color information of the node in every situation. When the node only needs
+            <td>The color object contains the color information of the node in every situation. When the uiNode only needs
                 a single color, a color value like <code>'rgba(120,32,14,1)'</code>, <code>'#ffffff'</code> or <code>'red'</code>
                 can be supplied instead of an object.
             </td>
@@ -422,7 +422,7 @@ network.setOptions(options);
             <td>id</td>
             <td>String</td>
             <td><code>undefined</code></td>
-            <td>The id of the node. The id is mandatory for nodes and they have to be unique. This should obviously be set per node, not globally.</td>
+            <td>The id of the node. The id is mandatory for uiNodes and they have to be unique. This should obviously be set per uiHardwareHardwareNodess, not globally.</td>
         </tr>
         <tr>
             <td>image</td>
@@ -544,7 +544,7 @@ network.setOptions(options);
             <td class="indent">scaling.customScalingFunction</td>
             <td>Function</td>
             <td>in description</td>
-            <td>If nodes have <code>value</code> fields, this function determines how the size of the nodes are scaled
+            <td>If nodes have <code>value</code> fields, this function determines how the size of the uiNodes are scaled
                 based on their values. The default function is:
 <pre>
 function (min,max,total,value) {
@@ -607,7 +607,7 @@ mySize = minSize + diff * scale;
             <td>shape</td>
             <td>String</td>
             <td><code>'ellipse'</code></td>
-            <td>The shape defines what the node looks like. There are two types of nodes. One type has the label inside
+            <td>The shape defines what the node looks like. There are two types of uiNodes. One type has the label inside
                 of it and the other type has the label underneath it. The types with the label inside of it are:
                 <code>ellipse</code>, <code>circle</code>, <code>database</code>, <code>box</code>, <code>text</code>.
                 The ones with the label outside of it are: <code>image</code>, <code>circularImage</code>,

@@ -4,8 +4,6 @@
 */
 
 
-var gatewayHardwareConnected = null;
-
 
 $(function () {
     getGatewayInfo();
@@ -31,7 +29,6 @@ function getGatewayInfo() {
 
 
 function updateInfo(gatewayInfo) {
-    gatewayHardwareConnected = gatewayInfo.isGatewayConnected;
     $("#serial-gateway-state").removeClass("blue");
     $("#serial-gateway-state").removeClass("red");
 
@@ -63,14 +60,6 @@ function updateInfo(gatewayInfo) {
         default:
     }
 
-
-    if (gatewayHardwareConnected) {
-        $('#gateway-hardware-online').show();
-        $('#gateway-hardware-offline').hide();
-    } else {
-        $('#gateway-hardware-online').hide();
-        $('#gateway-hardware-offline').show();
-    }
 
     $('#nodes-registered').html(gatewayInfo.gatewayNodesRegistered);
     $('#sensors-registered').html(gatewayInfo.gatewaySensorsRegistered);

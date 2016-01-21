@@ -7,7 +7,7 @@ using MyNetSensors.Repositories.EF.SQLite;
 
 namespace WebController.Migrations
 {
-    [DbContext(typeof(NodesDbContext))]
+    [DbContext(typeof(MySensorsNodesDbContext))]
     partial class NodesDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

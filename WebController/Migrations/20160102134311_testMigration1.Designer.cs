@@ -7,7 +7,7 @@ using MyNetSensors.Repositories.EF.SQLite;
 
 namespace WebController.Migrations
 {
-    [DbContext(typeof(NodesDbContext))]
+    [DbContext(typeof(MySensorsNodesDbContext))]
     [Migration("20160102134311_testMigration1")]
     partial class testMigration1
     {

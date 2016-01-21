@@ -11,7 +11,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateways;
-using MyNetSensors.SerialControllers;
+using MyNetSensors.Gateways.MySensors.Serial;
 using MyNetSensors.WebController.Code;
 
 
@@ -20,11 +20,11 @@ namespace MyNetSensors.WebController.Controllers
     [ResponseCache(Duration = 0)]
     public class HardwareController : Controller
     {
-        private IGatewayRepository gatewayDb;
+        private IMySensorsRepository mySensorsDb;
 
         public HardwareController()
         {
-            gatewayDb = SerialController.gatewayDb;
+            mySensorsDb = NodesController.mySensorsDb;
         }
 
         public ActionResult Index()
@@ -35,17 +35,10 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public ActionResult Control()
-        {
-            return View();
-        }
-
-
-
 
         public ActionResult SettingsSelect()
         {
-            var nodes = gatewayDb.GetNodes();
+            var nodes = mySensorsDb.GetNodes();
             return View(nodes);
         }
 
@@ -55,7 +48,7 @@ namespace MyNetSensors.WebController.Controllers
             if (id == null)
                 return RedirectToAction("SettingsSelect");
 
-            Node node = gatewayDb.GetNode(id.Value);
+            Node node = mySensorsDb.GetNode(id.Value);
             if (node == null)
                 return HttpNotFound();
 
@@ -72,7 +65,7 @@ namespace MyNetSensors.WebController.Controllers
         public ActionResult Settings()
         {
             int id = Int32.Parse(Request.Form["Id"]);
-            Node node = gatewayDb.GetNode(id);
+            Node node = mySensorsDb.GetNode(id);
             string nodename = Request.Form["nodename"];
             if (nodename == "")
                 nodename = null;
@@ -99,7 +92,7 @@ namespace MyNetSensors.WebController.Controllers
                 sensor.remapToMin = remapToMin;
                 sensor.remapToMax = remapToMax;
             }
-            gatewayDb.UpdateNodeSettings(node);
+            mySensorsDb.UpdateNodeSettings(node);
 
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.UpdateNodeSettings(node);
@@ -111,7 +104,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Remove(int id)
         {
-            Node node = gatewayDb.GetNode(id);
+            Node node = mySensorsDb.GetNode(id);
             if (node == null)
                 return HttpNotFound();
 
@@ -119,7 +112,7 @@ namespace MyNetSensors.WebController.Controllers
             GatewayAPIController gatewayApi = new GatewayAPIController();
             gatewayApi.RemoveNode(node.Id);
 
-            gatewayDb.RemoveNode(node.Id);
+            mySensorsDb.RemoveNode(node.Id);
 
 
             return RedirectToAction("Index");

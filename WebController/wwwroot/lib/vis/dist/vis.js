@@ -1,4 +1,4 @@
-/**
+﻿/**
  * vis.js
  * https://github.com/almende/vis
  *
@@ -28510,7 +28510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
   /**
    * @class Node
-   * A node. A node can be connected to other nodes via one or multiple edges.
+   * A node. A uiNode can be connected to other nodes via one or multiple edges.
    * @param {object} options An object containing options for the node. All
    *                            options are optional, except for the id.
    *                              {number} id     Id of the node. Required
@@ -28821,7 +28821,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-       * Adjust the value range of the node. The node will adjust it's size
+       * Adjust the value range of the node. The uiNode will adjust it's size
        * based on its value.
        * @param {Number} min
        * @param {Number} max
@@ -31408,7 +31408,7 @@ return /******/ (function(modules) { // webpackBootstrap
         // if anything has been updates, reset the selection width and the hover width
         this._setInteractionWidths();
 
-        // A node is connected when it has a from and to node that both exist in the network.body.nodes.
+        // A node is connected when it has a from and to uiNode that both exist in the network.body.nodes.
         this.connect();
 
         if (options.hidden !== undefined || options.physics !== undefined) {
@@ -34529,7 +34529,7 @@ return /******/ (function(modules) { // webpackBootstrap
     }, {
       key: "_splitBranch",
       value: function _splitBranch(parentBranch) {
-        // if the branch is shaded with a node, replace the node in the new subset.
+        // if the branch is shaded with a node, replace the uiNode in the new subset.
         var containedNode = null;
         if (parentBranch.childrenCount === 1) {
           containedNode = parentBranch.children.data;
@@ -35540,7 +35540,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-      * suck all connected nodes of a node into the node.
+      * suck all connected nodes of a node into the uiNode.
       * @param nodeId
       * @param options
       * @param refreshData
@@ -35719,7 +35719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
       /**
       *
-      * @param {Object}    childNodesObj         | object with node objects, id as keys, same as childNodes except it also contains a source node
+      * @param {Object}    childNodesObj         | object with node objects, id as keys, same as childNodes except it also contains a source uiNode
       * @param {Object}    childEdgesObj         | object with edge objects, id as keys
       * @param {Array}     options               | object with {clusterNodeProperties, clusterEdgeProperties, processProperties}
       * @param {Boolean}   refreshData | when true, do not wrap up
@@ -36057,7 +36057,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-      * Get the stack clusterId's that a certain node resides in. cluster A -> cluster B -> cluster C -> node
+      * Get the stack clusterId's that a certain node resides in. cluster A -> cluster B -> cluster C -> uiNode
       * @param nodeId
       * @returns {Array}
       */
@@ -39882,7 +39882,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-       * Receives an array with node indices and returns an array with the actual node references. Used for sorting based on
+       * Receives an array with node indices and returns an array with the actual uiNode references. Used for sorting based on
        * node properties.
        * @param idArray
        */
@@ -40013,7 +40013,7 @@ return /******/ (function(modules) { // webpackBootstrap
             _this3.hierarchicalLevels[nodeA.id] = minLevel;
           }
 
-          var diff = customCallback(_NetworkUtil2['default']._cloneOptions(nodeA, 'node'), _NetworkUtil2['default']._cloneOptions(nodeB, 'node'), _NetworkUtil2['default']._cloneOptions(edge, 'edge'));
+          var diff = customCallback(_NetworkUtil2['default']._cloneOptions(nodeA, 'node'), _NetworkUtil2['default']._cloneOptions(nodeB, 'uiNode'), _NetworkUtil2['default']._cloneOptions(edge, 'edge'));
 
           _this3.hierarchicalLevels[nodeB.id] = _this3.hierarchicalLevels[nodeA.id] + diff;
         };
@@ -40626,7 +40626,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-       * call the bound function to handle the editing of the node. The node has to be selected.
+       * call the bound function to handle the editing of the node. The uiNode has to be selected.
        */
     }, {
       key: 'editNode',
@@ -41301,7 +41301,7 @@ return /******/ (function(modules) { // webpackBootstrap
         var pointerObj = this.selectionHandler._pointerToPositionObject(pointer);
         var edge = this.body.edges[this.edgeBeingEditedId];
 
-        // if the node that was dragged is not a control node, return
+        // if the node that was dragged is not a control uiNode, return
         if (this.selectedControlNode === undefined) {
           return;
         }
@@ -41418,11 +41418,11 @@ return /******/ (function(modules) { // webpackBootstrap
           connectFromId = this.body.edges[this.temporaryIds.edges[0]].fromId;
         }
 
-        // get the overlapping node but NOT the temporary node;
+        // get the overlapping node but NOT the temporary uiNode;
         var overlappingNodeIds = this.selectionHandler._getAllNodesOverlappingWith(pointerObj);
         var node = undefined;
         for (var i = overlappingNodeIds.length - 1; i >= 0; i--) {
-          // if the node id is NOT a temporary node, accept the node.
+          // if the node id is NOT a temporary uiNode, accept the uiNode.
           if (this.temporaryIds.nodes.indexOf(overlappingNodeIds[i]) === -1) {
             node = this.body.nodes[overlappingNodeIds[i]];
             break;
@@ -42859,7 +42859,7 @@ return /******/ (function(modules) { // webpackBootstrap
   }
 
   /**
-   * Add a node to a graph object. If there is already a node with
+   * Add a node to a graph object. If there is already a uiNode with
    * the same id, their attributes will be merged.
    * @param {Object} graph
    * @param {Object} node
@@ -43821,7 +43821,7 @@ return /******/ (function(modules) { // webpackBootstrap
     editNode: 'Edit Node',
     editEdge: 'Edit Edge',
     addDescription: 'Click in an empty space to place a new node.',
-    edgeDescription: 'Click on a node and drag the edge to another node to connect them.',
+    edgeDescription: 'Click on a node and drag the edge to another uiNode to connect them.',
     editEdgeDescription: 'Click on the control points and drag them to a node to connect to it.',
     createEdgeError: 'Cannot link edges to a cluster.',
     deleteClusterError: 'Clusters cannot be deleted.',
@@ -43876,7 +43876,7 @@ return /******/ (function(modules) { // webpackBootstrap
     editNode: 'Node wijzigen',
     editEdge: 'Link wijzigen',
     addDescription: 'Klik op een leeg gebied om een nieuwe node te maken.',
-    edgeDescription: 'Klik op een node en sleep de link naar een andere node om ze te verbinden.',
+    edgeDescription: 'Klik op een node en sleep de link naar een andere uiNode om ze te verbinden.',
     editEdgeDescription: 'Klik op de verbindingspunten en sleep ze naar een node om daarmee te verbinden.',
     createEdgeError: 'Kan geen link maken naar een cluster.',
     deleteClusterError: 'Clusters kunnen niet worden verwijderd.',

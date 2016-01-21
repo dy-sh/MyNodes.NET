@@ -38,11 +38,13 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "Gateways": "1.0.0-*",
-        "LogicalNodes": "1.0.0-*",
+        "Gateways.MySensors.Serial": "1.0.0-*",
+        "Nodes": "1.0.0-*",
+        "Nodes.MySensors": "1.0.0-*",
+        "Nodes.UI": "1.0.0-*",
+        "Nodes.UITimer": "1.0.0-*",
         "Repositories.Dapper": "1.0.0-*",
-        "Repositories.EF.SQLite": "1.0.0-*",
-        "SerialControllers": "1.0.0-*"
+        "Repositories.EF.SQLite": "1.0.0-*"
       }
     }
   },

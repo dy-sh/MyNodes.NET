@@ -190,7 +190,7 @@
 
     // provide the data in the vis format
     var data = {
-        nodes: nodes,
+        nodes: uiNodes,
         edges: edges
     };
     var options = {};
@@ -250,7 +250,7 @@
         </tr>
         <tr>
             <td><a href="./nodes.html">nodes</a></td>
-            <td>Handles the creation and deletion of nodes and contains the global node options and styles.</td>
+            <td>Handles the creation and deletion of nodes and contains the global uiNode options and styles.</td>
         </tr>
         <tr>
             <td><a href="./physics.html">physics</a></td>
@@ -275,7 +275,7 @@ var options = {
   clickToUse: false,
   configure: {...},    // defined in the configure module.
   edges: {...},        // defined in the edges module.
-  nodes: {...},        // defined in the nodes module.
+  nodes: {...},        // defined in the uiNodes module.
   groups: {...},       // defined in the groups module.
   layout: {...},       // defined in the layout module.
   interaction: {...},  // defined in the interaction module.
@@ -351,7 +351,7 @@ network.setOptions(options);
             <tr><td id="event_nodes">nodes</td>
                 <td>Object</td>
                 <td>Object</td>
-                <td href="./nodes.html">All options in this object are explained in the nodes module.</a>
+                <td href="./nodes.html">All options in this object are explained in the uiNodes module.</a>
                 </td>
             </tr>
             <tr><td id="event_groups">groups</td>
@@ -397,12 +397,12 @@ var locales = {
     edit: 'Edit',
     del: 'Delete selected',
     back: 'Back',
-    addNode: 'Add Node',
+    addNode: 'Add HardwareHardwareNodess',
     addEdge: 'Add Edge',
-    editNode: 'Edit Node',
+    editNode: 'Edit HardwareHardwareNodess',
     editEdge: 'Edit Edge',
     addDescription: 'Click in an empty space to place a new node.',
-    edgeDescription: 'Click on a node and drag the edge to another node to connect them.',
+    edgeDescription: 'Click on a node and drag the edge to another uiNode to connect them.',
     editEdgeDescription: 'Click on the control points and drag them to a node to connect to it.',
     createEdgeError: 'Cannot link edges to a cluster.',
     deleteClusterError: 'Clusters cannot be deleted.',
@@ -558,7 +558,7 @@ var locales = {
             </tr>
             <tr class="hidden" parent="clusterByConnection">
                 <td class="midMethods">Returns: none</td>
-                <td>This method looks at the provided node and makes a cluster of it and all it's connected nodes. The
+                <td>This method looks at the provided node and makes a cluster of it and all it's connected uiNodes. The
                     behaviour can be customized by proving the options object. All options of this object are explained
                     <a
                             data-scroll="" data-options="{ &quot;easing&quot;: &quot;easeInCubic&quot; }"
@@ -588,12 +588,12 @@ var locales = {
             </tr>
             <tr class="hidden" parent="clusterOutliers">
                 <td class="midMethods">Returns: none</td>
-                <td>This method will cluster all nodes with 1 edge with their respective connected node.
+                <td>This method will cluster all nodes with 1 edge with their respective connected uiNode.
                     The options object is explained in full <a data-scroll="" data-options="{ &quot;easing&quot;: &quot;easeInCubic&quot; }" href="#optionsObject">below</a>.
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','findNode', this);">
-                <td colspan="2"><span parent="findNode" class="right-caret" id="method_findNode"></span> findNode(
+                <td colspan="2"><span parent="findNode" class="right-caret" id="method_findNode"></span> findHardwareHardwareNodess(
                     <code>String nodeId</code>)
             </tr>
             <tr class="hidden" parent="findNode">
@@ -616,12 +616,12 @@ var locales = {
                 <td>Returns true if the node whose ID has been supplied is a cluster.</td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getNodesInCluster', this);">
-                <td colspan="2"><span parent="getNodesInCluster" class="right-caret" id="method_getNodesInCluster"></span> getNodesInCluster(
+                <td colspan="2"><span parent="getNodesInCluster" class="right-caret" id="method_getNodesInCluster"></span> getHardwareHardwareNodesssInCluster(
                     <code>String clusterNodeId</code>)
             </tr>
             <tr class="hidden" parent="getNodesInCluster">
                 <td class="midMethods">Returns: Array</td>
-                <td>Returns an array of all nodeIds of the nodes that would be released if you open the cluster.
+                <td>Returns an array of all nodeIds of the uiNodes that would be released if you open the cluster.
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','openCluster', this);">
@@ -630,14 +630,14 @@ var locales = {
             </tr>
             <tr class="hidden" parent="openCluster">
                 <td class="midMethods">Returns: none</td>
-                <td>Opens the cluster, releases the contained nodes and edges, removing the cluster node and cluster
+                <td>Opens the cluster, releases the contained nodes and edges, removing the cluster uiNode and cluster
                     edges. The options object is optional and currently supports one option, releaseFunction, which is a function that can be used to manually
                     position the nodes after the cluster is opened. <br>
 <pre class="code">
 function releaseFunction (clusterPosition, containedNodesPositions) {
     var newPositions = {};
     // clusterPosition = {x:clusterX, y:clusterY};
-    // containedNodesPositions = {nodeId:{x:nodeX,y:nodeY}, nodeId2....}
+    // containedNodesPositions = {nodeId:{x:uiHardwareHardwareNodessX,y:uiHardwareHardwareNodessY}, uiHardwareHardwareNodessId2....}
     newPositions[nodeId] = {x:newPosX, y:newPosY};
     return newPositions;
 }</pre>
@@ -686,7 +686,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','addNodeMode', this);">
-                <td colspan="2"><span parent="addNodeMode" class="right-caret" id="method_addNodeMode"></span> addNodeMode()</td>
+                <td colspan="2"><span parent="addNodeMode" class="right-caret" id="method_addNodeMode"></span> addHardwareHardwareNodessMode()</td>
             </tr>
             <tr class="hidden" parent="addNodeMode">
                 <td class="midMethods">Returns: none</td>
@@ -698,7 +698,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','editNode', this);">
-                <td colspan="2"><span parent="editNode" class="right-caret" id="method_editNode"></span> editNode()</td>
+                <td colspan="2"><span parent="editNode" class="right-caret" id="method_editNode"></span> editHardwareHardwareNodess()</td>
             </tr>
             <tr class="hidden" parent="editNode">
                 <td class="midMethods">Returns: none</td>
@@ -737,7 +737,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
             </tr>
             <tr class="hidden" parent="getPositions">
                 <td class="midMethods">Returns: Object</td>
-                <td>Returns the x y positions in canvas space of the nodes with the supplied nodeIds as an object:
+                <td>Returns the x y positions in canvas space of the nodes with the supplied uiNodeIds as an object:
 <pre class="code">
 {
   nodeId1: {x: xValue, y:yValue},
@@ -758,7 +758,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
             <tr class="hidden" parent="storePositions">
                 <td class="midMethods">Returns: none</td>
                 <td>When using the vis.DataSet to load your nodes into the network, this method will put the X and Y
-                    positions of all nodes into that dataset. If you're loading your nodes from a database and have
+                    positions of all nodes into that dataset. If you're loading your uiNodes from a database and have
                     this dynamically coupled with
                     the DataSet, you can
                     use this to stablize your network once, then save the positions in that database through the DataSet
@@ -778,7 +778,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','moveNode', this);">
-                <td colspan="2"><span parent="moveNode" class="right-caret" id="method_moveNode"></span> moveNode(<code><i>nodeId, Number x, Number y</i></code>)</td>
+                <td colspan="2"><span parent="moveNode" class="right-caret" id="method_moveNode"></span> moveHardwareHardwareNodess(<code><i>nodeId, Number x, Number y</i></code>)</td>
             </tr>
             <tr class="hidden" parent="moveNode">
                 <td class="midMethods">Returns: none</td>
@@ -805,13 +805,13 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getConnectedNodes', this);">
-                <td colspan="2"><span parent="getConnectedNodes" class="right-caret" id="method_getConnectedNodes"></span> getConnectedNodes(<code><i>String
+                <td colspan="2"><span parent="getConnectedNodes" class="right-caret" id="method_getConnectedNodes"></span> getConnectedHardwareHardwareNodesss(<code><i>String
                     nodeId or edgeId</i></code>)
                 </td>
             </tr>
             <tr class="hidden" parent="getConnectedNodes">
                 <td class="midMethods">Returns: Array</td>
-                <td>Returns an array of nodeIds of the all the nodes that are directly connected to this node. If you supply an edgeId,
+                <td>Returns an array of nodeIds of the all the uiNodes that are directly connected to this uiHardwareHardwareNodess. If you supply an edgeId,
                 vis will first match the id to nodes. If no match is found, it will search in the edgelist and return an array: <code>[fromId, toId]</code>.</td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getConnectedEdges', this);">
@@ -867,19 +867,19 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 <td>Returns an object with selected nodes and edges ids like this:
             <pre class="code">
 {
-  nodes: [Array of selected nodeIds],
+  nodes: [Array of selected uiNodeIds],
   edges: [Array of selected edgeIds]
 }</pre>
                 </td>
             </tr>
 
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getSelectedNodes', this);">
-                <td colspan="2"><span parent="getSelectedNodes" class="right-caret" id="method_getSelectedNodes"></span> getSelectedNodes()</td>
+                <td colspan="2"><span parent="getSelectedNodes" class="right-caret" id="method_getSelectedNodes"></span> getSelectedHardwareHardwareNodesss()</td>
             </tr>
             <tr class="hidden" parent="getSelectedNodes">
                 <td class="midMethods">Returns: Array</td>
                 <td>Returns an array of selected node ids like so:
-                    <code>[nodeId1, nodeId2, ..]</code>.
+                    <code>[nodeId1, uiNodeId2, ..]</code>.
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getSelectedEdges', this);">
@@ -890,7 +890,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 <td>Returns an array of selected edge ids like so: <code>[edgeId1, edgeId2, ..]</code>.</td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','getNodeAt', this);">
-                <td colspan="2"><span parent="getNodeAt" class="right-caret" id="method_getNodeAt"></span> getNodeAt(<code><i>{x: xPosition
+                <td colspan="2"><span parent="getNodeAt" class="right-caret" id="method_getNodeAt"></span> getHardwareHardwareNodessAt(<code><i>{x: xPosition
                     DOM, y: yPosition DOM}</i></code>)
                 </td>
             </tr>
@@ -914,7 +914,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 </td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','selectNodes', this);">
-                <td colspan="2"><span parent="selectNodes" class="right-caret" id="method_selectNodes"></span> selectNodes(<code><i>Array with
+                <td colspan="2"><span parent="selectNodes" class="right-caret" id="method_selectNodes"></span> selectHardwareHardwareNodesss(<code><i>Array with
                     nodeIds</i></code>,<code><i>[Boolean
                     highlightEdges]</i></code>)
                 </td>
@@ -950,7 +950,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 <td>Sets the selection, wich must be an object like this:
             <pre class="code">
 {
-  nodes: [Array of nodeIds],
+  nodes: [Array of uiNodeIds],
   edges: [Array of edgeIds]
 }</pre>
                   You can also pass only <code>nodes</code> or <code>edges</code> in <code>selection</code> object.
@@ -1000,14 +1000,14 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
                 <td>Zooms out so all nodes fit on the canvas. You can supply options to customize this:
 <pre class="code">
 {
-  nodes:[Array of nodeIds],
+  nodes:[Array of uiNodeIds],
   animation: { // -------------------> can be a boolean too!
     duration: Number
     easingFunction: String
   }
 }
 </pre>
-                    The nodes can be used to zoom to fit only specific nodes in the view. <br/><br/>
+                    The nodes can be used to zoom to fit only specific uiNodes in the view. <br/><br/>
                     The other options are explained in the <code>moveTo()</code> description below.
                     All options are optional for the fit method.
                 </td>
@@ -1020,7 +1020,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
             </tr>
             <tr class="hidden" parent="focus">
                 <td class="midMethods">Returns: none</td>
-                <td>You can focus on a node with this function. What that means is the view will lock onto that node, if
+                <td>You can focus on a node with this function. What that means is the view will lock onto that uiNode, if
                     it
                     is moving, the view will also move accordingly. If the view is dragged by the user, the focus is
                     broken.
@@ -1077,7 +1077,7 @@ function releaseFunction (clusterPosition, containedNodesPositions) {
 
 
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','releaseNode', this);">
-                <td colspan="2"><span parent="releaseNode" class="right-caret" id="method_releaseNode"></span> releaseNode()</td>
+                <td colspan="2"><span parent="releaseNode" class="right-caret" id="method_releaseNode"></span> releaseHardwareHardwareNodess()</td>
             </tr>
             <tr class="hidden" parent="releaseNode">
                 <td class="midMethods">Returns: none</td>
@@ -1221,7 +1221,7 @@ var options = {
                 <td>Fired when the user clicks the mouse or taps on a touchscreen device. Passes an object with properties structured as:
 
                 <pre class="prettyprint lang-js">{
-  nodes: [Array of selected nodeIds],
+  nodes: [Array of selected uiNodeIds],
   edges: [Array of selected edgeIds],
   event: [Object] original click event,
   pointer: {
@@ -1280,9 +1280,9 @@ var options = {
             <tr><td id="event_deselectNode">deselectNode</td>
                 <td>Object
                 </td>
-                <td>Fired when a node (or nodes) has (or have) been deselected by the user. The previous selection is the list of nodes and edges that were selected before the last user event. Passes an object with properties structured as:
+                <td>Fired when a node (or uiNodes) has (or have) been deselected by the user. The previous selection is the list of uiHardwareHardwareNodesss and edges that were selected before the last user event. Passes an object with properties structured as:
 <pre class="prettyprint lang-js">{
-  nodes: [Array of selected nodeIds],
+  nodes: [Array of selected uiNodeIds],
   edges: [Array of selected edgeIds],
   event: [Object] original click event,
   pointer: {
@@ -1291,7 +1291,7 @@ var options = {
     }
   },
   previousSelection: {
-    nodes: [Array of previously selected nodeIds],
+    nodes: [Array of previously selected uiNodeIds],
     edges: [Array of previously selected edgeIds]
   }
 }
@@ -1318,11 +1318,11 @@ var options = {
                 <td>Fired when the drag has finished.</td>
             </tr>
             <tr><td id="event_hoverNode">hoverNode</td>
-                <td><code>{node: nodeId}</code></td>
+                <td><code>{node: uiNodeId}</code></td>
                 <td>Fired interaction:{hover:true} and the mouse hovers over a node.</td>
             </tr>
             <tr><td id="event_blurNode">blurNode</td>
-                <td><code>{node: nodeId}</code></td>
+                <td><code>{node: uiNodeId}</code></td>
                 <td>Fired interaction:{hover:true} and the mouse moved away from a node it was hovering over before.</td>
             </tr>
             <tr><td id="event_hoverEdge">hoverEdge</td>
@@ -1477,7 +1477,7 @@ var parsed = vis.network.convertGephi(gephiJSON, parserOptions);
 
 // provide data in the normal fashion
 var data = {
-  nodes: parsed.nodes,
+  nodes: parsed.uiNodes,
   edged: parsed.edges
 };
 
@@ -1499,7 +1499,7 @@ var network = new vis.Network(container, data);
             <tr><td>nodes.fixed</td>
                 <td>Boolean</td>
                 <td><code>true</code></td>
-                <td>When false, the nodes will move according to the physics model after import. If true, the nodes do
+                <td>When false, the nodes will move according to the physics model after import. If true, the uiNodes do
                     not move at all. If set to true, the node positions have to be defined to avoid infinite recursion
                     errors in the physics.
                 </td>
@@ -1542,7 +1542,7 @@ var DOTstring = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }';
 var parsedData = vis.network.convertDot(DOTstring);
 
 var data = {
-  nodes: parsedData.nodes,
+  nodes: parsedData.uiNodes,
   edges: parsedData.edges
 }
 

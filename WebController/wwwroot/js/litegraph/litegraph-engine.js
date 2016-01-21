@@ -19,7 +19,7 @@ var NODE_WIDTH = 150;
 $(function () {
 
     //configure signalr
-    var clientsHub = $.connection.clientsHub;
+    var clientsHub = $.connection.nodesEngineHub;
 
     clientsHub.client.OnConnectedEvent = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
@@ -44,7 +44,7 @@ $(function () {
 
 
 
-    clientsHub.client.OnLogicalNodeRemoveEvent = function (nodeId) {
+    clientsHub.client.OnRemoveNodeEvent = function (nodeId) {
         //if current panel removed
         if (nodeId == this_panel_id) {
             window.location = "/NodesEditor/";
@@ -59,7 +59,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnLogicalNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdatedEvent = function (node) {
         if (node.panel_id != window.this_panel_id)
             return;
 
@@ -67,7 +67,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnNewLogicalNodeEvent = function (node) {
+    clientsHub.client.OnNewNodeEvent = function (node) {
         if (node.panel_id != window.this_panel_id)
             return;
 
@@ -111,8 +111,8 @@ $(function () {
         else if (change.newState === $.signalR.connectionState.connected) {
             if (signalRServerConnected == false) {
                 noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
-                getIsHardwareConnected();
                 getNodes();
+                getGatewayInfo();
             }
             signalRServerConnected = true;
         }

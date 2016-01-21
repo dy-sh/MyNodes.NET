@@ -7,11 +7,11 @@ var LogRecord = {
     LogRecordOwner:
     {
         Gateway:0,
-        Node:1,
+        HardwareNodes:1,
         DataBase:2,
-        LogicalNodesEngine:3,
-        LogicalNode:4,
-        SerialController:5
+        NodesEngine:3,
+        Nodes:4,
+        NodesController:5
 
     },
 
@@ -28,7 +28,7 @@ var signalRServerConnected;
 
 $(function () {
     //configure signalr
-    var clientsHub = $.connection.clientsHub;
+    var clientsHub = $.connection.nodesEngineHub;
 
     //var logType set from ViewBag in View
 
@@ -53,7 +53,7 @@ $(function () {
         else if (change.newState === $.signalR.connectionState.connected) {
             if (signalRServerConnected == false) {
                 noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
-                getIsHardwareConnected();
+                getGatewayInfo();
             }
             signalRServerConnected = true;
         }
@@ -133,17 +133,17 @@ function OnLogRecord(logRecord) {
 
 
 function addRecord(logRecord) {
-    if (logType == "AllErrors" && logRecord.Type != LogRecord.LogRecordType.Error)
+    if (logType == "Errors" && logRecord.Type != LogRecord.LogRecordType.Error)
         return;
-    if (logType == "Controller" && logRecord.Owner != LogRecord.LogRecordOwner.SerialController)
+    if (logType == "NodesController" && logRecord.Owner != LogRecord.LogRecordOwner.NodesController)
         return;
     if (logType == "Gateway" && logRecord.Owner != LogRecord.LogRecordOwner.Gateway)
         return;
-    if (logType == "GatewayMessages" && logRecord.Owner != LogRecord.LogRecordOwner.Node)
+    if (logType == "HardwareNodes" && logRecord.Owner != LogRecord.LogRecordOwner.HardwareNodes)
         return;
-    if (logType == "LogicalNodes" && logRecord.Owner != LogRecord.LogRecordOwner.LogicalNode)
+    if (logType == "Nodes" && logRecord.Owner != LogRecord.LogRecordOwner.Nodes)
         return;
-    if (logType == "LogicalNodesEngine" && logRecord.Owner != LogRecord.LogRecordOwner.LogicalNodesEngine)
+    if (logType == "NodesEngine" && logRecord.Owner != LogRecord.LogRecordOwner.NodesEngine)
         return;
     if (logType == "DataBase" && logRecord.Owner != LogRecord.LogRecordOwner.DataBase)
         return;
@@ -168,19 +168,19 @@ function addOwner(logRecord) {
         case LogRecord.LogRecordOwner.Gateway:
             logRecord.Message= "GATEWAY: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.Node:
+        case LogRecord.LogRecordOwner.HardwareNodes:
             logRecord.Message = "GATEWAY: " + logRecord.Message;
             break;
         case LogRecord.LogRecordOwner.DataBase:
             logRecord.Message = "DATABASE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.LogicalNodesEngine:
-            logRecord.Message = "LOGICAL NODES ENGINE: " + logRecord.Message;
+        case LogRecord.LogRecordOwner.NodesEngine:
+            logRecord.Message = "NODES ENGINE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.LogicalNode:
-            logRecord.Message = "LOGICAL NODE: " + logRecord.Message;
+        case LogRecord.LogRecordOwner.Nodes:
+            logRecord.Message = "NODE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.SerialController:
+        case LogRecord.LogRecordOwner.NodesController:
             logRecord.Message = "CONTROLLER: " + logRecord.Message;
             break;
     }

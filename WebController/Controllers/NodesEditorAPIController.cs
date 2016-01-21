@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
-using MyNetSensors.LogicalNodes;
-using MyNetSensors.LogicalNodesMySensors;
-using MyNetSensors.LogicalNodesUI;
-using MyNetSensors.SerialControllers;
+using MyNetSensors.Nodes;
+using MyNetSensors.WebController.Code;
 using Newtonsoft.Json;
-using Input = LiteGraph.Input;
-using Node = MyNetSensors.Gateways.Node;
-using Output = LiteGraph.Output;
+using Link = MyNetSensors.Nodes.Link;
+using Node = MyNetSensors.Nodes.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {
@@ -21,8 +18,8 @@ namespace MyNetSensors.WebController.Controllers
     {
         const string MAIN_PANEL_ID = "Main";
 
-        private LogicalNodesEngine engine = SerialController.logicalNodesEngine;
-        private LogicalNodesUIEngine uiEngine = SerialController.logicalNodesUIEngine;
+        private NodesEngine engine = NodesController.nodesEngine;
+        private UiNodesEngine uiEngine = NodesController.uiNodesEngine;
 
 
         public List<LiteGraph.Node> GetNodes(string panelId)
@@ -33,43 +30,43 @@ namespace MyNetSensors.WebController.Controllers
             if (panelId == null)
                 panelId = MAIN_PANEL_ID;
 
-            List<LogicalNode> nodes = engine.nodes;
+            List<Node> nodes = engine.nodes;
             if (nodes == null || !nodes.Any())
                 return null;
 
             return (
                 from node in nodes
                 where node.PanelId == panelId
-                select ConvertLogicalNodeToLitegraphNode(node)).ToList();
+                select ConvertNodeToLiteGraphNode(node)).ToList();
         }
 
 
-        public LiteGraph.Node ConvertLogicalNodeToLitegraphNode(LogicalNode logicalNode)
+        public LiteGraph.Node ConvertNodeToLiteGraphNode(Node node)
         {
-            LiteGraph.Node node = new LiteGraph.Node
+            LiteGraph.Node litegraphNode = new LiteGraph.Node
             {
-                title = logicalNode.Title,
-                type = logicalNode.Type,
-                id = logicalNode.Id,
-                panel_id = logicalNode.PanelId
+                title = node.Title,
+                type = node.Type,
+                id = node.Id,
+                panel_id = node.PanelId
             };
 
 
-            node.properties["ObjectType"] = logicalNode.GetType().ToString();
+            litegraphNode.properties["ObjectType"] = node.GetType().ToString();
 
-            if (logicalNode.Position != null)
-                node.pos = new[] { logicalNode.Position.X, logicalNode.Position.Y };
+            if (node.Position != null)
+                litegraphNode.pos = new[] { node.Position.X, node.Position.Y };
 
-            if (logicalNode.Size != null)
-                node.size = new[] { logicalNode.Size.Width, logicalNode.Size.Height };
+            if (node.Size != null)
+                litegraphNode.size = new[] { node.Size.Width, node.Size.Height };
 
-            node.inputs = new List<Input>();
-            node.outputs = new List<Output>();
+            litegraphNode.inputs = new List<LiteGraph.Input>();
+            litegraphNode.outputs = new List<LiteGraph.Output>();
 
-            if (logicalNode.Inputs != null)
-                foreach (var input in logicalNode.Inputs)
+            if (node.Inputs != null)
+                foreach (var input in node.Inputs)
                 {
-                    node.inputs.Add(new Input
+                    litegraphNode.inputs.Add(new LiteGraph.Input
                     {
                         name = input.Name,
                         type = "string",
@@ -78,10 +75,10 @@ namespace MyNetSensors.WebController.Controllers
                 }
 
 
-            if (logicalNode.Outputs != null)
-                foreach (var output in logicalNode.Outputs)
+            if (node.Outputs != null)
+                foreach (var output in node.Outputs)
                 {
-                    List<LogicalLink> links = engine.GetLinksForOutput(output);
+                    List<Link> links = engine.GetLinksForOutput(output);
                     if (links != null)
                     {
                         string[] linksIds = new string[links.Count];
@@ -89,7 +86,7 @@ namespace MyNetSensors.WebController.Controllers
                         {
                             linksIds[i] = links[i].Id;
                         }
-                        node.outputs.Add(new Output
+                        litegraphNode.outputs.Add(new LiteGraph.Output
                         {
                             name = output.Name,
                             type = "string",
@@ -98,7 +95,7 @@ namespace MyNetSensors.WebController.Controllers
                     }
                     else
                     {
-                        node.outputs.Add(new Output
+                        litegraphNode.outputs.Add(new LiteGraph.Output
                         {
                             name = output.Name,
                             type = "string"
@@ -106,71 +103,71 @@ namespace MyNetSensors.WebController.Controllers
                     }
                 }
 
-            if (logicalNode is LogicalNodeUI)
+            if (node is UiNode)
             {
-                LogicalNodeUI n = (LogicalNodeUI)logicalNode;
-                node.properties["Name"] = n.Name;
-                node.properties["ShowOnMainPage"] = n.ShowOnMainPage ? "true" : "false";
+                UiNode n = (UiNode)node;
+                litegraphNode.properties["Name"] = n.Name;
+                litegraphNode.properties["ShowOnMainPage"] = n.ShowOnMainPage ? "true" : "false";
             }
 
-            if (logicalNode is LogicalNodeUISlider)
+            if (node is UiSliderNode)
             {
-                LogicalNodeUISlider n = (LogicalNodeUISlider) logicalNode;
-                node.properties["Min"] = n.Min.ToString();
-                node.properties["Max"] = n.Max.ToString();
+                UiSliderNode n = (UiSliderNode) node;
+                litegraphNode.properties["Min"] = n.Min.ToString();
+                litegraphNode.properties["Max"] = n.Max.ToString();
             }
 
-            if (logicalNode is LogicalNodeUIChart)
+            if (node is UiChartNode)
             {
-                LogicalNodeUIChart n = (LogicalNodeUIChart)logicalNode;
-                node.properties["State"] = n.State.ToString();
-                node.properties["WriteInDatabase"] = n.WriteInDatabase ? "true" : "false";
-                node.properties["UpdateInterval"] = n.UpdateInterval.ToString();
+                UiChartNode n = (UiChartNode)node;
+                litegraphNode.properties["State"] = n.State.ToString();
+                litegraphNode.properties["WriteInDatabase"] = n.WriteInDatabase ? "true" : "false";
+                litegraphNode.properties["UpdateInterval"] = n.UpdateInterval.ToString();
             }
 
-            if (logicalNode is LogicalNodeConstant)
+            if (node is ConstantNode)
             {
-                LogicalNodeConstant n = (LogicalNodeConstant)logicalNode;
-                node.properties["Value"] = n.Value;
+                ConstantNode n = (ConstantNode)node;
+                litegraphNode.properties["Value"] = n.Value;
             }
 
-            if (logicalNode is LogicalNodePanel)
+            if (node is PanelNode)
             {
-                LogicalNodePanel n = (LogicalNodePanel)logicalNode;
-                node.properties["PanelName"] = n.Name;
+                PanelNode n = (PanelNode)node;
+                litegraphNode.properties["PanelName"] = n.Name;
             }
 
-            if (logicalNode is LogicalNodePanelInput)
+            if (node is PanelInputNode)
             {
-                LogicalNodePanelInput n = (LogicalNodePanelInput)logicalNode;
-                node.properties["Name"] = n.Name;
+                PanelInputNode n = (PanelInputNode)node;
+                litegraphNode.properties["Name"] = n.Name;
             }
 
-            if (logicalNode is LogicalNodePanelOutput)
+            if (node is PanelOutputNode)
             {
-                LogicalNodePanelOutput n = (LogicalNodePanelOutput)logicalNode;
-                node.properties["Name"] = n.Name;
+                PanelOutputNode n = (PanelOutputNode)node;
+                litegraphNode.properties["Name"] = n.Name;
             }
 
-            return node;
+            return litegraphNode;
         }
 
 
-        public Link ConvertLogicalNodeToLitegraphLink(LogicalLink logicalLink)
+        public LiteGraph.Link ConvertLinkToLiteGraphLink(Link link)
         {
-            if (logicalLink == null)
+            if (link == null)
                 return null;
-            LiteGraph.Link link = new LiteGraph.Link
+            LiteGraph.Link liteGraphLink = new LiteGraph.Link
             {
-                origin_id = engine.GetOutputOwner(logicalLink.OutputId).Id,
-                target_id = engine.GetInputOwner(logicalLink.InputId).Id,
-                origin_slot = GetOutputSlot(logicalLink.OutputId),
-                target_slot = GetInputSlot(logicalLink.InputId),
-                id = logicalLink.Id,
-                panel_id = logicalLink.PanelId
+                origin_id = engine.GetOutputOwner(link.OutputId).Id,
+                target_id = engine.GetInputOwner(link.InputId).Id,
+                origin_slot = GetOutputSlot(link.OutputId),
+                target_slot = GetInputSlot(link.InputId),
+                id = link.Id,
+                panel_id = link.PanelId
             };
 
-            return link;
+            return liteGraphLink;
         }
 
 
@@ -179,14 +176,14 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            List<LogicalLink> links = engine.links;
+            List<Link> links = engine.links;
             if (links == null || !links.Any())
                 return null;
 
             return (
                 from link in links
                 where link.PanelId == panelId
-                select ConvertLogicalNodeToLitegraphLink(link)).ToList();
+                select ConvertLinkToLiteGraphLink(link)).ToList();
         }
 
 
@@ -218,7 +215,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public bool RemoveLink(Link link)
+        public bool RemoveLink(LiteGraph.Link link)
         {
             if (engine == null)
                 return false;
@@ -226,8 +223,8 @@ namespace MyNetSensors.WebController.Controllers
             if (link.origin_id == null || link.target_id == null)
                 return false;
 
-            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
-            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            Node outNode = NodesController.nodesEngine.GetNode(link.origin_id);
+            Node inNode = NodesController.nodesEngine.GetNode(link.target_id);
             if (outNode == null || inNode == null)
             {
                 engine.LogEngineError($"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. Does not exist.");
@@ -238,13 +235,13 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool CreateLink(Link link)
+        public bool CreateLink(LiteGraph.Link link)
         {
             if (engine == null)
                 return false;
 
-            LogicalNode outNode = SerialController.logicalNodesEngine.GetNode(link.origin_id);
-            LogicalNode inNode = SerialController.logicalNodesEngine.GetNode(link.target_id);
+            Node outNode = NodesController.nodesEngine.GetNode(link.origin_id);
+            Node inNode = NodesController.nodesEngine.GetNode(link.target_id);
 
             if (outNode == null || inNode == null)
             {
@@ -261,7 +258,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            LogicalNode newNode;
+            Node newNode;
 
             try
             {
@@ -269,7 +266,7 @@ namespace MyNetSensors.WebController.Controllers
                 string assemblyName = node.properties["Assembly"];
 
                 var newObject = Activator.CreateInstance(assemblyName, type);
-                newNode = (LogicalNode) newObject.Unwrap();
+                newNode = (Node) newObject.Unwrap();
             }
             catch
             {
@@ -277,7 +274,7 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            //LogicalNode newNode = newObject as LogicalNode;
+            //Node newNode = newObject as HardwareNode;
             newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             if (node.size.Length==2)
                 newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
@@ -294,7 +291,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            LogicalNode oldNode = engine.GetNode(node.id);
+            Node oldNode = engine.GetNode(node.id);
             if (oldNode == null)
             {
                 engine.LogEngineError($"Can`t remove node [{node.id}]. Does not exist.");
@@ -310,7 +307,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            LogicalNode oldNode = engine.GetNode(node.id);
+            Node oldNode = engine.GetNode(node.id);
             if (oldNode == null)
             {
                 engine.LogEngineError($"Can`t update node [{node.id}]. Does not exist.");
@@ -328,14 +325,14 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool PanelSettings(string id, string panelname)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Panel [{id}]. Does not exist.");
                 return false;
             }
 
-            LogicalNodePanel node = (LogicalNodePanel)n;
+            PanelNode node = (PanelNode)n;
             node.Name = panelname;
             engine.UpdateNode(node, true);
 
@@ -344,23 +341,23 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool InputOutputSettings(string id, string name)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Input/Output [{id}]. Does not exist.");
                 return false;
             }
 
-            if (n is LogicalNodePanelInput)
+            if (n is PanelInputNode)
             {
-                LogicalNodePanelInput node = (LogicalNodePanelInput)n;
+                PanelInputNode node = (PanelInputNode)n;
                 node.Name = name;
                 engine.UpdateNode(node, true);
             }
 
-            if (n is LogicalNodePanelOutput)
+            if (n is PanelOutputNode)
             {
-                LogicalNodePanelOutput node = (LogicalNodePanelOutput)n;
+                PanelOutputNode node = (PanelOutputNode)n;
                 node.Name = name;
                 engine.UpdateNode(node, true);
             }
@@ -370,17 +367,17 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool UINodeSettings(string id, string name,bool show)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
                 return false;
             }
 
-            LogicalNodeUI node = (LogicalNodeUI)n;
-            node.Name = name;
-            node.ShowOnMainPage = show;
-            engine.UpdateNode(node, true);
+            UiNode uiNode = (UiNode)n;
+            uiNode.Name = name;
+            uiNode.ShowOnMainPage = show;
+            engine.UpdateNode(uiNode, true);
 
             return true;
         }
@@ -388,7 +385,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool UISliderSettings(string id, string name, int min,int max,bool show)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
@@ -400,26 +397,26 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            LogicalNodeUISlider node = (LogicalNodeUISlider)n;
-            node.Name = name;
-            node.Min = min;
-            node.Max = max;
-            node.ShowOnMainPage = show;
-            engine.UpdateNode(node, true);
+            UiSliderNode uiSliderNode = (UiSliderNode)n;
+            uiSliderNode.Name = name;
+            uiSliderNode.Min = min;
+            uiSliderNode.Max = max;
+            uiSliderNode.ShowOnMainPage = show;
+            engine.UpdateNode(uiSliderNode, true);
 
             return true;
         }
 
         public bool ConstantSettings(string id, string value)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
                 return false;
             }
 
-            LogicalNodeConstant node = (LogicalNodeConstant)n;
+            ConstantNode node = (ConstantNode)n;
             node.SetValue(value);
             engine.UpdateNode(node, true);
 
@@ -429,23 +426,23 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool UIChartSettings(string id, string name, bool show, bool writeInDatabase, int updateInterval)
         {
-            LogicalNode n = engine.GetNode(id);
+            Node n = engine.GetNode(id);
             if (n == null)
             {
                 engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
                 return false;
             }
 
-            LogicalNodeUIChart node = (LogicalNodeUIChart)n;
+            UiChartNode uiNode = (UiChartNode)n;
 
-            if (node.WriteInDatabase && !writeInDatabase)
-                uiEngine.ClearChart(node.Id);
+            if (uiNode.WriteInDatabase && !writeInDatabase)
+                uiEngine.ClearChart(uiNode.Id);
 
-            node.Name = name;
-            node.ShowOnMainPage = show;
-            node.WriteInDatabase = writeInDatabase;
-            node.UpdateInterval = updateInterval;
-            engine.UpdateNode(node, true);
+            uiNode.Name = name;
+            uiNode.ShowOnMainPage = show;
+            uiNode.WriteInDatabase = writeInDatabase;
+            uiNode.UpdateInterval = updateInterval;
+            engine.UpdateNode(uiNode, true);
 
 
             return true;

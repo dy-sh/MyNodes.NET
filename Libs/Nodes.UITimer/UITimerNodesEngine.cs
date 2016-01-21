@@ -6,20 +6,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyNetSensors.LogicalNodes;
 
 namespace MyNetSensors.Nodes
 {
     public class UITimerNodesEngine
     {
-        private LogicalNodesEngine engine;
+        private NodesEngine engine;
         private IUITimerNodesRepository db;
 
         private List<UITimerTask> tasks = new List<UITimerTask>();
 
         private bool abortExecuting = false;
 
-        public UITimerNodesEngine(LogicalNodesEngine engine, IUITimerNodesRepository db = null)
+        public UITimerNodesEngine(NodesEngine engine, IUITimerNodesRepository db = null)
         {
             this.db = db;
             this.engine = engine;
@@ -30,7 +29,7 @@ namespace MyNetSensors.Nodes
             engine.OnUpdateEvent += UpdateTasks;
         }
 
-        private void OnRemoveNodeEvent(LogicalNode node)
+        private void OnRemoveNodeEvent(Node node)
         {
             RemoveTasksForNode(node.Id);
         }
@@ -86,7 +85,7 @@ namespace MyNetSensors.Nodes
 
             db?.UpdateTask(task);
 
-            UITimer node = engine.GetNode(task.NodeId) as UITimer;
+            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
             if (node == null)
             {
                 engine.LogEngineError($"Can`t execute task for Node [{task.NodeId}]. Not found.");
@@ -126,7 +125,7 @@ namespace MyNetSensors.Nodes
 
         public bool AddTask(UITimerTask task)
         {
-            UITimer node = engine.GetNode(task.NodeId) as UITimer;
+            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
 
             if (node == null)
                 return false;

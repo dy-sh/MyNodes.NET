@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../Libs/Nodes.MySensors/Nodes.MySensors.csproj",
+      "bin": {
+        "assembly": "../../Libs/Nodes.MySensors/obj/{configuration}/Nodes.MySensors.dll",
+        "pdb": "../../Libs/Nodes.MySensors/obj/{configuration}/Nodes.MySensors.pdb"
+      },
+      "dependencies": {
+        "Gateways.MySensors.Serial": "1.0.0-*",
+        "Nodes": "1.0.0-*"
+      }
+    }
+  }
+}

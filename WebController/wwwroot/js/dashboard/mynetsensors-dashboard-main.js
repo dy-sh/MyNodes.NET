@@ -125,8 +125,8 @@ function updateLog(node) {
 
 
 function updateProgress(node) {
-    //if (node.Value == null)
-    //    node.Value = 0;
+    //if (uiNode.Value == null)
+    //    uiNode.Value = 0;
 
     if (node.Value > 100)
         node.Value = 100;

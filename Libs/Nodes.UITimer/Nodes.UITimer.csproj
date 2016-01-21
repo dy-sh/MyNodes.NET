@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IUITimerNodesRepository.cs" />
-    <Compile Include="UITimer.cs" />
+    <Compile Include="UiTimerNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UITimerNodesEngine.cs" />
     <Compile Include="UITimerTask.cs" />
@@ -54,13 +54,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LogicalNodesUI\LogicalNodesUI.csproj">
+    <ProjectReference Include="..\Nodes.UI\Nodes.UI.csproj">
       <Project>{55e6ee51-7da0-48f3-91ee-0b18962e589c}</Project>
-      <Name>LogicalNodesUI</Name>
+      <Name>Nodes.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LogicalNodes\LogicalNodes.csproj">
+    <ProjectReference Include="..\Nodes\Nodes.csproj">
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
-      <Name>LogicalNodes</Name>
+      <Name>Nodes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

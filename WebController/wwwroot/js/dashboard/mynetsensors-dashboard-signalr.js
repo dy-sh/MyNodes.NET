@@ -17,7 +17,7 @@ var signalRServerConnected;
 $(function () {
 
     //configure signalr
-    var clientsHub = $.connection.clientsHub;
+    var clientsHub = $.connection.nodesEngineHub;
 
     clientsHub.client.OnConnectedEvent = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
@@ -33,7 +33,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnNewUINodeEvent = function (node) {
+    clientsHub.client.OnNewNodeEvent = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -43,7 +43,7 @@ $(function () {
         createNode(node);
     };
 
-    clientsHub.client.OnUINodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdatedEvent = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -57,7 +57,7 @@ $(function () {
         updateNode(node);
     };
 
-    clientsHub.client.OnUINodeRemoveEvent = function (node) {
+    clientsHub.client.OnRemoveNodeEvent = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -78,8 +78,8 @@ $(function () {
         else if (change.newState === $.signalR.connectionState.connected) {
             if (signalRServerConnected == false) {
                 noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
-                getIsHardwareConnected();
                 getNodes();
+                getGatewayInfo();
             }
             signalRServerConnected = true;
         }
@@ -89,8 +89,8 @@ $(function () {
     // connection.stateChanged(signalrConnectionStateChanged);
     //connection.start({ waitForPageLoad: true });
 
-    getGatewayInfo();
     getNodes();
+    getGatewayInfo();
 });
 
 

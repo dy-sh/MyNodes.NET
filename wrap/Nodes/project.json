@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../Libs/Nodes/Nodes.csproj",
+      "bin": {
+        "assembly": "../../Libs/Nodes/obj/{configuration}/Nodes.dll",
+        "pdb": "../../Libs/Nodes/obj/{configuration}/Nodes.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "8.0.1"
+      }
+    }
+  }
+}

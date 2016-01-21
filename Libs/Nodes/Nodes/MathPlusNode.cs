@@ -1,0 +1,44 @@
+﻿/*  MyNetSensors 
+    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    License: http://www.gnu.org/licenses/gpl-3.0.txt  
+*/
+
+using System;
+
+namespace MyNetSensors.Nodes
+{
+    public class MathPlusNode : Node
+    {
+        /// <summary>
+        /// Math Plus (2 inputs, 1 output).
+        /// </summary>
+        public MathPlusNode() : base(2, 1)
+        {
+            this.Title = "Math Plus";
+            this.Type = "Math/Plus";
+        }
+
+        public override void Loop()
+        {
+            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
+        }
+
+        public override void OnInputChange(Input input)
+        {
+            int a = 0, b = 0;
+
+            if (Inputs[0].Value != null)
+                a = Int32.Parse(Inputs[0].Value);
+
+            if (Inputs[1].Value != null)
+                b = Int32.Parse(Inputs[1].Value);
+
+            LogInfo($"MathPlus: [{Inputs[0].Value??"NULL"}] + [{Inputs[1].Value??"NULL"}]  = [{Outputs[0].Value??"NULL"}]");
+
+            Outputs[0].Value = (a + b).ToString();
+
+        }
+
+
+    }
+}

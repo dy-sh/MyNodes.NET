@@ -89,7 +89,7 @@ var LiteGraph = {
 	},
 
 	/**
-	* Create a node of a given type with a name. The node is not attached to any graph yet.
+	* Create a node of a given type with a name. The uiNode is not attached to any graph yet.
 	* @method createNode
 	* @param {String} type full name of the node class. p.e. "math/sin"
 	* @param {String} name a name to distinguish from other nodes
@@ -619,7 +619,7 @@ LGraph.prototype.sendActionToCanvas = function(action, params)
 /**
 * Adds a new node instasnce to this graph
 * @method add
-* @param {LGraphNode} node the instance of the node
+* @param {LGraphNode} node the instance of the uiNode
 */
 
 LGraph.prototype.add = function(node, skip_compute_order)
@@ -642,7 +642,7 @@ LGraph.prototype.add = function(node, skip_compute_order)
 	/*
 	// rendering stuf... 
 	if(node.bgImageUrl)
-		node.bgImage = node.loadImage(node.bgImageUrl);
+		node.bgImage = uiNode.loadImage(uiNode.bgImageUrl);
 	*/
 
 	if(node.onAdded)
@@ -668,7 +668,7 @@ LGraph.prototype.add = function(node, skip_compute_order)
 /**
 * Removes a node from the graph
 * @method remove
-* @param {LGraphNode} node the instance of the node
+* @param {LGraphNode} node the instance of the uiNode
 */
 
 LGraph.prototype.remove = function(node)
@@ -1789,10 +1789,10 @@ LGraphNode.prototype.findOutputSlot = function(name)
 }
 
 /**
-* connect this node output to the input of another node
+* connect this node output to the input of another uiNode
 * @method connect
 * @param {number_or_string} slot (could be the number of the slot or the string with the name of the slot)
-* @param {LGraphNode} node the target node 
+* @param {LGraphNode} node the target uiNode 
 * @param {number_or_string} target_slot the input slot of the target node (could be the number of the slot or the string with the name of the slot)
 * @return {boolean} if it was connected succesfully
 */
@@ -1827,7 +1827,7 @@ LGraphNode.prototype.connect = function(slot, node, target_slot,linkId)
 	//avoid loopback
 	if(node == this)
 		return false; 
-	//if( node.constructor != LGraphNode ) throw ("LGraphNode.connect: node is not of type LGraphNode");
+	//if( node.constructor != LGraphNode ) throw ("LGraphNode.connect: uiNode is not of type LGraphNode");
 
 	if(target_slot.constructor === String)
 	{
@@ -3799,8 +3799,8 @@ LGraphCanvas.prototype.drawNode = function(node, ctx )
 	/*
 	if(node.flags.collapsed)
 	{
-		if(!node.onDrawCollapsed || node.onDrawCollapsed(ctx) == false)
-			this.drawNodeCollapsed(node, ctx, color, node.bgcolor);
+		if(!node.onDrawCollapsed || uiNode.onDrawCollapsed(ctx) == false)
+			this.drawNodeCollapsed(node, ctx, color, uiNode.bgcolor);
 		return;
 	}
 	*/
@@ -4088,7 +4088,7 @@ LGraphCanvas.prototype.drawNodeCollapsed = function(node, ctx, fgcolor, bgcolor)
 	else //flat box
 	{
 		ctx.beginPath();
-		//ctx.rect(node.size[0] * 0.5 - collapsed_radius, node.size[1] * 0.5 - collapsed_radius, 2*collapsed_radius, 2*collapsed_radius);
+		//ctx.rect(node.size[0] * 0.5 - collapsed_radius, uiNode.size[1] * 0.5 - collapsed_radius, 2*collapsed_radius, 2*collapsed_radius);
 		ctx.rect(0, 0, node.size[0], collapsed_radius * 2 );
 		ctx.fill();
 		ctx.shadowColor = "rgba(0,0,0,0)";
@@ -4096,7 +4096,7 @@ LGraphCanvas.prototype.drawNodeCollapsed = function(node, ctx, fgcolor, bgcolor)
 
 		ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
 		ctx.beginPath();
-		//ctx.rect(node.size[0] * 0.5 - collapsed_radius*0.5, node.size[1] * 0.5 - collapsed_radius*0.5, collapsed_radius,collapsed_radius);
+		//ctx.rect(node.size[0] * 0.5 - collapsed_radius*0.5, uiNode.size[1] * 0.5 - collapsed_radius*0.5, collapsed_radius,collapsed_radius);
 		ctx.rect(collapsed_radius*0.5, collapsed_radius*0.5, collapsed_radius, collapsed_radius);
 		ctx.fill();
 	}
@@ -4534,7 +4534,7 @@ LGraphCanvas.onMenuNodeRemove = function(node)
 	if(node.removable == false) return;
 	send_remove_node(node);
     //derwish remove
-	//node.graph.remove(node);
+	//node.graph.remove(uiNode);
 	//node.setDirtyCanvas(true, true);
 }
 

@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Repositories.EF.SQLite;
-using MyNetSensors.SerialControllers;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.Models;
 using MyNetSensors.WebController.Services;
@@ -56,13 +55,13 @@ namespace MyNetSensors.WebController
                     .AddSqlServer()
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlServer(connectionString))
-                    .AddDbContext<LogicalNodesDbContext>(options =>
-                        options.UseSqlServer(connectionString))
-                    .AddDbContext<LogicalNodesStatesDbContext>(options =>
-                        options.UseSqlServer(connectionString))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlServer(connectionString))
-                    .AddDbContext<NodesMessagesDbContext>(options =>
+                    .AddDbContext<NodesStatesHistoryDbContext>(options =>
+                        options.UseSqlServer(connectionString))
+                    .AddDbContext<MySensorsNodesDbContext>(options =>
+                        options.UseSqlServer(connectionString))
+                    .AddDbContext<MySensorsMessagesDbContext>(options =>
                         options.UseSqlServer(connectionString))
                     .AddDbContext<UITimerNodesDbContext>(options =>
                         options.UseSqlServer(connectionString));
@@ -73,14 +72,14 @@ namespace MyNetSensors.WebController
                     .AddSqlite()
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlite("Data Source=Application.sqlite"))
-                    .AddDbContext<LogicalNodesDbContext>(options =>
-                        options.UseSqlite("Data Source=LogicalNodes.sqlite"))
-                    .AddDbContext<LogicalNodesStatesDbContext>(options =>
-                        options.UseSqlite("Data Source=LogicalNodesStates.sqlite"))
                     .AddDbContext<NodesDbContext>(options =>
                         options.UseSqlite("Data Source=Nodes.sqlite"))
-                    .AddDbContext<NodesMessagesDbContext>(options =>
-                        options.UseSqlite("Data Source=NodesMessages.sqlite"))
+                    .AddDbContext<NodesStatesHistoryDbContext>(options =>
+                        options.UseSqlite("Data Source=NodesStatesHistory.sqlite"))
+                    .AddDbContext<MySensorsNodesDbContext>(options =>
+                        options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
+                    .AddDbContext<MySensorsMessagesDbContext>(options =>
+                        options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
                     .AddDbContext<UITimerNodesDbContext>(options =>
                         options.UseSqlite("Data Source=UITimerNodes.sqlite"));
             }
@@ -107,10 +106,10 @@ namespace MyNetSensors.WebController
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IConnectionManager connectionManager,
-            LogicalNodesDbContext logicalNodesDbContext,
-            LogicalNodesStatesDbContext logicalNodesStatesDbContext,
             NodesDbContext nodesDbContext,
-            NodesMessagesDbContext nodesMessagesDbContext,
+            NodesStatesHistoryDbContext nodesStatesHistoryDbContext,
+            MySensorsNodesDbContext mySensorsNodesDbContext,
+            MySensorsMessagesDbContext mySensorsMessagesDbContext,
             UITimerNodesDbContext uiTimerNodesDbContext
             )
         {
@@ -198,16 +197,17 @@ namespace MyNetSensors.WebController
             }
 
 
-            SignalRServer.Start(connectionManager);
-            SerialControllerConfigurator.logicalNodesDbContext = logicalNodesDbContext;
-            SerialControllerConfigurator.logicalNodesStatesDbContext = logicalNodesStatesDbContext;
-            SerialControllerConfigurator.nodesDbContext = nodesDbContext;
-            SerialControllerConfigurator.nodesMessagesDbContext = nodesMessagesDbContext;
-            SerialControllerConfigurator.uiTimerNodesDbContext = uiTimerNodesDbContext;
+            NodesEngineSignalRServer.Start(connectionManager);
+            MySensorsSignalRServer.Start(connectionManager);
+            NodesControllerConfigurator.nodesDbContext = nodesDbContext;
+            NodesControllerConfigurator.nodesStatesHistoryDbContext = nodesStatesHistoryDbContext;
+            NodesControllerConfigurator.mySensorsNodesDbContext = mySensorsNodesDbContext;
+            NodesControllerConfigurator.mySensorsMessagesDbContext = mySensorsMessagesDbContext;
+            NodesControllerConfigurator.uiTimerNodesDbContext = uiTimerNodesDbContext;
 
             bool firstRun = Boolean.Parse(Configuration["FirstRun"]);
             if (!firstRun)
-                SerialControllerConfigurator.Start(Configuration);
+                NodesControllerConfigurator.Start(Configuration);
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
