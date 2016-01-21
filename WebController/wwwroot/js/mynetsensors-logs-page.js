@@ -66,7 +66,7 @@ $(function () {
             url: "/Logs/ClearLogs/",
             data: { logType: logType },
             success: function () {
-                $('#log').html();
+                $('#log').html(null);
             }
         });
     });

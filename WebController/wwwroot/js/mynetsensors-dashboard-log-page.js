@@ -92,7 +92,7 @@ $('#clear-button').click(function () {
         type: "POST",
         data: { nodeId: nodeId },
         success: function (connected) {
-            $('#history-table').html();
+            $('#history-table').html(null);
         }
     });
 });

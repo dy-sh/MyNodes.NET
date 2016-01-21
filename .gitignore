@@ -210,3 +210,8 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/WebController/UITimerNodes.sqlite
+/WebController/NodesStatesHistory.sqlite
+/WebController/Nodes.sqlite
+/WebController/MySensorsNodes.sqlite
+/WebController/MySensorsMessages.sqlite
