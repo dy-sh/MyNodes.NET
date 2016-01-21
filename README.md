@@ -24,7 +24,7 @@ Assembling device takes as less as 5 minutes.
 
 The minimum hardware required to make it work - two Arduino boards and two radio modules NRF24L01+.
 
-<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/SerialGateway.Device/Screen1.png" >
+<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/Devices.SerialGateway/Screen1.png" >
 
 One set is connected to the computer, and the second is the basis of your smart device.
 
@@ -39,7 +39,7 @@ Assembly is very simple, see the <a class="fadebefore" href="http://www.mynetsen
 
 All devices communicate through the gateway.
 
-<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/SerialGateway.Device/Screen2.png" >
+<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/Devices.SerialGateway/Screen2.png" >
 
 The gateway handles network routing, records nodes state to the database, keeps statistics.
 
