@@ -14,7 +14,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         void RemoveAllMessages();
 
 
-        bool IsDbExist();
         void SetWriteInterval(int ms);
         void Enable(bool enable);
     }

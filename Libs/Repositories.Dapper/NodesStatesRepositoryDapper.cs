@@ -50,10 +50,10 @@ namespace MyNetSensors.Repositories.Dapper
 
                     db.Execute(
                         @"CREATE TABLE [dbo].[NodesStates](
-	            [Id] [int] IDENTITY(1,1) NOT NULL,
-	            [NodeId] [nvarchar](max) NULL,
-	            [State] [nvarchar](max) NULL,
-	            [DateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
+	                    [Id] [int] IDENTITY(1,1) NOT NULL,
+	                    [NodeId] [nvarchar](max) NULL,
+	                    [State] [nvarchar](max) NULL,
+	                    [DateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
                 }
                 catch (Exception ex)
                 {

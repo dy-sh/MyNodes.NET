@@ -30,27 +30,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-
-
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
-
-        public string AddOrUpdateNode(Node node)
-        {
-            string id = node.Id;
-
-            Node oldLink = GetNode(node.Id);
-
-            if (oldLink == null)
-                id = AddNode(node);
-            else
-                UpdateNode(node);
-
-            return id;
-        }
+        
 
         public string AddNode(Node node)
         {
@@ -116,21 +96,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
 
 
-
-        public string AddOrUpdateLink(Link link)
-        {
-            string id = link.Id;
-
-            Link oldLink = GetLink(link.Id);
-
-            if (oldLink == null)
-                id = AddLink(link);
-            else
-                UpdateLink(link);
-
-            return id;
-        }
-
+        
         public string AddLink(Link link)
         {
             db.Links.Add(link);
@@ -138,13 +104,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             return link.Id;
         }
-
-        public void UpdateLink(Link link)
-        {
-            db.Links.Update(link);
-            db.SaveChanges();
-        }
-
+        
         public Link GetLink(string id)
         {
             return db.Links.FirstOrDefault(x => x.Id == id);

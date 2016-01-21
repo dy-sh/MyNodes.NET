@@ -30,7 +30,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         void RemoveAllNodes();
         
 
-        bool IsDbExist();
         void SetWriteInterval(int ms);
 
 

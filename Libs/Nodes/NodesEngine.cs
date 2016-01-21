@@ -77,7 +77,6 @@ namespace MyNetSensors.Nodes
 
             if (nodesDb != null)
             {
-                nodesDb.CreateDb();
                 GetNodesFromRepository();
                 GetLinksFromRepository();
             }
@@ -375,9 +374,14 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        private List<Node> GetNodesForPanel(PanelNode node)
+        public List<Node> GetNodesForPanel(PanelNode node)
         {
             return nodes.Where(n => n.PanelId == node.Id).ToList();
+        }
+
+        public List<Node> GetNodesForPanel(string panelId)
+        {
+            return nodes.Where(n => n.PanelId == panelId).ToList();
         }
 
         private List<PanelNode> GetPanelNodes()
@@ -572,8 +576,7 @@ namespace MyNetSensors.Nodes
 
             LogEngineInfo($"New link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
-            Link link = new Link(output.Id, input.Id);
-            link.PanelId = inputNode.PanelId;
+            Link link = new Link(output.Id, input.Id, inputNode.PanelId);
             links.Add(link);
 
             nodesDb?.AddLink(link);
@@ -659,6 +662,11 @@ namespace MyNetSensors.Nodes
             }
 
             return list;
+        }
+
+        public List<Link> GetLinksForPanel(string panelId)
+        {
+            return links.Where(x=>x.PanelId==panelId).ToList();
         }
 
         private void UpdateStatesFromLinks()

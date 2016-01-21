@@ -135,23 +135,10 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
         
-
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
-
-
-
         public void Enable(bool enable)
         {
             this.enable = enable;
         }
-
-
-
-        
 
 
 

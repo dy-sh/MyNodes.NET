@@ -17,11 +17,12 @@ namespace MyNetSensors.Nodes
         //    OutputId = output.Id;
         //}
 
-        public Link(string outputId, string inputId)
+        public Link(string outputId, string inputId, string panelId)
         {
             Id = Guid.NewGuid().ToString();
             InputId = inputId;
             OutputId = outputId;
+            PanelId = panelId;
         }
 
         public Link(){}

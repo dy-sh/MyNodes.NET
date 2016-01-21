@@ -95,7 +95,7 @@ namespace MyNetSensors.Repositories.Dapper
                     db.Open();
 
                     db.Execute(
-                        @"CREATE TABLE [dbo].[Messages](
+                        @"CREATE TABLE [dbo].[MySensorsMessages](
 	            [Id] [int] IDENTITY(1,1) NOT NULL,
 	            [nodeId] [int] NOT NULL,
 	            [sensorId] [int] NOT NULL,
@@ -121,7 +121,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
 
-                db.Query("TRUNCATE TABLE [Messages]");
+                db.Query("TRUNCATE TABLE [MySensorsMessages]");
             }
         }
 
@@ -138,7 +138,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                messages = db.Query<Message>("SELECT * FROM Messages").ToList();
+                messages = db.Query<Message>("SELECT * FROM MySensorsMessages").ToList();
             }
             return messages;
         }
@@ -158,7 +158,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
                                +
                                "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
@@ -179,7 +179,7 @@ namespace MyNetSensors.Repositories.Dapper
                 newMessages.CopyTo(messages);
                 newMessages.Clear();
 
-                var sqlQuery = "INSERT INTO Messages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
                                +
                                "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
@@ -188,14 +188,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
         
 
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
-
-
-
+  
         public void Enable(bool enable)
         {
             this.enable = enable;

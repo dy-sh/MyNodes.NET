@@ -9,9 +9,6 @@ namespace MyNetSensors.Nodes
 {
     public interface INodesRepository
     {
-        void CreateDb();
-        bool IsDbExist();
-        string AddOrUpdateNode(Node node);
         string AddNode(Node node);
         void UpdateNode(Node node);
         Node GetNode(string id);
@@ -19,9 +16,7 @@ namespace MyNetSensors.Nodes
         void RemoveNode(string id);
         void RemoveAllNodes();
 
-        string AddOrUpdateLink(Link link);
         string AddLink(Link link);
-        void UpdateLink(Link link);
         Link GetLink(string id);
         List<Link> GetAllLinks();
         void RemoveLink(string id);

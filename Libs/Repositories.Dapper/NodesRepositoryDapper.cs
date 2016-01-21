@@ -57,6 +57,7 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [Id] [nvarchar](max) NOT NULL,
 	                    [InputId] [nvarchar](max)NOT NULL,       
 	                    [OutputId] [nvarchar](max)NOT NULL,       
+	                    [PanelId] [nvarchar](max)NOT NULL,       
                         ) ON [PRIMARY] ";
 
                     db.Query(req);
@@ -67,26 +68,7 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
-
-        public string AddOrUpdateNode(Node node)
-        {
-            string id = node.Id;
-
-            Node oldLink = GetNode(node.Id);
-
-            if (oldLink == null)
-                id = AddNode(node);
-            else
-                UpdateNode(node);
-
-            return id;
-        }
+        
 
         public string AddNode(Node node)
         {
@@ -173,19 +155,6 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        public string AddOrUpdateLink(Link link)
-        {
-            string id = link.Id;
-
-            Link oldLink = GetLink(link.Id);
-
-            if (oldLink == null)
-                id = AddLink(link);
-            else
-                UpdateLink(link);
-
-            return id;
-        }
 
         public string AddLink(Link link)
         {
@@ -193,27 +162,14 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
 
-                var sqlQuery = "INSERT INTO Links (Id, InputId, OutputId) "
-                               + "VALUES(@Id, @InputId, @OutputId)";
+                var sqlQuery = "INSERT INTO Links (Id, InputId, OutputId, PanelId) "
+                               + "VALUES(@Id, @InputId, @OutputId, @PanelId)";
 
                 db.Execute(sqlQuery, link);
             }
             return link.Id;
         }
 
-        public void UpdateLink(Link link)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "UPDATE Links SET " +
-                    "InputId = @InputId, OutputId = @OutputId " +
-                    "WHERE Id = @Id";
-
-                db.Execute(sqlQuery, link);
-            }
-        }
 
         public Link GetLink(string id)
         {

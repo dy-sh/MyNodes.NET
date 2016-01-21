@@ -14,29 +14,40 @@ namespace MyNetSensors.Repositories.Dapper
 {
     public class UITimerNodesRepositoryDapper : IUITimerNodesRepository
     {
-
         private string connectionString;
+
 
         public UITimerNodesRepositoryDapper(string connectionString)
         {
             this.connectionString = connectionString;
+            CreateDb();
         }
 
 
         public void CreateDb()
         {
-            CreateUITimerNodesTable();
-        }
-
-        private void CreateUITimerNodesTable()
-        {
-            using (var db = new SqlConnection(connectionString))
+            using (var db = new SqlConnection(connectionString + ";Database= master"))
             {
-                db.Open();
-                
+
                 try
                 {
-                    string req =
+                    //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
+                    db.Open();
+                    db.Execute("CREATE DATABASE [MyNetSensors]");
+                }
+                catch
+                {
+                }
+            }
+
+            using (var db = new SqlConnection(connectionString))
+            {
+
+                try
+                {
+                    db.Open();
+
+                    db.Execute(
                         @"CREATE TABLE [dbo].[UITimerNodes](
 	                    [Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [enabled] [bit] NULL,       
@@ -52,9 +63,8 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [repeatingBValue] [nvarchar](max) NULL,       
 	                    [repeatingNeededCount] [int] NULL,
 	                    [repeatingDoneCount] [int] NULL
-                        ) ON [PRIMARY] ";
+                        ) ON [PRIMARY] ");
 
-                    db.Query(req);
                 }
                 catch
                 {
@@ -62,21 +72,16 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
 
 
         public int AddOrUpdateTask(UITimerTask task)
         {
-            int id=task.Id;
+            int id = task.Id;
 
             UITimerTask oldTask = GetTask(task.Id);
 
             if (oldTask == null)
-                id= AddTask(task);
+                id = AddTask(task);
             else
                 UpdateTask(task);
 
@@ -153,7 +158,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 list = db.Query<UITimerTask>("SELECT * FROM UITimerNodes WHERE nodeId=@nodeId",
-                    new { nodeId}).ToList();
+                    new { nodeId }).ToList();
             }
 
             return list;
@@ -244,7 +249,8 @@ namespace MyNetSensors.Repositories.Dapper
                     "executionValue = @executionValue, " +
                     "repeatingDoneCount = @repeatingDoneCount " +
                     "WHERE Id = @Id";
-                db.Execute(sqlQuery, new {
+                db.Execute(sqlQuery, new
+                {
                     id,
                     isCompleted,
                     repeatingDoneCount,
@@ -307,6 +313,6 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-     
+
     }
 }

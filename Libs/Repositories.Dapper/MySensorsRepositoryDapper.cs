@@ -98,7 +98,7 @@ namespace MyNetSensors.Repositories.Dapper
                 try
                 {
                     db.Execute(
-                        @" CREATE TABLE [dbo].[Nodes](
+                        @" CREATE TABLE [dbo].[MySensorsNodes](
 	                [Id] [int] NOT NULL,
 	                [registered] [datetime] NOT NULL,
 	                [lastSeen] [datetime] NOT NULL,
@@ -114,7 +114,7 @@ namespace MyNetSensors.Repositories.Dapper
                 try
                 {
                     db.Execute(
-                        @" CREATE TABLE [dbo].[Sensors](
+                        @" CREATE TABLE [dbo].[MySensorsSensors](
 	                [Id] [int] IDENTITY(1,1) NOT NULL,
 	                [nodeId] [int] NOT NULL,
 	                [sensorId] [int] NOT NULL,
@@ -145,8 +145,8 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query("TRUNCATE TABLE [Nodes]");
-                db.Query("TRUNCATE TABLE [Sensors]");
+                db.Query("TRUNCATE TABLE [MySensorsNodes]");
+                db.Query("TRUNCATE TABLE [MySensorsSensors]");
             }
         }
 
@@ -179,7 +179,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                string joinQuery = "SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.nodeId ORDER BY n.Id";
+                string joinQuery = "SELECT * FROM MySensorsNodes n JOIN MySensorsSensors s ON n.Id = s.nodeId ORDER BY n.Id";
 
                 list = db.Query<Node, Sensor, Node>(joinQuery, mapper.Map, splitOn: "Id")
                      .Where(y => y != null).ToList();
@@ -199,7 +199,7 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Open();
 
                 Node oldNode =
-                    db.Query<Node>("SELECT * FROM Nodes WHERE Id = @Id", new { node.Id }).SingleOrDefault();
+                    db.Query<Node>("SELECT * FROM MySensorsNodes WHERE Id = @Id", new { node.Id }).SingleOrDefault();
 
                 if (oldNode == null)
                 {
@@ -219,7 +219,7 @@ namespace MyNetSensors.Repositories.Dapper
 
             using (var db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "INSERT INTO Nodes (Id, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
+                var sqlQuery = "INSERT INTO MySensorsNodes (Id, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
                                +
                                "VALUES(@Id, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel)";
                                
@@ -239,7 +239,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 var sqlQuery =
-                    "UPDATE Nodes SET " +
+                    "UPDATE MySensorsNodes SET " +
                     "registered = @registered, " +
                     "lastSeen = @lastSeen, " +
                     "isRepeatingNode = @isRepeatingNode, " +
@@ -264,7 +264,7 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Open();
 
                 Sensor oldSensor =
-                    db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
+                    db.Query<Sensor>("SELECT * FROM MySensorsSensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
                         new { nodeId = sensor.nodeId, sensorId = sensor.sensorId }).SingleOrDefault();
 
 
@@ -287,7 +287,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
 
-                var sqlQuery = "INSERT INTO Sensors (nodeId, sensorId, type, dataType,state, description, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
+                var sqlQuery = "INSERT INTO MySensorsSensors (nodeId, sensorId, type, dataType,state, description, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
                                +
                                "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
@@ -319,7 +319,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
 
                 var sqlQuery =
-                    "UPDATE Sensors SET " +
+                    "UPDATE MySensorsSensors SET " +
                     "nodeId = @nodeId, " +
                     "sensorId  = @sensorId, " +
                     "type = @type, " +
@@ -393,15 +393,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-        public bool IsDbExist()
-        {
-            //todo check if db exist
-            return true;
-        }
-
-
-
-    
+ 
 
 
         
@@ -420,7 +412,7 @@ namespace MyNetSensors.Repositories.Dapper
                 ParentKey = (node) => node.Id
             };
 
-            string joinQuery = $"SELECT * FROM Nodes n JOIN Sensors s ON n.Id = s.nodeId WHERE n.Id = {id}";
+            string joinQuery = $"SELECT * FROM MySensorsNodes n JOIN MySensorsSensors s ON n.Id = s.nodeId WHERE n.Id = {id}";
 
             Node result;
             using (var db = new SqlConnection(connectionString))
@@ -438,7 +430,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE Id = @Id", new { Id = id }).FirstOrDefault();
+                sensor = db.Query<Sensor>("SELECT * FROM MySensorsSensors WHERE Id = @Id", new { Id = id }).FirstOrDefault();
             }
             return sensor;
         }
@@ -449,7 +441,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                sensor = db.Query<Sensor>("SELECT * FROM Sensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
+                sensor = db.Query<Sensor>("SELECT * FROM MySensorsSensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
                         new { nodeId, sensorId }).FirstOrDefault();
             }
             return sensor;
@@ -462,7 +454,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE Nodes SET " +
+                    "UPDATE MySensorsNodes SET " +
                     "name = @name " +
                     "WHERE Id = @Id";
                 db.Execute(sqlQuery, node);
@@ -480,7 +472,7 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "UPDATE Sensors SET " +
+                    "UPDATE MySensorsSensors SET " +
                     "description = @description, " +
                     "invertData = @invertData, " +
                     "remapEnabled = @remapEnabled, " +
@@ -510,12 +502,12 @@ namespace MyNetSensors.Repositories.Dapper
             {
                 db.Open();
                 var sqlQuery =
-                    "Delete FROM Nodes " +
+                    "Delete FROM MySensorsNodes " +
                     "WHERE Id = @Id";
                 db.Execute(sqlQuery, new { Id = id });
 
                 sqlQuery =
-                    "Delete FROM Sensors " +
+                    "Delete FROM MySensorsSensors " +
                     "WHERE Id = @Id";
                 db.Execute(sqlQuery, new { Id = id });
             }
