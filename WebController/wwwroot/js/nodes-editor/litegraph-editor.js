@@ -1,11 +1,8 @@
-//NOT FINISHED
 
 function Editor(container_id, options)
 {
 	//fill container
-	//var html = "<div class='header'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
 	var html = "<div class='content'><div class='editor-area'><canvas class='graphcanvas' width='1000' height='500' tabindex=10></canvas></div></div>";
-	//html += "<div class='footer'><div class='tools tools-left'></div><div class='tools tools-right'></div></div>";
 	
 	var root = document.createElement("div");
 	this.root = root;
@@ -22,10 +19,6 @@ function Editor(container_id, options)
 
 	//add stuff
 
-	//this.addToolsButton("minimap_button", "", "images/litegraph/icon-edit.png", this.onMinimapButton.bind(this), ".tools-right");
-	//this.addToolsButton("reset_button", "", "images/litegraph/icon-stop.png", this.onResetButton.bind(this), ".tools-right");
-	//this.addToolsButton("maximize_button", "", "images/litegraph/icon-maximize.png", this.onFullscreenButton.bind(this), ".tools-right");
-
 	this.addMiniWindow(200,200);
 
 	//append to DOM
@@ -39,30 +32,16 @@ function Editor(container_id, options)
 
 var minimap_opened = false;
 
-
-Editor.prototype.createPanel = function(title, options)
-{
-
-	var root = document.createElement("div");
-	root.className = "dialog";
-	root.innerHTML = "<div class='dialog-header'><span class='dialog-title'>"+title+"</span></div><div class='dialog-content'></div><div class='dialog-footer'></div>";
-	root.header = root.querySelector(".dialog-header");
-	root.content = root.querySelector(".dialog-content");
-	root.footer = root.querySelector(".dialog-footer");
-
-
-	return root;
-}
-
-Editor.prototype.createButton = function(name, icon_url)
-{
-	var button = document.createElement("button");
-	if(icon_url)
-		button.innerHTML = "<img src='"+icon_url+"'/> ";
-	button.innerHTML += name;
-	return button;
-}
-
+// noty settings
+$.noty.defaults.layout = 'bottomRight';
+$.noty.defaults.theme = 'relax';
+$.noty.defaults.timeout = 3000;
+$.noty.defaults.animation = {
+    open: 'animated bounceInRight', // Animate.css class names
+    close: 'animated flipOutX', // Animate.css class names
+    easing: 'swing', // unavailable - no need
+    speed: 500 // unavailable - no need
+};
 
 Editor.prototype.addMiniWindow = function (w, h) {
 

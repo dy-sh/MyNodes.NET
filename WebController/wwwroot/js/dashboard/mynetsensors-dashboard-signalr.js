@@ -72,15 +72,17 @@ $(function () {
 
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.reconnecting) {
-            $("#panelsContainer").html(null);
-            noty({ text: 'Web server is not responding!', type: 'error', timeout: false });
+            $("#panelsContainer").fadeOut(300);
+            noty({ text: 'Web server is not responding!', type: 'error' });
             signalRServerConnected = false;
         }
         else if (change.newState === $.signalR.connectionState.connected) {
             if (signalRServerConnected == false) {
-                noty({ text: 'Connected to web server.', type: 'alert', timeout: false });
+                noty({ text: 'Connected to web server.', type: 'alert' });
                 //waiting while server initialized and read db
-                setTimeout(function() {
+                setTimeout(function () {
+                    $("#panelsContainer").html(null);
+                    $("#panelsContainer").show();
                     getNodes();
                     getGatewayInfo();
                 }, 2000);
