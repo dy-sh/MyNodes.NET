@@ -9,7 +9,7 @@ namespace MyNetSensors.WebController.Code
         DataBase,
         NodesEngine,
         Nodes,
-        NodesController
+        System
     }
 
     public enum LogRecordType
@@ -54,8 +54,8 @@ namespace MyNetSensors.WebController.Code
                     return $"{Date}: NODES ENGINE: {Message}";
                 case LogRecordOwner.Nodes:
                     return $"{Date}: NODE: {Message}";
-                case LogRecordOwner.NodesController:
-                    return $"{Date}: CONTROLLER: {Message}";
+                case LogRecordOwner.System:
+                    return $"{Date}: SYSTEM: {Message}";
             }
             return null;
         }

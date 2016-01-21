@@ -24,7 +24,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public HardwareController()
         {
-            mySensorsDb = NodesController.mySensorsDb;
+            mySensorsDb = SystemController.mySensorsDb;
         }
 
         public ActionResult Index()

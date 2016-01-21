@@ -19,7 +19,7 @@ namespace MyNetSensors.WebController.Controllers
     {
         const string MAIN_PANEL_ID = "Main";
 
-        private NodesEngine engine = NodesController.nodesEngine;
+        private NodesEngine engine = SystemController.nodesEngine;
 
         public IActionResult Index(bool split)
         {

@@ -23,8 +23,8 @@ namespace MyNetSensors.WebController.Controllers
 
         public UITimerController()
         {
-            tasksEngine = NodesController.uiTimerNodesEngine;
-            engine = NodesController.nodesEngine;
+            tasksEngine = SystemController.uiTimerNodesEngine;
+            engine = SystemController.nodesEngine;
         }
 
         public ActionResult Tasks(string id)

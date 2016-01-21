@@ -18,7 +18,7 @@ namespace MyNetSensors.WebController.Controllers
 
     public class GatewayAPIController : Controller
     {
-        private Gateway gateway = NodesController.gateway;
+        private Gateway gateway = SystemController.gateway;
 
 
         public List<Node> GetNodes()
@@ -93,28 +93,28 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool DisableTasks()
         {
-            NodesController.uiTimerNodesEngine.DisableAllTasks();
+            SystemController.uiTimerNodesEngine.DisableAllTasks();
             return true;
         }
 
 
         public bool RemoveAllTasks()
         {
-            NodesController.uiTimerNodesEngine.RemoveAllTasks();
+            SystemController.uiTimerNodesEngine.RemoveAllTasks();
             return true;
         }
         
 
         public async Task<bool> Connect()
         {
-            string portname = NodesController.gateway.serialPort.GetPortName();
-            await NodesController.gateway.Connect(portname);
+            string portname = SystemController.gateway.serialPort.GetPortName();
+            await SystemController.gateway.Connect(portname);
             return true;
         }
 
         public bool Disconnect()
         {
-            NodesController.gateway.Disconnect();
+            SystemController.gateway.Disconnect();
             return true;
         }
 

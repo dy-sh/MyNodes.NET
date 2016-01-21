@@ -11,7 +11,7 @@ var LogRecord = {
         DataBase:2,
         NodesEngine:3,
         Nodes:4,
-        NodesController:5
+        System:5
 
     },
 
@@ -135,7 +135,7 @@ function OnLogRecord(logRecord) {
 function addRecord(logRecord) {
     if (logType == "Errors" && logRecord.Type != LogRecord.LogRecordType.Error)
         return;
-    if (logType == "NodesController" && logRecord.Owner != LogRecord.LogRecordOwner.NodesController)
+    if (logType == "System" && logRecord.Owner != LogRecord.LogRecordOwner.System)
         return;
     if (logType == "Gateway" && logRecord.Owner != LogRecord.LogRecordOwner.Gateway)
         return;
@@ -180,7 +180,7 @@ function addOwner(logRecord) {
         case LogRecord.LogRecordOwner.Nodes:
             logRecord.Message = "NODE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.NodesController:
+        case LogRecord.LogRecordOwner.System:
             logRecord.Message = "CONTROLLER: " + logRecord.Message;
             break;
     }

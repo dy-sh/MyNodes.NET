@@ -20,28 +20,28 @@ namespace MyNetSensors.WebController.Code
         {
             hub = connectionManager.GetHubContext<NodesEngineHub>();
 
-            NodesController.OnStarted += OnNodesControllerStarted;
-            NodesController.logs.OnGatewayLogInfo += OnLogRecord;
-            NodesController.logs.OnGatewayLogError += OnLogRecord;
-            NodesController.logs.OnHardwareNodeLogInfo += OnLogRecord;
-            NodesController.logs.OnHardwareNodeLogError += OnLogRecord;
-            NodesController.logs.OnDataBaseLogInfo += OnLogRecord;
-            NodesController.logs.OnDataBaseLogError += OnLogRecord;
-            NodesController.logs.OnNodesEngineLogInfo += OnLogRecord;
-            NodesController.logs.OnNodesEngineLogError += OnLogRecord;
-            NodesController.logs.OnNodeLogInfo += OnLogRecord;
-            NodesController.logs.OnNodeLogError += OnLogRecord;
-            NodesController.logs.OnNodesControllerLogInfo += OnLogRecord;
-            NodesController.logs.OnNodesControllerLogError += OnLogRecord;
+            SystemController.OnStarted += OnSystemControllerStarted;
+            SystemController.logs.OnGatewayLogInfo += OnLogRecord;
+            SystemController.logs.OnGatewayLogError += OnLogRecord;
+            SystemController.logs.OnHardwareNodeLogInfo += OnLogRecord;
+            SystemController.logs.OnHardwareNodeLogError += OnLogRecord;
+            SystemController.logs.OnDataBaseLogInfo += OnLogRecord;
+            SystemController.logs.OnDataBaseLogError += OnLogRecord;
+            SystemController.logs.OnNodesEngineLogInfo += OnLogRecord;
+            SystemController.logs.OnNodesEngineLogError += OnLogRecord;
+            SystemController.logs.OnNodeLogInfo += OnLogRecord;
+            SystemController.logs.OnNodeLogError += OnLogRecord;
+            SystemController.logs.OnSystemLogInfo += OnLogRecord;
+            SystemController.logs.OnSystemLogError += OnLogRecord;
         }
 
       
 
 
-        private static void OnNodesControllerStarted(object sender, EventArgs e)
+        private static void OnSystemControllerStarted(object sender, EventArgs e)
         {
-            nodesEngine = NodesController.nodesEngine;
-            uiNodesEngine = NodesController.uiNodesEngine;
+            nodesEngine = SystemController.nodesEngine;
+            uiNodesEngine = SystemController.uiNodesEngine;
 
             if (nodesEngine != null)
             {

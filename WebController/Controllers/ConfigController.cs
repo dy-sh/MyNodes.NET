@@ -51,8 +51,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult FirstRun()
         {
-            List<string> ports = NodesController.comPort.GetPortsList();
-            string currentPort = NodesController.serialPortName;
+            List<string> ports = SystemController.comPort.GetPortsList();
+            string currentPort = SystemController.serialPortName;
 
             ViewBag.ports = ports;
 
@@ -75,7 +75,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            NodesControllerConfigurator.Start(сonfiguration);
+            //SystemController.Start(сonfiguration);
 
             return RedirectToAction("Index", "Dashboard");
         }
@@ -85,8 +85,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult SerialPort()
         {
-            List<string> ports = NodesController.comPort.GetPortsList();
-            string currentPort = NodesController.serialPortName;
+            List<string> ports = SystemController.comPort.GetPortsList();
+            string currentPort = SystemController.serialPortName;
 
             ViewBag.ports = ports;
 
@@ -108,8 +108,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            NodesController.gateway.Disconnect();
-            NodesController.serialPortName = port.PortName;
+            SystemController.gateway.Disconnect();
+            SystemController.serialPortName = port.PortName;
 
             return RedirectToAction("Index");
         }
@@ -125,8 +125,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            string portname = NodesController.serialPortName;
-            await NodesController.gateway.Connect(portname);
+            string portname = SystemController.serialPortName;
+            await SystemController.gateway.Connect(portname);
 
             return true;
         }
@@ -139,7 +139,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            NodesController.gateway.Disconnect();
+            SystemController.gateway.Disconnect();
 
             return true;
         }

@@ -75,35 +75,35 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (logType == "All")
             {
-                return NodesController.logs.GetAllLogs();
+                return SystemController.logs.GetAllLogs();
             }
             else if(logType == "Errors")
             {
-                return NodesController.logs.GetErrorsLogs();
+                return SystemController.logs.GetErrorsLogs();
             }
             else if (logType == "Controller")
             {
-                return NodesController.logs.nodesControllerLog;
+                return SystemController.logs.systemLog;
             }
             else if (logType == "Gateway")
             {
-                return NodesController.logs.gatewayLog;
+                return SystemController.logs.gatewayLog;
             }
             else if (logType == "HardwareNodes")
             {
-                return NodesController.logs.hardwareNodesLog;
+                return SystemController.logs.hardwareNodesLog;
             }
             else if (logType == "Nodes")
             {
-                return NodesController.logs.nodesLog;
+                return SystemController.logs.nodesLog;
             }
             else if (logType == "NodesEngine")
             {
-                return NodesController.logs.nodesEngineLog;
+                return SystemController.logs.nodesEngineLog;
             }
             else if (logType == "DataBase")
             {
-                return NodesController.logs.dataBaseLog;
+                return SystemController.logs.dataBaseLog;
             }
             return null;
         }
@@ -112,31 +112,31 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (logType == "All")
             {
-                NodesController.logs.ClearAllLogs();
+                SystemController.logs.ClearAllLogs();
             }
             else if (logType == "Controller")
             {
-                NodesController.logs.nodesControllerLog.Clear();
+                SystemController.logs.systemLog.Clear();
             }
             else if (logType == "Gateway")
             {
-                NodesController.logs.gatewayLog.Clear();
+                SystemController.logs.gatewayLog.Clear();
             }
             else if (logType == "HardwareNodes")
             {
-                NodesController.logs.hardwareNodesLog.Clear();
+                SystemController.logs.hardwareNodesLog.Clear();
             }
             else if (logType == "Nodes")
             {
-                NodesController.logs.nodesLog.Clear();
+                SystemController.logs.nodesLog.Clear();
             }
             else if (logType == "NodesEngine")
             {
-                NodesController.logs.nodesEngineLog.Clear();
+                SystemController.logs.nodesEngineLog.Clear();
             }
             else if (logType == "DataBase")
             {
-                NodesController.logs.dataBaseLog.Clear();
+                SystemController.logs.dataBaseLog.Clear();
             }
 
             return true;

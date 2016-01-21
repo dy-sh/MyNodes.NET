@@ -12,7 +12,7 @@ namespace MyNetSensors.WebController.Controllers
     {
         const string MAIN_PANEL_ID = "Main";
 
-        private UiNodesEngine engine = NodesController.uiNodesEngine;
+        private UiNodesEngine engine = SystemController.uiNodesEngine;
 
 
         public IActionResult Index()

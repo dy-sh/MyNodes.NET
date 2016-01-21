@@ -18,8 +18,8 @@ namespace MyNetSensors.WebController.Controllers
     {
         const string MAIN_PANEL_ID = "Main";
 
-        private NodesEngine engine = NodesController.nodesEngine;
-        private UiNodesEngine uiEngine = NodesController.uiNodesEngine;
+        private NodesEngine engine = SystemController.nodesEngine;
+        private UiNodesEngine uiEngine = SystemController.uiNodesEngine;
 
 
         public List<LiteGraph.Node> GetNodes(string panelId)
@@ -223,8 +223,8 @@ namespace MyNetSensors.WebController.Controllers
             if (link.origin_id == null || link.target_id == null)
                 return false;
 
-            Node outNode = NodesController.nodesEngine.GetNode(link.origin_id);
-            Node inNode = NodesController.nodesEngine.GetNode(link.target_id);
+            Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
+            Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
             if (outNode == null || inNode == null)
             {
                 engine.LogEngineError($"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. Does not exist.");
@@ -240,8 +240,8 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            Node outNode = NodesController.nodesEngine.GetNode(link.origin_id);
-            Node inNode = NodesController.nodesEngine.GetNode(link.target_id);
+            Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
+            Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
 
             if (outNode == null || inNode == null)
             {

@@ -11,7 +11,7 @@ namespace MyNetSensors.WebController.Controllers
     public class DashboardAPIController : Controller
     {
 
-        private UiNodesEngine engine = NodesController.uiNodesEngine;
+        private UiNodesEngine engine = SystemController.uiNodesEngine;
 
 
         public string GetNameForPanel(string id)

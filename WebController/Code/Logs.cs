@@ -4,14 +4,14 @@ using System.Linq;
 namespace MyNetSensors.WebController.Code
 {
     public delegate void LogMessageEventHandler(LogRecord record);
-    public class NodesControllerLogs
+    public class Logs
     {
         public List<LogRecord> gatewayLog = new List<LogRecord>();
         public List<LogRecord> hardwareNodesLog = new List<LogRecord>();
         public List<LogRecord> dataBaseLog = new List<LogRecord>();
         public List<LogRecord> nodesEngineLog = new List<LogRecord>();
         public List<LogRecord> nodesLog = new List<LogRecord>();
-        public List<LogRecord> nodesControllerLog = new List<LogRecord>();
+        public List<LogRecord> systemLog = new List<LogRecord>();
 
         public event LogMessageEventHandler OnGatewayLogInfo;
         public event LogMessageEventHandler OnGatewayLogError;
@@ -23,22 +23,22 @@ namespace MyNetSensors.WebController.Code
         public event LogMessageEventHandler OnNodesEngineLogError;
         public event LogMessageEventHandler OnNodeLogInfo;
         public event LogMessageEventHandler OnNodeLogError;
-        public event LogMessageEventHandler OnNodesControllerLogInfo;
-        public event LogMessageEventHandler OnNodesControllerLogError;
+        public event LogMessageEventHandler OnSystemLogInfo;
+        public event LogMessageEventHandler OnSystemLogError;
 
         public bool enableGatewayLog = true;
         public bool enableHardwareNodesLog = true;
         public bool enableDataBaseLog = true;
         public bool enableNodesEngineLog = true;
         public bool enableNodesLog = true;
-        public bool enableNodesControllerLog = true;
+        public bool enableSystemLog = true;
 
         public int maxGatewayRecords = 1000;
         public int maxHardwareNodesRecords = 1000;
         public int maxDataBaseRecords = 1000;
         public int maxNodesEngineRecords = 1000;
         public int maxNodesRecords = 1000;
-        public int maxNodesControllerRecords = 1000;
+        public int maxSystemRecords = 1000;
 
 
         public void AddGatewayInfo(string message)
@@ -164,28 +164,28 @@ namespace MyNetSensors.WebController.Code
         }
 
 
-        public void AddNodesControllerInfo(string message)
+        public void AddSystemInfo(string message)
         {
-            if (!enableNodesControllerLog)
+            if (!enableSystemLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordOwner.NodesController, LogRecordType.Info, message);
-            nodesControllerLog.Add(logRecord);
-            if (nodesControllerLog.Count > maxNodesControllerRecords)
-                nodesControllerLog.RemoveAt(0);
-            OnNodesControllerLogInfo?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Info, message);
+            systemLog.Add(logRecord);
+            if (systemLog.Count > maxSystemRecords)
+                systemLog.RemoveAt(0);
+            OnSystemLogInfo?.Invoke(logRecord);
         }
 
-        public void AddNodesControllerError(string message)
+        public void AddSystemError(string message)
         {
-            if (!enableNodesControllerLog)
+            if (!enableSystemLog)
                 return;
 
-            LogRecord logRecord = new LogRecord(LogRecordOwner.NodesController, LogRecordType.Error, message);
-            nodesControllerLog.Add(logRecord);
-            if (nodesControllerLog.Count > maxNodesControllerRecords)
-                nodesControllerLog.RemoveAt(0);
-            OnNodesControllerLogError?.Invoke(logRecord);
+            LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Error, message);
+            systemLog.Add(logRecord);
+            if (systemLog.Count > maxSystemRecords)
+                systemLog.RemoveAt(0);
+            OnSystemLogError?.Invoke(logRecord);
         }
 
         public List<LogRecord> GetAllLogs()
@@ -196,7 +196,7 @@ namespace MyNetSensors.WebController.Code
             list.AddRange(nodesEngineLog);
             list.AddRange(nodesLog);
             list.AddRange(dataBaseLog);
-            list.AddRange(nodesControllerLog);
+            list.AddRange(systemLog);
             return list.OrderBy(x => x.Date).ToList();
         }
 
@@ -208,7 +208,7 @@ namespace MyNetSensors.WebController.Code
             list.AddRange(nodesEngineLog.Where(x => x.Type == LogRecordType.Error));
             list.AddRange(nodesLog.Where(x => x.Type == LogRecordType.Error));
             list.AddRange(dataBaseLog.Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(nodesControllerLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(systemLog.Where(x => x.Type == LogRecordType.Error));
             return list.OrderBy(x => x.Date).ToList();
         }
 
@@ -219,7 +219,7 @@ namespace MyNetSensors.WebController.Code
             nodesEngineLog.Clear();
             nodesLog.Clear();
             dataBaseLog.Clear();
-            nodesControllerLog.Clear();
+            systemLog.Clear();
         }
     }
 }

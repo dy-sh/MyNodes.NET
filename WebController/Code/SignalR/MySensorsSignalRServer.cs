@@ -20,13 +20,13 @@ namespace MyNetSensors.WebController.Code
         {
             hub = connectionManager.GetHubContext<MySensorsHub>();
 
-            NodesController.OnStarted += OnNodesControllerStarted;
+            SystemController.OnStarted += OnSystemControllerStarted;
         }
         
 
-        private static void OnNodesControllerStarted(object sender, EventArgs e)
+        private static void OnSystemControllerStarted(object sender, EventArgs e)
         {
-            gateway = NodesController.gateway;
+            gateway = SystemController.gateway;
 
             gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
             gateway.OnMessageSendEvent += OnMessageSendEvent;
