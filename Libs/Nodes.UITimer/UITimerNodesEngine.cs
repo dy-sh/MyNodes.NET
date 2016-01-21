@@ -14,7 +14,7 @@ namespace MyNetSensors.Nodes
         private NodesEngine engine;
         private IUITimerNodesRepository db;
 
-        private List<UITimerTask> tasks = new List<UITimerTask>();
+        private List<UITimerTask> tasks;
 
         private bool abortExecuting = false;
 
@@ -24,6 +24,8 @@ namespace MyNetSensors.Nodes
             this.engine = engine;
 
             tasks = db?.GetAllTasks();
+            if (tasks == null)
+                tasks = new List<UITimerTask>();
 
             engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
             engine.OnUpdateEvent += UpdateTasks;
