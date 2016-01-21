@@ -1,4 +1,4 @@
-<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/icons/MyNetSensors_banner2.png" >
+<img alt="" src="https://raw.githubusercontent.com/derwish-pro/MyNetSensors/master/WebController/wwwroot/images/logos/MyNetSensors_banner2.png" >
 
 Official website with detailed documentation: <a href="http://www.mynetsensors.com"> MyNetSensors.com </a><br />
 
