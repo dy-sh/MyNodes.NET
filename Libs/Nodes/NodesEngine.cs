@@ -23,8 +23,8 @@ namespace MyNetSensors.Nodes
         private INodesRepository nodesDb;
 
         private Timer updateNodesTimer = new Timer();
-        public List<Node> nodes = new List<Node>();
-        public List<Link> links = new List<Link>();
+        private List<Node> nodes = new List<Node>();
+        private List<Link> links = new List<Link>();
 
         private bool started = false;
 
@@ -116,6 +116,15 @@ namespace MyNetSensors.Nodes
         {
             if (nodesDb != null)
                 nodes = nodesDb.GetAllNodes();
+
+            foreach (var node in nodes)
+            {
+                foreach (var input in node.Inputs)
+                    input.OnInputChange += OnInputChange;
+
+                foreach (var output in node.Outputs)
+                    output.OnOutputChange += OnOutputChange;
+            }
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
@@ -216,6 +225,13 @@ namespace MyNetSensors.Nodes
                     return;
             }
 
+            foreach (var input in node.Inputs)
+                input.OnInputChange += OnInputChange;
+
+            foreach (var output in node.Outputs)
+                output.OnOutputChange += OnOutputChange;
+
+
             nodes.Add(node);
 
             nodesDb?.AddNode(node);
@@ -230,8 +246,8 @@ namespace MyNetSensors.Nodes
         private string GeneratePanelName(PanelNode node)
         {
             //auto naming
-            List<PanelNode> nodes = GetPanelNodes();
-            List<string> names = nodes.Select(x => x.Name).ToList();
+            List<PanelNode> panels = GetPanelNodes();
+            List<string> names = panels.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"{node.Name} {i}"))
@@ -269,8 +285,9 @@ namespace MyNetSensors.Nodes
                 Name = node.Name
             };
             panel.Inputs.Add(input);
+            input.OnInputChange += OnInputChange;
 
-            UpdateNode(panel,true);
+            UpdateNode(panel, true);
 
             return true;
         }
@@ -301,6 +318,7 @@ namespace MyNetSensors.Nodes
                 Name = node.Name
             };
             panel.Outputs.Add(output);
+            output.OnOutputChange += OnOutputChange;
 
             UpdateNode(panel, true);
             return true;
@@ -347,6 +365,12 @@ namespace MyNetSensors.Nodes
                 RemoveLink(link);
             }
 
+            foreach (var input in node.Inputs)
+                input.OnInputChange -= OnInputChange;
+
+            foreach (var output in node.Outputs)
+                output.OnOutputChange -= OnOutputChange;
+
             node.OnRemove();
 
             OnRemoveNodeEvent?.Invoke(node);
@@ -367,8 +391,8 @@ namespace MyNetSensors.Nodes
 
         private void RemovePanel(PanelNode node)
         {
-            List<Node> nodes = GetNodesForPanel(node);
-            foreach (var n in nodes)
+            List<Node> panels = GetNodesForPanel(node);
+            foreach (var n in panels)
             {
                 RemoveNode(n);
             }
@@ -446,9 +470,9 @@ namespace MyNetSensors.Nodes
                 LogEngineInfo($"Update node [{node.GetType().Name}]");
 
                 if (node is PanelInputNode)
-                    UpdatePanelInput((PanelInputNode) node);
+                    UpdatePanelInput((PanelInputNode)node);
                 if (node is PanelOutputNode)
-                    UpdatePanelOutput((PanelOutputNode) node);
+                    UpdatePanelOutput((PanelOutputNode)node);
 
 
                 oldNode.Inputs = node.Inputs;
@@ -555,7 +579,7 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            if (inputNode == outputNode )
+            if (inputNode == outputNode)
             {
                 LogEngineError($"Can`t create link from [{output.Id}] to [{input.Id}]. Input and output belong to the same node.");
                 return;
@@ -666,7 +690,7 @@ namespace MyNetSensors.Nodes
 
         public List<Link> GetLinksForPanel(string panelId)
         {
-            return links.Where(x=>x.PanelId==panelId).ToList();
+            return links.Where(x => x.PanelId == panelId).ToList();
         }
 
         private void UpdateStatesFromLinks()
@@ -762,7 +786,7 @@ namespace MyNetSensors.Nodes
         //}
 
         // this list used for infinite loop detection
-        List<Input> changedInputsStack=new List<Input>();
+        List<Input> changedInputsStack = new List<Input>();
 
         public void OnInputChange(Input input)
         {
@@ -838,7 +862,7 @@ namespace MyNetSensors.Nodes
             return (from node in nodes from output in node.Outputs where output.Id == outputId select node).FirstOrDefault();
         }
 
-      
+
 
 
         public void RemoveAllNodesAndLinks()
@@ -846,6 +870,15 @@ namespace MyNetSensors.Nodes
             LogEngineInfo("Remove all nodes and links");
 
             nodesDb?.RemoveAllNodes();
+
+            foreach (var node in nodes)
+            {
+                foreach (var input in node.Inputs)
+                    input.OnInputChange -= OnInputChange;
+
+                foreach (var output in node.Outputs)
+                    output.OnOutputChange -= OnOutputChange;
+            }
 
             links = new List<Link>();
             nodes = new List<Node>();
@@ -932,6 +965,16 @@ namespace MyNetSensors.Nodes
             List<object> objects = (List<object>)JsonConvert.DeserializeObject<object>(json, settings);
 
             return objects.OfType<Link>().ToList();
+        }
+
+        public List<Node> GetNodes()
+        {
+            return nodes;
+        }
+
+        public List<Link> GetLinks()
+        {
+            return links;
         }
     }
 }

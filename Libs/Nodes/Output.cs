@@ -2,6 +2,7 @@
 
 namespace MyNetSensors.Nodes
 {
+    public delegate void OutputEventHandler(Output output);
     public class Output
     {
         public string Id { get; set; }
@@ -9,13 +10,15 @@ namespace MyNetSensors.Nodes
 
         private string val;
 
+        public event OutputEventHandler OnOutputChange;
+
         public string Value
         {
             get { return val; }
             set
             {
                 val = value;
-                NodesEngine.nodesEngine.OnOutputChange(this);
+                OnOutputChange?.Invoke(this);
             }
         }
 

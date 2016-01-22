@@ -35,7 +35,7 @@ namespace MyNetSensors.Nodes
             if (statesDb == null)
                 return;
 
-            List<UiChartNode> charts = engine.nodes
+            List<UiChartNode> charts = engine.GetNodes()
                 .Where(n => n is UiChartNode)
                 .Cast<UiChartNode>()
                 .ToList();
@@ -111,7 +111,7 @@ namespace MyNetSensors.Nodes
 
         public List<PanelNode> GetPanels()
         {
-            return engine.nodes
+            return engine.GetNodes()
                 .Where(n => n is PanelNode)
                 .Cast<PanelNode>()
                 .ToList();
@@ -128,13 +128,13 @@ namespace MyNetSensors.Nodes
 
         public UiNode GetUINode(string id)
         {
-            return engine.nodes.FirstOrDefault(n => n.Id == id) as UiNode;
+            return engine.GetNode(id) as UiNode;
         }
 
 
         public List<UiNode> GetUINodes()
         {
-            return engine.nodes
+            return engine.GetNodes()
                 .Where(n => n is UiNode)
                 .Cast<UiNode>()
                 .ToList();
@@ -142,7 +142,7 @@ namespace MyNetSensors.Nodes
 
         public List<UiNode> GetUINodesForMainPage()
         {
-            return engine.nodes
+            return engine.GetNodes()
                 .Where(n => n is UiNode && ((UiNode)n).ShowOnMainPage)
                 .Cast<UiNode>()
                 .ToList();
@@ -150,7 +150,7 @@ namespace MyNetSensors.Nodes
 
         public List<UiNode> GetUINodesForPanel(string panelId)
         {
-            return engine.nodes
+            return engine.GetNodes()
                 .Where(n => n is UiNode && n.PanelId == panelId)
                 .Cast<UiNode>()
                 .ToList();

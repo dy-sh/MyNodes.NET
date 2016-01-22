@@ -30,7 +30,7 @@ namespace MyNetSensors.WebController.Controllers
             if (panelId == null)
                 panelId = MAIN_PANEL_ID;
 
-            List<Node> nodes = engine.nodes;
+            List<Node> nodes = engine.GetNodes();
             if (nodes == null || !nodes.Any())
                 return null;
 
@@ -176,7 +176,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            List<Link> links = engine.links;
+            List<Link> links = engine.GetLinks();
             if (links == null || !links.Any())
                 return null;
 
@@ -189,12 +189,12 @@ namespace MyNetSensors.WebController.Controllers
 
         private int GetInputSlot(string inputId)
         {
-            for (int i = 0; i < engine.nodes.Count; i++)
+            foreach (Node node in engine.GetNodes())
             {
-                for (int j = 0; j < engine.nodes[i].Inputs.Count; j++)
+                for (int i = 0; i < node.Inputs.Count; i++)
                 {
-                    if (engine.nodes[i].Inputs[j].Id == inputId)
-                        return j;
+                    if (node.Inputs[i].Id == inputId)
+                        return i;
                 }
             }
             return -1;
@@ -202,17 +202,16 @@ namespace MyNetSensors.WebController.Controllers
 
         private int GetOutputSlot(string outputId)
         {
-            for (int i = 0; i < engine.nodes.Count; i++)
+            foreach (Node node in engine.GetNodes())
             {
-                for (int j = 0; j < engine.nodes[i].Outputs.Count; j++)
+                for (int i = 0; i < node.Outputs.Count; i++)
                 {
-                    if (engine.nodes[i].Outputs[j].Id == outputId)
-                        return j;
+                    if (node.Outputs[i].Id == outputId)
+                        return i;
                 }
             }
             return -1;
         }
-
 
 
         public bool RemoveLink(LiteGraph.Link link)

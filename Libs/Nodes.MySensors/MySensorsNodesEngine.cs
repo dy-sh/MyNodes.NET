@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MyNetSensors.Gateways;
 using MyNetSensors.Gateways.MySensors.Serial;
 using Node = MyNetSensors.Nodes.Node;
@@ -75,16 +76,9 @@ namespace MyNetSensors.Nodes
 
         public MySensorsNode GetHardwareNode(int nodeId)
         {
-            foreach (var n in engine.nodes)
-            {
-                if (n is MySensorsNode)
-                {
-                    MySensorsNode node = (MySensorsNode)n;
-                    if (node.nodeId == nodeId)
-                        return node;
-                }
-            }
-            return null;
+            return engine.GetNodes()
+                .OfType<MySensorsNode>()
+                .FirstOrDefault(node => node.nodeId == nodeId);
         }
 
         public MySensorsNodeOutput GetHardwarOutput(int nodeId, int sensorId)
@@ -93,12 +87,9 @@ namespace MyNetSensors.Nodes
             if (oldNode == null)
                 return null;
 
-            foreach (MySensorsNodeOutput output in oldNode.Outputs)
-            {
-                if (output.sensorId == sensorId)
-                    return output;
-            }
-            return null;
+            return oldNode.Outputs
+                .Cast<MySensorsNodeOutput>()
+                .FirstOrDefault(output => output.sensorId == sensorId);
         }
 
 
@@ -109,12 +100,9 @@ namespace MyNetSensors.Nodes
             if (oldNode == null)
                 return null;
 
-            foreach (MySensorsNodeInput input in oldNode.Inputs)
-            {
-                if (input.sensorId == sensorId)
-                    return input;
-            }
-            return null;
+            return oldNode.Inputs
+                .Cast<MySensorsNodeInput>()
+                .FirstOrDefault(input => input.sensorId == sensorId);
         }
 
         public MySensorsNodeOutput GetHardwarOutput(Sensor sensor)
@@ -152,12 +140,12 @@ namespace MyNetSensors.Nodes
             engine.LogEngineInfo("Remove all non-hardware nodes");
 
             //to prevent changing of collection while writing 
-            Node[] nodes = engine.nodes.ToArray();
+            Node[] nodes = engine.GetNodes().ToArray();
 
-            for (int i = 0; i < nodes.Length; i++)
+            foreach (Node t in nodes)
             {
-                if (!(nodes[i] is MySensorsNode))
-                    engine.RemoveNode(nodes[i]);
+                if (!(t is MySensorsNode))
+                    engine.RemoveNode(t);
             }
         }
     }
