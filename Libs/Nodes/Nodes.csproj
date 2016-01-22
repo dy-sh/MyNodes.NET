@@ -63,8 +63,6 @@
     <Compile Include="Output.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializedLink.cs" />
-    <Compile Include="SerializedNode.cs" />
     <Compile Include="Size.cs" />
   </ItemGroup>
   <ItemGroup>

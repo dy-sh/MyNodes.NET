@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using MyNetSensors.Nodes;
+using Newtonsoft.Json;
 
-namespace MyNetSensors.Nodes
+namespace MyNetSensors.Repositories.EF.SQLite
 {
     public class SerializedNode
     {

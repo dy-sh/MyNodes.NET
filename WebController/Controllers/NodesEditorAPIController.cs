@@ -459,21 +459,20 @@ namespace MyNetSensors.WebController.Controllers
                 return null;
             }
 
-            string result = "";
 
             //serialize nodes
             List<Node> nodes = engine.GetNodesForPanel(id);
-            result += engine.SerializeNodes(nodes);
-
-            //serialize links
             List<Link> links = engine.GetLinksForPanel(id);
-            result += engine.SerializeLinks(links);
+
+            string json = engine.SerializeNodesAndLinks(nodes,links);
 
 
-        //    List<Node> newNodes = engine.DeserializeNodes(result);
-         //   List<Link> newLinks = engine.DeserializeLinks(result);
+            List<Node> newNodes; 
+            List<Link> newLinks;
 
-            return result;
+            engine.DeserializeNodesAndLinks(json, out newNodes, out newLinks);
+
+            return json;
         }
 
     }
