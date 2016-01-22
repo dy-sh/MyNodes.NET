@@ -51,7 +51,6 @@
     <Compile Include="NodesStatesRepositoryDapper.cs" />
     <Compile Include="MySensorsMessagesRepositoryDapper.cs" />
     <Compile Include="MySensorsRepositoryDapper.cs" />
-    <Compile Include="SerializedNode.cs" />
     <Compile Include="NodesRepositoryDapper.cs" />
     <Compile Include="UITimerNodesRepositoryDapper.cs" />
     <Compile Include="OneToManyDapperMapper.cs" />

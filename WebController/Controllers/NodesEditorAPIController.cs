@@ -112,7 +112,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (node is UiSliderNode)
             {
-                UiSliderNode n = (UiSliderNode) node;
+                UiSliderNode n = (UiSliderNode)node;
                 litegraphNode.properties["Min"] = n.Min.ToString();
                 litegraphNode.properties["Max"] = n.Max.ToString();
             }
@@ -266,7 +266,7 @@ namespace MyNetSensors.WebController.Controllers
                 string assemblyName = node.properties["Assembly"];
 
                 var newObject = Activator.CreateInstance(assemblyName, type);
-                newNode = (Node) newObject.Unwrap();
+                newNode = (Node)newObject.Unwrap();
             }
             catch
             {
@@ -276,7 +276,7 @@ namespace MyNetSensors.WebController.Controllers
 
             //Node newNode = newObject as HardwareNode;
             newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-            if (node.size.Length==2)
+            if (node.size.Length == 2)
                 newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
             newNode.Id = node.id;
             newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
@@ -365,7 +365,7 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool UINodeSettings(string id, string name,bool show)
+        public bool UINodeSettings(string id, string name, bool show)
         {
             Node n = engine.GetNode(id);
             if (n == null)
@@ -383,7 +383,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool UISliderSettings(string id, string name, int min,int max,bool show)
+        public bool UISliderSettings(string id, string name, int min, int max, bool show)
         {
             Node n = engine.GetNode(id);
             if (n == null)
@@ -448,7 +448,34 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+        public string SerializePanel(string id)
+        {
+            if (engine == null)
+                return null;
 
-        
+            Node n = engine.GetNode(id) as PanelNode;
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t serialize Panel [{id}]. Does not exist.");
+                return null;
+            }
+
+            string result = "";
+
+            //serialize nodes
+            List<Node> nodes = engine.GetNodesForPanel(id);
+            result += engine.SerializeNodes(nodes);
+
+            //serialize links
+            List<Link> links = engine.GetLinksForPanel(id);
+            result += engine.SerializeLinks(links);
+
+
+        //    List<Node> newNodes = engine.DeserializeNodes(result);
+         //   List<Link> newLinks = engine.DeserializeLinks(result);
+
+            return result;
+        }
+
     }
 }

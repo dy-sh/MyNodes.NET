@@ -138,7 +138,6 @@
     <Compile Include="NodesStatesRepositoryEf.cs" />
     <Compile Include="MySensorsMessagesRepositoryEf.cs" />
     <Compile Include="MySensorsRepositoryEf.cs" />
-    <Compile Include="SerializedNode.cs" />
     <Compile Include="NodesRepositoryEf.cs" />
     <Compile Include="UITimerNodesRepositoryEf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

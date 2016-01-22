@@ -695,71 +695,71 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public string SerializeLinks()
-        {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            };
-            return JsonConvert.SerializeObject(links, settings);
-        }
+        //public string SerializeLinks()
+        //{
+        //    JsonSerializerSettings settings = new JsonSerializerSettings
+        //    {
+        //        TypeNameHandling = TypeNameHandling.All
+        //    };
+        //    return JsonConvert.SerializeObject(links, settings);
+        //}
 
-        public void DeserializeLinks(string json)
-        {
-            links = new List<Link>();
+        //public void DeserializeLinks(string json)
+        //{
+        //    links = new List<Link>();
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            };
+        //    JsonSerializerSettings settings = new JsonSerializerSettings
+        //    {
+        //        TypeNameHandling = TypeNameHandling.All
+        //    };
 
-            List<Link> newLinks = JsonConvert.DeserializeObject<List<Link>>(json, settings);
+        //    List<Link> newLinks = JsonConvert.DeserializeObject<List<Link>>(json, settings);
 
-            foreach (var link in newLinks)
-            {
-                AddLink(link.OutputId, link.InputId);
-            }
+        //    foreach (var link in newLinks)
+        //    {
+        //        AddLink(link.OutputId, link.InputId);
+        //    }
 
-            OnLinksUpdatedEvent?.Invoke(links);
-        }
+        //    OnLinksUpdatedEvent?.Invoke(links);
+        //}
 
 
-        public string SerializeNodes()
-        {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            };
-            return JsonConvert.SerializeObject(nodes, settings);
-        }
+        //public string SerializeNodes()
+        //{
+        //    JsonSerializerSettings settings = new JsonSerializerSettings
+        //    {
+        //        TypeNameHandling = TypeNameHandling.All
+        //    };
+        //    return JsonConvert.SerializeObject(nodes, settings);
+        //}
 
-        public void DeserializeNodes(string json)
-        {
-            bool state = started;
-            if (state)
-                Stop();
+        //public void DeserializeNodes(string json)
+        //{
+        //    bool state = started;
+        //    if (state)
+        //        Stop();
 
-            RemoveAllNodesAndLinks();
+        //    RemoveAllNodesAndLinks();
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                ObjectCreationHandling = ObjectCreationHandling.Replace
-            };
+        //    JsonSerializerSettings settings = new JsonSerializerSettings
+        //    {
+        //        TypeNameHandling = TypeNameHandling.All,
+        //        ObjectCreationHandling = ObjectCreationHandling.Replace
+        //    };
 
-            nodes = JsonConvert.DeserializeObject<List<Node>>(json, settings);
+        //    nodes = JsonConvert.DeserializeObject<List<Node>>(json, settings);
 
-            foreach (var node in nodes)
-            {
-                node.OnDeserialize();
-                LogEngineInfo($"New node [{node.GetType().Name}]");
-            }
+        //    foreach (var node in nodes)
+        //    {
+        //        node.OnDeserialize();
+        //        LogEngineInfo($"New node [{node.GetType().Name}]");
+        //    }
 
-            if (state)
-                Start();
+        //    if (state)
+        //        Start();
 
-            OnNodesUpdatedEvent?.Invoke(nodes);
-        }
+        //    OnNodesUpdatedEvent?.Invoke(nodes);
+        //}
 
         // this list used for infinite loop detection
         List<Input> changedInputsStack=new List<Input>();
@@ -883,6 +883,55 @@ namespace MyNetSensors.Nodes
         public void LogEngineError(string message)
         {
             OnLogEngineError?.Invoke(message);
+        }
+
+
+        public string SerializeNodes(List<Node> nodesList)
+        {
+            string result = "";
+
+            List<string> sNodes = nodesList.Select(node => new SerializedNode(node).JsonData).ToList();
+            foreach (var node in sNodes)
+            {
+                result += node + "\n\n";
+            }
+
+            return result;
+        }
+
+        public string SerializeLinks(List<Link> linksList)
+        {
+            string result = "";
+
+            List<string> sLinks = linksList.Select(link => new SerializedLink(link).JsonData).ToList();
+            foreach (var link in sLinks)
+            {
+                result += link + "\n\n";
+            }
+
+            return result;
+        }
+
+        public List<Node> DeserializeNodes(string json)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+
+            List<object> objects = (List<object>)JsonConvert.DeserializeObject<object>(json, settings);
+
+            return objects.OfType<Node>().ToList();
+        }
+
+        public List<Link> DeserializeLinks(string json)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.All;
+            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+
+            List<object> objects = (List<object>)JsonConvert.DeserializeObject<object>(json, settings);
+
+            return objects.OfType<Link>().ToList();
         }
     }
 }
