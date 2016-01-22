@@ -7,6 +7,7 @@ namespace MyNetSensors.Nodes
 {
     public class PanelOutputNode : Node
     {
+        //Id must be equal to panel output id
         public string Name { get; set; }
 
         public PanelOutputNode() : base(1, 0)

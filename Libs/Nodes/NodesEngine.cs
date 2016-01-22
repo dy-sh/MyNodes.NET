@@ -307,13 +307,16 @@ namespace MyNetSensors.Nodes
 
             node.Name = GenerateInputName(panel, node);
 
-            Input input = new Input
+            if (!panel.Inputs.Any(x => x.Id == node.Id))
             {
-                Id = node.Id,
-                Name = node.Name
-            };
-            panel.Inputs.Add(input);
-            input.OnInputChange += OnInputChange;
+                Input input = new Input
+                {
+                    Id = node.Id,
+                    Name = node.Name
+                };
+                panel.Inputs.Add(input);
+                input.OnInputChange += OnInputChange;
+            }
 
             UpdateNode(panel, true);
 
@@ -339,14 +342,16 @@ namespace MyNetSensors.Nodes
 
             node.Name = GenerateOutputName(panel, node);
 
-
-            Output output = new Output
+            if (!panel.Outputs.Any(x => x.Id == node.Id))
             {
-                Id = node.Id,
-                Name = node.Name
-            };
-            panel.Outputs.Add(output);
-            output.OnOutputChange += OnOutputChange;
+                Output output = new Output
+                {
+                    Id = node.Id,
+                    Name = node.Name
+                };
+                panel.Outputs.Add(output);
+                output.OnOutputChange += OnOutputChange;
+            }
 
             UpdateNode(panel, true);
             return true;
@@ -980,23 +985,36 @@ namespace MyNetSensors.Nodes
         {
             foreach (var node in nodesList)
             {
+                //generate id`s for inputs
                 foreach (var input in node.Inputs)
                 {
                     string oldId = input.Id;
                     input.Id = Guid.NewGuid().ToString();
 
+                    //update links
                     foreach (var link in linksList.Where(x => x.InputId == oldId))
                         link.InputId = input.Id;
+
+                    //for panel update input node id
+                    if (node is PanelNode)
+                        nodesList.FirstOrDefault(x=> x.Id == oldId).Id = input.Id;
                 }
 
+                //generate id`s for outputs
                 foreach (var output in node.Outputs)
                 {
                     string oldId = output.Id;
                     output.Id = Guid.NewGuid().ToString();
 
+                    //update links
                     foreach (var link in linksList.Where(x => x.OutputId == oldId))
                         link.OutputId = output.Id;
+
+                    //for panel update output node id
+                    if (node is PanelNode)
+                        nodesList.FirstOrDefault(x => x.Id == oldId).Id = output.Id;
                 }
+
 
                 if (node is PanelNode)
                 {
@@ -1006,15 +1024,9 @@ namespace MyNetSensors.Nodes
                     foreach (var n in nodesList.Where(x => x.PanelId == oldId))
                         n.PanelId = node.Id;
                 }
-                else if (node is PanelInputNode)
+                else if (node is PanelInputNode || node is PanelOutputNode)
                 {
-                    node.Id = Guid.NewGuid().ToString();
-                    //todo
-                }
-                else if (node is PanelOutputNode)
-                {
-                    node.Id = Guid.NewGuid().ToString();
-                    //todo
+                    //id already updated
                 }
                 else
                 {
