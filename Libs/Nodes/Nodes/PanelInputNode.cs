@@ -13,7 +13,6 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Input";
             this.Type = "Main/Panel Input";
-            this.Name = "In";
         }
 
         public override void Loop()

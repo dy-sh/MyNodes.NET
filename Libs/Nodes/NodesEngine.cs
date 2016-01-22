@@ -278,8 +278,8 @@ namespace MyNetSensors.Nodes
             List<string> names = panels.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
-                if (!names.Contains($"{node.Name} {i}"))
-                    return $"{node.Name} {i}";
+                if (!names.Contains($"Panel {i}"))
+                    return $"Panel {i}";
             }
             return null;
         }
@@ -360,8 +360,8 @@ namespace MyNetSensors.Nodes
             List<string> names = panel.Inputs.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
-                if (!names.Contains($"{node.Name} {i}"))
-                    return $"{node.Name} {i}";
+                if (!names.Contains($"In {i}"))
+                    return $"In {i}";
             }
             return null;
         }
@@ -372,8 +372,8 @@ namespace MyNetSensors.Nodes
             List<string> names = panel.Outputs.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
-                if (!names.Contains($"{node.Name} {i}"))
-                    return $"{node.Name} {i}";
+                if (!names.Contains($"Out {i}"))
+                    return $"Out {i}";
             }
             return null;
         }
