@@ -48,7 +48,6 @@ namespace MyNetSensors.Nodes
         public event Action OnStopEvent;
         public event Action OnUpdateEvent;
 
-        public delegate void NodeEventHandler(Node node);
         public delegate void NodesEventHandler(List<Node> nodes);
         public delegate void InputEventHandler(Input input);
         public delegate void OutputEventHandler(Output output);
@@ -124,9 +123,23 @@ namespace MyNetSensors.Nodes
 
                 foreach (var output in node.Outputs)
                     output.OnOutputChange += OnOutputChange;
+
+                node.OnLogError += LogNodeError;
+                node.OnLogInfo += LogNodeInfo;
+                node.OnUpdate += UpdateNode;
             }
 
             OnNodesUpdatedEvent?.Invoke(nodes);
+        }
+
+        private void LogNodeInfo(string message)
+        {
+            OnLogNodeInfo?.Invoke(message);
+        }
+
+        private void LogNodeError(string message)
+        {
+            OnLogNodeError?.Invoke(message);
         }
 
         private void GetLinksFromRepository()
@@ -231,6 +244,10 @@ namespace MyNetSensors.Nodes
             foreach (var output in node.Outputs)
                 output.OnOutputChange += OnOutputChange;
 
+
+            node.OnLogError += LogNodeError;
+            node.OnLogInfo += LogNodeInfo;
+            node.OnUpdate += UpdateNode;
 
             nodes.Add(node);
 
@@ -365,16 +382,22 @@ namespace MyNetSensors.Nodes
                 RemoveLink(link);
             }
 
+            node.OnRemove();
+
+            OnRemoveNodeEvent?.Invoke(node);
+            LogEngineInfo($"Remove node [{node.GetType().Name}]");
+
             foreach (var input in node.Inputs)
                 input.OnInputChange -= OnInputChange;
 
             foreach (var output in node.Outputs)
                 output.OnOutputChange -= OnOutputChange;
 
-            node.OnRemove();
+            node.OnLogError -= LogNodeError;
+            node.OnLogInfo -= LogNodeInfo;
+            node.OnUpdate -= UpdateNode;
 
-            OnRemoveNodeEvent?.Invoke(node);
-            LogEngineInfo($"Remove node [{node.GetType().Name}]");
+
 
             if (node is PanelInputNode)
                 RemovePanelInput((PanelInputNode)node);
@@ -873,11 +896,17 @@ namespace MyNetSensors.Nodes
 
             foreach (var node in nodes)
             {
+                node.OnRemove();
+
                 foreach (var input in node.Inputs)
                     input.OnInputChange -= OnInputChange;
 
                 foreach (var output in node.Outputs)
                     output.OnOutputChange -= OnOutputChange;
+
+                node.OnLogError -= LogNodeError;
+                node.OnLogInfo -= LogNodeInfo;
+                node.OnUpdate -= UpdateNode;
             }
 
             links = new List<Link>();
