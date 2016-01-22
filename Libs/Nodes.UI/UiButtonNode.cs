@@ -11,7 +11,7 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "UI Button";
             this.Type = "UI/Button";
-            this.Name = "Button";
+            this.DefaultName = "Button";
             Outputs[0].Value = "0";
         }
 

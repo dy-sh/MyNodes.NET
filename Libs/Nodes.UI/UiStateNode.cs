@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "UI State";
             this.Type = "UI/State";
-            this.Name = "State";
+            this.DefaultName = "State";
         }
 
         public override void Loop()

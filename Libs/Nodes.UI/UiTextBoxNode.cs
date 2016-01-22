@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "UI TextBox";
             this.Type = "UI/TextBox";
-            this.Name = "TextBox";
+            this.DefaultName = "TextBox";
         }
 
         public override void Loop()

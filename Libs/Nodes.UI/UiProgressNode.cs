@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "UI Progress";
             this.Type = "UI/Progress";
-            this.Name = "Progress";
+            this.DefaultName = "Progress";
         }
 
         public override void Loop()

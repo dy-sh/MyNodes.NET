@@ -227,6 +227,16 @@ function send_create_node(node) {
     });
 };
 
+function send_clone_node(node) {
+    $.ajax({
+        url: '/NodesEditorAPI/CloneNode',
+        type: 'POST',
+        data: { 'id': node.id }
+    }).done(function () {
+
+    });
+};
+
 function send_remove_node(node) {
 
     var serializedNode = node.serialize();

@@ -9,6 +9,7 @@ namespace MyNetSensors.Nodes
     {
         public int PanelOrderIndex { get; set; }
         public string Name { get; set; }
+        internal string DefaultName { get; set; }
 
         public bool ShowOnMainPage { get; set; }
 

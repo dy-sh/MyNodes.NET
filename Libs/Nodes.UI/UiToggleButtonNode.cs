@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "UI Toggle";
             this.Type = "UI/Toggle Button";
-            this.Name = "Toggle";
+            this.DefaultName = "Toggle";
 
             Value = "0";
             Outputs[0].Value = Value;

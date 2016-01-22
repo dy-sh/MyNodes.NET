@@ -27,7 +27,7 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "UI Chart";
             this.Type = "UI/Chart";
-            this.Name = "Chart";
+            this.DefaultName = "Chart";
 
             NodeStates = new List<NodeState>();
             WriteInDatabase = false;

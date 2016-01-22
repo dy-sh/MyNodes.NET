@@ -4541,15 +4541,15 @@ LGraphCanvas.onMenuNodeRemove = function(node)
 LGraphCanvas.onMenuNodeClone = function(node)
 {
 	if(node.clonable == false) return;
-	var newnode = node.clone();
-	if(!newnode) return;
-	newnode.pos = [node.pos[0]+10,node.pos[1]+10];
     //derwish removed
+	//var newnode = node.clone();
+	//if(!newnode) return;
+	//newnode.pos = [node.pos[0]+10,node.pos[1]+10];
 	//node.graph.add(newnode);
 	//node.setDirtyCanvas(true, true);
 
     //derwish added
-	send_create_node(newnode);
+	send_clone_node(node);
 }
 
 LGraphCanvas.node_colors = {

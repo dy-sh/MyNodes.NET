@@ -11,7 +11,7 @@ namespace MyNetSensors.Nodes
     public delegate void NodeEventHandler(Node node);
     public delegate void NodeUpdateEventHandler(Node node, bool writeNodeToDb);
 
-    public abstract class Node
+    public abstract class Node:ICloneable
     {
         public string Id { get; set; }
         public string PanelId { get; set; }
@@ -55,6 +55,7 @@ namespace MyNetSensors.Nodes
 
         public Node()
         {
+            Id = Guid.NewGuid().ToString();
             Inputs = new List<Input>();
             Outputs = new List<Output>();
             PanelId = "Main";
@@ -84,6 +85,17 @@ namespace MyNetSensors.Nodes
             OnUpdate?.Invoke(this, writeNodeToDb);
         }
 
+        public object Clone()
+        {
+            Node newNode=(Node) this.MemberwiseClone();
+            newNode.Id= Guid.NewGuid().ToString();
+            foreach (var input in newNode.Inputs)
+                input.Id= Guid.NewGuid().ToString();
+
+            foreach (var output in newNode.Outputs)
+                output.Id = Guid.NewGuid().ToString();
+            return newNode;
+        }
     }
 
 

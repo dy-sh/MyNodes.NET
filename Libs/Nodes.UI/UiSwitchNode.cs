@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "UI Switch";
             this.Type = "UI/Switch";
-            this.Name = "Switch";
+            this.DefaultName = "Switch";
            Value = "0";
             Outputs[0].Value = Value;
         }

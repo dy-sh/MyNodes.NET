@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "UI Label";
             this.Type = "UI/Label";
-            this.Name = "Label";
+            this.DefaultName = "Label";
         }
 
         public override void Loop()

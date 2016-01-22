@@ -15,7 +15,7 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "UI Log";
             this.Type = "UI/Log";
-            this.Name = "Log";
+            this.DefaultName = "Log";
         }
 
         public override void Loop()

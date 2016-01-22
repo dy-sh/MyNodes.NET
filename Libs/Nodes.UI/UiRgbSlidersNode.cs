@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "UI RGB Sliders";
             this.Type = "UI/RGB Sliders";
-            this.Name = "RGB";
+            this.DefaultName = "RGB";
             Value = "000000";
             Outputs[0].Value = Value.ToString();
         }

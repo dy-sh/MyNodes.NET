@@ -257,27 +257,21 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            Node newNode;
+            string type = node.properties["ObjectType"];
+            string assemblyName = node.properties["Assembly"];
 
-            try
-            {
-                string type = node.properties["ObjectType"];
-                string assemblyName = node.properties["Assembly"];
+            Node newNode = CreateNode(type, assemblyName);
 
-                var newObject = Activator.CreateInstance(assemblyName, type);
-                newNode = (Node)newObject.Unwrap();
-            }
-            catch
+            if(newNode==null)
             {
                 engine.LogEngineError($"Can`t create node [{node.properties["ObjectType"]}]. Type does not exist.");
                 return false;
             }
 
-            //Node newNode = newObject as HardwareNode;
             newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             if (node.size.Length == 2)
                 newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
-            newNode.Id = node.id;
+            //newNode.Id = node.id;
             newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
 
             engine.AddNode(newNode);
@@ -452,28 +446,114 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            Node n = engine.GetNode(id) as PanelNode;
-            if (n == null)
+            Node panel = engine.GetNode(id) as PanelNode;
+            if (panel == null)
             {
                 engine.LogEngineError($"Can`t serialize Panel [{id}]. Does not exist.");
                 return null;
             }
+            
+            List<Node> nodes = new List<Node>();
+            nodes.Add(panel);
+            nodes.AddRange(engine.GetNodesForPanel(id));
 
-
-            //serialize nodes
-            List<Node> nodes = engine.GetNodesForPanel(id);
             List<Link> links = engine.GetLinksForPanel(id);
-
             string json = engine.SerializeNodesAndLinks(nodes,links);
 
-
-            List<Node> newNodes; 
-            List<Link> newLinks;
-
-            engine.DeserializeNodesAndLinks(json, out newNodes, out newLinks);
+            DeserializePanel(json);
 
             return json;
         }
 
+        public bool DeserializePanel(string json)
+        {
+            if (engine == null)
+                return false;
+
+            List<Node> nodes;
+            List<Link> links;
+            engine.DeserializeNodesAndLinks(json, out nodes, out links);
+
+            //get new id`s
+            foreach (var node in nodes)
+            {
+                foreach (var input in node.Inputs)
+                {
+                    string oldId = input.Id;
+                    input.Id= Guid.NewGuid().ToString();
+
+                    foreach (var link in links.Where(x => x.InputId == oldId))
+                        link.InputId = input.Id;
+                }
+
+                foreach (var output in node.Outputs)
+                {
+                    string oldId = output.Id;
+                    output.Id = Guid.NewGuid().ToString();
+
+                    foreach (var link in links.Where(x => x.OutputId == oldId))
+                        link.OutputId = output.Id;
+                }
+
+                if (node is PanelNode)
+                {
+                    string oldId = node.Id;
+                    node.Id = Guid.NewGuid().ToString();
+
+                    foreach (var n in nodes.Where(x => x.PanelId == oldId))
+                        n.PanelId = node.Id;
+                }
+                else if (node is PanelInputNode)
+                {
+
+                }
+                else if (node is PanelOutputNode)
+                {
+
+                }
+                else
+                {
+                    node.Id = Guid.NewGuid().ToString();
+                }
+            }
+
+            foreach (var node in nodes)
+                engine.AddNode(node);
+
+            foreach (var link in links)
+                engine.AddLink(link.OutputId,link.InputId);
+
+            return true;
+        }
+
+
+
+        private Node CreateNode(string type, string assemblyName)
+        {
+            try
+            {
+                var newObject = Activator.CreateInstance(assemblyName, type);
+                return (Node) newObject.Unwrap();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool CloneNode(string id)
+        {
+            if (engine == null)
+                return false;
+
+            Node oldNode = engine.GetNode(id);
+            Node node = (Node)oldNode.Clone();
+
+            node.Position = new Position { X = oldNode.Position.X+10, Y = oldNode.Position.Y + 15 };
+
+            engine.AddNode(node);
+
+            return true;
+        }
     }
 }

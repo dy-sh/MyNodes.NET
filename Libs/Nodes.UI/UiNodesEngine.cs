@@ -102,8 +102,8 @@ namespace MyNetSensors.Nodes
             List<string> names = nodes.Select(x => x.Name).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
-                if (!names.Contains($"{uiNode.Name} {i}"))
-                    return $"{uiNode.Name} {i}";
+                if (!names.Contains($"{uiNode.DefaultName} {i}"))
+                    return $"{uiNode.DefaultName} {i}";
             }
             return null;
         }
