@@ -446,19 +446,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            Node panel = engine.GetNode(id) as PanelNode;
-            if (panel == null)
-            {
-                engine.LogEngineError($"Can`t serialize Panel [{id}]. Does not exist.");
-                return null;
-            }
-            
-            List<Node> nodes = new List<Node>();
-            nodes.Add(panel);
-            nodes.AddRange(engine.GetNodesForPanel(id));
-
-            List<Link> links = engine.GetLinksForPanel(id);
-            string json = engine.SerializeNodesAndLinks(nodes,links);
+            string json= engine.SerializePanel(id);
 
             DeserializePanel(json);
 
@@ -472,50 +460,9 @@ namespace MyNetSensors.WebController.Controllers
 
             List<Node> nodes;
             List<Link> links;
-            engine.DeserializeNodesAndLinks(json, out nodes, out links);
+            engine.DeserializePanel(json, out nodes, out links);
 
-            //get new id`s
-            foreach (var node in nodes)
-            {
-                foreach (var input in node.Inputs)
-                {
-                    string oldId = input.Id;
-                    input.Id= Guid.NewGuid().ToString();
-
-                    foreach (var link in links.Where(x => x.InputId == oldId))
-                        link.InputId = input.Id;
-                }
-
-                foreach (var output in node.Outputs)
-                {
-                    string oldId = output.Id;
-                    output.Id = Guid.NewGuid().ToString();
-
-                    foreach (var link in links.Where(x => x.OutputId == oldId))
-                        link.OutputId = output.Id;
-                }
-
-                if (node is PanelNode)
-                {
-                    string oldId = node.Id;
-                    node.Id = Guid.NewGuid().ToString();
-
-                    foreach (var n in nodes.Where(x => x.PanelId == oldId))
-                        n.PanelId = node.Id;
-                }
-                else if (node is PanelInputNode)
-                {
-
-                }
-                else if (node is PanelOutputNode)
-                {
-
-                }
-                else
-                {
-                    node.Id = Guid.NewGuid().ToString();
-                }
-            }
+            engine.GenerateNewIds(ref nodes, ref links);
 
             foreach (var node in nodes)
                 engine.AddNode(node);
@@ -546,12 +493,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return false;
 
-            Node oldNode = engine.GetNode(id);
-            Node node = (Node)oldNode.Clone();
-
-            node.Position = new Position { X = oldNode.Position.X+10, Y = oldNode.Position.Y + 15 };
-
-            engine.AddNode(node);
+            engine.CloneNode(id);
 
             return true;
         }

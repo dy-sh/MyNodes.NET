@@ -154,7 +154,7 @@ namespace MyNetSensors.Nodes
 
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
-        
+
         private void LogNodeInfo(string message)
         {
             OnLogNodeInfo?.Invoke(message);
@@ -752,7 +752,7 @@ namespace MyNetSensors.Nodes
             return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
         }
 
-        
+
 
         // this list used for infinite loop detection
         List<Input> changedInputsStack = new List<Input>();
@@ -893,9 +893,9 @@ namespace MyNetSensors.Nodes
             OnLogEngineError?.Invoke(message);
         }
 
-        
 
-        public string SerializeNodesAndLinks(List<Node> nodesList, List<Link> linksList)
+
+        private string SerializeNodesAndLinks(List<Node> nodesList, List<Link> linksList)
         {
             List<Object> list = new List<Object>();
             list.AddRange(nodesList);
@@ -907,7 +907,7 @@ namespace MyNetSensors.Nodes
             return JsonConvert.SerializeObject(list, settings);
         }
 
-        public void DeserializeNodesAndLinks(string json, out List<Node> nodesList, out List<Link> linksList)
+        private void DeserializeNodesAndLinks(string json, out List<Node> nodesList, out List<Link> linksList)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
@@ -917,6 +917,110 @@ namespace MyNetSensors.Nodes
 
             nodesList = objects.OfType<Node>().ToList();
             linksList = objects.OfType<Link>().ToList();
+        }
+
+
+        public string SerializePanel(string id)
+        {
+            Node panel = GetNode(id) as PanelNode;
+            if (panel == null)
+            {
+                LogEngineError($"Can`t serialize Panel [{id}]. Does not exist.");
+                return null;
+            }
+
+            List<Node> nodesList = new List<Node>();
+            nodesList.Add(panel);
+            nodesList.AddRange(GetNodesForPanel(id));
+
+            List<Link> linksList = GetLinksForPanel(id);
+
+            return SerializeNodesAndLinks(nodesList, linksList);
+        }
+
+        public void DeserializePanel(string json, out List<Node> nodesList, out List<Link> linksList)
+        {
+            DeserializeNodesAndLinks(json, out nodesList, out linksList);
+        }
+
+        public void CloneNode(string id)
+        {
+            Node oldNode = GetNode(id);
+            if (oldNode is PanelNode)
+            {
+                string json = SerializePanel(id);
+
+                List<Node> newNodes;
+                List<Link> newLinks;
+                DeserializePanel(json, out newNodes, out newLinks);
+
+                newNodes[0].Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
+
+                GenerateNewIds(ref newNodes, ref newLinks);
+
+                foreach (var node in newNodes)
+                    AddNode(node);
+
+                foreach (var link in newLinks)
+                    AddLink(link.OutputId, link.InputId);
+            }
+            else
+            {
+                Node newNode = (Node)oldNode.Clone();
+                newNode.Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
+                AddNode(newNode);
+            }
+
+
+        }
+
+
+
+        public void GenerateNewIds(ref List<Node> nodesList, ref List<Link> linksList)
+        {
+            foreach (var node in nodesList)
+            {
+                foreach (var input in node.Inputs)
+                {
+                    string oldId = input.Id;
+                    input.Id = Guid.NewGuid().ToString();
+
+                    foreach (var link in linksList.Where(x => x.InputId == oldId))
+                        link.InputId = input.Id;
+                }
+
+                foreach (var output in node.Outputs)
+                {
+                    string oldId = output.Id;
+                    output.Id = Guid.NewGuid().ToString();
+
+                    foreach (var link in linksList.Where(x => x.OutputId == oldId))
+                        link.OutputId = output.Id;
+                }
+
+                if (node is PanelNode)
+                {
+                    string oldId = node.Id;
+                    node.Id = Guid.NewGuid().ToString();
+
+                    foreach (var n in nodesList.Where(x => x.PanelId == oldId))
+                        n.PanelId = node.Id;
+                }
+                else if (node is PanelInputNode)
+                {
+                    node.Id = Guid.NewGuid().ToString();
+                    //todo
+                }
+                else if (node is PanelOutputNode)
+                {
+                    node.Id = Guid.NewGuid().ToString();
+                    //todo
+                }
+                else
+                {
+                    node.Id = Guid.NewGuid().ToString();
+                }
+            }
         }
     }
 }
