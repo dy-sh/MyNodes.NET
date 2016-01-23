@@ -32,6 +32,7 @@
             { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
             null,
             { content: "Export to file", callback: function () { var win = window.open("/NodesEditorAPI/SerializePanelToFile/" + that.id, '_blank'); win.focus(); } },
+            { content: "Export to script", callback: function () { editor.exportPanelToScript(that.id) } },
             null
         ];
     }
@@ -495,7 +496,8 @@
     function UITimer() {
         this.properties = {
             'ObjectType': "MyNetSensors.Nodes.UiTimerNode",
-            'Assembly': "Nodes.UITimer"};
+            'Assembly': "Nodes.UITimer"
+        };
     }
     UITimer.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;

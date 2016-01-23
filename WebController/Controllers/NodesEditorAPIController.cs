@@ -449,28 +449,13 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
+            PanelNode node = engine.GetPanelNode(id);
+            if (node == null)
+                return null;
+
             return NodesEngineSerializer.SerializePanel(id, engine);
         }
 
-        //public bool DeserializePanel(string json)
-        //{
-        //    if (engine == null)
-        //        return false;
-
-        //    List<Node> nodes;
-        //    List<Link> links;
-        //    NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
-
-        //    engine.GenerateNewIds(ref nodes, ref links);
-
-        //    foreach (var node in nodes)
-        //        engine.AddNode(node);
-
-        //    foreach (var link in links)
-        //        engine.AddLink(link.OutputId,link.InputId);
-
-        //    return true;
-        //}
 
         public IActionResult SerializePanelToFile(string id)
         {
@@ -502,6 +487,8 @@ namespace MyNetSensors.WebController.Controllers
             }
         }
 
+
+
         public bool CloneNode(string id)
         {
             if (engine == null)
@@ -512,6 +499,8 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
         public bool ImportPanel(string json, int x,int y,string ownerPanelId)
         {
             if (engine == null)
@@ -519,7 +508,22 @@ namespace MyNetSensors.WebController.Controllers
 
             try
             {
-                DeserializePanel(json, x, y, ownerPanelId);
+                List<Node> nodes;
+                List<Link> links;
+                NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
+
+                //set position to panel
+                nodes[0].Position = new Position(x, y);
+                nodes[0].PanelId = ownerPanelId;
+
+                engine.GenerateNewIds(ref nodes, ref links);
+
+                foreach (var node in nodes)
+                    engine.AddNode(node);
+
+                foreach (var link in links)
+                    engine.AddLink(link.OutputId, link.InputId);
+
                 return true;
             }
             catch
@@ -530,29 +534,6 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        private PanelNode DeserializePanel(string json, int x, int y, string ownerPanelId)
-        {
-            if (engine == null)
-                return null;
-
-            List<Node> nodes;
-            List<Link> links;
-            NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
-
-            //set position to panel
-            nodes[0].Position = new Position(x, y);
-            nodes[0].PanelId = ownerPanelId;
-
-            engine.GenerateNewIds(ref nodes, ref links);
-
-            foreach (var node in nodes)
-                engine.AddNode(node);
-
-            foreach (var link in links)
-                engine.AddLink(link.OutputId, link.InputId);
-
-            return (PanelNode)nodes[0];
-        }
 
     }
 }

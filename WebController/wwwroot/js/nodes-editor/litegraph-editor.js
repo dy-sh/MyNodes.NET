@@ -164,12 +164,9 @@ Editor.prototype.importPanelFromFile = function (position) {
 
 
 Editor.prototype.importPanelFromScript = function (position) {
+    $('#modal-panel-submit').show();
 
     $('#modal-panel-title').html("Import Panel");
-
-    $('#modal-panel-message').hide();
-    $('#modal-panel-message').removeClass("negative");
-    $('#modal-panel-form').removeClass("loading");
     $('#modal-panel-form').html(
                '<form class="ui form" id="modal-panel-form">' +
                '<div class="field">' +
@@ -179,7 +176,13 @@ Editor.prototype.importPanelFromScript = function (position) {
 
 
     $('#modal-panel').modal({
-        dimmerSettings: { opacity: 0.3 }
+        dimmerSettings: { opacity: 0.3 },
+        onHidden: function () {
+            $('#modal-panel-submit').hide();
+            $('#modal-panel-message').hide();
+            $('#modal-panel-message').removeClass("negative");
+            $('#modal-panel-form').removeClass("loading");
+        }
     }).modal('setting', 'transition', 'fade up').modal('show');
 
     $('#modal-panel-submit').click(function () {
@@ -210,14 +213,48 @@ Editor.prototype.importPanelFromScript = function (position) {
                 }
             }
         });
-
     });
-
 }
 
 
 
 
+Editor.prototype.exportPanelToScript = function (id) {
+
+    $('#modal-panel-message').html("Generating script...");
+    $('#modal-panel-message').fadeIn(300);
+
+    $('#modal-panel-title').html("Export Panel");
+    $('#modal-panel-form').html(
+               '<form class="ui form" id="modal-panel-form">' +
+               '<div class="field">' +
+               'Script: <textarea id="modal-panel-text"></textarea>' +
+               '</div>'
+               + '</form>');
+    $('#modal-panel-text').hide();
+
+
+    $('#modal-panel').modal({
+        dimmerSettings: { opacity: 0.3 },
+        onHidden: function () {
+            $('#modal-panel-submit').hide();
+            $('#modal-panel-message').hide();
+            $('#modal-panel-message').removeClass("negative");
+            $('#modal-panel-form').removeClass("loading");
+        }
+    }).modal('setting', 'transition', 'fade up').modal('show');
+
+    $.ajax({
+        url: "/NodesEditorAPI/SerializePanel/",
+        type: "POST",
+        data: { id: id },
+        success: function (result) {
+            $('#modal-panel-text').html(result);
+            $('#modal-panel-text').fadeIn(300);
+            $('#modal-panel-message').hide();
+        }
+    });
+}
 
 
 
