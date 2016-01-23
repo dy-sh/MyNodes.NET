@@ -446,7 +446,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            string json= engine.SerializePanel(id);
+            string json= NodesEngineSerializer.SerializePanel(id,engine);
 
             DeserializePanel(json);
 
@@ -460,7 +460,7 @@ namespace MyNetSensors.WebController.Controllers
 
             List<Node> nodes;
             List<Link> links;
-            engine.DeserializePanel(json, out nodes, out links);
+            NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
 
             engine.GenerateNewIds(ref nodes, ref links);
 

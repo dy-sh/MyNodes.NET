@@ -49,6 +49,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="NodesEngineSerializer.cs" />
     <Compile Include="Nodes\ConstantNode.cs" />
     <Compile Include="Nodes\ConsoleNode.cs" />
     <Compile Include="Nodes\PanelOutputNode.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Output.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializedNode.cs" />
     <Compile Include="Size.cs" />
   </ItemGroup>
   <ItemGroup>

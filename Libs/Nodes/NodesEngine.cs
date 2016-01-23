@@ -1,5 +1,5 @@
 ﻿/*  MyNetSensors 
-    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    Copyright (C) 2015-2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
@@ -14,7 +14,7 @@ namespace MyNetSensors.Nodes
     public delegate void LogMessageEventHandler(string message);
     public class NodesEngine
     {
-        const string MAIN_PANEL_ID = "Main";
+        public readonly string MAIN_PANEL_ID = "Main";
 
         //If you have tons of nodes, and system perfomance decreased, increase this value,
         //and you will get less nodes updating frequency 
@@ -116,7 +116,11 @@ namespace MyNetSensors.Nodes
             if (nodesDb != null)
                 nodes = nodesDb.GetAllNodes();
 
-            foreach (var node in nodes)
+            //to prevent changing of collection while writing to db is not yet finished
+            Node[] nodesArray = new Node[nodes.Count];
+            nodes.CopyTo(nodesArray);
+
+            foreach (var node in nodesArray)
             {
                 foreach (var input in node.Inputs)
                     input.OnInputChange += OnInputChange;
@@ -127,6 +131,14 @@ namespace MyNetSensors.Nodes
                 node.OnLogError += LogNodeError;
                 node.OnLogInfo += LogNodeInfo;
                 node.OnUpdate += UpdateNode;
+
+                bool checkNodeCanBeAdded = node.OnAddToEngine(this);
+                if (!checkNodeCanBeAdded)
+                {
+                    LogEngineError($"Can`t create node [{node.GetType().Name}]. Aborted by node.");
+                    nodes.Remove(node);
+                    continue;
+                }
             }
 
             OnNodesUpdatedEvent?.Invoke(nodes);
@@ -232,22 +244,13 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
+            bool checkNodeCanBeAdded = node.OnAddToEngine(this);
+            if (!checkNodeCanBeAdded)
+            {
+                LogEngineError($"Can`t create node [{node.GetType().Name}]. Aborted by node.");
+                return;
+            }
 
-            if (node is PanelNode)
-            {
-                if (!AddPanel((PanelNode)node))
-                    return;
-            }
-            if (node is PanelInputNode)
-            {
-                if (!AddPanelInput((PanelInputNode)node))
-                    return;
-            }
-            if (node is PanelOutputNode)
-            {
-                if (!AddPanelOutput((PanelOutputNode)node))
-                    return;
-            }
 
             foreach (var input in node.Inputs)
                 input.OnInputChange += OnInputChange;
@@ -271,117 +274,11 @@ namespace MyNetSensors.Nodes
 
 
 
-        private string GeneratePanelName(PanelNode node)
-        {
-            //auto naming
-            List<PanelNode> panels = GetPanelNodes();
-            List<string> names = panels.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
-            {
-                if (!names.Contains($"Panel {i}"))
-                    return $"Panel {i}";
-            }
-            return null;
-        }
-
-        private bool AddPanel(PanelNode node)
-        {
-            node.Name = GeneratePanelName(node);
-            return true;
-        }
-
-        private bool AddPanelInput(PanelInputNode node)
-        {
-            if (node.PanelId == MAIN_PANEL_ID)
-            {
-                LogEngineError("Can`t create input for main panel.");
-                return false;
-            }
-
-            PanelNode panel = GetPanelNode(node.PanelId);
-            if (panel == null)
-            {
-                LogEngineError($"Can`t create panel input. Panel [{node.PanelId}] does not exist.");
-                return false;
-            }
-
-            node.Name = GenerateInputName(panel, node);
-
-            if (!panel.Inputs.Any(x => x.Id == node.Id))
-            {
-                Input input = new Input
-                {
-                    Id = node.Id,
-                    Name = node.Name
-                };
-                panel.Inputs.Add(input);
-                input.OnInputChange += OnInputChange;
-            }
-
-            UpdateNode(panel, true);
-
-            return true;
-        }
 
 
 
-        private bool AddPanelOutput(PanelOutputNode node)
-        {
-            if (node.PanelId == MAIN_PANEL_ID)
-            {
-                LogEngineError("Can`t create output for main panel.");
-                return false;
-            }
-
-            PanelNode panel = GetPanelNode(node.PanelId);
-            if (panel == null)
-            {
-                LogEngineError($"Can`t create panel output. Panel [{node.PanelId}] does not exist.");
-                return false;
-            }
-
-            node.Name = GenerateOutputName(panel, node);
-
-            if (!panel.Outputs.Any(x => x.Id == node.Id))
-            {
-                Output output = new Output
-                {
-                    Id = node.Id,
-                    Name = node.Name
-                };
-                panel.Outputs.Add(output);
-                output.OnOutputChange += OnOutputChange;
-            }
-
-            UpdateNode(panel, true);
-            return true;
-        }
 
 
-
-        private string GenerateInputName(PanelNode panel, PanelInputNode node)
-        {
-            //auto naming
-            List<string> names = panel.Inputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
-            {
-                if (!names.Contains($"In {i}"))
-                    return $"In {i}";
-            }
-            return null;
-        }
-
-        private string GenerateOutputName(PanelNode panel, PanelOutputNode node)
-        {
-            //auto naming
-            List<string> names = panel.Outputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
-            {
-                if (!names.Contains($"Out {i}"))
-                    return $"Out {i}";
-            }
-            return null;
-        }
 
 
         public void RemoveNode(Node node)
@@ -413,29 +310,12 @@ namespace MyNetSensors.Nodes
             node.OnLogInfo -= LogNodeInfo;
             node.OnUpdate -= UpdateNode;
 
-
-
-            if (node is PanelInputNode)
-                RemovePanelInput((PanelInputNode)node);
-            else if (node is PanelOutputNode)
-                RemovePanelOutput((PanelOutputNode)node);
-            else if (node is PanelNode)
-                RemovePanel((PanelNode)node);
-
-
             nodesDb?.RemoveNode(node.Id);
 
             nodes.Remove(node);
         }
 
-        private void RemovePanel(PanelNode node)
-        {
-            List<Node> nodesList = GetNodesForPanel(node.Id,false);
-            foreach (var n in nodesList)
-            {
-                RemoveNode(n);
-            }
-        }
+
 
         public List<Node> GetNodesForPanel(string panelId, bool includeSubPanels)
         {
@@ -449,7 +329,7 @@ namespace MyNetSensors.Nodes
                 List<PanelNode> panels = nodesList.OfType<PanelNode>().ToList();
                 foreach (PanelNode panel in panels)
                 {
-                    nodesList.AddRange(GetNodesForPanel(panel.Id,true));
+                    nodesList.AddRange(GetNodesForPanel(panel.Id, true));
                 }
                 return nodesList;
             }
@@ -463,8 +343,8 @@ namespace MyNetSensors.Nodes
             }
             else
             {
-                List<Link> linksList= links.Where(n => n.PanelId == panelId).ToList();
-                List<PanelNode> panels = GetNodesForPanel(panelId,true).OfType<PanelNode>().ToList();
+                List<Link> linksList = links.Where(n => n.PanelId == panelId).ToList();
+                List<PanelNode> panels = GetNodesForPanel(panelId, true).OfType<PanelNode>().ToList();
                 foreach (PanelNode panel in panels)
                 {
                     linksList.AddRange(links.Where(n => n.PanelId == panel.Id).ToList());
@@ -474,51 +354,13 @@ namespace MyNetSensors.Nodes
         }
 
 
-        private List<PanelNode> GetPanelNodes()
+        public List<PanelNode> GetPanelNodes()
         {
             return nodes.Where(n => n is PanelNode).Cast<PanelNode>().ToList();
         }
 
 
-        private bool RemovePanelInput(PanelInputNode node)
-        {
-            PanelNode panel = GetPanelNode(node.PanelId);
-            if (panel == null)
-            {
-                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
-                return false;
-            }
 
-            Input input = GetInput(node.Id);
-
-            Link link = GetLinkForInput(input);
-            if (link != null)
-                RemoveLink(link);
-
-            panel.Inputs.Remove(input);
-            UpdateNode(panel, true);
-            return true;
-        }
-
-        private bool RemovePanelOutput(PanelOutputNode node)
-        {
-            PanelNode panel = GetPanelNode(node.PanelId);
-            if (panel == null)
-            {
-                LogEngineError($"Can`t remove panel input. Panel [{node.PanelId}] does not exist.");
-                return false;
-            }
-
-            Output output = GetOutput(node.Id);
-
-            List<Link> links = GetLinksForOutput(output);
-            foreach (var link in links)
-                RemoveLink(link);
-
-            panel.Outputs.Remove(output);
-            UpdateNode(panel, true);
-            return true;
-        }
 
 
         public void UpdateNode(Node node, bool writeNodeToDb)
@@ -803,12 +645,6 @@ namespace MyNetSensors.Nodes
 
             node.OnInputChange(input);
 
-            if (node is PanelNode)
-                GetNode(input.Id).Outputs[0].Value = input.Value;
-
-            if (node is PanelOutputNode)
-                GetOutput(node.Id).Value = input.Value;
-
             OnInputUpdatedEvent?.Invoke(input);
 
             changedInputsStack.Remove(input);
@@ -826,18 +662,6 @@ namespace MyNetSensors.Nodes
             OnOutputUpdatedEvent?.Invoke(output);
 
             node.OnOutputChange(output);
-
-            //send state to linked nodes
-            List<Link> list = links.Where(x => x.OutputId == output.Id).ToList();
-            foreach (var link in list)
-            {
-                Input input = GetInput(link.InputId);
-                if (input != null)
-                {
-                    input.Value = output.Value;
-                }
-            }
-
         }
 
         public Node GetInputOwner(Input input)
@@ -924,64 +748,17 @@ namespace MyNetSensors.Nodes
 
 
 
-        private string SerializeNodesAndLinks(List<Node> nodesList, List<Link> linksList)
-        {
-            List<Object> list = new List<Object>();
-            list.AddRange(nodesList);
-            list.AddRange(linksList);
-
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
-
-            return JsonConvert.SerializeObject(list, settings);
-        }
-
-        private void DeserializeNodesAndLinks(string json, out List<Node> nodesList, out List<Link> linksList)
-        {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.All;
-            settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
-
-            List<object> objects = (List<object>)JsonConvert.DeserializeObject<object>(json, settings);
-
-            nodesList = objects.OfType<Node>().ToList();
-            linksList = objects.OfType<Link>().ToList();
-        }
-
-
-        public string SerializePanel(string id)
-        {
-            Node panel = GetNode(id) as PanelNode;
-            if (panel == null)
-            {
-                LogEngineError($"Can`t serialize Panel [{id}]. Does not exist.");
-                return null;
-            }
-
-            List<Node> nodesList = new List<Node>();
-            nodesList.Add(panel);
-            nodesList.AddRange(GetNodesForPanel(id, true));
-
-            List<Link> linksList = GetLinksForPanel(id,true);
-
-            return SerializeNodesAndLinks(nodesList, linksList);
-        }
-
-        public void DeserializePanel(string json, out List<Node> nodesList, out List<Link> linksList)
-        {
-            DeserializeNodesAndLinks(json, out nodesList, out linksList);
-        }
 
         public void CloneNode(string id)
         {
             Node oldNode = GetNode(id);
             if (oldNode is PanelNode)
             {
-                string json = SerializePanel(id);
+                string json = NodesEngineSerializer.SerializePanel(id, this);
 
                 List<Node> newNodes;
                 List<Link> newLinks;
-                DeserializePanel(json, out newNodes, out newLinks);
+                NodesEngineSerializer.DeserializePanel(json, out newNodes, out newLinks);
 
                 newNodes[0].Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
 
@@ -995,7 +772,11 @@ namespace MyNetSensors.Nodes
             }
             else
             {
-                Node newNode = (Node)oldNode.Clone();
+                string json = NodesEngineSerializer.SerializeNode(oldNode);
+                Node newNode = NodesEngineSerializer.DeserializeNode(json);
+
+                GenerateNewIds(newNode);
+
                 newNode.Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
                 AddNode(newNode);
             }
@@ -1058,5 +839,19 @@ namespace MyNetSensors.Nodes
                 }
             }
         }
+
+        public void GenerateNewIds(Node node)
+        {
+            //generate id`s for inputs
+            foreach (var input in node.Inputs)
+                input.Id = Guid.NewGuid().ToString();
+
+            //generate id`s for outputs
+            foreach (var output in node.Outputs)
+                output.Id = Guid.NewGuid().ToString();
+
+            node.Id = Guid.NewGuid().ToString();
+        }
     }
 }
+
