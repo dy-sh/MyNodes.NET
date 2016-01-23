@@ -512,14 +512,14 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool ImportPanelFromFile(string file, int x,int y)
+        public bool ImportPanelFromFile(string file, int x,int y,string ownerPanelId)
         {
             if (engine == null)
                 return false;
 
             try
             {
-                DeserializePanel(file, x, y);
+                DeserializePanel(file, x, y, ownerPanelId);
                 return true;
             }
             catch
@@ -530,7 +530,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        private PanelNode DeserializePanel(string json, int x, int y)
+        private PanelNode DeserializePanel(string json, int x, int y, string ownerPanelId)
         {
             if (engine == null)
                 return null;
@@ -541,6 +541,7 @@ namespace MyNetSensors.WebController.Controllers
 
             //set position to panel
             nodes[0].Position = new Position(x, y);
+            nodes[0].PanelId = ownerPanelId;
 
             engine.GenerateNewIds(ref nodes, ref links);
 

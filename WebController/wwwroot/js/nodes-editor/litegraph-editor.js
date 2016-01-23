@@ -141,7 +141,8 @@ Editor.prototype.importPanelFromFile = function (position) {
                 data: {
                     file: filebody,
                     x: position[0],
-                    y: position[1]
+                    y: position[1],
+                    ownerPanelId: window.this_panel_id
                 },
                 success: function (result) {
                     if (result) {
