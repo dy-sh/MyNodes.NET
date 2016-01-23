@@ -109,8 +109,8 @@ namespace MyNetSensors.WebController.Code
                 logs.AddSystemInfo("---------------- STARTING ------------------");
 
                 ConnectToDB(services);
-                ConnectToGateway();
-                ConnectToNodesEngine();
+                ConnectToSerialGateway();
+                StartNodesEngine();
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
 
@@ -225,7 +225,7 @@ namespace MyNetSensors.WebController.Code
         
 
 
-        private static void ConnectToGateway()
+        private static void ConnectToSerialGateway()
         {
             gateway.enableAutoAssignId = enableAutoAssignId;
 
@@ -250,13 +250,8 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void ConnectToNodesEngine()
+        private static void StartNodesEngine()
         {
-            //connecting tasks
-            if (!nodesEngineEnabled) return;
-
-            logs.AddSystemInfo("Starting nodes engine... ");
-
             nodesEngine = new NodesEngine(nodesDb);
             nodesEngine.SetUpdateInterval(nodesEngineUpdateInterval);
             nodesEngine.OnLogEngineInfo += logs.AddNodesEngineInfo;
@@ -268,6 +263,9 @@ namespace MyNetSensors.WebController.Code
             uiNodesEngine = new UiNodesEngine(nodesEngine, nodesStatesDb);
             uiTimerNodesEngine = new UITimerNodesEngine(nodesEngine, uiTimerNodesDb);
 
+            if (!nodesEngineEnabled) return;
+
+            logs.AddSystemInfo("Starting nodes engine... ");
             nodesEngine.Start();
 
             logs.AddSystemInfo("Nodes engine started.");

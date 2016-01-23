@@ -117,7 +117,6 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        [HttpPost]
         public async Task<bool> ConnectSerialController()
         {
             dynamic json = ReadConfig();
@@ -131,7 +130,7 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        [HttpPost]
+
         public bool DisconnectSerialController()
         {
             dynamic json = ReadConfig();
@@ -140,6 +139,32 @@ namespace MyNetSensors.WebController.Controllers
             сonfiguration.Reload();
 
             SystemController.gateway.Disconnect();
+
+            return true;
+        }
+
+
+        public bool StartNodesEngine()
+        {
+            dynamic json = ReadConfig();
+            json.NodesEngine.Enable = true;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            SystemController.nodesEngine.Start();
+
+            return true;
+        }
+
+
+        public bool StopNodesEngine()
+        {
+            dynamic json = ReadConfig();
+            json.NodesEngine.Enable = false;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            SystemController.nodesEngine.Stop();
 
             return true;
         }

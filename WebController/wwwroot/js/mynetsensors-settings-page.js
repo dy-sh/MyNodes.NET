@@ -53,7 +53,7 @@ $(document).ready(function () {
     $("#nodes-engine-start").click(function () {
         $.ajax({
             type: "POST",
-            url: "/NodesEditorAPI/Start/",
+            url: "/Config/StartNodesEngine/",
             success: function () {
                 getNodesEngineInfo();
             }
@@ -63,7 +63,7 @@ $(document).ready(function () {
     $("#nodes-engine-stop").click(function () {
         $.ajax({
             type: "POST",
-            url: "/NodesEditorAPI/Stop/",
+            url: "/Config/StopNodesEngine/",
             success:function() {
                 getNodesEngineInfo();
             }

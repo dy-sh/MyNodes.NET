@@ -31,6 +31,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Panel(string id, bool split)
         {
+            if (engine == null)
+                return HttpBadRequest();
+
             ViewBag.split = split;
 
             if (id == null || id== MAIN_PANEL_ID)

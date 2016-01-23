@@ -68,9 +68,6 @@ namespace MyNetSensors.Nodes
 
             this.nodesDb = nodesDb;
 
-
-
-
             updateNodesTimer.Elapsed += UpdateNodes;
             updateNodesTimer.Interval = updateNodesInterval;
 
@@ -82,15 +79,22 @@ namespace MyNetSensors.Nodes
         }
 
 
-
+        private bool starting;
 
         public void Start()
         {
-            if (started)
+            if (started || starting)
                 return;
 
-            started = true;
+
+            LogEngineInfo("Starting...");
+            starting = true;
+
             UpdateStatesFromLinks();
+
+
+            started = true;
+
             updateNodesTimer.Start();
 
             OnStartEvent?.Invoke();
@@ -105,6 +109,8 @@ namespace MyNetSensors.Nodes
                 return;
 
             started = false;
+            starting = false;
+
             updateNodesTimer.Stop();
             changedInputsStack.Clear();
 
@@ -174,25 +180,53 @@ namespace MyNetSensors.Nodes
             OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
-        private void LogNodeInfo(string message)
+
+
+
+        // this list used for infinite loop detection
+        List<Input> changedInputsStack = new List<Input>();
+
+        public void OnInputChange(Input input)
         {
-            OnLogNodeInfo?.Invoke(message);
+            if (!started)
+                return;
+
+            Node node = GetInputOwner(input.Id);
+
+            if (changedInputsStack.Contains(input))
+            {
+                changedInputsStack.Remove(input);
+                LogEngineError($"Infinite loop detected in Node [{node.Type}] [{node.Id}].");
+                return;
+            }
+            changedInputsStack.Add(input);
+
+            node.OnInputChange(input);
+
+            OnInputUpdatedEvent?.Invoke(input);
+
+            try
+            {
+                changedInputsStack.Remove(input);
+            }
+            catch { }
+
         }
 
-        private void LogNodeError(string message)
+        public void OnOutputChange(Output output)
         {
-            OnLogNodeError?.Invoke(message);
+            if (!started)
+                return;
+
+            Node node = GetOutputOwner(output);
+            if (node == null)
+                return;
+
+            OnOutputUpdatedEvent?.Invoke(output);
+
+            node.OnOutputChange(output);
         }
 
-        public List<Node> GetNodes()
-        {
-            return nodes;
-        }
-
-        public List<Link> GetLinks()
-        {
-            return links;
-        }
 
         private void UpdateNodes(object sender, ElapsedEventArgs e)
         {
@@ -219,10 +253,33 @@ namespace MyNetSensors.Nodes
             catch { }
 
             if (started)
-            updateNodesTimer.Start();
+                updateNodesTimer.Start();
         }
 
 
+
+
+        private void LogNodeInfo(string message)
+        {
+            OnLogNodeInfo?.Invoke(message);
+        }
+
+        private void LogNodeError(string message)
+        {
+            OnLogNodeError?.Invoke(message);
+        }
+
+        public List<Node> GetNodes()
+        {
+            return nodes;
+        }
+
+        public List<Link> GetLinks()
+        {
+            return links;
+        }
+
+   
 
 
 
@@ -615,12 +672,16 @@ namespace MyNetSensors.Nodes
 
             foreach (var link in links)
             {
-                if (!started)
+                if (!started && !starting)
                     return;
 
                 Input input = GetInput(link.InputId);
                 Output output = GetOutput(link.OutputId);
                 input.Value = output.Value;
+
+                //update node internal logic
+                Node node = GetInputOwner(input);
+                node.OnInputChange(input);
             }
         }
 
@@ -636,52 +697,7 @@ namespace MyNetSensors.Nodes
             return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
         }
 
-
-
-        // this list used for infinite loop detection
-        List<Input> changedInputsStack = new List<Input>();
-
-        public void OnInputChange(Input input)
-        {
-            if (!started)
-                return;
-
-            Node node = GetInputOwner(input.Id);
-
-            if (changedInputsStack.Contains(input))
-            {
-                changedInputsStack.Remove(input);
-                LogEngineError($"Infinite loop detected in Node [{node.Type}] [{node.Id}].");
-                return;
-            }
-            changedInputsStack.Add(input);
-
-            node.OnInputChange(input);
-
-            OnInputUpdatedEvent?.Invoke(input);
-
-            try
-            {
-                changedInputsStack.Remove(input);
-            }
-            catch { }
-            
-        }
-
-        public void OnOutputChange(Output output)
-        {
-            if (!started)
-                return;
-
-            Node node = GetOutputOwner(output);
-            if (node == null)
-                return;
-
-            OnOutputUpdatedEvent?.Invoke(output);
-
-            node.OnOutputChange(output);
-        }
-
+        
         public Node GetInputOwner(Input input)
         {
             return nodes.FirstOrDefault(node => node.Inputs.Contains(input));

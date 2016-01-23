@@ -24,6 +24,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Panel(string id)
         {
+            if (engine == null)
+                return HttpBadRequest();
+
             if (id == null || id == MAIN_PANEL_ID)
             {
                 id = MAIN_PANEL_ID;
@@ -43,6 +46,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult List()
         {
+            if (engine == null)
+                return HttpBadRequest();
+
             ViewBag.showMainPanel = engine.GetUINodesForPanel(MAIN_PANEL_ID).Any();
 
             List<PanelNode> allPanels = engine.GetPanels();
@@ -58,10 +64,10 @@ namespace MyNetSensors.WebController.Controllers
 
 
         
-        public ActionResult Chart(string id, string autoscroll, string style, string start, string end)
+        public IActionResult Chart(string id, string autoscroll, string style, string start, string end)
         {
             if (engine == null)
-                return null;
+                return HttpBadRequest();
 
             UiChartNode chart = engine.GetUINode(id) as UiChartNode;
             if (chart == null)
