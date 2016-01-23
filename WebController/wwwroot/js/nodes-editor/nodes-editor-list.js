@@ -27,9 +27,11 @@
         return [
             { content: "Open", callback: function () { window.location = "/NodesEditor/Panel/" + that.id; } },
             null, //null for horizontal line
-            { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
-            null, //null for horizontal line
             { content: "Settings", callback: function () { PanelSettings(that) } },
+            null,
+            { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
+            null,
+            { content: "Export to file", callback: function () { var win = window.open("/NodesEditorAPI/SerializePanelToFile/" + that.id, '_blank'); win.focus(); } },
             null
         ];
     }

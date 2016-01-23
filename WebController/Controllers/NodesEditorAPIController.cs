@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
@@ -446,11 +447,7 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return null;
 
-            string json= NodesEngineSerializer.SerializePanel(id,engine);
-
-            DeserializePanel(json);
-
-            return json;
+            return NodesEngineSerializer.SerializePanel(id, engine);
         }
 
         public bool DeserializePanel(string json)
@@ -472,6 +469,21 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+        public IActionResult SerializePanelToFile(string id)
+        {
+            if (engine == null)
+                return null;
+
+            PanelNode node = engine.GetPanelNode(id);
+            if (node == null)
+                return null;
+
+            string json= NodesEngineSerializer.SerializePanel(id, engine);
+
+            return File(Encoding.UTF8.GetBytes(json), "text/plain", node.Name+".json");
+        }
+
 
 
 

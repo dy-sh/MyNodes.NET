@@ -760,7 +760,7 @@ namespace MyNetSensors.Nodes
                 List<Link> newLinks;
                 NodesEngineSerializer.DeserializePanel(json, out newNodes, out newLinks);
 
-                newNodes[0].Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
+                newNodes[0].Position = new Position { X = oldNode.Position.X + 5, Y = oldNode.Position.Y + 20 };
 
                 GenerateNewIds(ref newNodes, ref newLinks);
 
@@ -777,7 +777,7 @@ namespace MyNetSensors.Nodes
 
                 GenerateNewIds(newNode);
 
-                newNode.Position = new Position { X = oldNode.Position.X + 10, Y = oldNode.Position.Y + 15 };
+                newNode.Position = new Position { X = oldNode.Position.X + 5, Y = oldNode.Position.Y + 20 };
                 AddNode(newNode);
             }
 
