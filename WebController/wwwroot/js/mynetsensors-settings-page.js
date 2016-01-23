@@ -33,8 +33,8 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "/Config/ConnectSerialController/",
-            success:function() {
-
+            success: function () {
+                getGatewayInfo();
             }
         });
     });
@@ -44,7 +44,28 @@ $(document).ready(function () {
             type: "POST",
             url: "/Config/DisconnectSerialController/",
             success: function () {
+                getGatewayInfo();
+            }
+        });
+    });
 
+
+    $("#nodes-engine-start").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/NodesEditorAPI/Start/",
+            success: function () {
+                getNodesEngineInfo();
+            }
+        });
+    });
+
+    $("#nodes-engine-stop").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/NodesEditorAPI/Stop/",
+            success:function() {
+                getNodesEngineInfo();
             }
         });
     });
@@ -79,7 +100,7 @@ function updateNodesEngineInfo(info) {
         $("#nodes-engine-stop").show();
     }
     else{
-        $("#serial-gateway-state").html('Stopped');
+        $("#nodes-engine-state").html('Stopped');
         $("#nodes-engine-state").addClass('red');
         $("#nodes-engine-start").show();
         $("#nodes-engine-stop").hide();

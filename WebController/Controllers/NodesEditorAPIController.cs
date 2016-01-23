@@ -556,5 +556,25 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool Start()
+        {
+            if (engine == null)
+                return false;
+
+            engine.Start();
+
+            return true;
+        }
+
+        public bool Stop()
+        {
+            if (engine == null)
+                return false;
+
+            engine.Stop();
+
+            return true;
+        }
+
     }
 }

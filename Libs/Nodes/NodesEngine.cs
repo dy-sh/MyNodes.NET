@@ -86,9 +86,12 @@ namespace MyNetSensors.Nodes
 
         public void Start()
         {
+            if (started)
+                return;
+
             started = true;
-            updateNodesTimer.Start();
             UpdateStatesFromLinks();
+            updateNodesTimer.Start();
 
             OnStartEvent?.Invoke();
 
@@ -98,11 +101,15 @@ namespace MyNetSensors.Nodes
 
         public void Stop()
         {
+            if (!started)
+                return;
+
             started = false;
+            updateNodesTimer.Stop();
+            changedInputsStack.Clear();
 
             OnStopEvent?.Invoke();
 
-            updateNodesTimer.Stop();
             LogEngineInfo("Stopped");
         }
 
@@ -203,12 +210,15 @@ namespace MyNetSensors.Nodes
                 foreach (var node in nodesTemp)
                 {
                     node.Loop();
+                    if (!started)
+                        break;
                 }
 
                 OnUpdateEvent?.Invoke();
             }
             catch { }
 
+            if (started)
             updateNodesTimer.Start();
         }
 
@@ -605,6 +615,9 @@ namespace MyNetSensors.Nodes
 
             foreach (var link in links)
             {
+                if (!started)
+                    return;
+
                 Input input = GetInput(link.InputId);
                 Output output = GetOutput(link.OutputId);
                 input.Value = output.Value;
@@ -647,7 +660,12 @@ namespace MyNetSensors.Nodes
 
             OnInputUpdatedEvent?.Invoke(input);
 
-            changedInputsStack.Remove(input);
+            try
+            {
+                changedInputsStack.Remove(input);
+            }
+            catch { }
+            
         }
 
         public void OnOutputChange(Output output)
