@@ -7,63 +7,11 @@
 
 $(function () {
     getGatewayInfo();
+    getNodesEngineInfo();
     setInterval(getGatewayInfo, 1000);
+    setInterval(getNodesEngineInfo, 1000);
 });
 
-
-
-function getGatewayInfo() {
-    $.ajax({
-        url: "/GatewayAPI/GetGatewayInfo/",
-        type: "POST",
-        success: function (gatewayInfo) {
-            $('#main-content').show();
-            updateInfo(gatewayInfo);
-        },
-        error: function () {
-            $('#main-content').hide();
-        }
-    });
-}
-
-
-
-function updateInfo(gatewayInfo) {
-    $("#serial-gateway-state").removeClass("blue");
-    $("#serial-gateway-state").removeClass("red");
-
-    switch (gatewayInfo.state) {
-        case 0:
-            $("#serial-gateway-state").html('Disconnected');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").show();
-            $("#serial-gateway-disconnect").hide();
-            break;
-        case 1:
-            $("#serial-gateway-state").html('Connecting to port...');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
-            break;
-        case 2:
-            $("#serial-gateway-state").html('Connecting to gateway...');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
-            break;
-        case 3:
-            $("#serial-gateway-state").html('Connected');
-            $("#serial-gateway-state").addClass('blue');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
-            break;
-        default:
-    }
-
-
-    $('#nodes-registered').html(gatewayInfo.gatewayNodesRegistered);
-    $('#sensors-registered').html(gatewayInfo.gatewaySensorsRegistered);
-}
 
 $(document).ready(function () {
 
@@ -102,3 +50,104 @@ $(document).ready(function () {
     });
 
 });
+
+
+
+function getNodesEngineInfo() {
+    $.ajax({
+        url: "/NodesEditorAPI/GetNodesEngineInfo/",
+        type: "POST",
+        success: function (info) {
+            $('#main-content').show();
+            updateNodesEngineInfo(info);
+        },
+        error: function () {
+            $('#main-content').hide();
+        }
+    });
+}
+
+
+
+function updateNodesEngineInfo(info) {
+    $("#nodes-engine-state").removeClass("blue");
+    $("#nodes-engine-state").removeClass("red");
+    if (info.Started) {
+        $("#nodes-engine-state").html('Started');
+        $("#nodes-engine-state").addClass('blue');
+        $("#nodes-engine-start").hide();
+        $("#nodes-engine-stop").show();
+    }
+    else{
+        $("#serial-gateway-state").html('Stopped');
+        $("#nodes-engine-state").addClass('red');
+        $("#nodes-engine-start").show();
+        $("#nodes-engine-stop").hide();
+    }
+
+    $('#nodes-engine-links-count').html(info.LinksCount);
+    $('#nodes-engine-nodes-count').html(info.AllNodesCount);
+    $('#nodes-engine-panels-count').html(info.PanelsNodesCount);
+    $('#nodes-engine-io-count').html(info.InputsOutputsNodesCount);
+    $('#nodes-engine-ui-count').html(info.UiNodesCount);
+    $('#nodes-engine-hardware-count').html(info.HardwareNodesCount);
+    $('#nodes-engine-other-count').html(info.OtherNodesCount);
+}
+
+
+
+
+
+
+function getGatewayInfo() {
+    $.ajax({
+        url: "/GatewayAPI/GetGatewayInfo/",
+        type: "POST",
+        success: function (gatewayInfo) {
+            $('#main-content').show();
+            updateGatewayInfo(gatewayInfo);
+        },
+        error: function () {
+            $('#main-content').hide();
+        }
+    });
+}
+
+
+
+function updateGatewayInfo(gatewayInfo) {
+    $("#serial-gateway-state").removeClass("blue");
+    $("#serial-gateway-state").removeClass("red");
+
+    switch (gatewayInfo.state) {
+        case 0:
+            $("#serial-gateway-state").html('Disconnected');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").show();
+            $("#serial-gateway-disconnect").hide();
+            break;
+        case 1:
+            $("#serial-gateway-state").html('Connecting to port...');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        case 2:
+            $("#serial-gateway-state").html('Connecting to gateway...');
+            $("#serial-gateway-state").addClass('red');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        case 3:
+            $("#serial-gateway-state").html('Connected');
+            $("#serial-gateway-state").addClass('blue');
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            break;
+        default:
+    }
+
+
+    $('#serial-gateway-nodes-count').html(gatewayInfo.gatewayNodesRegistered);
+    $('#serial-gateway-sensors-count').html(gatewayInfo.gatewaySensorsRegistered);
+}

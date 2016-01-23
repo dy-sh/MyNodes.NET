@@ -15,6 +15,62 @@
     <div class="ui divider"></div>
 
     <div class="ui two column centered stackable grid" id="main-content" style="display: none;">
+
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Nodes Engine</b>
+                </div>
+
+                <div class="ui attached clearing segment">
+                    State
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-state">-</span>
+                    </div>
+                </div>
+
+                <div class="ui attached clearing segment">
+                    Nodes
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-nodes-count">-</span>
+                    </div><br/><br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp; Panels
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-panels-count">-</span>
+                    </div><br/><br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp; Inputs/Outputs
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-io-count">-</span>
+                    </div><br/><br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp; UI
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-ui-count">-</span>
+                    </div><br /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp; Hardware
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-hardware-count">-</span>
+                    </div><br/><br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp; Other
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-other-count">-</span>
+                    </div><br /><br />
+                    Links
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-links-count">-</span>
+                    </div><br/><br/>
+                    <div class="ui divider"></div>
+                    <button class="ui right floated small button" id="nodes-engine-delete">Delete all nodes</button>
+                </div>
+
+                    <div class="ui attached clearing segment">
+                        <button class="ui right floated blue button connectbutton" id="nodes-engine-start">Start</button>
+                        <button class="ui right floated button connectbutton" id="nodes-engine-stop" style="display: none">Stop</button>
+                    </div>
+                </div>
+        </div>
+
+
         <div class="column">
             <div class="ui raised segments">
                 <div class="ui secondary clearing segment">
@@ -45,50 +101,38 @@
                 <div class="ui attached clearing segment">
                     State
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="serial-gateway-state"></span>
+                        <span class="ui blue basic label" id="serial-gateway-state">-</span>
                     </div>
                 </div>
 
                 <div class="ui attached clearing segment">
-                    Nodes registered
+                    Nodes
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="nodes-registered">-</span>
+                        <span class="ui blue basic label" id="serial-gateway-nodes-count">-</span>
                     </div>
-                    <br />
-                    <br />
-                    Sensors registered
+                    <br/>
+                    <br/>
+                    Sensors
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="sensors-registered">-</span>
+                        <span class="ui blue basic label" id="serial-gateway-sensors-count">-</span>
                     </div>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <div class="ui divider"></div>
                     <button class="ui right floated small button" id="serial-gateway-delete-nodes">Delete all nodes</button>
                 </div>
-    
 
-                <div class="ui attached clearing segment" id="node-{{Id}}">
 
-                        <button class="ui right floated blue button connectbutton" id="serial-gateway-connect">Connect</button>
-                        <button class="ui right floated button connectbutton" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
-                        <a asp-controller="Config" asp-action="SerialPort" class="ui right floated button">Select serial port</a>
-
+                <div class="ui attached clearing segment">
+                    <button class="ui right floated blue button connectbutton" id="serial-gateway-connect">Connect</button>
+                    <button class="ui right floated button connectbutton" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
+                    <a asp-controller="Config" asp-action="SerialPort" class="ui right floated button">Select serial port</a>
                 </div>
             </div>
         </div>
 
 
-        @*<div class="column">
-                <div class="ui raised segments">
-                    <div class="ui secondary clearing segment">
-                        <b>Tasks</b>
-                    </div>
-                    <div class="ui attached center aligned segment">
-                        <button type="button" class="ui button" id="disableTasks">Disable all tasks</button>
-                        <button class="ui button" id="dropTasks">Delete all tasks</button>
-                    </div>
-                </div>
-            </div>*@
+
 
 
         @*<div class="column">

@@ -533,6 +533,27 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public NodesEngineInfo GetNodesEngineInfo()
+        {
+            if (engine == null)
+                return null;
+
+            NodesEngineInfo info = new NodesEngineInfo();
+            info.Started = engine.IsStarted();
+            info.LinksCount = engine.GetLinks().Count;
+            info.AllNodesCount = engine.GetNodes().Count;
+            info.PanelsNodesCount = engine.GetNodes().OfType<PanelNode>().Count();
+            info.HardwareNodesCount = engine.GetNodes().OfType<MySensorsNode>().Count();
+            info.InputsOutputsNodesCount = engine.GetNodes().Count(x => x is PanelInputNode || x is PanelOutputNode);
+            info.UiNodesCount = engine.GetNodes().OfType<UiNode>().Count();
+            info.OtherNodesCount = info.AllNodesCount
+                                   - info.PanelsNodesCount
+                                   - info.HardwareNodesCount
+                                   - info.InputsOutputsNodesCount
+                                   - info.UiNodesCount;
+
+            return info;
+        }
 
 
     }
