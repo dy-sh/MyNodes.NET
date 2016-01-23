@@ -17,7 +17,7 @@ $(document).ready(function () {
 
 
     $("#serial-gateway-delete-nodes").click(function () {
-        $('#confirm-delete-nodes-dialog').modal({
+        $('#serial-gateway-delete-nodes-nonfirm').modal({
             onApprove: function () {
                 $.ajax({
                     type: "POST", url: "/GatewayAPI/RemoveAllNodes",
@@ -68,6 +68,19 @@ $(document).ready(function () {
                 getNodesEngineInfo();
             }
         });
+    });
+
+    $("#nodes-engine-delete-nodes").click(function () {
+        $('#nodes-engine-delete-nodes-confirm').modal({
+            onApprove: function () {
+                $.ajax({
+                    type: "POST", url: "/NodesEditorAPI/RemoveAllNodesAndLinks",
+                    success: function (result) {
+                        if (result) noty({ text: 'Nodes were deleted.' });
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
     });
 
 });

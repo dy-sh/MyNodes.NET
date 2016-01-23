@@ -556,5 +556,13 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        public bool RemoveAllNodesAndLinks()
+        {
+            if (engine == null)
+                return false;
+
+            engine.RemoveAllNodesAndLinks();
+            return true;
+        }
     }
 }

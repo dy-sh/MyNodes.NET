@@ -725,29 +725,28 @@ namespace MyNetSensors.Nodes
         {
             LogEngineInfo("Remove all nodes and links");
 
-            nodesDb?.RemoveAllNodes();
+            //foreach (var node in nodes)
+            //{
+            //    node.OnRemove();
 
-            foreach (var node in nodes)
-            {
-                node.OnRemove();
+            //    foreach (var input in node.Inputs)
+            //        input.OnInputChange -= OnInputChange;
 
-                foreach (var input in node.Inputs)
-                    input.OnInputChange -= OnInputChange;
+            //    foreach (var output in node.Outputs)
+            //        output.OnOutputChange -= OnOutputChange;
 
-                foreach (var output in node.Outputs)
-                    output.OnOutputChange -= OnOutputChange;
-
-                node.OnLogError -= LogNodeError;
-                node.OnLogInfo -= LogNodeInfo;
-                node.OnUpdate -= UpdateNode;
-            }
-
+            //    node.OnLogError -= LogNodeError;
+            //    node.OnLogInfo -= LogNodeInfo;
+            //    node.OnUpdate -= UpdateNode;
+            //}
+            
             links = new List<Link>();
             nodes = new List<Node>();
 
+            nodesDb?.RemoveAllNodes();
+
             OnNodesUpdatedEvent?.Invoke(nodes);
             OnLinksUpdatedEvent?.Invoke(links);
-
         }
 
 

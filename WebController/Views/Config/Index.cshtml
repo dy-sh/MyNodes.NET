@@ -60,7 +60,7 @@
                         <span class="ui blue basic label" id="nodes-engine-links-count">-</span>
                     </div><br/><br/>
                     <div class="ui divider"></div>
-                    <button class="ui right floated small button" id="nodes-engine-delete">Delete all nodes</button>
+                    <button class="ui right floated small button" id="nodes-engine-delete-nodes">Delete all nodes</button>
                 </div>
 
                     <div class="ui attached clearing segment">
@@ -150,9 +150,9 @@
     </div>
 
 
-    <div class="ui modal" id="confirm-delete-nodes-dialog">
+    <div class="ui modal" id="serial-gateway-delete-nodes-nonfirm">
         <div class="header">
-            Delete all nodes
+            Delete all hardware nodes
         </div>
         <div class="image content">
             <div class="ui image">
@@ -160,7 +160,7 @@
                 <i class="red massive warning sign icon"></i>
             </div>
             <div class="description">
-                Deleting nodes from the database will release their ID.
+                Deleting hardware nodes from the database will release their ID.
                 After that, you will need to turn on all
                 previously registered nodes to reinitialize the database.
                 If this is not done, any new node will take the ID
@@ -184,14 +184,14 @@
 
 
 
-    <div class="ui modal" id="confirm-delete-tasks-dialog">
-        <div class="header">Delete all nodes tasks</div>
+    <div class="ui modal" id="nodes-engine-delete-nodes-confirm">
+        <div class="header">Delete all nodes</div>
         <div class="image content">
             <div class="ui image">
                 <i class="massive settings icon"></i>
             </div>
             <div class="description">
-                Are you sure you want to delete all nodes tasks?
+                Are you sure you want to delete all nodes and links?
             </div>
         </div>
         <div class="actions">
