@@ -79,24 +79,37 @@
     <br />
     <div id="main"></div>
 
-    <div class="ui small modal" id="node-settings-panel">
-        <div class="header" id="node-settings-title">
-            Const
+<div class="ui small modal" id="node-settings-panel">
+    <div class="header" id="node-settings-title"></div>
+    <div class="content" id="node-settings-body"></div>
+    <div class="actions">
+        <div class="ui cancel button">
+            Cancel
         </div>
-        <div class="content" id="node-settings-body">
-            thtryr
+        <div class="ui ok blue button">
+            OK
         </div>
+    </div>
+</div>
+
+    <div class="ui small modal" id="import-panel">
+        <div class="header" id="import-panel-title"></div>
+        <div class="content" id="import-panel-body">
+            <form class="ui form" name="uploadForm">
+                <div class="fields">
+                    <div class="field">File: <input type="file" name="uploadFile" id="uploadFile"></div>
+                </div>
+            </form>
+        </div>
+        <div class="content" id="import-panel-message">Uploading...</div>
         <div class="actions">
             <div class="ui cancel button">
                 Cancel
             </div>
-            <div class="ui ok blue button">
-                OK
-            </div>
         </div>
     </div>
 
-    <script>
+<script>
         //this var used in litegraph.js
         var this_panel_id = "@ViewBag.panelId";
         var owner_panel_id = "@ViewBag.ownerPanelId";

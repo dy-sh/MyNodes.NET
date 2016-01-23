@@ -95,4 +95,79 @@ Editor.prototype.addMiniWindow = function (w, h) {
 }
 
 
+Editor.prototype.importPanelFromFile = function (position) {
+
+    $('#import-panel-title').html("Import Panel from file");
+
+    $('#import-panel-body').show();
+    $('#import-panel-message').hide();
+
+    //clear upload file
+    var uploadFile = $("#uploadFile");
+    uploadFile.replaceWith(uploadFile = uploadFile.clone(true));
+
+    $('#import-panel').modal({
+        dimmerSettings: { opacity: 0.3 }
+    }).modal('setting', 'transition', 'fade up').modal('show');
+
+    document.forms['uploadForm'].elements['uploadFile'].onchange = function (evt) {
+        $('#import-panel-message').html("Uploading...");
+        $('#import-panel-message').show();
+        $('#import-panel-body').hide();
+
+
+        if (!window.FileReader) {
+            $('#import-panel-message').html("Browser is not compatible");
+            $('#import-panel-message').show();
+            $('#import-panel-body').hide();
+        };
+
+        var reader = new FileReader();
+
+        reader.onload = function (evt) {
+            if (evt.target.readyState != 2) return;
+            if (evt.target.error) {
+                $('#import-panel-message').html("Error while reading file.");
+                $('#import-panel-message').show();
+                $('#import-panel-body').hide();
+                return;
+            }
+
+            var filebody = evt.target.result;
+
+            $.ajax({
+                url: "/NodesEditorAPI/ImportPanelFromFile/",
+                type: "POST",
+                data: {
+                    file: filebody,
+                    x: position[0],
+                    y: position[1]
+                },
+                success: function (result) {
+                    if (result) {
+                        $('#import-panel').modal('hide');
+                    } else {
+                        $('#import-panel-message').html("Error. File format is not correct.");
+                        $('#import-panel-message').show();
+                        $('#import-panel-body').hide();
+                    }
+                }
+            });
+        };
+
+        reader.readAsText(evt.target.files[0]);
+    };
+
+}
+
+
+
+
+
+
+
+
+
+
+
 LiteGraph.Editor = Editor;

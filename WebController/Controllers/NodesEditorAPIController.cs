@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
+using Microsoft.AspNet.Http;
 using MyNetSensors.Nodes;
 using MyNetSensors.WebController.Code;
 using Newtonsoft.Json;
@@ -450,25 +452,25 @@ namespace MyNetSensors.WebController.Controllers
             return NodesEngineSerializer.SerializePanel(id, engine);
         }
 
-        public bool DeserializePanel(string json)
-        {
-            if (engine == null)
-                return false;
+        //public bool DeserializePanel(string json)
+        //{
+        //    if (engine == null)
+        //        return false;
 
-            List<Node> nodes;
-            List<Link> links;
-            NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
+        //    List<Node> nodes;
+        //    List<Link> links;
+        //    NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
 
-            engine.GenerateNewIds(ref nodes, ref links);
+        //    engine.GenerateNewIds(ref nodes, ref links);
 
-            foreach (var node in nodes)
-                engine.AddNode(node);
+        //    foreach (var node in nodes)
+        //        engine.AddNode(node);
 
-            foreach (var link in links)
-                engine.AddLink(link.OutputId,link.InputId);
+        //    foreach (var link in links)
+        //        engine.AddLink(link.OutputId,link.InputId);
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public IActionResult SerializePanelToFile(string id)
         {
@@ -509,5 +511,47 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+        public bool ImportPanelFromFile(string file, int x,int y)
+        {
+            if (engine == null)
+                return false;
+
+            try
+            {
+                DeserializePanel(file, x, y);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+
+        private PanelNode DeserializePanel(string json, int x, int y)
+        {
+            if (engine == null)
+                return null;
+
+            List<Node> nodes;
+            List<Link> links;
+            NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
+
+            //set position to panel
+            nodes[0].Position = new Position(x, y);
+
+            engine.GenerateNewIds(ref nodes, ref links);
+
+            foreach (var node in nodes)
+                engine.AddNode(node);
+
+            foreach (var link in links)
+                engine.AddLink(link.OutputId, link.InputId);
+
+            return (PanelNode)nodes[0];
+        }
+
     }
 }
