@@ -430,22 +430,49 @@ namespace MyNetSensors.Nodes
 
         private void RemovePanel(PanelNode node)
         {
-            List<Node> panels = GetNodesForPanel(node);
-            foreach (var n in panels)
+            List<Node> nodesList = GetNodesForPanel(node.Id,false);
+            foreach (var n in nodesList)
             {
                 RemoveNode(n);
             }
         }
 
-        public List<Node> GetNodesForPanel(PanelNode node)
+        public List<Node> GetNodesForPanel(string panelId, bool includeSubPanels)
         {
-            return nodes.Where(n => n.PanelId == node.Id).ToList();
+            if (!includeSubPanels)
+            {
+                return nodes.Where(n => n.PanelId == panelId).ToList();
+            }
+            else
+            {
+                List<Node> nodesList = nodes.Where(n => n.PanelId == panelId).ToList();
+                List<PanelNode> panels = nodesList.OfType<PanelNode>().ToList();
+                foreach (PanelNode panel in panels)
+                {
+                    nodesList.AddRange(GetNodesForPanel(panel.Id,true));
+                }
+                return nodesList;
+            }
         }
 
-        public List<Node> GetNodesForPanel(string panelId)
+        public List<Link> GetLinksForPanel(string panelId, bool includeSubPanels)
         {
-            return nodes.Where(n => n.PanelId == panelId).ToList();
+            if (!includeSubPanels)
+            {
+                return links.Where(n => n.PanelId == panelId).ToList();
+            }
+            else
+            {
+                List<Link> linksList= links.Where(n => n.PanelId == panelId).ToList();
+                List<PanelNode> panels = GetNodesForPanel(panelId,true).OfType<PanelNode>().ToList();
+                foreach (PanelNode panel in panels)
+                {
+                    linksList.AddRange(links.Where(n => n.PanelId == panel.Id).ToList());
+                }
+                return linksList;
+            }
         }
+
 
         private List<PanelNode> GetPanelNodes()
         {
@@ -727,10 +754,7 @@ namespace MyNetSensors.Nodes
             return list;
         }
 
-        public List<Link> GetLinksForPanel(string panelId)
-        {
-            return links.Where(x => x.PanelId == panelId).ToList();
-        }
+
 
         private void UpdateStatesFromLinks()
         {
@@ -936,9 +960,9 @@ namespace MyNetSensors.Nodes
 
             List<Node> nodesList = new List<Node>();
             nodesList.Add(panel);
-            nodesList.AddRange(GetNodesForPanel(id));
+            nodesList.AddRange(GetNodesForPanel(id, true));
 
-            List<Link> linksList = GetLinksForPanel(id);
+            List<Link> linksList = GetLinksForPanel(id,true);
 
             return SerializeNodesAndLinks(nodesList, linksList);
         }
@@ -997,7 +1021,7 @@ namespace MyNetSensors.Nodes
 
                     //for panel update input node id
                     if (node is PanelNode)
-                        nodesList.FirstOrDefault(x=> x.Id == oldId).Id = input.Id;
+                        nodesList.FirstOrDefault(x => x.Id == oldId).Id = input.Id;
                 }
 
                 //generate id`s for outputs
