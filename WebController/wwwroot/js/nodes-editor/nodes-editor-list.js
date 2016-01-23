@@ -33,6 +33,7 @@
             null,
             { content: "Export to file", callback: function () { var win = window.open("/NodesEditorAPI/SerializePanelToFile/" + that.id, '_blank'); win.focus(); } },
             { content: "Export to script", callback: function () { editor.exportPanelToScript(that.id) } },
+            { content: "Export URL", callback: function () { editor.exportPanelURL(that.id) } },
             null
         ];
     }
