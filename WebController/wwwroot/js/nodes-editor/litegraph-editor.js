@@ -180,6 +180,7 @@ Editor.prototype.importPanelFromScript = function (position) {
             $('#modal-panel-message').hide();
             $('#modal-panel-message').removeClass("negative");
             $('#modal-panel-form').removeClass("loading");
+            $('#modal-panel-submit').unbind();
         }
     }).modal('setting', 'transition', 'fade up').modal('show');
 
@@ -236,6 +237,7 @@ Editor.prototype.importPanelFromURL = function (position) {
             $('#modal-panel-message').hide();
             $('#modal-panel-message').removeClass("negative");
             $('#modal-panel-form').removeClass("loading");
+            $('#modal-panel-submit').unbind();
         }
     }).modal('setting', 'transition', 'fade up').modal('show');
 
@@ -333,7 +335,7 @@ Editor.prototype.exportPanelURL = function (id) {
     $('#modal-panel-title').html("Export Panel");
     $('#modal-panel-form').html(
                '<div class="field">' +
-               'URL: <textarea id="modal-panel-text"></textarea>' +
+               'URL:  <input type="text" id="modal-panel-text">' +
                '</div>');
     var url = $(location).attr('host') + "/NodesEditorAPI/SerializePanel/" + id;
 
@@ -342,7 +344,7 @@ Editor.prototype.exportPanelURL = function (id) {
         url = prefix + url;
     }
 
-    $('#modal-panel-text').html(url);
+    $('#modal-panel-text').val(url);
 
 
     $('#modal-panel').modal({
