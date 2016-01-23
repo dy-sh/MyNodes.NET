@@ -512,14 +512,14 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool ImportPanelFromFile(string file, int x,int y,string ownerPanelId)
+        public bool ImportPanel(string json, int x,int y,string ownerPanelId)
         {
             if (engine == null)
                 return false;
 
             try
             {
-                DeserializePanel(file, x, y, ownerPanelId);
+                DeserializePanel(json, x, y, ownerPanelId);
                 return true;
             }
             catch

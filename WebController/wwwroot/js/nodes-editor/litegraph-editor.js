@@ -1,33 +1,32 @@
 
-function Editor(container_id, options)
-{
-	//fill container
-	var html = "<div class='content'><div class='editor-area'><canvas class='graphcanvas' width='1000' height='500' tabindex=10></canvas></div></div>";
-	
-	var root = document.createElement("div");
-	this.root = root;
-	root.className = "litegraph-editor";
-	root.innerHTML = html;
+function Editor(container_id, options) {
+    //fill container
+    var html = "<div class='content'><div class='editor-area'><canvas class='graphcanvas' width='1000' height='500' tabindex=10></canvas></div></div>";
 
-	var canvas = root.querySelector(".graphcanvas");
+    var root = document.createElement("div");
+    this.root = root;
+    root.className = "litegraph-editor";
+    root.innerHTML = html;
 
-	//create graph
-	var graph = this.graph = new LGraph();
-	var graphcanvas = this.graphcanvas = new LGraphCanvas(canvas,graph);
-	graphcanvas.background_image = "/images/litegraph/grid.png";
-	graph.onAfterExecute = function() { graphcanvas.draw(true) };
+    var canvas = root.querySelector(".graphcanvas");
 
-	//add stuff
+    //create graph
+    var graph = this.graph = new LGraph();
+    var graphcanvas = this.graphcanvas = new LGraphCanvas(canvas, graph);
+    graphcanvas.background_image = "/images/litegraph/grid.png";
+    graph.onAfterExecute = function () { graphcanvas.draw(true) };
 
-	this.addMiniWindow(200,200);
+    //add stuff
 
-	//append to DOM
-	var	parent = document.getElementById(container_id);
-	if(parent)
-		parent.appendChild(root);
+    this.addMiniWindow(200, 200);
 
-	graphcanvas.resize();
-	//graphcanvas.draw(true,true);
+    //append to DOM
+    var parent = document.getElementById(container_id);
+    if (parent)
+        parent.appendChild(root);
+
+    graphcanvas.resize();
+    //graphcanvas.draw(true,true);
 }
 
 var minimap_opened = false;
@@ -45,59 +44,59 @@ $.noty.defaults.animation = {
 
 Editor.prototype.addMiniWindow = function (w, h) {
 
-    if (minimap_opened) 
+    if (minimap_opened)
         return;
 
     minimap_opened = true;
 
-	var miniwindow = document.createElement("div");
-	miniwindow.className = "litegraph miniwindow";
-	miniwindow.innerHTML = "<canvas class='graphcanvas' width='"+w+"' height='"+h+"' tabindex=10></canvas>";
-	var canvas = miniwindow.querySelector("canvas");
+    var miniwindow = document.createElement("div");
+    miniwindow.className = "litegraph miniwindow";
+    miniwindow.innerHTML = "<canvas class='graphcanvas' width='" + w + "' height='" + h + "' tabindex=10></canvas>";
+    var canvas = miniwindow.querySelector("canvas");
 
-	var graphcanvas = new LGraphCanvas(canvas, this.graph);
-	graphcanvas.background_image = "images/litegraph/grid.png";
+    var graphcanvas = new LGraphCanvas(canvas, this.graph);
+    graphcanvas.background_image = "images/litegraph/grid.png";
     //derwish edit
-	graphcanvas.scale = 0.1;
+    graphcanvas.scale = 0.1;
     //graphcanvas.allow_dragnodes = false;
 
-	graphcanvas.offset = [0, 0];
-	graphcanvas.scale = 0.1;
-	graphcanvas.setZoom(0.1, [1, 1]);
+    graphcanvas.offset = [0, 0];
+    graphcanvas.scale = 0.1;
+    graphcanvas.setZoom(0.1, [1, 1]);
 
-	miniwindow.style.position = "absolute";
-	miniwindow.style.top = "4px";
-	miniwindow.style.right = "4px";
+    miniwindow.style.position = "absolute";
+    miniwindow.style.top = "4px";
+    miniwindow.style.right = "4px";
 
-	var close_button = document.createElement("div");
-	close_button.className = "corner-button";
-	close_button.innerHTML = "X";
-	close_button.addEventListener("click", function (e) {
-	    minimap_opened = false;
-		graphcanvas.setGraph(null);
-		miniwindow.parentNode.removeChild(miniwindow);
-	});
-	miniwindow.appendChild(close_button);
+    var close_button = document.createElement("div");
+    close_button.className = "corner-button";
+    close_button.innerHTML = "X";
+    close_button.addEventListener("click", function (e) {
+        minimap_opened = false;
+        graphcanvas.setGraph(null);
+        miniwindow.parentNode.removeChild(miniwindow);
+    });
+    miniwindow.appendChild(close_button);
 
     //derwiah added
-	var reset_button = document.createElement("div");
-	reset_button.className = "corner-button2";
-	reset_button.innerHTML = "R";
-	reset_button.addEventListener("click", function (e) {
-	    graphcanvas.offset = [0, 0];
-	    graphcanvas.scale = 0.1;
-	    graphcanvas.setZoom (0.1, [1, 1]);
-	});
-	miniwindow.appendChild(reset_button);
+    var reset_button = document.createElement("div");
+    reset_button.className = "corner-button2";
+    reset_button.innerHTML = "R";
+    reset_button.addEventListener("click", function (e) {
+        graphcanvas.offset = [0, 0];
+        graphcanvas.scale = 0.1;
+        graphcanvas.setZoom(0.1, [1, 1]);
+    });
+    miniwindow.appendChild(reset_button);
 
-	this.root.querySelector(".content").appendChild(miniwindow);
+    this.root.querySelector(".content").appendChild(miniwindow);
 
 }
 
 
 Editor.prototype.importPanelFromFile = function (position) {
 
-    $('#import-panel-title').html("Import Panel from file");
+    $('#import-panel-title').html("Import Panel");
 
     $('#import-panel-body').show();
     $('#import-panel-message').hide();
@@ -136,10 +135,10 @@ Editor.prototype.importPanelFromFile = function (position) {
             var filebody = evt.target.result;
 
             $.ajax({
-                url: "/NodesEditorAPI/ImportPanelFromFile/",
+                url: "/NodesEditorAPI/ImportPanel/",
                 type: "POST",
                 data: {
-                    file: filebody,
+                    json: filebody,
                     x: position[0],
                     y: position[1],
                     ownerPanelId: window.this_panel_id
@@ -163,6 +162,58 @@ Editor.prototype.importPanelFromFile = function (position) {
 
 
 
+
+Editor.prototype.importPanelFromScript = function (position) {
+
+    $('#modal-panel-title').html("Import Panel");
+
+    $('#modal-panel-message').hide();
+    $('#modal-panel-message').removeClass("negative");
+    $('#modal-panel-form').removeClass("loading");
+    $('#modal-panel-form').html(
+               '<form class="ui form" id="modal-panel-form">' +
+               '<div class="field">' +
+               'Script: <textarea id="modal-panel-text"></textarea>' +
+               '</div>'
+               + '</form>');
+
+
+    $('#modal-panel').modal({
+        dimmerSettings: { opacity: 0.3 }
+    }).modal('setting', 'transition', 'fade up').modal('show');
+
+    $('#modal-panel-submit').click(function () {
+        $('#modal-panel-form').addClass("loading");
+        $('#modal-panel-message').html("Uploading...");
+        $('#modal-panel-message').removeClass("negative");
+        $('#modal-panel-message').fadeIn(300);
+        // $('#import-script-body').hide();
+
+        $.ajax({
+            url: "/NodesEditorAPI/ImportPanel/",
+            type: "POST",
+            data: {
+                json: $('#modal-panel-text').val(),
+                x: position[0],
+                y: position[1],
+                ownerPanelId: window.this_panel_id
+            },
+            success: function (result) {
+                if (result) {
+                    $('#modal-panel').modal('hide');
+                } else {
+                    $('#modal-panel-message').html("Failed to import. Script is not correct.");
+                    $('#modal-panel-message').addClass("negative");
+                    $('#modal-panel-form').removeClass("loading");
+                    $('#modal-panel-message').show();
+                    $('#modal-panel-body').fadeIn(300);
+                }
+            }
+        });
+
+    });
+
+}
 
 
 

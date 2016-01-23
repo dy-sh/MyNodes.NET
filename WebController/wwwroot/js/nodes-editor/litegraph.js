@@ -4069,7 +4069,7 @@ LGraphCanvas.onMenuImport = function (node, e, prev_menu, canvas, first_event) {
     var entries = {};
 
     entries[0] = { value: "Panel from file", content: "Panel from file", is_menu: false };
-   // entries[1] = { value: "Panel from text", content: "Panel from text", is_menu: false };
+    entries[1] = { value: "Panel from script", content: "Panel from script", is_menu: false };
    // entries[2] = { value: "Panel from URL", content: "Panel from URL", is_menu: false };
 
     var menu = LiteGraph.createContextualMenu(entries, { event: e, callback: inner_clicked, from: prev_menu }, window);
@@ -4082,11 +4082,11 @@ LGraphCanvas.onMenuImport = function (node, e, prev_menu, canvas, first_event) {
             editor.importPanelFromFile(pos);
         }
 
-        if (v.value == "Panel from text") {
+        if (v.value == "Panel from script") {
             var pos = canvas.convertEventToCanvas(first_event);
             pos[0] = Math.round(pos[0]);
             pos[1] = Math.round(pos[1]);
-            editor.importPanelFromText(pos);
+            editor.importPanelFromScript(pos);
         }
 
         if (v.value == "Panel from URL") {
