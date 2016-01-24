@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-    public class MathPlusNode : Node
+    public class MathSqrtNode : Node
     {
         /// <summary>
-        /// Math Plus (2 inputs, 1 output).
+        /// Math Sqrt (1 inputs, 1 output).
         /// </summary>
-        public MathPlusNode() : base(2, 1)
+        public MathSqrtNode() : base(1, 1)
         {
-            this.Title = "Math Plus";
-            this.Type = "Math/Plus";
+            this.Title = "Math Sqrt";
+            this.Type = "Math/Sqrt";
         }
 
         public override void Loop()
@@ -31,24 +31,23 @@ namespace MyNetSensors.Nodes
         {
             try
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
+                if (Inputs[0].Value == null)
                 {
-                    LogInfo($"Math/Plus: [NULL]");
+                    LogInfo($"Math/Sqrt: [NULL]");
                     Outputs[0].Value = null;
                 }
                 else
                 {
                     Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a + b;
+                    Double b = Math.Sqrt(a);
 
-                    LogInfo($"Math/Plus: [{a}] + [{b}]  = [{c}]");
-                    Outputs[0].Value = c.ToString();
+                    LogInfo($"Math/Sqrt: sqrt [{a}] = [{b}]");
+                    Outputs[0].Value = b.ToString();
                 }
             }
             catch
             {
-                LogError($"Math/Plus: Incorrect value in input");
+                LogError($"Math/Sqrt: Incorrect value in input");
                 Outputs[0].Value = null;
             }
         }
