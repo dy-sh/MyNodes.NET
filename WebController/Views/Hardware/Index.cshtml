@@ -25,7 +25,7 @@
         <h4 class="ui top attached inverted header" id="nodeTitle{{Id}}">
             @*<h4 class="ui top attached block header id="nodeTitle{{Id}}">*@
             <span class="ui floated left">
-                Node id: {{Id}}
+                Node {{Id}}
             </span>
         </h4>
         <div class="ui attached segment">
@@ -45,7 +45,7 @@
 
 <script id="sensorTemplate" type="text/x-handlebars-template">
     <div class="ui segment" id="sensorPanel{{sensor-id this}}">
-        Sensor Id: {{sensorId}} <br />
+        Sensor {{sensorId}} <br />
         Type: <span id="sensorType{{sensor-id this}}"> {{sensor-type this}} </span><br />
         {{#if description}} Description: {{description}} <br />{{/if}}
         Data Type: <span id="dataType{{sensor-id this}}"> </span><br />

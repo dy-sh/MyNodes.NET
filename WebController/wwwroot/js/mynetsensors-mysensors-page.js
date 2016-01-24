@@ -120,8 +120,9 @@ function onReturnNodes(nodes) {
     lastSeens = {};
 
     for (var i = 0; i < nodes.length; i++) {
-        lastSeens[nodes[i].nodeId] = nodes[i].lastSeen;
+        lastSeens[nodes[i].Id] = nodes[i].lastSeen;
     }
+    updateAllLastSeens();
 }
 
 
