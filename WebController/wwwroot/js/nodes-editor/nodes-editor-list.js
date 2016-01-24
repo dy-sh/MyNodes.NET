@@ -586,20 +586,47 @@
         };
     }
     LogicCounter.title = "Counter";
-    LiteGraph.registerNodeType("Logic/Counter", LogicCounter);
+    LiteGraph.registerNodeType("Operation/Counter", LogicCounter);
 
 
 
-    //LogicInvert
-    function LogicInvert() {
+
+
+
+  //---------------------------------------------------------------------------------
+
+
+
+    //LogicAnd
+    function LogicAnd() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.InvertNode",
+            'ObjectType': "MyNetSensors.Nodes.LogicAndNode",
             'Assembly': "Nodes"
         };
     }
-    LogicInvert.title = "Invert";
-    LiteGraph.registerNodeType("Logic/Invert", LogicInvert);
+    LogicAnd.title = "AND";
+    LiteGraph.registerNodeType("Logic/AND", LogicAnd);
 
+    //LogicOr
+    function LogicOr() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.LogicOrNode",
+            'Assembly': "Nodes"
+        };
+    }
+    LogicOr.title = "OR";
+    LiteGraph.registerNodeType("Logic/OR", LogicOr);
+
+    //LogicNot
+    function LogicNot() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.LogicNotNode",
+            'Assembly': "Nodes"
+        };
+    }
+    LogicNot.title = "NOT";
+    LiteGraph.registerNodeType("Logic/NOT", LogicNot);  
+    
 
 
     //MathPlus
@@ -612,9 +639,105 @@
     MathPlus.title = "Plus";
     LiteGraph.registerNodeType("Math/Plus", MathPlus);
 
+    //MathMinus
+    function MathMinus() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathMinusNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathMinus.title = "Minus";
+    LiteGraph.registerNodeType("Math/Minus", MathMinus);
 
+    //MathMultiply
+    function MathMultiply() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathMultiplyNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathMultiply.title = "Multiply";
+    LiteGraph.registerNodeType("Math/Multiply", MathMultiply);
 
+    //MathDivide
+    function MathDivide() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathDivideNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathDivide.title = "Divide";
+    LiteGraph.registerNodeType("Math/Divide", MathDivide);
 
+    //MathSin
+    function MathSin() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathSinNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathSin.title = "Sin";
+    LiteGraph.registerNodeType("Math/Sin", MathSin);
+
+    //MathCos
+    function MathCos() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathCosNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathCos.title = "Cos";
+    LiteGraph.registerNodeType("Math/Cos", MathCos);
+
+    //MathTan
+    function MathTan() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathTanNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathTan.title = "Tan";
+    LiteGraph.registerNodeType("Math/Tan", MathTan);
+
+    //MathModulus
+    function MathModulus() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathModulusNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathModulus.title = "Modulus";
+    LiteGraph.registerNodeType("Math/Modulus", MathModulus);
+
+    //MathSqrt
+    function MathSqrt() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathSqrtNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathSqrt.title = "Sqrt";
+    LiteGraph.registerNodeType("Math/Sqrt", MathSqrt);
+
+    //MathPow
+    function MathPow() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathPowNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathPow.title = "Pow";
+    LiteGraph.registerNodeType("Math/Pow", MathPow);
+
+    //MathRound
+    function MathRound() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathRoundNode",
+            'Assembly': "Nodes"
+        };
+    }
+    MathRound.title = "Round";
+    LiteGraph.registerNodeType("Math/Round", MathRound);
 
 
 

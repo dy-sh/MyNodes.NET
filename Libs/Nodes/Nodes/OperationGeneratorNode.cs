@@ -4,11 +4,16 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Timers;
+
 
 namespace MyNetSensors.Nodes
 {
 
-    public class CounterNode : Node
+    public class OperationGeneratorNode : Node
     {
         private int DEFAULT_VALUE = 1000;
 
@@ -17,12 +22,12 @@ namespace MyNetSensors.Nodes
         private DateTime lastTime;
 
         /// <summary>
-        /// Counter (1 input, 1 output). Input[0] - Frequency (ms). Default=1000.
+        /// Generator (1 input, 1 output). Input[0] - Frequency (ms). Default=1000.
         /// </summary>
-        public CounterNode() : base(1, 1)
+        public OperationGeneratorNode() : base(1, 1)
         {
-            this.Title = "Counter";
-            this.Type = "Operation/Counter";
+            this.Title = "Generator";
+            this.Type = "Operation/Generator";
 
             Inputs[0].Name = "Frequency";
             lastTime = DateTime.Now;
@@ -39,9 +44,9 @@ namespace MyNetSensors.Nodes
             TimeSpan elapsed = DateTime.Now - lastTime;
             if (elapsed.TotalMilliseconds >= freq)
             {
-                count++;
+                count = 1 - count;
 
-                LogInfo($"Counter: {count}");
+                LogInfo($"Operation/Generator: {count}");
 
                 Outputs[0].Value = count.ToString();
                 lastTime = DateTime.Now;
@@ -54,16 +59,13 @@ namespace MyNetSensors.Nodes
             try
             {
                 freqInput = Int32.Parse(input.Value);
-                LogInfo($"Counter: frequency changed to {freqInput.Value} ms");
+                LogInfo($"Operation/Generator: frequency changed to {freqInput.Value} ms");
             }
             catch
             {
                 freqInput = null;
-                LogInfo($"Counter: frequency changed to default value: {DEFAULT_VALUE} ms");
+                LogInfo($"Operation/Generator: frequency changed to default value: {DEFAULT_VALUE} ms");
             }
-
         }
-
-
     }
 }

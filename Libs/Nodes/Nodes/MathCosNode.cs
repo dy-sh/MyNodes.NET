@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-    public class MathPlusNode : Node
+    public class MathCosNode : Node
     {
         /// <summary>
-        /// Math Plus (2 inputs, 1 output).
+        /// Math Cos (1 inputs, 1 output).
         /// </summary>
-        public MathPlusNode() : base(2, 1)
+        public MathCosNode() : base(1, 1)
         {
-            this.Title = "Math Plus";
-            this.Type = "Math/Plus";
+            this.Title = "Math Cos";
+            this.Type = "Math/Cos";
         }
 
         public override void Loop()
@@ -31,24 +31,23 @@ namespace MyNetSensors.Nodes
         {
             try
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
+                if (Inputs[0].Value == null)
                 {
-                    LogInfo($"Math/Plus: [NULL]");
+                    LogInfo($"Math/Cos: [NULL]");
                     Outputs[0].Value = null;
                 }
                 else
                 {
                     Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a + b;
+                    Double b = Math.Cos(a);
 
-                    LogInfo($"Math/Plus: [{a}] + [{b}]  = [{c}]");
-                    Outputs[0].Value = c.ToString();
+                    LogInfo($"Math/Cos: Cos [{a}] = [{b}]");
+                    Outputs[0].Value = b.ToString();
                 }
             }
             catch
             {
-                LogError($"Math/Plus: Incorrect value in input");
+                LogError($"Math/Cos: Incorrect value in input");
                 Outputs[0].Value = null;
             }
         }

@@ -1,7 +1,4 @@
-﻿/*  MyNetSensors 
-    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
-    License: http://www.gnu.org/licenses/gpl-3.0.txt  
-*/
+﻿//planer-pro copyright 2015 GPL - license.
 
 using System;
 using System.Collections.Generic;
@@ -11,44 +8,46 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-    public class MathPlusNode : Node
+   
+    public class MathMultiplyNode : Node
     {
         /// <summary>
-        /// Math Plus (2 inputs, 1 output).
+        /// Math Multiply (2 inputs, 1 output).
         /// </summary>
-        public MathPlusNode() : base(2, 1)
+        public MathMultiplyNode() : base(2, 1)
         {
-            this.Title = "Math Plus";
-            this.Type = "Math/Plus";
+            this.Title = "Math Multiply";
+            this.Type = "Math/Multiply";
         }
 
         public override void Loop()
         {
-            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
+
+
             try
             {
                 if (Inputs[0].Value == null || Inputs[1].Value == null)
                 {
-                    LogInfo($"Math/Plus: [NULL]");
+                    LogInfo($"Math/Multiply: [NULL]");
                     Outputs[0].Value = null;
                 }
                 else
                 {
                     Double a = Double.Parse(Inputs[0].Value);
                     Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a + b;
+                    Double c = a * b;
 
-                    LogInfo($"Math/Plus: [{a}] + [{b}]  = [{c}]");
+                    LogInfo($"Math/Multiply: [{a}] * [{b}]  = [{c}]");
                     Outputs[0].Value = c.ToString();
                 }
             }
             catch
             {
-                LogError($"Math/Plus: Incorrect value in input");
+                LogError($"Math/Multiply: Incorrect value in input");
                 Outputs[0].Value = null;
             }
         }
