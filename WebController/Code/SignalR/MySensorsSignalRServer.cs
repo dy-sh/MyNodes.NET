@@ -32,15 +32,20 @@ namespace MyNetSensors.WebController.Code
             gateway.OnMessageSend += OnMessageSend;
             gateway.OnConnected += OnConnected;
             gateway.OnDisconnected += OnDisconnected;
-            gateway.OnRemoveAllNodes += OnRemoveAllNodes;
             gateway.OnNewNode += OnNewNode;
             gateway.OnNodeUpdated += OnNodeUpdated;
             gateway.OnNodeLastSeenUpdated += OnNodeLastSeenUpdated;
             gateway.OnNodeBatteryUpdated += OnNodeBatteryUpdated;
-            gateway.OnSensorUpdated += OnSensorUpdated;
             gateway.OnNewSensor += OnNewSensor;
+            gateway.OnSensorUpdated += OnSensorUpdated;
+            gateway.OnRemoveAllNodes += OnRemoveAllNodes;
+            gateway.OnRemoveNode += OnRemoveNode;
         }
-        
+
+        private static void OnRemoveNode(Node node)
+        {
+            hub.Clients.All.OnRemoveNode(node.Id);
+        }
 
 
         private static void OnNewSensor(Sensor sensor)

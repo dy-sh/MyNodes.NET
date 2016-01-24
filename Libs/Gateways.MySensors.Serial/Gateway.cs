@@ -274,12 +274,14 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             try
             {
                 mes = new Message(message);
-                RecieveMessage(mes);
             }
             catch
             {
                 LogError($"Failed to process incoming message: [{message}]");
             }
+
+            if (mes!=null)
+                RecieveMessage(mes);
         }
 
         public void RecieveMessage(Message message)

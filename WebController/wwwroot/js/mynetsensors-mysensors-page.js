@@ -51,6 +51,14 @@ $(function () {
         createOrUpdateSensor(sensor);
     };
 
+    clientsHub.client.OnRemoveAllNodes = function () {
+        removeAllNodes();
+    };
+
+    clientsHub.client.OnRemoveNode = function (nodeId) {
+        removeNode(nodeId);
+    };
+
     $.connection.hub.start();
 
     $.connection.hub.stateChanged(function (change) {
@@ -244,3 +252,15 @@ function updateAllLastSeens(sensor) {
     }
 }
 
+function removeNode(nodeId) {
+    $('#nodePanel' + nodeId).fadeOut(elementsFadeTime, function () {
+        $(this).remove();
+    });
+}
+
+
+function removeAllNodes() {
+    $('#nodesContainer').fadeOut(elementsFadeTime, function () {
+        $(this).html();
+    });
+}
