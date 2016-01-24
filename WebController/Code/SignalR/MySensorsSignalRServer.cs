@@ -28,76 +28,76 @@ namespace MyNetSensors.WebController.Code
         {
             gateway = SystemController.gateway;
 
-            gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
-            gateway.OnMessageSendEvent += OnMessageSendEvent;
-            gateway.OnConnectedEvent += OnConnectedEvent;
-            gateway.OnDisconnectedEvent += OnDisconnectedEvent;
-            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
-            gateway.OnNewNodeEvent += OnNewNodeEvent;
-            gateway.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
-            gateway.OnNodeLastSeenUpdatedEvent += OnNodeLastSeenUpdatedEvent;
-            gateway.OnNodeBatteryUpdatedEvent += OnNodeBatteryUpdatedEvent;
-            gateway.OnSensorUpdatedEvent += OnSensorUpdatedEvent;
-            gateway.OnNewSensorEvent += OnNewSensorEvent;
+            gateway.OnMessageRecieved += OnMessageRecieved;
+            gateway.OnMessageSend += OnMessageSend;
+            gateway.OnConnected += OnConnected;
+            gateway.OnDisconnected += OnDisconnected;
+            gateway.OnRemoveAllNodes += OnRemoveAllNodes;
+            gateway.OnNewNode += OnNewNode;
+            gateway.OnNodeUpdated += OnNodeUpdated;
+            gateway.OnNodeLastSeenUpdated += OnNodeLastSeenUpdated;
+            gateway.OnNodeBatteryUpdated += OnNodeBatteryUpdated;
+            gateway.OnSensorUpdated += OnSensorUpdated;
+            gateway.OnNewSensor += OnNewSensor;
         }
         
 
 
-        private static void OnNewSensorEvent(Sensor sensor)
+        private static void OnNewSensor(Sensor sensor)
         {
-            hub.Clients.All.OnNewSensorEvent(sensor);
+            hub.Clients.All.OnNewSensor(sensor);
         }
 
-        private static void OnSensorUpdatedEvent(Sensor sensor)
+        private static void OnSensorUpdated(Sensor sensor)
         {
-            hub.Clients.All.OnSensorUpdatedEvent(sensor);
+            hub.Clients.All.OnSensorUpdated(sensor);
         }
 
-        private static void OnNodeBatteryUpdatedEvent(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeBatteryUpdated(Gateways.MySensors.Serial.Node node)
         {
-            hub.Clients.All.OnNodeBatteryUpdatedEvent(node);
+            hub.Clients.All.OnNodeBatteryUpdated(node);
         }
 
-        private static void OnNodeLastSeenUpdatedEvent(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeLastSeenUpdated(Gateways.MySensors.Serial.Node node)
         {
-            hub.Clients.All.OnNodeLastSeenUpdatedEvent(node);
+            hub.Clients.All.OnNodeLastSeenUpdated(node);
         }
 
-        private static void OnNodeUpdatedEvent(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeUpdated(Gateways.MySensors.Serial.Node node)
         {
-            hub.Clients.All.OnNodeUpdatedEvent(node);
+            hub.Clients.All.OnNodeUpdated(node);
         }
 
-        private static void OnNewNodeEvent(Gateways.MySensors.Serial.Node node)
+        private static void OnNewNode(Gateways.MySensors.Serial.Node node)
         {
-            hub.Clients.All.OnNewNodeEvent(node);
+            hub.Clients.All.OnNewNode(node);
         }
 
-        private static void OnRemoveAllNodesEvent()
+        private static void OnRemoveAllNodes()
         {
-            hub.Clients.All.OnRemoveAllNodesEvent();
+            hub.Clients.All.OnRemoveAllNodes();
         }
 
-        private static void OnDisconnectedEvent()
+        private static void OnDisconnected()
         {
-            hub.Clients.All.OnDisconnectedEvent();
+            hub.Clients.All.OnDisconnected();
         }
 
-        private static void OnConnectedEvent()
+        private static void OnConnected()
         {
-            hub.Clients.All.OnConnectedEvent();
+            hub.Clients.All.OnConnected();
         }
 
 
 
-        private static void OnMessageRecievedEvent(Message message)
+        private static void OnMessageRecieved(Message message)
         {
-            hub.Clients.All.OnMessageRecievedEvent(message.ToString());
+            hub.Clients.All.OnMessageRecieved(message.ToString());
         }
 
-        private static void OnMessageSendEvent(Message message)
+        private static void OnMessageSend(Message message)
         {
-            hub.Clients.All.OnMessageSendEvent(message.ToString());
+            hub.Clients.All.OnMessageSend(message.ToString());
 
         }
        

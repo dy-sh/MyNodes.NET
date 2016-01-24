@@ -20,12 +20,12 @@ namespace MyNetSensors.Nodes
             MySensorsNodesEngine.mySensorsNodesEngine = this;
             MySensorsNodesEngine.engine = engine;
 
-            gateway.OnNewNodeEvent += CreateOrUpdateNode;
-            gateway.OnNodeUpdatedEvent += CreateOrUpdateNode;
-            gateway.OnNewSensorEvent += CreateOrUpdateSensor;
-            gateway.OnSensorUpdatedEvent += CreateOrUpdateSensor;
-            gateway.OnRemoveAllNodesEvent += OnGatewayRemoveAllNodesEvent;
-            gateway.OnRemoveNodeEvent += OnGatewayRemoveNodeEvent;
+            gateway.OnNewNode += CreateOrUpdateNode;
+            gateway.OnNodeUpdated += CreateOrUpdateNode;
+            gateway.OnNewSensor += CreateOrUpdateSensor;
+            gateway.OnSensorUpdated += CreateOrUpdateSensor;
+            gateway.OnRemoveAllNodes += OnGatewayRemoveAllNodes;
+            gateway.OnRemoveNode += OnGatewayRemoveNode;
             engine.OnRemoveAllNodesAndLinks += OnEngineRemoveAllNodesAndLinks;
             engine.OnRemoveNode += OnEngineRemoveNode;
             CreateAndAddMySensorsNodes();
@@ -48,7 +48,7 @@ namespace MyNetSensors.Nodes
                 gateway.RemoveAllNodes();
         }
 
-        private void OnGatewayRemoveNodeEvent(Gateways.MySensors.Serial.Node node)
+        private void OnGatewayRemoveNode(Gateways.MySensors.Serial.Node node)
         {
             MySensorsNode oldNode = GetMySensorsNode(node.Id);
 
@@ -56,7 +56,7 @@ namespace MyNetSensors.Nodes
                 engine.RemoveNode(oldNode);
         }
 
-        private void OnGatewayRemoveAllNodesEvent()
+        private void OnGatewayRemoveAllNodes()
         {
             List<MySensorsNode> nodes = engine.GetNodes().OfType<MySensorsNode>().ToList();
             foreach (var node in nodes)

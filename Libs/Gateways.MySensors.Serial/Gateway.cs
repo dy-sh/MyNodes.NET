@@ -34,20 +34,20 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public bool reconnectIfDisconnected = true;
         public int ATTEMPTS_TO_COMMUNICATE = 5;
 
-        public event MessageEventHandler OnMessageRecievedEvent;
-        public event MessageEventHandler OnMessageSendEvent;
-        public event NodeEventHandler OnRemoveNodeEvent;
-        public event NodeEventHandler OnNewNodeEvent;
-        public event NodeEventHandler OnNodeUpdatedEvent;
-        public event NodeEventHandler OnNodeLastSeenUpdatedEvent;
-        public event NodeEventHandler OnNodeBatteryUpdatedEvent;
-        public event SensorEventHandler OnNewSensorEvent;
-        public event SensorEventHandler OnSensorUpdatedEvent;
-        public event Action OnRemoveAllNodesEvent;
-        public event Action OnDisconnectedEvent;
-        public event Action OnUnexpectedlyDisconnectedEvent;
-        public event Action OnConnectedEvent;
-        public event GatewayStateEventHandler OnGatewayStateChangedEvent;
+        public event MessageEventHandler OnMessageRecieved;
+        public event MessageEventHandler OnMessageSend;
+        public event NodeEventHandler OnRemoveNode;
+        public event NodeEventHandler OnNewNode;
+        public event NodeEventHandler OnNodeUpdated;
+        public event NodeEventHandler OnNodeLastSeenUpdated;
+        public event NodeEventHandler OnNodeBatteryUpdated;
+        public event SensorEventHandler OnNewSensor;
+        public event SensorEventHandler OnSensorUpdated;
+        public event Action OnRemoveAllNodes;
+        public event Action OnDisconnected;
+        public event Action OnUnexpectedlyDisconnected;
+        public event Action OnConnected;
+        public event GatewayStateEventHandler OnGatewayStateChanged;
         public event LogEventHandler OnLogMessage;
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
@@ -73,9 +73,9 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             gatewayAliveChecker = new GatewayAliveChecker(this);
 
             this.serialPort = serialPort;
-            this.serialPort.OnDataReceivedEvent += RecieveMessage;
-            this.serialPort.OnDisconnectedEvent += OnSerialPortDisconnectedEvent;
-            this.serialPort.OnConnectedEvent += TryToCommunicateWithGateway;
+            this.serialPort.OnDataReceived += RecieveMessage;
+            this.serialPort.OnDisconnected += OnSerialPortDisconnected;
+            this.serialPort.OnConnected += TryToCommunicateWithGateway;
             this.serialPort.OnLogError += LogError;
             this.serialPort.OnLogInfo += OnLogInfo;
         }
@@ -129,12 +129,12 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             }
 
             if (gatewayState == GatewayState.Connected && newState != GatewayState.Connected)
-                OnDisconnectedEvent?.Invoke();
+                OnDisconnected?.Invoke();
             else if (gatewayState != GatewayState.Connected && newState == GatewayState.Connected)
-                OnConnectedEvent?.Invoke();
+                OnConnected?.Invoke();
 
             gatewayState = newState;
-            OnGatewayStateChangedEvent?.Invoke(gatewayState);
+            OnGatewayStateChanged?.Invoke(gatewayState);
         }
 
         public async Task Connect(string serialPortName)
@@ -170,7 +170,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 serialPort.Disconnect();
         }
 
-        internal void OnSerialPortDisconnectedEvent()
+        internal void OnSerialPortDisconnected()
         {
             if (gatewayState == GatewayState.Connected)
             {
@@ -181,7 +181,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 if (serialPort.IsConnected())
                     serialPort.Disconnect();
 
-                OnUnexpectedlyDisconnectedEvent?.Invoke();
+                OnUnexpectedlyDisconnected?.Invoke();
                 if (reconnectIfDisconnected)
                     Connect(serialPort.GetPortName());
             }
@@ -240,7 +240,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             message.incoming = false;
 
-            OnMessageSendEvent?.Invoke(message);
+            OnMessageSend?.Invoke(message);
 
             UpdateSensorFromMessage(message);
 
@@ -288,7 +288,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             AddMessageToLog(message);
 
-            OnMessageRecievedEvent?.Invoke(message);
+            OnMessageRecieved?.Invoke(message);
 
 
             //Gateway ready
@@ -373,7 +373,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 nodes.Add(node);
                 db?.AddNode(node);
 
-                OnNewNodeEvent?.Invoke(node);
+                OnNewNode?.Invoke(node);
                 LogInfo($"Node[{node.Id}] registered.");
             }
 
@@ -387,13 +387,13 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                     {
                         node.isRepeatingNode = false;
 
-                        OnNodeUpdatedEvent?.Invoke(node);
+                        OnNodeUpdated?.Invoke(node);
                     }
                     else if (mes.subType == (int)SensorType.S_ARDUINO_REPEATER_NODE)
                     {
                         node.isRepeatingNode = true;
 
-                        OnNodeUpdatedEvent?.Invoke(node);
+                        OnNodeUpdated?.Invoke(node);
                     }
                 }
                 else if (mes.messageType == MessageType.C_INTERNAL)
@@ -403,26 +403,26 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                         node.name = mes.payload;
                         LogInfo($"Node[{node.Id}] name: [{node.name}]");
 
-                        OnNodeUpdatedEvent?.Invoke(node);
+                        OnNodeUpdated?.Invoke(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
                         node.version = mes.payload;
                         LogInfo($"Node[{node.Id}] version: [{node.version}]");
 
-                        OnNodeUpdatedEvent?.Invoke(node);
+                        OnNodeUpdated?.Invoke(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
                         node.batteryLevel = Int32.Parse(mes.payload);
                         LogInfo($"Node[{node.Id}] battery level: [{node.batteryLevel}]");
 
-                        OnNodeBatteryUpdatedEvent?.Invoke(node);
+                        OnNodeBatteryUpdated?.Invoke(node);
                     }
                 }
             }
 
-            OnNodeLastSeenUpdatedEvent?.Invoke(node);
+            OnNodeLastSeenUpdated?.Invoke(node);
             db?.UpdateNode(node);
         }
 
@@ -446,7 +446,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] registered");
 
                 db?.AddSensor(sensor);
-                OnNewSensorEvent?.Invoke(sensor);
+                OnNewSensor?.Invoke(sensor);
             }
 
             if (mes.messageType == MessageType.C_SET)
@@ -456,7 +456,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] datatype: [{sensor.dataType}] state: [{sensor.state}]");
 
                 db?.UpdateSensor(sensor);
-                OnSensorUpdatedEvent?.Invoke(sensor);
+                OnSensorUpdated?.Invoke(sensor);
             }
             else if (mes.messageType == MessageType.C_PRESENTATION)
             {
@@ -479,7 +479,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 if (!String.IsNullOrEmpty(sensor.description))
                     LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] description: [{sensor.description}]");
                 db?.UpdateSensor(sensor);
-                OnSensorUpdatedEvent?.Invoke(sensor);
+                OnSensorUpdated?.Invoke(sensor);
             }
         }
 
@@ -601,7 +601,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             LogInfo($"All nodes removed.");
 
             db?.RemoveAllNodesAndSensors();
-            OnRemoveAllNodesEvent?.Invoke();
+            OnRemoveAllNodes?.Invoke();
         }
 
         public async Task SendRebootToAllNodes()
@@ -659,7 +659,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             LogInfo($"Remove Node[{nodeId}]");
 
-            OnRemoveNodeEvent?.Invoke(oldNode);
+            OnRemoveNode?.Invoke(oldNode);
         }
     }
 }

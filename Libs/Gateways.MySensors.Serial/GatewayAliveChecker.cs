@@ -18,10 +18,10 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public GatewayAliveChecker(Gateway gateway)
         {
             this.gateway = gateway;
-            gateway.OnUnexpectedlyDisconnectedEvent += Stop;
-            gateway.OnDisconnectedEvent += Stop;
-            gateway.OnConnectedEvent += Start;
-            gateway.OnMessageRecievedEvent += OnMessageRecievedEvent;
+            gateway.OnUnexpectedlyDisconnected += Stop;
+            gateway.OnDisconnected += Stop;
+            gateway.OnConnected += Start;
+            gateway.OnMessageRecieved += OnMessageRecieved;
             checkGatewayTimer.Elapsed += CheckGatewayAlive;
         }
 
@@ -39,7 +39,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 //gateway not responding
                 gateway.LogError("Gateway not responding.");
 
-                gateway.OnSerialPortDisconnectedEvent();
+                gateway.OnSerialPortDisconnected();
             }
             else
             {
@@ -63,7 +63,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         }
 
 
-        private void OnMessageRecievedEvent(Message message)
+        private void OnMessageRecieved(Message message)
         {
             //Gateway vesrion (alive) respond
             if (message.nodeId == 0

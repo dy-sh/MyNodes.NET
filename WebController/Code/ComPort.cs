@@ -14,9 +14,9 @@ namespace MyNetSensors.WebController.Code
 {
     public class ComPort : IComPort
     {
-        public event OnDataReceivedEventHandler OnDataReceivedEvent;
-        public event Action OnConnectedEvent;
-        public event Action OnDisconnectedEvent;
+        public event OnDataReceivedEventHandler OnDataReceived;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
         public event ExceptionEventHandler OnWritingError;
         public event ExceptionEventHandler OnConnectingError;
         public event LogEventHandler OnLogMessage;
@@ -63,7 +63,7 @@ namespace MyNetSensors.WebController.Code
 
                 isConnected = true;
                 LogInfo($"Connected to port {portName}.");
-                OnConnectedEvent?.Invoke();
+                OnConnected?.Invoke();
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace MyNetSensors.WebController.Code
                 serialPort?.Dispose();
                 serialPort = null;
 
-                OnDisconnectedEvent?.Invoke();
+                OnDisconnected?.Invoke();
             }
         }
 
@@ -132,7 +132,7 @@ namespace MyNetSensors.WebController.Code
             {
                 LogMessage("RX: " + message);
 
-                OnDataReceivedEvent?.Invoke(message);
+                OnDataReceived?.Invoke(message);
             }
         }
 

@@ -57,9 +57,9 @@ namespace MyNetSensors.WebController.Code
 
             if (uiNodesEngine != null)
             {
-                uiNodesEngine.OnUiNodeUpdatedEvent += OnNodeUpdatedEvent;
-                uiNodesEngine.OnNewUiNodeEvent += OnNewNodeEvent;
-                uiNodesEngine.OnRemoveUiNodeEvent += OnRemoveNodeEvent;
+                uiNodesEngine.OnUiNodeUpdated += OnNodeUpdated;
+                uiNodesEngine.OnNewUiNode += OnNewNode;
+                uiNodesEngine.OnRemoveUiNode += OnRemoveNode;
             }
         }
 
@@ -80,19 +80,19 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnNodeActivity(node.Id);
         }
 
-        private static void OnRemoveNodeEvent(UiNode uiNode)
+        private static void OnRemoveNode(UiNode uiNode)
         {
-            hub.Clients.All.OnRemoveNodeEvent(uiNode);
+            hub.Clients.All.OnRemoveNode(uiNode);
         }
 
-        private static void OnNewNodeEvent(UiNode uiNode)
+        private static void OnNewNode(UiNode uiNode)
         {
-            hub.Clients.All.OnNewNodeEvent(uiNode);
+            hub.Clients.All.OnNewNode(uiNode);
         }
 
-        private static void OnNodeUpdatedEvent(UiNode uiNode)
+        private static void OnNodeUpdated(UiNode uiNode)
         {
-            hub.Clients.All.OnNodeUpdatedEvent(uiNode);
+            hub.Clients.All.OnNodeUpdated(uiNode);
         }
 
 
@@ -100,28 +100,28 @@ namespace MyNetSensors.WebController.Code
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLinkToLiteGraphLink(link);
-            hub.Clients.All.OnNewLinkEvent(liteGraphLink);
+            hub.Clients.All.OnNewLink(liteGraphLink);
         }
 
         private static void OnRemoveLink(Link link)
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLinkToLiteGraphLink(link);
-            hub.Clients.All.OnRemoveLinkEvent(liteGraphLink);
+            hub.Clients.All.OnRemoveLink(liteGraphLink);
         }
 
         private static void OnRemoveNode(Node node)
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnRemoveNodeEvent(liteGraphNode.id);
+            hub.Clients.All.OnRemoveNode(liteGraphNode.id);
         }
 
         private static void OnNodeUpdated(Node node)
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnNodeUpdatedEvent(liteGraphNode);
+            hub.Clients.All.OnNodeUpdated(liteGraphNode);
 
         }
 
@@ -129,7 +129,7 @@ namespace MyNetSensors.WebController.Code
         {
             NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
             LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnNewNodeEvent(liteGraphNode);
+            hub.Clients.All.OnNewNode(liteGraphNode);
         }
 
         

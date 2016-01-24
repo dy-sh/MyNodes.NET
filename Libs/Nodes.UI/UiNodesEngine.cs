@@ -7,9 +7,9 @@ namespace MyNetSensors.Nodes
 
     public class UiNodesEngine
     {
-        public event UiNodeEventHandler OnNewUiNodeEvent;
-        public event UiNodeEventHandler OnRemoveUiNodeEvent;
-        public event UiNodeEventHandler OnUiNodeUpdatedEvent;
+        public event UiNodeEventHandler OnNewUiNode;
+        public event UiNodeEventHandler OnRemoveUiNode;
+        public event UiNodeEventHandler OnUiNodeUpdated;
 
         private static NodesEngine engine;
 
@@ -61,13 +61,13 @@ namespace MyNetSensors.Nodes
         {
             Node node = engine.GetOutputOwner(output);
             if (node is UiNode)
-                OnUiNodeUpdatedEvent?.Invoke((UiNode)node);
+                OnUiNodeUpdated?.Invoke((UiNode)node);
         }
 
         private void OnNodeUpdated(Node node)
         {
             if (node is UiNode)
-                OnUiNodeUpdatedEvent?.Invoke((UiNode)node);
+                OnUiNodeUpdated?.Invoke((UiNode)node);
 
 
             if (node is UiChartNode)
@@ -83,7 +83,7 @@ namespace MyNetSensors.Nodes
         private void OnRemoveNode(Node node)
         {
             if (node is UiNode)
-                OnRemoveUiNodeEvent?.Invoke((UiNode)node);
+                OnRemoveUiNode?.Invoke((UiNode)node);
 
             if (node is UiChartNode)
                 statesDb?.RemoveStatesForNode(node.Id);
@@ -95,7 +95,7 @@ namespace MyNetSensors.Nodes
 
             UiNode n = (UiNode)node;
 
-            OnNewUiNodeEvent?.Invoke(n);
+            OnNewUiNode?.Invoke(n);
 
             n.Name = GenerateName(n);
             engine.UpdateNode(n, true);

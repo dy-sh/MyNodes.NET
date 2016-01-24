@@ -12,9 +12,9 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
     public interface IComPort
     {
-        event OnDataReceivedEventHandler OnDataReceivedEvent;
-        event Action OnConnectedEvent;
-        event Action OnDisconnectedEvent;
+        event OnDataReceivedEventHandler OnDataReceived;
+        event Action OnConnected;
+        event Action OnDisconnected;
         event ExceptionEventHandler OnWritingError;
         event ExceptionEventHandler OnConnectingError;
         event LogEventHandler OnLogMessage;

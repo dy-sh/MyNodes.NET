@@ -14,18 +14,18 @@ $(function () {
     //configure signalr
     var clientsHub = $.connection.nodesEngineHub;
 
-    clientsHub.client.OnConnectedEvent = function () {
+    clientsHub.client.OnConnected = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnectedEvent = function () {
+    clientsHub.client.OnDisconnected = function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
 
 
 
-    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdated = function (node) {
         if (node.Id == nodeId)//nodeId initialized from ViewBag
             updateLog(node);
     };
@@ -36,7 +36,7 @@ $(function () {
         $('#panelsContainer').html(null);
     };
 
-    clientsHub.client.OnRemoveNodeEvent = function (node) {
+    clientsHub.client.OnRemoveNode = function (node) {
         if (node.Id == nodeId) {
             noty({ text: 'This Node was removed!', type: 'error', timeout: false });
             $('#panelsContainer').html(null);

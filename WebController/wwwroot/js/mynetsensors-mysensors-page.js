@@ -16,38 +16,38 @@ $(function () {
     //configure signalr
     var clientsHub = $.connection.mySensorsHub;
 
-    clientsHub.client.OnConnectedEvent = function () {
+    clientsHub.client.OnConnected = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnectedEvent = function () {
+    clientsHub.client.OnDisconnected = function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
 
 
-    clientsHub.client.OnNewNodeEvent = function (node) {
+    clientsHub.client.OnNewNode = function (node) {
         createOrUpdateNode(node);
     };
 
-    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdated = function (node) {
         createOrUpdateNode(node);
     };
 
-    clientsHub.client.OnNodeLastSeenUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeLastSeenUpdated = function (node) {
         lastSeens[node.Id] = node.lastSeen;
         updateLastSeen(node.Id, node.lastSeen);
     };
 
-    clientsHub.client.OnNodeBatteryUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeBatteryUpdated = function (node) {
         updateBattery(node);
     };
 
-    clientsHub.client.OnSensorUpdatedEvent = function (sensor) {
+    clientsHub.client.OnSensorUpdated = function (sensor) {
         createOrUpdateSensor(sensor);
     };
 
-    clientsHub.client.OnNewSensorEvent = function (sensor) {
+    clientsHub.client.OnNewSensor = function (sensor) {
         createOrUpdateSensor(sensor);
     };
 

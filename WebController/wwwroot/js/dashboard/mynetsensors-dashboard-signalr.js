@@ -19,11 +19,11 @@ $(function () {
     //configure signalr
     var clientsHub = $.connection.nodesEngineHub;
 
-    clientsHub.client.OnConnectedEvent = function () {
+    clientsHub.client.OnConnected = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnectedEvent = function () {
+    clientsHub.client.OnDisconnected = function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
@@ -36,7 +36,7 @@ $(function () {
 
   
 
-    clientsHub.client.OnNewNodeEvent = function (node) {
+    clientsHub.client.OnNewNode = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -46,7 +46,7 @@ $(function () {
         createNode(node);
     };
 
-    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdated = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -60,7 +60,7 @@ $(function () {
         updateNode(node);
     };
 
-    clientsHub.client.OnRemoveNodeEvent = function (node) {
+    clientsHub.client.OnRemoveNode = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;

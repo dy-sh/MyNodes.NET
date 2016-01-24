@@ -21,11 +21,11 @@ $(function () {
     //configure signalr
     var clientsHub = $.connection.nodesEngineHub;
 
-    clientsHub.client.OnConnectedEvent = function () {
+    clientsHub.client.OnConnected = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnectedEvent = function () {
+    clientsHub.client.OnDisconnected = function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
@@ -50,7 +50,7 @@ $(function () {
 
 
 
-    clientsHub.client.OnRemoveNodeEvent = function (nodeId) {
+    clientsHub.client.OnRemoveNode = function (nodeId) {
         //if current panel removed
         if (nodeId == this_panel_id) {
             window.location = "/NodesEditor/";
@@ -65,7 +65,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnNodeUpdatedEvent = function (node) {
+    clientsHub.client.OnNodeUpdated = function (node) {
         if (node.panel_id != window.this_panel_id)
             return;
 
@@ -73,7 +73,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnNewNodeEvent = function (node) {
+    clientsHub.client.OnNewNode = function (node) {
         if (node.panel_id != window.this_panel_id)
             return;
 
@@ -81,7 +81,7 @@ $(function () {
     };
 
 
-    clientsHub.client.OnRemoveLinkEvent = function (link) {
+    clientsHub.client.OnRemoveLink = function (link) {
         if (link.panel_id != window.this_panel_id)
             return;
 
@@ -91,7 +91,7 @@ $(function () {
         targetNode.disconnectInput(link.target_slot);
     };
 
-    clientsHub.client.OnNewLinkEvent = function (link) {
+    clientsHub.client.OnNewLink = function (link) {
         if (link.panel_id != window.this_panel_id)
             return;
 

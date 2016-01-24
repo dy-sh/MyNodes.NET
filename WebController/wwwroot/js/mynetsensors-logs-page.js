@@ -35,11 +35,11 @@ $(function () {
     clientsHub.client.OnLogRecord = OnLogRecord;
 
 
-    clientsHub.client.OnConnectedEvent = function () {
+    clientsHub.client.OnConnected = function () {
         noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnectedEvent = function () {
+    clientsHub.client.OnDisconnected = function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
