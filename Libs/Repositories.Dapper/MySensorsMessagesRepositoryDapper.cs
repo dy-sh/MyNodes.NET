@@ -89,7 +89,6 @@ namespace MyNetSensors.Repositories.Dapper
 	            [ack] [bit] NOT NULL,
 	            [subType] [int] NOT NULL,
 	            [payload] [nvarchar](max) NULL,
-	            [isValid] [bit] NOT NULL,
 	            [incoming] [bit] NOT NULL,
 	            [dateTime] [datetime] NOT NULL ) ON [PRIMARY] ");
                 }
@@ -133,9 +132,9 @@ namespace MyNetSensors.Repositories.Dapper
                 using (var db = new SqlConnection(connectionString))
                 {
                     db.Open();
-                    var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                    var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, incoming, dateTime) "
                                    +
-                                   "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
+                                   "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @incoming, @dateTime); "
                                    + "SELECT CAST(SCOPE_IDENTITY() as int)";
                     db.Query(sqlQuery, message);
                 }
@@ -159,9 +158,9 @@ namespace MyNetSensors.Repositories.Dapper
                 newMessages.CopyTo(messages);
                 newMessages.Clear();
 
-                var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, incoming, dateTime) "
                                +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
+                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @incoming, @dateTime); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 db.Execute(sqlQuery, messages);
             }

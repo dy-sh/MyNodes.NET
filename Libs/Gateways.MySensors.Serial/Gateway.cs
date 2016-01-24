@@ -62,7 +62,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         private IMySensorsRepository db;
         private IMySensorsMessagesRepository hisotryDb;
 
-        public Gateway(IComPort serialPort, IMySensorsRepository db=null,IMySensorsMessagesRepository hisotryDb=null)
+        public Gateway(IComPort serialPort, IMySensorsRepository db = null, IMySensorsMessagesRepository hisotryDb = null)
         {
             this.db = db;
             this.hisotryDb = hisotryDb;
@@ -265,7 +265,15 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
         public void RecieveMessage(string message)
         {
-            Message mes = new Message(message);
+            Message mes = null;
+            try
+            {
+                mes = new Message(message);
+            }
+            catch
+            {
+                LogError($"Failed to process incoming message: [{message}]");
+            }
             RecieveMessage(mes);
         }
 
@@ -284,51 +292,48 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             OnMessageRecievedEvent?.Invoke(message);
 
 
-            if (message.isValid)
+            //Gateway ready
+            if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_GATEWAY_READY)
+                return;
+
+
+            //Gateway log message
+            if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_LOG_MESSAGE)
+                return;
+
+            //New ID request
+            if (message.nodeId == 255)
             {
-                //Gateway ready
-                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_GATEWAY_READY)
-                    return;
+                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_ID_REQUEST)
+                    if (enableAutoAssignId)
+                        SendNewIdResponse();
 
-
-                //Gateway log message
-                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_LOG_MESSAGE)
-                    return;
-
-                //New ID request
-                if (message.nodeId == 255)
-                {
-                    if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_ID_REQUEST)
-                        if (enableAutoAssignId)
-                            SendNewIdResponse();
-
-                    return;
-                }
-
-                //Metric system request
-                if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_CONFIG)
-                    SendMetricResponse(message.nodeId);
-
-                //Sensor request
-                if (message.messageType == MessageType.C_REQ)
-                    ProceedRequestMessage(message);
-
-                //Gateway vesrion (alive) response
-                if (message.nodeId == 0
-                    && message.messageType == MessageType.C_INTERNAL
-                    && message.subType == (int)InternalDataType.I_VERSION)
-                {
-                    if (gatewayState != GatewayState.Connected)
-                        SetGatewayState(GatewayState.Connected);
-                }
-
-                //request to node
-                if (message.nodeId == 0)
-                    return;
-
-                UpdateNodeFromMessage(message);
-                UpdateSensorFromMessage(message);
+                return;
             }
+
+            //Metric system request
+            if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_CONFIG)
+                SendMetricResponse(message.nodeId);
+
+            //Sensor request
+            if (message.messageType == MessageType.C_REQ)
+                ProceedRequestMessage(message);
+
+            //Gateway vesrion (alive) response
+            if (message.nodeId == 0
+                && message.messageType == MessageType.C_INTERNAL
+                && message.subType == (int)InternalDataType.I_VERSION)
+            {
+                if (gatewayState != GatewayState.Connected)
+                    SetGatewayState(GatewayState.Connected);
+            }
+
+            //request to node
+            if (message.nodeId == 0)
+                return;
+
+            UpdateNodeFromMessage(message);
+            UpdateSensorFromMessage(message);
         }
 
 

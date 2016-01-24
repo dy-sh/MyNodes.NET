@@ -18,7 +18,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public bool ack { get; set; }
         public int subType { get; set; }
         public string payload { get; set; }
-        public bool isValid { get; set; }
         public bool incoming { get; set; }//or outgoing
         public DateTime dateTime { get; set; }
 
@@ -27,7 +26,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public Message()
         {
             dateTime = DateTime.Now;
-            isValid = true;
         }
 
 
@@ -41,10 +39,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             string inc = incoming ? "RX" : "TX";
 
-            if (isValid)
-                return
-                    $"{inc}: {nodeId}; {sensorId}; {messageType}; {ack}; {GetDecodedSubType()}; {payload}";
-            else return $"{inc}: {payload}";
+            return $"{inc}: {nodeId}; {sensorId}; {messageType}; {ack}; {GetDecodedSubType()}; {payload}";
         }
 
 
@@ -67,50 +62,17 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
 
 
-        public void ParseFromString(string message)
+        private void ParseFromString(string message)
         {
             dateTime = DateTime.Now;
-            try
-            {
-                string[] arguments = message.Split(new char[] { ';' }, 6);
-                nodeId = Int32.Parse(arguments[0]);
-                sensorId = Int32.Parse(arguments[1]);
-                messageType = (MessageType)Int32.Parse(arguments[2]);
-                ack = arguments[3] == "1";
-                subType = Int32.Parse(arguments[4]);
-                payload = arguments[5];
-                isValid = true;
-            }
-            catch
-            {
-                isValid = false;
-                payload = message;
-            }
+
+            string[] arguments = message.Split(new char[] { ';' }, 6);
+            nodeId = Int32.Parse(arguments[0]);
+            sensorId = Int32.Parse(arguments[1]);
+            messageType = (MessageType)Int32.Parse(arguments[2]);
+            ack = arguments[3] == "1";
+            subType = Int32.Parse(arguments[4]);
+            payload = arguments[5];
         }
-
-        //public Message ParseMessageFromString(string message)
-        //{
-        //    var mes = new Message();
-
-        //    try
-        //    {
-        //        string[] arguments = message.Split(new char[] { ';' }, 6);
-        //        mes.nodeId = Int32.Parse(arguments[0]);
-        //        mes.sensorId = Int32.Parse(arguments[1]);
-        //        mes.messageType = (MessageType)Int32.Parse(arguments[2]);
-        //        mes.ack = arguments[3] == "1";
-        //        mes.subType = Int32.Parse(arguments[4]);
-        //        mes.payload = arguments[5];
-        //    }
-        //    catch
-        //    {
-        //        mes = new Message
-        //        {
-        //            isValid = false,
-        //            payload = message
-        //        };
-        //    }
-        //    return mes;
-        //}
     }
 }
