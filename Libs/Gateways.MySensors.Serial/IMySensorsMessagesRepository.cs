@@ -7,14 +7,10 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         event LogEventHandler OnLogInfo;
         event LogEventHandler OnLogError;
 
-        void ConnectToGateway(Gateway gateway);
-
         void AddMessage(Message message);
         List<Message> GetMessages();
         void RemoveAllMessages();
 
-
         void SetWriteInterval(int ms);
-        void Enable(bool enable);
     }
 }

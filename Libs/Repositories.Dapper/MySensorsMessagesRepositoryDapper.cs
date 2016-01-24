@@ -31,7 +31,6 @@ namespace MyNetSensors.Repositories.Dapper
 
         private bool enable = true;
 
-        private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //messages list, to write to db by timer
@@ -48,20 +47,6 @@ namespace MyNetSensors.Repositories.Dapper
 
             this.connectionString = connectionString;
             CreateDb();
-        }
-
-
-        public void ConnectToGateway(Gateway gateway)
-        {
-
-            this.gateway = gateway;
-
-            List<Message> messages = GetMessages();
-            foreach (var message in messages)
-                gateway.messagesLog.AddNewMessage(message);
-
-            gateway.messagesLog.OnNewMessageLogged += OnNewMessage;
-            gateway.messagesLog.OnClearMessages += OnClearMessages;
 
             if (writeInterval > 0)
             {
@@ -69,6 +54,7 @@ namespace MyNetSensors.Repositories.Dapper
                 updateDbTimer.Start();
             }
         }
+
         
 
         private void CreateDb()
@@ -126,11 +112,6 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
       
-        private void OnClearMessages()
-        {
-            RemoveAllMessages();
-        }
-
    
         public List<Message> GetMessages()
         {
@@ -143,28 +124,27 @@ namespace MyNetSensors.Repositories.Dapper
             return messages;
         }
 
-        private void OnNewMessage(Message message)
+        public void AddMessage(Message message)
         {
             if (!enable) return;
 
             if (writeInterval == 0)
-                AddMessage(message);
+            {
+                using (var db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+                    var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
+                                   +
+                                   "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
+                                   + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    db.Query(sqlQuery, message);
+                }
+            }
             else
                 newMessages.Add(message);
         }
 
-        public void AddMessage(Message message)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery = "INSERT INTO MySensorsMessages (nodeId, sensorId, messageType, ack, subType ,payload, isValid, incoming, dateTime) "
-                               +
-                               "VALUES(@nodeId, @sensorId, @messageType, @ack, @subType, @payload, @isValid, @incoming, @dateTime); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Query(sqlQuery, message);
-            }
-        }
+ 
 
     
 
@@ -188,20 +168,6 @@ namespace MyNetSensors.Repositories.Dapper
         }
         
 
-  
-        public void Enable(bool enable)
-        {
-            this.enable = enable;
-        }
-
-
-
-        
-        
-
-
-
-
 
 
         private void UpdateDbTimerEvent(object sender, object e)
@@ -215,7 +181,7 @@ namespace MyNetSensors.Repositories.Dapper
                     updateDbTimer.Start();
                     return;
                 }
-                ;
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -242,8 +208,7 @@ namespace MyNetSensors.Repositories.Dapper
             if (writeInterval > 0)
             {
                 updateDbTimer.Interval = writeInterval;
-                if (gateway != null)
-                    updateDbTimer.Start();
+                updateDbTimer.Start();
             }
         }
 

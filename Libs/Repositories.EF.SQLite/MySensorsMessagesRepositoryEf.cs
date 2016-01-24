@@ -33,7 +33,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private bool enable = true;
 
-        private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
         //messages list, to write to db by timer
@@ -50,21 +49,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             this.db = mySensorsDbContext;
             CreateDb();
-        }
-
-
-        public void ConnectToGateway(Gateway gateway)
-        {
-
-            this.gateway = gateway;
-
-            List<Message> messages = GetMessages();
-            if (messages != null)
-                foreach (var message in messages)
-                    gateway.messagesLog.AddNewMessage(message);
-
-            gateway.messagesLog.OnNewMessageLogged += OnNewMessage;
-            gateway.messagesLog.OnClearMessages += OnClearMessages;
 
             if (writeInterval > 0)
             {
@@ -72,6 +56,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 updateDbTimer.Start();
             }
         }
+
 
 
         public void CreateDb()
@@ -94,53 +79,38 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        private void OnClearMessages()
-        {
-            RemoveAllMessages();
-        }
-
-     
+ 
         public List<Message> GetMessages()
         {
             return db.Messages.ToList();
         }
 
-        private void OnNewMessage(Message message)
-        {
-            if (!enable) return;
 
-            if (writeInterval == 0)
-                AddMessage(message);
-            else
-                newMessages.Add(message);
-        }
 
         public void AddMessage(Message message)
         {
-            db.Messages.Add(message);
-            db.SaveChanges();
+            if (writeInterval == 0)
+            {
+                db.Messages.Add(message);
+                db.SaveChanges();
+            }
+            else
+                newMessages.Add(message);
         }
 
 
  
         private void WriteNewMessages()
         {
-            //Message[] messages = new Message[newMessages.Count];
-            //newMessages.CopyTo(messages);
-            //newMessages.Clear();
-
-            db.Messages.AddRange(newMessages);
-            db.SaveChanges();
+            Message[] messages = new Message[newMessages.Count];
+            newMessages.CopyTo(messages);
             newMessages.Clear();
+
+            db.Messages.AddRange(messages);
+            db.SaveChanges();
         }
 
         
-        public void Enable(bool enable)
-        {
-            this.enable = enable;
-        }
-
-
 
         private void UpdateDbTimerEvent(object sender, object e)
         {
@@ -153,7 +123,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                     updateDbTimer.Start();
                     return;
                 }
-                ;
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -180,8 +150,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (writeInterval > 0)
             {
                 updateDbTimer.Interval = writeInterval;
-                if (gateway != null)
-                    updateDbTimer.Start();
+                updateDbTimer.Start();
             }
         }
 

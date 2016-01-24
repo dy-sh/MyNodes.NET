@@ -26,7 +26,7 @@ namespace MyNetSensors.WebController.Code
         public static bool useInternalDb = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
-        public static bool writeNodesMessagesToDataBase = false;
+        public static bool serialGatewayMessagesLogEnabled = false;
 
 
         public static bool nodesEngineEnabled = true;
@@ -39,8 +39,8 @@ namespace MyNetSensors.WebController.Code
 
 
         //VARIABLES
-        public static ComPort comPort = new ComPort();
-        public static Gateway gateway = new Gateway(comPort);
+        public static ComPort comPort;
+        public static Gateway gateway;
 
         public static IMySensorsRepository mySensorsDb;
         public static IMySensorsMessagesRepository mySensorsMessagesDb;
@@ -127,7 +127,7 @@ namespace MyNetSensors.WebController.Code
             {
                 serialGatewayEnabled = Boolean.Parse(configuration["SerialGateway:Enable"]);
                 enableAutoAssignId = Boolean.Parse(configuration["SerialGateway:EnableAutoAssignId"]);
-                writeNodesMessagesToDataBase = Boolean.Parse(configuration["SerialGateway:WriteNodesMessagesToDataBase"]);
+                serialGatewayMessagesLogEnabled = Boolean.Parse(configuration["SerialGateway:EnableMessagesLog"]);
 
                 logs.enableGatewayLog = Boolean.Parse(configuration["SerialGateway:LogState"]);
                 logs.enableHardwareNodesLog = Boolean.Parse(configuration["SerialGateway:LogMessages"]);
@@ -208,15 +208,12 @@ namespace MyNetSensors.WebController.Code
 
 
             mySensorsDb.SetWriteInterval(dataBaseWriteInterval);
-            mySensorsDb.ConnectToGateway(gateway);
             mySensorsDb.OnLogInfo += logs.AddDataBaseInfo;
             mySensorsDb.OnLogError += logs.AddDataBaseError;
 
             mySensorsMessagesDb.SetWriteInterval(dataBaseWriteInterval);
-            mySensorsMessagesDb.ConnectToGateway(gateway);
             mySensorsMessagesDb.OnLogInfo += logs.AddDataBaseInfo;
             mySensorsMessagesDb.OnLogError += logs.AddDataBaseError;
-            mySensorsMessagesDb.Enable(writeNodesMessagesToDataBase);
 
             logs.AddSystemInfo("Database connected.");
         }
@@ -227,6 +224,9 @@ namespace MyNetSensors.WebController.Code
 
         private static void ConnectToSerialGateway()
         {
+            comPort=new ComPort();
+            gateway=new Gateway(comPort, mySensorsDb,mySensorsMessagesDb);
+
             gateway.enableAutoAssignId = enableAutoAssignId;
 
             gateway.OnLogMessage += logs.AddHardwareNodeInfo;
@@ -235,6 +235,7 @@ namespace MyNetSensors.WebController.Code
             gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
             // gateway.serialPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
+            gateway.messagesLogEnabled = serialGatewayMessagesLogEnabled;
 
             if (!serialGatewayEnabled) return;
 

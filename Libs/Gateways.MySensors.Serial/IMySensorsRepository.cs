@@ -12,12 +12,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         event LogEventHandler OnLogInfo;
         event LogEventHandler OnLogError;
 
-        void ConnectToGateway(Gateway gateway);
-
-
-
-
-
         int AddOrUpdateNode(Node node);
         int AddNode(Node node);
         void UpdateNode(Node node);
@@ -31,7 +25,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         
 
         void SetWriteInterval(int ms);
-
 
         void UpdateNodeSettings(Node node);
         void UpdateSensorSettings(Sensor sensor);

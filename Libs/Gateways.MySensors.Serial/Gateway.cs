@@ -28,8 +28,8 @@ namespace MyNetSensors.Gateways.MySensors.Serial
     public class Gateway
     {
         public IComPort serialPort;
-        public bool storeMessages = true;
         public bool enableAutoAssignId = true;
+        public bool messagesLogEnabled = true;
         public bool endlessConnectionAttempts = true;
         public bool reconnectIfDisconnected = true;
         public int ATTEMPTS_TO_COMMUNICATE = 5;
@@ -52,15 +52,23 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
 
-        public MessagesLog messagesLog = new MessagesLog();
+        private List<Message> messagesLog = new List<Message>();
         private List<Node> nodes = new List<Node>();
 
         GatewayAliveChecker gatewayAliveChecker;
 
         private GatewayState gatewayState = GatewayState.Disconnected;
 
-        public Gateway(IComPort serialPort)
+        private IMySensorsRepository db;
+        private IMySensorsMessagesRepository hisotryDb;
+
+        public Gateway(IComPort serialPort, IMySensorsRepository db=null,IMySensorsMessagesRepository hisotryDb=null)
         {
+            this.db = db;
+            this.hisotryDb = hisotryDb;
+
+            messagesLog = hisotryDb?.GetMessages();
+
             gatewayAliveChecker = new GatewayAliveChecker(this);
 
             this.serialPort = serialPort;
@@ -72,6 +80,16 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         }
 
 
+        public List<Message> GetMessagesLog()
+        {
+            return messagesLog;
+        }
+
+        public void ClearMessagesLog()
+        {
+            messagesLog.Clear();
+            hisotryDb?.RemoveAllMessages();
+        }
 
 
         private void LogMessage(string message)
@@ -237,8 +255,11 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             serialPort.SendMessage(mes);
 
-            if (storeMessages)
-                messagesLog.AddNewMessage(message);
+            if (messagesLogEnabled)
+            {
+                messagesLog.Add(message);
+                hisotryDb?.AddMessage(message);
+            }
         }
 
 
@@ -252,8 +273,11 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             message.incoming = true;
 
-            if (storeMessages)
-                messagesLog.AddNewMessage(message);
+            if (messagesLogEnabled)
+            {
+                messagesLog.Add(message);
+                hisotryDb?.AddMessage(message);
+            }
 
             LogMessage(message.ToString());
 
