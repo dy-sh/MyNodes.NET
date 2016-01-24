@@ -57,7 +57,7 @@ namespace MyNetSensors.Nodes
             else
             {
                 //todo update inputs names
-                oldNode.Title = node.GetSimpleName1();
+                oldNode.Title = node.GetSimpleName2();
                 engine.UpdateNode(oldNode, true);
             }
         }
@@ -69,11 +69,11 @@ namespace MyNetSensors.Nodes
             {
                 MySensorsNode node = GetHardwareNode(sensor.nodeId);
                 node.AddInputOutput(sensor);
-                engine.UpdateNode(node,true);//for call event
+                engine.UpdateNode(node, true);
             }
             else
             {
-                engine.UpdateOutput(output.Id, sensor.state, sensor.sensorId.ToString());
+                engine.UpdateOutput(output.Id, sensor.state, sensor.GetSimpleName3());
             }
 
         }
@@ -130,7 +130,7 @@ namespace MyNetSensors.Nodes
 
             foreach (var node in gateway.GetNodes())
             {
-                if (GetHardwareNode(node.Id)!=null)
+                if (GetHardwareNode(node.Id) != null)
                     continue;
 
                 MySensorsNode newMySensorsNode = new MySensorsNode(node);

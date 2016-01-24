@@ -103,15 +103,15 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             if (!String.IsNullOrEmpty(name))
                 return name;
 
-            return $"Node {Id}";
+            return $"Node{Id}";
         }
 
         public string GetSimpleName2()
         {
             if (!String.IsNullOrEmpty(name))
-                return $"Node {Id} ({name})";
+                return $"Node{Id} [{name}]";
 
-            return $"Node {Id}";
+            return $"Node{Id}";
         }
     }
 }

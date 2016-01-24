@@ -12,7 +12,7 @@ namespace MyNetSensors.Nodes
         public MySensorsNode(Gateways.MySensors.Serial.Node node) : base(0, 0)
         {
             this.nodeId = node.Id;
-            this.Title = node.GetSimpleName1();
+            this.Title = node.GetSimpleName2();
             this.Type = "Nodes/Hardware";
             CreateInputsOutputs(node);
         }
@@ -47,6 +47,8 @@ namespace MyNetSensors.Nodes
             MySensorsNodeOutput mySensorsNodeOutput = (MySensorsNodeOutput)output;
 
             LogInfo($"Hardware Node{mySensorsNodeOutput.nodeId} Sensor{mySensorsNodeOutput.sensorId} output: {output.Value}");
+
+            base.OnOutputChange(output);
         }
 
         private void CreateInputsOutputs(Gateways.MySensors.Serial.Node node)
@@ -65,7 +67,7 @@ namespace MyNetSensors.Nodes
             input.nodeId = sensor.nodeId;
             Inputs.Add(input);
 
-            MySensorsNodeOutput output = new MySensorsNodeOutput { Name = sensor.sensorId.ToString() };
+            MySensorsNodeOutput output = new MySensorsNodeOutput { Name = sensor.GetSimpleName3() };
             output.sensorId = sensor.sensorId;
             output.nodeId = sensor.nodeId;
            //todo output.Value = sensor.state;

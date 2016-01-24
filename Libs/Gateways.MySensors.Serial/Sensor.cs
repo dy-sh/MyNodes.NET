@@ -192,5 +192,32 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                  dataType == SensorDataType.V_DIMMER ||
                  dataType == SensorDataType.V_LIGHT_LEVEL);
         }
+
+        public string GetSimpleName1()
+        {
+            if (!String.IsNullOrEmpty(description))
+                return description;
+
+            return $"Sensor{sensorId}";
+        }
+
+        public string GetSimpleName2()
+        {
+            if (!String.IsNullOrEmpty(description))
+                return $"{sensorId} [{description}]";
+
+            return $"{sensorId}";
+        }
+
+        public string GetSimpleName3()
+        {
+            if (!String.IsNullOrEmpty(description))
+                return $"{sensorId} [{description}]";
+
+            if (type!=null)
+                return $"{sensorId} [{type}]";
+
+            return $"{sensorId}";
+        }
     }
 }

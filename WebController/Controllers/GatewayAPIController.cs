@@ -64,6 +64,9 @@ namespace MyNetSensors.WebController.Controllers
         
         public GatewayInfo GetGatewayInfo()
         {
+            if (gateway == null)
+                return null;
+
             return gateway.GetGatewayInfo();
         }
         
