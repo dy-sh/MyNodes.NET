@@ -274,12 +274,12 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             try
             {
                 mes = new Message(message);
+                RecieveMessage(mes);
             }
             catch
             {
                 LogError($"Failed to process incoming message: [{message}]");
             }
-            RecieveMessage(mes);
         }
 
         public void RecieveMessage(Message message)
@@ -347,7 +347,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             Sensor sensor = node?.GetSensor(mes.sensorId);
             if (sensor == null)
             {
-                LogInfo($"Can't answer to REQ message. Node{mes.nodeId} Sensor{mes.sensorId} does not registered.");
+                LogInfo($"Can't answer to REQ message. Node[{mes.nodeId}] Sensor[{mes.sensorId}] does not registered.");
                 return;
             }
 
@@ -374,7 +374,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 db?.AddNode(node);
 
                 OnNewNodeEvent?.Invoke(node);
-                LogInfo($"Node{node.Id} registered.");
+                LogInfo($"Node[{node.Id}] registered.");
             }
 
             node.UpdateLastSeenNow();
@@ -386,14 +386,12 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                     if (mes.subType == (int)SensorType.S_ARDUINO_NODE)
                     {
                         node.isRepeatingNode = false;
-                        LogInfo($"Node{node.Id} is not repeating");
 
                         OnNodeUpdatedEvent?.Invoke(node);
                     }
                     else if (mes.subType == (int)SensorType.S_ARDUINO_REPEATER_NODE)
                     {
                         node.isRepeatingNode = true;
-                        LogInfo($"Node{node.Id} is repeating");
 
                         OnNodeUpdatedEvent?.Invoke(node);
                     }
@@ -403,21 +401,21 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                     if (mes.subType == (int)InternalDataType.I_SKETCH_NAME)
                     {
                         node.name = mes.payload;
-                        LogInfo($"Node{node.Id} name: [{node.name}]");
+                        LogInfo($"Node[{node.Id}] name: [{node.name}]");
 
                         OnNodeUpdatedEvent?.Invoke(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_SKETCH_VERSION)
                     {
                         node.version = mes.payload;
-                        LogInfo($"Node{node.Id} version: [{node.version}]");
+                        LogInfo($"Node[{node.Id}] version: [{node.version}]");
 
                         OnNodeUpdatedEvent?.Invoke(node);
                     }
                     else if (mes.subType == (int)InternalDataType.I_BATTERY_LEVEL)
                     {
                         node.batteryLevel = Int32.Parse(mes.payload);
-                        LogInfo($"Node{node.Id} battery level: [{node.batteryLevel}]");
+                        LogInfo($"Node[{node.Id}] battery level: [{node.batteryLevel}]");
 
                         OnNodeBatteryUpdatedEvent?.Invoke(node);
                     }
@@ -445,7 +443,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             if (sensor == null)
             {
                 sensor = node.AddSensor(mes.sensorId);
-                LogInfo($"Node{sensor.nodeId} Sensor{sensor.sensorId} registered");
+                LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] registered");
 
                 db?.AddSensor(sensor);
                 OnNewSensorEvent?.Invoke(sensor);
@@ -455,7 +453,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             {
                 sensor.dataType = (SensorDataType)mes.subType;
                 sensor.state = mes.payload;
-                LogInfo($"Node{sensor.nodeId} Sensor{sensor.sensorId} datatype: [{sensor.dataType}], state: [{sensor.state}]");
+                LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] datatype: [{sensor.dataType}] state: [{sensor.state}]");
 
                 db?.UpdateSensor(sensor);
                 OnSensorUpdatedEvent?.Invoke(sensor);
@@ -464,20 +462,22 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             {
                 try
                 {
-                    sensor.type=((SensorType) mes.subType);
+                    sensor.type = ((SensorType)mes.subType);
                     sensor.SetDefaultDataType();
                 }
                 catch
                 {
-                    LogError($"Can`t set sensor type for Node{mes.nodeId} Sensor{mes.sensorId}: [{mes.subType}]");
+                    LogError($"Can`t set sensor type for Node[{mes.nodeId}] Sensor[{mes.sensorId}]: [{mes.subType}]");
                     return;
                 }
 
                 if (!String.IsNullOrEmpty(mes.payload))
                     sensor.description = mes.payload;
 
-                LogInfo($"Node{sensor.nodeId} Sensor{sensor.sensorId} presented type: [{sensor.dataType}], description: [{sensor.description}]");
-                LogInfo($"Node{sensor.nodeId} Sensor{sensor.sensorId} datatype set to default: [{sensor.dataType}]");
+                LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] presented type: [{sensor.type}]");
+                LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] datatype set to default: [{sensor.dataType}]");
+                if (!String.IsNullOrEmpty(sensor.description))
+                    LogInfo($"Node[{sensor.nodeId}] Sensor[{sensor.sensorId}] description: [{sensor.description}]");
                 db?.UpdateSensor(sensor);
                 OnSensorUpdatedEvent?.Invoke(sensor);
             }
@@ -504,13 +504,13 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             Node node = GetNode(nodeId);
             if (node == null)
             {
-                LogError($"Can`t send message. Node{nodeId} does not exist.");
+                LogError($"Can`t send message. Node[{nodeId}] does not exist.");
                 return;
             }
             Sensor sensor = node.GetSensor(sensorId);
             if (sensor == null)
             {
-                LogError($"Can`t send message. Node{nodeId} Sensor{sensorId} does not exist.");
+                LogError($"Can`t send message. Node[{nodeId}] Sensor[{sensorId}] does not exist.");
                 return;
             }
             sensor.state = state;
@@ -598,8 +598,10 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             nodes.Clear();
 
-            OnRemoveAllNodesEvent?.Invoke();
+            LogInfo($"All nodes removed.");
+
             db?.RemoveAllNodesAndSensors();
+            OnRemoveAllNodesEvent?.Invoke();
         }
 
         public async Task SendRebootToAllNodes()
@@ -647,12 +649,17 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             Node oldNode = GetNode(nodeId);
             if (oldNode == null)
+            {
+                LogError($"Can`t remove Node[{nodeId}]. Does not exist.");
                 return;
+            }
+
+            nodes.Remove(oldNode);
+            db?.RemoveNode(oldNode.Id);
+
+            LogInfo($"Remove Node[{nodeId}]");
 
             OnRemoveNodeEvent?.Invoke(oldNode);
-
-            db?.RemoveNode(oldNode.Id);
-            nodes.Remove(oldNode);
         }
     }
 }

@@ -55,12 +55,12 @@ namespace MyNetSensors.Nodes
         {
             foreach (var sensor in node.sensors)
             {
-                AddInputOutput(sensor);
+                AddInputAndOutput(sensor);
             }
         }
 
 
-        public void AddInputOutput(Sensor sensor)
+        public void AddInputAndOutput(Sensor sensor)
         {
             MySensorsNodeInput input = new MySensorsNodeInput { Name = sensor.sensorId.ToString() };
             input.sensorId = sensor.sensorId;

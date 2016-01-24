@@ -154,7 +154,6 @@
             'Assembly': "Nodes.MySensors"
         };
         this.clonable = false;
-        this.removable = false;
     }
     LiteGraph.registerNodeType("Nodes/Hardware", MySensorsNode);
 

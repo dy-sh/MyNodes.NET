@@ -24,19 +24,39 @@ namespace MyNetSensors.Nodes
             gateway.OnNodeUpdatedEvent += CreateOrUpdateNode;
             gateway.OnNewSensorEvent += CreateOrUpdateSensor;
             gateway.OnSensorUpdatedEvent += CreateOrUpdateSensor;
-            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
-            gateway.OnRemoveNodeEvent += OnRemoveNodeEvent;
-            CreateAndAddHardwareNodes();
+            gateway.OnRemoveAllNodesEvent += OnGatewayRemoveAllNodesEvent;
+            gateway.OnRemoveNodeEvent += OnGatewayRemoveNodeEvent;
+            engine.OnRemoveAllNodesAndLinks += OnEngineRemoveAllNodesAndLinks;
+            engine.OnRemoveNode += OnEngineRemoveNode;
+            CreateAndAddMySensorsNodes();
         }
 
-        private void OnRemoveNodeEvent(Gateways.MySensors.Serial.Node node)
+        private void OnEngineRemoveNode(Node node)
         {
-            MySensorsNode oldNode = GetHardwareNode(node.Id);
+            if (!(node is MySensorsNode))
+                return;
+
+            MySensorsNode n = (MySensorsNode) node;
+
+            if (gateway.GetNode(n.nodeId)!=null)
+                gateway.RemoveNode(n.nodeId);
+        }
+
+        private void OnEngineRemoveAllNodesAndLinks()
+        {
+            if (gateway.GetNodes().Any())
+                gateway.RemoveAllNodes();
+        }
+
+        private void OnGatewayRemoveNodeEvent(Gateways.MySensors.Serial.Node node)
+        {
+            MySensorsNode oldNode = GetMySensorsNode(node.Id);
+
             if (oldNode != null)
                 engine.RemoveNode(oldNode);
         }
 
-        private void OnRemoveAllNodesEvent()
+        private void OnGatewayRemoveAllNodesEvent()
         {
             List<MySensorsNode> nodes = engine.GetNodes().OfType<MySensorsNode>().ToList();
             foreach (var node in nodes)
@@ -48,7 +68,7 @@ namespace MyNetSensors.Nodes
 
         private void CreateOrUpdateNode(Gateways.MySensors.Serial.Node node)
         {
-            MySensorsNode oldNode = GetHardwareNode(node.Id);
+            MySensorsNode oldNode = GetMySensorsNode(node.Id);
             if (oldNode == null)
             {
                 MySensorsNode newMySensorsNode = new MySensorsNode(node);
@@ -56,7 +76,6 @@ namespace MyNetSensors.Nodes
             }
             else
             {
-                //todo update inputs names
                 oldNode.Title = node.GetSimpleName2();
                 engine.UpdateNode(oldNode, true);
             }
@@ -64,11 +83,11 @@ namespace MyNetSensors.Nodes
 
         private void CreateOrUpdateSensor(Sensor sensor)
         {
-            MySensorsNodeOutput output = GetHardwarOutput(sensor);
+            MySensorsNodeOutput output = GetMySensorsNodeOutput(sensor);
             if (output == null)
             {
-                MySensorsNode node = GetHardwareNode(sensor.nodeId);
-                node.AddInputOutput(sensor);
+                MySensorsNode node = GetMySensorsNode(sensor.nodeId);
+                node.AddInputAndOutput(sensor);
                 engine.UpdateNode(node, true);
             }
             else
@@ -81,16 +100,16 @@ namespace MyNetSensors.Nodes
 
 
 
-        public MySensorsNode GetHardwareNode(int nodeId)
+        public MySensorsNode GetMySensorsNode(int nodeId)
         {
             return engine.GetNodes()
                 .OfType<MySensorsNode>()
                 .FirstOrDefault(node => node.nodeId == nodeId);
         }
 
-        public MySensorsNodeOutput GetHardwarOutput(int nodeId, int sensorId)
+        public MySensorsNodeOutput GetMySensorsNodeOutput(int nodeId, int sensorId)
         {
-            MySensorsNode oldNode = GetHardwareNode(nodeId);
+            MySensorsNode oldNode = GetMySensorsNode(nodeId);
             if (oldNode == null)
                 return null;
 
@@ -101,9 +120,9 @@ namespace MyNetSensors.Nodes
 
 
 
-        public MySensorsNodeInput GetHardwareInput(int nodeId, int sensorId)
+        public MySensorsNodeInput GetMySensorsNodeInput(int nodeId, int sensorId)
         {
-            MySensorsNode oldNode = GetHardwareNode(nodeId);
+            MySensorsNode oldNode = GetMySensorsNode(nodeId);
             if (oldNode == null)
                 return null;
 
@@ -112,25 +131,25 @@ namespace MyNetSensors.Nodes
                 .FirstOrDefault(input => input.sensorId == sensorId);
         }
 
-        public MySensorsNodeOutput GetHardwarOutput(Sensor sensor)
+        public MySensorsNodeOutput GetMySensorsNodeOutput(Sensor sensor)
         {
-            return GetHardwarOutput(sensor.nodeId, sensor.sensorId);
+            return GetMySensorsNodeOutput(sensor.nodeId, sensor.sensorId);
         }
 
 
 
-        public MySensorsNodeInput GetHardwareInput(Sensor sensor)
+        public MySensorsNodeInput GetMySensorsNodeInput(Sensor sensor)
         {
-            return GetHardwareInput(sensor.nodeId, sensor.sensorId);
+            return GetMySensorsNodeInput(sensor.nodeId, sensor.sensorId);
         }
 
-        public List<MySensorsNode> CreateAndAddHardwareNodes()
+        public List<MySensorsNode> CreateAndAddMySensorsNodes()
         {
             var list = new List<MySensorsNode>();
 
             foreach (var node in gateway.GetNodes())
             {
-                if (GetHardwareNode(node.Id) != null)
+                if (GetMySensorsNode(node.Id) != null)
                     continue;
 
                 MySensorsNode newMySensorsNode = new MySensorsNode(node);

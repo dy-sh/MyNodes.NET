@@ -27,8 +27,8 @@ namespace MyNetSensors.Nodes
             if (tasks == null)
                 tasks = new List<UITimerTask>();
 
-            engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
-            engine.OnUpdateEvent += UpdateTasks;
+            engine.OnRemoveNode += OnRemoveNode;
+            engine.OnUpdateLoop += UpdateTasks;
             engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
         }
 
@@ -38,7 +38,7 @@ namespace MyNetSensors.Nodes
             db?.RemoveAllTasks();
         }
 
-        private void OnRemoveNodeEvent(Node node)
+        private void OnRemoveNode(Node node)
         {
             RemoveTasksForNode(node.Id);
         }

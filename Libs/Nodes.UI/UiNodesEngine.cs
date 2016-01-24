@@ -22,10 +22,10 @@ namespace MyNetSensors.Nodes
             this.statesDb = statesDb;
 
             UiNodesEngine.engine = engine;
-            engine.OnNewNodeEvent += OnNewNodeEvent;
-            engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
-            engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
-            engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
+            engine.OnNewNode += OnNewNode;
+            engine.OnRemoveNode += OnRemoveNode;
+            engine.OnNodeUpdated += OnNodeUpdated;
+            engine.OnOutputStateUpdated += OnOutputStateUpdated;
             engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
 
             GetStatesFromRepository();
@@ -57,14 +57,14 @@ namespace MyNetSensors.Nodes
 
 
 
-        private void OnOutputUpdatedEvent(Output output)
+        private void OnOutputStateUpdated(Output output)
         {
             Node node = engine.GetOutputOwner(output);
             if (node is UiNode)
                 OnUiNodeUpdatedEvent?.Invoke((UiNode)node);
         }
 
-        private void OnNodeUpdatedEvent(Node node)
+        private void OnNodeUpdated(Node node)
         {
             if (node is UiNode)
                 OnUiNodeUpdatedEvent?.Invoke((UiNode)node);
@@ -80,7 +80,7 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        private void OnRemoveNodeEvent(Node node)
+        private void OnRemoveNode(Node node)
         {
             if (node is UiNode)
                 OnRemoveUiNodeEvent?.Invoke((UiNode)node);
@@ -89,7 +89,7 @@ namespace MyNetSensors.Nodes
                 statesDb?.RemoveStatesForNode(node.Id);
         }
 
-        private void OnNewNodeEvent(Node node)
+        private void OnNewNode(Node node)
         {
             if (!(node is UiNode)) return;
 

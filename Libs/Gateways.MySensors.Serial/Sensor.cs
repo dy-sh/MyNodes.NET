@@ -212,10 +212,13 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public string GetSimpleName3()
         {
             if (!String.IsNullOrEmpty(description))
-                return $"{sensorId} [{description}]";
+                return $"[{description}] {sensorId} ";
 
             if (type!=null)
-                return $"{sensorId} [{type}]";
+                return $"[{type}] {sensorId}";
+
+            if (dataType != null)
+                return $"[{dataType}] {sensorId}";
 
             return $"{sensorId}";
         }

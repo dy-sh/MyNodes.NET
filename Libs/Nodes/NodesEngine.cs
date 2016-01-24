@@ -35,16 +35,16 @@ namespace MyNetSensors.Nodes
         public event LogMessageEventHandler OnLogEngineInfo;
         public event LogMessageEventHandler OnLogEngineError;
 
-        public event NodeEventHandler OnNewNodeEvent;
-        public event NodeEventHandler OnRemoveNodeEvent;
-        public event NodeEventHandler OnNodeUpdatedEvent;
-        public event InputEventHandler OnInputUpdatedEvent;
-        public event OutputEventHandler OnOutputUpdatedEvent;
-        public event LinkEventHandler OnNewLinkEvent;
-        public event LinkEventHandler OnRemoveLinkEvent;
-        public event Action OnStartEvent;
-        public event Action OnStopEvent;
-        public event Action OnUpdateEvent;
+        public event NodeEventHandler OnNewNode;
+        public event NodeEventHandler OnRemoveNode;
+        public event NodeEventHandler OnNodeUpdated;
+        public event InputEventHandler OnInputStateUpdated;
+        public event OutputEventHandler OnOutputStateUpdated;
+        public event LinkEventHandler OnNewLink;
+        public event LinkEventHandler OnRemoveLink;
+        public event Action OnStart;
+        public event Action OnStop;
+        public event Action OnUpdateLoop;
         public event Action OnRemoveAllNodesAndLinks;
 
 
@@ -96,7 +96,7 @@ namespace MyNetSensors.Nodes
             started = true;
 
             updateNodesTimer.Start();
-            OnStartEvent?.Invoke();
+            OnStart?.Invoke();
             LogEngineInfo("Started");
         }
 
@@ -112,7 +112,7 @@ namespace MyNetSensors.Nodes
             updateNodesTimer.Stop();
             changedInputsStack.Clear();
 
-            OnStopEvent?.Invoke();
+            OnStop?.Invoke();
 
             LogEngineInfo("Stopped");
         }
@@ -196,7 +196,7 @@ namespace MyNetSensors.Nodes
 
             node.OnInputChange(input);
 
-            OnInputUpdatedEvent?.Invoke(input);
+            OnInputStateUpdated?.Invoke(input);
 
             try
             {
@@ -215,7 +215,7 @@ namespace MyNetSensors.Nodes
             if (node == null)
                 return;
 
-            OnOutputUpdatedEvent?.Invoke(output);
+            OnOutputStateUpdated?.Invoke(output);
 
             node.OnOutputChange(output);
         }
@@ -241,7 +241,7 @@ namespace MyNetSensors.Nodes
                         break;
                 }
 
-                OnUpdateEvent?.Invoke();
+                OnUpdateLoop?.Invoke();
             }
             catch { }
 
@@ -329,7 +329,7 @@ namespace MyNetSensors.Nodes
 
             LogEngineInfo($"New node [{node.GetType().Name}]");
 
-            OnNewNodeEvent?.Invoke(node);
+            OnNewNode?.Invoke(node);
         }
 
 
@@ -356,9 +356,9 @@ namespace MyNetSensors.Nodes
             }
 
             node.OnRemove();
+            nodes.Remove(node);
+            nodesDb?.RemoveNode(node.Id);
 
-            OnRemoveNodeEvent?.Invoke(node);
-            LogEngineInfo($"Remove node [{node.GetType().Name}]");
 
             foreach (var input in node.Inputs)
                 input.OnInputChange -= OnInputChange;
@@ -370,9 +370,9 @@ namespace MyNetSensors.Nodes
             node.OnLogInfo -= LogNodeInfo;
             node.OnUpdate -= UpdateNode;
 
-            nodesDb?.RemoveNode(node.Id);
 
-            nodes.Remove(node);
+            LogEngineInfo($"Remove node [{node.GetType().Name}]");
+            OnRemoveNode?.Invoke(node);
         }
 
 
@@ -453,7 +453,7 @@ namespace MyNetSensors.Nodes
                 nodesDb?.UpdateNode(oldNode);
             }
 
-            OnNodeUpdatedEvent?.Invoke(node);
+            OnNodeUpdated?.Invoke(node);
         }
 
         private void UpdatePanelInput(PanelInputNode node)
@@ -491,14 +491,16 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            oldOutput.Value = value;
 
             if (name != null && name != oldOutput.Name)
             {
                 oldOutput.Name = name;
                 Node node = GetOutputOwner(oldOutput);
                 nodesDb?.UpdateNode(node);
+                OnNodeUpdated?.Invoke(node);
             }
+
+            oldOutput.Value = value;
         }
 
         public void UpdateInput(string inputId, string value, string name = null)
@@ -511,15 +513,16 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            oldInput.Value = value;
 
             if (name != null && name != oldInput.Name)
             {
                 oldInput.Name = name;
                 Node node = GetInputOwner(oldInput);
                 nodesDb?.UpdateNode(node);
+                OnNodeUpdated?.Invoke(node);
             }
 
+            oldInput.Value = value;
         }
 
         public void AddLink(string outputId, string inputId)
@@ -573,7 +576,7 @@ namespace MyNetSensors.Nodes
 
             nodesDb?.AddLink(link);
 
-            OnNewLinkEvent?.Invoke(link);
+            OnNewLink?.Invoke(link);
 
             if (!started)
                 return;
@@ -596,14 +599,14 @@ namespace MyNetSensors.Nodes
 
             Node inputNode = GetInputOwner(input);
             Node outputNode = GetOutputOwner(output);
+
+            links.Remove(link);
+            nodesDb?.RemoveLink(link.Id);
             LogEngineInfo($"Remove link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
-            nodesDb?.RemoveLink(link.Id);
-
-            OnRemoveLinkEvent?.Invoke(link);
-            links.Remove(link);
-
             input.Value = null;
+            OnRemoveLink?.Invoke(link);
+
         }
 
         public void RemoveLink(Link link)
