@@ -92,11 +92,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         }
 
 
-        private void LogMessage(string message)
-        {
-            OnLogMessage?.Invoke(message);
-        }
-
         internal void LogInfo(string message)
         {
             OnLogInfo?.Invoke(message);
@@ -248,20 +243,30 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             UpdateSensorFromMessage(message);
 
-            LogMessage(message.ToString());
-
             string mes = $"{message.nodeId};" + $"{message.sensorId};" + $"{(int)message.messageType};" + $"{((message.ack) ? "1" : "0")};" + $"{message.subType};" + $"{message.payload}\n";
-
 
             serialPort.SendMessage(mes);
 
-            if (messagesLogEnabled)
-            {
-                messagesLog.Add(message);
-                hisotryDb?.AddMessage(message);
-            }
+            AddMessageToLog(message);
         }
 
+
+        public void AddMessageToLog(Message message)
+        {
+            if (!messagesLogEnabled)
+                return;
+
+            //ignore check alive message
+            if (message.nodeId == 0
+                && message.messageType == MessageType.C_INTERNAL
+                && message.subType == (int)InternalDataType.I_VERSION)
+                return;
+
+            messagesLog.Add(message);
+            hisotryDb?.AddMessage(message);
+
+            OnLogMessage?.Invoke(message.ToString());
+        }
 
         public void RecieveMessage(string message)
         {
@@ -281,13 +286,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             message.incoming = true;
 
-            if (messagesLogEnabled)
-            {
-                messagesLog.Add(message);
-                hisotryDb?.AddMessage(message);
-            }
-
-            LogMessage(message.ToString());
+            AddMessageToLog(message);
 
             OnMessageRecievedEvent?.Invoke(message);
 
