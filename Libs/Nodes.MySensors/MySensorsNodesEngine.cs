@@ -45,21 +45,6 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        private void CreateOrUpdateSensor(Sensor sensor)
-        {
-            MySensorsNodeOutput output = GetHardwarOutput(sensor);
-            if (output == null)
-            {
-                MySensorsNode node = GetHardwareNode(sensor.nodeId);
-                node.AddInputOutput(sensor);
-                engine.UpdateNode(node,true);//for call event
-            }
-            else
-            {
-                engine.UpdateOutput(output.Id, sensor.state, sensor.Id.ToString());
-            }
-
-        }
 
         private void CreateOrUpdateNode(Gateways.MySensors.Serial.Node node)
         {
@@ -73,9 +58,27 @@ namespace MyNetSensors.Nodes
             {
                 //todo update inputs names
                 oldNode.Title = node.GetSimpleName1();
-                engine.UpdateNode(oldNode,true);
+                engine.UpdateNode(oldNode, true);
             }
         }
+
+        private void CreateOrUpdateSensor(Sensor sensor)
+        {
+            MySensorsNodeOutput output = GetHardwarOutput(sensor);
+            if (output == null)
+            {
+                MySensorsNode node = GetHardwareNode(sensor.nodeId);
+                node.AddInputOutput(sensor);
+                engine.UpdateNode(node,true);//for call event
+            }
+            else
+            {
+                engine.UpdateOutput(output.Id, sensor.state, sensor.sensorId.ToString());
+            }
+
+        }
+
+
 
 
         public MySensorsNode GetHardwareNode(int nodeId)
