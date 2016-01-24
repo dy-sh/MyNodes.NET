@@ -56,7 +56,7 @@ namespace MyNetSensors.Nodes
             }
             else
             {
-                engine.UpdateOutput(output.Id, sensor.state, sensor.GetSimpleName1());
+                engine.UpdateOutput(output.Id, sensor.state, sensor.Id.ToString());
             }
 
         }

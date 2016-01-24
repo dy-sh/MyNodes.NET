@@ -23,14 +23,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public string state { get; set; }
 
 
-
-        public bool invertData { get; set; }
-        public bool remapEnabled { get; set; }
-        public string remapFromMin { get; set; }
-        public string remapFromMax { get; set; }
-        public string remapToMin { get; set; }
-        public string remapToMax { get; set; }
-
         public Sensor()
         {
 
@@ -70,18 +62,8 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
 
 
-        public void SetSensorType(SensorType? sensorType)
+        public void SetDefaultSensorType(SensorType? sensorType)
         {
-            if (this.type == sensorType) return;
-            if (sensorType < 0 || sensorType > Enum.GetValues(typeof (SensorType)).Cast<SensorType>().Max())
-            {
-                Console.WriteLine("This exception occurs when the serial port does not have time to write the data");
-                throw new ArgumentOutOfRangeException("This exception occurs when the serial port does not have time to write the data");
-            }
-
-
-            this.type = sensorType;
-
             switch (sensorType)
             {
                 case SensorType.S_DOOR:
@@ -195,287 +177,18 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             }
         }
 
-      
-        public string GetSimpleName1()
-        {
-            if (description != null)
-                return description;
-            else
-                return MySensors.GetSimpleSensorType(type);
-        }
-
-        public string GetSimpleName2()
-        {
-            return $"Sensor {sensorId} ({GetSimpleName1()})";
-        }
-
-
-        public void RemapSensorData()
-        {
-            if (!remapEnabled && !invertData)
-                return;
-
-       
-                if (CheckTypeIsBinary(dataType))
-                {
-                    if (invertData)
-                    {
-                        if (state == "0")
-                            state = "1";
-                        else state = "0";
-                    }
-                }
-
-                if (CheckTypeIsPercentage(dataType))
-                {
-                    int val = Int32.Parse(state);
-
-                    if (remapEnabled)
-                    {
-                        int fromMin = Int32.Parse(remapFromMin);
-                        int fromMax = Int32.Parse(remapFromMax);
-                        int toMin = Int32.Parse(remapToMin);
-                        int toMax = Int32.Parse(remapToMax);
-
-                        val = MathUtils.Map(val, fromMin, fromMax, toMin, toMax);
-                    }
-
-                    val = MathUtils.Clamp(val, 0, 100);
-
-                    if (invertData)
-                    {
-                        val = 100 - val;
-                    }
-
-                    state = val.ToString();
-                }
-
-                if (dataType == SensorDataType.V_RGB)
-                {
-                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(state);
-
-                    if (remapEnabled)
-                    {
-                        int[] fromMin = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMin);
-                        int[] fromMax = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMax);
-                        int[] toMin = ColorUtils.ConvertRGBHexStringToIntArray(remapToMin);
-                        int[] toMax = ColorUtils.ConvertRGBHexStringToIntArray(remapToMax);
-
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
-                        }
-                    }
-
-                    for (int i = 0; i < val.Length; i++)
-                    {
-                        val[i] = MathUtils.Clamp(val[i], 0, 255);
-                    }
-
-                    if (invertData)
-                    {
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = 255 - val[i];
-                        }
-                    }
-
-                    state = ColorUtils.ConvertRGBIntArrayToHexString(val);
-
-                }
-
-
-                if (dataType == SensorDataType.V_RGBW)
-                {
-                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(state);
-
-                    if (remapEnabled)
-                    {
-                        int[] fromMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMin);
-                        int[] fromMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMax);
-                        int[] toMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMin);
-                        int[] toMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMax);
-
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
-                        }
-                    }
-
-                    for (int i = 0; i < val.Length; i++)
-                    {
-                        val[i] = MathUtils.Clamp(val[i], 0, 255);
-                    }
-
-                    if (invertData)
-                    {
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = 255 - val[i];
-                        }
-                    }
-
-                    state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
-
-                }
- 
-        }
-
-        public void UnRemapSensorData()
-        {
-
-      
-                if (CheckTypeIsBinary(dataType))
-                {
-                    if (invertData)
-                    {
-                        if (state == "0")
-                            state = "1";
-                        else state = "0";
-                    }
-                }
-
-                if (CheckTypeIsPercentage(dataType))
-                {
-                    int val = Int32.Parse(state);
-
-                    if (remapEnabled)
-                    {
-                        int fromMin = Int32.Parse(remapToMin);
-                        int fromMax = Int32.Parse(remapToMax);
-                        int toMin = Int32.Parse(remapFromMin);
-                        int toMax = Int32.Parse(remapFromMax);
-
-                        val = MathUtils.Map(val, fromMin, fromMax, toMin, toMax);
-                    }
-
-                    val = MathUtils.Clamp(val, 0, 100);
-
-                    if (invertData)
-                    {
-                        val = 100 - val;
-                    }
-
-                    state = val.ToString();
-                }
-
-                if (dataType == SensorDataType.V_RGB)
-                {
-                    int[] val = ColorUtils.ConvertRGBHexStringToIntArray(state);
-
-                    if (remapEnabled)
-                    {
-                        int[] fromMin = ColorUtils.ConvertRGBHexStringToIntArray(remapToMin);
-                        int[] fromMax = ColorUtils.ConvertRGBHexStringToIntArray(remapToMax);
-                        int[] toMin = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMin);
-                        int[] toMax = ColorUtils.ConvertRGBHexStringToIntArray(remapFromMax);
-
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
-                        }
-                    }
-
-                    for (int i = 0; i < val.Length; i++)
-                    {
-                        val[i] = MathUtils.Clamp(val[i], 0, 255);
-                    }
-
-                    if (invertData)
-                    {
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = 255 - val[i];
-                        }
-                    }
-
-                    state = ColorUtils.ConvertRGBIntArrayToHexString(val);
-
-                }
-
-
-                if (dataType == SensorDataType.V_RGBW)
-                {
-                    int[] val = ColorUtils.ConvertRGBWHexStringToIntArray(state);
-
-                    if (remapEnabled)
-                    {
-                        int[] fromMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMin);
-                        int[] fromMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapToMax);
-                        int[] toMin = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMin);
-                        int[] toMax = ColorUtils.ConvertRGBWHexStringToIntArray(remapFromMax);
-
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = MathUtils.Map(val[i], fromMin[i], fromMax[i], toMin[i], toMax[i]);
-                        }
-                    }
-
-                    for (int i = 0; i < val.Length; i++)
-                    {
-                        val[i] = MathUtils.Clamp(val[i], 0, 255);
-                    }
-
-                    if (invertData)
-                    {
-                        for (int i = 0; i < val.Length; i++)
-                        {
-                            val[i] = 255 - val[i];
-                        }
-                    }
-
-                    state = ColorUtils.ConvertRGBWIntArrayToHexString(val);
-
-                }
-  
-        }
-
-        public string ConvertSensorData(SensorDataType? newDataType)
-        {
-
-            //convert binary to percentage 
-            if (CheckTypeIsBinary(this.dataType)
-                && CheckTypeIsPercentage(newDataType))
-            {
-                if (this.state == "0")
-                    return ("0");
-                else
-                    return ("100");
-            }
-
-            //convert  percentage to binary
-            if (CheckTypeIsBinary(newDataType)
-                && CheckTypeIsPercentage(this.dataType))
-            {
-                if (this.state == "0")
-                    return ("0");
-                else
-                    return ("1");
-            }
-
-            return this.state;
-        }
+    
 
         public bool IsBinary()
         {
-            return CheckTypeIsBinary(dataType);
+            return (dataType == SensorDataType.V_STATUS ||
+                dataType == SensorDataType.V_LIGHT ||
+                dataType == SensorDataType.V_ARMED ||
+                dataType == SensorDataType.V_TRIPPED ||
+                dataType == SensorDataType.V_LOCK_STATUS);
         }
 
         public bool IsPercentage()
-        {
-            return CheckTypeIsPercentage(dataType);
-        }
-
-        private bool CheckTypeIsBinary(SensorDataType? dataType)
-        {
-            return (dataType == SensorDataType.V_STATUS ||
-                    dataType == SensorDataType.V_LIGHT ||
-                    dataType == SensorDataType.V_ARMED ||
-                    dataType == SensorDataType.V_TRIPPED ||
-                    dataType == SensorDataType.V_LOCK_STATUS);
-        }
-
-        private bool CheckTypeIsPercentage(SensorDataType? dataType)
         {
             return (dataType == SensorDataType.V_PERCENTAGE ||
                  dataType == SensorDataType.V_DIMMER ||

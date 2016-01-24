@@ -18,7 +18,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         public bool ack { get; set; }
         public int subType { get; set; }
         public string payload { get; set; }
-        public bool incoming { get; set; }//or outgoing
+        public bool incoming { get; set; } //or outgoing
         public DateTime dateTime { get; set; }
 
 
@@ -52,11 +52,11 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             string subTypeString = subType.ToString();
             if (messageType == MessageType.C_PRESENTATION)
-                subTypeString = ((SensorType)subType).ToString();
+                subTypeString = ((SensorType) subType).ToString();
             else if (messageType == MessageType.C_SET || messageType == MessageType.C_REQ)
-                subTypeString = ((SensorDataType)subType).ToString();
+                subTypeString = ((SensorDataType) subType).ToString();
             else if (messageType == MessageType.C_INTERNAL)
-                subTypeString = ((InternalDataType)subType).ToString();
+                subTypeString = ((InternalDataType) subType).ToString();
             return subTypeString;
         }
 
@@ -66,13 +66,18 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             dateTime = DateTime.Now;
 
-            string[] arguments = message.Split(new char[] { ';' }, 6);
+            string[] arguments = message.Split(new char[] {';'}, 6);
             nodeId = Int32.Parse(arguments[0]);
             sensorId = Int32.Parse(arguments[1]);
-            messageType = (MessageType)Int32.Parse(arguments[2]);
+            messageType = (MessageType) Int32.Parse(arguments[2]);
             ack = arguments[3] == "1";
             subType = Int32.Parse(arguments[4]);
             payload = arguments[5];
+        }
+
+        public string ParseToMySensorsMessage()
+        {
+            return $"{nodeId};{sensorId};{(int) messageType};{(ack ? "1" : "0")};{subType};{payload}\n";
         }
     }
 }

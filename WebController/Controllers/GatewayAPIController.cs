@@ -70,7 +70,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool UpdateNodeSettings(Node node)
         {
-            gateway.UpdateNodeSettings(node);
+           // gateway.UpdateNode(node);
             return true;
         }
         

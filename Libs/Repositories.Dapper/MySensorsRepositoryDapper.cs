@@ -29,11 +29,11 @@ namespace MyNetSensors.Repositories.Dapper
         //writeInterval should be large enough (3000 ms is ok)
         private int writeInterval = 5000;
 
-        private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
-        //store id-s of updated nodes, to write to db by timer
-        private List<int> updatedNodesId = new List<int>();
+        //store updated nodes, to write to db by timer
+        private List<Node> updatedNodes = new List<Node>();
+        private List<Sensor> updatedSensors = new List<Sensor>();
 
         private string connectionString;
 
@@ -46,25 +46,6 @@ namespace MyNetSensors.Repositories.Dapper
 
             this.connectionString = connectionString;
             CreateDb();
-        }
-
-
-        public void ConnectToGateway(Gateway gateway)
-        {
-
-            this.gateway = gateway;
-
-            List<Node> nodes = GetNodes();
-            foreach (var node in nodes)
-                gateway.AddNode(node);
-
-            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
-
-            gateway.OnNewNodeEvent += OnNodeUpdated;
-            gateway.OnNodeUpdatedEvent += OnNodeUpdated;
-            gateway.OnNewSensorEvent += OnSensorUpdated;
-            gateway.OnSensorUpdatedEvent += OnSensorUpdated;
-
 
             if (writeInterval > 0)
             {
@@ -72,6 +53,7 @@ namespace MyNetSensors.Repositories.Dapper
                 updateDbTimer.Start();
             }
         }
+
 
 
 
@@ -121,13 +103,7 @@ namespace MyNetSensors.Repositories.Dapper
 	                [type] [int] NULL,
 	                [dataType] [int] NULL,
 	                [state] [nvarchar](max) NULL,
-	                [description] [nvarchar](max) NULL,
-	                [invertData] [bit] NULL,
-	                [remapEnabled] [bit] NULL,
-	                [remapFromMin] [nvarchar](max) NULL,
-	                [remapFromMax] [nvarchar](max) NULL,
-	                [remapToMin] [nvarchar](max) NULL,
-	                [remapToMax] [nvarchar](max) NULL
+	                [description] [nvarchar](max) NULL,	              
 	                ) ON [PRIMARY] ");
                 }
                 catch
@@ -138,9 +114,10 @@ namespace MyNetSensors.Repositories.Dapper
 
     
 
-        public void RemoveAllNodes()
+        public void RemoveAllNodesAndSensors()
         {
-            updatedNodesId.Clear();
+            updatedNodes.Clear();
+            updatedSensors.Clear();
 
             using (var db = new SqlConnection(connectionString))
             {
@@ -153,10 +130,6 @@ namespace MyNetSensors.Repositories.Dapper
 
       
 
-        private void OnRemoveAllNodesEvent()
-        {
-            RemoveAllNodes();
-        }
 
 
      
@@ -189,30 +162,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-
-
-        public int AddOrUpdateNode(Node node)
-        {
-            int id;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                Node oldNode =
-                    db.Query<Node>("SELECT * FROM MySensorsNodes WHERE Id = @Id", new { node.Id }).SingleOrDefault();
-
-                if (oldNode == null)
-                {
-                    id = AddNode(node);
-                }
-                else
-                {
-                    UpdateNode(node);
-                    id = node.Id;
-                }
-            }
-            return id;
-        }
+        
 
         public int AddNode(Node node)
         {
@@ -227,59 +177,34 @@ namespace MyNetSensors.Repositories.Dapper
                // gateway.SetNodeDbId(node.nodeId, id);
             }
 
-            foreach (var sensor in node.sensors)
-            {
-                AddOrUpdateSensor(sensor);
-            }
             return node.Id;
         }
 
         public void UpdateNode(Node node)
         {
-            using (var db = new SqlConnection(connectionString))
+            if (writeInterval == 0)
             {
-                var sqlQuery =
-                    "UPDATE MySensorsNodes SET " +
-                    "registered = @registered, " +
-                    "lastSeen = @lastSeen, " +
-                    "isRepeatingNode = @isRepeatingNode, " +
-                    "name = @name, " +
-                    "version = @version, " +
-                    "batteryLevel = @batteryLevel " +
-                    "WHERE Id = @Id";
-                db.Execute(sqlQuery, node);
+                using (var db = new SqlConnection(connectionString))
+                {
+                    var sqlQuery =
+                        "UPDATE MySensorsNodes SET " +
+                        "registered = @registered, " +
+                        "lastSeen = @lastSeen, " +
+                        "isRepeatingNode = @isRepeatingNode, " +
+                        "name = @name, " +
+                        "version = @version, " +
+                        "batteryLevel = @batteryLevel " +
+                        "WHERE Id = @Id";
+                    db.Execute(sqlQuery, node);
+                }
             }
-
-            foreach (var sensor in node.sensors)
+            else
             {
-                AddOrUpdateSensor(sensor);
+                if (!updatedNodes.Contains(node))
+                    updatedNodes.Add(node);
             }
         }
 
-        public int AddOrUpdateSensor(Sensor sensor)
-        {
-            int id;
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                Sensor oldSensor =
-                    db.Query<Sensor>("SELECT * FROM MySensorsSensors WHERE nodeId = @nodeId AND sensorId = @sensorId",
-                        new { nodeId = sensor.nodeId, sensorId = sensor.sensorId }).SingleOrDefault();
-
-
-                if (oldSensor == null)
-                {
-                    id=AddSensor(sensor);
-                }
-                else
-                {
-                    UpdateSensor(sensor);
-                    id = sensor.Id;
-                }
-            }
-            return id;
-        }
 
         public int AddSensor(Sensor sensor)
         {
@@ -287,116 +212,106 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
 
-                var sqlQuery = "INSERT INTO MySensorsSensors (nodeId, sensorId, type, dataType,state, description, invertData, remapEnabled, remapFromMin, remapFromMax, remapToMin, remapToMax) "
+                var sqlQuery = "INSERT INTO MySensorsSensors (nodeId, sensorId, type, dataType,state, description) "
                                +
-                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description, @invertData, @remapEnabled, @remapFromMin, @remapFromMax, @remapToMin, @remapToMax); "
+                               "VALUES(@nodeId, @sensorId, @type, @dataType ,@state, @description); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                id = db.Query<int>(sqlQuery, new
-                {
-                    nodeId = sensor.nodeId,
-                    sensorId = sensor.sensorId,
-                    type = sensor.type,
-                    dataType = sensor.dataType,
-                    state = sensor.state,
-                    description = sensor.description,
-                    invertData = sensor.invertData,
-                    remapEnabled = sensor.remapEnabled,
-                    remapFromMin = sensor.remapFromMin,
-                    remapFromMax = sensor.remapFromMax,
-                    remapToMin = sensor.remapToMin,
-                    remapToMax = sensor.remapToMax
-                }).Single();
+                id = db.Query<int>(sqlQuery, sensor).Single();
 
             }
-            gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, id);
             return id;
         }
 
 
         public void UpdateSensor(Sensor sensor)
         {
-            using (var db = new SqlConnection(connectionString))
+            if (writeInterval == 0)
             {
-
-                var sqlQuery =
-                    "UPDATE MySensorsSensors SET " +
-                    "nodeId = @nodeId, " +
-                    "sensorId  = @sensorId, " +
-                    "type = @type, " +
-                    "dataType = @dataType, " +
-                    "state = @state, " +
-                    "description = @description, " +
-                    "invertData = @invertData, " +
-                    "remapEnabled = @remapEnabled, " +
-                    "remapFromMin = @remapFromMin, " +
-                    "remapFromMax = @remapFromMax, " +
-                    "remapToMin = @remapToMin, " +
-                    "remapToMax = @remapToMax " +
-                    "WHERE nodeId = @nodeId AND sensorId = @sensorId";
-                db.Execute(sqlQuery, new
+                using (var db = new SqlConnection(connectionString))
                 {
-                    nodeId = sensor.nodeId,
-                    sensorId = sensor.sensorId,
-                    type = sensor.type,
-                    dataType = sensor.dataType,
-                    state = sensor.state,
-                    description = sensor.description,
-                    invertData = sensor.invertData,
-                    remapEnabled = sensor.remapEnabled,
-                    remapFromMin = sensor.remapFromMin,
-                    remapFromMax = sensor.remapFromMax,
-                    remapToMin = sensor.remapToMin,
-                    remapToMax = sensor.remapToMax
-                });
+                    db.Open();
+
+                    var sqlQuery =
+                        "UPDATE MySensorsSensors SET " +
+                        "nodeId = @nodeId, " +
+                        "sensorId  = @sensorId, " +
+                        "type = @type, " +
+                        "dataType = @dataType, " +
+                        "state = @state, " +
+                        "description = @description " +
+                        "WHERE nodeId = @nodeId AND sensorId = @sensorId";
+                    db.Execute(sqlQuery, sensor);
+                }
             }
-        }
-
-
-
-
-     
-
-        private void OnNodeUpdated(Node node)
-        {
-            if (writeInterval == 0) AddOrUpdateNode(node);
             else
             {
-                if (!updatedNodesId.Contains(node.Id))
-                    updatedNodesId.Add(node.Id);
+                if (!updatedSensors.Contains(sensor))
+                    updatedSensors.Add(sensor);
             }
         }
 
-        private void OnSensorUpdated(Sensor sensor)
+
+
+
+
+
+
+        private void WriteUpdated()
         {
-            if (writeInterval == 0) AddOrUpdateSensor(sensor);
-            else
+            if (!updatedNodes.Any() && !updatedSensors.Any())
+                return;
+
+            if (updatedNodes.Any())
             {
-                if (!updatedNodesId.Contains(sensor.nodeId))
-                    updatedNodesId.Add(sensor.nodeId);
+
+                //to prevent changing of collection while writing to db is not yet finished
+                Node[] nodesTemp = new Node[updatedNodes.Count];
+                updatedNodes.CopyTo(nodesTemp);
+                updatedNodes.Clear();
+
+                using (var db = new SqlConnection(connectionString))
+                {
+                    var sqlQuery =
+                        "UPDATE MySensorsNodes SET " +
+                        "registered = @registered, " +
+                        "lastSeen = @lastSeen, " +
+                        "isRepeatingNode = @isRepeatingNode, " +
+                        "name = @name, " +
+                        "version = @version, " +
+                        "batteryLevel = @batteryLevel " +
+                        "WHERE Id = @Id";
+                    db.Execute(sqlQuery, nodesTemp);
+                }
+            }
+
+            if (updatedSensors.Any())
+            {
+
+                //to prevent changing of collection while writing to db is not yet finished
+                Sensor[] sensorsTemp = new Sensor[updatedSensors.Count];
+                updatedSensors.CopyTo(sensorsTemp);
+                updatedSensors.Clear();
+
+                using (var db = new SqlConnection(connectionString))
+                {
+                    var sqlQuery =
+                        "UPDATE MySensorsSensors SET " +
+                        "nodeId = @nodeId, " +
+                        "sensorId  = @sensorId, " +
+                        "type = @type, " +
+                        "dataType = @dataType, " +
+                        "state = @state, " +
+                        "description = @description " +
+                        "WHERE nodeId = @nodeId AND sensorId = @sensorId";
+                    db.Execute(sqlQuery, sensorsTemp);
+                }
             }
         }
 
-        private void WriteUpdatedNodes()
-        {
-            if (!updatedNodesId.Any()) return;
-
-            //to prevent changing of collection while writing to db is not yet finished
-            int[] nodesTemp = new int[updatedNodesId.Count];
-            updatedNodesId.CopyTo(nodesTemp);
-            updatedNodesId.Clear();
-
-            List<Node> nodes = gateway.GetNodes();
-            foreach (var id in nodesTemp)
-            {
-                Node node = nodes.FirstOrDefault(x => x.Id == id);
-                AddOrUpdateNode(node);
-            }
-        }
-
- 
 
 
-        
+
+
 
         public Node GetNode(int id)
         {
@@ -447,54 +362,7 @@ namespace MyNetSensors.Repositories.Dapper
             return sensor;
         }
 
-
-        public void UpdateNodeSettings(Node node)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "UPDATE MySensorsNodes SET " +
-                    "name = @name " +
-                    "WHERE Id = @Id";
-                db.Execute(sqlQuery, node);
-            }
-
-            foreach (var sensor in node.sensors)
-            {
-                UpdateSensorSettings(sensor);
-            }
-        }
-
-        public void UpdateSensorSettings(Sensor sensor)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery =
-                    "UPDATE MySensorsSensors SET " +
-                    "description = @description, " +
-                    "invertData = @invertData, " +
-                    "remapEnabled = @remapEnabled, " +
-                    "remapFromMin = @remapFromMin, " +
-                    "remapFromMax = @remapFromMax, " +
-                    "remapToMin = @remapToMin, " +
-                    "remapToMax = @remapToMax " +
-                    "WHERE nodeId = @nodeId AND sensorId = @sensorId";
-                db.Execute(sqlQuery, new
-                {
-                    description = sensor.description,
-                    invertData = sensor.invertData,
-                    remapEnabled = sensor.remapEnabled,
-                    remapFromMin = sensor.remapFromMin,
-                    remapFromMax = sensor.remapFromMax,
-                    remapToMin = sensor.remapToMin,
-                    remapToMax = sensor.remapToMax,
-                    sensorId = sensor.sensorId,
-                    nodeId = sensor.nodeId
-                });
-            }
-        }
+        
 
         public void RemoveNode(int id)
         {
@@ -525,7 +393,7 @@ namespace MyNetSensors.Repositories.Dapper
             updateDbTimer.Stop();
             try
             {
-                int messages = updatedNodesId.Count;
+                int messages = updatedNodes.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
@@ -535,7 +403,7 @@ namespace MyNetSensors.Repositories.Dapper
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                WriteUpdatedNodes();
+                WriteUpdated();
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
@@ -557,8 +425,7 @@ namespace MyNetSensors.Repositories.Dapper
             if (writeInterval > 0)
             {
                 updateDbTimer.Interval = writeInterval;
-                if (gateway != null)
-                    updateDbTimer.Start();
+                updateDbTimer.Start();
             }
         }
 

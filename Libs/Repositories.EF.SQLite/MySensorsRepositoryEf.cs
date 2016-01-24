@@ -31,11 +31,11 @@ namespace MyNetSensors.Repositories.EF.SQLite
         //writeInterval should be large enough (3000 ms is ok)
         private int writeInterval = 5000;
 
-        private Gateway gateway;
         private Timer updateDbTimer = new Timer();
 
-        //store id-s of updated nodes, to write to db by timer
-        private List<int> updatedNodesId = new List<int>();
+        //store updated nodes, to write to db by timer
+        private List<Node> updatedNodes = new List<Node>();
+        private List<Sensor> updatedSensors = new List<Sensor>();
 
         private MySensorsNodesDbContext db;
 
@@ -48,25 +48,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             this.db = mySensorsNodesDbContext;
             CreateDb();
-        }
-
-
-        public void ConnectToGateway(Gateway gateway)
-        {
-
-            this.gateway = gateway;
-
-            List<Node> nodes = GetNodes();
-            foreach (var node in nodes)
-                gateway.AddNode(node);
-
-            gateway.OnRemoveAllNodesEvent += OnRemoveAllNodesEvent;
-
-            gateway.OnNewNodeEvent += OnNodeUpdated;
-            gateway.OnNodeUpdatedEvent += OnNodeUpdated;
-            gateway.OnNewSensorEvent += OnSensorUpdated;
-            gateway.OnSensorUpdatedEvent += OnSensorUpdated;
-
 
             if (writeInterval > 0)
             {
@@ -74,6 +55,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 updateDbTimer.Start();
             }
         }
+
+
+
 
 
         public void CreateDb()
@@ -89,22 +73,22 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
         }
 
-        public void RemoveAllNodes()
+        public void RemoveAllNodesAndSensors()
         {
+            updatedNodes.Clear();
+            updatedSensors.Clear();
+
             db.Sensors.RemoveRange(db.Sensors);
             db.Nodes.RemoveRange(db.Nodes);
             db.SaveChanges();
         }
 
 
-        private void OnRemoveAllNodesEvent()
-        {
-            RemoveAllNodes();
-        }
 
 
-      
- 
+
+
+
 
         public List<Node> GetNodes()
         {
@@ -112,19 +96,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         }
 
 
-        public int AddOrUpdateNode(Node node)
-        {
-            int id = node.Id;
 
-            Node oldNode = GetNode(node.Id);
-
-            if (oldNode == null)
-                id = AddNode(node);
-            else
-                UpdateNode(node);
-
-            return id;
-        }
 
         public int AddNode(Node node)
         {
@@ -134,7 +106,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             foreach (var sensor in node.sensors)
             {
-                AddOrUpdateSensor(sensor);
+                AddSensor(sensor);
             }
 
             return node.Id;
@@ -142,83 +114,72 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void UpdateNode(Node node)
         {
-            db.Nodes.Update(node);
-            db.SaveChanges();
-
-            foreach (var sensor in node.sensors)
+            if (writeInterval == 0)
             {
-                AddOrUpdateSensor(sensor);
+                db.Nodes.Update(node);
+                db.SaveChanges();
             }
-        }
-
-        public int AddOrUpdateSensor(Sensor sensor)
-        {
-            int id = sensor.Id;
-
-            Sensor oldSensor = GetSensor(sensor.Id);
-
-            if (oldSensor == null)
-                id = AddSensor(sensor);
             else
-                UpdateSensor(sensor);
-
-            return id;
+            {
+                if (!updatedNodes.Contains(node))
+                    updatedNodes.Add(node);
+            }
         }
 
         public int AddSensor(Sensor sensor)
         {
-           // int node_Id = GetNodeByNodeId(sensor.nodeId).Id;
-
             db.Sensors.Add(sensor);
             db.SaveChanges();
-
-            gateway.SetSensorDbId(sensor.nodeId, sensor.sensorId, sensor.Id);
             return sensor.Id;
         }
 
         public void UpdateSensor(Sensor sensor)
         {
-            db.Sensors.Update(sensor);
+            if (writeInterval == 0)
+            {
+                db.Sensors.Update(sensor);
+                db.SaveChanges();
+            }
+            else
+            {
+                if (!updatedSensors.Contains(sensor))
+                    updatedSensors.Add(sensor);
+            }
+        }
+
+
+
+
+
+
+        private void WriteUpdated()
+        {
+            if(!updatedNodes.Any() && !updatedSensors.Any())
+                return;
+
+            if (updatedNodes.Any())
+            {
+
+                //to prevent changing of collection while writing to db is not yet finished
+                Node[] nodesTemp = new Node[updatedNodes.Count];
+                updatedNodes.CopyTo(nodesTemp);
+                updatedNodes.Clear();
+
+                db.Nodes.UpdateRange(nodesTemp);
+            }
+
+            if (updatedSensors.Any())
+            {
+
+                //to prevent changing of collection while writing to db is not yet finished
+                Sensor[] sensorsTemp = new Sensor[updatedSensors.Count];
+                updatedSensors.CopyTo(sensorsTemp);
+                updatedSensors.Clear();
+
+                db.Sensors.UpdateRange(sensorsTemp);
+            }
+
             db.SaveChanges();
-        }
-
-
-
-        private void OnNodeUpdated(Node node)
-        {
-            if (writeInterval == 0) AddOrUpdateNode(node);
-            else
-            {
-                if (!updatedNodesId.Contains(node.Id))
-                    updatedNodesId.Add(node.Id);
-            }
-        }
-
-        private void OnSensorUpdated(Sensor sensor)
-        {
-            if (writeInterval == 0) AddOrUpdateSensor(sensor);
-            else
-            {
-                if (!updatedNodesId.Contains(sensor.nodeId))
-                    updatedNodesId.Add(sensor.nodeId);
-            }
-        }
-
-        private void WriteUpdatedNodes()
-        {
-            if (!updatedNodesId.Any()) return;
-
-            //to prevent changing of collection while writing to db is not yet finished
-            int[] nodesTemp = new int[updatedNodesId.Count];
-            updatedNodesId.CopyTo(nodesTemp);
-            updatedNodesId.Clear();
-
-            List<Node> nodes = gateway.GetNodes();
-            foreach (var id in nodesTemp)
-            {
-                Node node = nodes.FirstOrDefault(x => x.Id == id);
-                AddOrUpdateNode(node);
-            }
         }
 
 
@@ -243,37 +204,10 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public Sensor GetSensor(int nodeId, int sensorId)
         {
-            return db.Sensors.FirstOrDefault(x => x.nodeId == nodeId && x.sensorId==sensorId);
+            return db.Sensors.FirstOrDefault(x => x.nodeId == nodeId && x.sensorId == sensorId);
         }
 
 
-        public void UpdateNodeSettings(Node node)
-        {
-            Node oldNode = GetNode(node.Id);
-            oldNode.name = node.name;
-            db.Nodes.Update(oldNode);
-            db.SaveChanges();
-
-            foreach (var sensor in node.sensors)
-            {
-                UpdateSensorSettings(sensor);
-            }
-        }
-
-        public void UpdateSensorSettings(Sensor sensor)
-        {
-            Sensor oldSensor = GetSensor(sensor.Id);
-            oldSensor.description = sensor.description;
-            oldSensor.invertData = sensor.invertData;
-            oldSensor.remapEnabled = sensor.remapEnabled;
-            oldSensor.remapFromMin = sensor.remapFromMin;
-            oldSensor.remapFromMax = sensor.remapFromMax;
-            oldSensor.remapToMin = sensor.remapToMin;
-            oldSensor.remapToMax = sensor.remapToMax;
-
-            db.Sensors.Update(oldSensor);
-            db.SaveChanges();
-        }
 
         public void RemoveNode(int id)
         {
@@ -287,11 +221,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
             List<Sensor> sensors = db.Sensors.Where(x => x.nodeId == node.Id).ToList();
             db.Sensors.RemoveRange(sensors);
             db.SaveChanges();
-            
+
         }
-
- 
-
 
 
 
@@ -301,7 +232,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             updateDbTimer.Stop();
             try
             {
-                int messages = updatedNodesId.Count;
+                int messages = updatedNodes.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
@@ -311,7 +242,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                WriteUpdatedNodes();
+                WriteUpdated();
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
@@ -330,8 +261,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             if (writeInterval > 0)
             {
                 updateDbTimer.Interval = writeInterval;
-                if (gateway != null)
-                    updateDbTimer.Start();
+                updateDbTimer.Start();
             }
         }
 

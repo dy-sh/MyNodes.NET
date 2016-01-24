@@ -12,23 +12,19 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         event LogEventHandler OnLogInfo;
         event LogEventHandler OnLogError;
 
-        int AddOrUpdateNode(Node node);
         int AddNode(Node node);
         void UpdateNode(Node node);
-        int AddOrUpdateSensor(Sensor sensor);
+        void RemoveNode(int id);
+
         int AddSensor(Sensor sensor);
         void UpdateSensor(Sensor sensor);
+
         List<Node> GetNodes();
         Node GetNode(int id);
         Sensor GetSensor(int nodeId, int sensorId);
-        void RemoveAllNodes();
+        void RemoveAllNodesAndSensors();
         
 
         void SetWriteInterval(int ms);
-
-        void UpdateNodeSettings(Node node);
-        void UpdateSensorSettings(Sensor sensor);
-        void RemoveNode(int id);
-
     }
 }

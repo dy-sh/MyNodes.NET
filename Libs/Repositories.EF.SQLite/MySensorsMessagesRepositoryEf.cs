@@ -74,6 +74,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void RemoveAllMessages()
         {
+            newMessages.Clear();
+
             db.Messages.RemoveRange(db.Messages);
             db.SaveChanges();
         }
@@ -133,7 +135,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
                 float messagesPerSec = (float) messages/(float) elapsed*1000;
-                LogInfo($"Writing to DB: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
+                LogInfo($"Writing gateway messages: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
             }
             catch(Exception ex)
             {

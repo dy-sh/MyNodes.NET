@@ -60,12 +60,12 @@ namespace MyNetSensors.Nodes
 
         public void AddInputOutput(Sensor sensor)
         {
-            MySensorsNodeInput input = new MySensorsNodeInput { Name = sensor.GetSimpleName1() };
+            MySensorsNodeInput input = new MySensorsNodeInput { Name = sensor.Id.ToString() };
             input.sensorId = sensor.sensorId;
             input.nodeId = sensor.nodeId;
             Inputs.Add(input);
 
-            MySensorsNodeOutput output = new MySensorsNodeOutput { Name = sensor.GetSimpleName1() };
+            MySensorsNodeOutput output = new MySensorsNodeOutput { Name = sensor.Id.ToString() };
             output.sensorId = sensor.sensorId;
             output.nodeId = sensor.nodeId;
            //todo output.Value = sensor.state;
