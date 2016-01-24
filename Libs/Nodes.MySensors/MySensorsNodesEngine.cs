@@ -38,7 +38,11 @@ namespace MyNetSensors.Nodes
 
         private void OnRemoveAllNodesEvent()
         {
-            engine.RemoveAllNodesAndLinks();
+            List<MySensorsNode> nodes = engine.GetNodes().OfType<MySensorsNode>().ToList();
+            foreach (var node in nodes)
+            {
+                engine.RemoveNode(node);
+            }
         }
 
         private void CreateOrUpdateSensor(Sensor sensor)
@@ -133,20 +137,5 @@ namespace MyNetSensors.Nodes
             return list;
         }
 
-
-
-        public void RemoveAllNonHardwareNodes()
-        {
-            engine.LogEngineInfo("Remove all non-hardware nodes");
-
-            //to prevent changing of collection while writing 
-            Node[] nodes = engine.GetNodes().ToArray();
-
-            foreach (Node t in nodes)
-            {
-                if (!(t is MySensorsNode))
-                    engine.RemoveNode(t);
-            }
-        }
     }
 }

@@ -35,7 +35,6 @@ namespace MyNetSensors.Nodes
         public event LogMessageEventHandler OnLogEngineInfo;
         public event LogMessageEventHandler OnLogEngineError;
 
-        public event NodesEventHandler OnNodesUpdatedEvent;
         public event NodeEventHandler OnNewNodeEvent;
         public event NodeEventHandler OnRemoveNodeEvent;
         public event NodeEventHandler OnNodeUpdatedEvent;
@@ -43,16 +42,17 @@ namespace MyNetSensors.Nodes
         public event OutputEventHandler OnOutputUpdatedEvent;
         public event LinkEventHandler OnNewLinkEvent;
         public event LinkEventHandler OnRemoveLinkEvent;
-        public event LinksEventHandler OnLinksUpdatedEvent;
         public event Action OnStartEvent;
         public event Action OnStopEvent;
         public event Action OnUpdateEvent;
+        public event Action OnRemoveAllNodesAndLinks;
 
-        public delegate void NodesEventHandler(List<Node> nodes);
+
+        // public delegate void NodesEventHandler(List<Node> nodes);
+        //public delegate void LinksEventHandler(List<Link> link);
         public delegate void InputEventHandler(Input input);
         public delegate void OutputEventHandler(Output output);
         public delegate void LinkEventHandler(Link link);
-        public delegate void LinksEventHandler(List<Link> link);
 
 
 
@@ -90,15 +90,13 @@ namespace MyNetSensors.Nodes
             LogEngineInfo("Starting...");
             starting = true;
 
+            changedInputsStack.Clear();
             UpdateStatesFromLinks();
-
 
             started = true;
 
             updateNodesTimer.Start();
-
             OnStartEvent?.Invoke();
-
             LogEngineInfo("Started");
         }
 
@@ -153,8 +151,6 @@ namespace MyNetSensors.Nodes
                     continue;
                 }
             }
-
-            OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
 
@@ -175,9 +171,6 @@ namespace MyNetSensors.Nodes
                     links.Remove(link);
                 }
             }
-
-
-            OnNodesUpdatedEvent?.Invoke(nodes);
         }
 
 
@@ -723,41 +716,20 @@ namespace MyNetSensors.Nodes
 
         public void RemoveAllNodesAndLinks()
         {
-            LogEngineInfo("Remove all nodes and links");
-
-            //foreach (var node in nodes)
-            //{
-            //    node.OnRemove();
-
-            //    foreach (var input in node.Inputs)
-            //        input.OnInputChange -= OnInputChange;
-
-            //    foreach (var output in node.Outputs)
-            //        output.OnOutputChange -= OnOutputChange;
-
-            //    node.OnLogError -= LogNodeError;
-            //    node.OnLogInfo -= LogNodeInfo;
-            //    node.OnUpdate -= UpdateNode;
-            //}
-            
+          
             links = new List<Link>();
             nodes = new List<Node>();
 
+            LogEngineInfo("All nodes and links have been removed.");
+
             nodesDb?.RemoveAllNodes();
+            nodesDb?.RemoveAllLinks();
 
-            OnNodesUpdatedEvent?.Invoke(nodes);
-            OnLinksUpdatedEvent?.Invoke(links);
+            OnRemoveAllNodesAndLinks?.Invoke();
         }
 
 
 
-        public void RemoveAllLinks()
-        {
-            LogEngineInfo("Remove all links");
-
-            links = new List<Link>();
-            OnLinksUpdatedEvent?.Invoke(links);
-        }
 
         public void LogNodesInfo(string message)
         {

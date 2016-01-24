@@ -29,6 +29,13 @@ namespace MyNetSensors.Nodes
 
             engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
             engine.OnUpdateEvent += UpdateTasks;
+            engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
+        }
+
+        private void OnRemoveAllNodesAndLinks()
+        {
+            tasks = new List<UITimerTask>();
+            db?.RemoveAllTasks();
         }
 
         private void OnRemoveNodeEvent(Node node)

@@ -22,11 +22,6 @@ $(function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
-    clientsHub.client.OnRemoveAllNodesEvent = function () {
-        var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
-        $('#panelsContainer').html(null);
-    };
-
 
 
 
@@ -35,9 +30,16 @@ $(function () {
             updateLog(node);
     };
 
+
+    clientsHub.client.OnRemoveAllNodesAndLinks = function () {
+        noty({ text: 'This Node was removed!', type: 'error', timeout: false });
+        $('#panelsContainer').html(null);
+    };
+
     clientsHub.client.OnRemoveNodeEvent = function (node) {
         if (node.Id == nodeId) {
-            var n = noty({ text: 'This Node was removed!', type: 'error', timeout: false });
+            noty({ text: 'This Node was removed!', type: 'error', timeout: false });
+            $('#panelsContainer').html(null);
         }
     };
 

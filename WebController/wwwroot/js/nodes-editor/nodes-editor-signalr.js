@@ -29,6 +29,12 @@ $(function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
+    clientsHub.client.OnRemoveAllNodesAndLinks = function () {
+        graph.clear();
+        window.location.replace("/NodesEditor/");
+        noty({ text: 'All Nodes were deleted!', type: 'error' });
+    };
+
     clientsHub.client.OnNodeActivity = function (nodeId) {
         var node = graph.getNodeById(nodeId);
         if (node==null)
@@ -95,10 +101,6 @@ $(function () {
         //  graph.change();
 
     };
-
-    //clientsHub.client.OnLinksUpdatedEvent = function (links) {
-
-    //};
 
 
     $.connection.hub.start();

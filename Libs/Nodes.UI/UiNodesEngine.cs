@@ -26,8 +26,14 @@ namespace MyNetSensors.Nodes
             engine.OnRemoveNodeEvent += OnRemoveNodeEvent;
             engine.OnNodeUpdatedEvent += OnNodeUpdatedEvent;
             engine.OnOutputUpdatedEvent += OnOutputUpdatedEvent;
+            engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
 
             GetStatesFromRepository();
+        }
+
+        private void OnRemoveAllNodesAndLinks()
+        {
+            statesDb?.RemoveAllStates();
         }
 
         private void GetStatesFromRepository()

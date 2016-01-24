@@ -27,11 +27,14 @@ $(function () {
         noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
     };
 
-    clientsHub.client.OnRemoveAllNodesEvent = function () {
-        var n = noty({ text: 'Nodes deleted from the database!', type: 'error' });
-        $('#panelsContainer').html(null);
+    clientsHub.client.OnRemoveAllNodesAndLinks = function () {
+        window.location.replace("/Dashboard/");
+        noty({ text: 'All Nodes were deleted!', type: 'error' });
+        //$('#panelsContainer').html(null);
     };
 
+
+  
 
     clientsHub.client.OnNewNodeEvent = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
