@@ -588,7 +588,15 @@
     LogicCounter.title = "Counter";
     LiteGraph.registerNodeType("Operation/Counter", LogicCounter);
 
-
+    //OperationRemap
+    function OperationRemap() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationRemap",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationRemap.title = "Remap";
+    LiteGraph.registerNodeType("Operation/Remap", OperationRemap);
 
 
 
@@ -738,8 +746,6 @@
     }
     MathRound.title = "Round";
     LiteGraph.registerNodeType("Math/Round", MathRound);
-
-
 
 
 
