@@ -154,7 +154,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private void WriteUpdated()
         {
-            if(!updatedNodes.Any() && !updatedSensors.Any())
+            if (!updatedNodes.Any() && !updatedSensors.Any())
                 return;
 
             if (updatedNodes.Any())
@@ -232,7 +232,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             updateDbTimer.Stop();
             try
             {
-                int messages = updatedNodes.Count;
+                int messages = updatedNodes.Count + updatedSensors.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
@@ -247,7 +247,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
                 float messagesPerSec = (float)messages / (float)elapsed * 1000;
-                LogInfo($"Writing to DB: {elapsed} ms ({messages} inserts, {(int)messagesPerSec} inserts/sec)");
+                LogInfo($"Writing hardware nodes: {elapsed} ms ({messages} inserts, {(int)messagesPerSec} inserts/sec)");
             }
             catch { }
 

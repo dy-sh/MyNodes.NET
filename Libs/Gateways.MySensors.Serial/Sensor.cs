@@ -62,9 +62,9 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
 
 
-        public void SetDefaultSensorType(SensorType? sensorType)
+        public void SetDefaultDataType()
         {
-            switch (sensorType)
+            switch (type)
             {
                 case SensorType.S_DOOR:
                     dataType = SensorDataType.V_TRIPPED;
@@ -176,8 +176,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                     break;
             }
         }
-
-    
 
         public bool IsBinary()
         {

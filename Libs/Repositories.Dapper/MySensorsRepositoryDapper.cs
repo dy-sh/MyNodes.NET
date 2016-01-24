@@ -112,7 +112,7 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
-    
+
 
         public void RemoveAllNodesAndSensors()
         {
@@ -128,11 +128,11 @@ namespace MyNetSensors.Repositories.Dapper
         }
 
 
-      
 
 
 
-     
+
+
 
         public List<Node> GetNodes()
         {
@@ -162,7 +162,7 @@ namespace MyNetSensors.Repositories.Dapper
 
 
 
-        
+
 
         public int AddNode(Node node)
         {
@@ -172,9 +172,9 @@ namespace MyNetSensors.Repositories.Dapper
                 var sqlQuery = "INSERT INTO MySensorsNodes (Id, registered, lastSeen, isRepeatingNode, name ,version, batteryLevel) "
                                +
                                "VALUES(@Id, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel)";
-                               
+
                 db.Query(sqlQuery, node);
-               // gateway.SetNodeDbId(node.nodeId, id);
+                // gateway.SetNodeDbId(node.nodeId, id);
             }
 
             return node.Id;
@@ -362,7 +362,7 @@ namespace MyNetSensors.Repositories.Dapper
             return sensor;
         }
 
-        
+
 
         public void RemoveNode(int id)
         {
@@ -380,7 +380,7 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Execute(sqlQuery, new { Id = id });
             }
         }
-        
+
 
 
 
@@ -393,7 +393,7 @@ namespace MyNetSensors.Repositories.Dapper
             updateDbTimer.Stop();
             try
             {
-                int messages = updatedNodes.Count;
+                int messages = updatedNodes.Count + updatedSensors.Count;
                 if (messages == 0)
                 {
                     updateDbTimer.Start();
@@ -407,8 +407,8 @@ namespace MyNetSensors.Repositories.Dapper
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
-                float messagesPerSec = (float) messages/(float) elapsed*1000;
-                LogInfo($"Writing to DB: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
+                float messagesPerSec = (float)messages / (float)elapsed * 1000;
+                LogInfo($"Writing hardware nodes: {elapsed} ms ({messages} inserts, {(int)messagesPerSec} inserts/sec)");
             }
             catch (Exception ex)
             {
