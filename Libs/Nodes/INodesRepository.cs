@@ -9,6 +9,11 @@ namespace MyNetSensors.Nodes
 {
     public interface INodesRepository
     {
+        event LogEventHandler OnLogInfo;
+        event LogEventHandler OnLogError;
+        void SetWriteInterval(int ms);
+
+
         string AddNode(Node node);
         void UpdateNode(Node node);
         Node GetNode(string id);

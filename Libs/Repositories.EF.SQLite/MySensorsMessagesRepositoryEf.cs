@@ -31,8 +31,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
         //writeInterval should be large enough (3000 ms is ok)
         private int writeInterval = 5000;
 
-        private bool enable = true;
-
         private Timer updateDbTimer = new Timer();
 
         //messages list, to write to db by timer

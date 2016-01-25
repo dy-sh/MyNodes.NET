@@ -11,7 +11,9 @@ using Newtonsoft.Json;
 
 namespace MyNetSensors.Nodes
 {
+    public delegate void LogEventHandler(string message);
     public delegate void LogMessageEventHandler(string message);
+
     public class NodesEngine
     {
         public readonly string MAIN_PANEL_ID = "Main";
