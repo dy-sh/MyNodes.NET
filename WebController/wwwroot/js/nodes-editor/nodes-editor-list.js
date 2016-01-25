@@ -590,7 +590,7 @@
 
 
 
-  //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
 
 
 
@@ -622,8 +622,8 @@
         };
     }
     LogicNot.title = "NOT";
-    LiteGraph.registerNodeType("Logic/NOT", LogicNot);  
-    
+    LiteGraph.registerNodeType("Logic/NOT", LogicNot);
+
 
 
     //MathPlus
@@ -805,5 +805,35 @@
     }
     OperationCompareLower.title = "Compare Lower";
     LiteGraph.registerNodeType("Operation/Compare Lower", OperationCompareLower);
+
+    //OperationFlipFlop
+    function OperationFlipFlop() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationFlipflopNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationFlipFlop.title = "Flip-Flop";
+    LiteGraph.registerNodeType("Operation/Flip-Flop", OperationFlipFlop);
+
+    //OperationGate
+    function OperationGate() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationGateNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationGate.title = "Gate";
+    LiteGraph.registerNodeType("Operation/Gate", OperationGate);
+
+    //OperationRandom
+    function OperationRandom() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationRandomNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationRandom.title = "Random";
+    LiteGraph.registerNodeType("Operation/Random", OperationRandom);
 
 })();
