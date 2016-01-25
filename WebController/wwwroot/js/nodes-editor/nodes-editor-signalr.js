@@ -360,8 +360,12 @@ function createOrUpdateNode(node) {
         oldNode.size[1] = calculateNodeMinHeight(oldNode);
 
         //calculate pos
-        if (node.pos)
-            oldNode.pos = node.pos;
+
+        if (node.pos) {
+            if (editor.graphcanvas.node_dragged != oldNode) {
+                oldNode.pos = node.pos;
+            }
+        }
 
 
         oldNode.setDirtyCanvas(true, true);
