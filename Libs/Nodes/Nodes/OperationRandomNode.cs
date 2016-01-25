@@ -29,9 +29,14 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value != null)
+            try
             {
-                try
+                if (Inputs[0].Value == null || Inputs[1].Value == null || Inputs[2].Value == null)
+                {
+                    LogInfo($"Operation/Random: [NULL]");
+                    Outputs[0].Value = null;
+                }
+                else
                 {
                     Random rand = new Random(DateTime.Now.Millisecond);
 
@@ -44,11 +49,11 @@ namespace MyNetSensors.Nodes
                     LogInfo($"Operation/Random: random = [{rnd}]");
                     Outputs[0].Value = rnd.ToString();
                 }
-                catch (Exception)
-                {
-                    LogInfo($"Operation/Random: input value is incorrect");
-                    Outputs[0].Value = null;
-                }
+            }
+            catch
+            {
+                LogError($"Operation/Random: Incorrect value in input");
+                Outputs[0].Value = null;
             }
         }
     }
