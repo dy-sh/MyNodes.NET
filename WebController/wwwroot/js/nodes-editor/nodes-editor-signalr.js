@@ -32,7 +32,7 @@ $(function () {
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         graph.clear();
         window.location.replace("/NodesEditor/");
-        noty({ text: 'All Nodes were deleted!', type: 'error' });
+        noty({ text: 'All nodes have been deleted!', type: 'error' });
     };
 
     clientsHub.client.OnNodeActivity = function (nodeId) {

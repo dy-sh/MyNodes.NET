@@ -22,7 +22,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: "POST", url: "/GatewayAPI/RemoveAllNodes",
                     success: function (result) {
-                        if (result) noty({ text: 'Nodes were deleted.' });
+                        if (result) noty({ text: 'Nodes have been deleted.' });
                     }
                 });
             }
@@ -76,7 +76,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: "POST", url: "/NodesEditorAPI/RemoveAllNodesAndLinks",
                     success: function (result) {
-                        if (result) noty({ text: 'Nodes were deleted.' });
+                        if (result) noty({ text: 'Nodes have been deleted.' });
                     }
                 });
             }

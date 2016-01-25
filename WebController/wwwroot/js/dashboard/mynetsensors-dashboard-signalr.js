@@ -29,7 +29,7 @@ $(function () {
 
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         window.location.replace("/Dashboard/");
-        noty({ text: 'All Nodes were deleted!', type: 'error' });
+        noty({ text: 'All nodes have been deleted!', type: 'error' });
         //$('#panelsContainer').html(null);
     };
 
