@@ -4533,6 +4533,15 @@ LiteGraph.createContextualMenu = function (values, options, ref_window) {
 
     if (!options.from)
         LiteGraph.closeAllContextualMenus();
+    else {
+        //closing submenus
+        //derwish edit
+        var menus = document.querySelectorAll(".graphcontextualmenu");
+        for (var key in menus) {
+            if (menus[key].previousSibling == options.from)
+                menus[key].closeMenu();
+        }
+    }
 
     var root = ref_window.document.createElement("div");
     root.className = "graphcontextualmenu graphmenubar-panel";
