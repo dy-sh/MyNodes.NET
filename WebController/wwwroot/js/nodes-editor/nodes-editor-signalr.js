@@ -37,7 +37,7 @@ $(function () {
 
     clientsHub.client.OnNodeActivity = function (nodeId) {
         var node = graph.getNodeById(nodeId);
-        if (node==null)
+        if (node == null)
             return;
 
         node.boxcolor = LiteGraph.NODE_ACTIVE_BOXCOLOR;
@@ -362,11 +362,11 @@ function createOrUpdateNode(node) {
         //calculate pos
 
         if (node.pos) {
-            if (editor.graphcanvas.node_dragged != oldNode) {
+            if(!editor.graphcanvas.node_dragged)
                 oldNode.pos = node.pos;
-            }
+            else if(!editor.graphcanvas.selected_nodes[node.id])
+                oldNode.pos = node.pos;
         }
-
 
         oldNode.setDirtyCanvas(true, true);
     }
