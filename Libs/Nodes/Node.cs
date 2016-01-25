@@ -26,11 +26,6 @@ namespace MyNetSensors.Nodes
 
         protected NodesEngine engine { get; set; }
 
-        public event LogMessageEventHandler OnLogInfo;
-        public event LogMessageEventHandler OnLogError;
-        public event NodeUpdateEventHandler OnUpdate;
-
-
         public Node(int inputsCount, int outputsCount)
         {
             Id = Guid.NewGuid().ToString();
@@ -39,18 +34,18 @@ namespace MyNetSensors.Nodes
             for (int i = 0; i < outputsCount; i++)
             {
                 if (outputsCount == 1)
-                    Outputs.Add(new Output { Name = "Out" });
+                    AddOutput(new Output { Name = "Out" });
                 else
-                    Outputs.Add(new Output { Name = $"Out {i + 1}" });
+                    AddOutput(new Output { Name = $"Out {i + 1}" });
             }
 
             Inputs = new List<Input>();
             for (int i = 0; i < inputsCount; i++)
             {
                 if (inputsCount == 1)
-                    Inputs.Add(new Input { Name = "In" });
+                    AddInput(new Input { Name = "In" });
                 else
-                    Inputs.Add(new Input { Name = $"In {i + 1}" });
+                    AddInput(new Input { Name = $"In {i + 1}" });
             }
 
             PanelId = "Main";
@@ -68,12 +63,12 @@ namespace MyNetSensors.Nodes
 
         public void LogInfo(string message)
         {
-            OnLogInfo?.Invoke(message);
+            engine?.LogNodesInfo(message);
         }
 
         public void LogError(string message)
         {
-            OnLogError?.Invoke(message);
+            engine?.LogNodesError(message);
         }
 
         public abstract void Loop();
@@ -82,10 +77,10 @@ namespace MyNetSensors.Nodes
         public virtual void OnOutputChange(Output output)
         {
             //send state to linked nodes
-            List<Link> list = engine.GetLinksForOutput(output);
+            List<Link> list = engine?.GetLinksForOutput(output);
             foreach (var link in list)
             {
-                Input input = engine.GetInput(link.InputId);
+                Input input = engine?.GetInput(link.InputId);
                 if (input != null)
                 {
                     input.Value = output.Value;
@@ -93,18 +88,50 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        public virtual void OnRemove() {}
+        public virtual void OnRemove()
+        {
+            foreach (var input in Inputs)
+                input.OnInputChange -= engine.OnInputChange;
+
+            foreach (var output in Outputs)
+                output.OnOutputChange -= engine.OnOutputChange;
+
+            engine = null;
+        }
+
         public virtual bool OnAddToEngine(NodesEngine engine)
         {
             this.engine = engine;
+
+            foreach (var input in Inputs)
+                input.OnInputChange += engine.OnInputChange;
+
+            foreach (var output in Outputs)
+                output.OnOutputChange += engine.OnOutputChange;
+
             return true;
         }
 
-        public void CallNodeUpdatedEvent(bool writeNodeToDb)
+        public void UpdateNode(bool writeNodeToDb)
         {
-            OnUpdate?.Invoke(this, writeNodeToDb);
+            engine?.UpdateNode(this, writeNodeToDb);
         }
 
+        public void AddInput(Input input)
+        {
+            Inputs.Add(input);
+
+            if (engine != null)
+                input.OnInputChange += engine.OnInputChange;
+        }
+
+        public void AddOutput(Output output)
+        {
+            Outputs.Add(output);
+
+            if (engine != null)
+                output.OnOutputChange += engine.OnOutputChange;
+        }
     }
 
 

@@ -51,7 +51,7 @@ namespace MyNetSensors.Nodes
                 State = null;
 
                 //call update event without writing to db node state
-                CallNodeUpdatedEvent(false);
+                UpdateNode(false);
             }
 
             try
@@ -59,7 +59,7 @@ namespace MyNetSensors.Nodes
                 int val = Int32.Parse(LastStateCached);
                 NodeStates.Add(new NodeState(Id, val.ToString()));
                 State = val;
-                CallNodeUpdatedEvent(false);
+                UpdateNode(false);
             }
             catch (Exception)
             {

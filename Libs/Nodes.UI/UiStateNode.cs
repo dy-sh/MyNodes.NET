@@ -23,7 +23,7 @@ namespace MyNetSensors.Nodes
         public override void OnInputChange(Input input)
         {
             Value = input.Value;
-            CallNodeUpdatedEvent(false);
+            UpdateNode(false);
         }
 
 

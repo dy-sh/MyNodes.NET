@@ -39,7 +39,7 @@ namespace MyNetSensors.Nodes
                 };
                 Inputs.Add(input);
                 input.OnInputChange += engine.OnInputChange;
-                CallNodeUpdatedEvent(true);
+                UpdateNode(true);
             }
         }
 
@@ -54,7 +54,7 @@ namespace MyNetSensors.Nodes
                 };
                 Outputs.Add(output);
                 output.OnOutputChange += engine.OnOutputChange;
-                CallNodeUpdatedEvent(true);
+                UpdateNode(true);
             }
         }
 
@@ -69,7 +69,7 @@ namespace MyNetSensors.Nodes
                 engine.RemoveLink(link);
 
             Inputs.Remove(input);
-            CallNodeUpdatedEvent(true);
+            UpdateNode(true);
             return true;
         }
 
@@ -82,7 +82,7 @@ namespace MyNetSensors.Nodes
                 engine.RemoveLink(link);
 
             Outputs.Remove(output);
-            CallNodeUpdatedEvent(true);
+            UpdateNode(true);
             return true;
         }
 

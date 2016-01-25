@@ -26,9 +26,16 @@ namespace MyNetSensors.Nodes
             gateway.OnSensorUpdated += CreateOrUpdateSensor;
             gateway.OnRemoveAllNodes += OnGatewayRemoveAllNodes;
             gateway.OnRemoveNode += OnGatewayRemoveNode;
+            gateway.OnNodeBatteryUpdated += OnNodeBatteryUpdated;
             engine.OnRemoveAllNodesAndLinks += OnEngineRemoveAllNodesAndLinks;
             engine.OnRemoveNode += OnEngineRemoveNode;
             CreateAndAddMySensorsNodes();
+        }
+
+        private void OnNodeBatteryUpdated(Gateways.MySensors.Serial.Node node)
+        {
+            MySensorsNode n = GetMySensorsNode(node.Id);
+            n?.UpdateBattery(node.batteryLevel);
         }
 
         private void OnEngineRemoveNode(Node node)

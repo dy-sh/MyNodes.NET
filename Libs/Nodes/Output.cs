@@ -7,6 +7,7 @@ namespace MyNetSensors.Nodes
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public int SlotIndex { get; set; }
 
         private string val;
 

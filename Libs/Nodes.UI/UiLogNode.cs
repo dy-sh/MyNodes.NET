@@ -25,14 +25,14 @@ namespace MyNetSensors.Nodes
         public override void OnInputChange(Input input)
         {
             Log += $"{DateTime.Now}: {input.Value ?? "NULL"}<br/>";
-            CallNodeUpdatedEvent(false);
+            UpdateNode(false);
         }
 
 
         public void ClearLog()
         {
             Log = "";
-            CallNodeUpdatedEvent(false);
+            UpdateNode(false);
         }
     }
 }

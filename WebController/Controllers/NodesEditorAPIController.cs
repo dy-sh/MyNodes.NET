@@ -66,8 +66,11 @@ namespace MyNetSensors.WebController.Controllers
             litegraphNode.inputs = new List<LiteGraph.Input>();
             litegraphNode.outputs = new List<LiteGraph.Output>();
 
+
             if (node.Inputs != null)
-                foreach (var input in node.Inputs)
+            {
+                List<Nodes.Input> orderedInputs = node.Inputs.OrderBy(x => x.SlotIndex).ToList();
+                foreach (var input in orderedInputs)
                 {
                     litegraphNode.inputs.Add(new LiteGraph.Input
                     {
@@ -76,10 +79,12 @@ namespace MyNetSensors.WebController.Controllers
                         link = engine.GetLinkForInput(input)?.Id
                     });
                 }
-
+            }
 
             if (node.Outputs != null)
-                foreach (var output in node.Outputs)
+            {
+                List<Nodes.Output> orderedOutputs = node.Outputs.OrderBy(x => x.SlotIndex).ToList();
+                foreach (var output in orderedOutputs)
                 {
                     List<Link> links = engine.GetLinksForOutput(output);
                     if (links != null)
@@ -105,6 +110,7 @@ namespace MyNetSensors.WebController.Controllers
                         });
                     }
                 }
+            }
 
             if (node is UiNode)
             {
@@ -265,7 +271,7 @@ namespace MyNetSensors.WebController.Controllers
 
             Node newNode = CreateNode(type, assemblyName);
 
-            if(newNode==null)
+            if (newNode == null)
             {
                 engine.LogEngineError($"Can`t create node [{node.properties["ObjectType"]}]. Type does not exist.");
                 return false;
@@ -466,9 +472,9 @@ namespace MyNetSensors.WebController.Controllers
             if (node == null)
                 return null;
 
-            string json= NodesEngineSerializer.SerializePanel(id, engine);
+            string json = NodesEngineSerializer.SerializePanel(id, engine);
 
-            return File(Encoding.UTF8.GetBytes(json), "text/plain", node.Name+".json");
+            return File(Encoding.UTF8.GetBytes(json), "text/plain", node.Name + ".json");
         }
 
 
@@ -479,7 +485,7 @@ namespace MyNetSensors.WebController.Controllers
             try
             {
                 var newObject = Activator.CreateInstance(assemblyName, type);
-                return (Node) newObject.Unwrap();
+                return (Node)newObject.Unwrap();
             }
             catch
             {
@@ -501,7 +507,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public bool ImportPanel(string json, int x,int y,string ownerPanelId)
+        public bool ImportPanel(string json, int x, int y, string ownerPanelId)
         {
             if (engine == null)
                 return false;

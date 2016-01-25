@@ -135,16 +135,6 @@ namespace MyNetSensors.Nodes
 
             foreach (var node in nodesArray)
             {
-                foreach (var input in node.Inputs)
-                    input.OnInputChange += OnInputChange;
-
-                foreach (var output in node.Outputs)
-                    output.OnOutputChange += OnOutputChange;
-
-                node.OnLogError += LogNodeError;
-                node.OnLogInfo += LogNodeInfo;
-                node.OnUpdate += UpdateNode;
-
                 bool checkNodeCanBeAdded = node.OnAddToEngine(this);
                 if (!checkNodeCanBeAdded)
                 {
@@ -313,18 +303,6 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-
-            foreach (var input in node.Inputs)
-                input.OnInputChange += OnInputChange;
-
-            foreach (var output in node.Outputs)
-                output.OnOutputChange += OnOutputChange;
-
-
-            node.OnLogError += LogNodeError;
-            node.OnLogInfo += LogNodeInfo;
-            node.OnUpdate += UpdateNode;
-
             nodes.Add(node);
 
             nodesDb?.AddNode(node);
@@ -360,18 +338,6 @@ namespace MyNetSensors.Nodes
             node.OnRemove();
             nodes.Remove(node);
             nodesDb?.RemoveNode(node.Id);
-
-
-            foreach (var input in node.Inputs)
-                input.OnInputChange -= OnInputChange;
-
-            foreach (var output in node.Outputs)
-                output.OnOutputChange -= OnOutputChange;
-
-            node.OnLogError -= LogNodeError;
-            node.OnLogInfo -= LogNodeInfo;
-            node.OnUpdate -= UpdateNode;
-
 
             LogEngineInfo($"Remove node [{node.GetType().Name}]");
             OnRemoveNode?.Invoke(node);
