@@ -60,6 +60,8 @@
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
     <Compile Include="Nodes\MathMultiplyNode.cs" />
+    <Compile Include="Nodes\MathClamp.cs" />
+    <Compile Include="Nodes\MathRemap.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />
@@ -81,7 +83,6 @@
     <Compile Include="Nodes\PanelInputNode.cs" />
     <Compile Include="Nodes\PanelNode.cs" />
     <Compile Include="Nodes\CounterNode.cs" />
-    <Compile Include="Nodes\InvertNode.cs" />
     <Compile Include="Nodes\MathPlusNode.cs" />
     <Compile Include="NodesEngine.cs" />
     <Compile Include="Link.cs" />

@@ -590,8 +590,6 @@
 
 
 
-
-
   //---------------------------------------------------------------------------------
 
 
@@ -738,8 +736,74 @@
     MathRound.title = "Round";
     LiteGraph.registerNodeType("Math/Round", MathRound);
 
+    //MathRemap
+    function MathRemap() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathRemap",
+            'Assembly': "Nodes"
+        };
+    }
+    MathRemap.title = "Remap";
+    LiteGraph.registerNodeType("Math/Remap", MathRemap);
 
+    //MathClamp
+    function MathClamp() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.MathClamp",
+            'Assembly': "Nodes"
+        };
+    }
+    MathClamp.title = "Clamp";
+    LiteGraph.registerNodeType("Math/Clamp", MathClamp);
 
+    //OperationGeneratorNode
+    function OperationGeneratorNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationGeneratorNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationGeneratorNode.title = "Generator";
+    LiteGraph.registerNodeType("Operation/Generator", OperationGeneratorNode);
 
+    //OperationCompareEqual
+    function OperationCompareEqual() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationCompareEqualNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationCompareEqual.title = "Compare Equal";
+    LiteGraph.registerNodeType("Operation/Compare Equal", OperationCompareEqual);
+
+    //OperationCompareNotEqual
+    function OperationCompareNotEqual() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationCompareNotEqualNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationCompareNotEqual.title = "Compare NotEqual";
+    LiteGraph.registerNodeType("Operation/Compare NotEqual", OperationCompareNotEqual);
+
+    //OperationCompareGreater
+    function OperationCompareGreater() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationCompareGreaterNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationCompareGreater.title = "Compare Greater";
+    LiteGraph.registerNodeType("Operation/Compare Greater", OperationCompareGreater);
+
+    //OperationCompareLower
+    function OperationCompareLower() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationCompareLowerNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationCompareLower.title = "Compare Lower";
+    LiteGraph.registerNodeType("Operation/Compare Lower", OperationCompareLower);
 
 })();
