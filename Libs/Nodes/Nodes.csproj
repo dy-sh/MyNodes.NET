@@ -60,7 +60,8 @@
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
     <Compile Include="Nodes\MathMultiplyNode.cs" />
-    <Compile Include="Nodes\OperationRemap.cs" />
+    <Compile Include="Nodes\MathClamp.cs" />
+    <Compile Include="Nodes\MathRemap.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />

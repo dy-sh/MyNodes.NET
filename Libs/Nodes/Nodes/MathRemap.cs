@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationRemap : Node
+    public class MathRemap : Node
     {
         /// <summary>
-        /// OperationRemap (2 inputs, 1 output).
+        /// MathRemap (5 inputs, 1 output).
         /// </summary>
-        public OperationRemap() : base(5, 1)
+        public MathRemap() : base(5, 1)
         {
             this.Title = "Remap";
-            this.Type = "Operation/Remap";
+            this.Type = "Math/Remap";
 
             Inputs[0].Name = "InMin";
             Inputs[1].Name = "InMax";
@@ -40,7 +40,7 @@ namespace MyNetSensors.Nodes
             {
                 if (Inputs[0].Value == null || Inputs[1].Value == null || Inputs[2].Value == null || Inputs[3].Value == null || Inputs[4].Value == null)
                 {
-                    LogInfo($"Operation/Remap: [NULL]");
+                    LogInfo($"Math/Remap: [NULL]");
                     Outputs[0].Value = null;
                 }
                 else
@@ -54,13 +54,13 @@ namespace MyNetSensors.Nodes
                     Double signal = Double.Parse(Inputs[2].Value);
 
                     Double result = (signal - aIn) / (bIn - aIn) * (dOut - cOut) + cOut;
-                    LogInfo($"Operation/Remap: {result}");
+                    LogInfo($"Math/Remap: {result}");
                     Outputs[0].Value = result.ToString();
                 }
             }
             catch
             {
-                LogError($"Operation/Remap: Incorrect value in input");
+                LogError($"Math/Remap: Incorrect value in input");
                 Outputs[0].Value = null;
             }
         }

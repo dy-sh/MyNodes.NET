@@ -29,7 +29,7 @@
             return (int) Map((float) value, (float) fromMin, (float) fromMax, (float) toMin, (float) toMax);
         }
 
-        public static double Map(double value, double fromMin, double fromMax, double toMin, double toMax)
+        public static float Map(float value, float fromMin, float fromMax, float toMin, float toMax)
         {
             return (value - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
         }

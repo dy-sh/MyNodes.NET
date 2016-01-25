@@ -29,23 +29,31 @@ namespace MyNetSensors.Nodes
 
             try
             {
-                Double a = Double.Parse(Inputs[0].Value);
-                Double b = Double.Parse(Inputs[1].Value);
-
-                if (a > b)
+                if (Inputs[0].Value == null || Inputs[1].Value == null)
                 {
-                    LogInfo($"Operation/Compare Greater: [{a}] > [{b}]");
-                    Outputs[0].Value = "1";
+                    LogInfo($"Operation/Compare Greater: [NULL]");
+                    Outputs[0].Value = null;
                 }
                 else
                 {
-                    LogInfo($"Operation/Compare Greater: [{a}] < [{b}]");
-                    Outputs[0].Value = "0";
+                    Double a = Double.Parse(Inputs[0].Value);
+                    Double b = Double.Parse(Inputs[1].Value);
+
+                    if (a > b)
+                    {
+                        LogInfo($"Operation/Compare Greater: [{a}] > [{b}]");
+                        Outputs[0].Value = "1";
+                    }
+                    else
+                    {
+                        LogInfo($"Operation/Compare Greater: [{a}] < [{b}]");
+                        Outputs[0].Value = "0";
+                    }
                 }
             }
             catch
             {
-                LogInfo($"Operation/Compare Greater: input value is incorrect");
+                LogError($"Operation/Compare Greater: Incorrect value in input");
                 Outputs[0].Value = null;
             }
         }
