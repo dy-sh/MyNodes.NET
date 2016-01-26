@@ -31,7 +31,7 @@ namespace MyNetSensors.Nodes
         private string oldValue = "";
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null || Inputs[1].Value == null)
+            if (Inputs[0].Value == null)
             {
                 LogInfo($"Operation/Event Counter: [NULL]");
                 Outputs[0].Value = null;
