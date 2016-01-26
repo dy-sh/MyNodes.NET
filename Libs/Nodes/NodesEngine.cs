@@ -402,7 +402,7 @@ namespace MyNetSensors.Nodes
 
         public void UpdateNode(Node node)
         {
-            LogEngineInfo($"Update node [{node.GetType().Name}]");
+          //  LogEngineInfo($"Update node [{node.GetType().Name}]");
             OnNodeUpdated?.Invoke(node);
         }
 
@@ -416,7 +416,7 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            LogEngineInfo($"Update node in DB [{node.GetType().Name}]");
+          //  LogEngineInfo($"Update node in DB [{node.GetType().Name}]");
             nodesDb?.UpdateNode(node);
         }
 
