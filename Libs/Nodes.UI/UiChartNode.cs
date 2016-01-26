@@ -49,8 +49,6 @@ namespace MyNetSensors.Nodes
             if (LastStateCached == null)
             {
                 State = null;
-
-                //call update event without writing to db node state
                 UpdateMe();
             }
 

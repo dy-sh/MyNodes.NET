@@ -37,6 +37,8 @@ namespace MyNetSensors.Nodes
             Value = value;
             LogInfo($"UI Slider [{Name}]: [{Value}]");
             Outputs[0].Value = Value.ToString();
+            UpdateMeInDb();
+
         }
     }
 }

@@ -29,6 +29,8 @@ namespace MyNetSensors.Nodes
             Value = value;
             LogInfo($"UI TextBox [{Name}]: [{Value??"NULL"}]");
             Outputs[0].Value = Value;
+            UpdateMeInDb();
+
         }
     }
 }
