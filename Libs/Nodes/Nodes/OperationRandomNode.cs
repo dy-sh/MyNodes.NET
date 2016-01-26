@@ -38,16 +38,18 @@ namespace MyNetSensors.Nodes
                 }
                 else
                 {
-                    Random rand = new Random(DateTime.Now.Millisecond);
+                    if (Inputs[0].Value == "1")
+                    {
+                        Random rand = new Random(DateTime.Now.Millisecond);
 
-                    int min = Int32.Parse(Inputs[1].Value);
-                    int max = Int32.Parse(Inputs[2].Value);
+                        int min = Int32.Parse(Inputs[1].Value);
+                        int max = Int32.Parse(Inputs[2].Value);
 
+                        int rnd = rand.Next(min, max);
 
-                    int rnd = rand.Next(min, max);
-
-                    LogInfo($"Operation/Random: random = [{rnd}]");
-                    Outputs[0].Value = rnd.ToString();
+                        LogInfo($"Operation/Random: random = [{rnd}]");
+                        Outputs[0].Value = rnd.ToString();
+                    }
                 }
             }
             catch
