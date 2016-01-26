@@ -22,7 +22,7 @@ namespace MyNetSensors.Nodes
             this.Title = "Clamp";
             this.Type = "Math/Clamp";
 
-            Inputs[0].Name = "Input";
+            Inputs[0].Name = "In";
             Inputs[1].Name = "InMin";
             Inputs[2].Name = "InMax";  
         }

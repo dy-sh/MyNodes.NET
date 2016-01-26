@@ -18,8 +18,9 @@ namespace MyNetSensors.Nodes
         /// </summary>
         public SystemBeepAdvancedNode() : base(3, 0)
         {
-            this.Title = "System Beep Advanced";
-            this.Type = "System/BeepAdvanced";
+            this.Title = "Beep Advanced";
+            this.Type = "System/Beep Advanced";
+
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Frequency";
             Inputs[2].Name = "Duration";
@@ -31,25 +32,30 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == "1")
+            if (Inputs[0].Value == null || Inputs[1].Value == null || Inputs[2].Value == null)
+            {
+                LogInfo($"System/Beep Advanced: [NULL]");
+            }
+            else if (Inputs[0].Value == "1")
             {
                 try
                 {
                     int f = Int32.Parse(Inputs[1].Value);
                     int d = Int32.Parse(Inputs[2].Value);
 
-                    Beep(f,d); 
+                    Beep(f, d);
                     LogInfo($"Beep {f}Hz {d}mS");
                 }
                 catch
                 {
-                } 
+                    LogError($"System/Beep Advanced: Incorrect value in input");
+                }
             }
         }
 
-        public async void Beep(int freq,int dur)
+        public async void Beep(int freq, int dur)
         {
-            await Task.Run(()=>Console.Beep(freq, dur));
+            await Task.Run(() => Console.Beep(freq, dur));
         }
     }
 }

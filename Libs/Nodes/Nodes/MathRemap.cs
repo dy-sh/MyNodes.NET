@@ -24,7 +24,7 @@ namespace MyNetSensors.Nodes
 
             Inputs[0].Name = "InMin";
             Inputs[1].Name = "InMax";
-            Inputs[2].Name = "Input";
+            Inputs[2].Name = "In";
             Inputs[3].Name = "OutMin";
             Inputs[4].Name = "OutMax";
         }
