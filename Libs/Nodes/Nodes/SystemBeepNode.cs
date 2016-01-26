@@ -18,7 +18,7 @@ namespace MyNetSensors.Nodes
         /// </summary>
         public SystemBeepNode() : base(1, 0)
         {
-            this.Title = "System Beep";
+            this.Title = "Beep";
             this.Type = "System/Beep";
         }
 
@@ -29,10 +29,10 @@ namespace MyNetSensors.Nodes
         public override void OnInputChange(Input input)
         {
             //LogInfo($"Console: {input.Value}");
-            if (input.Value != null)
+            if (Inputs[0].Value == "1")
             {
                 Beep();
-                LogInfo($"Beep");
+                LogInfo($"System/Beep: Beep");
             }
         }
 

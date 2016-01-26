@@ -19,7 +19,7 @@ namespace MyNetSensors.Nodes
             this.Title = "Event Counter";
             this.Type = "Operation/Event Counter";
 
-            Inputs[0].Name = "input";
+            Inputs[0].Name = "In";
             Inputs[1].Name = "clear";
         }
 
