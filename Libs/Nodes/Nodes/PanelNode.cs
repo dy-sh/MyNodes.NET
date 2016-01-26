@@ -39,7 +39,8 @@ namespace MyNetSensors.Nodes
                 };
                 Inputs.Add(input);
                 input.OnInputChange += engine.OnInputChange;
-                UpdateNode(true);
+                UpdateMe();
+                UpdateMeInDb();
             }
         }
 
@@ -54,7 +55,8 @@ namespace MyNetSensors.Nodes
                 };
                 Outputs.Add(output);
                 output.OnOutputChange += engine.OnOutputChange;
-                UpdateNode(true);
+                UpdateMe();
+                UpdateMeInDb();
             }
         }
 
@@ -69,7 +71,8 @@ namespace MyNetSensors.Nodes
                 engine.RemoveLink(link);
 
             Inputs.Remove(input);
-            UpdateNode(true);
+            UpdateMe();
+            UpdateMeInDb();
             return true;
         }
 
@@ -82,7 +85,8 @@ namespace MyNetSensors.Nodes
                 engine.RemoveLink(link);
 
             Outputs.Remove(output);
-            UpdateNode(true);
+            UpdateMe();
+            UpdateMeInDb();
             return true;
         }
 

@@ -70,5 +70,21 @@ namespace MyNetSensors.Nodes
             PanelNode panel = engine.GetPanelNode(PanelId);
             panel?.RemoveOutput(this);
         }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+
+            Output output = engine.GetOutput(Id);
+            output.Name = Name;
+
+            Node panel = engine.GetPanelNode(PanelId);
+
+            engine.UpdateNode(panel);
+            engine.UpdateNode(this);
+
+            engine.UpdateNodeInDb(panel);
+            engine.UpdateNodeInDb(this);
+        }
     }
 }

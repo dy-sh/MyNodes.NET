@@ -84,7 +84,8 @@ namespace MyNetSensors.Nodes
             else
             {
                 oldNode.Title = node.GetSimpleName2();
-                engine.UpdateNode(oldNode, true);
+                engine.UpdateNode(oldNode);
+                engine.UpdateNodeInDb(oldNode);
             }
         }
 
@@ -95,7 +96,8 @@ namespace MyNetSensors.Nodes
             {
                 MySensorsNode node = GetMySensorsNode(sensor.nodeId);
                 node.AddInputAndOutput(sensor);
-                engine.UpdateNode(node, true);
+                engine.UpdateNode(node);
+                engine.UpdateNodeInDb(node);
             }
             else
             {

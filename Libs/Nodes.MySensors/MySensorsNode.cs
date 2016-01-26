@@ -101,7 +101,8 @@ namespace MyNetSensors.Nodes
             }
 
             output.Value = batteryLevel.ToString();
-            UpdateNode(true);
+            UpdateMe();
+            UpdateMeInDb();
         }
     }
 }

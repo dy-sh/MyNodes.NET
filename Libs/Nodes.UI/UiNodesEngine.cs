@@ -98,7 +98,8 @@ namespace MyNetSensors.Nodes
             OnNewUiNode?.Invoke(n);
 
             n.Name = GenerateName(n);
-            engine.UpdateNode(n, true);
+            engine.UpdateNode(n);
+            engine.UpdateNodeInDb(n);
         }
 
         private string GenerateName(UiNode uiNode)
@@ -263,7 +264,8 @@ namespace MyNetSensors.Nodes
             statesDb?.RemoveStatesForNode(nodeId);
 
             //send update ivent
-            engine.UpdateNode(uiNode, false);
+            engine.UpdateNode(uiNode);
+            engine.UpdateNodeInDb(uiNode);
         }
     }
 }

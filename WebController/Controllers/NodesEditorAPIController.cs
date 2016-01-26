@@ -319,7 +319,8 @@ namespace MyNetSensors.WebController.Controllers
             oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
             oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
 
-            engine.UpdateNode(oldNode, true);
+            engine.UpdateNode(oldNode);
+            engine.UpdateNodeInDb(oldNode);
 
             return true;
         }
@@ -336,7 +337,8 @@ namespace MyNetSensors.WebController.Controllers
 
             PanelNode node = (PanelNode)n;
             node.Name = panelname;
-            engine.UpdateNode(node, true);
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
 
             return true;
         }
@@ -353,15 +355,13 @@ namespace MyNetSensors.WebController.Controllers
             if (n is PanelInputNode)
             {
                 PanelInputNode node = (PanelInputNode)n;
-                node.Name = name;
-                engine.UpdateNode(node, true);
+                node.UpdateName(name);
             }
 
             if (n is PanelOutputNode)
             {
                 PanelOutputNode node = (PanelOutputNode)n;
-                node.Name = name;
-                engine.UpdateNode(node, true);
+                node.UpdateName(name);
             }
 
             return true;
@@ -376,10 +376,11 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            UiNode uiNode = (UiNode)n;
-            uiNode.Name = name;
-            uiNode.ShowOnMainPage = show;
-            engine.UpdateNode(uiNode, true);
+            UiNode node = (UiNode)n;
+            node.Name = name;
+            node.ShowOnMainPage = show;
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
 
             return true;
         }
@@ -399,12 +400,13 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            UiSliderNode uiSliderNode = (UiSliderNode)n;
-            uiSliderNode.Name = name;
-            uiSliderNode.Min = min;
-            uiSliderNode.Max = max;
-            uiSliderNode.ShowOnMainPage = show;
-            engine.UpdateNode(uiSliderNode, true);
+            UiSliderNode node = (UiSliderNode)n;
+            node.Name = name;
+            node.Min = min;
+            node.Max = max;
+            node.ShowOnMainPage = show;
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
 
             return true;
         }
@@ -420,7 +422,8 @@ namespace MyNetSensors.WebController.Controllers
 
             ConstantNode node = (ConstantNode)n;
             node.SetValue(value);
-            engine.UpdateNode(node, true);
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
 
             return true;
         }
@@ -435,16 +438,17 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
             }
 
-            UiChartNode uiNode = (UiChartNode)n;
+            UiChartNode node = (UiChartNode)n;
 
-            if (uiNode.WriteInDatabase && !writeInDatabase)
-                uiEngine.ClearChart(uiNode.Id);
+            if (node.WriteInDatabase && !writeInDatabase)
+                uiEngine.ClearChart(node.Id);
 
-            uiNode.Name = name;
-            uiNode.ShowOnMainPage = show;
-            uiNode.WriteInDatabase = writeInDatabase;
-            uiNode.UpdateInterval = updateInterval;
-            engine.UpdateNode(uiNode, true);
+            node.Name = name;
+            node.ShowOnMainPage = show;
+            node.WriteInDatabase = writeInDatabase;
+            node.UpdateInterval = updateInterval;
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
 
 
             return true;

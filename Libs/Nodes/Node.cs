@@ -112,10 +112,16 @@ namespace MyNetSensors.Nodes
             return true;
         }
 
-        public void UpdateNode(bool writeNodeToDb)
+        public void UpdateMe()
         {
-            engine?.UpdateNode(this, writeNodeToDb);
+            engine?.UpdateNode(this);
         }
+
+        public void UpdateMeInDb()
+        {
+            engine?.UpdateNodeInDb(this);
+        }
+
 
         public void AddInput(Input input)
         {

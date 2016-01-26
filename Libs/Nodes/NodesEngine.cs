@@ -264,7 +264,7 @@ namespace MyNetSensors.Nodes
             return links;
         }
 
-   
+
 
 
 
@@ -391,58 +391,27 @@ namespace MyNetSensors.Nodes
 
 
 
-        public void UpdateNode(Node node, bool writeNodeToDb)
+        public void UpdateNode(Node node)
         {
-            if (writeNodeToDb)
-            {
-                Node oldNode = GetNode(node.Id);
-
-                if (oldNode == null)
-                {
-                    LogEngineError($"Can`t update node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
-                    return;
-                }
-
-                LogEngineInfo($"Update node [{node.GetType().Name}]");
-
-                if (node is PanelInputNode)
-                    UpdatePanelInput((PanelInputNode)node);
-                if (node is PanelOutputNode)
-                    UpdatePanelOutput((PanelOutputNode)node);
-
-
-                oldNode.Inputs = node.Inputs;
-                oldNode.Outputs = node.Outputs;
-                oldNode.Position = node.Position;
-                oldNode.Size = node.Size;
-                oldNode.Title = node.Title;
-                oldNode.Type = node.Type;
-
-                nodesDb?.UpdateNode(oldNode);
-            }
-
+            LogEngineInfo($"Update node [{node.GetType().Name}]");
             OnNodeUpdated?.Invoke(node);
         }
 
-        private void UpdatePanelInput(PanelInputNode node)
+        public void UpdateNodeInDb(Node node)
         {
-            Input input = GetInput(node.Id);
-            input.Name = node.Name;
-            Node panel = GetPanelNode(node.PanelId);
+            Node oldNode = GetNode(node.Id);
 
-            UpdateNode(panel, true);
-        }
-        private void UpdatePanelOutput(PanelOutputNode node)
-        {
-            Output output = GetOutput(node.Id);
-            output.Name = node.Name;
-            Node panel = GetPanelNode(node.PanelId);
+            if (oldNode == null)
+            {
+                LogEngineError($"Can`t update node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
+                return;
+            }
 
-            UpdateNode(panel, true);
+            LogEngineInfo($"Update node in DB [{node.GetType().Name}]");
+            nodesDb?.UpdateNode(node);
         }
 
-
-
+   
         public PanelNode GetPanelNode(string panelId)
         {
             return (PanelNode)nodes.FirstOrDefault(n => n is PanelNode && n.Id == panelId);
@@ -661,7 +630,7 @@ namespace MyNetSensors.Nodes
             return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
         }
 
-        
+
         public Node GetInputOwner(Input input)
         {
             return nodes.FirstOrDefault(node => node.Inputs.Contains(input));
@@ -687,7 +656,7 @@ namespace MyNetSensors.Nodes
 
         public void RemoveAllNodesAndLinks()
         {
-          
+
             links = new List<Link>();
             nodes = new List<Node>();
 
@@ -828,6 +797,8 @@ namespace MyNetSensors.Nodes
 
             node.Id = Guid.NewGuid().ToString();
         }
+
+
     }
 }
 
