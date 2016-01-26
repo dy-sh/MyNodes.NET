@@ -856,4 +856,24 @@
     OperationMixer.title = "Mixer";
     LiteGraph.registerNodeType("Operation/Mixer", OperationMixer);
 
+    //SystemBeep
+    function SystemBeep() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.SystemBeepNode",
+            'Assembly': "Nodes"
+        };
+    }
+    SystemBeep.title = "Beep";
+    LiteGraph.registerNodeType("System/Beep", SystemBeep);
+
+    //SystemBeepAdvanced
+    function SystemBeepAdvance() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.SystemBeepAdvancedNode",
+            'Assembly': "Nodes"
+        };
+    }
+    SystemBeepAdvance.title = "Beep Advanced";
+    LiteGraph.registerNodeType("System/Beep Advanced", SystemBeepAdvance);
+
 })();
