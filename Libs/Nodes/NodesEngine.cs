@@ -722,6 +722,8 @@ namespace MyNetSensors.Nodes
 
                 foreach (var link in newLinks)
                     AddLink(link.OutputId, link.InputId);
+
+                newNodes[0].ResetInputs();
             }
             else
             {
@@ -732,6 +734,7 @@ namespace MyNetSensors.Nodes
 
                 newNode.Position = new Position { X = oldNode.Position.X + 5, Y = oldNode.Position.Y + 20 };
                 AddNode(newNode);
+                newNode.ResetInputs();
             }
 
 

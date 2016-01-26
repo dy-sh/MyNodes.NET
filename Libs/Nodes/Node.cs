@@ -143,6 +143,14 @@ namespace MyNetSensors.Nodes
         {
             engine.ShowNodeActivity(this);
         }
+
+        public void ResetInputs()
+        {
+            foreach (var input in Inputs)
+            {
+                input.Value = null;
+            }
+        }
     }
 
 

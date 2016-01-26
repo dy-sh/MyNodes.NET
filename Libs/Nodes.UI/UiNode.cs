@@ -17,10 +17,10 @@ namespace MyNetSensors.Nodes
         {
             get
             {
-                if (PanelId == engine.MAIN_PANEL_ID)
+                if (PanelId == engine?.MAIN_PANEL_ID)
                     return "Main Panel";
 
-                return engine.GetPanelNode(PanelId)?.Name;
+                return engine?.GetPanelNode(PanelId)?.Name;
             }
         }
 
