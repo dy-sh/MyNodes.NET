@@ -13,16 +13,6 @@ namespace MyNetSensors.Nodes
 
         public bool ShowOnMainPage { get; set; }
 
-        public string PanelName
-        {
-            get
-            {
-                if (PanelId == engine?.MAIN_PANEL_ID)
-                    return "Main Panel";
-
-                return engine?.GetPanelNode(PanelId)?.Name;
-            }
-        }
 
         public UiNode(int inputsCount, int outputsCount) : base(inputsCount, outputsCount)
         {

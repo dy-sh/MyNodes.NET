@@ -248,8 +248,10 @@ namespace MyNetSensors.WebController.Code
 
                 gateway.Connect(serialPortName).Wait();
 
+            if(gateway.IsConnected())
                 logs.AddSystemInfo("Gateway connected.");
-
+            else
+                logs.AddSystemInfo("Gateway is not connected.");
         }
 
 

@@ -12,56 +12,91 @@ namespace MyNetSensors.Nodes
     {
         private int DEFAULT_VALUE = 1000;
 
-        public int count = 0;
-        private int? freqInput;
+        public int Count { get; set; }
+
+        private double frequency;
+        private bool enabled = true;
         private DateTime lastTime;
 
         /// <summary>
         /// Counter (1 input, 1 output). Input[0] - Frequency (ms). Default=1000.
         /// </summary>
-        public CounterNode() : base(1, 1)
+        public CounterNode() : base(3, 1)
         {
             this.Title = "Counter";
             this.Type = "Operation/Counter";
 
             Inputs[0].Name = "Frequency";
+            Inputs[1].Name = "Enable";
+            Inputs[2].Name = "Reset";
             lastTime = DateTime.Now;
+            frequency = DEFAULT_VALUE;
         }
 
         public override void Loop()
         {
-            int freq = DEFAULT_VALUE;
-            if (freqInput.HasValue)
-                freq = freqInput.Value;
-
-            if (freq <= 0) return;
+            if (!enabled || frequency<=0)
+                return;
 
             TimeSpan elapsed = DateTime.Now - lastTime;
-            if (elapsed.TotalMilliseconds >= freq)
+            if (elapsed.TotalMilliseconds >= frequency)
             {
-                count++;
-
-                LogInfo($"Counter: {count}");
-
-                Outputs[0].Value = count.ToString();
+                Count++;
                 lastTime = DateTime.Now;
 
+                LogInfo($"{Count}");
+
+                Outputs[0].Value = Count.ToString();
             }
         }
 
         public override void OnInputChange(Input input)
         {
-            try
+            if (!CheckIsDoubleOrNull(Inputs[0].Value))
             {
-                freqInput = Int32.Parse(input.Value);
-                LogInfo($"Counter: frequency changed to {freqInput.Value} ms");
-            }
-            catch
-            {
-                freqInput = null;
-                LogInfo($"Counter: frequency changed to default value: {DEFAULT_VALUE} ms");
+                LogIncorrectInputValueError(input);
+                return;
             }
 
+            if (!CheckIsBoolOrNull(Inputs[1].Value))
+            {
+                LogIncorrectInputValueError(input);
+                return;
+            }
+
+            if (!CheckIsBoolOrNull(Inputs[2].Value))
+            {
+                LogIncorrectInputValueError(input);
+                return;
+            }
+
+            if (input == Inputs[0])
+            {
+                if (input.Value == null)
+                    frequency = DEFAULT_VALUE;
+                else
+                    Double.TryParse(input.Value, out frequency);
+
+                if (frequency < 0)
+                    frequency = 0;
+
+                LogInfo($"Frequency changed to {frequency} ms");
+
+            }
+
+            if (input == Inputs[1])
+            {
+                enabled = input.Value != "0";
+
+                LogInfo(enabled ? "Started" : "Stopped");
+            }
+
+            if (input == Inputs[2] && input.Value == "1")
+            {
+                Count = 0;
+                lastTime = DateTime.Now;
+                LogInfo("Reset");
+            }
         }
 
 

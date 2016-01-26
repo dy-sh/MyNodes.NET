@@ -25,6 +25,17 @@ namespace MyNetSensors.Nodes
         public List<Output> Outputs { get; set; }
 
         protected NodesEngine engine { get; set; }
+        
+        public string PanelName
+        {
+            get
+            {
+                if (PanelId == engine?.MAIN_PANEL_ID)
+                    return "Main Panel";
+
+                return engine?.GetPanelNode(PanelId)?.Name;
+            }
+        }
 
         public Node(int inputsCount, int outputsCount)
         {
@@ -63,12 +74,17 @@ namespace MyNetSensors.Nodes
 
         public void LogInfo(string message)
         {
-            engine?.LogNodesInfo(message);
+            engine?.LogNodesInfo($"{PanelName}: {Title}: {message}");
         }
 
         public void LogError(string message)
         {
-            engine?.LogNodesError(message);
+            engine?.LogNodesError($"{PanelName}: {Title}: {message}");
+        }
+
+        public void LogIncorrectInputValueError(Input input)
+        {
+            LogError($"Incorrect value in {input.Name}: [{input.Value}]");
         }
 
         public abstract void Loop();
@@ -150,6 +166,47 @@ namespace MyNetSensors.Nodes
             {
                 input.Value = null;
             }
+        }
+
+        public bool CheckIsBool(string value)
+        {
+            return value == "0" || value == "1";
+        }
+
+        public bool CheckIsDouble(string value)
+        {
+            double result;
+            return Double.TryParse(value, out result);
+        }
+
+        public bool CheckIsInteger(string value)
+        {
+            int result;
+            return Int32.TryParse(value, out result);
+        }
+
+
+        public bool CheckIsBoolOrNull(string value)
+        {
+            return value == "0" || value == "1" || value==null;
+        }
+
+        public bool CheckIsDoubleOrNull(string value)
+        {
+            if (value == null)
+                return true;
+
+            double result;
+            return Double.TryParse(value, out result);
+        }
+
+        public bool CheckIsIntegerOrNull(string value)
+        {
+            if (value == null)
+                return true;
+
+            int result;
+            return Int32.TryParse(value, out result);
         }
     }
 
