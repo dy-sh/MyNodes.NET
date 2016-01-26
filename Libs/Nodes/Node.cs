@@ -123,7 +123,7 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public void AddInput(Input input)
+        public virtual void AddInput(Input input)
         {
             Inputs.Add(input);
 
@@ -131,7 +131,7 @@ namespace MyNetSensors.Nodes
                 input.OnInputChange += engine.OnInputChange;
         }
 
-        public void AddOutput(Output output)
+        public virtual void AddOutput(Output output)
         {
             Outputs.Add(output);
 

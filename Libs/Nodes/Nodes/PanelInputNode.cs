@@ -29,8 +29,6 @@ namespace MyNetSensors.Nodes
 
         public override bool OnAddToEngine(NodesEngine engine)
         {
-            this.engine = engine;
-
             if (PanelId == engine.MAIN_PANEL_ID)
             {
                 LogError("Can`t create input for main panel.");
@@ -44,24 +42,13 @@ namespace MyNetSensors.Nodes
                 return false;
             }
 
-            Name = GenerateInputName(panel);
+            panel.AddInputNode(this);
 
-            panel.AddInput(this);
-
+            base.OnAddToEngine(engine);
             return true;
         }
 
-        private string GenerateInputName(PanelNode panel)
-        {
-            //auto naming
-            List<string> names = panel.Inputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
-            {
-                if (!names.Contains($"In {i}"))
-                    return $"In {i}";
-            }
-            return null;
-        }
+       
 
         public override void OnRemove()
         {

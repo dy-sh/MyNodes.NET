@@ -31,8 +31,6 @@ namespace MyNetSensors.Nodes
 
         public override bool OnAddToEngine(NodesEngine engine)
         {
-            this.engine = engine;
-
             if (PanelId == engine.MAIN_PANEL_ID)
             {
                 LogError("Can`t create output for main panel.");
@@ -46,24 +44,13 @@ namespace MyNetSensors.Nodes
                 return false;
             }
 
-            Name = GenerateOutputName(panel);
+            panel.AddOutputNode(this);
 
-            panel.AddOutput(this);
-
+            base.OnAddToEngine(engine);
             return true;
         }
 
-        private string GenerateOutputName(PanelNode panel)
-        {
-            //auto naming
-            List<string> names = panel.Outputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
-            {
-                if (!names.Contains($"Out {i}"))
-                    return $"Out {i}";
-            }
-            return null;
-        }
+    
 
         public override void OnRemove()
         {

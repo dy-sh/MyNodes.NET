@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
-    public class PanelNode:Node
+    public class PanelNode : Node
     {
         public string Name { get; set; }
 
@@ -24,40 +24,51 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (engine!=null)
-            engine.GetNode(input.Id).Outputs[0].Value = input.Value;
+            if (engine != null)
+                engine.GetNode(input.Id).Outputs[0].Value = input.Value;
         }
 
-        public void AddInput(PanelInputNode node)
+        public void AddInputNode(PanelInputNode node)
         {
-            if (!Inputs.Any(x => x.Id == node.Id))
+            if (Inputs.Any(x => x.Id == node.Id))
+                return;
+
+            Input input = new Input
             {
-                Input input = new Input
-                {
-                    Id = node.Id,
-                    Name = node.Name
-                };
-                Inputs.Add(input);
-                input.OnInputChange += engine.OnInputChange;
-                UpdateMe();
-                UpdateMeInDb();
-            }
+                Id = node.Id,
+                Name = GenerateNewInputName()
+            };
+
+            node.Name = input.Name;
+            AddInput(input);
+
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
+
+            UpdateMe();
+            UpdateMeInDb();
         }
 
-        public void AddOutput(PanelOutputNode node)
+        public void AddOutputNode(PanelOutputNode node)
         {
-            if (!Outputs.Any(x => x.Id == node.Id))
+            if (Outputs.Any(x => x.Id == node.Id))
+                return;
+
+
+            Output output = new Output
             {
-                Output output = new Output
-                {
-                    Id = node.Id,
-                    Name = node.Name
-                };
-                Outputs.Add(output);
-                output.OnOutputChange += engine.OnOutputChange;
-                UpdateMe();
-                UpdateMeInDb();
-            }
+                Id = node.Id,
+                Name = GenerateOutputName()
+            };
+
+            node.Name = output.Name;
+            AddOutput(output);
+
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
+
+            UpdateMe();
+            UpdateMeInDb();
         }
 
 
@@ -96,9 +107,11 @@ namespace MyNetSensors.Nodes
         public override bool OnAddToEngine(NodesEngine engine)
         {
             this.engine = engine;
-          
+
+            if (Name==null)
             Name = GeneratePanelName();
 
+            base.OnAddToEngine(engine);
             return true;
         }
 
@@ -124,6 +137,30 @@ namespace MyNetSensors.Nodes
             {
                 engine.RemoveNode(n);
             }
+        }
+
+        private string GenerateNewInputName()
+        {
+            //auto naming
+            List<string> names = Inputs.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"In {i}"))
+                    return $"In {i}";
+            }
+            return null;
+        }
+
+        private string GenerateOutputName()
+        {
+            //auto naming
+            List<string> names = Outputs.Select(x => x.Name).ToList();
+            for (int i = 1; i <= names.Count + 1; i++)
+            {
+                if (!names.Contains($"Out {i}"))
+                    return $"Out {i}";
+            }
+            return null;
         }
     }
 }
