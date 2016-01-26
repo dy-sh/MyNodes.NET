@@ -21,7 +21,7 @@ namespace MyNetSensors.Nodes
             this.Title = "Gate";
             this.Type = "Operation/Gate";
 
-            Inputs[0].Name = "Value";
+            Inputs[0].Name = "Input";
             Inputs[1].Name = "Key";
         }
 

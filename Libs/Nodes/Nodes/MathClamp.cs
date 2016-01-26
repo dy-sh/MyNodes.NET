@@ -22,9 +22,9 @@ namespace MyNetSensors.Nodes
             this.Title = "Clamp";
             this.Type = "Math/Clamp";
 
-            Inputs[0].Name = "InMin";
-            Inputs[1].Name = "InMax";
-            Inputs[2].Name = "Input";
+            Inputs[0].Name = "Input";
+            Inputs[1].Name = "InMin";
+            Inputs[2].Name = "InMax";  
         }
 
         public override void Loop()
@@ -43,15 +43,24 @@ namespace MyNetSensors.Nodes
                 }
                 else
                 {
-                    
-                    Double aIn = Double.Parse(Inputs[0].Value);
-                    Double bIn = Double.Parse(Inputs[1].Value);
+                    Double signal = Double.Parse(Inputs[0].Value);
+                    Double aIn = Double.Parse(Inputs[1].Value);
+                    Double bIn = Double.Parse(Inputs[2].Value);
 
-                    Double signal = Double.Parse(Inputs[2].Value);
+                    Double result;
 
-                    Double result = (signal < aIn) ? aIn : (signal > bIn) ? bIn : signal;
-                    LogInfo($"Math/Clamp: {result}");
-                    Outputs[0].Value = result.ToString();
+                    if (signal >= aIn && signal <= bIn)
+                    {
+                        result = signal;
+                        LogInfo($"Math/Clamp: in range");
+                        Outputs[0].Value = result.ToString();
+                    }
+                    else
+                    {
+                        LogInfo($"Math/Clamp: no in range");
+                        Outputs[0].Value = null;
+                    }
+                    //Double result = (signal < aIn) ? aIn : (signal > bIn) ? bIn : signal; 
                 }
             }
             catch
