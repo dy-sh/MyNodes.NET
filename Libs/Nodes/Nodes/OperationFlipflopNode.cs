@@ -55,7 +55,6 @@ namespace MyNetSensors.Nodes
                             result = "1";
                             part++;
                         }
-                        part++;
                         break;
 
                     case 2:

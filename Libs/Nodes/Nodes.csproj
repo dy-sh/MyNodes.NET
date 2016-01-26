@@ -63,6 +63,8 @@
     <Compile Include="Nodes\MathClamp.cs" />
     <Compile Include="Nodes\MathRemap.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
+    <Compile Include="Nodes\OperationMixer.cs" />
+    <Compile Include="Nodes\OperationEventCounter.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />
     <Compile Include="Nodes\MathSqrtNode.cs" />
