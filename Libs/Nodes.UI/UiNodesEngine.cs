@@ -89,7 +89,9 @@ namespace MyNetSensors.Nodes
 
             OnNewUiNode?.Invoke(n);
 
-            n.Name = GenerateName(n);
+            if (n.Name==null)
+                n.Name = GenerateName(n);
+
             engine.UpdateNode(n);
             engine.UpdateNodeInDb(n);
         }

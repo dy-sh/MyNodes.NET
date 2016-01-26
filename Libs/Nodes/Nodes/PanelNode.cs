@@ -42,9 +42,6 @@ namespace MyNetSensors.Nodes
             node.Name = input.Name;
             AddInput(input);
 
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
             UpdateMe();
             UpdateMeInDb();
         }
@@ -63,9 +60,6 @@ namespace MyNetSensors.Nodes
 
             node.Name = output.Name;
             AddOutput(output);
-
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
 
             UpdateMe();
             UpdateMeInDb();
