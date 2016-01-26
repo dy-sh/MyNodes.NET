@@ -420,46 +420,45 @@ namespace MyNetSensors.Nodes
 
         public void UpdateOutput(string outputId, string value, string name = null)
         {
-            Output oldOutput = GetOutput(outputId);
+            Output output = GetOutput(outputId);
 
-            if (oldOutput == null)
+            if (output == null)
             {
                 LogEngineError($"Can`t update output [{outputId}]. Does not exist.");
                 return;
             }
 
-
-            if (name != null && name != oldOutput.Name)
+            if (name != null && name != output.Name)
             {
-                oldOutput.Name = name;
-                Node node = GetOutputOwner(oldOutput);
-                nodesDb?.UpdateNode(node);
-                OnNodeUpdated?.Invoke(node);
+                output.Name = name;
+                Node node = GetOutputOwner(output);
+                UpdateNodeInDb(node);
+                UpdateNode(node);
             }
 
-            oldOutput.Value = value;
+            output.Value = value;
         }
 
         public void UpdateInput(string inputId, string value, string name = null)
         {
-            Input oldInput = GetInput(inputId);
+            Input input = GetInput(inputId);
 
-            if (oldInput == null)
+            if (input == null)
             {
                 LogEngineError($"Can`t update input [{inputId}]. Does not exist.");
                 return;
             }
 
 
-            if (name != null && name != oldInput.Name)
+            if (name != null && name != input.Name)
             {
-                oldInput.Name = name;
-                Node node = GetInputOwner(oldInput);
-                nodesDb?.UpdateNode(node);
-                OnNodeUpdated?.Invoke(node);
+                input.Name = name;
+                Node node = GetInputOwner(input);
+                UpdateNodeInDb(node);
+                UpdateNode(node);
             }
 
-            oldInput.Value = value;
+            input.Value = value;
         }
 
         public void AddLink(string outputId, string inputId)

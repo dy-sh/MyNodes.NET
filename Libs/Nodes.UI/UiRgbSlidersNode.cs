@@ -31,8 +31,9 @@ namespace MyNetSensors.Nodes
             Value = value;
             LogInfo($"UI RGB Sliders [{Name}]: [{Value}]");
             Outputs[0].Value = Value;
-            UpdateMeInDb();
 
+            UpdateMe();
+            UpdateMeInDb();
         }
     }
 }

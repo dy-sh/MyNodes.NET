@@ -25,7 +25,6 @@ namespace MyNetSensors.Nodes
             engine.OnNewNode += OnNewNode;
             engine.OnRemoveNode += OnRemoveNode;
             engine.OnNodeUpdated += OnNodeUpdated;
-            engine.OnOutputStateUpdated += OnOutputStateUpdated;
             engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
 
             GetStatesFromRepository();
@@ -56,13 +55,6 @@ namespace MyNetSensors.Nodes
         }
 
 
-
-        private void OnOutputStateUpdated(Output output)
-        {
-            Node node = engine.GetOutputOwner(output);
-            if (node is UiNode)
-                OnUiNodeUpdated?.Invoke((UiNode)node);
-        }
 
         private void OnNodeUpdated(Node node)
         {

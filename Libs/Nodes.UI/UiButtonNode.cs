@@ -27,8 +27,11 @@ namespace MyNetSensors.Nodes
         {
             LogInfo($"UI Button [{Name}]: [1]");
             Outputs[0].Value = "1";
+            UpdateMe();
+
             LogInfo($"UI Button [{Name}]: [0]");
             Outputs[0].Value = "0";
+            UpdateMe();
         }
     }
 }

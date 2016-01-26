@@ -57,10 +57,25 @@ namespace MyNetSensors.WebController.Code
 
             if (uiNodesEngine != null)
             {
-                uiNodesEngine.OnUiNodeUpdated += OnNodeUpdated;
-                uiNodesEngine.OnNewUiNode += OnNewNode;
-                uiNodesEngine.OnRemoveUiNode += OnRemoveNode;
+                uiNodesEngine.OnUiNodeUpdated += OnUiNodeUpdated;
+                uiNodesEngine.OnNewUiNode += OnNewUiNode;
+                uiNodesEngine.OnRemoveUiNode += OnRemoveUiNode;
             }
+        }
+
+        private static void OnRemoveUiNode(UiNode uinode)
+        {
+            hub.Clients.All.OnRemoveUiNode(uinode);
+        }
+
+        private static void OnNewUiNode(UiNode uinode)
+        {
+            hub.Clients.All.OnNewUiNode(uinode);
+        }
+
+        private static void OnUiNodeUpdated(UiNode uinode)
+        {
+            hub.Clients.All.OnUiNodeUpdated(uinode);
         }
 
         private static void OnRemoveAllNodesAndLinks()
@@ -80,20 +95,6 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnNodeActivity(node.Id);
         }
 
-        private static void OnRemoveNode(UiNode uiNode)
-        {
-            hub.Clients.All.OnRemoveNode(uiNode);
-        }
-
-        private static void OnNewNode(UiNode uiNode)
-        {
-            hub.Clients.All.OnNewNode(uiNode);
-        }
-
-        private static void OnNodeUpdated(UiNode uiNode)
-        {
-            hub.Clients.All.OnNodeUpdated(uiNode);
-        }
 
 
         private static void OnNewLink(Link link)

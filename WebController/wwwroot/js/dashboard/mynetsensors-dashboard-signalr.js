@@ -36,7 +36,7 @@ $(function () {
 
   
 
-    clientsHub.client.OnNewNode = function (node) {
+    clientsHub.client.OnNewUiNode = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -46,7 +46,7 @@ $(function () {
         createNode(node);
     };
 
-    clientsHub.client.OnNodeUpdated = function (node) {
+    clientsHub.client.OnUiNodeUpdated = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
@@ -60,7 +60,7 @@ $(function () {
         updateNode(node);
     };
 
-    clientsHub.client.OnRemoveNode = function (node) {
+    clientsHub.client.OnRemoveUiNode = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;

@@ -32,6 +32,8 @@ namespace MyNetSensors.Nodes
             Value = Value == "0" ? "1" : "0";
             LogInfo($"UI Toggle Button [{Name}]: [{Value}]");
             Outputs[0].Value = Value;
+
+            UpdateMe();
             UpdateMeInDb();
         }
     }
