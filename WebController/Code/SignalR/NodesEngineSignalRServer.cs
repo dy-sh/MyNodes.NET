@@ -50,8 +50,7 @@ namespace MyNetSensors.WebController.Code
                 nodesEngine.OnRemoveNode += OnRemoveNode;
                 nodesEngine.OnRemoveLink += OnRemoveLink;
                 nodesEngine.OnNewLink += OnNewLink;
-                nodesEngine.OnInputStateUpdated += OnInputStateUpdated;
-                nodesEngine.OnOutputStateUpdated += OnOutputStateUpdated;
+                nodesEngine.OnNodeActivity += OnNodeActivity;
                 nodesEngine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
             }
 
@@ -62,6 +61,8 @@ namespace MyNetSensors.WebController.Code
                 uiNodesEngine.OnRemoveUiNode += OnRemoveUiNode;
             }
         }
+
+
 
         private static void OnRemoveUiNode(UiNode uinode)
         {
@@ -83,18 +84,11 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnRemoveAllNodesAndLinks();
         }
 
-        private static void OnOutputStateUpdated(Output output)
+        
+        private static void OnNodeActivity(Node node)
         {
-            Node node = nodesEngine.GetOutputOwner(output);
             hub.Clients.All.OnNodeActivity(node.Id);
         }
-
-        private static void OnInputStateUpdated(Input input)
-        {
-            Node node = nodesEngine.GetInputOwner(input);
-            hub.Clients.All.OnNodeActivity(node.Id);
-        }
-
 
 
         private static void OnNewLink(Link link)

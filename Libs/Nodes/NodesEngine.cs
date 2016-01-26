@@ -20,7 +20,7 @@ namespace MyNetSensors.Nodes
 
         //If you have tons of nodes, and system perfomance decreased, increase this value,
         //and you will get less nodes updating frequency 
-        private int updateNodesInterval = 1;
+        private int UPDATE_NODES_INTEVAL = 1;
 
         private INodesRepository nodesDb;
 
@@ -40,6 +40,7 @@ namespace MyNetSensors.Nodes
         public event NodeEventHandler OnNewNode;
         public event NodeEventHandler OnRemoveNode;
         public event NodeEventHandler OnNodeUpdated;
+        public event NodeEventHandler OnNodeActivity;
         public event InputEventHandler OnInputStateUpdated;
         public event OutputEventHandler OnOutputStateUpdated;
         public event LinkEventHandler OnNewLink;
@@ -71,7 +72,11 @@ namespace MyNetSensors.Nodes
             this.nodesDb = nodesDb;
 
             updateNodesTimer.Elapsed += UpdateNodes;
-            updateNodesTimer.Interval = updateNodesInterval;
+            updateNodesTimer.Interval = UPDATE_NODES_INTEVAL;
+
+            activityTimer.Elapsed += UpdateShowActivity;
+            activityTimer.Interval = SHOW_ACTIVITY_INTERVAL;
+            activityTimer.Start();
 
             if (nodesDb != null)
             {
@@ -79,6 +84,8 @@ namespace MyNetSensors.Nodes
                 GetLinksFromRepository();
             }
         }
+
+
 
 
         private bool starting;
@@ -178,6 +185,11 @@ namespace MyNetSensors.Nodes
 
             Node node = GetInputOwner(input.Id);
 
+            if(node==null)
+                return;
+
+            ShowNodeActivity(node);
+
             if (changedInputsStack.Contains(input))
             {
                 changedInputsStack.Remove(input);
@@ -186,9 +198,9 @@ namespace MyNetSensors.Nodes
             }
             changedInputsStack.Add(input);
 
-            node.OnInputChange(input);
-
             OnInputStateUpdated?.Invoke(input);
+
+            node.OnInputChange(input);
 
             try
             {
@@ -206,6 +218,8 @@ namespace MyNetSensors.Nodes
             Node node = GetOutputOwner(output);
             if (node == null)
                 return;
+
+            ShowNodeActivity(node);
 
             OnOutputStateUpdated?.Invoke(output);
 
@@ -270,15 +284,15 @@ namespace MyNetSensors.Nodes
 
         public void SetUpdateInterval(int ms)
         {
-            updateNodesInterval = ms;
+            UPDATE_NODES_INTEVAL = ms;
             updateNodesTimer.Stop();
-            updateNodesTimer.Interval = updateNodesInterval;
+            updateNodesTimer.Interval = UPDATE_NODES_INTEVAL;
             updateNodesTimer.Start();
         }
 
         public int GetUpdateInterval()
         {
-            return updateNodesInterval;
+            return UPDATE_NODES_INTEVAL;
         }
 
 
@@ -311,11 +325,6 @@ namespace MyNetSensors.Nodes
 
             OnNewNode?.Invoke(node);
         }
-
-
-
-
-
 
 
 
@@ -411,7 +420,7 @@ namespace MyNetSensors.Nodes
             nodesDb?.UpdateNode(node);
         }
 
-   
+
         public PanelNode GetPanelNode(string panelId)
         {
             return (PanelNode)nodes.FirstOrDefault(n => n is PanelNode && n.Id == panelId);
@@ -798,6 +807,29 @@ namespace MyNetSensors.Nodes
         }
 
 
+
+
+
+        //NODES ACTIVITY
+
+        public int SHOW_ACTIVITY_INTERVAL = 350;
+        List<Node> activityList = new List<Node>();
+        private Timer activityTimer = new Timer();
+
+
+        public void ShowNodeActivity(Node node)
+        {
+            if (activityList.Contains(node))
+                return;
+
+            activityList.Add(node);
+            OnNodeActivity?.Invoke(node);
+        }
+
+        private void UpdateShowActivity(object sender, ElapsedEventArgs e)
+        {
+            activityList.Clear();
+        }
     }
 }
 

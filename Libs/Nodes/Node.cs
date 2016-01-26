@@ -138,6 +138,11 @@ namespace MyNetSensors.Nodes
             if (engine != null)
                 output.OnOutputChange += engine.OnOutputChange;
         }
+
+        public void ShowActivity()
+        {
+            engine.ShowNodeActivity(this);
+        }
     }
 
 
