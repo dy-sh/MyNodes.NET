@@ -155,6 +155,8 @@
         };
         this.clonable = false;
     }
+    MySensorsNode.title = "MySensors Node";
+    MySensorsNode.skip_list = true;
     LiteGraph.registerNodeType("Nodes/Hardware", MySensorsNode);
 
 
