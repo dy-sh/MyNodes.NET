@@ -123,7 +123,7 @@ namespace MyNetSensors.Nodes
                 return null;
 
             return oldNode.Outputs
-                .Cast<MySensorsNodeOutput>()
+                .OfType<MySensorsNodeOutput>()
                 .FirstOrDefault(output => output.sensorId == sensorId);
         }
 
@@ -136,7 +136,7 @@ namespace MyNetSensors.Nodes
                 return null;
 
             return oldNode.Inputs
-                .Cast<MySensorsNodeInput>()
+                .OfType<MySensorsNodeInput>()
                 .FirstOrDefault(input => input.sensorId == sensorId);
         }
 
