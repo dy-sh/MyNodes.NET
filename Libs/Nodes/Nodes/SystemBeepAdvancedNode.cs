@@ -24,6 +24,10 @@ namespace MyNetSensors.Nodes
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Frequency";
             Inputs[2].Name = "Duration";
+
+            Inputs[0].Type = DataType.Logical;
+            Inputs[1].Type = DataType.Number;
+            Inputs[2].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -32,11 +36,14 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null || Inputs[1].Value == null || Inputs[2].Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo($"System/Beep Advanced: [NULL]");
+                LogInfo("[NULL]");
+                Outputs[0].Value = null;
+                return;
             }
-            else if (Inputs[0].Value == "1")
+
+            if (Inputs[0].Value == "1")
             {
                 try
                 {
@@ -48,7 +55,7 @@ namespace MyNetSensors.Nodes
                 }
                 catch
                 {
-                    LogError($"System/Beep Advanced: Incorrect value in input");
+                    LogError($"Incorrect value in input");
                 }
             }
         }

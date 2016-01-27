@@ -26,8 +26,9 @@ namespace MyNetSensors.Nodes
         public void SetValue(string value)
         {
             Value = value;
-            LogInfo($"Constant changed: [{Value??"NULL"}]");
+            LogInfo($"[{Value??"NULL"}]");
             Outputs[0].Value = Value;
+            UpdateMeInDb();
         }
     }
 }

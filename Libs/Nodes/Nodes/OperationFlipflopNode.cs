@@ -24,6 +24,8 @@ namespace MyNetSensors.Nodes
             this.Title = "Flip-Flop";
             this.Type = "Operation/Flip-Flop";
 
+            Inputs[0].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -32,56 +34,50 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo($"Operation/Flip-Flop: [NULL]");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
-            else if (Inputs[0].Value == "1" || Inputs[0].Value == "0")
+
+            switch (part)
             {
-                switch (part)
-                {
-                    case 0:
-                        if (Inputs[0].Value == "1")
-                        {
-                            result = "1";
-                            part++;
-                        }
-                        break;
+                case 0:
+                    if (Inputs[0].Value == "1")
+                    {
+                        result = "1";
+                        part++;
+                    }
+                    break;
 
-                    case 1:
-                        if (Inputs[0].Value == "0")
-                        {
-                            result = "1";
-                            part++;
-                        }
-                        break;
+                case 1:
+                    if (Inputs[0].Value == "0")
+                    {
+                        result = "1";
+                        part++;
+                    }
+                    break;
 
-                    case 2:
-                        if (Inputs[0].Value == "1")
-                        {
-                            result = "0";
-                            part++;
-                        }
-                        break;
+                case 2:
+                    if (Inputs[0].Value == "1")
+                    {
+                        result = "0";
+                        part++;
+                    }
+                    break;
 
-                    case 3:
-                        if (Inputs[0].Value == "0")
-                        {
-                            result = "0";
-                            part = 0;
-                        }
-                        break;
-                }
-
-                LogInfo($"Operation/Flip-Flop: [{Inputs[0].Value}] Flip-Flop to [{result}]");
-                Outputs[0].Value = result;
+                case 3:
+                    if (Inputs[0].Value == "0")
+                    {
+                        result = "0";
+                        part = 0;
+                    }
+                    break;
             }
-            else
-            {
-                LogError($"Operation/Flip-Flop: Incorrect value in input");
-                Outputs[0].Value = null;
-            }
+
+            LogInfo($"[{Inputs[0].Value}] Flip-Flop to [{result}]");
+            Outputs[0].Value = result;
         }
     }
 }

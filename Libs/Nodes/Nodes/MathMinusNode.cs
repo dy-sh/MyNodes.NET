@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-   
-    public class MathMinusNode: Node
+
+    public class MathMinusNode : Node
     {
         /// <summary>
         /// Math Minus (2 inputs, 1 output).
@@ -18,6 +18,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Minus";
             this.Type = "Math/Minus";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -26,29 +30,19 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
-                {
-                    LogInfo($"Math/Minus: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a - b;
-
-                    LogInfo($"Math/Minus: [{a}] - [{b}]  = [{c}]");
-                    Outputs[0].Value = c.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Minus: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Double.Parse(Inputs[1].Value);
+            Double c = a - b;
+
+            LogInfo($"[{a}] - [{b}] = [{c}]");
+            Outputs[0].Value = c.ToString();
         }
     }
 }

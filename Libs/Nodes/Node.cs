@@ -12,6 +12,13 @@ namespace MyNetSensors.Nodes
     public delegate void NodeEventHandler(Node node);
     public delegate void NodeUpdateEventHandler(Node node, bool writeNodeToDb);
 
+    public enum DataType
+    {
+        Text,
+        Number,
+        Logical
+    }
+
     public abstract class Node
     {
         public string Id { get; set; }
@@ -84,7 +91,7 @@ namespace MyNetSensors.Nodes
 
         public void LogIncorrectInputValueError(Input input)
         {
-            LogError($"Incorrect value in {input.Name}: [{input.Value}]");
+            LogError($"Incorrect value in [{input.Name}]: [{input.Value}]");
         }
 
         public abstract void Loop();
@@ -168,45 +175,33 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        public bool CheckIsBool(string value)
+        public virtual void CheckInputDataTypeIsCorrect(Input input)
         {
-            return value == "0" || value == "1";
-        }
+            if (input.Value == null)
+                return;
 
-        public bool CheckIsDouble(string value)
-        {
-            double result;
-            return Double.TryParse(value, out result);
-        }
+            if (input.Type==DataType.Text)
+                return;
 
-        public bool CheckIsInteger(string value)
-        {
-            int result;
-            return Int32.TryParse(value, out result);
-        }
+            if (input.Type == DataType.Logical)
+            {
+                if (input.Value != null && input.Value != "0" && input.Value != "1")
+                {
+                    LogIncorrectInputValueError(input);
+                    input.SetValueWithoutUpdate(null);
+                }
+            }
 
-
-        public bool CheckIsBoolOrNull(string value)
-        {
-            return value == "0" || value == "1" || value==null;
-        }
-
-        public bool CheckIsDoubleOrNull(string value)
-        {
-            if (value == null)
-                return true;
-
-            double result;
-            return Double.TryParse(value, out result);
-        }
-
-        public bool CheckIsIntegerOrNull(string value)
-        {
-            if (value == null)
-                return true;
-
-            int result;
-            return Int32.TryParse(value, out result);
+            if (input.Type == DataType.Number)
+            {
+                double num;
+               
+                if (!double.TryParse(input.Value,out num))
+                {
+                    LogIncorrectInputValueError(input);
+                    input.SetValueWithoutUpdate(null);
+                }
+            }
         }
     }
 

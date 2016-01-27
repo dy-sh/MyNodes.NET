@@ -35,17 +35,17 @@ namespace MyNetSensors.Nodes
 
             if (Inputs[2].Value == "0")
             {
-                LogInfo($"Operation/Switch2x: switched to value0");
+                LogInfo($"Switched to value0");
                 Outputs[0].Value = Inputs[0].Value;
             }
             else if (Inputs[2].Value == "1")
             {
-                LogInfo($"Operation/Switch2x: switched to value1");
+                LogInfo($"Switched to value1");
                 Outputs[0].Value = Inputs[1].Value;
             }
             else
             {
-                LogInfo($"Operation/Switch2x: input value is incorrect");
+                LogInfo($"Input value is incorrect");
                 Outputs[0].Value = null;
             }
         }

@@ -18,6 +18,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Compare Greater";
             this.Type = "Operation/Compare Greater";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Number;
+            Outputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -26,35 +30,25 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
-                {
-                    LogInfo($"Operation/Compare Greater: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-
-                    if (a > b)
-                    {
-                        LogInfo($"Operation/Compare Greater: [{a}] > [{b}]");
-                        Outputs[0].Value = "1";
-                    }
-                    else
-                    {
-                        LogInfo($"Operation/Compare Greater: [{a}] < [{b}]");
-                        Outputs[0].Value = "0";
-                    }
-                }
-            }
-            catch
-            {
-                LogError($"Operation/Compare Greater: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
+            }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Double.Parse(Inputs[1].Value);
+
+            if (a > b)
+            {
+                LogInfo($"[{a}] > [{b}]");
+                Outputs[0].Value = "1";
+            }
+            else
+            {
+                LogInfo($"[{a}] < [{b}]");
+                Outputs[0].Value = "0";
             }
         }
     }

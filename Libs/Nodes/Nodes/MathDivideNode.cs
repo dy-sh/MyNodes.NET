@@ -18,6 +18,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Divide";
             this.Type = "Math/Divide";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -26,27 +30,26 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
+            if (Inputs.Any(i => i.Value == null))
+            {
+                LogInfo("[NULL]");
+                Outputs[0].Value = null;
+                return;
+            }
+
             try
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
-                {
-                    LogInfo($"Math/Divide: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a / b;
+                Double a = Double.Parse(Inputs[0].Value);
+                Double b = Double.Parse(Inputs[1].Value);
+                Double c = a / b;
 
-                    LogInfo($"Math/Divide: [{a}] / [{b}]  = [{c}]");
-                    Outputs[0].Value = c.ToString();
-                }
+                LogInfo($"[{a}] / [{b}] = [{c}]");
+                Outputs[0].Value = c.ToString();
             }
             catch
             {
-                LogError($"Math/Divide: Incorrect value in input");
                 Outputs[0].Value = null;
+                LogInfo("[NULL]");
             }
         }
     }

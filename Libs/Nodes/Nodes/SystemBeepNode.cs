@@ -20,6 +20,8 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Beep";
             this.Type = "System/Beep";
+
+            Inputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -28,11 +30,10 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            //LogInfo($"Console: {input.Value}");
             if (Inputs[0].Value == "1")
             {
                 Beep();
-                LogInfo($"System/Beep: Beep");
+                LogInfo("Beep");
             }
         }
 

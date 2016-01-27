@@ -9,18 +9,15 @@ using System.Threading.Tasks;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationMixer : Node
+    public class OperationMixerNode : Node
     {
         /// <summary>
-        /// OperationMixer (2 inputs, 1 output).
+        /// OperationMixerNode (2 inputs, 1 output).
         /// </summary>
-        public OperationMixer() : base(2, 1)
+        public OperationMixerNode() : base(2, 1)
         {
             this.Title = "Mixer";
             this.Type = "Operation/Mixer";
-
-            Inputs[0].Name = "in 1";
-            Inputs[1].Name = "in 2";
         }
 
         public override void Loop()
@@ -36,7 +33,7 @@ namespace MyNetSensors.Nodes
             if (Inputs[1].Value != null) mixOut = mixOut + Inputs[1].Value;
 
             Outputs[0].Value = mixOut;
-            LogInfo($"Operation/Mixer: {mixOut}");
+            LogInfo($"[{mixOut??"NULL"}]");
         }
     }
 }

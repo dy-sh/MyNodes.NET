@@ -565,27 +565,15 @@
 
 
 
-    //SystemConsole
-    function SystemConsole() {
-        this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.ConsoleNode",
-            'Assembly': "Nodes"
-        };
-    }
-    SystemConsole.title = "Console";
-    LiteGraph.registerNodeType("System/Console", SystemConsole);
-
-
-
     //LogicCounter
-    function LogicCounter() {
+    function OperationCounter() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.CounterNode",
+            'ObjectType': "MyNetSensors.Nodes.OperationCounterNode",
             'Assembly': "Nodes"
         };
     }
-    LogicCounter.title = "Counter";
-    LiteGraph.registerNodeType("Operation/Counter", LogicCounter);
+    OperationCounter.title = "Counter";
+    LiteGraph.registerNodeType("Operation/Counter", OperationCounter);
 
 
 
@@ -736,20 +724,20 @@
     MathRound.title = "Round";
     LiteGraph.registerNodeType("Math/Round", MathRound);
 
-    //MathRemap
+    //MathRemapNode
     function MathRemap() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.MathRemap",
+            'ObjectType': "MyNetSensors.Nodes.MathRemapNode",
             'Assembly': "Nodes"
         };
     }
     MathRemap.title = "Remap";
     LiteGraph.registerNodeType("Math/Remap", MathRemap);
 
-    //MathClamp
+    //MathClampNode
     function MathClamp() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.MathClamp",
+            'ObjectType': "MyNetSensors.Nodes.MathClampNode",
             'Assembly': "Nodes"
         };
     }
@@ -836,20 +824,20 @@
     OperationRandom.title = "Random";
     LiteGraph.registerNodeType("Operation/Random", OperationRandom);
 
-    //OperationEventCounter
+    //OperationEventsCounterNode
     function OperationEventCounter() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.OperationEventCounter",
+            'ObjectType': "MyNetSensors.Nodes.OperationEventsCounterNode",
             'Assembly': "Nodes"
         };
     }
     OperationEventCounter.title = "Event Counter";
     LiteGraph.registerNodeType("Operation/Event Counter", OperationEventCounter);
 
-    //OperationMixer
+    //OperationMixerNode
     function OperationMixer() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.OperationMixer",
+            'ObjectType': "MyNetSensors.Nodes.OperationMixerNode",
             'Assembly': "Nodes"
         };
     }

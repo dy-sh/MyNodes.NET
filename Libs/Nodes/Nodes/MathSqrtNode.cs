@@ -20,35 +20,36 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Sqrt";
             this.Type = "Math/Sqrt";
+
+            Inputs[0].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
         {
-            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
+            if (Inputs.Any(i => i.Value == null))
+            {
+                LogInfo("[NULL]");
+                Outputs[0].Value = null;
+                return;
+            }
+
             try
             {
-                if (Inputs[0].Value == null)
-                {
-                    LogInfo($"Math/Sqrt: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Math.Sqrt(a);
+                Double a = Double.Parse(Inputs[0].Value);
+                Double b = Math.Sqrt(a);
 
-                    LogInfo($"Math/Sqrt: sqrt [{a}] = [{b}]");
-                    Outputs[0].Value = b.ToString();
-                }
+                LogInfo($"Sqrt [{a}] = [{b}]");
+                Outputs[0].Value = b.ToString();
             }
             catch
             {
-                LogError($"Math/Sqrt: Incorrect value in input");
                 Outputs[0].Value = null;
+                LogInfo("[NULL]");
             }
         }
     }

@@ -18,6 +18,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Compare NotEqual";
             this.Type = "Operation/Compare NotEqual";
+
+            Inputs[0].Type = DataType.Text;
+            Inputs[1].Type = DataType.Text;
+            Outputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -26,41 +30,39 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
+            if (Inputs.Any(i => i.Value == null))
+            {
+                LogInfo("[NULL]");
+                Outputs[0].Value = null;
+                return;
+            }
 
             try
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
+                Double a = Double.Parse(Inputs[0].Value);
+                Double b = Double.Parse(Inputs[1].Value);
+
+                if (a != b)
                 {
-                    LogInfo($"Operation/Compare NotEqual: [NULL]");
-                    Outputs[0].Value = null;
+                    LogInfo($"[{a}] != [{b}]");
+                    Outputs[0].Value = "1";
                 }
                 else
                 {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-
-                    if (a != b)
-                    {
-                        LogInfo($"Operation/Compare NotEqual: [{a}] != [{b}]");
-                        Outputs[0].Value = "1";
-                    }
-                    else
-                    {
-                        LogInfo($"Operation/Compare NotEqual: [{a}] = [{b}]");
-                        Outputs[0].Value = "0";
-                    }
+                    LogInfo($"[{a}] = [{b}]");
+                    Outputs[0].Value = "0";
                 }
             }
             catch
             {
                 if (Inputs[0].Value != Inputs[1].Value)
                 {
-                    LogInfo($"Operation/Compare NotEqual: [{Inputs[0].Value}] != [{Inputs[1].Value}]");
+                    LogInfo($"[{Inputs[0].Value}] != [{Inputs[1].Value}]");
                     Outputs[0].Value = "1";
                 }
                 else
                 {
-                    LogInfo($"Operation/Compare NotEqual: [{Inputs[0].Value}] = [{Inputs[1].Value}]");
+                    LogInfo($"[{Inputs[0].Value}] = [{Inputs[1].Value}]");
                     Outputs[0].Value = "0";
                 }
             }

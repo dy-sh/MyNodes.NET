@@ -10,6 +10,9 @@ namespace MyNetSensors.Nodes
 {
     public class OperationRandomNode : Node
     {
+        private int DEFAULT_MIN = 0;
+        private int DEFAULT_MAX = 100;
+
         /// <summary>
         /// Random (3 inputs, 1 output).
         /// </summary>
@@ -21,6 +24,11 @@ namespace MyNetSensors.Nodes
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Min Value";
             Inputs[2].Name = "Max Value";
+
+            Inputs[0].Type = DataType.Logical;
+            Inputs[1].Type = DataType.Number;
+            Inputs[2].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -29,34 +37,20 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            try
+            if (input == Inputs[0] && Inputs[0].Value == "1")
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null || Inputs[2].Value == null)
-                {
-                    LogInfo($"Operation/Random: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    if (Inputs[0].Value == "1")
-                    {
-                        Random rand = new Random(DateTime.Now.Millisecond);
+                Random rand = new Random(DateTime.Now.Millisecond);
 
-                        int min = Int32.Parse(Inputs[1].Value);
-                        int max = Int32.Parse(Inputs[2].Value);
+                int min = Inputs[1].Value == null ? DEFAULT_MIN * 100 : (int)(double.Parse(Inputs[1].Value) * 100);
+                int max = Inputs[2].Value == null ? DEFAULT_MAX * 100 : (int)(double.Parse(Inputs[2].Value) * 100);
 
-                        int rnd = rand.Next(min, max);
+                double rnd = rand.Next(min, max);
+                rnd = rnd / 100;
 
-                        LogInfo($"Operation/Random: random = [{rnd}]");
-                        Outputs[0].Value = rnd.ToString();
-                    }
-                }
+                LogInfo($"[{rnd}]");
+                Outputs[0].Value = rnd.ToString();
             }
-            catch
-            {
-                LogError($"Operation/Random: Incorrect value in input");
-                Outputs[0].Value = null;
-            }
+
         }
     }
 }

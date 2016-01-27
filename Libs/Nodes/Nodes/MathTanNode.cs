@@ -20,36 +20,29 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Tan";
             this.Type = "Math/Tan";
+
+            Inputs[0].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
         {
-            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null)
-                {
-                    LogInfo($"Math/Tan: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Math.Tan(a);
-
-                    LogInfo($"Math/Tan: Tan [{a}] = [{b}]");
-                    Outputs[0].Value = b.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Tan: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Math.Tan(a);
+
+            LogInfo($"Tan [{a}] = [{b}]");
+            Outputs[0].Value = b.ToString();
         }
     }
 }

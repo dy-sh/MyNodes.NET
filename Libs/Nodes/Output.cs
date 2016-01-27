@@ -7,12 +7,12 @@ namespace MyNetSensors.Nodes
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public DataType Type { get; set; }
         public int SlotIndex { get; set; }
-
-        private string val;
 
         public event OutputEventHandler OnOutputChange;
 
+        private string val;
         public string Value
         {
             get { return val; }
@@ -26,6 +26,7 @@ namespace MyNetSensors.Nodes
         public Output()
         {
             Id = Guid.NewGuid().ToString();
+            Type = DataType.Text;
         }
     }
 }

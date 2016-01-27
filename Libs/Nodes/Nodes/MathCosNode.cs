@@ -20,36 +20,29 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Cos";
             this.Type = "Math/Cos";
+
+            Inputs[0].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
         {
-            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null)
-                {
-                    LogInfo($"Math/Cos: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Math.Cos(a);
-
-                    LogInfo($"Math/Cos: Cos [{a}] = [{b}]");
-                    Outputs[0].Value = b.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Cos: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Math.Cos(a);
+
+            LogInfo($"Cos [{a}] = [{b}]");
+            Outputs[0].Value = b.ToString();
         }
     }
 }

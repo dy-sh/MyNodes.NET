@@ -21,8 +21,12 @@ namespace MyNetSensors.Nodes
             this.Title = "Gate";
             this.Type = "Operation/Gate";
 
-            Inputs[0].Name = "In";
+            Inputs[0].Name = "Value";
             Inputs[1].Name = "Key";
+
+            Inputs[0].Type = DataType.Text;
+            Inputs[1].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Text;
         }
 
         public override void Loop()
@@ -31,25 +35,22 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null || Inputs[1].Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo($"Operation/Gate: [NULL]");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
-            else if (Inputs[1].Value == "1")
+
+            if (Inputs[1].Value == "1")
             {
-                LogInfo($"Operation/Gate: send [{Inputs[0].Value}] to output");
+                LogInfo($"[{Inputs[0].Value}]");
                 Outputs[0].Value = Inputs[0].Value;
-            }
-            else if (Inputs[1].Value == "0")
-            {
-                Outputs[0].Value = null;
-                LogInfo($"Operation/Gate: gate closed");
             }
             else
             {
-                LogError($"Operation/Gate: Incorrect value in input");
                 Outputs[0].Value = null;
+                LogInfo($"[NULL]");
             }
         }
     }

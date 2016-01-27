@@ -8,7 +8,7 @@ using System;
 namespace MyNetSensors.Nodes
 {
 
-    public class CounterNode : Node
+    public class OperationCounterNode : Node
     {
         private int DEFAULT_VALUE = 1000;
 
@@ -17,25 +17,28 @@ namespace MyNetSensors.Nodes
         private double frequency;
         private bool enabled = true;
         private DateTime lastTime;
+        
 
-        /// <summary>
-        /// Counter (1 input, 1 output). Input[0] - Frequency (ms). Default=1000.
-        /// </summary>
-        public CounterNode() : base(3, 1)
+        public OperationCounterNode() : base(3, 1)
         {
             this.Title = "Counter";
             this.Type = "Operation/Counter";
 
             Inputs[0].Name = "Frequency";
-            Inputs[1].Name = "Enable";
+            Inputs[1].Name = "Start";
             Inputs[2].Name = "Reset";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Number;
+
             lastTime = DateTime.Now;
             frequency = DEFAULT_VALUE;
         }
 
         public override void Loop()
         {
-            if (!enabled || frequency<=0)
+            if (!enabled || frequency <= 0)
                 return;
 
             TimeSpan elapsed = DateTime.Now - lastTime;
@@ -47,29 +50,12 @@ namespace MyNetSensors.Nodes
                 LogInfo($"{Count}");
 
                 Outputs[0].Value = Count.ToString();
+                UpdateMeInDb();
             }
         }
 
         public override void OnInputChange(Input input)
         {
-            if (!CheckIsDoubleOrNull(Inputs[0].Value))
-            {
-                LogIncorrectInputValueError(input);
-                return;
-            }
-
-            if (!CheckIsBoolOrNull(Inputs[1].Value))
-            {
-                LogIncorrectInputValueError(input);
-                return;
-            }
-
-            if (!CheckIsBoolOrNull(Inputs[2].Value))
-            {
-                LogIncorrectInputValueError(input);
-                return;
-            }
-
             if (input == Inputs[0])
             {
                 if (input.Value == null)
@@ -81,8 +67,8 @@ namespace MyNetSensors.Nodes
                     frequency = 0;
 
                 LogInfo($"Frequency changed to {frequency} ms");
-
             }
+
 
             if (input == Inputs[1])
             {
@@ -90,12 +76,18 @@ namespace MyNetSensors.Nodes
 
                 LogInfo(enabled ? "Started" : "Stopped");
             }
+            
 
-            if (input == Inputs[2] && input.Value == "1")
+            if (input == Inputs[2])
             {
+                if (input.Value != "1")
+                    return;
+
                 Count = 0;
                 lastTime = DateTime.Now;
                 LogInfo("Reset");
+                UpdateMeInDb();
+                Outputs[0].Value = "0";
             }
         }
 

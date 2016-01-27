@@ -198,6 +198,8 @@ namespace MyNetSensors.Nodes
             }
             changedInputsStack.Add(input);
 
+            node.CheckInputDataTypeIsCorrect(input);
+
             OnInputStateUpdated?.Invoke(input);
 
             node.OnInputChange(input);
@@ -209,6 +211,7 @@ namespace MyNetSensors.Nodes
             catch { }
 
         }
+
 
         public void OnOutputChange(Output output)
         {
@@ -622,6 +625,7 @@ namespace MyNetSensors.Nodes
 
                 //update node internal logic
                 Node node = GetInputOwner(input);
+                node.CheckInputDataTypeIsCorrect(input);
                 node.OnInputChange(input);
             }
         }

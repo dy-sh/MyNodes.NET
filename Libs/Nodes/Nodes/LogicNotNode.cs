@@ -20,6 +20,9 @@ namespace MyNetSensors.Nodes
       {
             this.Title = "Logic NOT";
             this.Type = "Logic/NOT";
+
+            Inputs[0].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -28,21 +31,13 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo($"Logic/NOT: [NULL]");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
-
                 return;
             }
 
-            if (Inputs[0].Value != "0" && Inputs[0].Value != "1")
-            {
-                LogError($"Logic/NOT: Incorrect value in input");
-                Outputs[0].Value = null;
-
-                return;
-            }
             string result;
 
             if (Inputs[0].Value == "0")
@@ -50,7 +45,7 @@ namespace MyNetSensors.Nodes
             else
                 result = "0";
 
-            LogInfo($"Logic/NOT: NOT [{Inputs[0].Value}] = [{result}]");
+            LogInfo($"NOT [{Inputs[0].Value}] = [{result}]");
 
             Outputs[0].Value = result;
         }

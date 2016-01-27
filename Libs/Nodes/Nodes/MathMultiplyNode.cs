@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-   
+
     public class MathMultiplyNode : Node
     {
         /// <summary>
@@ -18,6 +18,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Multiply";
             this.Type = "Math/Multiply";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -26,30 +30,19 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-
-
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
-                {
-                    LogInfo($"Math/Multiply: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = a * b;
-
-                    LogInfo($"Math/Multiply: [{a}] * [{b}]  = [{c}]");
-                    Outputs[0].Value = c.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Multiply: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Double.Parse(Inputs[1].Value);
+            Double c = a * b;
+
+            LogInfo($"[{a}] * [{b}]  = [{c}]");
+            Outputs[0].Value = c.ToString();
         }
     }
 }

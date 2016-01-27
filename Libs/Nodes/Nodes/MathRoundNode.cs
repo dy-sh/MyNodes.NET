@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-   
+
     public class MathRoundNode : Node
     {
         /// <summary>
@@ -18,6 +18,9 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Round";
             this.Type = "Math/Round";
+
+            Inputs[0].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
@@ -26,30 +29,18 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-
-
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null)
-                {
-                    LogInfo($"Math/Round: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    int b = (int)Math.Round(a);
-
-                    LogInfo($"Math/Round: [{a}] rounded to [{b}]");
-                    Outputs[0].Value = b.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Round: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
-
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            int b = (int)Math.Round(a);
+
+            LogInfo($"[{a}] rounded to [{b}]");
+            Outputs[0].Value = b.ToString();
         }
     }
 }

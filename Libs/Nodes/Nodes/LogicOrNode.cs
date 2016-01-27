@@ -20,6 +20,10 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Logic OR";
             this.Type = "Logic/OR";
+
+            Inputs[0].Type = DataType.Logical;
+            Inputs[1].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Logical;
         }
 
         public override void Loop()
@@ -28,20 +32,10 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs[0].Value == null || Inputs[1].Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo($"Logic/OR: [NULL]");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
-
-                return;
-            }
-
-            if ((Inputs[0].Value != "0" && Inputs[0].Value != "1") ||
-                (Inputs[1].Value != "0" && Inputs[1].Value != "1"))
-            {
-                LogError($"Logic/OR: Incorrect value in input");
-                Outputs[0].Value = null;
-
                 return;
             }
 
@@ -50,7 +44,7 @@ namespace MyNetSensors.Nodes
             if (Inputs[0].Value == "0" && Inputs[1].Value == "0")
                 result = "0";
 
-            LogInfo($"Logic/OR: [{Inputs[0].Value}] OR [{Inputs[1].Value}] = [{result}]");
+            LogInfo($"[{Inputs[0].Value}] OR [{Inputs[1].Value}] = [{result}]");
 
             Outputs[0].Value = result;
         }

@@ -20,37 +20,31 @@ namespace MyNetSensors.Nodes
         {
             this.Title = "Math Pow";
             this.Type = "Math/Pow";
+
+            Inputs[0].Type = DataType.Number;
+            Inputs[1].Type = DataType.Number;
+            Outputs[0].Type = DataType.Number;
         }
 
         public override void Loop()
         {
-            //  Console.WriteLine( $"MATH LOOP {DateTime.Now} {Inputs[0].Value} {Inputs[1].Value}  {Outputs[0].Value}");
         }
 
         public override void OnInputChange(Input input)
         {
-            try
+            if (Inputs.Any(i => i.Value == null))
             {
-                if (Inputs[0].Value == null || Inputs[1].Value == null)
-                {
-                    LogInfo($"Math/Pow: [NULL]");
-                    Outputs[0].Value = null;
-                }
-                else
-                {
-                    Double a = Double.Parse(Inputs[0].Value);
-                    Double b = Double.Parse(Inputs[1].Value);
-                    Double c = Math.Pow(a, b);
-
-                    LogInfo($"Math/Pow: Pow [{a}] to [{b}]");
-                    Outputs[0].Value = c.ToString();
-                }
-            }
-            catch
-            {
-                LogError($"Math/Pow: Incorrect value in input");
+                LogInfo("[NULL]");
                 Outputs[0].Value = null;
+                return;
             }
+
+            Double a = Double.Parse(Inputs[0].Value);
+            Double b = Double.Parse(Inputs[1].Value);
+            Double c = Math.Pow(a, b);
+
+            LogInfo($"Pow [{a}] to [{b}]");
+            Outputs[0].Value = c.ToString();
         }
     }
 }
