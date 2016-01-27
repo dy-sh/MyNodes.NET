@@ -30,6 +30,11 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
+            if (Inputs.Any(i => i.Value == null))
+            {
+                return;
+            }
+
             if (Inputs[0].Value == "1")
             {
                 Beep();
