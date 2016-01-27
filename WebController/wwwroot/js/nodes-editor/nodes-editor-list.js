@@ -864,4 +864,14 @@
     SystemBeepAdvance.title = "Beep Advanced";
     LiteGraph.registerNodeType("System/Beep Advanced", SystemBeepAdvance);
 
+    //DelayTimer
+    function DelayTimerNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.DelayTimerNode",
+            'Assembly': "Nodes"
+        };
+    }
+    DelayTimerNode.title = "Delay Timer";
+    LiteGraph.registerNodeType("Delay/Delay Timer", DelayTimerNode);
+
 })();

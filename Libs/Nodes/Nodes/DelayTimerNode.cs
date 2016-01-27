@@ -8,48 +8,48 @@ using System;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationGeneratorNode : Node
+    public class DelayTimerNode : Node
     {
-        private int DEFAULT_VALUE = 1000;
+        private int DEFAULT_VALUE = 5000;
 
-        public int Count { get; set; }
-
-        private double frequency;
+        private double delay;
         private bool enabled = true;
         private DateTime lastTime;
 
 
-        public OperationGeneratorNode() : base(3, 1)
+        public DelayTimerNode() : base(3, 1)
         {
-            this.Title = "Generator";
-            this.Type = "Operation/Generator";
+            this.Title = "Delay Timer";
+            this.Type = "Delay/Delay Timer";
 
-            Inputs[0].Name = "Frequency";
+            Inputs[0].Name = "Delay";
             Inputs[1].Name = "Start";
             Inputs[2].Name = "Reset";
 
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Logical;
+            Inputs[2].Type = DataType.Logical;
             Outputs[0].Type = DataType.Number;
 
             lastTime = DateTime.Now;
-            frequency = DEFAULT_VALUE;
+            delay = DEFAULT_VALUE;
         }
 
         public override void Loop()
         {
-            if (!enabled || frequency <= 0)
+            if (!enabled || delay <= 0)
                 return;
 
             TimeSpan elapsed = DateTime.Now - lastTime;
-            if (elapsed.TotalMilliseconds >= frequency)
+            if (elapsed.TotalMilliseconds >= delay)
             {
-                Count = 1 - Count;
+                
                 lastTime = DateTime.Now;
 
-                LogInfo($"{Count}");
+                LogInfo($"Time trigger");
 
-                Outputs[0].Value = Count.ToString();
+                Outputs[0].Value = "1";
+                enabled = false;
             }
         }
 
@@ -58,37 +58,36 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[0])
             {
                 if (input.Value == null)
-                    frequency = DEFAULT_VALUE;
+                    delay = DEFAULT_VALUE;
                 else
-                    Double.TryParse(input.Value, out frequency);
+                    Double.TryParse(input.Value, out delay);
 
-                if (frequency < 0)
-                    frequency = 0;
+                if (delay < 0)
+                    delay = 0;
 
-                LogInfo($"Frequency changed to {frequency} ms");
+                lastTime = DateTime.Now;
+
+                LogInfo($"Delay changed to {delay} ms");
             }
-
 
             if (input == Inputs[1])
             {
                 enabled = input.Value != "0";
+                lastTime = DateTime.Now;
 
                 LogInfo(enabled ? "Started" : "Stopped");
             }
-
 
             if (input == Inputs[2])
             {
                 if (input.Value != "1")
                     return;
 
-                Count = 0;
                 lastTime = DateTime.Now;
-                LogInfo("Reset");
                 Outputs[0].Value = "0";
+
+                LogInfo("Reset");
             }
         }
-
-
     }
 }
