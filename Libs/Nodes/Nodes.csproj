@@ -50,6 +50,8 @@
     <Compile Include="LiteGraph.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodesEngineSerializer.cs" />
+    <Compile Include="Nodes\ConnectionReceiverNode.cs" />
+    <Compile Include="Nodes\ConnectionTransmitterNode.cs" />
     <Compile Include="Nodes\ConstantNode.cs" />
     <Compile Include="Nodes\LogicAndNode.cs" />
     <Compile Include="Nodes\LogicNotNode.cs" />

@@ -180,9 +180,17 @@ namespace MyNetSensors.Repositories.EF.SQLite
         {
             List<Node> nodes = new List<Node>();
             List<SerializedNode> serializedNodes = db.SerializedNodes.ToList();
-            foreach (var serializedNode in serializedNodes)
+
+            try
             {
-                nodes.Add(serializedNode.GetDeserializedNode());
+                foreach (var serializedNode in serializedNodes)
+                {
+                    nodes.Add(serializedNode.GetDeserializedNode());
+                }
+            }
+            catch
+            {
+                LogError("Can`t deserialize nodes. Database is corrupted or outdated.");
             }
 
             return nodes;

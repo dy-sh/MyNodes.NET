@@ -580,6 +580,97 @@
 
 
 
+
+
+
+
+
+
+    //Connection Transmitter
+    function ConnectionTransmitterNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.ConnectionTransmitterNode",
+            'Assembly': "Nodes"
+        };
+    }
+    ConnectionTransmitterNode.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { TransmitterSettings(that) } }, null];
+    }
+    function TransmitterSettings(node) {
+        $('#node-settings-title').html(node.type);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Channel: <input type="number" id="node-settings-channel"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-channel').val(node.properties['Channel']);
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/TransmitterSettings/",
+                    type: "POST",
+                    data: {
+                        channel: $('#node-settings-channel').val(),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    ConnectionTransmitterNode.title = "Transmitter";
+    LiteGraph.registerNodeType("Connection/Transmitter", ConnectionTransmitterNode);
+
+
+
+    //Connection Receiver
+    function ConnectionReceiverNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.ConnectionReceiverNode",
+            'Assembly': "Nodes"
+        };
+    }
+    ConnectionReceiverNode.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { ReceiverSettings(that) } }, null];
+    }
+    function ReceiverSettings(node) {
+        $('#node-settings-title').html(node.type);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Channel: <input type="number" id="node-settings-channel"></div>' +
+            '</div></div>'
+        );
+
+        $('#node-settings-channel').val(node.properties['Channel']);
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/ReceiverSettings/",
+                    type: "POST",
+                    data: {
+                        channel: $('#node-settings-channel').val(),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    ConnectionReceiverNode.title = "Receiver";
+    LiteGraph.registerNodeType("Connection/Receiver", ConnectionReceiverNode);
+
+
+
+
+
+
     //---------------------------------------------------------------------------------
 
 

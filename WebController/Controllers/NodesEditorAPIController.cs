@@ -158,6 +158,20 @@ namespace MyNetSensors.WebController.Controllers
                 litegraphNode.properties["Name"] = n.Name;
             }
 
+            if (node is ConnectionReceiverNode)
+            {
+                ConnectionReceiverNode n = (ConnectionReceiverNode)node;
+                litegraphNode.properties["Channel"] = n.Channel.ToString();
+                litegraphNode.properties["Name"] = n.Channel.ToString();
+            }
+
+            if (node is ConnectionTransmitterNode)
+            {
+                ConnectionTransmitterNode n = (ConnectionTransmitterNode)node;
+                litegraphNode.properties["Channel"] = n.Channel.ToString();
+                litegraphNode.properties["Name"] = n.Channel.ToString();
+            }
+
             return litegraphNode;
         }
 
@@ -572,6 +586,41 @@ namespace MyNetSensors.WebController.Controllers
                 return false;
 
             engine.RemoveAllNodesAndLinks();
+            return true;
+        }
+
+
+        public bool ReceiverSettings(string id, int channel)
+        {
+            Node n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
+
+            ConnectionReceiverNode node = (ConnectionReceiverNode)n;
+            node.SetChannel(channel);
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
+
+            return true;
+        }
+
+        public bool TransmitterSettings(string id, int channel)
+        {
+            Node n = engine.GetNode(id);
+            if (n == null)
+            {
+                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                return false;
+            }
+
+            ConnectionTransmitterNode node = (ConnectionTransmitterNode)n;
+            node.SetChannel(channel);
+            engine.UpdateNode(node);
+            engine.UpdateNodeInDb(node);
+
             return true;
         }
     }

@@ -235,9 +235,16 @@ namespace MyNetSensors.Repositories.Dapper
                 List<SerializedNode> serializedNodes = db.Query<SerializedNode>
                     ("SELECT * FROM Nodes").ToList();
 
-                foreach (var serializedNode in serializedNodes)
+                try
                 {
-                    nodes.Add(serializedNode.GetDeserializedNode());
+                    foreach (var serializedNode in serializedNodes)
+                    {
+                        nodes.Add(serializedNode.GetDeserializedNode());
+                    }
+                }
+                catch
+                {
+                    LogError("Can`t deserialize nodes. Database is corrupted or outdated.");
                 }
             }
 
