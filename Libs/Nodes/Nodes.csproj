@@ -62,6 +62,7 @@
     <Compile Include="Nodes\MathClampNode.cs" />
     <Compile Include="Nodes\MathRemapNode.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
+    <Compile Include="Nodes\DelayTimerNode.cs" />
     <Compile Include="Nodes\OperationGeneratorNode.cs" />
     <Compile Include="Nodes\OperationMixerNode.cs" />
     <Compile Include="Nodes\OperationEventsCounterNode.cs" />

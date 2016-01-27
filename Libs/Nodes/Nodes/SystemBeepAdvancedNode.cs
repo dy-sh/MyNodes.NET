@@ -38,8 +38,6 @@ namespace MyNetSensors.Nodes
         {
             if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo("[NULL]");
-                Outputs[0].Value = null;
                 return;
             }
 
@@ -49,6 +47,8 @@ namespace MyNetSensors.Nodes
                 {
                     int f = Int32.Parse(Inputs[1].Value);
                     int d = Int32.Parse(Inputs[2].Value);
+
+                    f = (f < 37) ? 37 : (f > 32767) ? 32767 : f;
 
                     Beep(f, d);
                     LogInfo($"Beep {f}Hz {d}mS");
