@@ -626,8 +626,11 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public int ReceiverSetValue(string value, string channel, string password)
+        public async Task<int> ReceiverSetValue(string value, string channel, string password)
         {
+            if (engine == null)
+                return 2;
+
             List<ConnectionRemoteReceiverNode> receivers = engine.GetNodes()
                 .OfType<ConnectionRemoteReceiverNode>()
                 .Where(x => x.GetChannel().ToString() == channel)
@@ -635,14 +638,15 @@ namespace MyNetSensors.WebController.Controllers
 
             if (!receivers.Any())
             {
-                engine.LogNodesError($"Received a value for Remote Receiver, but no receivers with channel [{channel}]");
+                engine.LogNodesError(
+                    $"Received a value for Remote Receiver, but no receivers with channel [{channel}]");
                 return 2;
             }
 
             var ip = HttpContext.Connection.RemoteIpAddress;
             string address = ip?.ToString();
 
-            bool received=false;
+            bool received = false;
 
             foreach (var receiver in receivers)
             {

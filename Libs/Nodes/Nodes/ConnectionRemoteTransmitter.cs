@@ -89,7 +89,7 @@ namespace MyNetSensors.Nodes
 
                     LogInfo($"Send to [{address}] channel [{channel}]: [{value ?? "NULL"}]");
 
-                    var result = client.PostAsync(url, content).Result;
+                    var result = await client.PostAsync(url, content);
                     string resultContent = result.Content.ReadAsStringAsync().Result;
 
                     if (resultContent == "0")
