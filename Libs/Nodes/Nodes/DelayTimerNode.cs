@@ -13,22 +13,22 @@ namespace MyNetSensors.Nodes
         private int DEFAULT_VALUE = 5000;
 
         private double delay;
-        private bool enabled = true;
+        private bool enabled = false;
         private DateTime lastTime;
 
 
-        public DelayTimerNode() : base(3, 1)
+        public DelayTimerNode() : base(2, 1)
         {
             this.Title = "Delay Timer";
             this.Type = "Delay/Delay Timer";
 
             Inputs[0].Name = "Delay";
             Inputs[1].Name = "Start";
-            Inputs[2].Name = "Reset";
+            //Inputs[2].Name = "Reset";
 
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Logical;
-            Inputs[2].Type = DataType.Logical;
+            //Inputs[2].Type = DataType.Logical;
             Outputs[0].Type = DataType.Number;
 
             lastTime = DateTime.Now;
@@ -72,13 +72,21 @@ namespace MyNetSensors.Nodes
 
             if (input == Inputs[1])
             {
-                enabled = input.Value != "0";
-                lastTime = DateTime.Now;
+                if (input.Value != "0")
+                {
+                    enabled = true;
+                    lastTime = DateTime.Now;
+                }
+                else
+                {
+                    enabled = false;
+                    Outputs[0].Value = "0";
+                }
 
-                LogInfo(enabled ? "Started" : "Stopped");
+                LogInfo(enabled ? "Started" : "Stopped, reseted" );
             }
 
-            if (input == Inputs[2])
+            /*if (input == Inputs[2])
             {
                 if (input.Value != "1")
                     return;
@@ -87,7 +95,7 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = "0";
 
                 LogInfo("Reset");
-            }
+            }*/
         }
     }
 }
