@@ -49,12 +49,13 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[3])
             {
                 password = input.Value;
-
                 string pass = null;
-                for (int i = 0; i < password.Length; i++)
-                {
-                    pass += "*";
-                }
+
+                if (password != null)
+                    for (int i = 0; i < password.Length; i++)
+                    {
+                        pass += "*";
+                    }
 
                 LogInfo($"Password changed: {pass ?? "NULL"}");
             }

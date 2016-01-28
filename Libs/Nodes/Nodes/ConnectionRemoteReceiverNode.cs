@@ -11,7 +11,7 @@ namespace MyNetSensors.Nodes
         private int channel;
 
 
-        public ConnectionRemoteReceiverNode() : base(2,1)
+        public ConnectionRemoteReceiverNode() : base(2, 1)
         {
             this.Title = "Remote Receiver";
             this.Type = "Connection/Remote Receiver";
@@ -39,12 +39,13 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[1])
             {
                 password = input.Value;
-
                 string pass = null;
-                for (int i = 0; i < password.Length; i++)
-                {
-                    pass += "*";
-                }
+
+                if (password != null)
+                    for (int i = 0; i < password.Length; i++)
+                    {
+                        pass += "*";
+                    }
 
                 LogInfo($"Password changed: {pass ?? "NULL"}");
             }
@@ -52,7 +53,7 @@ namespace MyNetSensors.Nodes
 
         public bool ReceiveValue(string value, string channel, string password, string senderIp)
         {
-            if (channel!=this.channel.ToString())
+            if (channel != this.channel.ToString())
                 return false;
 
             if (password != this.password)
