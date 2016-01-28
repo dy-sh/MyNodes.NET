@@ -669,6 +669,33 @@
 
 
 
+    //ConnectionRemoteTransmitter
+    function ConnectionRemoteTransmitter() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.ConnectionRemoteTransmitter",
+            'Assembly': "Nodes"
+        };
+    }
+    ConnectionRemoteTransmitter.title = "Remote Transmitter";
+    LiteGraph.registerNodeType("Connection/Remote Transmitter", ConnectionRemoteTransmitter);
+
+
+
+
+    //ConnectionRemoteReceiverNode
+    function ConnectionRemoteReceiverNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.ConnectionRemoteReceiverNode",
+            'Assembly': "Nodes"
+        };
+    }
+    ConnectionRemoteReceiverNode.title = "Remote Receiver";
+    LiteGraph.registerNodeType("Connection/Remote Receiver", ConnectionRemoteReceiverNode);
+
+
+
+
+
 
 
     //---------------------------------------------------------------------------------

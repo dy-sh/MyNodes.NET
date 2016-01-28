@@ -9,6 +9,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Features;
 using MyNetSensors.Nodes;
 using MyNetSensors.WebController.Code;
 using Newtonsoft.Json;
@@ -623,5 +624,34 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+
+        public int ReceiverSetValue(string value, string channel, string password)
+        {
+            List<ConnectionRemoteReceiverNode> receivers = engine.GetNodes()
+                .OfType<ConnectionRemoteReceiverNode>()
+                .Where(x => x.GetChannel().ToString() == channel)
+                .ToList();
+
+            if (!receivers.Any())
+            {
+                engine.LogNodesError($"Received a value for Remote Receiver, but no receivers with channel [{channel}]");
+                return 2;
+            }
+
+            var ip = HttpContext.Connection.RemoteIpAddress;
+            string address = ip?.ToString();
+
+            bool received=false;
+
+            foreach (var receiver in receivers)
+            {
+                if (receiver.ReceiveValue(value, channel, password, address))
+                    received = true;
+            }
+
+            return received ? 0 : 1;
+        }
+
     }
 }
