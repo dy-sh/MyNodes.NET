@@ -964,6 +964,16 @@
     OperationMixer.title = "Mixer";
     LiteGraph.registerNodeType("Operation/Mixer", OperationMixer);
 
+    //OperationxFader
+    function OperationxFader() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationxFader",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationxFader.title = "xFader";
+    LiteGraph.registerNodeType("Operation/xFader", OperationxFader);
+
     //SystemBeep
     function SystemBeep() {
         this.properties = {

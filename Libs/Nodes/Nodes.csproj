@@ -60,6 +60,7 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\OperationxFader.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
     <Compile Include="Nodes\MathMultiplyNode.cs" />
