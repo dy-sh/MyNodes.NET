@@ -1004,4 +1004,24 @@
     DelayTimerNode.title = "Delay Timer";
     LiteGraph.registerNodeType("Delay/Delay Timer", DelayTimerNode);
 
+    //OperationSwitchNode
+    function OperationSwitchInNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationSwitchInNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationSwitchInNode.title = "Switch in";
+    LiteGraph.registerNodeType("Operation/Switch in", OperationSwitchInNode);
+
+    //OperationSwitchNode
+    function OperationSwitchOutNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationSwitchOutNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationSwitchOutNode.title = "Switch out";
+    LiteGraph.registerNodeType("Operation/Switch out", OperationSwitchOutNode);
+
 })();

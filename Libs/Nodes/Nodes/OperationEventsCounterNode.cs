@@ -37,6 +37,7 @@ namespace MyNetSensors.Nodes
             {
                 Count = 0;
                 LogInfo($"Reset");
+                Outputs[0].Value = "0";
             }
             else if (input == Inputs[0])
             {
