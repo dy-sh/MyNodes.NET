@@ -3407,7 +3407,7 @@ LGraphCanvas.prototype.drawBackCanvas = function () {
         //render BG
         if (this.background_image && this.scale > 0.5) {
             ctx.globalAlpha = (1.0 - 0.5 / this.scale) * this.editor_alpha;
-            ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.imageSmoothingEnabled = false;
+            ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = false;
             if (!this._bg_img || this._bg_img.name != this.background_image) {
                 this._bg_img = new Image();
                 this._bg_img.name = this.background_image;
@@ -3419,7 +3419,7 @@ LGraphCanvas.prototype.drawBackCanvas = function () {
             }
 
             var pattern = null;
-            if (this._bg_img != this._pattern_img && this._bg_img.width > 0) {
+            if (this._pattern == null && this._bg_img.width > 0) {
                 pattern = ctx.createPattern(this._bg_img, 'repeat');
                 this._pattern_img = this._bg_img;
                 this._pattern = pattern;
@@ -3433,7 +3433,7 @@ LGraphCanvas.prototype.drawBackCanvas = function () {
             }
 
             ctx.globalAlpha = 1.0;
-            ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = true;
         }
 
         if (this.onBackgroundRender)
