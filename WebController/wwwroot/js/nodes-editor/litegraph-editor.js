@@ -55,7 +55,7 @@ Editor.prototype.addMiniWindow = function (w, h) {
     var canvas = miniwindow.querySelector("canvas");
 
     var graphcanvas = new LGraphCanvas(canvas, this.graph);
-    graphcanvas.background_image = "images/litegraph/grid.png";
+  //  graphcanvas.background_image = "images/litegraph/grid.png";
     //derwish edit
     graphcanvas.scale = 0.1;
     //graphcanvas.allow_dragnodes = false;
@@ -135,7 +135,7 @@ Editor.prototype.importPanelFromFile = function (position) {
             var filebody = evt.target.result;
 
             $.ajax({
-                url: "/NodesEditorAPI/ImportPanel/",
+                url: "/NodesEditorAPI/ImportPanelJson/",
                 type: "POST",
                 data: {
                     json: filebody,
@@ -192,7 +192,7 @@ Editor.prototype.importPanelFromScript = function (position) {
         // $('#import-script-body').hide();
 
         $.ajax({
-            url: "/NodesEditorAPI/ImportPanel/",
+            url: "/NodesEditorAPI/ImportPanelJson/",
             type: "POST",
             data: {
                 json: $('#modal-panel-text').val(),
@@ -269,7 +269,7 @@ Editor.prototype.importPanelFromURL = function (position) {
 
         function importPanel(script) {
             $.ajax({
-                url: "/NodesEditorAPI/ImportPanel/",
+                url: "/NodesEditorAPI/ImportPanelJson/",
                 type: "POST",
                 data: {
                     json: script,

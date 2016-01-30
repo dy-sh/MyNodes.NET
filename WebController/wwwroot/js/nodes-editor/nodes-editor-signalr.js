@@ -221,7 +221,7 @@ function send_create_node(node) {
 
     var serializedNode = node.serialize();
     $.ajax({
-        url: '/NodesEditorAPI/CreateNode',
+        url: '/NodesEditorAPI/AddNode',
         type: 'POST',
         data: { 'node': serializedNode }
     }).done(function () {

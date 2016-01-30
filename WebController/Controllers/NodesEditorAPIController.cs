@@ -276,7 +276,7 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool CreateNode(LiteGraph.Node node)
+        public bool AddNode(LiteGraph.Node node)
         {
             if (engine == null)
                 return false;
@@ -284,7 +284,7 @@ namespace MyNetSensors.WebController.Controllers
             string type = node.properties["ObjectType"];
             string assemblyName = node.properties["Assembly"];
 
-            Node newNode = CreateNode(type, assemblyName);
+            Node newNode = AddNode(type, assemblyName);
 
             if (newNode == null)
             {
@@ -302,6 +302,34 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+        private Node AddNode(string type, string assemblyName)
+        {
+            try
+            {
+                var newObject = Activator.CreateInstance(assemblyName, type);
+                return (Node)newObject.Unwrap();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
+
+        public bool CloneNode(string id)
+        {
+            if (engine == null)
+                return false;
+
+            engine.CloneNode(id);
+
+            return true;
+        }
+
+
+
 
         public bool RemoveNode(LiteGraph.Node node)
         {
@@ -499,34 +527,11 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        private Node CreateNode(string type, string assemblyName)
-        {
-            try
-            {
-                var newObject = Activator.CreateInstance(assemblyName, type);
-                return (Node)newObject.Unwrap();
-            }
-            catch
-            {
-                return null;
-            }
-        }
+      
 
 
 
-        public bool CloneNode(string id)
-        {
-            if (engine == null)
-                return false;
-
-            engine.CloneNode(id);
-
-            return true;
-        }
-
-
-
-        public bool ImportPanel(string json, int x, int y, string ownerPanelId)
+        public bool ImportPanelJson(string json, int x, int y, string ownerPanelId)
         {
             if (engine == null)
                 return false;
