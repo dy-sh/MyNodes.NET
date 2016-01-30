@@ -15,8 +15,8 @@ namespace MyNetSensors.Nodes
 
         public OperationEventsCounterNode() : base(2, 1)
         {
-            this.Title = "Event Counter";
-            this.Type = "Operation/Event Counter";
+            this.Title = "Events Counter";
+            this.Type = "Operation/Events Counter";
 
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Reset";

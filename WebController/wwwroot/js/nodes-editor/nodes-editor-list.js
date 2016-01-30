@@ -944,15 +944,28 @@
     OperationRandom.title = "Random";
     LiteGraph.registerNodeType("Operation/Random", OperationRandom);
 
+
     //OperationEventsCounterNode
-    function OperationEventCounter() {
+    function OperationEventsCounterNode() {
         this.properties = {
             'ObjectType': "MyNetSensors.Nodes.OperationEventsCounterNode",
             'Assembly': "Nodes"
         };
     }
-    OperationEventCounter.title = "Event Counter";
-    LiteGraph.registerNodeType("Operation/Event Counter", OperationEventCounter);
+    OperationEventsCounterNode.title = "Events Counter";
+    LiteGraph.registerNodeType("Operation/Events Counter", OperationEventsCounterNode);
+
+
+    //OperationEventsFreqCounterNode
+    function OperationEventsFreqCounterNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationEventsFreqCounterNode",
+            'Assembly': "Nodes"
+        };
+        }
+    OperationEventsFreqCounterNode.title = "Events Freq Counter";
+    LiteGraph.registerNodeType("Operation/Events Freq Counter", OperationEventsFreqCounterNode);
+
 
     //OperationMixerNode
     function OperationMixer() {
