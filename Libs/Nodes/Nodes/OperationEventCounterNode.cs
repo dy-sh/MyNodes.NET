@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationEventsCounterNode : Node
+    public class OperationEventCounterNode : Node
     {
         public int Count { get; set; }
 
-        public OperationEventsCounterNode() : base(2, 1)
+        public OperationEventCounterNode() : base(2, 1)
         {
-            this.Title = "Events Counter";
-            this.Type = "Operation/Events Counter";
+            this.Title = "Event Counter";
+            this.Type = "Operation/Event Counter";
 
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Reset";

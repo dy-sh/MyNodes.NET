@@ -124,16 +124,9 @@ namespace MyNetSensors.WebController.Code
 
         private void InvokeDataRecievedEvents(string receivedData)
         {
+            LogMessage("RX: " + receivedData);
 
-            string[] messages = receivedData.Split(new char[] { '\r', '\n' },
-                             StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var message in messages)
-            {
-                LogMessage("RX: " + message);
-
-                OnDataReceived?.Invoke(message);
-            }
+            OnDataReceived?.Invoke(receivedData);
         }
 
 

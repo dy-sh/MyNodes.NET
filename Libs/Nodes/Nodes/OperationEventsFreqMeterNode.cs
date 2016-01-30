@@ -10,18 +10,18 @@ using System.Timers;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationEventsFreqCounterNode : Node
+    public class OperationEventsFreqMeterNode : Node
     {
         private int count;
         private int countWas;
         private Timer timer = new Timer();
 
-        public OperationEventsFreqCounterNode() : base(1, 1)
+        public OperationEventsFreqMeterNode() : base(1, 1)
         {
-            this.Title = "Events Freq Counter";
-            this.Type = "Operation/Events Freq Counter";
+            this.Title = "Events Freq Meter";
+            this.Type = "Operation/Events Freq Meter";
 
-            Inputs[0].Name = "Value";
+            Outputs[0].Name = "Events/sec";
 
             Inputs[0].Type = DataType.Text;
             Outputs[0].Type = DataType.Number;
@@ -47,12 +47,15 @@ namespace MyNetSensors.Nodes
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
+            if (engine == null || !engine.IsStarted())
+                return;
+
             if (count == countWas)
                 return;
 
             countWas = count;
             count = 0;
-            LogInfo($"[{countWas}]");
+            LogInfo($"[{countWas}] events/sec");
             Outputs[0].Value = countWas.ToString();
         }
     }

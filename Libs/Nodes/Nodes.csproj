@@ -60,7 +60,8 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
-    <Compile Include="Nodes\OperationEventsFreqCounterNode.cs" />
+    <Compile Include="Nodes\OperationEventsDelayMeterNode.cs" />
+    <Compile Include="Nodes\OperationEventsFreqMeterNode.cs" />
     <Compile Include="Nodes\OperationSwitchOutNode.cs" />
     <Compile Include="Nodes\OperationxFader.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Nodes\DelayTimerNode.cs" />
     <Compile Include="Nodes\OperationGeneratorNode.cs" />
     <Compile Include="Nodes\OperationMixerNode.cs" />
-    <Compile Include="Nodes\OperationEventsCounterNode.cs" />
+    <Compile Include="Nodes\OperationEventCounterNode.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />
     <Compile Include="Nodes\MathSqrtNode.cs" />

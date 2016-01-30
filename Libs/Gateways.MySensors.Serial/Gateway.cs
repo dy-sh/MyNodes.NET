@@ -268,21 +268,53 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             OnLogMessage?.Invoke(message.ToString());
         }
 
-        public void RecieveMessage(string message)
-        {
-            Message mes = null;
-            try
-            {
-                mes = new Message(message);
-            }
-            catch
-            {
-                LogError($"Failed to process incoming message: [{message}]");
-            }
 
-            if (mes!=null)
-                RecieveMessage(mes);
+        public void RecieveMessage(string data)
+        {
+            //string[] messages = data.Split(new char[] { '\r', '\n' },
+            //    StringSplitOptions.None);
+
+            List<string> messages = SplitMessages(data);
+
+            foreach (var message in messages)
+            {
+                Message mes = null;
+                try
+                {
+                    mes = new Message(message);
+                }
+                catch
+                {
+                    LogError($"Failed to process incoming message: [{message}]");
+                }
+
+                if (mes != null)
+                    RecieveMessage(mes);
+            }
         }
+
+
+        private string messageBuffer = "";
+
+        private List<string> SplitMessages(string data)
+        {
+            List<string> messages = new List<string>();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] != '\n')
+                {
+                    messageBuffer += data[i];
+                }
+                else
+                {
+                    messages.Add(messageBuffer);
+                    messageBuffer = "";
+                }
+            }
+            return messages;
+        }
+
 
         public void RecieveMessage(Message message)
         {

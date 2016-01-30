@@ -945,26 +945,38 @@
     LiteGraph.registerNodeType("Operation/Random", OperationRandom);
 
 
-    //OperationEventsCounterNode
-    function OperationEventsCounterNode() {
+    //OperationEventCounterNode
+    function OperationEventCounterNode() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.OperationEventsCounterNode",
+            'ObjectType': "MyNetSensors.Nodes.OperationEventCounterNode",
             'Assembly': "Nodes"
         };
     }
-    OperationEventsCounterNode.title = "Events Counter";
-    LiteGraph.registerNodeType("Operation/Events Counter", OperationEventsCounterNode);
+    OperationEventCounterNode.title = "Event Counter";
+    LiteGraph.registerNodeType("Operation/Event Counter", OperationEventCounterNode);
 
 
-    //OperationEventsFreqCounterNode
-    function OperationEventsFreqCounterNode() {
+    //OperationEventsFreqMeterNode
+    function OperationEventsFreqMeterNode() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.OperationEventsFreqCounterNode",
+            'ObjectType': "MyNetSensors.Nodes.OperationEventsFreqMeterNode",
             'Assembly': "Nodes"
         };
         }
-    OperationEventsFreqCounterNode.title = "Events Freq Counter";
-    LiteGraph.registerNodeType("Operation/Events Freq Counter", OperationEventsFreqCounterNode);
+    OperationEventsFreqMeterNode.title = "Events Freq Meter";
+    LiteGraph.registerNodeType("Operation/Events Freq Meter", OperationEventsFreqMeterNode);
+
+
+    //OperationEventsDelayMeterNode
+    function OperationEventsDelayMeterNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationEventsDelayMeterNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationEventsDelayMeterNode.title = "Events Delay Meter";
+    LiteGraph.registerNodeType("Operation/Events Delay Meter", OperationEventsDelayMeterNode);
+
 
 
     //OperationMixerNode
