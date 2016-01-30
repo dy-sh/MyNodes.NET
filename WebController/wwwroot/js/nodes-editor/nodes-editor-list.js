@@ -964,6 +964,16 @@
     OperationMixer.title = "Mixer";
     LiteGraph.registerNodeType("Operation/Mixer", OperationMixer);
 
+    //OperationxFader
+    function OperationxFader() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationxFader",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationxFader.title = "xFader";
+    LiteGraph.registerNodeType("Operation/xFader", OperationxFader);
+
     //SystemBeep
     function SystemBeep() {
         this.properties = {
@@ -993,5 +1003,25 @@
     }
     DelayTimerNode.title = "Delay Timer";
     LiteGraph.registerNodeType("Delay/Delay Timer", DelayTimerNode);
+
+    //OperationSwitchNode
+    function OperationSwitchInNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationSwitchInNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationSwitchInNode.title = "Switch in";
+    LiteGraph.registerNodeType("Operation/Switch in", OperationSwitchInNode);
+
+    //OperationSwitchNode
+    function OperationSwitchOutNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationSwitchOutNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationSwitchOutNode.title = "Switch out";
+    LiteGraph.registerNodeType("Operation/Switch out", OperationSwitchOutNode);
 
 })();

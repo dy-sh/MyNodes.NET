@@ -60,6 +60,8 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\OperationSwitchOutNode.cs" />
+    <Compile Include="Nodes\OperationxFader.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
     <Compile Include="Nodes\MathMultiplyNode.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="Nodes\OperationFlipflopNode.cs" />
     <Compile Include="Nodes\OperationGateNode.cs" />
     <Compile Include="Nodes\OperationRandomNode.cs" />
-    <Compile Include="Nodes\OperationSwitch2xNode.cs" />
+    <Compile Include="Nodes\OperationSwitchInNode.cs" />
     <Compile Include="Nodes\PanelOutputNode.cs" />
     <Compile Include="Nodes\PanelInputNode.cs" />
     <Compile Include="Nodes\PanelNode.cs" />
