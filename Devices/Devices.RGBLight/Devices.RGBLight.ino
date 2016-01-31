@@ -3,26 +3,22 @@
 
 #include "LedStrip.h"
 #include <EEPROM.h>
-
+#include <Bounce2.h>
 
 
 #define LED_STRIP_INVERT_PWM true
 
 LedStrip ledStrip(3, 9, 10, LED_STRIP_INVERT_PWM);
 
-#define ButtonPin 2
-#define TurnOnOffFadeTime 2000
+#define BUTTON_PIN 2
+#define LIGHT_FADE_TIME 2000
 
 #define POWER_ID 1
 #define RGB_ID 2
 
 
-bool lastButtonState;
-bool buttonState;
-long lastDebounceTime = 0;
-#define DebounceDelay 50
-bool buttonSwitch;
-
+Bounce debouncer = Bounce();
+bool lightEnabled;
 
 uint8_t preset_r, preset_g, preset_b;
 
@@ -45,7 +41,7 @@ void sendCurrentRGB() {
 }
 
 void sendCurrentPower() {
-	gw.send(powerMessage.set(buttonSwitch));
+	gw.send(powerMessage.set(lightEnabled));
 }
 
 
@@ -53,30 +49,46 @@ void resetEEPROMTimer() {
 	lastSaveTime = millis();
 }
 
-
+long RGB_values[3] = { 0,0,0 };
 
 void incomingMessage(const MyMessage &message) {
 	if (message.type == V_RGB) {
 		resetEEPROMTimer();
 
 		String hexstring = message.getString();
+
+		hexstring[6] = '\0';
+
+		//long number = (long)strtol(&hexstring[0], NULL, 16);
+		//RGB_values[0] = number >> 16;
+		//RGB_values[1] = number >> 8 & 0xFF;
+		//RGB_values[2] = number & 0xFF;
+		//Serial.print("Red is ");
+		//Serial.println(RGB_values[0]);
+		//Serial.print("Green is ");
+		//Serial.println(RGB_values[1]);
+		//Serial.print("Blue is ");
+		//Serial.println(RGB_values[2]);
+
 		long val = (long)strtol(&hexstring[0], NULL, 16);
 
 		ledStrip.SetColor(val >> 16, val >> 8 & 0xFF, val & 0xFF);
 
 		Serial.print("Set color: ");
 		Serial.println(hexstring);
+
+
 	}
 	if (message.type == V_STATUS) {
-		buttonSwitch = message.getBool();
+		lightEnabled = message.getBool();
 
-		if (buttonSwitch)
-			ledStrip.TurnOn(TurnOnOffFadeTime);
+		if (lightEnabled)
+			ledStrip.TurnOn(LIGHT_FADE_TIME);
 		else
-			ledStrip.TurnOff(TurnOnOffFadeTime);
+			ledStrip.TurnOff(LIGHT_FADE_TIME);
 
 		Serial.print("Set power: ");
-		Serial.println(buttonSwitch);
+		Serial.println(lightEnabled);
 	}
 }
 
@@ -84,40 +96,22 @@ void incomingMessage(const MyMessage &message) {
 
 void switchLedState()
 {
-	buttonSwitch = !buttonSwitch;
+	lightEnabled = !lightEnabled;
 
-	if (buttonSwitch)
-		ledStrip.TurnOn(TurnOnOffFadeTime);
+	Serial.print("Switch: ");
+	Serial.println(lightEnabled);
+
+	if (lightEnabled)
+		ledStrip.TurnOn(LIGHT_FADE_TIME);
 	else
-		ledStrip.TurnOff(TurnOnOffFadeTime);
+		ledStrip.TurnOff(LIGHT_FADE_TIME);
 
 	sendCurrentPower();
 
-	Serial.print("Switch: ");
-	Serial.println(buttonSwitch);
 }
 
-void readButton()
-{
-	bool reading = digitalRead(ButtonPin);
 
 
-	if (reading != lastButtonState)
-		lastDebounceTime = millis();
-
-
-	if ((millis() - lastDebounceTime) > DebounceDelay) {
-		if (reading != buttonState) {
-			buttonState = reading;
-
-			if (buttonState)
-				switchLedState();
-		}
-	}
-
-
-	lastButtonState = reading;
-}
 
 
 void storePreset() {
@@ -159,44 +153,51 @@ void saveStateToEEPROM() {
 
 void setup() {
 
-	// Initialize library and add callback for incoming messages
 	gw.begin(incomingMessage);
 
-	// Send the sketch version information to the gateway and Controller
-	gw.sendSketchInfo("RGB Node", "2.0");
-
-	// Register the sensor to gw
-	gw.present(POWER_ID, S_BINARY);
-	gw.present(RGB_ID, S_RGB_LIGHT);
-
-
-	pinMode(ButtonPin, INPUT_PULLUP);
-
-	lastButtonState = digitalRead(ButtonPin);
-	buttonState = lastButtonState;
-	buttonSwitch = false;
-
+	Serial.begin(115200);
+	Serial.println("Starting RGB Node...");
 
 	//set last color
 	ledStrip.TurnOff();
 	readPreset();
 	ledStrip.SetColor(preset_r, preset_g, preset_b);
-	//	switchLedState();
 
-	//send current color to gateway
+	pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+	lightEnabled = false;
+	debouncer.attach(BUTTON_PIN);
+	debouncer.interval(25);
+
+
+
+	Serial.println("Presenting...");
+
+
+	gw.sendSketchInfo("RGB Node", "2.0");
+
+	gw.present(POWER_ID, S_BINARY);
+	gw.present(RGB_ID, S_RGB_LIGHT);
+
 	sendCurrentPower();
 	sendCurrentRGB();
 
-	Serial.println("Led strip is ready");
+	Serial.println("Ready");
+
 }
 
 
 void loop() {
+	gw.process();
 
 	ledStrip.Loop();
-	readButton();
 
-	gw.process();
+	//read button
+	debouncer.update();
+	if (debouncer.fell()) {
+		Serial.println(millis());
+		switchLedState();
+	}
 
 	saveStateToEEPROM();
 }
