@@ -1,5 +1,5 @@
 ﻿/*  MyNetSensors 
-    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    Copyright (C) 2015-2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
@@ -7,16 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MyNetSensors.Gateway;
-using MyNetSensors.SoftNodes;
-using MyNetSensors.SoftNodesSignalRClient;
+
 
 
 namespace ScreenColor
@@ -24,29 +24,22 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        private static string serverURL = "http://localhost:13122/";
+        private static string serverAddress = "http://localhost:1312";
 
         static int captureUpdateDelay = 0;
         static float heightFromTop = 0.4f;
 
-        static float rTune = 1f;
-        static float gTune = 0.5f;
-        static float bTune = 0.3f;
-
         static bool isWorking;
         static Color screenColor;
 
-        private static int sensorId = 1;
-        private static int nodeId = 255;
-        private static string nodeName = "Screen Color";
-        private static string nodeVersion = "1.0";
-        private static string sensorDescription = "Average Screen Color";
+        static int receiverChannel = 0;
+        static string receiverPassword;
+
+        private static string nodeName = "Screen Color Transmitter";
+        private static string nodeVersion = "1.1";
 
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
-
-        private static ISoftNodeClient softNodeClient;
-        private static SoftNode softNode;
 
         private static DateTime messageStartDate = DateTime.Now;
         private static int messagesCount;
@@ -54,25 +47,6 @@ namespace ScreenColor
         static void Main(string[] args)
         {
             ReadSettings();
-
-            softNodeClient = new SoftNodeClient();
-            softNode = new SoftNode(softNodeClient, nodeId, nodeName, nodeVersion);
-
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowNodeTxRxDebug"]))
-                softNode.OnDebugTxRxMessage += message => Console.WriteLine("NODE: " + message);
-
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ShowNodeStateDebug"]))
-                softNode.OnDebugNodeStateMessage += message => Console.WriteLine("NODE: " + message);
-
-            softNode.OnIdResponseReceived += OnIdResponseReceived;
-            softNode.ConnectToServer(serverURL);
-
-
-            Sensor sensor = new Sensor();
-            sensor.sensorId = sensorId;
-            sensor.sensorType = SensorType.S_RGB_LIGHT;
-            sensor.description = sensorDescription;
-            softNode.AddSensor(sensor);
 
             StartScreenCapture();
             ShowMessage("Screen capture started");
@@ -83,16 +57,6 @@ namespace ScreenColor
             }
         }
 
-        private static void OnIdResponseReceived(int nodeid)
-        {
-
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings.Remove("NodeId");
-            config.AppSettings.Settings.Add("NodeId", nodeid.ToString());
-            config.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings");
-
-        }
 
         static void ReadSettings()
         {
@@ -102,15 +66,11 @@ namespace ScreenColor
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
             //read app.config
-            rTune = float.Parse(ConfigurationManager.AppSettings["RTune"]);
-            gTune = float.Parse(ConfigurationManager.AppSettings["GTune"]);
-            bTune = float.Parse(ConfigurationManager.AppSettings["BTune"]);
             heightFromTop = float.Parse(ConfigurationManager.AppSettings["ScreenHeightFromTop"]);
             captureUpdateDelay = int.Parse(ConfigurationManager.AppSettings["CapturingDelay"]);
-            serverURL = ConfigurationManager.AppSettings["SoftNodesServerURL"];
-            nodeId = Int32.Parse(ConfigurationManager.AppSettings["NodeId"]);
-            nodeName = ConfigurationManager.AppSettings["NodeName"];
-            nodeVersion = ConfigurationManager.AppSettings["NodeVersion"];
+            serverAddress = ConfigurationManager.AppSettings["ServerAddress"];
+            receiverChannel = int.Parse(ConfigurationManager.AppSettings["ReceiverChannel"]);
+            receiverPassword = ConfigurationManager.AppSettings["ReceiverPassword"];
         }
 
         private static String ColorToHex(Color color)
@@ -118,14 +78,60 @@ namespace ScreenColor
             return /* "#" + */ color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
 
-        public static void SendColor( Color color)
+        public static async void SendColor(Color color)
         {
-            SensorData data = new SensorData(nodeId, sensorId,SensorDataType.V_RGB, ColorToHex(color));
-            if (softNode.IsPresentationCompleted())
+            try
             {
-                softNode.SendSensorData(sensorId, data);
-                CalculateMessagesPerSec();
+                using (var client = new HttpClient())
+                {
+                    string url = serverAddress + "/NodesEditorApi/ReceiverSetValue/";
+
+                    string value = ColorToHex(color);
+
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("value", value),
+                        new KeyValuePair<string, string>("channel", receiverChannel.ToString()),
+                        new KeyValuePair<string, string>("password", receiverPassword)
+                    });
+
+                   // LogInfo($"Send to [{serverAddress}] channel [{receiverChannel}]: [{value ?? "NULL"}]");
+
+                    var result = await client.PostAsync(url, content);
+                    string resultContent = result.Content.ReadAsStringAsync().Result;
+
+                    CalculateMessagesPerSec();
+
+
+                    if (resultContent == "0")
+                    {
+                       // LogInfo($"[{serverAddress}] channel [{receiverChannel}] receiver: Received.");
+                    }
+                    else if (resultContent == "1")
+                    {
+                        LogError($"[{serverAddress}] channel [{receiverChannel}] receiver: Password is wrong.");
+                    }
+                    else if (resultContent == "2")
+                    {
+                        LogError($"[{serverAddress}]: No receivers with channel [{receiverChannel}].");
+                    }
+
+                }
             }
+            catch (Exception ex)
+            {
+                LogError(ex.Message);
+            }
+        }
+
+        private static void LogError(string text)
+        {
+            Console.WriteLine(text);
+        }
+
+        private static void LogInfo(string text)
+        {
+            Console.WriteLine(text);
         }
 
         private static async void StartScreenCapture()
@@ -144,8 +150,6 @@ namespace ScreenColor
 
                     Color newScreenColor = ScreenCapture.GetScreenAverageColor(heightFromTop);
 
-                    newScreenColor = TuneColor(newScreenColor);
-
                     if (newScreenColor != screenColor)
                     {
                         screenColor = newScreenColor;
@@ -156,18 +160,6 @@ namespace ScreenColor
 
         }
 
-        private static Color TuneColor(Color newScreenColor)
-        {
-            int r = newScreenColor.R;
-            int g = newScreenColor.G;
-            int b = newScreenColor.B;
-
-            r = (int)((float)(r) * rTune);
-            g = (int)((float)(g) * gTune);
-            b = (int)((float)(b) * bTune);
-
-            return Color.FromArgb(r, g, b);
-        }
 
         private static void StopScreenCapture()
         {
@@ -222,6 +214,9 @@ namespace ScreenColor
         {
             Console.WriteLine("CAPTURE: " + message);
         }
+
+
+
 
     }
 }
