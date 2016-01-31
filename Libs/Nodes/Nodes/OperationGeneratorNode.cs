@@ -4,6 +4,8 @@
 */
 
 using System;
+using System.Diagnostics;
+using System.Timers;
 
 namespace MyNetSensors.Nodes
 {
@@ -16,8 +18,8 @@ namespace MyNetSensors.Nodes
 
         private double frequency;
         private bool enabled = true;
-        private DateTime lastTime;
 
+        private Timer timer = new Timer();
 
         public OperationGeneratorNode() : base(3, 1)
         {
@@ -32,25 +34,30 @@ namespace MyNetSensors.Nodes
             Inputs[1].Type = DataType.Logical;
             Outputs[0].Type = DataType.Number;
 
-            lastTime = DateTime.Now;
             frequency = DEFAULT_VALUE;
+
+            timer = new Timer();
+            timer.Interval = frequency;
+            timer.Elapsed += TimerElapsed;
+            timer.Start();
         }
 
-        public override void Loop()
+
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             if (!enabled || frequency <= 0)
                 return;
 
-            TimeSpan elapsed = DateTime.Now - lastTime;
-            if (elapsed.TotalMilliseconds >= frequency)
-            {
-                Count = 1 - Count;
-                lastTime = DateTime.Now;
+            Count = 1 - Count;
 
-                LogInfo($"{Count}");
+            LogInfo($"{Count}");
 
-                Outputs[0].Value = Count.ToString();
-            }
+            Outputs[0].Value = Count.ToString();
+        }
+
+        public override void Loop()
+        {
+
         }
 
         public override void OnInputChange(Input input)
@@ -65,6 +72,10 @@ namespace MyNetSensors.Nodes
                 if (frequency < 0)
                     frequency = 0;
 
+                timer.Stop();
+                timer.Interval = frequency;
+                timer.Start();
+
                 LogInfo($"Frequency changed to {frequency} ms");
             }
 
@@ -72,6 +83,7 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[1])
             {
                 enabled = input.Value != "0";
+                timer.Enabled = enabled;
 
                 LogInfo(enabled ? "Started" : "Stopped");
             }
@@ -82,8 +94,10 @@ namespace MyNetSensors.Nodes
                 if (input.Value != "1")
                     return;
 
+                timer.Stop();
+                timer.Start();
+
                 Count = 0;
-                lastTime = DateTime.Now;
                 LogInfo("Reset");
                 Outputs[0].Value = "0";
             }
