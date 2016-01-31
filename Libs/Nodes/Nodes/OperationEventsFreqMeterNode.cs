@@ -57,6 +57,7 @@ namespace MyNetSensors.Nodes
             count = 0;
             LogInfo($"[{countWas}] events/sec");
             Outputs[0].Value = countWas.ToString();
+            countWas = 0;
         }
     }
 }
