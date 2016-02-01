@@ -14,30 +14,39 @@ namespace MyNetSensors.WebController.Controllers
         private UiNodesEngine engine = SystemController.uiNodesEngine;
 
 
-        public string GetNameForPanel(string id)
+        public async Task<string> GetNameForPanel(string id)
         {
-            if (engine == null)
-                return null;
+            return await Task.Run(() =>
+            {
+                if (engine == null)
+                    return null;
 
-            PanelNode panel = engine.GetPanel(id);
+                PanelNode panel = engine.GetPanel(id);
 
-            return panel?.Name;
+                return panel?.Name;
+            });
         }
 
-        public List<UiNode> GetUINodesForMainPage()
+        public async Task<List<UiNode>> GetUINodesForMainPage()
         {
-            if (engine == null)
-                return null;
+            return await Task.Run(() =>
+            {
+                if (engine == null)
+                    return null;
 
-            return engine.GetUINodesForMainPage();
+                return engine.GetUINodesForMainPage();
+            });
         }
 
-        public List<UiNode> GetUINodesForPanel(string panelId)
+        public async Task<List<UiNode>> GetUINodesForPanel(string panelId)
         {
-            if (engine == null)
-                return null;
+            return await Task.Run(() =>
+            {
+                if (engine == null)
+                    return null;
 
-            return engine.GetUINodesForPanel(panelId);
+                return engine.GetUINodesForPanel(panelId);
+            });
         }
 
 
@@ -74,47 +83,59 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        public bool SliderChange(string nodeId, int value)
+        public async Task<bool> SliderChange(string nodeId, int value)
         {
-            engine.SliderChange(nodeId, value);
-            return true;
-        }
-
-        public bool RGBSlidersChange(string nodeId, string value)
-        {
-            engine.RGBSlidersChange(nodeId, value);
-            return true;
-        }
-
-        public bool RGBWSlidersChange(string nodeId, string value)
-        {
-            engine.RGBWSlidersChange(nodeId, value);
-            return true;
-        }
-
-
-
-
-        public List<ChartData> GetChartData(string id)
-        {
-            UiChartNode chart = engine.GetUINode(id) as UiChartNode;
-            if (chart == null)
-                return null;
-
-            List<NodeState> nodeStates = chart.GetStates();
-
-            if (nodeStates == null || !nodeStates.Any())
-                return null;
-
-            //copy to array to prevent changing data error
-            NodeState[] nodeStatesArray=new NodeState[nodeStates.Count];
-            nodeStates.CopyTo(nodeStatesArray);
-
-            return nodeStatesArray.Select(item => new ChartData
+            return await Task.Run(() =>
             {
-                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
-                y = item.State=="0"?"-0.01": item.State
-            }).ToList();
+                engine.SliderChange(nodeId, value);
+                return true;
+            });
+        }
+
+        public async Task<bool> RGBSlidersChange(string nodeId, string value)
+        {
+            return await Task.Run(() =>
+            {
+                engine.RGBSlidersChange(nodeId, value);
+                return true;
+            });
+        }
+
+        public async Task<bool> RGBWSlidersChange(string nodeId, string value)
+        {
+            return await Task.Run(() =>
+            {
+                engine.RGBWSlidersChange(nodeId, value);
+                return true;
+            });
+        }
+
+
+
+
+        public async Task<List<ChartData>> GetChartData(string id)
+        {
+            return await Task.Run(() =>
+            {
+                UiChartNode chart = engine.GetUINode(id) as UiChartNode;
+                if (chart == null)
+                    return null;
+
+                List<NodeState> nodeStates = chart.GetStates();
+
+                if (nodeStates == null || !nodeStates.Any())
+                    return null;
+
+                //copy to array to prevent changing data error
+                NodeState[] nodeStatesArray = new NodeState[nodeStates.Count];
+                nodeStates.CopyTo(nodeStatesArray);
+
+                return nodeStatesArray.Select(item => new ChartData
+                {
+                    x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
+                    y = item.State == "0" ? "-0.01" : item.State
+                }).ToList();
+            });
         }
 
 
