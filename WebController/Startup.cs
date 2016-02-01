@@ -178,6 +178,7 @@ namespace MyNetSensors.WebController
 
                 app.UseRuntimeInfoPage("/info");
 
+                app.UseWebSockets();
                 app.UseSignalR();
 
                 app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -185,6 +186,7 @@ namespace MyNetSensors.WebController
                 app.UseStaticFiles();
 
                 app.UseIdentity();
+
 
                 // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
