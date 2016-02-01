@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartData.cs" />
+    <Compile Include="UiSpeechNode.cs" />
     <Compile Include="UiNodesEngine.cs" />
     <Compile Include="UiNode.cs" />
     <Compile Include="UiButtonNode.cs" />

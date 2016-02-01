@@ -57,6 +57,9 @@ function createNode(node) {
         case "UI/Timer":
             createTimer(node);
             break;
+        case "UI/Speech":
+            createSpeech(node);
+            break;
     default:
     }
     updateNode(node);
@@ -111,6 +114,9 @@ function updateNode(node) {
             break;
         case "UI/Timer":
             updateTimer(node);
+            break;
+        case "UI/Speech":
+            updateSpeech(node);
             break;
         default:
     }
