@@ -60,6 +60,9 @@ function createNode(node) {
         case "UI/Speech":
             createSpeech(node);
             break;
+        case "UI/Audio":
+            createAudio(node);
+            break;
     default:
     }
     updateNode(node);
@@ -117,6 +120,9 @@ function updateNode(node) {
             break;
         case "UI/Speech":
             updateSpeech(node);
+            break;
+        case "UI/Audio":
+            updateAudio(node);
             break;
         default:
     }

@@ -1,6 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-audio.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-chart.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-main.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-rgbsliders.js" />

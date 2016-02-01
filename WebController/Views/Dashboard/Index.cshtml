@@ -235,6 +235,12 @@
     </div>
 </script>
 
+<script id="audioTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node-{{Id}}">
+        <span id="audioName-{{Id}}"></span>
+    </div>
+</script>
+
 
 
 @section styles{
@@ -258,5 +264,6 @@
     <script src="~/js/dashboard/mynetsensors-dashboard-chart.js"></script>
     <script src="~/js/dashboard/mynetsensors-dashboard-timer.js"></script>
     <script src="~/js/dashboard/mynetsensors-dashboard-speech.js"></script>
+    <script src="~/js/dashboard/mynetsensors-dashboard-audio.js"></script>
 }
 

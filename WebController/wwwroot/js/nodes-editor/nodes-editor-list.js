@@ -568,6 +568,53 @@
 
 
 
+    //UI Slider
+    function UIAudio() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.UiAudioNode",
+            'Assembly': "Nodes.UI"
+        };
+    }
+    UIAudio.prototype.getExtraMenuOptions = function (graphcanvas) {
+        var that = this;
+        return [{ content: "Settings", callback: function () { UIAudioSettings(that) } }, null];
+    }
+    function UIAudioSettings(node) {
+        $('#node-settings-title').html(node.type);
+
+        $('#node-settings-body').html(
+            '<div class="ui form"><div class="fields">' +
+            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
+            '</div><div class="fields">' +
+            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
+            '</div><div class="ui divider"></div><div class="fields">' +
+            '</div></div>'
+        );
+
+        $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
+
+
+        $('#node-settings-panel').modal({
+            dimmerSettings: { opacity: 0.3 },
+            onApprove: function () {
+                $.ajax({
+                    url: "/NodesEditorAPI/UINodeSettings/",
+                    type: "POST",
+                    data: {
+                        name: $('#node-settings-name').val(),
+                        show: $('#node-settings-show').prop('checked'),
+                        id: node.id
+                    }
+                });
+            }
+        }).modal('setting', 'transition', 'fade up').modal('show');
+    }
+    UIAudio.title = "Audio";
+    LiteGraph.registerNodeType("UI/Audio", UIAudio);
+
+
+
 
     /*
      -------------------------------- OTHER -------------------------------------
