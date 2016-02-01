@@ -16,7 +16,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using MyNetSensors.SoftNodes;
 
 
 namespace ScreenColor
@@ -24,7 +24,6 @@ namespace ScreenColor
     class Program
     {
         //SETTINGS
-        private static string serverAddress = "http://localhost:1312";
 
         static int captureUpdateDelay = 0;
         static float heightFromTop = 0.4f;
@@ -32,30 +31,36 @@ namespace ScreenColor
         static bool isWorking;
         static Color screenColor;
 
-        static int receiverChannel = 0;
-        static string receiverPassword;
-
-        private static string nodeName = "Screen Color Transmitter";
-        private static string nodeVersion = "1.1";
-
         private static DateTime captureStartDate = DateTime.Now;
         private static int screensCount;
 
         private static DateTime messageStartDate = DateTime.Now;
         private static int messagesCount;
 
+        private static SoftNodeTransmitter transmitter;
+
+        static string serverAddress = "http://localhost:1312";
+        static int receiverChannel = 0;
+        static string receiverPassword;
+
         static void Main(string[] args)
         {
             ReadSettings();
 
+            transmitter = new SoftNodeTransmitter(serverAddress, receiverChannel, receiverPassword);
+            transmitter.OnLogError += LogError;
+           // transmitter.OnLogInfo += LogInfo;
+
             StartScreenCapture();
-            ShowMessage("Screen capture started");
+            LogCapture("Screen capture started");
 
             while (true)
             {
                 Console.ReadLine();
             }
         }
+
+
 
 
         static void ReadSettings()
@@ -78,60 +83,33 @@ namespace ScreenColor
             return /* "#" + */ color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
 
-        public static async void SendColor(Color color)
+        public static void SendColor(Color color)
         {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    string url = serverAddress + "/NodesEditorApi/ReceiverSetValue/";
 
-                    string value = ColorToHex(color);
+            string value = ColorToHex(color);
 
-                    var content = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("value", value),
-                        new KeyValuePair<string, string>("channel", receiverChannel.ToString()),
-                        new KeyValuePair<string, string>("password", receiverPassword)
-                    });
+            transmitter.Send(value);
 
-                   // LogInfo($"Send to [{serverAddress}] channel [{receiverChannel}]: [{value ?? "NULL"}]");
-
-                    var result = await client.PostAsync(url, content);
-                    string resultContent = result.Content.ReadAsStringAsync().Result;
-
-                    CalculateMessagesPerSec();
-
-
-                    if (resultContent == "0")
-                    {
-                       // LogInfo($"[{serverAddress}] channel [{receiverChannel}] receiver: Received.");
-                    }
-                    else if (resultContent == "1")
-                    {
-                        LogError($"[{serverAddress}] channel [{receiverChannel}] receiver: Password is wrong.");
-                    }
-                    else if (resultContent == "2")
-                    {
-                        LogError($"[{serverAddress}]: No receivers with channel [{receiverChannel}].");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError(ex.Message);
-            }
+            CalculateMessagesPerSec();
         }
 
         private static void LogError(string text)
         {
-            Console.WriteLine(text);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("TRANSMITTER: "+text);
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static void LogInfo(string text)
         {
-            Console.WriteLine(text);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("TRANSMITTER : " + text);
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private static void LogCapture(string message)
+        {
+            Console.WriteLine("CAPTURE: " + message);
         }
 
         private static async void StartScreenCapture()
@@ -182,9 +160,9 @@ namespace ScreenColor
             screensCount = 0;
 
             if (capturesPerSecond > 1)
-                ShowMessage("Captured " + (int)capturesPerSecond + " screens/second");
+                LogCapture("Captured " + (int)capturesPerSecond + " screens/second");
             else
-                ShowMessage("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
+                LogCapture("Captured " + capturesPerSecond.ToString("0.00") + " screens/second");
 
         }
 
@@ -204,16 +182,13 @@ namespace ScreenColor
             messagesCount = 0;
 
             if (messagesPerSecond > 1)
-                ShowMessage("                               Sended " + (int)messagesPerSecond + " messages/second");
+                LogCapture("                               Sent " + (int)messagesPerSecond + " messages/second");
             else
-                ShowMessage("                               Sended " + messagesPerSecond.ToString("0.00") + " messages/second");
+                LogCapture("                               Sent " + messagesPerSecond.ToString("0.00") + " messages/second");
 
         }
 
-        private static void ShowMessage(string message)
-        {
-            Console.WriteLine("CAPTURE: " + message);
-        }
+
 
 
 
