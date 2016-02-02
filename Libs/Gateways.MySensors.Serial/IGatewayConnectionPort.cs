@@ -10,7 +10,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 {
     public delegate void OnDataReceivedEventHandler(string message);
 
-    public interface IComPort
+    public interface IGatewayConnectionPort
     {
         event OnDataReceivedEventHandler OnDataReceived;
         event Action OnConnected;
@@ -21,11 +21,9 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         event LogEventHandler OnLogInfo;
         event LogEventHandler OnLogError;
 
-        List<string> GetPortsList();
-        void Connect(string portName, int baudRate= 115200);
+        void Connect();
         void Disconnect();
         void SendMessage(string message);
         bool IsConnected();
-        string GetPortName();
     }
 }

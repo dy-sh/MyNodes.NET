@@ -73,6 +73,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool UpdateNodeSettings(Node node)
         {
+            //todo
            // gateway.UpdateNode(node);
             return true;
         }
@@ -90,34 +91,6 @@ namespace MyNetSensors.WebController.Controllers
         public async Task<bool> RemoveAllNodes()
         {
             gateway.RemoveAllNodes();
-            return true;
-        }
-        
-
-        public bool DisableTasks()
-        {
-            SystemController.uiTimerNodesEngine.DisableAllTasks();
-            return true;
-        }
-
-
-        public bool RemoveAllTasks()
-        {
-            SystemController.uiTimerNodesEngine.RemoveAllTasks();
-            return true;
-        }
-        
-
-        public async Task<bool> Connect()
-        {
-            string portname = SystemController.gateway.serialPort.GetPortName();
-            await SystemController.gateway.Connect(portname);
-            return true;
-        }
-
-        public bool Disconnect()
-        {
-            SystemController.gateway.Disconnect();
             return true;
         }
 

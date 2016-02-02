@@ -38,7 +38,7 @@ namespace MyNetSensors.WebController.Code
 
 
         //VARIABLES
-        public static ComPort comPort;
+        public static IGatewayConnectionPort gatewayConnectionPort;
         public static Gateway gateway;
 
         public static IMySensorsRepository mySensorsDb;
@@ -220,13 +220,13 @@ namespace MyNetSensors.WebController.Code
 
             nodesDb.SetWriteInterval(dataBaseWriteInterval);
             nodesDb.OnLogInfo += logs.AddDataBaseInfo;
-            nodesDb.OnLogError+= logs.AddDataBaseError;
+            nodesDb.OnLogError += logs.AddDataBaseError;
 
             logs.AddSystemInfo("Database connected.");
         }
 
 
-        
+
 
 
 
@@ -240,7 +240,11 @@ namespace MyNetSensors.WebController.Code
             nodesEngine.OnLogNodeInfo += logs.AddNodeInfo;
             nodesEngine.OnLogNodeError += logs.AddNodeError;
 
-            mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
+            if (gateway != null && nodesEngine != null)
+                mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
+            else
+                mySensorsNodesEngine = null;
+
             uiNodesEngine = new UiNodesEngine(nodesEngine, nodesStatesDb);
             uiTimerNodesEngine = new UITimerNodesEngine(nodesEngine, uiTimerNodesDb);
 
@@ -256,34 +260,39 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void ConnectToGateway()
+        public static void ConnectToGateway()
         {
+            mySensorsNodesEngine = null;
+
             if (serialGatewayEnabled)
             {
-                comPort = new ComPort();
+                gatewayConnectionPort = new SerialConnectionPort(serialGatewayPortName);
             }
             else if (ethernetGatewayEnabled)
             {
-                //ethernet
+                gatewayConnectionPort = new EthernetConnectionPort(ethernetGatewayIp, ethernetGatewayPort);
             }
-            gateway = new Gateway(comPort, mySensorsDb, mySensorsMessagesDb);
+            else return;
+
+            //connecting to gateway
+            logs.AddSystemInfo("Connecting to gateway...");
+
+            gateway = new Gateway(gatewayConnectionPort, mySensorsDb, mySensorsMessagesDb);
 
             gateway.enableAutoAssignId = gatewayAutoAssignId;
 
             gateway.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.OnLogInfo += logs.AddGatewayInfo;
             gateway.OnLogError += logs.AddGatewayError;
-            gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
-            // gateway.serialPort.OnLogMessage += logs.AddHardwareNodeInfo;
+            gateway.connectionPort.OnLogInfo += logs.AddGatewayInfo;
+            // gateway.connectionPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
             gateway.messagesLogEnabled = gatewayMessagesLogEnabled;
 
-            if (!serialGatewayEnabled) return;
+            gateway.Connect().Wait();
 
-            //connecting to gateway
-            logs.AddSystemInfo("Connecting to gateway...");
-
-            gateway.Connect(serialGatewayPortName).Wait();
+            if (gateway != null && nodesEngine != null)
+                mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
 
             if (gateway.IsConnected())
                 logs.AddSystemInfo("Gateway connected.");
@@ -292,16 +301,5 @@ namespace MyNetSensors.WebController.Code
 
         }
 
-
-
-        private static void ConnectToEthernetGateway()
-        {
-            //------------
-            EthernetConnection con = new EthernetConnection();
-            con.OnLogInfo += logs.AddGatewayInfo;
-            con.OnLogError += logs.AddGatewayError;
-            con.OnLogMessage += logs.AddHardwareNodeInfo;
-            con.Connect(null, 0);
-        }
     }
 }

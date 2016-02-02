@@ -39,7 +39,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
                 //gateway not responding
                 gateway.LogError("Gateway not responding.");
 
-                gateway.OnSerialPortDisconnected();
+                gateway.OnConnectionPortDisconnected();
             }
             else
             {

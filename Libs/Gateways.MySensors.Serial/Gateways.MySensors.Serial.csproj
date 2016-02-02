@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="GatewayAliveChecker.cs" />
     <Compile Include="GatewayInfo.cs" />
-    <Compile Include="IComPort.cs" />
+    <Compile Include="IGatewayConnectionPort.cs" />
     <Compile Include="IMySensorsRepository.cs" />
     <Compile Include="IMySensorsMessagesRepository.cs" />
     <Compile Include="Message.cs" />

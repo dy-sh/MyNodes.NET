@@ -41,6 +41,7 @@ namespace MyNetSensors.Nodes
 
             LogInfo($"Hardware Node{nodeId} Sensor{mySensorsNodeInput.sensorId} input: {input.Value}");
 
+            //todo null exception if desconnected
             MySensorsNodesEngine.gateway.SendSensorState(mySensorsNodeInput.nodeId, mySensorsNodeInput.sensorId, input.Value);
 
         }

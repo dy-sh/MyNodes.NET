@@ -12,7 +12,7 @@ using MyNetSensors.Gateways.MySensors.Serial;
 
 namespace MyNetSensors.WebController.Code
 {
-    public class ComPort : IComPort
+    public class SerialConnectionPort : IGatewayConnectionPort
     {
         public event OnDataReceivedEventHandler OnDataReceived;
         public event Action OnConnected;
@@ -27,6 +27,7 @@ namespace MyNetSensors.WebController.Code
         private SerialPort serialPort;
 
         private string portName;
+        private int baudRate=115200;
 
         public bool IsConnected()
         {
@@ -38,38 +39,34 @@ namespace MyNetSensors.WebController.Code
             return portName;
         }
 
+        public void SetPortName(string portName)
+        {
+            Disconnect();
+            this.portName = portName;
+        }
 
-        public List<string> GetPortsList()
+        public int GetBaudRate()
+        {
+            return baudRate;
+        }
+
+        public void SetBaudRate(int baudRate)
+        {
+            Disconnect();
+            this.baudRate = baudRate;
+        }
+
+
+        public static List<string> GetAvailablePorts()
         {
             return SerialPort.GetPortNames().ToList();
         }
-        
 
-        public void Connect(string portName, int baudRate)
+
+        public SerialConnectionPort(string portName, int baudRate=115200)
         {
             this.portName = portName;
-
-            try
-            {
-                serialPort = new SerialPort(portName)
-                {
-                    BaudRate = baudRate,
-                    Parity = Parity.None,
-                    StopBits = StopBits.One,
-                    DataBits = 8
-                };
-                serialPort.DataReceived += serialPort_DataReceived;
-                serialPort.Open();
-
-                isConnected = true;
-                LogInfo($"Connected to port {portName}.");
-                OnConnected?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                LogError($"Failed to connect to port {portName}.");
-                OnConnectingError?.Invoke(ex);
-            }
+            this.baudRate = baudRate;
         }
 
 
@@ -101,34 +98,54 @@ namespace MyNetSensors.WebController.Code
         }
 
 
+        public void Connect()
+        {
+            try
+            {
+                serialPort = new SerialPort(portName)
+                {
+                    BaudRate = baudRate,
+                    Parity = Parity.None,
+                    StopBits = StopBits.One,
+                    DataBits = 8
+                };
+                serialPort.DataReceived += serialPort_DataReceived;
+                serialPort.Open();
+
+                isConnected = true;
+                LogInfo($"Connected to port {portName}.");
+                OnConnected?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                LogError($"Failed to connect to port {portName}.");
+                OnConnectingError?.Invoke(ex);
+            }
+        }
+
         public void Disconnect()
         {
-            if (isConnected || serialPort != null)
-            {
-                isConnected = false;
+            if (!isConnected || serialPort == null)
+                return;
 
-                //LogPortState("Port disconnected.");
+            isConnected = false;
 
-                serialPort?.Dispose();
-                serialPort = null;
+            //LogPortState("Port disconnected.");
 
-                OnDisconnected?.Invoke();
-            }
+            serialPort?.Dispose();
+            serialPort = null;
+
+            OnDisconnected?.Invoke();
         }
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string data = serialPort.ReadExisting();
-            InvokeDataRecievedEvents(data);
+
+            LogMessage("RX: " + data);
+
+            OnDataReceived?.Invoke(data);
         }
-
-        private void InvokeDataRecievedEvents(string receivedData)
-        {
-            LogMessage("RX: " + receivedData);
-
-            OnDataReceived?.Invoke(receivedData);
-        }
-
 
 
         private void LogMessage(string message)

@@ -27,7 +27,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
     public class Gateway
     {
-        public IComPort serialPort;
+        public IGatewayConnectionPort connectionPort;
         public bool enableAutoAssignId = true;
         public bool messagesLogEnabled = true;
         public bool endlessConnectionAttempts = true;
@@ -62,7 +62,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         private IMySensorsRepository db;
         private IMySensorsMessagesRepository hisotryDb;
 
-        public Gateway(IComPort serialPort, IMySensorsRepository db = null, IMySensorsMessagesRepository hisotryDb = null)
+        public Gateway(IGatewayConnectionPort connectionPort, IMySensorsRepository db = null, IMySensorsMessagesRepository hisotryDb = null)
         {
             this.db = db;
             this.hisotryDb = hisotryDb;
@@ -72,12 +72,12 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
             gatewayAliveChecker = new GatewayAliveChecker(this);
 
-            this.serialPort = serialPort;
-            this.serialPort.OnDataReceived += RecieveMessage;
-            this.serialPort.OnDisconnected += OnSerialPortDisconnected;
-            this.serialPort.OnConnected += TryToCommunicateWithGateway;
-            this.serialPort.OnLogError += LogError;
-            this.serialPort.OnLogInfo += OnLogInfo;
+            this.connectionPort = connectionPort;
+            this.connectionPort.OnDataReceived += RecieveMessage;
+            this.connectionPort.OnDisconnected += OnConnectionPortDisconnected;
+            this.connectionPort.OnConnected += TryToCommunicateWithGateway;
+            this.connectionPort.OnLogError += LogError;
+            this.connectionPort.OnLogInfo += OnLogInfo;
         }
 
 
@@ -137,7 +137,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             OnGatewayStateChanged?.Invoke(gatewayState);
         }
 
-        public async Task Connect(string serialPortName)
+        public async Task Connect()
         {
             if (gatewayState != GatewayState.Disconnected)
                 Disconnect();
@@ -148,7 +148,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             {
                 while (gatewayState == GatewayState.ConnectingToPort)
                 {
-                    serialPort.Connect(serialPortName);
+                    connectionPort.Connect();
                     await Task.Delay(1000);
                 }
                 while (gatewayState == GatewayState.ConnectingToGateway)
@@ -158,7 +158,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             }
             else
             {
-                serialPort.Connect(serialPortName);
+                connectionPort.Connect();
             }
         }
 
@@ -166,11 +166,11 @@ namespace MyNetSensors.Gateways.MySensors.Serial
         {
             SetGatewayState(GatewayState.Disconnected);
 
-            if (serialPort.IsConnected())
-                serialPort.Disconnect();
+            if (connectionPort.IsConnected())
+                connectionPort.Disconnect();
         }
 
-        internal void OnSerialPortDisconnected()
+        internal void OnConnectionPortDisconnected()
         {
             if (gatewayState == GatewayState.Connected)
             {
@@ -178,12 +178,12 @@ namespace MyNetSensors.Gateways.MySensors.Serial
 
                 SetGatewayState(GatewayState.Disconnected);
 
-                if (serialPort.IsConnected())
-                    serialPort.Disconnect();
+                if (connectionPort.IsConnected())
+                    connectionPort.Disconnect();
 
                 OnUnexpectedlyDisconnected?.Invoke();
                 if (reconnectIfDisconnected)
-                    Connect(serialPort.GetPortName());
+                    Connect();
             }
         }
 
@@ -245,7 +245,7 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             UpdateSensorFromMessage(message);
 
             string mes = message.ParseToMySensorsMessage();
-            serialPort.SendMessage(mes);
+            connectionPort.SendMessage(mes);
 
             AddMessageToLog(message);
         }

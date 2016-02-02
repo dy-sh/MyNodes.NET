@@ -10,7 +10,7 @@ using MyNetSensors.Gateways.MySensors.Serial;
 
 namespace MyNetSensors.WebController.Code
 {
-    public class EthernetConnection : IComPort
+    public class EthernetConnectionPort : IGatewayConnectionPort
     {
         public event OnDataReceivedEventHandler OnDataReceived;
         public event Action OnConnected;
@@ -23,30 +23,51 @@ namespace MyNetSensors.WebController.Code
 
         private TcpClient tcpClient;
         NetworkStream tcpStream;
-        public List<string> GetPortsList()
-        {
+        private string ip;
+        private int port;
 
-            return null;
+        public EthernetConnectionPort(string ip, int port)
+        {
+            this.ip = ip;
+            this.port = port;
         }
 
-        public void Connect(string portName, int baudRate = 115200)
+        public string GetIp()
+        {
+            return ip;
+        }
+
+        public int GetPort()
+        {
+            return port;
+        }
+
+        public void SetIpAndPort(string ip, int port)
+        {
+            Disconnect();
+            this.ip = ip;
+            this.port = port;
+        }
+
+
+        public void Connect()
         {
             try
             {
                 tcpClient = new TcpClient();
 
-                tcpClient.Connect("192.168.88.20", 5003);
+                tcpClient.Connect(ip, port);
 
                 tcpStream = tcpClient.GetStream();
 
-                LogInfo($"Connected to 192.168.88.20");
+                LogInfo($"Connected to {ip}:{port}");
                 OnConnected?.Invoke();
 
                 ReadFromSocket();
             }
             catch (SocketException ex)
             {
-                LogError($"Failed to connect. {ex.ToString()}");
+                LogError($"Failed to connect to {ip}:{port}. {ex.ToString()}");
                 OnConnectingError?.Invoke(ex);
             }
         }
@@ -57,12 +78,11 @@ namespace MyNetSensors.WebController.Code
             {
 
                 try
-                {// Server Reply
+                {
                     if (tcpStream.CanRead)
                     {
                         // Buffer to store the response bytes.
                         byte[] readBuffer = new byte[tcpClient.ReceiveBufferSize];
-                        string fullServerReply = null;
                         using (var writer = new MemoryStream())
                         {
                             do
@@ -74,7 +94,8 @@ namespace MyNetSensors.WebController.Code
                                 }
                                 writer.Write(readBuffer, 0, numberOfBytesRead);
                             } while (tcpStream.DataAvailable);
-                            fullServerReply = Encoding.UTF8.GetString(writer.ToArray());
+                            var fullServerReply = Encoding.UTF8.GetString(writer.ToArray());
+
                             LogMessage("RX: " + fullServerReply.TrimEnd('\r', '\n'));
                             OnDataReceived?.Invoke(fullServerReply);
                         }
@@ -82,7 +103,7 @@ namespace MyNetSensors.WebController.Code
                 }
                 catch (Exception ex)
                 {
-                    LogError("Failed to read data from socket. " + ex.Message);
+                    LogError("Failed to read data from port. " + ex.Message);
                 }
 
                 await Task.Delay(1);
@@ -95,6 +116,7 @@ namespace MyNetSensors.WebController.Code
                 return;
 
             tcpClient.Close();
+            OnDisconnected?.Invoke();
         }
 
         public void SendMessage(string message)
@@ -127,10 +149,6 @@ namespace MyNetSensors.WebController.Code
             return tcpClient.Connected;
         }
 
-        public string GetPortName()
-        {
-            return null;
-        }
 
         private void LogMessage(string message)
         {

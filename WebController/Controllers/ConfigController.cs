@@ -51,13 +51,13 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult FirstRun()
         {
-            List<string> ports = SystemController.comPort.GetPortsList();
-            string currentPort = SystemController.serialGatewayPortName;
+            //List<string> ports = SystemController.gatewayConnectionPort.GetAvailablePorts();
+            //string currentPort = SystemController.serialGatewayPortName;
 
-            ViewBag.ports = ports;
+            //ViewBag.ports = ports;
 
-            if (ports.Contains(currentPort))
-                ViewBag.currentPort = currentPort;
+            //if (ports.Contains(currentPort))
+            //    ViewBag.currentPort = currentPort;
 
             return View(new SerialPortViewModel());
         }
@@ -66,16 +66,15 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult FirstRun(SerialPortViewModel port)
         {
-            if (String.IsNullOrEmpty(port.PortName))
-                return RedirectToAction("FirstRun");
+            //if (String.IsNullOrEmpty(port.PortName))
+            //    return RedirectToAction("FirstRun");
 
-            dynamic json = ReadConfig();
-            json.SerialGateway.SerialPort = port.PortName;
-            json.FirstRun = false;
-            WriteConfig(json);
-            сonfiguration.Reload();
+            //dynamic json = ReadConfig();
+            //json.SerialGateway.SerialPort = port.PortName;
+            //json.FirstRun = false;
+            //WriteConfig(json);
+            //сonfiguration.Reload();
 
-            //SystemController.Start(сonfiguration);
 
             return RedirectToAction("Index", "Dashboard");
         }
@@ -85,7 +84,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult SerialPort()
         {
-            List<string> ports = SystemController.comPort.GetPortsList();
+
+            List<string> ports = SerialConnectionPort.GetAvailablePorts();
             string currentPort = SystemController.serialGatewayPortName;
 
             ViewBag.ports = ports;
@@ -124,8 +124,10 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            string portname = SystemController.serialGatewayPortName;
-            await SystemController.gateway.Connect(portname);
+            await Task.Run((() =>
+            {
+                SystemController.ConnectToGateway();
+            }));
 
             return true;
         }
