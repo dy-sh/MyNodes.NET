@@ -52,7 +52,7 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult FirstRun()
         {
             List<string> ports = SystemController.comPort.GetPortsList();
-            string currentPort = SystemController.serialPortName;
+            string currentPort = SystemController.serialGatewayPortName;
 
             ViewBag.ports = ports;
 
@@ -86,7 +86,7 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult SerialPort()
         {
             List<string> ports = SystemController.comPort.GetPortsList();
-            string currentPort = SystemController.serialPortName;
+            string currentPort = SystemController.serialGatewayPortName;
 
             ViewBag.ports = ports;
 
@@ -109,7 +109,7 @@ namespace MyNetSensors.WebController.Controllers
             сonfiguration.Reload();
 
             SystemController.gateway.Disconnect();
-            SystemController.serialPortName = port.PortName;
+            SystemController.serialGatewayPortName = port.PortName;
 
             return RedirectToAction("Index");
         }
@@ -124,7 +124,7 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            string portname = SystemController.serialPortName;
+            string portname = SystemController.serialGatewayPortName;
             await SystemController.gateway.Connect(portname);
 
             return true;

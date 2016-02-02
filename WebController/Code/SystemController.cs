@@ -19,23 +19,22 @@ namespace MyNetSensors.WebController.Code
     public static class SystemController
     {
         //SETTINGS
-        public static string serialPortName = "COM1";
-        public static bool enableAutoAssignId = true;
+        public static string serialGatewayPortName = "COM1";
+
+        public static string ethernetGatewayIp = "192.168.88.20";
+        public static int ethernetGatewayPort = 5003;
+
+        public static bool gatewayAutoAssignId = true;
+        public static bool gatewayMessagesLogEnabled = false;
 
         public static bool dataBaseEnabled = true;
         public static bool useInternalDb = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
-        public static bool serialGatewayMessagesLogEnabled = false;
 
 
         public static bool nodesEngineEnabled = true;
         public static int nodesEngineUpdateInterval = 10;
-
-        //public static bool softNodesEnabled = true;
-        //public static int softNodesPort = 13122;
-        //public static bool softNodesLogMessages = true;
-        //public static bool softNodesLogState = true;
 
 
         //VARIABLES
@@ -56,12 +55,10 @@ namespace MyNetSensors.WebController.Code
 
         public static Logs logs = new Logs();
 
-        //public static ISoftNodesServer softNodesServer;
-        //public static SoftNodesController softNodesController;
-
         public static event EventHandler OnStarted;
 
         public static bool serialGatewayEnabled;
+        public static bool ethernetGatewayEnabled;
 
 
         private static bool systemControllerStarted;
@@ -109,8 +106,7 @@ namespace MyNetSensors.WebController.Code
                 logs.AddSystemInfo("---------------- STARTING ------------------");
 
                 ConnectToDB(services);
-                ConnectToSerialGateway();
-               // ConnectToEthernetGateway(); 
+                ConnectToGateway();
                 StartNodesEngine();
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
@@ -127,12 +123,18 @@ namespace MyNetSensors.WebController.Code
         {
             try
             {
-                serialGatewayEnabled = Boolean.Parse(configuration["SerialGateway:Enable"]);
-                enableAutoAssignId = Boolean.Parse(configuration["SerialGateway:EnableAutoAssignId"]);
-                serialGatewayMessagesLogEnabled = Boolean.Parse(configuration["SerialGateway:EnableMessagesLog"]);
+                serialGatewayEnabled = Boolean.Parse(configuration["Gateway:SerialGateway:Enable"]);
+                serialGatewayPortName = configuration["Gateway:SerialGateway:SerialPort"];
 
-                logs.enableGatewayLog = Boolean.Parse(configuration["SerialGateway:LogState"]);
-                logs.enableHardwareNodesLog = Boolean.Parse(configuration["SerialGateway:LogMessages"]);
+                ethernetGatewayEnabled = Boolean.Parse(configuration["Gateway:EthernetGateway:Enable"]);
+                ethernetGatewayIp = configuration["Gateway:EthernetGateway:GatewayIP"];
+                ethernetGatewayPort = Int32.Parse(configuration["Gateway:EthernetGateway:GatewayPort"]);
+
+                gatewayAutoAssignId = Boolean.Parse(configuration["Gateway:EnableAutoAssignId"]);
+                gatewayMessagesLogEnabled = Boolean.Parse(configuration["Gateway:EnableMessagesLog"]);
+
+                logs.enableGatewayLog = Boolean.Parse(configuration["Gateway:LogState"]);
+                logs.enableHardwareNodesLog = Boolean.Parse(configuration["Gateway:LogMessages"]);
                 logs.enableNodesEngineLog = Boolean.Parse(configuration["NodesEngine:LogEngine"]);
                 logs.enableNodesLog = Boolean.Parse(configuration["NodesEngine:LogNodes"]);
                 logs.enableDataBaseLog = Boolean.Parse(configuration["DataBase:LogState"]);
@@ -145,7 +147,6 @@ namespace MyNetSensors.WebController.Code
                 dataBaseWriteInterval = Int32.Parse(configuration["DataBase:WriteInterval"]);
                 dataBaseConnectionString = configuration["DataBase:ExternalDbConnectionString"];
 
-                serialPortName = configuration["SerialGateway:SerialPort"];
             }
             catch
             {
@@ -255,12 +256,19 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void ConnectToSerialGateway()
+        private static void ConnectToGateway()
         {
-            comPort = new ComPort();
+            if (serialGatewayEnabled)
+            {
+                comPort = new ComPort();
+            }
+            else if (ethernetGatewayEnabled)
+            {
+                //ethernet
+            }
             gateway = new Gateway(comPort, mySensorsDb, mySensorsMessagesDb);
 
-            gateway.enableAutoAssignId = enableAutoAssignId;
+            gateway.enableAutoAssignId = gatewayAutoAssignId;
 
             gateway.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.OnLogInfo += logs.AddGatewayInfo;
@@ -268,14 +276,14 @@ namespace MyNetSensors.WebController.Code
             gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
             // gateway.serialPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
-            gateway.messagesLogEnabled = serialGatewayMessagesLogEnabled;
+            gateway.messagesLogEnabled = gatewayMessagesLogEnabled;
 
             if (!serialGatewayEnabled) return;
 
             //connecting to gateway
             logs.AddSystemInfo("Connecting to gateway...");
 
-            gateway.Connect(serialPortName).Wait();
+            gateway.Connect(serialGatewayPortName).Wait();
 
             if (gateway.IsConnected())
                 logs.AddSystemInfo("Gateway connected.");
