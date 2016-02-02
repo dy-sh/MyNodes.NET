@@ -1,7 +1,7 @@
 ﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
 
 @{
-    ViewBag.Title = "Serial Port";
+    ViewBag.Title = "Serial Gateway";
 }
 
 <br />
@@ -10,7 +10,7 @@
     <h2>@ViewBag.Title</h2>
 
     <p>
-        < <a asp-controller="Config" asp-action="Gateway">Gateway Config</a>
+        < <a asp-action="Index">Config</a>
     </p>
     <div class="ui divider"></div>
 
@@ -19,10 +19,10 @@
         <div class="column">
             <div class="ui raised segments">
                 <div class="ui secondary segment">
-                    <h4>Serial Port</h4>
+                    <h4>Serial Gateway</h4>
                 </div>
 
-                <form asp-action="SerialPort" asp-anti-forgery="true" class="ui form">
+                <form asp-action="SerialGateway" asp-anti-forgery="true" class="ui form">
                     <div class="ui attached segment">
 
 

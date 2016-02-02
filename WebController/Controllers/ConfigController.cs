@@ -82,7 +82,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [HttpGet]
-        public IActionResult SerialPort()
+        public IActionResult SerialGateway()
         {
 
             List<string> ports = SerialConnectionPort.GetAvailablePorts();
@@ -98,31 +98,66 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [HttpPost]
-        public IActionResult SerialPort(SerialPortViewModel port)
+        public IActionResult SerialGateway(SerialPortViewModel port)
         {
             if (String.IsNullOrEmpty(port.PortName))
-                return RedirectToAction("SerialPort");
+                return RedirectToAction("SerialGateway");
 
             dynamic json = ReadConfig();
-            json.SerialGateway.SerialPort = port.PortName;
+            json.Gateway.SerialGateway.SerialPort = port.PortName;
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SystemController.gateway.Disconnect();
+            SystemController.DisconnectGateway();
             SystemController.serialGatewayPortName = port.PortName;
 
             return RedirectToAction("Index");
         }
 
 
+        [HttpGet]
+        public IActionResult EthernetGateway()
+        {
+            EthernetGatewayViewModel model = new EthernetGatewayViewModel
+            {
+                Ip = SystemController.ethernetGatewayIp,
+                Port = SystemController.ethernetGatewayPort
+            };
+
+            return View(model);
+        }
 
 
-        public async Task<bool> ConnectSerialController()
+        [HttpPost]
+        public IActionResult EthernetGateway(EthernetGatewayViewModel model)
         {
             dynamic json = ReadConfig();
-            json.SerialGateway.Enable = true;
+            json.Gateway.EthernetGateway.IP = model.Ip;
+            json.Gateway.EthernetGateway.Port = model.Port;
             WriteConfig(json);
             сonfiguration.Reload();
+
+            SystemController.DisconnectGateway();
+            SystemController.ethernetGatewayIp = model.Ip;
+            SystemController.ethernetGatewayPort = model.Port;
+
+            return RedirectToAction("Index");
+        }
+
+
+
+        public async Task<bool> ConnectSerialGateway()
+        {
+            SystemController.DisconnectGateway();
+
+            dynamic json = ReadConfig();
+            json.Gateway.SerialGateway.Enable = true;
+            json.Gateway.EthernetGateway.Enable = false;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            SystemController.serialGatewayEnabled = true;
+            SystemController.ethernetGatewayEnabled = false;
 
             await Task.Run((() =>
             {
@@ -133,17 +168,45 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public bool DisconnectSerialController()
+
+
+        public async Task<bool> ConnectEthernetController()
         {
+            SystemController.DisconnectGateway();
+
             dynamic json = ReadConfig();
-            json.SerialGateway.Enable = false;
+            json.Gateway.SerialGateway.Enable = false;
+            json.Gateway.EthernetGateway.Enable = true;
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SystemController.gateway.Disconnect();
+            SystemController.serialGatewayEnabled = false;
+            SystemController.ethernetGatewayEnabled = true;
+
+            await Task.Run((() =>
+            {
+                SystemController.ConnectToGateway();
+            }));
 
             return true;
         }
+
+        public bool DisconnectGateway()
+        {
+            dynamic json = ReadConfig();
+            json.Gateway.SerialGateway.Enable = false;
+            json.Gateway.EthernetGateway.Enable = false;
+            WriteConfig(json);
+            сonfiguration.Reload();
+
+            SystemController.serialGatewayEnabled = false;
+            SystemController.ethernetGatewayEnabled = false;
+
+            SystemController.DisconnectGateway();
+
+            return true;
+        }
+
 
 
         public bool StartNodesEngine()

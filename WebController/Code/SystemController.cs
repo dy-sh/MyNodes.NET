@@ -301,5 +301,16 @@ namespace MyNetSensors.WebController.Code
 
         }
 
+        public static void DisconnectGateway()
+        {
+            if (gateway==null)
+                return;
+
+            if (gateway.GetGatewayState() != GatewayState.Disconnected)
+            gateway.Disconnect();
+
+            gateway = null;
+            mySensorsNodesEngine = null;
+        }
     }
 }
