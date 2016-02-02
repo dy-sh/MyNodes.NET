@@ -101,25 +101,25 @@
                 <div class="ui attached clearing segment">
                     State
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="serial-gateway-state">-</span>
+                        <span class="ui blue basic label" id="gateway-state">-</span>
                     </div>
                 </div>
 
                 <div class="ui attached clearing segment">
                     Nodes
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="serial-gateway-nodes-count">-</span>
+                        <span class="ui blue basic label" id="gateway-nodes-count">-</span>
                     </div>
                     <br />
                     <br />
                     Sensors
                     <div class="ui right floated basic disabled button nonbutton">
-                        <span class="ui blue basic label" id="serial-gateway-sensors-count">-</span>
+                        <span class="ui blue basic label" id="gateway-sensors-count">-</span>
                     </div>
                     <br />
                     <br />
                     <div class="ui divider"></div>
-                    <button class="ui right floated small button" id="serial-gateway-delete-nodes">Delete all nodes</button>
+                    <button class="ui right floated small button" id="gateway-delete-nodes">Delete all nodes</button>
                 </div>
 
                 <div class="ui attached clearing segment">
@@ -140,42 +140,12 @@
 
                     </div>
                 </div>
-
-                @*<div class="ui attached clearing segment">
-                    Serial Gateway
-                    <button class="ui right floated blue button connectbutton" id="serial-gateway-connect">Connect</button>
-                    <button class="ui right floated button connectbutton" id="serial-gateway-disconnect" style="display: none">Disconnect</button>
-                    <a asp-controller="Config" asp-action="SerialGateway" class="ui right floated button">Settings</a>
-                </div>
-                <div class="ui attached clearing segment">
-                    Ethernet Gateway
-                    <button class="ui right floated blue button connectbutton" id="ethernet-gateway-connect">Connect</button>
-                    <button class="ui right floated button connectbutton" id="ethernet-gateway-disconnect" style="display: none">Disconnect</button>
-                    <a asp-controller="Config" asp-action="EthernetGateway" class="ui right floated button">Settings</a>
-                </div>*@
             </div>
         </div>
-
-
-
-
-
-        @*<div class="column">
-                <div class="ui raised segments">
-                    <div class="ui secondary clearing segment">
-                        <b>Web server</b>
-                    </div>
-                    <div class="ui attached clearing segment">
-                        <div class="ui blue basic label" id="users-online">-</div>
-                        Clients connected
-                    </div>
-                </div>
-            </div>*@
-
     </div>
 
 
-    <div class="ui modal" id="serial-gateway-delete-nodes-nonfirm">
+    <div class="ui modal" id="gateway-delete-nodes-nonfirm">
         <div class="header">
             Delete all hardware nodes
         </div>

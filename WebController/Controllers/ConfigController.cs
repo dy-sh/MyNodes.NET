@@ -170,7 +170,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        public async Task<bool> ConnectEthernetController()
+        public async Task<bool> ConnectEthernetGateway()
         {
             SystemController.DisconnectGateway();
 

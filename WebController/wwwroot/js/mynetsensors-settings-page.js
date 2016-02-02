@@ -16,8 +16,8 @@ $(function () {
 $(document).ready(function () {
 
 
-    $("#serial-gateway-delete-nodes").click(function () {
-        $('#serial-gateway-delete-nodes-nonfirm').modal({
+    $("#gateway-delete-nodes").click(function () {
+        $('#gateway-delete-nodes-nonfirm').modal({
             onApprove: function () {
                 $.ajax({
                     type: "POST", url: "/GatewayAPI/RemoveAllNodes",
@@ -32,7 +32,7 @@ $(document).ready(function () {
     $("#serial-gateway-connect").click(function () {
         $.ajax({
             type: "POST",
-            url: "/Config/ConnectSerialController/",
+            url: "/Config/ConnectSerialGateway/",
             success: function () {
                 getGatewayInfo();
             }
@@ -42,7 +42,27 @@ $(document).ready(function () {
     $("#serial-gateway-disconnect").click(function () {
         $.ajax({
             type: "POST",
-            url: "/Config/DisconnectSerialController/",
+            url: "/Config/DisconnectGateway/",
+            success: function () {
+                getGatewayInfo();
+            }
+        });
+    });
+
+    $("#ethernet-gateway-connect").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Config/ConnectEthernetGateway/",
+            success: function () {
+                getGatewayInfo();
+            }
+        });
+    });
+
+    $("#ethernet-gateway-disconnect").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Config/DisconnectGateway/",
             success: function () {
                 getGatewayInfo();
             }
@@ -150,38 +170,50 @@ function getGatewayInfo() {
 
 
 function updateGatewayInfo(gatewayInfo) {
-    $("#serial-gateway-state").removeClass("blue");
-    $("#serial-gateway-state").removeClass("red");
+    $("#gateway-state").removeClass("blue");
+    $("#gateway-state").removeClass("red");
 
     switch (gatewayInfo.state) {
         case 0:
-            $("#serial-gateway-state").html('Disconnected');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").show();
-            $("#serial-gateway-disconnect").hide();
+            $("#gateway-state").html('Disconnected');
+            $("#gateway-state").addClass('red');
             break;
         case 1:
-            $("#serial-gateway-state").html('Connecting to port...');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
+            $("#gateway-state").html('Connecting to port...');
+            $("#gateway-state").addClass('red');
             break;
         case 2:
-            $("#serial-gateway-state").html('Connecting to gateway...');
-            $("#serial-gateway-state").addClass('red');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
+            $("#gateway-state").html('Connecting to gateway...');
+            $("#gateway-state").addClass('red');
             break;
         case 3:
-            $("#serial-gateway-state").html('Connected');
-            $("#serial-gateway-state").addClass('blue');
-            $("#serial-gateway-connect").hide();
-            $("#serial-gateway-disconnect").show();
+            $("#gateway-state").html('Connected');
+            $("#gateway-state").addClass('blue');
             break;
         default:
     }
 
+    if (gatewayInfo.state == 0) { //disconnected
+        $("#serial-gateway-connect").show();
+        $("#serial-gateway-disconnect").hide();
+        $("#ethernet-gateway-connect").show();
+        $("#ethernet-gateway-disconnect").hide();
+    } else {//connecting or connected
+        if (gatewayInfo.type == 0) { //serial
+            $("#serial-gateway-connect").hide();
+            $("#serial-gateway-disconnect").show();
+            $("#ethernet-gateway-connect").show();
+            $("#ethernet-gateway-disconnect").hide();
+        }
+        else if (gatewayInfo.type == 1) { //ethernet
+            $("#serial-gateway-connect").show();
+            $("#serial-gateway-disconnect").hide();
+            $("#ethernet-gateway-connect").hide();
+            $("#ethernet-gateway-disconnect").show();
+        }
+    }
 
-    $('#serial-gateway-nodes-count').html(gatewayInfo.gatewayNodesRegistered);
-    $('#serial-gateway-sensors-count').html(gatewayInfo.gatewaySensorsRegistered);
+
+    $('#gateway-nodes-count').html(gatewayInfo.gatewayNodesRegistered);
+    $('#gateway-sensors-count').html(gatewayInfo.gatewaySensorsRegistered);
 }

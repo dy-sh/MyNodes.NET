@@ -55,7 +55,9 @@ namespace MyNetSensors.WebController.Code
 
         public static Logs logs = new Logs();
 
-        public static event EventHandler OnStarted;
+        public static event Action OnStarted;
+        public static event Action OnGatewayConnected;
+        public static event Action OnGatewayDisconnected;
 
         public static bool serialGatewayEnabled;
         public static bool ethernetGatewayEnabled;
@@ -111,7 +113,7 @@ namespace MyNetSensors.WebController.Code
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
 
-                OnStarted?.Invoke(null, EventArgs.Empty);
+                OnStarted?.Invoke();
 
             });
         }
@@ -288,18 +290,33 @@ namespace MyNetSensors.WebController.Code
             // gateway.connectionPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
             gateway.messagesLogEnabled = gatewayMessagesLogEnabled;
+            gateway.OnConnected += GatewayConnected;
+            gateway.OnDisconnected += GatewayDisconnected;
 
             gateway.Connect().Wait();
 
             if (gateway != null && nodesEngine != null)
                 mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
 
-            if (gateway.IsConnected())
+            if (gateway!= null && gateway.IsConnected())
+            {
                 logs.AddSystemInfo("Gateway connected.");
+            }
             else
                 logs.AddSystemInfo("Gateway is not connected.");
 
         }
+
+        private static void GatewayConnected()
+        {
+            OnGatewayConnected?.Invoke();
+        }
+
+        private static void GatewayDisconnected()
+        {
+           OnGatewayDisconnected?.Invoke();
+        }
+
 
         public static void DisconnectGateway()
         {

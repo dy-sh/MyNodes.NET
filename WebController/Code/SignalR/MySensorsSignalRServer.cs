@@ -20,11 +20,11 @@ namespace MyNetSensors.WebController.Code
         {
             hub = connectionManager.GetHubContext<MySensorsHub>();
 
-            SystemController.OnStarted += OnSystemControllerStarted;
+            SystemController.OnGatewayConnected += OnGatewayConnected;
         }
         
 
-        private static void OnSystemControllerStarted(object sender, EventArgs e)
+        private static void OnGatewayConnected()
         {
             gateway = SystemController.gateway;
 

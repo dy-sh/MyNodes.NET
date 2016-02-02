@@ -61,23 +61,40 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
-        
+
         public GatewayInfo GetGatewayInfo()
         {
-            if (gateway == null)
-                return null;
+            GatewayInfo info = new GatewayInfo
+            {
+                isGatewayConnected = IsConnected(),
+                gatewayNodesRegistered = 0,
+                gatewaySensorsRegistered = 0,
+                state = GatewayState.Disconnected
+            };
 
-            return gateway.GetGatewayInfo();
+            if (gateway != null)
+            {
+                info.state = gateway.GetGatewayState();
+                info.gatewayNodesRegistered = gateway.GetNodes().Count;
+                info.gatewaySensorsRegistered = gateway.GetNodes().Sum(node => node.sensors.Count);
+
+                if (gateway.connectionPort is EthernetConnectionPort)
+                    info.type = GatewayType.Ethernet;
+                else if (gateway.connectionPort is SerialConnectionPort)
+                    info.type = GatewayType.Serial;
+            }
+
+            return info;
         }
-        
+
 
         public bool UpdateNodeSettings(Node node)
         {
             //todo
-           // gateway.UpdateNode(node);
+            // gateway.UpdateNode(node);
             return true;
         }
-        
+
 
         public bool RemoveNode(int nodeId)
         {

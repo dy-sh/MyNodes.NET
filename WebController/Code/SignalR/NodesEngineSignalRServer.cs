@@ -38,7 +38,7 @@ namespace MyNetSensors.WebController.Code
       
 
 
-        private static void OnSystemControllerStarted(object sender, EventArgs e)
+        private static void OnSystemControllerStarted()
         {
             nodesEngine = SystemController.nodesEngine;
             uiNodesEngine = SystemController.uiNodesEngine;

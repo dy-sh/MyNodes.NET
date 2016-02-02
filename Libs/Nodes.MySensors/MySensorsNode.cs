@@ -41,9 +41,13 @@ namespace MyNetSensors.Nodes
 
             LogInfo($"Hardware Node{nodeId} Sensor{mySensorsNodeInput.sensorId} input: {input.Value}");
 
-            //todo null exception if desconnected
-            MySensorsNodesEngine.gateway.SendSensorState(mySensorsNodeInput.nodeId, mySensorsNodeInput.sensorId, input.Value);
-
+            if (MySensorsNodesEngine.gateway != null)
+                MySensorsNodesEngine.gateway.SendSensorState(mySensorsNodeInput.nodeId, mySensorsNodeInput.sensorId,
+                    input.Value);
+            else
+            {
+                LogError($"Can`t send message to Node[{mySensorsNodeInput.nodeId}] Sensor[{mySensorsNodeInput.sensorId}]. Gateway is not connected.");
+            }
         }
 
         public override void OnOutputChange(Output output)

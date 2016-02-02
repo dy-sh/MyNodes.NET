@@ -661,22 +661,6 @@ namespace MyNetSensors.Gateways.MySensors.Serial
             SendMessage(message);
         }
 
-        public GatewayInfo GetGatewayInfo()
-        {
-            GatewayInfo info = new GatewayInfo
-            {
-                state = gatewayState,
-                isGatewayConnected = IsConnected(),
-                gatewayNodesRegistered = nodes.Count
-            };
-
-
-            int sensors = nodes.Sum(node => node.sensors.Count);
-            info.gatewaySensorsRegistered = sensors;
-
-            return info;
-        }
-
 
 
         public void RemoveNode(int nodeId)
