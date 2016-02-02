@@ -60,6 +60,8 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\OperationJsonFileNode.cs" />
+    <Compile Include="Nodes\OperationFileNode.cs" />
     <Compile Include="Nodes\OperationEventsDelayMeterNode.cs" />
     <Compile Include="Nodes\OperationEventsFreqMeterNode.cs" />
     <Compile Include="Nodes\OperationSwitchOutNode.cs" />

@@ -793,7 +793,27 @@
 
 
 
+    //OperationFileNode
+    function OperationFileNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationFileNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationFileNode.title = "File";
+    LiteGraph.registerNodeType("Operation/File", OperationFileNode);
 
+
+
+    //OperationJsonFileNode
+    function OperationJsonFileNode() {
+        this.properties = {
+            'ObjectType': "MyNetSensors.Nodes.OperationJsonFileNode",
+            'Assembly': "Nodes"
+        };
+    }
+    OperationJsonFileNode.title = "Json File";
+    LiteGraph.registerNodeType("Operation/Json File", OperationJsonFileNode);
 
 
     //---------------------------------------------------------------------------------
