@@ -110,6 +110,7 @@ namespace MyNetSensors.WebController.Code
 
                 ConnectToDB(services);
                 ConnectToSerialGateway();
+               // ConnectToEthernetGateway(); 
                 StartNodesEngine();
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
@@ -118,6 +119,7 @@ namespace MyNetSensors.WebController.Code
 
             });
         }
+
 
 
 
@@ -226,35 +228,6 @@ namespace MyNetSensors.WebController.Code
         
 
 
-        private static void ConnectToSerialGateway()
-        {
-            comPort=new ComPort();
-            gateway=new Gateway(comPort, mySensorsDb,mySensorsMessagesDb);
-
-            gateway.enableAutoAssignId = enableAutoAssignId;
-
-            gateway.OnLogMessage += logs.AddHardwareNodeInfo;
-            gateway.OnLogInfo += logs.AddGatewayInfo;
-            gateway.OnLogError += logs.AddGatewayError;
-            gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
-            // gateway.serialPort.OnLogMessage += logs.AddHardwareNodeInfo;
-            gateway.endlessConnectionAttempts = true;
-            gateway.messagesLogEnabled = serialGatewayMessagesLogEnabled;
-
-            if (!serialGatewayEnabled) return;
-
-                //connecting to gateway
-                logs.AddSystemInfo("Connecting to gateway...");
-
-                gateway.Connect(serialPortName).Wait();
-
-            if(gateway.IsConnected())
-                logs.AddSystemInfo("Gateway connected.");
-            else
-                logs.AddSystemInfo("Gateway is not connected.");
-        }
-
-
 
 
         private static void StartNodesEngine()
@@ -276,6 +249,51 @@ namespace MyNetSensors.WebController.Code
             nodesEngine.Start();
 
             logs.AddSystemInfo("Nodes engine started.");
+        }
+
+
+
+
+
+        private static void ConnectToSerialGateway()
+        {
+            comPort = new ComPort();
+            gateway = new Gateway(comPort, mySensorsDb, mySensorsMessagesDb);
+
+            gateway.enableAutoAssignId = enableAutoAssignId;
+
+            gateway.OnLogMessage += logs.AddHardwareNodeInfo;
+            gateway.OnLogInfo += logs.AddGatewayInfo;
+            gateway.OnLogError += logs.AddGatewayError;
+            gateway.serialPort.OnLogInfo += logs.AddGatewayInfo;
+            // gateway.serialPort.OnLogMessage += logs.AddHardwareNodeInfo;
+            gateway.endlessConnectionAttempts = true;
+            gateway.messagesLogEnabled = serialGatewayMessagesLogEnabled;
+
+            if (!serialGatewayEnabled) return;
+
+            //connecting to gateway
+            logs.AddSystemInfo("Connecting to gateway...");
+
+            gateway.Connect(serialPortName).Wait();
+
+            if (gateway.IsConnected())
+                logs.AddSystemInfo("Gateway connected.");
+            else
+                logs.AddSystemInfo("Gateway is not connected.");
+
+        }
+
+
+
+        private static void ConnectToEthernetGateway()
+        {
+            //------------
+            EthernetConnection con = new EthernetConnection();
+            con.OnLogInfo += logs.AddGatewayInfo;
+            con.OnLogError += logs.AddGatewayError;
+            con.OnLogMessage += logs.AddHardwareNodeInfo;
+            con.Connect(null, 0);
         }
     }
 }
