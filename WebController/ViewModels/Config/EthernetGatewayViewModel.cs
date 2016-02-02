@@ -9,11 +9,11 @@ namespace MyNetSensors.WebController.ViewModels.Config
     public class EthernetGatewayViewModel
     {
         [Required]
-        [Display(Name = "Gateway IP")]
+        [Display(Name = "IP")]
         public string Ip { get; set; }
 
         [Required]
-        [Display(Name = "Gateway Port")]
+        [Display(Name = "Port")]
         public int Port { get; set; }
     }
 }
