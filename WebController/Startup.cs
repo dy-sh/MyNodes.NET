@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Query.ExpressionTranslators.Internal;
@@ -15,8 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.Models;
-using MyNetSensors.WebController.Services;
 
 namespace MyNetSensors.WebController
 {
@@ -57,8 +54,6 @@ namespace MyNetSensors.WebController
                 {
                     services.AddEntityFramework()
                         .AddSqlite()
-                        .AddDbContext<ApplicationDbContext>(options =>
-                            options.UseSqlite("Data Source=Application.sqlite"))
                         .AddDbContext<NodesDbContext>(options =>
                             options.UseSqlite("Data Source=Nodes.sqlite"))
                         .AddDbContext<NodesStatesHistoryDbContext>(options =>
@@ -75,8 +70,6 @@ namespace MyNetSensors.WebController
                     string connectionString = Configuration["DataBase:ExternalDbConnectionString"];
                     services.AddEntityFramework()
                         .AddSqlServer()
-                        .AddDbContext<ApplicationDbContext>(options =>
-                            options.UseSqlServer(connectionString))
                         .AddDbContext<NodesDbContext>(options =>
                             options.UseSqlServer(connectionString))
                         .AddDbContext<NodesStatesHistoryDbContext>(options =>
@@ -90,15 +83,7 @@ namespace MyNetSensors.WebController
                 }
             }
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
             services.AddMvc();
-
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
 
             //Add all SignalR related services to IoC.
             services.AddSignalR();
@@ -160,20 +145,6 @@ namespace MyNetSensors.WebController
                 else
                 {
                     app.UseExceptionHandler("/Home/Error");
-
-                    // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-                    try
-                    {
-                        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                            .CreateScope())
-                        {
-                            serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-                                .Database.Migrate();
-                        }
-                    }
-                    catch
-                    {
-                    }
                 }
 
                 app.UseRuntimeInfoPage("/info");
@@ -184,11 +155,6 @@ namespace MyNetSensors.WebController
                 app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
                 app.UseStaticFiles();
-
-                app.UseIdentity();
-
-
-                // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
                 app.UseStatusCodePages();
 
