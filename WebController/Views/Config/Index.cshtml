@@ -142,7 +142,40 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary clearing segment">
+                    <b>Web Server</b>
+                </div>
+
+                <div class="ui attached clearing segment">
+                    State
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="nodes-engine-state">Started</span>
+                    </div>
+                </div>
+
+                <div class="ui attached clearing segment">
+                    Registered Users
+                    <div class="ui right floated basic disabled button nonbutton">
+                        <span class="ui blue basic label" id="users-count">-</span>
+                    </div><br /><br />
+                    <div class="ui divider"></div>
+                    <a asp-controller="User" asp-action="List" class="ui right floated button">Edit users</a>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
     </div>
+
+    <br />
+    <br />
 
 
     <div class="ui modal" id="gateway-delete-nodes-nonfirm">

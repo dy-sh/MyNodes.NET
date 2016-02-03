@@ -129,5 +129,14 @@ namespace MyNetSensors.Repositories.Dapper
                 db.Query("TRUNCATE TABLE [Users]");
             }
         }
+
+        public int GetUsersCount()
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                return db.Query<int>("SELECT COUNT(*) FROM [Users]").Single();
+            }
+        }
     }
 }

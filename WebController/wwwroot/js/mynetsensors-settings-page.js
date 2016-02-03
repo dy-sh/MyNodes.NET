@@ -8,8 +8,10 @@
 $(function () {
     getGatewayInfo();
     getNodesEngineInfo();
+    getWebServerInfo();
     setInterval(getGatewayInfo, 1000);
     setInterval(getNodesEngineInfo, 1000);
+    setInterval(getWebServerInfo, 1000);
 });
 
 
@@ -216,4 +218,19 @@ function updateGatewayInfo(gatewayInfo) {
 
     $('#gateway-nodes-count').html(gatewayInfo.gatewayNodesRegistered);
     $('#gateway-sensors-count').html(gatewayInfo.gatewaySensorsRegistered);
+}
+
+
+function getWebServerInfo() {
+    $.ajax({
+        url: "/Config/GetWebServerInfo/",
+        type: "POST",
+        success: function (serverInfo) {
+            $('#main-content').show();
+            $('#users-count').html(serverInfo.RegisteredUsersCount);
+        },
+        error: function () {
+            $('#main-content').hide();
+        }
+    });
 }

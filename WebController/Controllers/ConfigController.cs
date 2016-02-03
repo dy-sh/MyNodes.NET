@@ -235,6 +235,15 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+
+        public WebServerInfo GetWebServerInfo()
+        {
+            WebServerInfo info=new WebServerInfo();
+            info.RegisteredUsersCount = SystemController.usersRepository.GetUsersCount();
+
+            return info;
+        }
     }
 
 }

@@ -72,5 +72,10 @@ namespace MyNetSensors.Repositories.EF.SQLite
             db.Users.RemoveRange(db.Users);
             db.SaveChanges();
         }
+
+        public int GetUsersCount()
+        {
+            return db.Users.Count();
+        }
     }
 }
