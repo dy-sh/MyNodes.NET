@@ -142,6 +142,7 @@
     <Compile Include="NodesRepositoryEf.cs" />
     <Compile Include="UITimerNodesRepositoryEf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsersRepositoryEf.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

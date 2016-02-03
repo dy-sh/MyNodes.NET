@@ -8,6 +8,8 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
+using MyNetSensors.Users;
+using MyNetSensors.WebController.ViewModels.User;
 
 namespace MyNetSensors.WebController.Controllers
 {

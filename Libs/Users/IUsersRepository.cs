@@ -9,11 +9,11 @@ namespace MyNetSensors.Users
 {
     public interface IUsersRepository
     {
-        string AddUser(User user);
+        int AddUser(User user);
         void UpdateUser(User user);
-        User GetUser(string id);
+        User GetUser(int id);
         List<User> GetAllUsers();
-        void RemoveUser(string id);
+        void RemoveUser(int id);
         void RemoveAllUsers();
     }
 }

@@ -158,6 +158,15 @@ namespace MyNetSensors.WebController
 
                 app.UseStatusCodePages();
 
+                app.UseCookieAuthentication(options =>
+                {
+                    options.AuthenticationScheme = "Cookies";
+                    options.LoginPath = new Microsoft.AspNet.Http.PathString("/User/Login");
+                    options.AutomaticAuthenticate = true;
+                    options.AutomaticChallenge = true;
+                });
+
+
                 app.UseMvc(routes =>
                 {
                     routes.MapRoute(
