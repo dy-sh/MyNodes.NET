@@ -101,5 +101,25 @@ namespace MyNetSensors.WebController.Controllers
             await HttpContext.Authentication.SignOutAsync("Cookies");
             return RedirectToAction("Login", "User");
         }
+
+
+
+        public IActionResult List()
+        {
+            List<User> users = db.GetAllUsers();
+            return View(users);
+        }
+
+        public IActionResult Remove(int id)
+        {
+            User user = db.GetUser(id);
+
+            if (user == null)
+                return HttpBadRequest();
+
+            db.RemoveUser(id);
+
+            return RedirectToAction("List");
+        }
     }
 }

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MyNetSensors.Users.User>
+
+
+@{
+    ViewBag.Title = "Users";
+}
+
+
+
+    <br />
+<div class="ui container">
+
+
+    <h2>@ViewBag.Title</h2>
+    <p>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+    </p>
+    <div class="ui divider"></div>
+
+    <div class="ui raised segments">
+        <div class="ui secondary clearing segment">
+            <b>Users</b>
+            <a asp-action="New" asp-route-id="@ViewBag.NodeId" class="ui right floated small primary button">Add New User</a>
+        </div>
+        @if (Model == null || Model.Count() == 0)
+        {
+            <div class="ui attached segment">
+                No users
+            </div>
+        }
+        else
+        {
+            foreach (var user in Model)
+            {
+                <div class="ui attached clearing segment">
+
+
+                    <h4>
+                        @user.Name
+                    </h4>
+                    <div class="ui right floated basic tiny buttons">
+                        <a asp-action="Edit" class="ui button" asp-route-id="@user.Id"><b>Edit permissions</b></a>
+                        <a asp-action="Remove" class="ui button" asp-route-id="@user.Id"><b>Delete</b></a>
+                    </div>
+
+
+                        @*<span class="ui tiny blue ribbon label">ACTIVE</span>*@
+
+                    Email: @user.Email<br>
+                </div>
+            }
+            <div class="ui right aligned attached segment">
+                <div class="ui small buttons">
+                    <a asp-action="RemoveAll" asp-route-id="@ViewBag.NodeId" class="ui button">Delete all users</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<br />
