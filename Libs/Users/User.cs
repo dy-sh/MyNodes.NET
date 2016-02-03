@@ -1,4 +1,6 @@
-﻿namespace MyNetSensors.Users
+﻿using System;
+
+namespace MyNetSensors.Users
 {
     public class User
     {

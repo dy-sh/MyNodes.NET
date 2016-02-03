@@ -55,6 +55,7 @@
     <Compile Include="UITimerNodesRepositoryDapper.cs" />
     <Compile Include="OneToManyDapperMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsersRepositoryDapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
