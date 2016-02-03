@@ -1,32 +1,79 @@
 ﻿@model MyNetSensors.WebController.ViewModels.User.RegisterModel
 
-<h2>Register</h2>
+@{
+    ViewBag.Title = "Register";
+}
 
-<form asp-action="Register" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
     <div>
-        <div>
-            <label asp-for="Name"></label><br />
-            <input type="text" asp-for="Name" />
-            <span asp-validation-for="Name" />
-        </div>
-        <div>
-            <label asp-for="Email"></label><br/>
-            <input type="text" asp-for="Email"/>
-            <span asp-validation-for="Email" />
-        </div>
-        <div>
-            <label asp-for="Password"></label><br/>
-            <input asp-for="Password"/>
-            <span asp-validation-for="Password" />
-        </div>
-        <div>
-            <label asp-for="ConfirmPassword"></label><br/>
-            <input asp-for="ConfirmPassword"/>
-            <span asp-validation-for="ConfirmPassword" />
-        </div>
-        <div>
-            <input type="submit" value="Регистрация"/>
+        <a asp-action="Login">Login</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Register" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui attached segment">
+                        <div class="field">
+                            <label>Login</label>
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" asp-for="Name" placeholder="Login"/>
+                            </div>
+                            <span asp-validation-for="Name" />
+                        </div>
+                        <div class="field">
+                            <label>Email</label>
+                            <div class="ui left icon input">
+                                <i class="mail icon"></i>
+                                <input type="text" asp-for="Email" placeholder="E-mail" />
+                            </div>
+                            <span asp-validation-for="Name" />
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Password</label>
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" asp-for="Password" placeholder="Password" />
+                                </div>
+                                <span asp-validation-for="Password" />
+                            </div>
+                            <div class="field">
+                                <label>Confirm Password</label>
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password" />
+                                </div>
+                                <span asp-validation-for="Password" />
+                            </div>
+                            </div>
+                            <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                        </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                             <a asp-action="Login" class="ui button">Cancel</a>
+                            <input type="submit" value="Register" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
         </div>
     </div>
-</form>
+</div>

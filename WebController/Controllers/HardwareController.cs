@@ -17,7 +17,6 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [ResponseCache(Duration = 0)]
     [Authorize]
     public class HardwareController : Controller
     {

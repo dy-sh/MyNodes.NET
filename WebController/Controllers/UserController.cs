@@ -77,7 +77,7 @@ namespace MyNetSensors.WebController.Controllers
                         Password = model.Password
                     });
 
-                    await Authenticate(model.Email);
+                    await Authenticate(model.Name);
 
                     return RedirectToAction("Index", "Home");
                 }

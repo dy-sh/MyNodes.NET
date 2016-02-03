@@ -8,7 +8,7 @@ namespace MyNetSensors.WebController.ViewModels.User
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Login is required")]
         public string Name { get; set; }
 
         public string Email { get; set; }
