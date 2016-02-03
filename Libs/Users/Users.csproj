@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{80CE261C-2829-445C-8DD6-CEDED5996EE9}</ProjectGuid>
+    <ProjectGuid>{564C8900-69C2-4756-AE54-FA254C92D5A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.Repositories.Dapper</RootNamespace>
-    <AssemblyName>Repositories.Dapper</AssemblyName>
+    <RootNamespace>MyNetSensors.Users</RootNamespace>
+    <AssemblyName>Users</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,14 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Dapper.1.50.0-beta6\lib\net45\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,34 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodesStatesRepositoryDapper.cs" />
-    <Compile Include="MySensorsMessagesRepositoryDapper.cs" />
-    <Compile Include="MySensorsRepositoryDapper.cs" />
-    <Compile Include="NodesRepositoryDapper.cs" />
-    <Compile Include="UITimerNodesRepositoryDapper.cs" />
-    <Compile Include="OneToManyDapperMapper.cs" />
+    <Compile Include="IUsersRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gateways.MySensors.Serial\Gateways.MySensors.Serial.csproj">
-      <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateways.MySensors.Serial</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Nodes.UITimer\Nodes.UITimer.csproj">
-      <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>
-      <Name>Nodes.UITimer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Nodes\Nodes.csproj">
-      <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
-      <Name>Nodes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Users\Users.csproj">
-      <Project>{564c8900-69c2-4756-ae54-fa254c92d5a6}</Project>
-      <Name>Users</Name>
-    </ProjectReference>
+    <Compile Include="User.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

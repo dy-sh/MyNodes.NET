@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class AccountController : Controller
+    public class UserController : Controller
     {
        
     }

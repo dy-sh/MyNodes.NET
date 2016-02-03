@@ -134,6 +134,7 @@
     <Compile Include="DbContext\MySensorsNodesDbContext.cs" />
     <Compile Include="DbContext\NodesStatesHistoryDbContext.cs" />
     <Compile Include="DbContext\MySensorsMessagesDbContext.cs" />
+    <Compile Include="DbContext\UsersDbContext.cs" />
     <Compile Include="DbContext\UITimerNodesDbContext.cs" />
     <Compile Include="NodesStatesRepositoryEf.cs" />
     <Compile Include="MySensorsMessagesRepositoryEf.cs" />
@@ -157,6 +158,10 @@
     <ProjectReference Include="..\Nodes\Nodes.csproj">
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>
       <Name>Nodes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Users\Users.csproj">
+      <Project>{564c8900-69c2-4756-ae54-fa254c92d5a6}</Project>
+      <Name>Users</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
