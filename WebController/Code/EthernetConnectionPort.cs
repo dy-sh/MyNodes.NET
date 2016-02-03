@@ -26,6 +26,9 @@ namespace MyNetSensors.WebController.Code
         private string ip;
         private int port;
 
+        private bool isConnected;
+
+
         public EthernetConnectionPort(string ip, int port)
         {
             this.ip = ip;
@@ -55,10 +58,10 @@ namespace MyNetSensors.WebController.Code
             try
             {
                 tcpClient = new TcpClient();
-
                 tcpClient.Connect(ip, port);
-
                 tcpStream = tcpClient.GetStream();
+
+                isConnected = true;
 
                 LogInfo($"Connected to {ip}:{port}");
                 OnConnected?.Invoke();
@@ -67,16 +70,18 @@ namespace MyNetSensors.WebController.Code
             }
             catch (SocketException ex)
             {
-                LogError($"Failed to connect to {ip}:{port}. {ex.ToString()}");
+                if (ex.SocketErrorCode == SocketError.TimedOut)
+                    LogError($"Failed to connect to {ip}:{port}. Remote host is not responding.");
+                else
+                    LogError($"Failed to connect to {ip}:{port}. {ex.ToString()}");
                 OnConnectingError?.Invoke(ex);
             }
         }
 
         private async void ReadFromSocket()
         {
-            while (IsConnected())
+            while (isConnected)
             {
-
                 try
                 {
                     if (tcpStream.CanRead)
@@ -103,7 +108,8 @@ namespace MyNetSensors.WebController.Code
                 }
                 catch (Exception ex)
                 {
-                    LogError("Failed to read data from port. " + ex.Message);
+                    if (!(ex is IOException))
+                        LogError("Failed to read data from port. " + ex.Message);
                 }
 
                 await Task.Delay(1);
@@ -112,6 +118,8 @@ namespace MyNetSensors.WebController.Code
 
         public void Disconnect()
         {
+            isConnected = false;
+
             if (!IsConnected())
                 return;
 
