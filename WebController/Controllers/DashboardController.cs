@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Nodes;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         const string MAIN_PANEL_ID = "Main";

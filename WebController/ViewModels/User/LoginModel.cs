@@ -8,7 +8,7 @@ namespace MyNetSensors.WebController.ViewModels.User
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Login is required")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

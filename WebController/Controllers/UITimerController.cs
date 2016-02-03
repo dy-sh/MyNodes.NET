@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 
 
@@ -16,6 +17,7 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [Authorize]
     public class UITimerController : Controller
     {
         private UITimerNodesEngine tasksEngine;

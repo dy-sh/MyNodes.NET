@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [Authorize]
     public class ConfigController : Controller
     {
 

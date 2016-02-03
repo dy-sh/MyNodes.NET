@@ -1,90 +1,61 @@
-﻿@using System.Collections.Generic
-@using Microsoft.AspNet.Http
-@using Microsoft.AspNet.Http.Authentication
-@model LoginViewModel
-@inject SignInManager<ApplicationUser> SignInManager
+﻿@model MyNetSensors.WebController.ViewModels.User.LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewBag.Title = "Login";
 }
 
-<h2>@ViewData["Title"].</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section>
-            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="ui form" role="form">
-                <h4>Use a local account to log in.</h4>
-                <div class="ui divider"></div>
-                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                <div class="fields">
-                    <label asp-for="Email" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="fields">
-                    <label asp-for="Password" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="fields">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            <input asp-for="RememberMe" />
-                            <label asp-for="RememberMe"></label>
-                        </div>
-                    </div>
-                </div>
-                <div class="fields">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="ui button primary">Log in</button>
-                    </div>
-                </div>
-                <p>
-                    <a asp-action="Register">Register as a new user?</a>
-                </p>
-                <p>
-                    <a asp-action="ForgotPassword">Forgot your password?</a>
-                </p>
-            </form>
-        </section>
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        <a asp-action="Register">Register</a>
     </div>
-    <div class="col-md-4">
-        <section>
-            <h4>Use another service to log in.</h4>
-            <div class="ui divider"></div>
-            @{
-                var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
-                if (loginProviders.Count == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="ui form" role="form">
-                        <div>
-                            <p>
-                                @foreach (var provider in loginProviders)
-                                {
-                                    <button type="submit" class="ui button primary" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
-                                }
-                            </p>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Login" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui attached segment">
+                        <div class="field">
+                          @*  <label asp-for="Name"></label>*@
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" asp-for="Name" placeholder="Login" />
+                            </div>
+                            <span asp-validation-for="Name" />
                         </div>
-                    </form>
-                }
-            }
-        </section>
+                        <div class="field">
+                        @*    <label asp-for="Password"></label>*@
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" asp-for="Password" placeholder="Password" />
+                            </div>
+                            <span asp-validation-for="Password" />
+                        </div>
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            @* <a asp-action="Register" class="ui button">Register</a>*@
+                            <input type="submit" value="Login" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>
-
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}

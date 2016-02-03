@@ -1,42 +1,32 @@
-﻿@model RegisterViewModel
-@{
-    ViewData["Title"] = "Register";
-}
+﻿@model MyNetSensors.WebController.ViewModels.User.RegisterModel
 
-<h2>@ViewData["Title"].</h2>
+<h2>Register</h2>
 
-<form asp-controller="Account" asp-action="Register" method="post" class="ui form" role="form">
-    <h4>Create a new account.</h4>
-    <div class="ui divider"></div>
-    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-    <div class="fields">
-        <label asp-for="Email" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+<form asp-action="Register" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+    <div>
+        <div>
+            <label asp-for="Name"></label><br />
+            <input type="text" asp-for="Name" />
+            <span asp-validation-for="Name" />
         </div>
-    </div>
-    <div class="fields">
-        <label asp-for="Password" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+        <div>
+            <label asp-for="Email"></label><br/>
+            <input type="text" asp-for="Email"/>
+            <span asp-validation-for="Email" />
         </div>
-    </div>
-    <div class="fields">
-        <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="ConfirmPassword" class="form-control" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        <div>
+            <label asp-for="Password"></label><br/>
+            <input asp-for="Password"/>
+            <span asp-validation-for="Password" />
         </div>
-    </div>
-    <div class="fields">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="ui button primary">Register</button>
+        <div>
+            <label asp-for="ConfirmPassword"></label><br/>
+            <input asp-for="ConfirmPassword"/>
+            <span asp-validation-for="ConfirmPassword" />
+        </div>
+        <div>
+            <input type="submit" value="Регистрация"/>
         </div>
     </div>
 </form>
-
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}

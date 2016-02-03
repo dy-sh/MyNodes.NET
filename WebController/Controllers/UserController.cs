@@ -28,7 +28,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            return View(new LoginModel());
         }
 
         [HttpPost]
@@ -58,7 +58,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(new RegisterModel());
         }
 
         [HttpPost]

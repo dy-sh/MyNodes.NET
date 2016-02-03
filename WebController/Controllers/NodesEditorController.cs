@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
+using Microsoft.AspNet.Authorization;
 using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.WebController.Code;
@@ -14,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace MyNetSensors.WebController.Controllers
 {
-
+    [Authorize]
     public class NodesEditorController : Controller
     {
         const string MAIN_PANEL_ID = "Main";

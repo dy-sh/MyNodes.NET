@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Features;
 using MyNetSensors.Nodes;
@@ -18,6 +19,7 @@ using Node = MyNetSensors.Nodes.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {
+    [Authorize]
     public class NodesEditorAPIController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
