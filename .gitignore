@@ -215,3 +215,4 @@ ModelManifest.xml
 /WebController/Nodes.sqlite
 /WebController/MySensorsNodes.sqlite
 /WebController/MySensorsMessages.sqlite
+/WebController/Application.sqlite

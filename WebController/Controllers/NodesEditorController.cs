@@ -23,6 +23,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Index(bool split)
         {
+            if (engine == null)
+                return View("Error", "Nodes Engine is not started.<br/><br/>   <a href='/Config'>Check settings</a>");
+
             ViewBag.split = split;
             ViewBag.panelId = MAIN_PANEL_ID;
 
@@ -32,7 +35,8 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult Panel(string id, bool split)
         {
             if (engine == null)
-                return HttpBadRequest();
+                return View("Error", "Nodes Engine is not started.<br/><br/>   <a href='/Config'>Check settings</a>");
+
 
             ViewBag.split = split;
 
@@ -72,6 +76,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Split(string id)
         {
+            if (engine == null)
+                return View("Error", "Nodes Engine is not started.<br/><br/>   <a href='/Config'>Check settings</a>");
+
             if (id == null)
                 ViewBag.route = "";
             else

@@ -1,6 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Error";
-}
+﻿@model String
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+@{
+    ViewData["Title"] = "Invalid request";
+
+    string message = Model ?? "Invalid request";
+}
+<br />
+<br />
+<br />
+<div class="ui container">
+    <div class="ui negative message">
+        <div class="header">
+            We're sorry
+        </div>
+        <p>
+            @Html.Raw(message)
+        </p>
+    </div>
+</div>
