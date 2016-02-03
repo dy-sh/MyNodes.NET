@@ -174,7 +174,6 @@ namespace MyNetSensors.Repositories.Dapper
                                "VALUES(@Id, @registered, @lastSeen, @isRepeatingNode, @name, @version, @batteryLevel)";
 
                 db.Query(sqlQuery, node);
-                // gateway.SetNodeDbId(node.nodeId, id);
             }
 
             return node.Id;

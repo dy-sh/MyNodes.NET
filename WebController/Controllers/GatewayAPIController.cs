@@ -24,8 +24,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public List<Node> GetNodes()
         {
-
-            return gateway.GetNodes();
+            return gateway?.GetNodes();
         }
 
         public bool IsConnected()
@@ -56,7 +55,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool SendMessage(int nodeId, int sensorId, string state)
         {
-            if (!gateway.IsConnected())
+            if (gateway==null || !gateway.IsConnected())
                 return false;
 
             gateway.SendSensorState(nodeId, sensorId, state);
@@ -100,7 +99,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public bool RemoveNode(int nodeId)
         {
-            if (gateway.GetNode(nodeId) == null)
+            if (gateway?.GetNode(nodeId) == null)
                 return false;
             gateway.RemoveNode(nodeId);
             return true;
