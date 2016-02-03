@@ -72,7 +72,16 @@
 
             <div class="right menu">
                 <div class="item">
-                    <a asp-controller="User" asp-action="Login" class="ui primary button fadebefore">Login</a>
+                    @{
+                        if (User!=null && User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="User" asp-action="Logout" class="ui button fadebefore">Logout</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="User" asp-action="Login" class="ui primary button fadebefore">Login</a>
+                        }
+                    }
                 </div>
             </div>
 
@@ -82,11 +91,11 @@
 
 
     <div class="pusher">
-    <br />
-    <br />
-    <br />
+        <br />
+        <br />
+        <br />
 
-    @RenderBody()
+        @RenderBody()
 
 
     </div>

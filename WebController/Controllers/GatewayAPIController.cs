@@ -24,6 +24,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public List<Node> GetNodes()
         {
+
             return gateway.GetNodes();
         }
 
