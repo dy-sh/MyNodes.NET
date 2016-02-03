@@ -13,6 +13,7 @@ using MyNetSensors.Gateways.MySensors.Serial;
 using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
+using MyNetSensors.Users;
 
 namespace MyNetSensors.WebController.Code
 {
@@ -38,6 +39,8 @@ namespace MyNetSensors.WebController.Code
 
 
         //VARIABLES
+        public static IUsersRepository usersRepository;
+
         public static IGatewayConnectionPort gatewayConnectionPort;
         public static Gateway gateway;
 
@@ -189,12 +192,14 @@ namespace MyNetSensors.WebController.Code
                 MySensorsNodesDbContext mySensorsNodesDbContext = (MySensorsNodesDbContext)services.GetService(typeof(MySensorsNodesDbContext));
                 MySensorsMessagesDbContext mySensorsMessagesDbContext = (MySensorsMessagesDbContext)services.GetService(typeof(MySensorsMessagesDbContext));
                 UITimerNodesDbContext uiTimerNodesDbContext = (UITimerNodesDbContext)services.GetService(typeof(UITimerNodesDbContext));
+                UsersDbContext usersDbContext = (UsersDbContext)services.GetService(typeof(UsersDbContext));
 
                 nodesDb = new NodesRepositoryEf(nodesDbContext);
                 nodesStatesDb = new NodesStatesRepositoryEf(nodesStatesHistoryDbContext);
                 mySensorsDb = new MySensorsRepositoryEf(mySensorsNodesDbContext);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryEf(mySensorsMessagesDbContext);
                 uiTimerNodesDb = new UITimerNodesRepositoryEf(uiTimerNodesDbContext);
+                usersRepository = new UsersRepositoryEf(usersDbContext);
             }
             else
             {
@@ -209,6 +214,7 @@ namespace MyNetSensors.WebController.Code
                 uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConnectionString);
                 nodesDb = new NodesRepositoryDapper(dataBaseConnectionString);
                 nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConnectionString);
+                usersRepository = new UsersRepositoryDapper(dataBaseConnectionString);
             }
 
 

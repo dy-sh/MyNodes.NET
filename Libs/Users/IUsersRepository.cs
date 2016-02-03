@@ -12,6 +12,7 @@ namespace MyNetSensors.Users
         int AddUser(User user);
         void UpdateUser(User user);
         User GetUser(int id);
+        User GetUser(string name);
         List<User> GetAllUsers();
         void RemoveUser(int id);
         void RemoveAllUsers();

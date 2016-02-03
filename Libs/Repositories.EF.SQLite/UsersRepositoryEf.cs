@@ -50,6 +50,11 @@ namespace MyNetSensors.Repositories.EF.SQLite
             return db.Users.FirstOrDefault(x => x.Id == id);
         }
 
+        public User GetUser(string name)
+        {
+            return db.Users.FirstOrDefault(x => x.Name == name);
+        }
+
         public List<User> GetAllUsers()
         {
             return db.Users.ToList();

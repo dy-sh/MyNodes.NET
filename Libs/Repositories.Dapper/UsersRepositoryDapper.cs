@@ -93,6 +93,16 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
+        public User GetUser(string name)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                return db.Query<User>($"SELECT * FROM [Users] WHERE Name=@Name", name).SingleOrDefault();
+
+            }
+        }
+
         public List<User> GetAllUsers()
         {
             using (var db = new SqlConnection(connectionString))
