@@ -132,8 +132,8 @@ namespace MyNetSensors.WebController.Controllers
         public IActionResult EthernetGateway(EthernetGatewayViewModel model)
         {
             dynamic json = ReadConfig();
-            json.Gateway.EthernetGateway.IP = model.Ip;
-            json.Gateway.EthernetGateway.Port = model.Port;
+            json.Gateway.EthernetGateway.GatewayIP = model.Ip;
+            json.Gateway.EthernetGateway.GatewayPort = model.Port;
             WriteConfig(json);
             сonfiguration.Reload();
 

@@ -15,11 +15,11 @@ $(function () {
     var clientsHub = $.connection.nodesEngineHub;
 
     clientsHub.client.OnConnected = function () {
-        noty({ text: 'Serial Gateway is connected.', type: 'alert', timeout: false });
+        noty({ text: 'Gateway is connected.', type: 'alert', timeout: false });
     };
 
     clientsHub.client.OnDisconnected = function () {
-        noty({ text: 'Serial Gateway is disconnected!', type: 'error', timeout: false });
+        noty({ text: 'Gateway is disconnected!', type: 'error', timeout: false });
     };
 
 
@@ -75,7 +75,7 @@ function getGatewayInfo() {
         type: "POST",
         success: function (gatewayInfo) {
             if (gatewayInfo.state == 1 || gatewayInfo.state == 2) {
-                noty({ text: 'Serial Gateway is not connected!', type: 'error', timeout: false });
+                noty({ text: 'Gateway is not connected!', type: 'error', timeout: false });
             }
         }
     });

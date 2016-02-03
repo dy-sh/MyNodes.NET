@@ -70,10 +70,19 @@ namespace MyNetSensors.WebController.Code
             }
             catch (SocketException ex)
             {
-                if (ex.SocketErrorCode == SocketError.TimedOut)
-                    LogError($"Failed to connect to {ip}:{port}. Remote host is not responding.");
-                else
-                    LogError($"Failed to connect to {ip}:{port}. {ex.ToString()}");
+                switch (ex.SocketErrorCode)
+                {
+                    case SocketError.TimedOut:
+                        LogError($"Failed to connect to {ip}:{port}. Remote host is not responding.");
+                        break;
+                    case SocketError.ConnectionRefused:
+                        LogError($"Failed to connect to {ip}:{port}. Remote host refused the connection.");
+                        break;
+                    default:
+                        LogError($"Failed to connect to {ip}:{port}. {ex.ToString()}");
+                        break;
+                }
+
                 OnConnectingError?.Invoke(ex);
             }
         }
