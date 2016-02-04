@@ -51,7 +51,7 @@
             }
             <div class="ui right aligned attached segment">
                 <div class="ui small buttons">
-                    <a asp-action="RemoveAll" asp-route-id="@ViewBag.NodeId" class="ui button">Delete all users</a>
+                    <a asp-action="RemoveAllExceptActive" asp-route-id="@ViewBag.NodeId" class="ui button">Delete all except me</a>
                 </div>
             </div>
         }

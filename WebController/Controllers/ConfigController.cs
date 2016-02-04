@@ -239,6 +239,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public WebServerInfo GetWebServerInfo()
         {
+            if (SystemController.usersRepository == null)
+                return null;
+
             WebServerInfo info=new WebServerInfo();
             info.RegisteredUsersCount = SystemController.usersRepository.GetUsersCount();
 

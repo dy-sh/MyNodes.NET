@@ -121,5 +121,25 @@ namespace MyNetSensors.WebController.Controllers
 
             return RedirectToAction("List");
         }
+
+        public IActionResult RemoveAllExceptActive()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+
+            string name = claims.FirstOrDefault(x=>x.Type=="name").Value;
+
+            User user = db.GetUser(name);
+
+            if (user == null)
+                return HttpBadRequest();
+
+            List<User> users = db.GetAllUsers();
+            users.Remove(user);
+
+            db.RemoveUsers(users);
+
+            return RedirectToAction("List");
+        }
     }
 }

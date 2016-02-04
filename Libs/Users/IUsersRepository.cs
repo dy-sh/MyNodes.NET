@@ -16,6 +16,7 @@ namespace MyNetSensors.Users
         List<User> GetAllUsers();
         void RemoveUser(int id);
         void RemoveAllUsers();
+        void RemoveUsers(List<User> users);
         int GetUsersCount();
     }
 }

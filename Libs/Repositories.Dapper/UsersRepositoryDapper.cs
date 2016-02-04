@@ -130,6 +130,14 @@ namespace MyNetSensors.Repositories.Dapper
             }
         }
 
+        public void RemoveUsers(List<User> users)
+        {
+            foreach (var user in users)
+            {
+                RemoveUser(user.Id);
+            }
+        }
+
         public int GetUsersCount()
         {
             using (var db = new SqlConnection(connectionString))
