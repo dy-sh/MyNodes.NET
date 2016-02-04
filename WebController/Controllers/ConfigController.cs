@@ -88,7 +88,7 @@ namespace MyNetSensors.WebController.Controllers
         {
 
             List<string> ports = SerialConnectionPort.GetAvailablePorts();
-            string currentPort = SystemController.serialGatewayPortName;
+            string currentPort = SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName;
 
             ViewBag.ports = ports;
 
@@ -111,7 +111,7 @@ namespace MyNetSensors.WebController.Controllers
             сonfiguration.Reload();
 
             SystemController.DisconnectGateway();
-            SystemController.serialGatewayPortName = port.PortName;
+            SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = port.PortName;
 
             return RedirectToAction("Index");
         }
@@ -122,8 +122,8 @@ namespace MyNetSensors.WebController.Controllers
         {
             EthernetGatewayViewModel model = new EthernetGatewayViewModel
             {
-                Ip = SystemController.ethernetGatewayIp,
-                Port = SystemController.ethernetGatewayPort
+                Ip = SystemController.gatewayConfig.EthernetGatewayConfig.GatewayIP,
+                Port = SystemController.gatewayConfig.EthernetGatewayConfig.GatewayPort
             };
 
             return View(model);
@@ -140,8 +140,8 @@ namespace MyNetSensors.WebController.Controllers
             сonfiguration.Reload();
 
             SystemController.DisconnectGateway();
-            SystemController.ethernetGatewayIp = model.Ip;
-            SystemController.ethernetGatewayPort = model.Port;
+            SystemController.gatewayConfig.EthernetGatewayConfig.GatewayIP = model.Ip;
+            SystemController.gatewayConfig.EthernetGatewayConfig.GatewayPort = model.Port;
 
             return RedirectToAction("Index");
         }
@@ -158,8 +158,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SystemController.serialGatewayEnabled = true;
-            SystemController.ethernetGatewayEnabled = false;
+            SystemController.gatewayConfig.SerialGatewayConfig.Enable = true;
+            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
 
             await Task.Run((() =>
             {
@@ -182,8 +182,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SystemController.serialGatewayEnabled = false;
-            SystemController.ethernetGatewayEnabled = true;
+            SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
+            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = true;
 
             await Task.Run((() =>
             {
@@ -201,8 +201,8 @@ namespace MyNetSensors.WebController.Controllers
             WriteConfig(json);
             сonfiguration.Reload();
 
-            SystemController.serialGatewayEnabled = false;
-            SystemController.ethernetGatewayEnabled = false;
+            SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
+            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
 
             SystemController.DisconnectGateway();
 

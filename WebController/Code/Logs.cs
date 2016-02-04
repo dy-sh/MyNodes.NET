@@ -26,65 +26,54 @@ namespace MyNetSensors.WebController.Code
         public event LogMessageEventHandler OnSystemLogInfo;
         public event LogMessageEventHandler OnSystemLogError;
 
-        public bool enableGatewayLog = true;
-        public bool enableHardwareNodesLog = true;
-        public bool enableDataBaseLog = true;
-        public bool enableNodesEngineLog = true;
-        public bool enableNodesLog = true;
-        public bool enableSystemLog = true;
+        public LogsConfig config;
 
-        public int maxGatewayRecords = 1000;
-        public int maxHardwareNodesRecords = 1000;
-        public int maxDataBaseRecords = 1000;
-        public int maxNodesEngineRecords = 1000;
-        public int maxNodesRecords = 1000;
-        public int maxSystemRecords = 1000;
-
+        
 
         public void AddGatewayInfo(string message)
         {
-            if (!enableGatewayLog)
+            if (!config.EnableGatewayStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Info, message);
             gatewayLog.Add(logRecord);
-            if(gatewayLog.Count> maxGatewayRecords)
+            if(gatewayLog.Count> config.MaxGatewayStateRecords)
                 gatewayLog.RemoveAt(0);
             OnGatewayLogInfo?.Invoke(logRecord);
         }
 
         public void AddGatewayError(string message)
         {
-            if (!enableGatewayLog)
+            if (!config.EnableGatewayStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Error, message);
             gatewayLog.Add(logRecord);
-            if (gatewayLog.Count > maxGatewayRecords)
+            if (gatewayLog.Count > config.MaxGatewayStateRecords)
                 gatewayLog.RemoveAt(0);
             OnGatewayLogError?.Invoke(logRecord);
         }
 
         public void AddHardwareNodeInfo(string message)
         {
-            if (!enableHardwareNodesLog)
+            if (!config.EnableGatewayMessagesLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.HardwareNodes, LogRecordType.Info, message);
             hardwareNodesLog.Add(logRecord);
-            if (hardwareNodesLog.Count > maxHardwareNodesRecords)
+            if (hardwareNodesLog.Count > config.MaxGatewayMessagesRecords)
                 hardwareNodesLog.RemoveAt(0);
             OnHardwareNodeLogInfo?.Invoke(logRecord);
         }
 
         public void AddHardwareNodeError(string message)
         {
-            if (!enableHardwareNodesLog)
+            if (!config.EnableGatewayMessagesLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.HardwareNodes, LogRecordType.Error, message);
             hardwareNodesLog.Add(logRecord);
-            if (hardwareNodesLog.Count > maxHardwareNodesRecords)
+            if (hardwareNodesLog.Count > config.MaxGatewayMessagesRecords)
                 hardwareNodesLog.RemoveAt(0);
             OnHardwareNodeLogError?.Invoke(logRecord);
         }
@@ -94,71 +83,71 @@ namespace MyNetSensors.WebController.Code
 
         public void AddDataBaseInfo(string message)
         {
-            if (!enableDataBaseLog)
+            if (!config.EnableDataBaseStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Info, message);
             dataBaseLog.Add(logRecord);
-            if (dataBaseLog.Count > maxDataBaseRecords)
+            if (dataBaseLog.Count > config.MaxDataBaseStateRecords)
                 dataBaseLog.RemoveAt(0);
             OnDataBaseLogInfo?.Invoke(logRecord);
         }
 
         public void AddDataBaseError(string message)
         {
-            if (!enableDataBaseLog)
+            if (!config.EnableDataBaseStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Error, message);
             dataBaseLog.Add(logRecord);
-            if (dataBaseLog.Count > maxDataBaseRecords)
+            if (dataBaseLog.Count > config.MaxDataBaseStateRecords)
                 dataBaseLog.RemoveAt(0);
             OnDataBaseLogError?.Invoke(logRecord);
         }
 
         public void AddNodesEngineInfo(string message)
         {
-            if (!enableNodesEngineLog)
+            if (!config.EnableNodesEngineStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.NodesEngine, LogRecordType.Info, message);
             nodesEngineLog.Add(logRecord);
-            if (nodesEngineLog.Count > maxNodesEngineRecords)
+            if (nodesEngineLog.Count > config.MaxNodesEngineStateRecords)
                 nodesEngineLog.RemoveAt(0);
             OnNodesEngineLogInfo?.Invoke(logRecord);
         }
 
         public void AddNodesEngineError(string message)
         {
-            if (!enableNodesEngineLog)
+            if (!config.EnableNodesEngineStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.NodesEngine, LogRecordType.Error, message);
             nodesEngineLog.Add(logRecord);
-            if (nodesEngineLog.Count > maxNodesEngineRecords)
+            if (nodesEngineLog.Count > config.MaxNodesEngineStateRecords)
                 nodesEngineLog.RemoveAt(0);
             OnNodesEngineLogError?.Invoke(logRecord);
         }
 
         public void AddNodeInfo(string message)
         {
-            if (!enableNodesLog)
+            if (!config.EnableNodesEngineNodesLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.Nodes, LogRecordType.Info, message);
             nodesLog.Add(logRecord);
-            if (nodesLog.Count > maxNodesRecords)
+            if (nodesLog.Count > config.MaxNodesEngineNodesRecords)
                 nodesLog.RemoveAt(0);
             OnNodeLogInfo?.Invoke(logRecord);
         }
         public void AddNodeError(string message)
         {
-            if (!enableNodesLog)
+            if (!config.EnableNodesEngineNodesLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.Nodes, LogRecordType.Error, message);
             nodesLog.Add(logRecord);
-            if (nodesLog.Count > maxNodesRecords)
+            if (nodesLog.Count > config.MaxNodesEngineNodesRecords)
                 nodesLog.RemoveAt(0);
             OnNodeLogError?.Invoke(logRecord);
         }
@@ -166,24 +155,24 @@ namespace MyNetSensors.WebController.Code
 
         public void AddSystemInfo(string message)
         {
-            if (!enableSystemLog)
+            if (!config.EnableSystemStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Info, message);
             systemLog.Add(logRecord);
-            if (systemLog.Count > maxSystemRecords)
+            if (systemLog.Count > config.MaxSystemStateRecords)
                 systemLog.RemoveAt(0);
             OnSystemLogInfo?.Invoke(logRecord);
         }
 
         public void AddSystemError(string message)
         {
-            if (!enableSystemLog)
+            if (!config.EnableSystemStateLog)
                 return;
 
             LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Error, message);
             systemLog.Add(logRecord);
-            if (systemLog.Count > maxSystemRecords)
+            if (systemLog.Count > config.MaxSystemStateRecords)
                 systemLog.RemoveAt(0);
             OnSystemLogError?.Invoke(logRecord);
         }

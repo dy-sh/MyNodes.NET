@@ -15,33 +15,17 @@ using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.Users;
 using MyNetSensors.WebController.ViewModels.Config;
+using Newtonsoft.Json;
 
 namespace MyNetSensors.WebController.Code
 {
     public static class SystemController
     {
-        //GATEWAYS
-        public static string serialGatewayPortName = "COM1";
-        public static string ethernetGatewayIp = "192.168.88.20";
-        public static int ethernetGatewayPort = 5003;
-        public static bool gatewayAutoAssignId = true;
-        public static bool gatewayMessagesLogEnabled = false;
-        public static bool serialGatewayEnabled;
-        public static bool ethernetGatewayEnabled;
-
-
-        //DATABASES
-        public static bool dataBaseEnabled = true;
-        public static bool useInternalDb = true;
-        public static string dataBaseConnectionString;
-        public static int dataBaseWriteInterval = 5000;
-
-        //NODES ENGINE
-        public static bool nodesEngineEnabled = true;
-        public static int nodesEngineUpdateInterval = 10;
-
-        //WEB SERVER
+        //CONFIG
+        public static GatewayConfig gatewayConfig;
         public static WebServerRules webServerRules;
+        public static DataBaseConfig dataBaseConfig;
+        public static NodesEngineConfig nodesEngineConfig;
 
 
         //VARIABLES
@@ -61,7 +45,7 @@ namespace MyNetSensors.WebController.Code
         public static UITimerNodesEngine uiTimerNodesEngine;
         public static IUITimerNodesRepository uiTimerNodesDb;
 
-        public static Logs logs = new Logs();
+        public static Logs logs=new Logs();
 
         public static event Action OnStarted;
         public static event Action OnGatewayConnected;
@@ -77,7 +61,7 @@ namespace MyNetSensors.WebController.Code
         {
             if (systemControllerStarted) return;
             systemControllerStarted = true;
-
+            
             //logs config
             logs.OnGatewayLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
             logs.OnGatewayLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
@@ -132,29 +116,57 @@ namespace MyNetSensors.WebController.Code
         {
             try
             {
-                serialGatewayEnabled = Boolean.Parse(configuration["Gateway:SerialGateway:Enable"]);
-                serialGatewayPortName = configuration["Gateway:SerialGateway:SerialPort"];
+                SerialGatewayConfig serialGatewayConfig = new SerialGatewayConfig
+                {
+                    Enable = Boolean.Parse(configuration["Gateway:SerialGateway:Enable"]),
+                    SerialPortName = configuration["Gateway:SerialGateway:SerialPortName"]
+                };
 
-                ethernetGatewayEnabled = Boolean.Parse(configuration["Gateway:EthernetGateway:Enable"]);
-                ethernetGatewayIp = configuration["Gateway:EthernetGateway:GatewayIP"];
-                ethernetGatewayPort = Int32.Parse(configuration["Gateway:EthernetGateway:GatewayPort"]);
+                EthernetGatewayConfig ethernetGatewayConfig = new EthernetGatewayConfig
+                {
+                    Enable = Boolean.Parse(configuration["Gateway:EthernetGateway:Enable"]),
+                    GatewayIP = configuration["Gateway:EthernetGateway:GatewayIP"],
+                    GatewayPort = Int32.Parse(configuration["Gateway:EthernetGateway:GatewayPort"])
+                };
 
-                gatewayAutoAssignId = Boolean.Parse(configuration["Gateway:EnableAutoAssignId"]);
-                gatewayMessagesLogEnabled = Boolean.Parse(configuration["Gateway:EnableMessagesLog"]);
+                gatewayConfig = new GatewayConfig
+                {
+                    SerialGatewayConfig = serialGatewayConfig,
+                    EthernetGatewayConfig = ethernetGatewayConfig,
+                    EnableAutoAssignId = Boolean.Parse(configuration["Gateway:EnableAutoAssignId"]),
+                    EnableMessagesLog = Boolean.Parse(configuration["Gateway:EnableMessagesLog"])
+                };
 
-                logs.enableGatewayLog = Boolean.Parse(configuration["Gateway:LogState"]);
-                logs.enableHardwareNodesLog = Boolean.Parse(configuration["Gateway:LogMessages"]);
-                logs.enableNodesEngineLog = Boolean.Parse(configuration["NodesEngine:LogEngine"]);
-                logs.enableNodesLog = Boolean.Parse(configuration["NodesEngine:LogNodes"]);
-                logs.enableDataBaseLog = Boolean.Parse(configuration["DataBase:LogState"]);
+                logs.config = new LogsConfig
+                {
+                    EnableGatewayStateLog = Boolean.Parse(configuration["Logs:EnableGatewayStateLog"]),
+                    EnableGatewayMessagesLog = Boolean.Parse(configuration["Logs:EnableGatewayMessagesLog"]),
+                    EnableDataBaseStateLog = Boolean.Parse(configuration["Logs:EnableDataBaseStateLog"]),
+                    EnableNodesEngineStateLog = Boolean.Parse(configuration["Logs:EnableNodesEngineStateLog"]),
+                    EnableNodesEngineNodesLog = Boolean.Parse(configuration["Logs:EnableNodesEngineNodesLog"]),
+                    EnableSystemStateLog = Boolean.Parse(configuration["Logs:EnableSystemStateLog"]),
+                    MaxGatewayStateRecords = Int32.Parse(configuration["Logs:MaxGatewayStateRecords"]),
+                    MaxGatewayMessagesRecords = Int32.Parse(configuration["Logs:MaxGatewayMessagesRecords"]),
+                    MaxDataBaseStateRecords = Int32.Parse(configuration["Logs:MaxDataBaseStateRecords"]),
+                    MaxNodesEngineStateRecords = Int32.Parse(configuration["Logs:MaxNodesEngineStateRecords"]),
+                    MaxNodesEngineNodesRecords = Int32.Parse(configuration["Logs:MaxNodesEngineNodesRecords"]),
+                    MaxSystemStateRecords = Int32.Parse(configuration["Logs:MaxSystemStateRecords"]),
+                };
 
-                nodesEngineEnabled = Boolean.Parse(configuration["NodesEngine:Enable"]);
-                nodesEngineUpdateInterval = Int32.Parse(configuration["NodesEngine:UpdateInterval"]);
 
-                dataBaseEnabled = Boolean.Parse(configuration["DataBase:Enable"]);
-                useInternalDb = Boolean.Parse(configuration["DataBase:UseInternalDb"]);
-                dataBaseWriteInterval = Int32.Parse(configuration["DataBase:WriteInterval"]);
-                dataBaseConnectionString = configuration["DataBase:ExternalDbConnectionString"];
+                nodesEngineConfig = new NodesEngineConfig
+                {
+                    Enable = Boolean.Parse(configuration["NodesEngine:Enable"]),
+                    UpdateInterval = Int32.Parse(configuration["NodesEngine:UpdateInterval"])
+                };
+
+                dataBaseConfig = new DataBaseConfig
+                {
+                    Enable = Boolean.Parse(configuration["DataBase:Enable"]),
+                    UseInternalDb = Boolean.Parse(configuration["DataBase:UseInternalDb"]),
+                    WriteInterval = Int32.Parse(configuration["DataBase:WriteInterval"]),
+                    ExternalDbConnectionString = configuration["DataBase:ExternalDbConnectionString"]
+                };
 
                 webServerRules = new WebServerRules
                 {
@@ -188,13 +200,13 @@ namespace MyNetSensors.WebController.Code
 
         private static void ConnectToDB(IServiceProvider services)
         {
-            if (!dataBaseEnabled) return;
+            if (!dataBaseConfig.Enable) return;
 
             logs.AddSystemInfo("Connecting to database... ");
 
 
             //db config
-            if (useInternalDb)
+            if (dataBaseConfig.UseInternalDb)
             {
                 NodesDbContext nodesDbContext = (NodesDbContext)services.GetService(typeof(NodesDbContext));
                 NodesStatesHistoryDbContext nodesStatesHistoryDbContext = (NodesStatesHistoryDbContext)services.GetService(typeof(NodesStatesHistoryDbContext));
@@ -212,30 +224,30 @@ namespace MyNetSensors.WebController.Code
             }
             else
             {
-                if (String.IsNullOrEmpty(dataBaseConnectionString))
+                if (String.IsNullOrEmpty(dataBaseConfig.ExternalDbConnectionString))
                 {
                     logs.AddSystemError("Database connection failed. Set ConnectionString in appsettings.json file.");
                     return;
                 }
 
-                mySensorsDb = new MySensorsRepositoryDapper(dataBaseConnectionString);
-                mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConnectionString);
-                uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConnectionString);
-                nodesDb = new NodesRepositoryDapper(dataBaseConnectionString);
-                nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConnectionString);
-                usersRepository = new UsersRepositoryDapper(dataBaseConnectionString);
+                mySensorsDb = new MySensorsRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                nodesDb = new NodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                usersRepository = new UsersRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
             }
 
 
-            mySensorsDb.SetWriteInterval(dataBaseWriteInterval);
+            mySensorsDb.SetWriteInterval(dataBaseConfig.WriteInterval);
             mySensorsDb.OnLogInfo += logs.AddDataBaseInfo;
             mySensorsDb.OnLogError += logs.AddDataBaseError;
 
-            mySensorsMessagesDb.SetWriteInterval(dataBaseWriteInterval);
+            mySensorsMessagesDb.SetWriteInterval(dataBaseConfig.WriteInterval);
             mySensorsMessagesDb.OnLogInfo += logs.AddDataBaseInfo;
             mySensorsMessagesDb.OnLogError += logs.AddDataBaseError;
 
-            nodesDb.SetWriteInterval(dataBaseWriteInterval);
+            nodesDb.SetWriteInterval(dataBaseConfig.WriteInterval);
             nodesDb.OnLogInfo += logs.AddDataBaseInfo;
             nodesDb.OnLogError += logs.AddDataBaseError;
 
@@ -251,7 +263,7 @@ namespace MyNetSensors.WebController.Code
         private static void StartNodesEngine()
         {
             nodesEngine = new NodesEngine(nodesDb);
-            nodesEngine.SetUpdateInterval(nodesEngineUpdateInterval);
+            nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);
             nodesEngine.OnLogEngineInfo += logs.AddNodesEngineInfo;
             nodesEngine.OnLogEngineError += logs.AddNodesEngineError;
             nodesEngine.OnLogNodeInfo += logs.AddNodeInfo;
@@ -265,7 +277,7 @@ namespace MyNetSensors.WebController.Code
             uiNodesEngine = new UiNodesEngine(nodesEngine, nodesStatesDb);
             uiTimerNodesEngine = new UITimerNodesEngine(nodesEngine, uiTimerNodesDb);
 
-            if (!nodesEngineEnabled) return;
+            if (!nodesEngineConfig.Enable) return;
 
             logs.AddSystemInfo("Starting nodes engine... ");
             nodesEngine.Start();
@@ -281,13 +293,16 @@ namespace MyNetSensors.WebController.Code
         {
             mySensorsNodesEngine = null;
 
-            if (serialGatewayEnabled)
+            if (gatewayConfig.SerialGatewayConfig.Enable)
             {
-                gatewayConnectionPort = new SerialConnectionPort(serialGatewayPortName);
+                gatewayConnectionPort = new SerialConnectionPort(
+                    gatewayConfig.SerialGatewayConfig.SerialPortName);
             }
-            else if (ethernetGatewayEnabled)
+            else if (gatewayConfig.EthernetGatewayConfig.Enable)
             {
-                gatewayConnectionPort = new EthernetConnectionPort(ethernetGatewayIp, ethernetGatewayPort);
+                gatewayConnectionPort = new EthernetConnectionPort(
+                    gatewayConfig.EthernetGatewayConfig.GatewayIP,
+                    gatewayConfig.EthernetGatewayConfig.GatewayPort);
             }
             else return;
 
@@ -296,7 +311,7 @@ namespace MyNetSensors.WebController.Code
 
             gateway = new Gateway(gatewayConnectionPort, mySensorsDb, mySensorsMessagesDb);
 
-            gateway.enableAutoAssignId = gatewayAutoAssignId;
+            gateway.enableAutoAssignId = gatewayConfig.EnableAutoAssignId;
 
             gateway.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.OnLogInfo += logs.AddGatewayInfo;
@@ -304,7 +319,7 @@ namespace MyNetSensors.WebController.Code
             gateway.connectionPort.OnLogInfo += logs.AddGatewayInfo;
             // gateway.connectionPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
-            gateway.messagesLogEnabled = gatewayMessagesLogEnabled;
+            gateway.messagesLogEnabled = gatewayConfig.EnableMessagesLog;
             gateway.OnConnected += GatewayConnected;
             gateway.OnDisconnected += GatewayDisconnected;
 

@@ -77,7 +77,8 @@ namespace MyNetSensors.Gateways.MySensors
             this.connectionPort.OnDisconnected += OnConnectionPortDisconnected;
             this.connectionPort.OnConnected += TryToCommunicateWithGateway;
             this.connectionPort.OnLogError += LogError;
-            this.connectionPort.OnLogInfo += OnLogInfo;
+            this.connectionPort.OnLogInfo += LogInfo;
+            this.connectionPort.OnLogMessage += LogMessage;
         }
 
 
@@ -101,6 +102,11 @@ namespace MyNetSensors.Gateways.MySensors
         internal void LogError(string message)
         {
             OnLogError?.Invoke(message);
+        }
+
+        internal void LogMessage(string message)
+        {
+            OnLogMessage?.Invoke(message);
         }
 
 
