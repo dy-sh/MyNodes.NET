@@ -44,7 +44,8 @@
         "Nodes.UI": "1.0.0-*",
         "Nodes.UITimer": "1.0.0-*",
         "Repositories.Dapper": "1.0.0-*",
-        "Repositories.EF.SQLite": "1.0.0-*"
+        "Repositories.EF.SQLite": "1.0.0-*",
+        "Users": "1.0.0-*"
       }
     }
   },

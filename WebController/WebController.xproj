@@ -35,6 +35,7 @@
     <ProjectReference Include="..\Libs\SerialController\SerialControl.csproj" />
     <ProjectReference Include="..\Libs\SerialControl\SerialControl.csproj" />
     <ProjectReference Include="..\Libs\UITimerNodes\UITimerNodes.csproj" />
+    <ProjectReference Include="..\Libs\Users\Users.csproj" />
     <ProjectReference Include="..\MyNetSensors.GatewayRepository\MyNetSensors.GatewayRepository.csproj" />
     <ProjectReference Include="..\MyNetSensors.Gateway\MyNetSensors.Gateway.csproj" />
     <ProjectReference Include="..\MyNetSensors.NodesLinks\MyNetSensors.NodesLinks.csproj" />
