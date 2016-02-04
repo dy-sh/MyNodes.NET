@@ -89,7 +89,7 @@ namespace MyNetSensors.WebController.Controllers
 
         private async Task Authenticate(string userName)
         {
-            var claims = new List<Claim>{new Claim("name", userName)};
+            var claims = new List<Claim> { new Claim("name", userName) };
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
@@ -127,7 +127,7 @@ namespace MyNetSensors.WebController.Controllers
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
 
-            string name = claims.FirstOrDefault(x=>x.Type=="name").Value;
+            string name = claims.FirstOrDefault(x => x.Type == "name").Value;
 
             User user = db.GetUser(name);
 
@@ -138,6 +138,62 @@ namespace MyNetSensors.WebController.Controllers
             users.Remove(user);
 
             db.RemoveUsers(users);
+
+            return RedirectToAction("List");
+        }
+
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View(new NewUserModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(NewUserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = db.GetUser(model.Name);
+                if (user == null)
+                {
+                    db.AddUser(new User
+                    {
+                        Name = model.Name,
+                        Email = model.Email,
+                        Password = model.Password
+                    });
+
+                    return RedirectToAction("List");
+                }
+
+                ModelState.AddModelError("", "User already exists");
+            }
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            User user = db.GetUser(id);
+            if (user == null)
+                return HttpBadRequest();
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(User model)
+        {
+            User user = db.GetUser(model.Name);
+            if (user == null)
+                return HttpBadRequest();
+
+            user.Email = model.Email;
+            db.UpdateUser(user);
 
             return RedirectToAction("List");
         }

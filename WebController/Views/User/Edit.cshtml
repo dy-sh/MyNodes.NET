@@ -1,0 +1,51 @@
+﻿@model MyNetSensors.Users.User
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+        < <a asp-action="List">Users</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@Model.Name</h4>
+                </div>
+
+                <form asp-action="Edit" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui attached segment">
+                        <input type="hidden" asp-for="Name"/>
+
+                        <div class="field">
+                            <label>Email</label>
+                            <input type="text" asp-for="Email" />
+                            <span asp-validation-for="Email" />
+                        </div>
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="List" class="ui button">Cancel</a>
+                            <input type="submit" value="Save" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

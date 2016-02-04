@@ -1,0 +1,61 @@
+﻿@model MyNetSensors.WebController.ViewModels.User.NewUserModel
+
+@{
+    ViewBag.Title = "Add New User";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+        < <a asp-action="List">Users</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Add" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui attached segment">
+                        <div class="field">
+                            <label>Login</label>
+                            <input type="text" asp-for="Name"  />
+                            <span asp-validation-for="Name" />
+                        </div>
+                        <div class="field">
+                            <label>Email</label>
+                                <input type="text" asp-for="Email" />
+                            <span asp-validation-for="Email" />
+                        </div>
+
+                        <div class="field">
+                            <label>Password</label>
+                            <input type="password" asp-for="Password" />
+                            <span asp-validation-for="Password" />
+                        </div>
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="List" class="ui button">Cancel</a>
+                            <input type="submit" value="Add" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

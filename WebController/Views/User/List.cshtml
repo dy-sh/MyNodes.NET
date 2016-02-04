@@ -20,7 +20,7 @@
     <div class="ui raised segments">
         <div class="ui secondary clearing segment">
             <b>Users</b>
-            <a asp-action="New" asp-route-id="@ViewBag.NodeId" class="ui right floated small primary button">Add New User</a>
+            <a asp-action="Add" asp-route-id="@ViewBag.NodeId" class="ui right floated small primary button">Add New User</a>
         </div>
         @if (Model == null || Model.Count() == 0)
         {
@@ -39,7 +39,8 @@
                         @user.Name
                     </h4>
                     <div class="ui right floated basic tiny buttons">
-                        <a asp-action="Edit" class="ui button" asp-route-id="@user.Id"><b>Edit permissions</b></a>
+                        <a asp-action="Permissions" class="ui button" asp-route-id="@user.Id"><b>Permissions</b></a>
+                        <a asp-action="Edit" class="ui button" asp-route-id="@user.Id"><b>Edit</b></a>
                         <a asp-action="Remove" class="ui button" asp-route-id="@user.Id"><b>Delete</b></a>
                     </div>
 
