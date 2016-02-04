@@ -13,7 +13,8 @@
         "Gateways.MySensors.Serial": "1.0.0-*",
         "Nodes.UITimer": "1.0.0-*",
         "Nodes": "1.0.0-*",
-        "Users": "1.0.0-*"
+        "Users": "1.0.0-*",
+        "Gateways.MySensors": "1.0.0-*"
       }
     }
   }

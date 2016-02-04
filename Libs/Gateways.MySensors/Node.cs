@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public class Node
     {

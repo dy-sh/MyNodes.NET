@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public delegate void MessageEventHandler(Message message);
     public delegate void NodeEventHandler(Node node);

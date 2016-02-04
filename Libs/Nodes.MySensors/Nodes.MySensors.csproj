@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gateways.MySensors.Serial\Gateways.MySensors.Serial.csproj">
+    <ProjectReference Include="..\Gateways.MySensors\Gateways.MySensors.csproj">
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateways.MySensors.Serial</Name>
+      <Name>Gateways.MySensors</Name>
     </ProjectReference>
     <ProjectReference Include="..\Nodes\Nodes.csproj">
       <Project>{d01dc889-34d8-41db-a0e9-81bfb1fa1e1e}</Project>

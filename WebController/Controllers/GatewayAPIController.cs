@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers

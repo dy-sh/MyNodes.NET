@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 using MyNetSensors.WebController.Controllers;
 
 
@@ -58,22 +58,22 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnSensorUpdated(sensor);
         }
 
-        private static void OnNodeBatteryUpdated(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeBatteryUpdated(Node node)
         {
             hub.Clients.All.OnNodeBatteryUpdated(node);
         }
 
-        private static void OnNodeLastSeenUpdated(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeLastSeenUpdated(Node node)
         {
             hub.Clients.All.OnNodeLastSeenUpdated(node);
         }
 
-        private static void OnNodeUpdated(Gateways.MySensors.Serial.Node node)
+        private static void OnNodeUpdated(Node node)
         {
             hub.Clients.All.OnNodeUpdated(node);
         }
 
-        private static void OnNewNode(Gateways.MySensors.Serial.Node node)
+        private static void OnNewNode(Node node)
         {
             hub.Clients.All.OnNewNode(node);
         }

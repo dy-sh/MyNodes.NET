@@ -5,7 +5,7 @@
 
 using System;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public class Message : ICloneable
     {

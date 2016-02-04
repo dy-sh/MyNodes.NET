@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 using Node = MyNetSensors.Nodes.Node;
 
 namespace MyNetSensors.Nodes
@@ -12,7 +12,7 @@ namespace MyNetSensors.Nodes
         public int nodeId;
 
 
-        public MySensorsNode(Gateways.MySensors.Serial.Node node) : base(0, 0)
+        public MySensorsNode(Gateways.MySensors.Node node) : base(0, 0)
         {
             this.nodeId = node.Id;
             this.Title = node.GetSimpleName2();
@@ -68,7 +68,7 @@ namespace MyNetSensors.Nodes
             base.OnOutputChange(output);
         }
 
-        private void CreateInputsOutputs(Gateways.MySensors.Serial.Node node)
+        private void CreateInputsOutputs(Gateways.MySensors.Node node)
         {
             foreach (var sensor in node.sensors)
             {

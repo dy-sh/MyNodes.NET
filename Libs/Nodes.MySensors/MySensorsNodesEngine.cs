@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 using Node = MyNetSensors.Nodes.Node;
 
 namespace MyNetSensors.Nodes
@@ -32,7 +32,7 @@ namespace MyNetSensors.Nodes
             CreateAndAddMySensorsNodes();
         }
 
-        private void OnNodeBatteryUpdated(Gateways.MySensors.Serial.Node node)
+        private void OnNodeBatteryUpdated(Gateways.MySensors.Node node)
         {
             MySensorsNode n = GetMySensorsNode(node.Id);
             n?.UpdateBattery(node.batteryLevel);
@@ -55,7 +55,7 @@ namespace MyNetSensors.Nodes
                 gateway.RemoveAllNodes();
         }
 
-        private void OnGatewayRemoveNode(Gateways.MySensors.Serial.Node node)
+        private void OnGatewayRemoveNode(Gateways.MySensors.Node node)
         {
             MySensorsNode oldNode = GetMySensorsNode(node.Id);
 
@@ -73,7 +73,7 @@ namespace MyNetSensors.Nodes
         }
 
 
-        private void CreateOrUpdateNode(Gateways.MySensors.Serial.Node node)
+        private void CreateOrUpdateNode(Gateways.MySensors.Node node)
         {
             MySensorsNode oldNode = GetMySensorsNode(node.Id);
             if (oldNode == null)

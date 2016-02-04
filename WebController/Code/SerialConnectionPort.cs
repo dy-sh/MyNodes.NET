@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 
 namespace MyNetSensors.WebController.Code
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public class GatewayAliveChecker
     {

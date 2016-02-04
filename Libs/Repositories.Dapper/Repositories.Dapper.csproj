@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gateways.MySensors.Serial\Gateways.MySensors.Serial.csproj">
+    <ProjectReference Include="..\Gateways.MySensors\Gateways.MySensors.csproj">
       <Project>{c323003b-afa8-464a-b3ca-18f07dd6cdee}</Project>
-      <Name>Gateways.MySensors.Serial</Name>
+      <Name>Gateways.MySensors</Name>
     </ProjectReference>
     <ProjectReference Include="..\Nodes.UITimer\Nodes.UITimer.csproj">
       <Project>{5c0bda8e-7c8c-427d-9673-b18a05b05280}</Project>

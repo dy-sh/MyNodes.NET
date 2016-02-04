@@ -8,7 +8,7 @@ using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 
 namespace MyNetSensors.Repositories.EF.SQLite
 {

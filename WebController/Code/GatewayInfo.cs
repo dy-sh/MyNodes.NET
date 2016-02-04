@@ -3,7 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 
 namespace MyNetSensors.WebController.Code
 {

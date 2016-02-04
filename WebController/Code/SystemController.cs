@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting.Internal;
 using Microsoft.Extensions.Configuration;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;

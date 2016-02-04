@@ -11,7 +11,7 @@ using System.Linq;
 using System.Timers;
 using Dapper;
 using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors.Serial;
+using MyNetSensors.Gateways.MySensors;
 
 namespace MyNetSensors.Repositories.Dapper
 {

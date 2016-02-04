@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public interface IMySensorsMessagesRepository
     {

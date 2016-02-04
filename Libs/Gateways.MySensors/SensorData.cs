@@ -5,7 +5,7 @@
 
 using System;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public class SensorData:ICloneable
     {

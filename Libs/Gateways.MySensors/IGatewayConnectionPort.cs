@@ -4,9 +4,8 @@
 */
 
 using System;
-using System.Collections.Generic;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public delegate void OnDataReceivedEventHandler(string message);
 

@@ -38,7 +38,7 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "Gateways.MySensors.Serial": "1.0.0-*",
+        "Gateways.MySensors": "1.0.0-*",
         "Nodes": "1.0.0-*",
         "Nodes.MySensors": "1.0.0-*",
         "Nodes.UI": "1.0.0-*",

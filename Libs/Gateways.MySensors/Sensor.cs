@@ -4,10 +4,8 @@
 */
 
 using System;
-using System.Linq;
-using MyNetSensors.Utils;
 
-namespace MyNetSensors.Gateways.MySensors.Serial
+namespace MyNetSensors.Gateways.MySensors
 {
     public class Sensor
     {
