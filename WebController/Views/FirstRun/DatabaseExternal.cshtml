@@ -12,22 +12,22 @@
 
 
     <div class="ui ordered steps">
-        <div class="step">
+        <div class="active step">
             <div class="content">
                 <div class="title">Database</div>
                 <div class="description">Configure database</div>
             </div>
         </div>
-        <div class="step">
+        <div class=" step">
             <div class="content">
                 <div class="title">Gateway</div>
                 <div class="description">Connect to gateway</div>
             </div>
         </div>
-        <div class="step">
+        <div class=" step">
             <div class="content">
                 <div class="title">User</div>
-                <div class="description">Create Admin profile</div>
+                <div class="description">Create admin profile</div>
             </div>
         </div>
     </div>
@@ -39,30 +39,18 @@
 
         <div class="column">
             <div class="ui raised segments">
-                <div class="ui secondary segment">
-                    <h4>@ViewBag.Title</h4>
+                <div class="ui secondary attached segment">
+                    <h4>Database</h4>
+                </div>
+
+                <div class="ui basic segment">
+                    <h2 class="ui header">External database</h2>
                 </div>
 
 
-                <div class="ui attached segment">
-                    <h2 class="ui header">Welcome to MyNetSensors</h2>
-
-                    This is the initial settings wizard.
-                    <br/>
-                    You will be offered the following steps:
-                    <br />
-
-                    <div class="ui bulleted list">
-                        <div class="item">Configure database</div>
-                        <div class="item">Connect to gateway</div>
-                        <div class="item">Create Admin profile</div>
-                    </div>
-                </div>
 
                 <div class="ui center aligned attached segment">
-                    <div class="ui buttons">
-                        <a asp-action="DataBase" class="ui primary button">Well, let's start</a>
-                    </div>
+                    <a asp-action="DataBase" asp-route-id="Non">Skip this step. Don't use a database yet.</a>
                 </div>
 
 
@@ -71,8 +59,11 @@
 
     </div>
 </div>
+
+
 <br />
-<br />
+<br/>
+
 
 
 

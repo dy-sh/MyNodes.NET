@@ -1,0 +1,117 @@
+﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
+
+@{
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "First Run";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+
+    <div class="ui ordered steps">
+        <div class="active step">
+            <div class="content">
+                <div class="title">Database</div>
+                <div class="description">Configure database</div>
+            </div>
+        </div>
+        <div class=" step">
+            <div class="content">
+                <div class="title">Gateway</div>
+                <div class="description">Connect to gateway</div>
+            </div>
+        </div>
+        <div class=" step">
+            <div class="content">
+                <div class="title">User</div>
+                <div class="description">Create admin profile</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>Database</h4>
+                </div>
+
+                <div class="ui basic segment">
+                    <h2 class="ui header">Select database</h2>
+                </div>
+                <div class="ui basic segment">
+                    If you don't know what database to use, choose the built-in database.
+                </div>
+                <div class="ui basic segment">
+
+                    <div class="ui two column middle aligned very relaxed stackable grid">
+                        <div class="column">
+                            <h3>External database</h3>
+                            <div class="ui bulleted list">
+                                <div class="item">Requires configuration</div>
+                                <div class="item">Requires separate server</div>
+                                <div class="item">Works faster than the built-in database</div>
+                                <div class="item">Gives a performance boost</div>
+                            </div>
+                        </div>
+                        <div class="ui vertical divider">Or</div>
+                        <div class="column">
+                            <h3>Built-in database</h3>
+                            <div class="ui bulleted list">
+                                <div class="item">Requires no configuration</div>
+                                <div class="item">Stored as a file on the disk (SQLite) that can be easily copied or deleted</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+  
+                <div class="ui attached segment">
+
+                    <div class="ui two column middle aligned very relaxed stackable grid">
+                        <div class="center aligned column">
+                            <a asp-action="DataBase" asp-route-id="External" class="ui button">External database</a>
+                        </div>
+                        <div class="center aligned column">
+                            <a asp-action="DataBase" asp-route-id="Builtin" class="ui primary button">Built-in database</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ui center aligned attached segment">
+                    <a asp-action="DataBase" asp-route-id="Non">Skip this step. Don't use a database yet.</a>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<br />
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

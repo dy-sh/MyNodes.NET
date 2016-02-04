@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    public class FirstRunController:Controller
+    public class FirstRunController : Controller
     {
         private const string SETTINGS_FILE_NAME = "appsettings.json";
         private IConfigurationRoot сonfiguration;
@@ -26,8 +26,43 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        [HttpGet]
         public IActionResult Index()
+        {
+
+
+            return View();
+        }
+
+        public IActionResult Database(string id)
+        {
+            if (id == "Non")
+            {
+                dynamic json = ReadConfig();
+                json.DataBase.Enable = false;
+                WriteConfig(json);
+                сonfiguration.Reload();
+
+                return RedirectToAction("Gateway");
+            }
+            if (id == "Builtin")
+            {
+                dynamic json = ReadConfig();
+                json.DataBase.Enable = true;
+                json.DataBase.UseInternalDb = true;
+                WriteConfig(json);
+                сonfiguration.Reload();
+
+                return RedirectToAction("Gateway");
+            }
+            if (id == "External")
+            {
+                return View("DatabaseExternal");
+            }
+
+            return View();
+        }
+
+        public IActionResult Gateway(string id)
         {
 
 
