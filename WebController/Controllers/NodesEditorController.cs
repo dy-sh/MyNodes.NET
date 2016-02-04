@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using LiteGraph;
 using Microsoft.AspNet.Authorization;
+using Microsoft.Extensions.Configuration;
 using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.WebController.Code;
@@ -21,6 +22,7 @@ namespace MyNetSensors.WebController.Controllers
         const string MAIN_PANEL_ID = "Main";
 
         private NodesEngine engine = SystemController.nodesEngine;
+
 
         public IActionResult Index(bool split)
         {

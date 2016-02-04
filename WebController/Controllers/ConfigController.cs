@@ -38,49 +38,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult Index()
         {
-            bool firstRun = Boolean.Parse(сonfiguration["FirstRun"]);
-
-            if (firstRun)
-                return RedirectToAction("FirstRun");
-
             return View();
         }
-
-
-
-
-
-        [HttpGet]
-        public IActionResult FirstRun()
-        {
-            //List<string> ports = SystemController.gatewayConnectionPort.GetAvailablePorts();
-            //string currentPort = SystemController.serialGatewayPortName;
-
-            //ViewBag.ports = ports;
-
-            //if (ports.Contains(currentPort))
-            //    ViewBag.currentPort = currentPort;
-
-            return View(new SerialPortViewModel());
-        }
-
-
-        [HttpPost]
-        public IActionResult FirstRun(SerialPortViewModel port)
-        {
-            //if (String.IsNullOrEmpty(port.PortName))
-            //    return RedirectToAction("FirstRun");
-
-            //dynamic json = ReadConfig();
-            //json.SerialGateway.SerialPort = port.PortName;
-            //json.FirstRun = false;
-            //WriteConfig(json);
-            //сonfiguration.Reload();
-
-
-            return RedirectToAction("Index", "Dashboard");
-        }
-
+        
 
 
         [HttpGet]

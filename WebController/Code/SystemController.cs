@@ -55,10 +55,25 @@ namespace MyNetSensors.WebController.Code
 
 
         private static bool systemControllerStarted;
+        private static bool firstRun;
+
+
 
 
         public static async void Start(IConfigurationRoot configuration, IServiceProvider services)
         {
+            if (Boolean.Parse(configuration["FirstRun"]))
+            {
+                if (firstRun)
+                    return;
+
+                firstRun = true;
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n"); // <-- see note
+                Console.ForegroundColor = ConsoleColor.Gray;
+                return;
+            }
+
             if (systemControllerStarted) return;
             systemControllerStarted = true;
             
@@ -75,16 +90,6 @@ namespace MyNetSensors.WebController.Code
             logs.OnNodeLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
             logs.OnSystemLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.White); };
             logs.OnSystemLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-
-
-            //bool firstRun = Boolean.Parse(Configuration["FirstRun"]);
-            //if (firstRun)
-            //else
-            //{
-            //    Console.ForegroundColor = ConsoleColor.White;
-            //    Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n"); // <-- see note
-            //    Console.ForegroundColor = ConsoleColor.Gray;
-            //}
 
 
             //read settings

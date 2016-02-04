@@ -1,0 +1,166 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <environment names="Development">
+        @*<link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />*@
+        @*<link href="~/css/slider/jquery-ui.min.css" rel="stylesheet" />*@
+        <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+            <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet" />*@
+        @*<link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />*@
+        <link href="~/lib/semantic-ui/dist/semantic.css" rel="stylesheet" />
+        <link href="~/css/daterangepicker/daterangepicker.css" rel="stylesheet" />
+        <link href="~/css/slider/nouislider.css" rel="stylesheet" />
+        <link href="~/css/switch/switch.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
+    </environment>
+    <environment names="Staging,Production">
+        @*<link href="~/lib/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet" />*@
+        <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
+            <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+            <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />*@
+        <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
+        <link href="~/css/daterangepicker/daterangepicker.min.css" rel="stylesheet" />
+        <link href="~/css/slider/nouislider.css" rel="stylesheet" />
+        <link href="~/css/switch/switch.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        @RenderSection("styles", required: false)
+    </environment>
+</head>
+<body>
+
+
+    <!-- Sidebar Menu -->
+    <div class="ui inverted vertical menu sidebar thin">
+        <div class="ui container">
+            <a asp-controller="Dashboard" asp-action="Index" class="item fadebefore">Dashboard</a>
+            <a asp-controller="Hardware" asp-action="Index" class="item fadebefore">Hardware</a>
+            <a asp-controller="Logs" asp-action="Index" class="item fadebefore">Logs</a>
+            <a asp-controller="Config" asp-action="Index" class="item fadebefore">Config</a>
+            <a asp-controller="Home" asp-action="About" class="item fadebefore">About</a>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- Header Menu-->
+    <div class="ui fixed big borderless main menu">
+        <div class="ui container">
+            <a class="sidebar-button showsmall item">
+                <i class="sidebar icon"></i>
+            </a>
+
+            <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
+
+        </div>
+    </div>
+
+
+    <div class="pusher">
+        <br />
+        <br />
+        <br />
+
+        @RenderBody()
+
+
+    </div>
+
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+        @*<script src="~/lib/jquery-ui/jquery-ui.js"></script>*@
+        @*<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+            <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>*@
+        <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
+        <script src="~/lib/moment/moment.js"></script>
+        <script src="~/js/handlebars.js"></script>
+        <script src="~/lib/semantic-ui/dist/semantic.js"></script>
+        <script src="~/js/daterangepicker/daterangepicker.js"></script>
+        <script src="~/js/slider/nouislider.js"></script>
+        <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
+        <script src="~/signalr/hubs" type="text/javascript"></script>
+
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
+        @*<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>*@
+        @*<script src="~/js/slider/jquery-ui.min.js"></script>*@
+        @*<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+            <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.min.js"></script>*@
+
+        <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
+        <script src="~/lib/moment/min/moment.min.js"></script>
+        <script src="~/js/handlebars.min.js"></script>
+        <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
+        <script src="~/js/daterangepicker/daterangepicker.js"></script>
+        <script src="~/js/slider/nouislider.min.js"></script>
+        <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
+        <script src="~/signalr/hubs" type="text/javascript"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+
+    <script>
+        ////page fade animation
+        //$('.body-content').fadeIn(700);
+        //$('#footer').fadeIn(700);
+
+        //$('.fadebefore').click(function () {
+        //    var href = $(this).attr('href');
+
+        //    // do animation
+        //    $('.body-content').fadeOut(400, function () {
+        //        // go to link when animation completes
+        //        window.location = href;
+
+        //    });
+
+        //    // over ride browser following link when clicked
+        //    return false;
+        //});
+
+
+        // noty settings
+        $.noty.defaults.layout = 'bottomRight';
+        $.noty.defaults.theme = 'relax';
+        $.noty.defaults.timeout = 3000;
+        $.noty.defaults.animation = {
+            open: 'animated bounceInRight', // Animate.css class names
+            close: 'animated flipOutX', // Animate.css class names
+            easing: 'swing', // unavailable - no need
+            speed: 500 // unavailable - no need
+        };
+
+
+        $(document)
+    .ready(function () {
+
+        // show dropdown
+        $('.ui.dropdown').dropdown({
+            on: 'click'
+        });
+
+        // create sidebar and attach to menu open
+        $('.ui.sidebar')
+            .sidebar('attach events', '.sidebar-button');
+    });
+
+
+    </script>
+</body>
+</html>

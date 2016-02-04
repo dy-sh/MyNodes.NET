@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Routing;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Query.ExpressionTranslators.Internal;
@@ -161,6 +162,19 @@ namespace MyNetSensors.WebController
                 app.UseStaticFiles();
 
                 app.UseStatusCodePages();
+
+                //redirect to /FirstRun
+                app.Use(async (context, next) =>
+                {
+                    if (Boolean.Parse(Configuration["FirstRun"])
+                    &&  !context.Request.Path.ToUriComponent().StartsWith("/FirstRun"))
+                    {
+                        context.Response.Redirect("/FirstRun");
+                        return;
+                    }
+                    //invoke next component
+                    await next.Invoke();
+                });
 
                 app.UseCookieAuthentication(options =>
                 {
