@@ -247,6 +247,33 @@ namespace MyNetSensors.WebController.Controllers
 
             return info;
         }
+
+
+
+        [HttpGet]
+        public IActionResult Rules()
+        {
+            return View(SystemController.webServerRules);
+        }
+
+
+        [HttpPost]
+        public IActionResult Rules(WebServerRules model)
+        {
+            if (model != null)
+            {
+                SystemController.webServerRules = model;
+
+                dynamic json = ReadConfig();
+                json.WebServer.Rules = JObject.FromObject(model);
+                WriteConfig(json);
+                сonfiguration.Reload();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 
 }

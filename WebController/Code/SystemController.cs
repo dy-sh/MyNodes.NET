@@ -14,28 +14,34 @@ using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.Dapper;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.Users;
+using MyNetSensors.WebController.ViewModels.Config;
 
 namespace MyNetSensors.WebController.Code
 {
     public static class SystemController
     {
-        //SETTINGS
+        //GATEWAYS
         public static string serialGatewayPortName = "COM1";
-
         public static string ethernetGatewayIp = "192.168.88.20";
         public static int ethernetGatewayPort = 5003;
-
         public static bool gatewayAutoAssignId = true;
         public static bool gatewayMessagesLogEnabled = false;
+        public static bool serialGatewayEnabled;
+        public static bool ethernetGatewayEnabled;
 
+
+        //DATABASES
         public static bool dataBaseEnabled = true;
         public static bool useInternalDb = true;
         public static string dataBaseConnectionString;
         public static int dataBaseWriteInterval = 5000;
 
-
+        //NODES ENGINE
         public static bool nodesEngineEnabled = true;
         public static int nodesEngineUpdateInterval = 10;
+
+        //WEB SERVER
+        public static WebServerRules webServerRules;
 
 
         //VARIABLES
@@ -46,7 +52,6 @@ namespace MyNetSensors.WebController.Code
 
         public static IMySensorsRepository mySensorsDb;
         public static IMySensorsMessagesRepository mySensorsMessagesDb;
-
 
         public static NodesEngine nodesEngine;
         public static MySensorsNodesEngine mySensorsNodesEngine;
@@ -62,8 +67,7 @@ namespace MyNetSensors.WebController.Code
         public static event Action OnGatewayConnected;
         public static event Action OnGatewayDisconnected;
 
-        public static bool serialGatewayEnabled;
-        public static bool ethernetGatewayEnabled;
+
 
 
         private static bool systemControllerStarted;
@@ -151,6 +155,11 @@ namespace MyNetSensors.WebController.Code
                 useInternalDb = Boolean.Parse(configuration["DataBase:UseInternalDb"]);
                 dataBaseWriteInterval = Int32.Parse(configuration["DataBase:WriteInterval"]);
                 dataBaseConnectionString = configuration["DataBase:ExternalDbConnectionString"];
+
+                webServerRules = new WebServerRules
+                {
+                    AllowRegistrationOfNewUsers = Boolean.Parse(configuration["WebServer:Rules:AllowRegistrationOfNewUsers"])
+                };
 
             }
             catch
@@ -304,7 +313,7 @@ namespace MyNetSensors.WebController.Code
             if (gateway != null && nodesEngine != null)
                 mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
 
-            if (gateway!= null && gateway.IsConnected())
+            if (gateway != null && gateway.IsConnected())
             {
                 logs.AddSystemInfo("Gateway connected.");
             }
@@ -320,17 +329,17 @@ namespace MyNetSensors.WebController.Code
 
         private static void GatewayDisconnected()
         {
-           OnGatewayDisconnected?.Invoke();
+            OnGatewayDisconnected?.Invoke();
         }
 
 
         public static void DisconnectGateway()
         {
-            if (gateway==null)
+            if (gateway == null)
                 return;
 
             if (gateway.GetGatewayState() != GatewayState.Disconnected)
-            gateway.Disconnect();
+                gateway.Disconnect();
 
             gateway = null;
             mySensorsNodesEngine = null;

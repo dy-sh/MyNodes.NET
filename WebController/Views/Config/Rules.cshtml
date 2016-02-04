@@ -1,0 +1,59 @@
+﻿@model MyNetSensors.WebController.ViewModels.Config.WebServerRules
+
+@{
+    ViewBag.Title = "Web Server Rules";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <p>
+        < <a asp-action="Index">Config</a>
+    </p>
+    <div class="ui divider"></div>
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Rules" asp-anti-forgery="true" class="ui form">
+                    <div class="ui attached segment">
+
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input asp-for="AllowRegistrationOfNewUsers"/>
+                                <label>Allow the registration of new users</label>
+                            </div>
+                        </div>
+                    <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Index" class="ui button">Cancel</a>
+                            <input type="submit" value="Save" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

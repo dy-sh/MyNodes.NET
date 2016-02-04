@@ -58,6 +58,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (!SystemController.webServerRules.AllowRegistrationOfNewUsers)
+                return View("Error", "Registration of new users is prohibited. Please contact administrator.");
+
             return View(new RegisterModel());
         }
 
@@ -65,6 +68,9 @@ namespace MyNetSensors.WebController.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
+            if (!SystemController.webServerRules.AllowRegistrationOfNewUsers)
+                return View("Error", "Registration of new users is prohibited. Please contact administrator.");
+
             if (ModelState.IsValid)
             {
                 User user = db.GetUser(model.Name);
