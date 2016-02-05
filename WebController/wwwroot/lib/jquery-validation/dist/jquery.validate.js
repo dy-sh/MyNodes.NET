@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * jQuery Validation Plugin v1.14.0
  *
  * http://jqueryvalidation.org/
@@ -1363,7 +1363,7 @@ $.extend( $.validator, {
 
 // ajax mode: abort
 // usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
+// if mode:"abort" is used, the previous request on that port (model can be undefined) is aborted via XMLHttpRequest.abort()
 
 var pendingRequests = {},
 	ajax;

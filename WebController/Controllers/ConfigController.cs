@@ -55,23 +55,23 @@ namespace MyNetSensors.WebController.Controllers
             if (ports.Contains(currentPort))
                 ViewBag.currentPort = currentPort;
 
-            return View(new SerialPortViewModel());
+            return View(new SerialGatewayViewModel());
         }
 
 
         [HttpPost]
-        public IActionResult SerialGateway(SerialPortViewModel port)
+        public IActionResult SerialGateway(SerialGatewayViewModel model)
         {
-            if (String.IsNullOrEmpty(port.PortName))
+            if (String.IsNullOrEmpty(model.PortName))
                 return RedirectToAction("SerialGateway");
 
             dynamic json = ReadConfig();
-            json.Gateway.SerialGateway.SerialPort = port.PortName;
+            json.Gateway.SerialGateway.SerialPort = model.PortName;
             WriteConfig(json);
             configuration.Reload();
 
             SystemController.DisconnectGateway();
-            SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = port.PortName;
+            SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = model.PortName;
 
             return RedirectToAction("Index");
         }

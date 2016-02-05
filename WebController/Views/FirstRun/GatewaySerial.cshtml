@@ -1,0 +1,112 @@
+﻿@model MyNetSensors.WebController.ViewModels.Config.SerialGatewayViewModel
+
+@{
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "First Run";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+
+    <div class="ui ordered steps">
+        <div class="completed step">
+            <div class="content">
+                <div class="title">Database</div>
+                <div class="description">Configure database</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">Gateway</div>
+                <div class="description">Connect to gateway</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">User</div>
+                <div class="description">Create admin profile</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>Gateway</h4>
+                </div>
+
+                <div class="ui basic segment">
+                    <h2 class="ui header">Serial gateway</h2>
+                </div>
+
+
+                <form asp-action="GatewaySerial" asp-anti-forgery="true" class="ui form">
+                    <div class="ui basic segment">
+
+                        <h5>Select serial port that is connected to the gateway</h5>
+                        <div class="fields">
+                            <div class="ten wide field">
+
+                                <div class="ui selection button dropdown">
+                                    <input type="hidden" name="PortName" value="@Model.PortName">
+                                    <i class="dropdown icon"></i>
+                                    @if (String.IsNullOrEmpty(ViewBag.currentPort))
+                                    {
+                                        <div class="default text">Serial Port</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text">@Model.PortName</div>
+                                    }
+                                    <div class="menu">
+                                        @foreach (string port in @ViewBag.ports)
+                                        {
+                                            <div class="item" data-value="@port">@port</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="two wide field">
+                                <a asp-action="Gateway" asp-route-id="Serial" class="ui button">Refrash</a>
+                            </div>
+                        </div>
+                        
+
+                        <div class="six wide field">
+                            <label asp-for="Boudrate"></label>
+                            <input asp-for="Boudrate" />
+                        </div>
+
+
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Gateway" asp-route-id="" class="ui button">Cancel</a>
+                            <input type="submit" value="Select" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<br />
+<br />
+

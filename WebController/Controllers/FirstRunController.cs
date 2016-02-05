@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyNetSensors.WebController.Code;
+using MyNetSensors.WebController.ViewModels.Config;
 using MyNetSensors.WebController.ViewModels.FirstRun;
 using Newtonsoft.Json.Linq;
 
@@ -99,7 +102,7 @@ namespace MyNetSensors.WebController.Controllers
                     }
                     catch (SqlException ex)
                     {
-                        ModelState.AddModelError("", "Unable to connect to the database. "+ ex.Message);
+                        ModelState.AddModelError("", "Unable to connect to the database. " + ex.Message);
                         return View("DatabaseExternal", model);
                     }
                 }
@@ -111,11 +114,69 @@ namespace MyNetSensors.WebController.Controllers
             }
         }
 
+
+
+
+        [HttpGet]
         public IActionResult Gateway(string id)
         {
+            if (id == "None")
+            {
+                dynamic json = ReadConfig();
+                json.Gateway.SerialGateway.Enable = false;
+                json.Gateway.EthernetGateway.Enable = false;
+                WriteConfig(json);
+                configuration.Reload();
 
+                return RedirectToAction("User");
+            }
+            if (id == "Serial")
+            {
+                ViewBag.ports = SerialConnectionPort.GetAvailablePorts();
+
+                return View("GatewaySerial", new SerialGatewayViewModel
+                {
+                    PortName = configuration["Gateway:SerialGateway:SerialPortName"],
+                    Boudrate = Int32.Parse(configuration["Gateway:SerialGateway:Boudrate"])
+                });
+            }
+            if (id == "Ethernet")
+            {
+                return View("GatewayEthernet", new EthernetGatewayViewModel
+                {
+                    Ip = configuration["Gateway:EthernetGateway:GatewayIP"],
+                    Port = Int32.Parse(configuration["Gateway:EthernetGateway:GatewayPort"])
+                });
+            }
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult GatewaySerial(SerialGatewayViewModel model)
+        {
+            if (String.IsNullOrEmpty(model.PortName))
+                return View("GatewaySerial", new SerialGatewayViewModel());
+
+            dynamic json = ReadConfig();
+            json.Gateway.SerialGateway.SerialPortName = model.PortName;
+            json.Gateway.SerialGateway.Boudrate = model.Boudrate;
+            WriteConfig(json);
+            configuration.Reload();
+
+            return RedirectToAction("User");
+        }
+
+        [HttpPost]
+        public IActionResult GatewayEthernet(EthernetGatewayViewModel model)
+        {
+            dynamic json = ReadConfig();
+            json.Gateway.EthernetGateway.GatewayIP = model.Ip;
+            json.Gateway.EthernetGateway.GatewayPort = model.Port;
+            WriteConfig(json);
+            configuration.Reload();
+
+            return RedirectToAction("User");
         }
 
 
