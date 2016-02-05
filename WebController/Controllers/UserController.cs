@@ -23,7 +23,7 @@ namespace MyNetSensors.WebController.Controllers
             db = SystemController.usersRepository;
         }
 
-
+        private string NO_DB_ERROR = "This functionality is not available because program does not use a database.";
 
         [HttpGet]
         public async Task<IActionResult> Login(string ReturnUrl)
@@ -49,6 +49,9 @@ namespace MyNetSensors.WebController.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string ReturnUrl)
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             if (ModelState.IsValid)
             {
                 User user = db.GetUser(model.Name);
@@ -81,6 +84,10 @@ namespace MyNetSensors.WebController.Controllers
             if (!SystemController.webServerRules.AllowRegistrationOfNewUsers)
                 return View("Error", "Registration of new users is prohibited. Please contact administrator.");
 
+            if (db==null)
+                return View("Error", NO_DB_ERROR);
+
+
             return View(new RegisterModel());
         }
 
@@ -90,6 +97,9 @@ namespace MyNetSensors.WebController.Controllers
         {
             if (!SystemController.webServerRules.AllowRegistrationOfNewUsers)
                 return View("Error", "Registration of new users is prohibited. Please contact administrator.");
+
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
 
             if (ModelState.IsValid)
             {
@@ -132,12 +142,18 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult List()
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             List<User> users = db.GetAllUsers();
             return View(users);
         }
 
         public IActionResult Remove(int id)
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             User user = db.GetUser(id);
 
             if (user == null)
@@ -150,6 +166,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult RemoveAllExceptActive()
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
 
@@ -172,6 +191,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             return View(new NewUserModel());
         }
 
@@ -179,6 +201,9 @@ namespace MyNetSensors.WebController.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(NewUserModel model)
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             if (ModelState.IsValid)
             {
                 User user = db.GetUser(model.Name);
@@ -203,6 +228,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             User user = db.GetUser(id);
             if (user == null)
                 return HttpBadRequest();
@@ -214,6 +242,9 @@ namespace MyNetSensors.WebController.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(User model)
         {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
             User user = db.GetUser(model.Name);
             if (user == null)
                 return HttpBadRequest();

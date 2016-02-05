@@ -39,9 +39,13 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        private string ALREADY_PASSED_MESSAGE =
+            "First Run wizard has already been passed. To start it again, change \"FirstRun\" to \"true\" in appsettings.json file and restart server.";
 
         public IActionResult Index()
         {
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
 
 
             return View();
@@ -50,6 +54,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Database(string id)
         {
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
             if (id == "None")
             {
                 dynamic json = ReadConfig();
@@ -89,6 +96,10 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult Database(ExternalDatabaseViewModel model)
         {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(model.ConnectionString))
@@ -137,6 +148,14 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Gateway(string id)
         {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
+
             if (id == "None")
             {
                 dynamic json = ReadConfig();
@@ -176,8 +195,13 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult GatewaySerial(SerialGatewayViewModel model)
         {
-            if (String.IsNullOrEmpty(model.PortName))
-                return View("GatewaySerial", new SerialGatewayViewModel());
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
 
             dynamic json = ReadConfig();
             json.Gateway.SerialGateway.SerialPortName = model.PortName;
@@ -197,6 +221,14 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public IActionResult GatewayEthernet(EthernetGatewayViewModel model)
         {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
+
             dynamic json = ReadConfig();
             json.Gateway.EthernetGateway.GatewayIP = model.Ip;
             json.Gateway.EthernetGateway.GatewayPort = model.Port;
@@ -215,8 +247,30 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [HttpGet]
-        public IActionResult UserProfile()
+        public async Task<IActionResult> UserProfile()
         {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
+
+            if (!SystemController.dataBaseConfig.Enable)
+            {
+                dynamic json = ReadConfig();
+                json.FirstRun = false;
+                WriteConfig(json);
+                configuration.Reload();
+
+                SystemController.Start(SystemController.configuration, SystemController.services);
+
+                await Authenticate("Guest");
+
+                return View("UserProfileNoDatabase");
+            }
+
             return View(new RegisterModel());
         }
 
@@ -224,6 +278,14 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public async Task<IActionResult> UserProfile(RegisterModel model)
         {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
+
             IUsersRepository db = SystemController.usersRepository;
 
             if (ModelState.IsValid)
