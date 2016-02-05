@@ -44,49 +44,36 @@
                 </div>
 
                 <div class="ui basic segment">
-                    <h2 class="ui header">Select gateway</h2>
+                    <h2 class="ui header">Ethernet gateway</h2>
                 </div>
-                <div class="ui basic segment">
-                    Select which gateway you have. <br/>
-                    You can skip this step if you have no gateway for now.
-                </div>
-                <div class="ui basic segment">
 
-                    <div class="ui two column middle aligned very relaxed stackable grid">
-                        <div class="column">
-                            <h3>Serial gateway</h3>
-                            <div class="ui bulleted list">
-                                <div class="item">Connects to the server via USB cable</div>
+                <form asp-action="GatewayEthernet" asp-anti-forgery="true" class="ui form">
+                    <div class="ui attached segment">
+
+
+                        <h5>Enter ethernet gateway address and port</h5>
+                        <div class="fields">
+                            <div class="twelve wide field">
+                                <label asp-for="Ip"></label>
+                                <input asp-for="Ip">
                             </div>
-                        </div>
-                        <div class="ui vertical divider">Or</div>
-                        <div class="column">
-                            <h3>Ethernet gateway</h3>
-                            <div class="ui bulleted list">
-                                <div class="item">This can be Ethernet or Wi-Fi gateway</div>
-                                <div class="item">Connection is made remotely via TCP port</div>
-                                <div class="item">If the gateway is not in the same network with the server, then you need to forward the port in the router</div>
+                            <div class="four wide field">
+                                <label asp-for="Port"></label>
+                                <input asp-for="Port">
                             </div>
-                        </div>
-                    </div>
-                </div>
+                            <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
 
-                <div class="ui attached segment">
-
-                    <div class="ui two column middle aligned very relaxed stackable grid">
-                        <div class="center aligned column">
-                            <a asp-action="Gateway" asp-route-id="Serial" class="ui primary button">Serial gateway</a>
-                        </div>
-                        <div class="center aligned column">
-                            <a asp-action="Gateway" asp-route-id="Ethernet" class="ui primary button">Ethernet gateway</a>
                         </div>
                     </div>
 
-                </div>
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Gateway" asp-route-id="" class="ui button">Cancel</a>
+                            <input type="submit" value="Select" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
 
-                <div class="ui center aligned attached segment">
-                    <a asp-action="Gateway" asp-route-id="None">Skip this step. Don't use a gateway.</a>
-                </div>
 
 
             </div>

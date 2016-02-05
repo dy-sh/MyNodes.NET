@@ -1,0 +1,90 @@
+﻿@model MyNetSensors.WebController.ViewModels.User.RegisterModel
+
+@{
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "First Run";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+
+    <div class="ui ordered steps">
+        <div class="completed step">
+            <div class="content">
+                <div class="title">Database</div>
+                <div class="description">Configure database</div>
+            </div>
+        </div>
+        <div class="completed step">
+            <div class="content">
+                <div class="title">Gateway</div>
+                <div class="description">Connect to gateway</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">User</div>
+                <div class="description">Create admin profile</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <div class="ui basic segment">
+                    <h2 class="ui header">Admin profile</h2>
+                </div>
+
+                <form asp-action="User" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui basic segment">
+                        <div class="field">
+                            <label>Login</label>
+                                <input type="text" asp-for="Name"  />
+                            <span asp-validation-for="Name" />
+                        </div>
+                        <div class="field">
+                            <label>Email</label>
+                                <input type="text" asp-for="Email" />
+                            <span asp-validation-for="Email" />
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Password</label>
+                                    <input type="password" asp-for="Password"/>
+                                <span asp-validation-for="Password" />
+                            </div>
+                            <div class="field">
+                                <label>Confirm Password</label>
+                                    <input type="password" asp-for="ConfirmPassword"  />
+                                <span asp-validation-for="Password" />
+                            </div>
+                        </div>
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <input type="submit" value="Register" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

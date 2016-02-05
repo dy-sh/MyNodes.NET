@@ -4,9 +4,11 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.ViewModels.Config;
 using MyNetSensors.WebController.ViewModels.FirstRun;
+using MyNetSensors.WebController.ViewModels.User;
 using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
@@ -180,6 +182,39 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult User()
+        {
+            return View(new RegisterModel());
+        }
+
+
+        [HttpPost]
+        public IActionResult User(RegisterModel model)
+        {
+            IUsersRepository db = SystemController.usersRepository;
+
+            if (ModelState.IsValid)
+            {
+                User user = db.GetUser(model.Name);
+                if (user == null)
+                {
+                    db.AddUser(new User
+                    {
+                        Name = model.Name,
+                        Email = model.Email,
+                        Password = model.Password
+                    });
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError("", "User already exists");
+            }
+            return View(model);
+        }
+
         //[HttpPost]
         //public IActionResult Index()
         //{
@@ -192,12 +227,6 @@ namespace MyNetSensors.WebController.Controllers
         //    return RedirectToAction("Index", "Dashboard");
         //}
 
-        [HttpGet]
-        public IActionResult SerialPort()
-        {
 
-
-            return View();
-        }
     }
 }
