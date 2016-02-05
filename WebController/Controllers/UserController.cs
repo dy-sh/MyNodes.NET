@@ -171,15 +171,14 @@ namespace MyNetSensors.WebController.Controllers
 
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
-
             string name = claims.FirstOrDefault(x => x.Type == "name").Value;
 
-            User user = db.GetUser(name);
+            List<User> users = db.GetAllUsers();
+            User user = users.FirstOrDefault(x => x.Name == name);
 
             if (user == null)
                 return HttpBadRequest();
 
-            List<User> users = db.GetAllUsers();
             users.Remove(user);
 
             db.RemoveUsers(users);
