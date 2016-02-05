@@ -27,7 +27,7 @@ namespace MyNetSensors.WebController.Code
         private SerialPort serialPort;
 
         private string portName;
-        private int baudRate=115200;
+        private int baudRate;
 
         public bool IsConnected()
         {
@@ -63,7 +63,7 @@ namespace MyNetSensors.WebController.Code
         }
 
 
-        public SerialConnectionPort(string portName, int baudRate=115200)
+        public SerialConnectionPort(string portName, int baudRate)
         {
             this.portName = portName;
             this.baudRate = baudRate;
@@ -113,7 +113,7 @@ namespace MyNetSensors.WebController.Code
                 serialPort.Open();
 
                 isConnected = true;
-                LogInfo($"Connected to port {portName}.");
+                LogInfo($"Connected to port {portName} at {baudRate} bits/s.");
                 OnConnected?.Invoke();
             }
             catch (Exception ex)

@@ -46,16 +46,13 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult SerialGateway()
         {
+            ViewBag.ports = SerialConnectionPort.GetAvailablePorts();
 
-            List<string> ports = SerialConnectionPort.GetAvailablePorts();
-            string currentPort = SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName;
-
-            ViewBag.ports = ports;
-
-            if (ports.Contains(currentPort))
-                ViewBag.currentPort = currentPort;
-
-            return View(new SerialGatewayViewModel());
+            return View(new SerialGatewayViewModel
+            {
+                PortName = SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName,
+                Boudrate = SystemController.gatewayConfig.SerialGatewayConfig.Boudrate
+            });
         }
 
 
@@ -66,12 +63,14 @@ namespace MyNetSensors.WebController.Controllers
                 return RedirectToAction("SerialGateway");
 
             dynamic json = ReadConfig();
-            json.Gateway.SerialGateway.SerialPort = model.PortName;
+            json.Gateway.SerialGateway.SerialPortName = model.PortName;
+            json.Gateway.SerialGateway.Boudrate = model.Boudrate;
             WriteConfig(json);
             configuration.Reload();
 
             SystemController.DisconnectGateway();
             SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = model.PortName;
+            SystemController.gatewayConfig.SerialGatewayConfig.Boudrate = model.Boudrate;
 
             return RedirectToAction("Index");
         }

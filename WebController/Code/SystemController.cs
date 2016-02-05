@@ -122,7 +122,8 @@ namespace MyNetSensors.WebController.Code
                 SerialGatewayConfig serialGatewayConfig = new SerialGatewayConfig
                 {
                     Enable = Boolean.Parse(configuration["Gateway:SerialGateway:Enable"]),
-                    SerialPortName = configuration["Gateway:SerialGateway:SerialPortName"]
+                    SerialPortName = configuration["Gateway:SerialGateway:SerialPortName"],
+                    Boudrate = Int32.Parse(configuration["Gateway:SerialGateway:Boudrate"])
                 };
 
                 EthernetGatewayConfig ethernetGatewayConfig = new EthernetGatewayConfig
@@ -312,7 +313,8 @@ namespace MyNetSensors.WebController.Code
             if (gatewayConfig.SerialGatewayConfig.Enable)
             {
                 gatewayConnectionPort = new SerialConnectionPort(
-                    gatewayConfig.SerialGatewayConfig.SerialPortName);
+                    gatewayConfig.SerialGatewayConfig.SerialPortName,
+                    gatewayConfig.SerialGatewayConfig.Boudrate);
             }
             else if (gatewayConfig.EthernetGatewayConfig.Enable)
             {

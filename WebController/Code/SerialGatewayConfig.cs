@@ -9,5 +9,6 @@ namespace MyNetSensors.WebController.Code
     {
         public bool Enable { get; set; }
         public string SerialPortName{ get; set; }
+        public int Boudrate{ get; set; }
     }
 }
