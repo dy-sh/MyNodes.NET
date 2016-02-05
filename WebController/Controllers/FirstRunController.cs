@@ -143,6 +143,10 @@ namespace MyNetSensors.WebController.Controllers
                 WriteConfig(json);
                 configuration.Reload();
 
+                SystemController.DisconnectGateway();
+                SystemController.ReadConfig();
+                SystemController.ConnectToGateway();
+
                 return RedirectToAction("User");
             }
             if (id == "Serial")
@@ -176,8 +180,14 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.Gateway.SerialGateway.SerialPortName = model.PortName;
             json.Gateway.SerialGateway.Boudrate = model.Boudrate;
+            json.Gateway.SerialGateway.Enable = true;
+            json.Gateway.EthernetGateway.Enable = false;
             WriteConfig(json);
             configuration.Reload();
+
+            SystemController.DisconnectGateway();
+            SystemController.ReadConfig();
+            SystemController.ConnectToGateway();
 
             return RedirectToAction("User");
         }
@@ -188,8 +198,14 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.Gateway.EthernetGateway.GatewayIP = model.Ip;
             json.Gateway.EthernetGateway.GatewayPort = model.Port;
+            json.Gateway.SerialGateway.Enable = false;
+            json.Gateway.EthernetGateway.Enable = true;
             WriteConfig(json);
             configuration.Reload();
+
+            SystemController.DisconnectGateway();
+            SystemController.ReadConfig();
+            SystemController.ConnectToGateway();
 
             return RedirectToAction("User");
         }

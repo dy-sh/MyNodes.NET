@@ -150,7 +150,6 @@ namespace MyNetSensors.WebController.Code
 
         private void LogMessage(string message)
         {
-            Console.WriteLine(message);
             OnLogMessage?.Invoke(message);
         }
 
