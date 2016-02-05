@@ -12,7 +12,7 @@
 
 
     <div class="ui ordered steps">
-        <div class="active step">
+        <div class="active completed step">
             <div class="content">
                 <div class="title">Database</div>
                 <div class="description">Configure database</div>
@@ -43,29 +43,17 @@
                     <h4>Database</h4>
                 </div>
 
-                <div class="ui basic segment">
-                    <h2 class="ui header">External database</h2>
+                <div class="ui attached segment">
+                    <h2 class="ui header">Database is configured</h2>
+                    Database connection is established
+                    <br />
                 </div>
 
-                <form asp-action="EthernetGateway" asp-anti-forgery="true" class="ui form">
-                    <div class="ui basic segment">
-         
-                            <div class="field">
-                                <label asp-for="ConnectionString"></label>
-                                <input asp-for="ConnectionString">
-                            </div>
-                            <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                <div class="ui center aligned attached segment">
+                    <div class="ui buttons">
+                        <a asp-action="Gateway" class="ui primary button">OK</a>
                     </div>
-
-                    <div class="ui center aligned attached segment">
-                        <div class="ui buttons">
-                            <a asp-action="Database" asp-route-id="" class="ui button">Cancel</a>
-                            <input type="submit" value="Connect" class="ui button primary" />
-                        </div>
-                    </div>
-                </form>
-
-
+                </div>
 
 
             </div>

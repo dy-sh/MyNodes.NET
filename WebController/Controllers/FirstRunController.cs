@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyNetSensors.WebController.ViewModels.FirstRun;
 using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
@@ -7,11 +11,11 @@ namespace MyNetSensors.WebController.Controllers
     public class FirstRunController : Controller
     {
         private const string SETTINGS_FILE_NAME = "appsettings.json";
-        private IConfigurationRoot сonfiguration;
+        private IConfigurationRoot configuration;
 
-        public FirstRunController(IConfigurationRoot сonfiguration)
+        public FirstRunController(IConfigurationRoot configuration)
         {
-            this.сonfiguration = сonfiguration;
+            this.configuration = configuration;
         }
 
         private dynamic ReadConfig()
@@ -33,6 +37,7 @@ namespace MyNetSensors.WebController.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Database(string id)
         {
             if (id == "Non")
@@ -40,7 +45,7 @@ namespace MyNetSensors.WebController.Controllers
                 dynamic json = ReadConfig();
                 json.DataBase.Enable = false;
                 WriteConfig(json);
-                сonfiguration.Reload();
+                configuration.Reload();
 
                 return RedirectToAction("Gateway");
             }
@@ -50,16 +55,60 @@ namespace MyNetSensors.WebController.Controllers
                 json.DataBase.Enable = true;
                 json.DataBase.UseInternalDb = true;
                 WriteConfig(json);
-                сonfiguration.Reload();
+                configuration.Reload();
 
                 return RedirectToAction("Gateway");
             }
             if (id == "External")
             {
-                return View("DatabaseExternal");
+                return View("DatabaseExternal", new ExternalDatabaseViewModel
+                {
+                    ConnectionString = configuration["DataBase:ExternalDbConnectionString"]
+                });
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Database(ExternalDatabaseViewModel model)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(model.ConnectionString))
+                {
+                    try
+                    {
+                        connection.Open();
+                        if (connection.State == ConnectionState.Open)
+                        {
+                            dynamic json = ReadConfig();
+                            json.DataBase.Enable = true;
+                            json.DataBase.UseInternalDb = false;
+                            json.DataBase.ExternalDbConnectionString = model.ConnectionString;
+                            WriteConfig(json);
+                            configuration.Reload();
+                            return View("DatabaseOK");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("",
+                                "Unable to connect to the database. Check the connection string.");
+                            return View("DatabaseExternal", model);
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        ModelState.AddModelError("", "Unable to connect to the database. "+ ex.Message);
+                        return View("DatabaseExternal", model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Unable to connect to the database. " + ex.Message);
+                return View("DatabaseExternal", model);
+            }
         }
 
         public IActionResult Gateway(string id)
@@ -77,7 +126,7 @@ namespace MyNetSensors.WebController.Controllers
         //    dynamic json = ReadConfig();
         //    json.FirstRun = false;
         //    WriteConfig(json);
-        //    сonfiguration.Reload();
+        //    configuration.Reload();
 
         //    return RedirectToAction("Index", "Dashboard");
         //}

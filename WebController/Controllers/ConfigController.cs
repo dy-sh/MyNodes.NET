@@ -19,11 +19,11 @@ namespace MyNetSensors.WebController.Controllers
     {
 
         private const string SETTINGS_FILE_NAME = "appsettings.json";
-        private IConfigurationRoot сonfiguration;
+        private IConfigurationRoot configuration;
 
-        public ConfigController(IConfigurationRoot сonfiguration)
+        public ConfigController(IConfigurationRoot configuration)
         {
-            this.сonfiguration = сonfiguration;
+            this.configuration = configuration;
         }
 
         private dynamic ReadConfig()
@@ -68,7 +68,7 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.Gateway.SerialGateway.SerialPort = port.PortName;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.DisconnectGateway();
             SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = port.PortName;
@@ -97,7 +97,7 @@ namespace MyNetSensors.WebController.Controllers
             json.Gateway.EthernetGateway.GatewayIP = model.Ip;
             json.Gateway.EthernetGateway.GatewayPort = model.Port;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.DisconnectGateway();
             SystemController.gatewayConfig.EthernetGatewayConfig.GatewayIP = model.Ip;
@@ -116,7 +116,7 @@ namespace MyNetSensors.WebController.Controllers
             json.Gateway.SerialGateway.Enable = true;
             json.Gateway.EthernetGateway.Enable = false;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.gatewayConfig.SerialGatewayConfig.Enable = true;
             SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
@@ -140,7 +140,7 @@ namespace MyNetSensors.WebController.Controllers
             json.Gateway.SerialGateway.Enable = false;
             json.Gateway.EthernetGateway.Enable = true;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
             SystemController.gatewayConfig.EthernetGatewayConfig.Enable = true;
@@ -159,7 +159,7 @@ namespace MyNetSensors.WebController.Controllers
             json.Gateway.SerialGateway.Enable = false;
             json.Gateway.EthernetGateway.Enable = false;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
             SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
@@ -176,7 +176,7 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.NodesEngine.Enable = true;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.nodesEngine.Start();
 
@@ -189,7 +189,7 @@ namespace MyNetSensors.WebController.Controllers
             dynamic json = ReadConfig();
             json.NodesEngine.Enable = false;
             WriteConfig(json);
-            сonfiguration.Reload();
+            configuration.Reload();
 
             SystemController.nodesEngine.Stop();
 
@@ -227,7 +227,7 @@ namespace MyNetSensors.WebController.Controllers
                 dynamic json = ReadConfig();
                 json.WebServer.Rules = JObject.FromObject(model);
                 WriteConfig(json);
-                сonfiguration.Reload();
+                configuration.Reload();
             }
 
             return RedirectToAction("Index");
