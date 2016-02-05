@@ -1,1 +1,101 @@
-﻿
+﻿@model MyNetSensors.WebController.ViewModels.Config.SerialPortViewModel
+
+@{
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "First Run";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+
+    <div class="ui ordered steps">
+        <div class="completed step">
+            <div class="content">
+                <div class="title">Database</div>
+                <div class="description">Configure database</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">Gateway</div>
+                <div class="description">Connect to gateway</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">User</div>
+                <div class="description">Create admin profile</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>Gateway</h4>
+                </div>
+
+                <div class="ui basic segment">
+                    <h2 class="ui header">Select gateway</h2>
+                </div>
+                <div class="ui basic segment">
+                    Select which gateway you have. <br/>
+                    You can skip this step if you have no gateway for now.
+                </div>
+                <div class="ui basic segment">
+
+                    <div class="ui two column middle aligned very relaxed stackable grid">
+                        <div class="column">
+                            <h3>Serial gateway</h3>
+                            <div class="ui bulleted list">
+                                <div class="item">Connects to the server via USB cable</div>
+                            </div>
+                        </div>
+                        <div class="ui vertical divider">Or</div>
+                        <div class="column">
+                            <h3>Ethernet gateway</h3>
+                            <div class="ui bulleted list">
+                                <div class="item">This can be Ethernet or Wi-Fi gateway</div>
+                                <div class="item">Connection is made remotely via TCP port</div>
+                                <div class="item">If the gateway is not in the same network with the server, then you need to forward the port in the router</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui attached segment">
+
+                    <div class="ui two column middle aligned very relaxed stackable grid">
+                        <div class="center aligned column">
+                            <a asp-action="Gateway" asp-route-id="Serial" class="ui primary button">Serial gateway</a>
+                        </div>
+                        <div class="center aligned column">
+                            <a asp-action="Gateway" asp-route-id="Ethernet" class="ui primary button">Ethernet gateway</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ui center aligned attached segment">
+                    <a asp-action="Gateway" asp-route-id="None">Skip this step. Don't use a gateway.</a>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<br />
+<br />
+

@@ -40,7 +40,7 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public IActionResult Database(string id)
         {
-            if (id == "Non")
+            if (id == "None")
             {
                 dynamic json = ReadConfig();
                 json.DataBase.Enable = false;
