@@ -199,11 +199,11 @@ namespace MyNetSensors.WebController.Controllers
 
         public WebServerInfo GetWebServerInfo()
         {
-            if (SystemController.usersRepository == null)
+            if (SystemController.usersDb == null)
                 return null;
 
             WebServerInfo info=new WebServerInfo();
-            info.RegisteredUsersCount = SystemController.usersRepository.GetUsersCount();
+            info.RegisteredUsersCount = SystemController.usersDb.GetUsersCount();
 
             return info;
         }

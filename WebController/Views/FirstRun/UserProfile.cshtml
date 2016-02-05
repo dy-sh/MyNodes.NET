@@ -82,8 +82,15 @@
                             <input type="submit" value="Register" class="ui button primary" />
                         </div>
                     </div>
-                </form>
 
+                    @if (ViewBag.CanSkip!=null)
+                    {
+                        <div class="ui center aligned attached segment">
+                            <a asp-action="Complete" asp-route-id="None">Skip this step. Use an existing profile.</a>
+                        </div>
+                    }
+
+                </form>
             </div>
         </div>
     </div>

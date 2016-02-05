@@ -88,7 +88,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                return db.Query<User>($"SELECT * FROM [Users] WHERE Id=@Id", id).SingleOrDefault();
+                return db.Query<User>($"SELECT * FROM [Users] WHERE Id=@id", new { id}).SingleOrDefault();
 
             }
         }
@@ -98,7 +98,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                return db.Query<User>($"SELECT * FROM [Users] WHERE Name=@Name", name).SingleOrDefault();
+                return db.Query<User>($"SELECT * FROM [Users] WHERE Name=@name", new { name }).SingleOrDefault();
 
             }
         }
@@ -117,7 +117,7 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query($"DELETE FROM [Users] WHERE Id=@Id",id);
+                db.Query($"DELETE FROM [Users] WHERE Id=@id",new { id});
             }
         }
 

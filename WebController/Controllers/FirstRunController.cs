@@ -80,7 +80,7 @@ namespace MyNetSensors.WebController.Controllers
                 SystemController.ReadConfig();
                 SystemController.ConnectToDB();
 
-                return RedirectToAction("Gateway");
+                return RedirectToAction("DatabaseCheck");
             }
             if (id == "External")
             {
@@ -119,7 +119,7 @@ namespace MyNetSensors.WebController.Controllers
                             SystemController.ReadConfig();
                             SystemController.ConnectToDB();
 
-                            return View("DatabaseOK");
+                            return RedirectToAction("DatabaseCheck");
                         }
                         else
                         {
@@ -141,6 +141,36 @@ namespace MyNetSensors.WebController.Controllers
                 return View("DatabaseExternal", model);
             }
         }
+
+
+        [HttpGet]
+
+        public IActionResult DatabaseCheck(string id)
+        {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+
+            if (id == "Delete")
+            {
+                SystemController.ClearAllDatabases();
+                return RedirectToAction("Gateway");
+            }
+            if (id == "Use")
+            {
+                return RedirectToAction("Gateway");
+            }
+
+
+            if ((SystemController.nodesDb.GetAllNodes()!=null && SystemController.nodesDb.GetAllNodes().Count != 0)
+                ||(SystemController.usersDb.GetUsersCount() != 0))
+                return View("DatabaseIsNotEmpty");
+
+            return RedirectToAction("Gateway");
+        }
+
+
 
 
 
@@ -259,17 +289,13 @@ namespace MyNetSensors.WebController.Controllers
 
             if (!SystemController.dataBaseConfig.Enable)
             {
-                dynamic json = ReadConfig();
-                json.FirstRun = false;
-                WriteConfig(json);
-                configuration.Reload();
-
-                SystemController.Start(SystemController.configuration, SystemController.services);
-
                 await Authenticate("Guest");
 
                 return View("UserProfileNoDatabase");
             }
+
+            if (SystemController.usersDb.GetUsersCount() > 0)
+                ViewBag.CanSkip = true;
 
             return View(new RegisterModel());
         }
@@ -286,7 +312,7 @@ namespace MyNetSensors.WebController.Controllers
             if (SystemController.dataBaseConfig == null)
                 return RedirectToAction("Index");
 
-            IUsersRepository db = SystemController.usersRepository;
+            IUsersRepository db = SystemController.usersDb;
 
             if (ModelState.IsValid)
             {
@@ -300,22 +326,39 @@ namespace MyNetSensors.WebController.Controllers
                         Password = model.Password
                     });
 
-                    dynamic json = ReadConfig();
-                    json.FirstRun = false;
-                    WriteConfig(json);
-                    configuration.Reload();
-
-                    SystemController.Start(SystemController.configuration, SystemController.services);
 
                     await Authenticate(model.Name);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Complete");
                 }
 
                 ModelState.AddModelError("", "User already exists");
             }
             return View(model);
         }
+
+
+
+        public IActionResult Complete(RegisterModel model)
+        {
+            //prevent start wizard if already passed
+            if (!bool.Parse(configuration["FirstRun"]))
+                return View("Error", ALREADY_PASSED_MESSAGE);
+
+            //redirect to first step if user came this url directly
+            if (SystemController.dataBaseConfig == null)
+                return RedirectToAction("Index");
+
+            dynamic json = ReadConfig();
+            json.FirstRun = false;
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.Start(SystemController.configuration, SystemController.services);
+
+            return RedirectToAction("Index", "Home");
+        }
+
 
 
         private async Task Authenticate(string userName)

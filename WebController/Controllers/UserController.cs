@@ -20,7 +20,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public UserController()
         {
-            db = SystemController.usersRepository;
+            db = SystemController.usersDb;
         }
 
         private string NO_DB_ERROR = "This functionality is not available because program does not use a database.";

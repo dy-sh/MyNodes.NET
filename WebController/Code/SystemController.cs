@@ -30,7 +30,7 @@ namespace MyNetSensors.WebController.Code
 
 
         //VARIABLES
-        public static IUsersRepository usersRepository;
+        public static IUsersRepository usersDb;
 
         public static IGatewayConnectionPort gatewayConnectionPort;
         public static Gateway gateway;
@@ -214,7 +214,7 @@ namespace MyNetSensors.WebController.Code
                 mySensorsDb = null;
                 mySensorsMessagesDb = null;
                 uiTimerNodesDb = null;
-                usersRepository = null;
+                usersDb = null;
                 return;
             }
 
@@ -236,7 +236,7 @@ namespace MyNetSensors.WebController.Code
                 mySensorsDb = new MySensorsRepositoryEf(mySensorsNodesDbContext);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryEf(mySensorsMessagesDbContext);
                 uiTimerNodesDb = new UITimerNodesRepositoryEf(uiTimerNodesDbContext);
-                usersRepository = new UsersRepositoryEf(usersDbContext);
+                usersDb = new UsersRepositoryEf(usersDbContext);
             }
             else
             {
@@ -251,7 +251,7 @@ namespace MyNetSensors.WebController.Code
                 mySensorsDb = new MySensorsRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
-                usersRepository = new UsersRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                usersDb = new UsersRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
             }
 
 
@@ -374,6 +374,17 @@ namespace MyNetSensors.WebController.Code
 
             gateway = null;
             mySensorsNodesEngine = null;
+        }
+
+        public static void ClearAllDatabases()
+        {
+            mySensorsDb.RemoveAllNodesAndSensors();
+            mySensorsMessagesDb.RemoveAllMessages();
+            nodesDb.RemoveAllLinks();
+            nodesDb.RemoveAllNodes();
+            nodesStatesDb.RemoveAllStates();
+            uiTimerNodesDb.RemoveAllTasks();
+            usersDb.RemoveAllUsers();
         }
     }
 }
