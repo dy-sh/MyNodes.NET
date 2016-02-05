@@ -24,15 +24,12 @@ namespace MyNetSensors.WebController
 
         public Startup(IHostingEnvironment env)
         {
-            // Set up configuration sources.
-
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
             {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
             }
 
@@ -40,63 +37,35 @@ namespace MyNetSensors.WebController
             Configuration = builder.Build();
         }
 
-        private IServiceCollection services;
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //database
-            bool dataBaseEnabled = Boolean.Parse(Configuration["DataBase:Enable"]);
-            bool useInternalDb = Boolean.Parse(Configuration["DataBase:UseInternalDb"]);
-
-            if (dataBaseEnabled)
-            {
-                if (useInternalDb)
-                {
-                    services.AddEntityFramework()
-                        .AddSqlite()
-                        .AddDbContext<NodesDbContext>(options =>
-                            options.UseSqlite("Data Source=Nodes.sqlite"))
-                        .AddDbContext<NodesStatesHistoryDbContext>(options =>
-                            options.UseSqlite("Data Source=NodesStatesHistory.sqlite"))
-                        .AddDbContext<MySensorsNodesDbContext>(options =>
-                            options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
-                        .AddDbContext<MySensorsMessagesDbContext>(options =>
-                            options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
-                        .AddDbContext<UITimerNodesDbContext>(options =>
-                            options.UseSqlite("Data Source=UITimerNodes.sqlite"))
-                        .AddDbContext<UsersDbContext>(options =>
-                            options.UseSqlite("Data Source=Users.sqlite"));
-                }
-                else
-                {
-                    string connectionString = Configuration["DataBase:ExternalDbConnectionString"];
-                    services.AddEntityFramework()
-                        .AddSqlServer()
-                        .AddDbContext<NodesDbContext>(options =>
-                            options.UseSqlServer(connectionString))
-                        .AddDbContext<NodesStatesHistoryDbContext>(options =>
-                            options.UseSqlServer(connectionString))
-                        .AddDbContext<MySensorsNodesDbContext>(options =>
-                            options.UseSqlServer(connectionString))
-                        .AddDbContext<MySensorsMessagesDbContext>(options =>
-                            options.UseSqlServer(connectionString))
-                        .AddDbContext<UITimerNodesDbContext>(options =>
-                            options.UseSqlServer(connectionString))
-                        .AddDbContext<UsersDbContext>(options =>
-                            options.UseSqlServer(connectionString));
-                }
-            }
+            //if (Boolean.Parse(Configuration["DataBase:Enable"])
+            //    && Boolean.Parse(Configuration["DataBase:UseInternalDb"]))
+            //{
+                services.AddEntityFramework()
+                    .AddSqlite()
+                    .AddDbContext<NodesDbContext>(options =>
+                        options.UseSqlite("Data Source=Nodes.sqlite"))
+                    .AddDbContext<NodesStatesHistoryDbContext>(options =>
+                        options.UseSqlite("Data Source=NodesStatesHistory.sqlite"))
+                    .AddDbContext<MySensorsNodesDbContext>(options =>
+                        options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
+                    .AddDbContext<MySensorsMessagesDbContext>(options =>
+                        options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
+                    .AddDbContext<UITimerNodesDbContext>(options =>
+                        options.UseSqlite("Data Source=UITimerNodes.sqlite"))
+                    .AddDbContext<UsersDbContext>(options =>
+                        options.UseSqlite("Data Source=Users.sqlite"));
+            //}
 
             services.AddMvc();
 
-            //Add all SignalR related services to IoC.
             services.AddSignalR();
 
             services.AddSingleton(x => Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
@@ -167,7 +136,7 @@ namespace MyNetSensors.WebController
                 app.Use(async (context, next) =>
                 {
                     if (Boolean.Parse(Configuration["FirstRun"])
-                    &&  !context.Request.Path.ToUriComponent().StartsWith("/FirstRun"))
+                    && !context.Request.Path.ToUriComponent().StartsWith("/FirstRun"))
                     {
                         context.Response.Redirect("/FirstRun");
                         return;
@@ -200,7 +169,7 @@ namespace MyNetSensors.WebController
             SystemController.Start(Configuration, serviceProvider);
         }
 
-        // Entry point for the application.
+
         public static void Main(string[] args)
         {
             WebApplication.Run<Startup>(args);

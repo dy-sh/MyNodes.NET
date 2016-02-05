@@ -7,19 +7,26 @@ namespace MyNetSensors.WebController.Code
 {
     public class LogsConfig
     {
-        public bool EnableGatewayStateLog { get; set; } = true;
-        public bool EnableGatewayMessagesLog { get; set; } = true;
-        public bool EnableDataBaseStateLog { get; set; } = true;
-        public bool EnableNodesEngineStateLog { get; set; } = true;
-        public bool EnableNodesEngineNodesLog { get; set; } = true;
-        public bool EnableSystemStateLog { get; set; } = true;
+        public bool ShowGatewayState { get; set; } = true;
+        public bool ShowGatewayMessages { get; set; } = true;
+        public bool ShowDataBaseState { get; set; } = true;
+        public bool ShowNodesEngineState { get; set; } = true;
+        public bool ShowNodesEngineNodes { get; set; } = true;
+        public bool ShowSystemState { get; set; } = true;
 
-        public int MaxGatewayStateRecords { get; set; } = 1000;
-        public int MaxGatewayMessagesRecords { get; set; } = 1000;
-        public int MaxDataBaseStateRecords { get; set; } = 1000;
-        public int MaxNodesEngineStateRecords { get; set; } = 1000;
-        public int MaxNodesEngineNodesRecords { get; set; } = 1000;
-        public int MaxSystemStateRecords { get; set; } = 1000;
+        public bool StoreGatewayState { get; set; } = true;
+        public bool StoreGatewayMessages { get; set; } = true;
+        public bool StoreDataBaseState { get; set; } = true;
+        public bool StoreNodesEngineState { get; set; } = true;
+        public bool StoreNodesEngineNodes { get; set; } = true;
+        public bool StoreSystemState { get; set; } = true;
+
+        public int MaxGatewayState { get; set; } = 1000;
+        public int MaxGatewayMessages { get; set; } = 1000;
+        public int MaxDataBaseState { get; set; } = 1000;
+        public int MaxNodesEngineState { get; set; } = 1000;
+        public int MaxNodesEngineNodes { get; set; } = 1000;
+        public int MaxSystemState { get; set; } = 1000;
 
     }
 }

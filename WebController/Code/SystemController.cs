@@ -77,19 +77,6 @@ namespace MyNetSensors.WebController.Code
             if (systemControllerStarted) return;
             systemControllerStarted = true;
             
-            //logs config
-            logs.OnGatewayLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Green); };
-            logs.OnGatewayLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-            logs.OnHardwareNodeLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.DarkGreen); };
-            logs.OnHardwareNodeLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-            logs.OnDataBaseLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Gray); };
-            logs.OnDataBaseLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-            logs.OnNodesEngineLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.Cyan); };
-            logs.OnNodesEngineLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-            logs.OnNodeLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.DarkCyan); };
-            logs.OnNodeLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
-            logs.OnSystemLogInfo += (logMessage) => { Log(logMessage, ConsoleColor.White); };
-            logs.OnSystemLogError += (logMessage) => { Log(logMessage, ConsoleColor.Red); };
 
 
             //read settings
@@ -144,18 +131,26 @@ namespace MyNetSensors.WebController.Code
 
                 logs.config = new LogsConfig
                 {
-                    EnableGatewayStateLog = Boolean.Parse(configuration["Logs:EnableGatewayStateLog"]),
-                    EnableGatewayMessagesLog = Boolean.Parse(configuration["Logs:EnableGatewayMessagesLog"]),
-                    EnableDataBaseStateLog = Boolean.Parse(configuration["Logs:EnableDataBaseStateLog"]),
-                    EnableNodesEngineStateLog = Boolean.Parse(configuration["Logs:EnableNodesEngineStateLog"]),
-                    EnableNodesEngineNodesLog = Boolean.Parse(configuration["Logs:EnableNodesEngineNodesLog"]),
-                    EnableSystemStateLog = Boolean.Parse(configuration["Logs:EnableSystemStateLog"]),
-                    MaxGatewayStateRecords = Int32.Parse(configuration["Logs:MaxGatewayStateRecords"]),
-                    MaxGatewayMessagesRecords = Int32.Parse(configuration["Logs:MaxGatewayMessagesRecords"]),
-                    MaxDataBaseStateRecords = Int32.Parse(configuration["Logs:MaxDataBaseStateRecords"]),
-                    MaxNodesEngineStateRecords = Int32.Parse(configuration["Logs:MaxNodesEngineStateRecords"]),
-                    MaxNodesEngineNodesRecords = Int32.Parse(configuration["Logs:MaxNodesEngineNodesRecords"]),
-                    MaxSystemStateRecords = Int32.Parse(configuration["Logs:MaxSystemStateRecords"]),
+                    ShowGatewayState = Boolean.Parse(configuration["Logs:ShowGatewayState"]),
+                    ShowGatewayMessages = Boolean.Parse(configuration["Logs:ShowGatewayMessages"]),
+                    ShowDataBaseState = Boolean.Parse(configuration["Logs:ShowDataBaseState"]),
+                    ShowNodesEngineState = Boolean.Parse(configuration["Logs:ShowNodesEngineState"]),
+                    ShowNodesEngineNodes = Boolean.Parse(configuration["Logs:ShowNodesEngineNodes"]),
+                    ShowSystemState = Boolean.Parse(configuration["Logs:ShowSystemState"]),
+
+                    StoreGatewayState = Boolean.Parse(configuration["Logs:StoreGatewayState"]),
+                    StoreGatewayMessages = Boolean.Parse(configuration["Logs:StoreGatewayMessages"]),
+                    StoreDataBaseState = Boolean.Parse(configuration["Logs:StoreDataBaseState"]),
+                    StoreNodesEngineState = Boolean.Parse(configuration["Logs:StoreNodesEngineState"]),
+                    StoreNodesEngineNodes = Boolean.Parse(configuration["Logs:StoreNodesEngineNodes"]),
+                    StoreSystemState = Boolean.Parse(configuration["Logs:StoreSystemState"]),
+
+                    MaxGatewayState = Int32.Parse(configuration["Logs:MaxGatewayState"]),
+                    MaxGatewayMessages = Int32.Parse(configuration["Logs:MaxGatewayMessages"]),
+                    MaxDataBaseState = Int32.Parse(configuration["Logs:MaxDataBaseState"]),
+                    MaxNodesEngineState = Int32.Parse(configuration["Logs:MaxNodesEngineState"]),
+                    MaxNodesEngineNodes = Int32.Parse(configuration["Logs:MaxNodesEngineNodes"]),
+                    MaxSystemState = Int32.Parse(configuration["Logs:MaxSystemState"]),
                 };
 
 
@@ -189,12 +184,7 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        public static void Log(LogRecord record, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(record.ToStringWithType());
-            Console.ForegroundColor = ConsoleColor.Gray;
-        }
+
 
 
 
