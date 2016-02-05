@@ -9,9 +9,9 @@ $(function () {
     getGatewayInfo();
     getNodesEngineInfo();
     getWebServerInfo();
-    setInterval(getGatewayInfo, 1000);
-    setInterval(getNodesEngineInfo, 1000);
-    setInterval(getWebServerInfo, 1000);
+    setInterval(getGatewayInfo, 2000);
+    setInterval(getNodesEngineInfo, 2000);
+    setInterval(getWebServerInfo, 2000);
 });
 
 

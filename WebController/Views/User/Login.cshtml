@@ -24,22 +24,23 @@
                 </div>
 
                 <form asp-action="Login" asp-anti-forgery="true" class="ui form">
-                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+                    <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="@ViewBag.ReturnUrl">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly"/>
 
                     <div class="ui attached segment">
                         <div class="field">
-                          @*  <label asp-for="Name"></label>*@
+                            @*  <label asp-for="Name"></label>*@
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" asp-for="Name" placeholder="Login" />
+                                <input type="text" asp-for="Name" placeholder="Login"/>
                             </div>
                             <span asp-validation-for="Name" />
                         </div>
                         <div class="field">
-                        @*    <label asp-for="Password"></label>*@
+                            @*    <label asp-for="Password"></label>*@
                             <div class="ui left icon input">
                                 <i class="lock icon"></i>
-                                <input type="password" asp-for="Password" placeholder="Password" />
+                                <input type="password" asp-for="Password" placeholder="Password"/>
                             </div>
                             <span asp-validation-for="Password" />
                         </div>
@@ -50,7 +51,7 @@
                     <div class="ui center aligned attached segment">
                         <div class="ui buttons">
                             @* <a asp-action="Register" class="ui button">Register</a>*@
-                            <input type="submit" value="Login" class="ui button primary" />
+                            <input type="submit" value="Login" class="ui button primary"/>
                         </div>
                     </div>
                 </form>

@@ -26,14 +26,28 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string ReturnUrl)
         {
+            //auto-authorizing if DB disabled or AllowFullAccessWithoutAuthorization is true
+            if (SystemController.webServerRules.AllowFullAccessWithoutAuthorization
+                || !SystemController.dataBaseConfig.Enable)
+            {
+                await Authenticate("Guest");
+
+                if (!String.IsNullOrEmpty(ReturnUrl))
+                    return Redirect(ReturnUrl);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.ReturnUrl = ReturnUrl;
+
             return View(new LoginModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model, string ReturnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -44,11 +58,17 @@ namespace MyNetSensors.WebController.Controllers
                     {
                         await Authenticate(model.Name);
 
+                        if (!String.IsNullOrEmpty(ReturnUrl))
+                            return Redirect(ReturnUrl);
+
                         return RedirectToAction("Index", "Home");
                     }
                 }
                 ModelState.AddModelError("", "Incorrect login or password");
             }
+
+            ViewBag.ReturnUrl = ReturnUrl;
+
             return View(model);
         }
 

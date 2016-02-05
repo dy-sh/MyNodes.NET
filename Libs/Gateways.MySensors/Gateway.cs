@@ -52,8 +52,8 @@ namespace MyNetSensors.Gateways.MySensors
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
 
-        private List<Message> messagesLog = new List<Message>();
-        private List<Node> nodes = new List<Node>();
+        private List<Message> messagesLog;
+        private List<Node> nodes;
 
         GatewayAliveChecker gatewayAliveChecker;
 
@@ -67,8 +67,8 @@ namespace MyNetSensors.Gateways.MySensors
             this.db = db;
             this.hisotryDb = hisotryDb;
 
-            messagesLog = hisotryDb?.GetMessages();
-            nodes = db?.GetNodes();
+            messagesLog = hisotryDb?.GetMessages() ?? new List<Message>();
+            nodes = db?.GetNodes() ?? new List<Node>();
 
             gatewayAliveChecker = new GatewayAliveChecker(this);
 

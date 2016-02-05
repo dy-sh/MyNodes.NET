@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
@@ -147,7 +149,7 @@ namespace MyNetSensors.WebController.Controllers
                 SystemController.ReadConfig();
                 SystemController.ConnectToGateway();
 
-                return RedirectToAction("User");
+                return RedirectToAction("UserProfile");
             }
             if (id == "Serial")
             {
@@ -189,7 +191,7 @@ namespace MyNetSensors.WebController.Controllers
             SystemController.ReadConfig();
             SystemController.ConnectToGateway();
 
-            return RedirectToAction("User");
+            return RedirectToAction("UserProfile");
         }
 
         [HttpPost]
@@ -207,20 +209,20 @@ namespace MyNetSensors.WebController.Controllers
             SystemController.ReadConfig();
             SystemController.ConnectToGateway();
 
-            return RedirectToAction("User");
+            return RedirectToAction("UserProfile");
         }
 
 
 
         [HttpGet]
-        public IActionResult User()
+        public IActionResult UserProfile()
         {
             return View(new RegisterModel());
         }
 
 
         [HttpPost]
-        public IActionResult User(RegisterModel model)
+        public async Task<IActionResult> UserProfile(RegisterModel model)
         {
             IUsersRepository db = SystemController.usersRepository;
 
@@ -236,6 +238,15 @@ namespace MyNetSensors.WebController.Controllers
                         Password = model.Password
                     });
 
+                    dynamic json = ReadConfig();
+                    json.FirstRun = false;
+                    WriteConfig(json);
+                    configuration.Reload();
+
+                    SystemController.Start(SystemController.configuration, SystemController.services);
+
+                    await Authenticate(model.Name);
+
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -244,18 +255,21 @@ namespace MyNetSensors.WebController.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //public IActionResult Index()
-        //{
 
-        //    dynamic json = ReadConfig();
-        //    json.FirstRun = false;
-        //    WriteConfig(json);
-        //    configuration.Reload();
+        private async Task Authenticate(string userName)
+        {
+            var claims = new List<Claim> { new Claim("name", userName) };
 
-        //    return RedirectToAction("Index", "Dashboard");
-        //}
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
+            await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(id));
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.Authentication.SignOutAsync("Cookies");
+            return RedirectToAction("Login", "User");
+        }
 
     }
 }

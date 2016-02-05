@@ -59,8 +59,8 @@ namespace MyNetSensors.WebController.Code
         private static bool firstRun;
 
 
-        private static IServiceProvider services;
-        private static IConfigurationRoot configuration;
+        public static IServiceProvider services;
+        public static IConfigurationRoot configuration;
 
         public static async void Start(IConfigurationRoot configuration, IServiceProvider services)
         {
@@ -96,8 +96,13 @@ namespace MyNetSensors.WebController.Code
 
                 logs.AddSystemInfo("---------------- STARTING ------------------");
 
+                if (nodesDb==null)
                 ConnectToDB();
+
+                if (gateway==null)
                 ConnectToGateway();
+
+                if (nodesEngine==null)
                 StartNodesEngine();
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
@@ -176,6 +181,7 @@ namespace MyNetSensors.WebController.Code
 
                 webServerRules = new WebServerRules
                 {
+                    AllowFullAccessWithoutAuthorization = Boolean.Parse(configuration["WebServer:Rules:AllowFullAccessWithoutAuthorization"]),
                     AllowRegistrationOfNewUsers = Boolean.Parse(configuration["WebServer:Rules:AllowRegistrationOfNewUsers"])
                 };
 
