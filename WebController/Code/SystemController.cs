@@ -7,6 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting.Internal;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using MyNetSensors.Gateways;
 using MyNetSensors.Gateways.MySensors;
@@ -58,19 +59,24 @@ namespace MyNetSensors.WebController.Code
         private static bool firstRun;
 
 
-
+        private static IServiceProvider services;
+        private static IConfigurationRoot configuration;
 
         public static async void Start(IConfigurationRoot configuration, IServiceProvider services)
         {
+            SystemController.configuration = configuration;
+            SystemController.services = services;
+
             if (Boolean.Parse(configuration["FirstRun"]))
             {
-                if (firstRun)
-                    return;
+                if (!firstRun)
+                {
+                    firstRun = true;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
 
-                firstRun = true;
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n"); // <-- see note
-                Console.ForegroundColor = ConsoleColor.Gray;
                 return;
             }
 
@@ -80,7 +86,7 @@ namespace MyNetSensors.WebController.Code
 
 
             //read settings
-            ReadConfig(configuration);
+            ReadConfig();
 
 
             await Task.Run(() =>
@@ -90,7 +96,7 @@ namespace MyNetSensors.WebController.Code
 
                 logs.AddSystemInfo("---------------- STARTING ------------------");
 
-                ConnectToDB(services);
+                ConnectToDB();
                 ConnectToGateway();
                 StartNodesEngine();
 
@@ -104,7 +110,7 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void ReadConfig(IConfigurationRoot configuration)
+        public static void ReadConfig()
         {
             try
             {
@@ -193,9 +199,18 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void ConnectToDB(IServiceProvider services)
+        public static void ConnectToDB()
         {
-            if (!dataBaseConfig.Enable) return;
+            if (!dataBaseConfig.Enable)
+            {
+                nodesDb = null;
+                nodesStatesDb = null;
+                mySensorsDb = null;
+                mySensorsMessagesDb = null;
+                uiTimerNodesDb = null;
+                usersRepository = null;
+                return;
+            }
 
             logs.AddSystemInfo("Connecting to database... ");
 
@@ -225,11 +240,11 @@ namespace MyNetSensors.WebController.Code
                     return;
                 }
 
+                nodesDb = new NodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsDb = new MySensorsRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
-                nodesDb = new NodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
-                nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 usersRepository = new UsersRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
             }
 
@@ -255,7 +270,7 @@ namespace MyNetSensors.WebController.Code
 
 
 
-        private static void StartNodesEngine()
+        public static void StartNodesEngine()
         {
             nodesEngine = new NodesEngine(nodesDb);
             nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);

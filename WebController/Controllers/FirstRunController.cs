@@ -55,6 +55,9 @@ namespace MyNetSensors.WebController.Controllers
                 WriteConfig(json);
                 configuration.Reload();
 
+                SystemController.ReadConfig();
+                SystemController.ConnectToDB();
+
                 return RedirectToAction("Gateway");
             }
             if (id == "Builtin")
@@ -64,6 +67,9 @@ namespace MyNetSensors.WebController.Controllers
                 json.DataBase.UseInternalDb = true;
                 WriteConfig(json);
                 configuration.Reload();
+
+                SystemController.ReadConfig();
+                SystemController.ConnectToDB();
 
                 return RedirectToAction("Gateway");
             }
@@ -96,6 +102,10 @@ namespace MyNetSensors.WebController.Controllers
                             json.DataBase.ExternalDbConnectionString = model.ConnectionString;
                             WriteConfig(json);
                             configuration.Reload();
+
+                            SystemController.ReadConfig();
+                            SystemController.ConnectToDB();
+
                             return View("DatabaseOK");
                         }
                         else
