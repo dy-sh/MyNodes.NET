@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize("LogsObserver")]
+    [Authorize(UserClaims.LogsObserver)]
 
     public class LogsController:Controller
     {
@@ -111,7 +112,7 @@ namespace MyNetSensors.WebController.Controllers
             return null;
         }
 
-        [Authorize("LogsEditor")]
+        [Authorize(UserClaims.LogsEditor)]
 
         public bool ClearLogs(string logType)
         {

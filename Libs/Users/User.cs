@@ -32,17 +32,17 @@ namespace MyNetSensors.Users
         {
             return new List<string>
             {
-                "DashboardObserver",
-                "DashboardEditor",
-                "EditorObserver",
-                "EditorEditor",
-                "HardwareObserver",
-                "LogsObserver",
-                "LogsEditor",
-                "ConfigObserver",
-                "ConfigEditor",
-                "UsersObserver",
-                "UsersEditor"
+                UserClaims.DashboardObserver,
+                UserClaims.DashboardEditor,
+                UserClaims.EditorObserver,
+                UserClaims.EditorEditor,
+                UserClaims.HardwareObserver,
+                UserClaims.LogsObserver,
+                UserClaims.LogsEditor,
+                UserClaims.ConfigObserver,
+                UserClaims.ConfigEditor,
+                UserClaims.UsersObserver,
+                UserClaims.UsersEditor,
             };
         }
 
@@ -55,17 +55,17 @@ namespace MyNetSensors.Users
 
             return new UserPermissions
             {
-                DashboardObserver = claims.Contains("DashboardObserver"),
-                DashboardEditor = claims.Contains("DashboardEditor"),
-                EditorObserver = claims.Contains("EditorObserver"),
-                EditorEditor = claims.Contains("EditorEditor"),
-                HardwareObserver = claims.Contains("HardwareObserver"),
-                LogsObserver = claims.Contains("LogsObserver"),
-                LogsEditor = claims.Contains("LogsEditor"),
-                ConfigObserver = claims.Contains("ConfigObserver"),
-                ConfigEditor = claims.Contains("ConfigEditor"),
-                UsersObserver = claims.Contains("UsersObserver"),
-                UsersEditor = claims.Contains("UsersEditor"),
+                DashboardObserver = claims.Contains(UserClaims.DashboardObserver),
+                DashboardEditor = claims.Contains(UserClaims.DashboardEditor),
+                EditorObserver = claims.Contains(UserClaims.EditorObserver),
+                EditorEditor = claims.Contains(UserClaims.EditorEditor),
+                HardwareObserver = claims.Contains(UserClaims.HardwareObserver),
+                LogsObserver = claims.Contains(UserClaims.LogsObserver),
+                LogsEditor = claims.Contains(UserClaims.LogsEditor),
+                ConfigObserver = claims.Contains(UserClaims.ConfigObserver),
+                ConfigEditor = claims.Contains(UserClaims.ConfigEditor),
+                UsersObserver = claims.Contains(UserClaims.UsersObserver),
+                UsersEditor = claims.Contains(UserClaims.UsersEditor),
             };
         }
 
@@ -74,27 +74,27 @@ namespace MyNetSensors.Users
             List<string> claims = new List<string>();
         
             if (userPermissions.DashboardObserver)
-                claims.Add("DashboardObserver");
+                claims.Add(UserClaims.DashboardObserver);
             if (userPermissions.DashboardEditor)
-                claims.Add("DashboardEditor");
+                claims.Add(UserClaims.DashboardEditor);
             if (userPermissions.EditorObserver)
-                claims.Add("EditorObserver");
+                claims.Add(UserClaims.EditorObserver);
             if (userPermissions.EditorEditor)
-                claims.Add("EditorEditor");
+                claims.Add(UserClaims.EditorEditor);
             if (userPermissions.HardwareObserver)
-                claims.Add("HardwareObserver");
+                claims.Add(UserClaims.HardwareObserver);
             if (userPermissions.LogsObserver)
-                claims.Add("LogsObserver");
+                claims.Add(UserClaims.LogsObserver);
             if (userPermissions.LogsEditor)
-                claims.Add("LogsEditor");
+                claims.Add(UserClaims.LogsEditor);
             if (userPermissions.ConfigObserver)
-                claims.Add("ConfigObserver");
+                claims.Add(UserClaims.ConfigObserver);
             if (userPermissions.ConfigEditor)
-                claims.Add("ConfigEditor");
+                claims.Add(UserClaims.ConfigEditor);
             if (userPermissions.UsersObserver)
-                claims.Add("UsersObserver");
+                claims.Add(UserClaims.UsersObserver);
             if (userPermissions.UsersEditor)
-                claims.Add("UsersEditor");
+                claims.Add(UserClaims.UsersEditor);
 
             SetClaims(claims);
         }

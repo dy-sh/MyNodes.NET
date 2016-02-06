@@ -7,6 +7,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 using MyNetSensors.WebController.ViewModels.Config;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    
     public class ConfigController : Controller
     {
 

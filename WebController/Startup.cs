@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyNetSensors.Repositories.EF.SQLite;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController
@@ -68,17 +69,17 @@ namespace MyNetSensors.WebController
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("DashboardObserver", policy => { policy.RequireClaim("DashboardObserver"); });
-                options.AddPolicy("DashboardEditor", policy => { policy.RequireClaim("DashboardEditor"); });
-                options.AddPolicy("EditorObserver", policy => { policy.RequireClaim("EditorObserver"); });
-                options.AddPolicy("EditorEditor", policy => { policy.RequireClaim("EditorEditor"); });
-                options.AddPolicy("HardwareObserver", policy => { policy.RequireClaim("HardwareObserver"); });
-                options.AddPolicy("LogsObserver", policy => { policy.RequireClaim("LogsObserver"); });
-                options.AddPolicy("LogsEditor", policy => { policy.RequireClaim("LogsEditor"); });
-                options.AddPolicy("ConfigObserver", policy => { policy.RequireClaim("ConfigObserver"); });
-                options.AddPolicy("ConfigEditor", policy => { policy.RequireClaim("ConfigEditor"); });
-                options.AddPolicy("UsersObserver", policy => { policy.RequireClaim("UsersObserver"); });
-                options.AddPolicy("UsersEditor", policy => { policy.RequireClaim("UsersEditor"); });
+                options.AddPolicy(UserClaims.DashboardObserver, policy => { policy.RequireClaim(UserClaims.DashboardObserver); });
+                options.AddPolicy(UserClaims.DashboardEditor, policy => { policy.RequireClaim(UserClaims.DashboardEditor); });
+                options.AddPolicy(UserClaims.EditorObserver, policy => { policy.RequireClaim(UserClaims.EditorObserver); });
+                options.AddPolicy(UserClaims.EditorEditor, policy => { policy.RequireClaim(UserClaims.EditorEditor); });
+                options.AddPolicy(UserClaims.HardwareObserver, policy => { policy.RequireClaim(UserClaims.HardwareObserver); });
+                options.AddPolicy(UserClaims.LogsObserver, policy => { policy.RequireClaim(UserClaims.LogsObserver); });
+                options.AddPolicy(UserClaims.LogsEditor, policy => { policy.RequireClaim(UserClaims.LogsEditor); });
+                options.AddPolicy(UserClaims.ConfigObserver, policy => { policy.RequireClaim(UserClaims.ConfigObserver); });
+                options.AddPolicy(UserClaims.ConfigEditor, policy => { policy.RequireClaim(UserClaims.ConfigEditor); });
+                options.AddPolicy(UserClaims.UsersObserver, policy => { policy.RequireClaim(UserClaims.UsersObserver); });
+                options.AddPolicy(UserClaims.UsersEditor, policy => { policy.RequireClaim(UserClaims.UsersEditor); });
             });
 
 
