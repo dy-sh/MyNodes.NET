@@ -15,6 +15,8 @@ using MyNetSensors.WebController.ViewModels.User;
 
 namespace MyNetSensors.WebController.Controllers
 {
+
+
     public class UserController : Controller
     {
         private IUsersRepository db;
@@ -166,6 +168,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+        [Authorize(UserClaims.UsersObserver)]
 
         public IActionResult List()
         {
@@ -175,6 +178,9 @@ namespace MyNetSensors.WebController.Controllers
             List<User> users = db.GetAllUsers();
             return View(users);
         }
+
+
+        [Authorize(UserClaims.UsersEditor)]
 
         public IActionResult Remove(int id)
         {
@@ -191,6 +197,8 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("List");
         }
 
+
+        [Authorize(UserClaims.UsersEditor)]
         public IActionResult RemoveAllExceptActive()
         {
             if (db == null)
@@ -214,6 +222,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.UsersEditor)]
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -222,6 +232,8 @@ namespace MyNetSensors.WebController.Controllers
 
             return View(new NewUserModel());
         }
+
+        [Authorize(UserClaims.UsersEditor)]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -251,6 +263,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.UsersEditor)]
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -263,6 +277,9 @@ namespace MyNetSensors.WebController.Controllers
 
             return View(user);
         }
+
+
+        [Authorize(UserClaims.UsersEditor)]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -283,6 +300,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+        [Authorize(UserClaims.UsersEditor)]
 
         [HttpGet]
         public IActionResult Permissions(int id)
@@ -299,6 +317,9 @@ namespace MyNetSensors.WebController.Controllers
 
             return View(user.GetUserPermissions());
         }
+
+
+        [Authorize(UserClaims.UsersEditor)]
 
         [HttpPost]
         [ValidateAntiForgeryToken]

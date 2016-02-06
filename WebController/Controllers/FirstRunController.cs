@@ -389,11 +389,7 @@ namespace MyNetSensors.WebController.Controllers
             await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(id));
         }
 
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.Authentication.SignOutAsync("Cookies");
-            return RedirectToAction("Login", "User");
-        }
+
 
     }
 }

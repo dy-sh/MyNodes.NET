@@ -31,7 +31,7 @@
                             <label>Login</label>
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" asp-for="Name" placeholder="Login"/>
+                                <input type="text" asp-for="Name"  />
                             </div>
                             <span asp-validation-for="Name" />
                         </div>
@@ -39,35 +39,36 @@
                             <label>Email</label>
                             <div class="ui left icon input">
                                 <i class="mail icon"></i>
-                                <input type="text" asp-for="Email" placeholder="E-mail" />
+                                <input type="text" asp-for="Email" />
                             </div>
                             <span asp-validation-for="Email" />
                         </div>
-                        <div class="fields">
-                            <div class="field">
-                                <label>Password</label>
-                                <div class="ui left icon input">
-                                    <i class="lock icon"></i>
-                                    <input type="password" asp-for="Password" placeholder="Password" />
-                                </div>
-                                <span asp-validation-for="Password" />
-                            </div>
-                            <div class="field">
-                                <label>Confirm Password</label>
-                                <div class="ui left icon input">
-                                    <i class="lock icon"></i>
-                                    <input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password" />
-                                </div>
-                                <span asp-validation-for="Password" />
-                            </div>
-                            </div>
-                            <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
 
+
+                        <div class="field">
+                            <label>Password</label>
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" asp-for="Password" />
+                            </div>
                         </div>
+                        <div class="field">
+                            <label>Confirm Password</label>
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" asp-for="ConfirmPassword"  />
+                            </div>
+                        </div>
+
+                        <span asp-validation-for="Password" />
+                        <span asp-validation-for="ConfirmPassword" />
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
 
                     <div class="ui center aligned attached segment">
                         <div class="ui buttons">
-                             <a asp-action="Login" class="ui button">Cancel</a>
+                            <a asp-action="Login" class="ui button">Cancel</a>
                             <input type="submit" value="Register" class="ui button primary" />
                         </div>
                     </div>

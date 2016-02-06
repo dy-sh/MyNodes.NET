@@ -4,20 +4,19 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using MyNetSensors.Gateways;
+using Microsoft.AspNet.Authorization;
 using MyNetSensors.Gateways.MySensors;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+
+
+    [Authorize(UserClaims.HardwareObserver)]
+
     public class HardwareController : Controller
     {
         private IMySensorsRepository mySensorsDb;
@@ -42,6 +41,8 @@ namespace MyNetSensors.WebController.Controllers
             return View(nodes);
         }
 
+
+
         [HttpGet]
         public ActionResult Settings(int? id)
         {
@@ -54,6 +55,9 @@ namespace MyNetSensors.WebController.Controllers
 
             return View(node);
         }
+
+
+        [Authorize(UserClaims.EditorEditor)]
 
         [HttpPost]
         public ActionResult Settings()
@@ -82,6 +86,9 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Index");
             // return View(node);
         }
+
+
+        [Authorize(UserClaims.EditorEditor)]
 
         public ActionResult Remove(int id)
         {

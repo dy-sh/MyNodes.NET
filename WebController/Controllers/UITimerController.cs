@@ -13,11 +13,13 @@ using Microsoft.AspNet.Mvc;
 
 using MyNetSensors.Gateways;
 using MyNetSensors.Nodes;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    [Authorize(UserClaims.DashboardObserver)]
+
     public class UITimerController : Controller
     {
         private UITimerNodesEngine tasksEngine;
@@ -45,6 +47,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.DashboardEditor)]
+
         [HttpGet]
         public ActionResult New(string id)
         {
@@ -67,6 +71,9 @@ namespace MyNetSensors.WebController.Controllers
             return View(task);
         }
 
+
+        [Authorize(UserClaims.DashboardEditor)]
+
         [HttpPost]
         public ActionResult New(UITimerTask task)
         {
@@ -80,6 +87,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.DashboardEditor)]
 
         [HttpGet]
         public ActionResult Edit(int id)
@@ -99,6 +107,9 @@ namespace MyNetSensors.WebController.Controllers
             return View(task);
         }
 
+
+        [Authorize(UserClaims.DashboardEditor)]
+
         [HttpPost]
         public ActionResult Edit(UITimerTask task)
         {
@@ -111,6 +122,9 @@ namespace MyNetSensors.WebController.Controllers
             return RedirectToAction("Tasks", new { id = task.NodeId });
         }
 
+
+        [Authorize(UserClaims.DashboardEditor)]
+
         public ActionResult Remove(int id)
         {
             bool result = tasksEngine.RemoveTask(id);
@@ -121,6 +135,9 @@ namespace MyNetSensors.WebController.Controllers
                 return Redirect(Request.Headers["Referer"].ToString());
             else return RedirectToAction("Tasks");
         }
+
+
+        [Authorize(UserClaims.DashboardEditor)]
 
         public ActionResult Enable(int id)
         {
@@ -140,6 +157,8 @@ namespace MyNetSensors.WebController.Controllers
             else return RedirectToAction("Tasks");
         }
 
+        [Authorize(UserClaims.DashboardEditor)]
+
         public ActionResult Disable(int id)
         {
             UITimerTask task = tasksEngine.GetTask(id);
@@ -158,6 +177,9 @@ namespace MyNetSensors.WebController.Controllers
             else return RedirectToAction("Tasks");
         }
 
+
+        [Authorize(UserClaims.DashboardEditor)]
+
         public ActionResult ExecuteNow(int id)
         {
             bool result = tasksEngine.ExecuteNowTask(id);
@@ -170,6 +192,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.DashboardEditor)]
+
         public ActionResult RemoveAll(string id)
         {
             bool result = tasksEngine.RemoveTasksForNode(id);
@@ -181,6 +205,9 @@ namespace MyNetSensors.WebController.Controllers
             else return RedirectToAction("Tasks");
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
 
         public ActionResult RemoveCompleted(string id)
         {

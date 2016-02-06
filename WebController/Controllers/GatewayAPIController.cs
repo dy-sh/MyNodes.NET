@@ -11,16 +11,18 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Gateways;
 using MyNetSensors.Gateways.MySensors;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [ResponseCache(Duration = 0)]
-    [Authorize]
+
     public class GatewayAPIController : Controller
     {
         private Gateway gateway = SystemController.gateway;
 
+
+        [Authorize(UserClaims.HardwareObserver)]
 
         public List<Node> GetNodes()
         {
@@ -52,6 +54,9 @@ namespace MyNetSensors.WebController.Controllers
         //    gateway.messagesLog.ClearLog();
         //    return true;
         //}
+
+
+        [Authorize(UserClaims.DashboardEditor)]
 
         public bool SendMessage(int nodeId, int sensorId, string state)
         {
@@ -89,6 +94,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.EditorEditor)]
+
         public bool UpdateNodeSettings(Node node)
         {
             //todo
@@ -96,6 +103,8 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+        [Authorize(UserClaims.EditorEditor)]
 
         public bool RemoveNode(int nodeId)
         {
@@ -105,6 +114,8 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+        [Authorize(UserClaims.EditorEditor)]
 
         public async Task<bool> RemoveAllNodes()
         {

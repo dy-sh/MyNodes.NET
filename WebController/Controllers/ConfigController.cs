@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    
+    [Authorize(UserClaims.ConfigObserver)]
     public class ConfigController : Controller
     {
 
@@ -41,7 +41,7 @@ namespace MyNetSensors.WebController.Controllers
         {
             return View();
         }
-        
+
 
 
         [HttpGet]
@@ -56,6 +56,8 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+        [Authorize(UserClaims.ConfigEditor)]
 
         [HttpPost]
         public IActionResult SerialGateway(SerialGatewayViewModel model)
@@ -90,6 +92,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.ConfigEditor)]
+
         [HttpPost]
         public IActionResult EthernetGateway(EthernetGatewayViewModel model)
         {
@@ -107,6 +111,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.ConfigEditor)]
 
         public async Task<bool> ConnectSerialGateway()
         {
@@ -131,6 +136,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+        [Authorize(UserClaims.ConfigEditor)]
 
         public async Task<bool> ConnectEthernetGateway()
         {
@@ -153,6 +159,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+        [Authorize(UserClaims.ConfigEditor)]
+
         public bool DisconnectGateway()
         {
             dynamic json = ReadConfig();
@@ -170,6 +179,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.ConfigEditor)]
 
         public bool StartNodesEngine()
         {
@@ -183,6 +193,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+        [Authorize(UserClaims.ConfigEditor)]
 
         public bool StopNodesEngine()
         {
@@ -202,7 +215,7 @@ namespace MyNetSensors.WebController.Controllers
             if (SystemController.usersDb == null)
                 return null;
 
-            WebServerInfo info=new WebServerInfo();
+            WebServerInfo info = new WebServerInfo();
             info.RegisteredUsersCount = SystemController.usersDb.GetUsersCount();
 
             return info;
@@ -216,6 +229,9 @@ namespace MyNetSensors.WebController.Controllers
             return View(SystemController.webServerRules);
         }
 
+
+
+        [Authorize(UserClaims.ConfigEditor)]
 
         [HttpPost]
         public IActionResult Rules(WebServerRules model)
