@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyNetSensors.Nodes;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    [Authorize(UserClaims.DashboardObserver)]
+
     public class DashboardAPIController : Controller
     {
 
@@ -52,6 +54,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.DashboardEditor)]
         public bool ClearLog(string nodeId)
         {
             engine.ClearLog(nodeId);
@@ -59,6 +62,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [Authorize(UserClaims.DashboardEditor)]
         public bool TextBoxSend(string nodeId, string value)
         {
             engine.TextBoxSend(nodeId, value);
@@ -67,24 +72,34 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+        [Authorize(UserClaims.DashboardEditor)]
         public bool ButtonClick(string nodeId)
         {
             engine.ButtonClick(nodeId);
             return true;
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public bool ToggleButtonClick(string nodeId)
         {
             engine.ToggleButtonClick(nodeId);
             return true;
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public bool SwitchClick(string nodeId)
         {
             engine.SwitchClick(nodeId);
             return true;
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public async Task<bool> SliderChange(string nodeId, int value)
         {
             return await Task.Run(() =>
@@ -94,6 +109,9 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public async Task<bool> RGBSlidersChange(string nodeId, string value)
         {
             return await Task.Run(() =>
@@ -103,6 +121,9 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public async Task<bool> RGBWSlidersChange(string nodeId, string value)
         {
             return await Task.Run(() =>
@@ -141,6 +162,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.DashboardEditor)]
         public bool ClearChart(string nodeId)
         {
             engine.ClearChart(nodeId);

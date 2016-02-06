@@ -10,13 +10,14 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.Extensions.Configuration;
 using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.EF.SQLite;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 using Newtonsoft.Json;
 
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    [Authorize(UserClaims.EditorObserver)]
     public class NodesEditorController : Controller
     {
         const string MAIN_PANEL_ID = "Main";

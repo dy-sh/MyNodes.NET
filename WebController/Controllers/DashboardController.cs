@@ -6,11 +6,12 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyNetSensors.Nodes;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    [Authorize(UserClaims.DashboardObserver)]
     public class DashboardController : Controller
     {
         const string MAIN_PANEL_ID = "Main";

@@ -12,6 +12,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Features;
 using MyNetSensors.Nodes;
+using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
 using Newtonsoft.Json;
 using Link = MyNetSensors.Nodes.Link;
@@ -19,7 +20,7 @@ using Node = MyNetSensors.Nodes.Node;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+
     public class NodesEditorAPIController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
@@ -28,6 +29,8 @@ namespace MyNetSensors.WebController.Controllers
         private UiNodesEngine uiEngine = SystemController.uiNodesEngine;
 
 
+
+        [Authorize(UserClaims.EditorObserver)]
         public async Task<List<LiteGraph.Node>> GetNodes(string panelId)
         {
             return await Task.Run(() =>
@@ -200,6 +203,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [Authorize(UserClaims.EditorObserver)]
         public async Task<List<LiteGraph.Link>> GetLinks(string panelId)
         {
             return await Task.Run(() =>
@@ -246,6 +251,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> RemoveLink(LiteGraph.Link link)
         {
             return await Task.Run(() =>
@@ -270,6 +277,9 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> CreateLink(LiteGraph.Link link)
         {
             return await Task.Run(() =>
@@ -292,6 +302,9 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> AddNode(LiteGraph.Node node)
         {
             return await Task.Run(() =>
@@ -337,6 +350,9 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> CloneNode(string id)
         {
             return await Task.Run(() =>
@@ -353,6 +369,9 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> RemoveNode(LiteGraph.Node node)
         {
             return await Task.Run(() =>
@@ -372,6 +391,9 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> UpdateNode(LiteGraph.Node node)
         {
             return await Task.Run(() =>
@@ -397,6 +419,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool PanelSettings(string id, string panelname)
         {
             Node n = engine.GetNode(id);
@@ -414,6 +439,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool InputOutputSettings(string id, string name)
         {
             Node n = engine.GetNode(id);
@@ -438,6 +466,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool UINodeSettings(string id, string name, bool show)
         {
             Node n = engine.GetNode(id);
@@ -457,6 +488,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool UISliderSettings(string id, string name, int min, int max, bool show)
         {
             Node n = engine.GetNode(id);
@@ -482,6 +516,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool ConstantSettings(string id, string value)
         {
             Node n = engine.GetNode(id);
@@ -500,6 +537,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool UIChartSettings(string id, string name, bool show, bool writeInDatabase, int updateInterval)
         {
             Node n = engine.GetNode(id);
@@ -525,6 +565,8 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+        [Authorize(UserClaims.EditorObserver)]
         public async Task<string> SerializePanel(string id)
         {
             return await Task.Run(() =>
@@ -541,6 +583,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [Authorize(UserClaims.EditorObserver)]
         public async Task<IActionResult> SerializePanelToFile(string id)
         {
             return await Task.Run(() =>
@@ -565,6 +609,9 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> ImportPanelJson(string json, int x, int y, string ownerPanelId)
         {
             return await Task.Run(() =>
@@ -600,6 +647,10 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+  
+        //todo authorize?
+
         public async Task<NodesEngineInfo> GetNodesEngineInfo()
         {
             return await Task.Run(() =>
@@ -626,6 +677,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> RemoveAllNodesAndLinks()
         {
             return await Task.Run(() =>
@@ -639,6 +693,9 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool ReceiverSettings(string id, int channel)
         {
             Node n = engine.GetNode(id);
@@ -656,6 +713,9 @@ namespace MyNetSensors.WebController.Controllers
             return true;
         }
 
+
+
+        [Authorize(UserClaims.EditorEditor)]
         public bool TransmitterSettings(string id, int channel)
         {
             Node n = engine.GetNode(id);
@@ -672,6 +732,8 @@ namespace MyNetSensors.WebController.Controllers
 
             return true;
         }
+
+
 
 
         public async Task<int> ReceiverSetValue(string value, string channel, string password)
