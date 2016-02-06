@@ -33,7 +33,15 @@ namespace MyNetSensors.WebController.Controllers
             if (SystemController.webServerRules.AllowFullAccessWithoutAuthorization
                 || !SystemController.dataBaseConfig.Enable)
             {
-                await Authenticate(new Admin());
+                User user = new User
+                {
+                    Name = "Admin",
+                    Password = "Admin"
+                };
+
+                user.SetClaims(Users.User.GetAllClaims());
+
+                await Authenticate(user);
 
                 if (!String.IsNullOrEmpty(ReturnUrl))
                     return Redirect(ReturnUrl);
@@ -85,7 +93,7 @@ namespace MyNetSensors.WebController.Controllers
             if (!SystemController.webServerRules.AllowRegistrationOfNewUsers)
                 return View("Error", "Registration of new users is prohibited. Please contact administrator.");
 
-            if (db==null)
+            if (db == null)
                 return View("Error", NO_DB_ERROR);
 
 
@@ -131,10 +139,11 @@ namespace MyNetSensors.WebController.Controllers
             var claims = new List<Claim>();
             claims.Add(new Claim("Name", user.Name));
 
-            foreach (var claim in user.Claims)
-            {
-                claims.Add(new Claim(claim, ""));
-            }
+            if (user.GetClaims() != null)
+                foreach (var claim in user.GetClaims())
+                {
+                    claims.Add(new Claim(claim, ""));
+                }
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 

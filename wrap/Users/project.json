@@ -6,6 +6,9 @@
       "bin": {
         "assembly": "../../Libs/Users/obj/{configuration}/Users.dll",
         "pdb": "../../Libs/Users/obj/{configuration}/Users.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "8.0.2"
       }
     }
   }

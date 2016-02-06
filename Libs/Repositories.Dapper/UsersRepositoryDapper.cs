@@ -47,7 +47,9 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [Id] [int] IDENTITY(1,1) NOT NULL,
 	                    [Name] [nvarchar](max) NULL,
 	                    [Email] [nvarchar](max) NULL,
-	                    [Password] [nvarchar](max) NULL) ON [PRIMARY] ");
+	                    [Password] [nvarchar](max) NULL,
+	                    [ClaimsJson] [nvarchar](max) NULL
+                        ) ON [PRIMARY] ");
                 }
                 catch (Exception ex)
                 {
@@ -60,9 +62,9 @@ namespace MyNetSensors.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                var sqlQuery = "INSERT INTO [Users] (Name, Email, Password) "
+                var sqlQuery = "INSERT INTO [Users] (Name, Email, Password,ClaimsJson) "
                                +
-                               "VALUES(@Name, @Email, @Password); "
+                               "VALUES(@Name, @Email, @Password,@ClaimsJson); "
                                + "SELECT CAST(SCOPE_IDENTITY() as int)";
                 return db.Query<int>(sqlQuery, user).Single();
             }
@@ -77,7 +79,8 @@ namespace MyNetSensors.Repositories.Dapper
                     "UPDATE [Users] SET " +
                     "Name = @Name, " +
                     "Email  = @Email, " +
-                    "Password = @Password " +
+                    "Password = @Password, " +
+                    "ClaimsJson = @ClaimsJson " +
                     "WHERE Id = @Id";
                 db.Execute(sqlQuery, user);
             }

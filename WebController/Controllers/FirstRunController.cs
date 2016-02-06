@@ -289,7 +289,15 @@ namespace MyNetSensors.WebController.Controllers
 
             if (!SystemController.dataBaseConfig.Enable)
             {
-                await Authenticate(new Admin());
+                User user = new User
+                {
+                    Name = "Admin",
+                    Password = "Admin"
+                };
+
+                user.SetClaims(Users.User.GetAllClaims());
+
+                await Authenticate(user);
 
                 return View("UserProfileNoDatabase");
             }
@@ -319,12 +327,14 @@ namespace MyNetSensors.WebController.Controllers
                 User user = db.GetUser(model.Name);
                 if (user == null)
                 {
-                    user = new Admin()
+                    user = new User()
                     {
                         Name = model.Name,
                         Email = model.Email,
                         Password = model.Password,
                     };
+
+                    user.SetClaims(Users.User.GetAllClaims());
 
                     db.AddUser(user);
 
@@ -367,10 +377,11 @@ namespace MyNetSensors.WebController.Controllers
             var claims = new List<Claim>();
             claims.Add(new Claim("Name", user.Name));
 
-            foreach (var claim in user.Claims)
-            {
-                claims.Add(new Claim(claim, ""));
-            }
+            if (user.GetClaims() != null)
+                foreach (var claim in user.GetClaims())
+                {
+                    claims.Add(new Claim(claim, ""));
+                }
 
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
