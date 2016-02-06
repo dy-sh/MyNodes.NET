@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -63,6 +65,23 @@ namespace MyNetSensors.WebController
             services.AddSignalR();
 
             services.AddSingleton(x => Configuration);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DashboardObserver", policy => { policy.RequireClaim("DashboardObserver"); });
+                options.AddPolicy("DashboardEditor", policy => { policy.RequireClaim("DashboardEditor"); });
+                options.AddPolicy("EditorObserver", policy => { policy.RequireClaim("EditorObserver"); });
+                options.AddPolicy("EditorEditor", policy => { policy.RequireClaim("EditorEditor"); });
+                options.AddPolicy("HardwareObserver", policy => { policy.RequireClaim("HardwareObserver"); });
+                options.AddPolicy("LogsObserver", policy => { policy.RequireClaim("LogsObserver"); });
+                options.AddPolicy("LogsEditor", policy => { policy.RequireClaim("LogsEditor"); });
+                options.AddPolicy("ConfigObserver", policy => { policy.RequireClaim("ConfigObserver"); });
+                options.AddPolicy("ConfigEditor", policy => { policy.RequireClaim("ConfigEditor"); });
+                options.AddPolicy("UsersObserver", policy => { policy.RequireClaim("UsersObserver"); });
+                options.AddPolicy("UsersEditor", policy => { policy.RequireClaim("UsersEditor"); });
+            });
+
+
         }
 
 
@@ -149,6 +168,7 @@ namespace MyNetSensors.WebController
                 {
                     options.AuthenticationScheme = "Cookies";
                     options.LoginPath = new Microsoft.AspNet.Http.PathString("/User/Login");
+                    options.AccessDeniedPath = "/User/AccessDenied";
                     options.AutomaticAuthenticate = true;
                     options.AutomaticChallenge = true;
                 });

@@ -163,8 +163,8 @@ namespace MyNetSensors.WebController.Controllers
             }
 
 
-            if ((SystemController.nodesDb.GetAllNodes()!=null && SystemController.nodesDb.GetAllNodes().Count != 0)
-                ||(SystemController.usersDb.GetUsersCount() != 0))
+            if ((SystemController.nodesDb.GetAllNodes() != null && SystemController.nodesDb.GetAllNodes().Count != 0)
+                || (SystemController.usersDb.GetUsersCount() != 0))
                 return View("DatabaseIsNotEmpty");
 
             return RedirectToAction("Gateway");
@@ -289,7 +289,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (!SystemController.dataBaseConfig.Enable)
             {
-                await Authenticate("Guest");
+                await Authenticate(new Admin());
 
                 return View("UserProfileNoDatabase");
             }
@@ -319,15 +319,16 @@ namespace MyNetSensors.WebController.Controllers
                 User user = db.GetUser(model.Name);
                 if (user == null)
                 {
-                    db.AddUser(new User
+                    user = new Admin()
                     {
                         Name = model.Name,
                         Email = model.Email,
-                        Password = model.Password
-                    });
+                        Password = model.Password,
+                    };
 
+                    db.AddUser(user);
 
-                    await Authenticate(model.Name);
+                    await Authenticate(user);
 
                     return RedirectToAction("Complete");
                 }
@@ -361,9 +362,16 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
-            var claims = new List<Claim> { new Claim("name", userName) };
+            var claims = new List<Claim>();
+            claims.Add(new Claim("Name", user.Name));
+
+            foreach (var claim in user.Claims)
+            {
+                claims.Add(new Claim(claim, ""));
+            }
+
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 

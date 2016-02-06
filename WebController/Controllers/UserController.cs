@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
@@ -32,7 +33,7 @@ namespace MyNetSensors.WebController.Controllers
             if (SystemController.webServerRules.AllowFullAccessWithoutAuthorization
                 || !SystemController.dataBaseConfig.Enable)
             {
-                await Authenticate("Guest");
+                await Authenticate(new Admin());
 
                 if (!String.IsNullOrEmpty(ReturnUrl))
                     return Redirect(ReturnUrl);
@@ -59,7 +60,7 @@ namespace MyNetSensors.WebController.Controllers
                 {
                     if (model.Password == user.Password)
                     {
-                        await Authenticate(model.Name);
+                        await Authenticate(user);
 
                         if (!String.IsNullOrEmpty(ReturnUrl))
                             return Redirect(ReturnUrl);
@@ -106,14 +107,16 @@ namespace MyNetSensors.WebController.Controllers
                 User user = db.GetUser(model.Name);
                 if (user == null)
                 {
-                    db.AddUser(new User
+                    user = new User()
                     {
                         Name = model.Name,
                         Email = model.Email,
-                        Password = model.Password
-                    });
+                        Password = model.Password,
+                    };
 
-                    await Authenticate(model.Name);
+                    db.AddUser(user);
+
+                    await Authenticate(user);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -123,9 +126,15 @@ namespace MyNetSensors.WebController.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
-            var claims = new List<Claim> { new Claim("name", userName) };
+            var claims = new List<Claim>();
+            claims.Add(new Claim("Name", user.Name));
+
+            foreach (var claim in user.Claims)
+            {
+                claims.Add(new Claim(claim, ""));
+            }
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
@@ -137,6 +146,15 @@ namespace MyNetSensors.WebController.Controllers
             await HttpContext.Authentication.SignOutAsync("Cookies");
             return RedirectToAction("Login", "User");
         }
+
+
+
+        public IActionResult AccessDenied()
+        {
+            return View("Error", "Access Denied");
+        }
+
+
 
 
 

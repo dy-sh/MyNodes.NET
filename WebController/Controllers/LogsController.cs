@@ -8,7 +8,8 @@ using MyNetSensors.WebController.Code;
 
 namespace MyNetSensors.WebController.Controllers
 {
-    [Authorize]
+    [Authorize("LogsObserver")]
+
     public class LogsController:Controller
     {
         public IActionResult Index()
@@ -109,6 +110,8 @@ namespace MyNetSensors.WebController.Controllers
             }
             return null;
         }
+
+        [Authorize("LogsEditor")]
 
         public bool ClearLogs(string logType)
         {
