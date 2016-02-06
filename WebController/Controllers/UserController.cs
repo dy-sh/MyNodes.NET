@@ -280,5 +280,41 @@ namespace MyNetSensors.WebController.Controllers
 
             return RedirectToAction("List");
         }
+
+
+
+
+        [HttpGet]
+        public IActionResult Permissions(int id)
+        {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
+            User user = db.GetUser(id);
+            if (user == null)
+                return HttpBadRequest();
+
+            ViewBag.UserId = user.Id;
+            ViewBag.UserName = user.Name;
+
+            return View(user.GetUserPermissions());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Permissions(UserPermissions model,int userId)
+        {
+            if (db == null)
+                return View("Error", NO_DB_ERROR);
+
+            User user = db.GetUser(userId);
+            if (user == null)
+                return HttpBadRequest();
+
+            user.SetClaims(model);
+            db.UpdateUser(user);
+
+            return RedirectToAction("List");
+        }
     }
 }
