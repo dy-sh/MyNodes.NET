@@ -69,8 +69,8 @@ namespace MyNetSensors.Nodes
                 else
                     Double.TryParse(input.Value, out frequency);
 
-                if (frequency < 0)
-                    frequency = 0;
+                if (frequency < 1)
+                    frequency = 1;
 
                 timer.Stop();
                 timer.Interval = frequency;

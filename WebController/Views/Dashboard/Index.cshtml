@@ -66,11 +66,13 @@
         <div class="ui raised segments">
 
             <div class="ui secondary clearing segment">
-                <b><span id="panelTitle-{{PanelId}}"></span></b>
-
-                <div class="ui right floated basic disabled button nonbutton">
-                    <i class="square outline icon" id="activity-{{PanelId}}"></i>
-                    @*<img src="@Url.Content("~/images/nodes/activity.gif")" id="activity-{{PanelId}}" class="ui right floated" style="display: none;" />*@
+                <div class="ui two column grid">
+                    <div class="fourteen wide column">
+                        <b><span id="panelTitle-{{PanelId}}"></span></b>
+                    </div>
+                    <div class="two wide right aligned column">
+                        <i class="square outline icon" id="activity-{{PanelId}}"></i>
+                    </div>
                 </div>
             </div>
 
