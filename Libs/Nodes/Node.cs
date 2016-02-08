@@ -33,6 +33,7 @@ namespace MyNetSensors.Nodes
 
         protected NodesEngine engine;
 
+
         public Dictionary<string, NodeSetting> Settings { get; set; } = new Dictionary<string, NodeSetting>();
 
 
@@ -221,6 +222,27 @@ namespace MyNetSensors.Nodes
             LogInfo($"Settings changed");
 
             return true;
+        }
+
+        public virtual string GetJsListGenerationScript()
+        {
+            var t = this.GetType();
+            string className = this.GetType().Name;
+            string fullClassName = this.GetType().FullName;
+            string assembly = this.GetType().Assembly.ToString();
+            return @"
+
+            //" + className + @"
+            function " + className + @" () {
+                this.properties = {
+                    'ObjectType': '" + fullClassName + @"',
+                    'Assembly': '" + assembly + @"'
+                };
+            }
+            " + className + @".title = '" + this.Title + @"';
+            LiteGraph.registerNodeType('" + this.Type + "', " + className + @");
+
+            ";
         }
     }
 

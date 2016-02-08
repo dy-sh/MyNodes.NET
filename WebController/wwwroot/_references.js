@@ -20,6 +20,7 @@
 /// <reference path="js/nodes-editor/litegraph.js" />
 /// <reference path="js/nodes-editor/litegraph-editor.js" />
 /// <reference path="js/nodes-editor/nodes-editor-list.js" />
+/// <reference path="js/nodes-editor/nodes-editor-list-generated.js" />
 /// <reference path="js/nodes-editor/nodes-editor-signalr.js" />
 /// <reference path="js/slider/nouislider.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />

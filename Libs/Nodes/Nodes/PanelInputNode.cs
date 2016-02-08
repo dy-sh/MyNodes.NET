@@ -75,5 +75,24 @@ namespace MyNetSensors.Nodes
             UpdateName(data["Name"]);
             return base.SetSettings(data);
         }
+
+        public override string GetJsListGenerationScript()
+        {
+            return @"
+
+            //PanelOutputNode
+            function PanelInputNode() {
+                this.properties = {
+                    ObjectType: 'MyNetSensors.Nodes.PanelInputNode',
+                    'Assembly': 'Nodes'
+                };
+                this.bgcolor = '#151515';
+
+            }
+            PanelInputNode.title = 'Panel Input';
+            LiteGraph.registerNodeType('Main/Panel Input', PanelInputNode);
+
+            ";
+        }
     }
 }

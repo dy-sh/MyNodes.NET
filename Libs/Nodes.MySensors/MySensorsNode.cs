@@ -109,5 +109,23 @@ namespace MyNetSensors.Nodes
             UpdateMe();
             UpdateMeInDb();
         }
+
+        public override string GetJsListGenerationScript()
+        {
+            return @"
+
+            function MySensorsNode() {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
+                    'Assembly': 'Nodes.MySensors'
+                };
+                this.clonable = false;
+            }
+            MySensorsNode.title = 'MySensors Node';
+            MySensorsNode.skip_list = true;
+            LiteGraph.registerNodeType('Nodes/Hardware', MySensorsNode);
+
+            ";
+        }
     }
 }

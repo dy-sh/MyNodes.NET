@@ -137,8 +137,7 @@ namespace MyNetSensors.WebController.Controllers
 
             if (node is PanelNode)
             {
-                if (node.Type == "Main/Panel")
-                    litegraphNode.title = node.Settings["Name"].Value;
+                litegraphNode.title = node.Settings["Name"].Value;
             }
 
 
@@ -565,5 +564,8 @@ namespace MyNetSensors.WebController.Controllers
                 return received ? 0 : 1;
             });
         }
+
+
+
     }
 }

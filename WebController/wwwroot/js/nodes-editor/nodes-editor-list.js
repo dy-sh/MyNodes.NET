@@ -14,58 +14,58 @@
 
 
     //Panel
-    function Panel() {
+    function PanelNode() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.PanelNode",
-            'Assembly': "Nodes"
+            'ObjectType': 'MyNetSensors.Nodes.PanelNode',
+            'Assembly': 'Nodes'
         };
-        this.bgcolor = "#565656";
+        this.bgcolor = '#565656';
     }
-    Panel.title = "Panel";
-    Panel.prototype.getExtraMenuOptions = function (graphcanvas) {
+    PanelNode.title = 'Panel';
+    PanelNode.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
         return [
-            { content: "Open", callback: function () { window.location = "/NodesEditor/Panel/" + that.id; } },
+            { content: 'Open', callback: function () { window.location = '/NodesEditor/Panel/' + that.id; } },
             null, //null for horizontal line
-            { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
+            { content: 'Show on Dashboard', callback: function () { var win = window.open('/Dashboard/Panel/' + that.id, '_blank'); win.focus(); } },
             null,
-            { content: "Export to file", callback: function () { var win = window.open("/NodesEditorAPI/SerializePanelToFile/" + that.id, '_blank'); win.focus(); } },
-            { content: "Export to script", callback: function () { editor.exportPanelToScript(that.id) } },
-            { content: "Export URL", callback: function () { editor.exportPanelURL(that.id) } },
+            { content: 'Export to file', callback: function () { var win = window.open('/NodesEditorAPI/SerializePanelToFile/' + that.id, '_blank'); win.focus(); } },
+            { content: 'Export to script', callback: function () { editor.exportPanelToScript(that.id) } },
+            { content: 'Export URL', callback: function () { editor.exportPanelURL(that.id) } },
             null
         ];
     }
-    LiteGraph.registerNodeType("Main/Panel", Panel);
+    LiteGraph.registerNodeType('Main/Panel', PanelNode);
 
 
 
 
-    //Panel Input
-    function PanelInput() {
+    //PanelOutputNode
+    function PanelInputNode() {
         this.properties = {
-            ObjectType: "MyNetSensors.Nodes.PanelInputNode",
-            'Assembly': "Nodes"
+            ObjectType: 'MyNetSensors.Nodes.PanelInputNode',
+            'Assembly': 'Nodes'
         };
-        this.bgcolor = "#151515";
+        this.bgcolor = '#151515';
 
     }
-    PanelInput.title = "Panel Input";
-    LiteGraph.registerNodeType("Main/Panel Input", PanelInput);
+    PanelInputNode.title = 'Panel Input';
+    LiteGraph.registerNodeType('Main/Panel Input', PanelInputNode);
 
 
 
 
 
-    //Panel Output
-    function PanelOutput() {
+    //PanelOutputNode
+    function PanelOutputNode() {
         this.properties = {
-            ObjectType: "MyNetSensors.Nodes.PanelOutputNode",
-            'Assembly': "Nodes"
+            ObjectType: 'MyNetSensors.Nodes.PanelOutputNode',
+            'Assembly': 'Nodes'
         };
-        this.bgcolor = "#151515";
+        this.bgcolor = '#151515';
     }
-    PanelOutput.title = "Panel Output";
-    LiteGraph.registerNodeType("Main/Panel Output", PanelOutput);
+    PanelOutputNode.title = 'Panel Output';
+    LiteGraph.registerNodeType('Main/Panel Output', PanelOutputNode);
 
 
 
@@ -78,20 +78,17 @@
 
 
 
-
-
-
     //MySensorsNode
     function MySensorsNode() {
         this.properties = {
-            'ObjectType': "MyNetSensors.Nodes.MySensorsNode",
-            'Assembly': "Nodes.MySensors"
+            'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
+            'Assembly': 'Nodes.MySensors'
         };
         this.clonable = false;
     }
-    MySensorsNode.title = "MySensors Node";
+    MySensorsNode.title = 'MySensors Node';
     MySensorsNode.skip_list = true;
-    LiteGraph.registerNodeType("Nodes/Hardware", MySensorsNode);
+    LiteGraph.registerNodeType('Nodes/Hardware', MySensorsNode);
 
 
 

@@ -17,6 +17,8 @@ using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.Users;
 using MyNetSensors.WebController.ViewModels.Config;
 using Newtonsoft.Json;
+using Node = MyNetSensors.Nodes.Node;
+using System.Linq;
 
 namespace MyNetSensors.WebController.Code
 {
@@ -46,7 +48,7 @@ namespace MyNetSensors.WebController.Code
         public static UITimerNodesEngine uiTimerNodesEngine;
         public static IUITimerNodesRepository uiTimerNodesDb;
 
-        public static Logs logs=new Logs();
+        public static Logs logs = new Logs();
 
         public static event Action OnStarted;
         public static event Action OnGatewayConnected;
@@ -82,7 +84,7 @@ namespace MyNetSensors.WebController.Code
 
             if (systemControllerStarted) return;
             systemControllerStarted = true;
-            
+
 
 
             //read settings
@@ -96,14 +98,14 @@ namespace MyNetSensors.WebController.Code
 
                 logs.AddSystemInfo("---------------- STARTING ------------------");
 
-                if (nodesDb==null)
-                ConnectToDB();
+                if (nodesDb == null)
+                    ConnectToDB();
 
-                if (gateway==null)
-                ConnectToGateway();
+                if (gateway == null)
+                    ConnectToGateway();
 
-                if (nodesEngine==null)
-                StartNodesEngine();
+                if (nodesEngine == null)
+                    StartNodesEngine();
 
                 logs.AddSystemInfo("------------- SARTUP COMPLETE --------------");
 
@@ -279,6 +281,8 @@ namespace MyNetSensors.WebController.Code
 
         public static void StartNodesEngine()
         {
+            GenerateNodesJsListFile();
+
             nodesEngine = new NodesEngine(nodesDb);
             nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);
             nodesEngine.OnLogEngineInfo += logs.AddNodesEngineInfo;
@@ -303,6 +307,32 @@ namespace MyNetSensors.WebController.Code
         }
 
 
+
+
+        public static void GenerateNodesJsListFile()
+        {
+            var nodes = typeof(Node)
+                 .Assembly.GetTypes()
+                 .Where(
+                     t => t.IsSubclassOf(typeof(Node))
+                     || t.IsSubclassOf(typeof(UiNode)))
+                 .Where(t => !t.IsAbstract)
+                 .Select(t => (Node)Activator.CreateInstance(t));
+
+            var list = nodes.ToList();
+
+
+            list = list.OrderBy(x => x.Type).ToList();
+
+            string file = "(function () {\n";
+
+            foreach (var node in list)
+                file += node.GetJsListGenerationScript();
+
+            file += "\n})();";
+
+            System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list-generated.js", file);
+        }
 
 
 
