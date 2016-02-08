@@ -182,11 +182,12 @@ function removePanel(panelId) {
 
 
 function sortPanel(panelId) {
-    var myArray = $('#uiContainer-' + panelId).children();
+
+    var elements = $('#uiContainer-' + panelId).children();
     var count = 0;
 
     // sort based on timestamp attribute
-    myArray.sort(function (a, b) {
+    elements.sort(function (a, b) {
 
         // convert to integers from strings
         a = parseInt($(a).attr("panelIndex"), 10);
@@ -202,6 +203,8 @@ function sortPanel(panelId) {
         }
     });
 
-    // put sorted results back on page
-    $('#uiContainer-' + panelId).html(myArray);
+    var panel = document.getElementById('uiContainer-' + panelId);
+    for (i = 0; i < elements.length; ++i) {
+        panel.appendChild(elements[i]);
+    }
 };
