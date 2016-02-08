@@ -14,9 +14,7 @@ namespace MyNetSensors.Nodes
 {
     public class OperationSwitchOutNode : Node
     {
-        /// <summary>
-        /// Switch out (2 input, 10 output).
-        /// </summary>
+
         public OperationSwitchOutNode() : base(2, 10)
         {
             this.Title = "Switch out";

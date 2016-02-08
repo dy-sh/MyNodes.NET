@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class LogicAndNode : Node
     {
-        /// <summary>
-        /// Not (2 input, 1 output).
-        /// </summary>
+
         public LogicAndNode() : base(2, 1)
         {
-            this.Title = "Logic AND";
+            this.Title = "AND";
             this.Type = "Logic/AND";
 
             Inputs[0].Type = DataType.Logical;

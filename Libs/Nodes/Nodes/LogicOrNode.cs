@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class LogicOrNode : Node
     {
-        /// <summary>
-        /// Or (2 input, 1 output).
-        /// </summary>
+
         public LogicOrNode() : base(2, 1)
         {
-            this.Title = "Logic OR";
+            this.Title = "OR";
             this.Type = "Logic/OR";
 
             Inputs[0].Type = DataType.Logical;

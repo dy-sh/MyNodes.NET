@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
-    public class ConnectionTransmitterNode : Node
+    public class ConnectionLocalTransmitterNode : Node
     {
 
-        public ConnectionTransmitterNode() : base(1,0)
+        public ConnectionLocalTransmitterNode() : base(1,0)
         {
-            this.Title = "Transmitter";
-            this.Type = "Connection/Transmitter";
+            this.Title = "Local Transmitter";
+            this.Type = "Connection/Local Transmitter";
 
             Settings.Add("Channel", new NodeSetting(NodeSettingType.Number, "Channel", "0"));
 
@@ -26,8 +26,8 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            List<ConnectionReceiverNode> receivers=  engine.GetNodes()
-                .OfType<ConnectionReceiverNode>()
+            List<ConnectionLocalReceiverNode> receivers=  engine.GetNodes()
+                .OfType<ConnectionLocalReceiverNode>()
                 .Where(x => x.Settings["Channel"].Value == Settings["Channel"].Value)
                 .ToList();
 

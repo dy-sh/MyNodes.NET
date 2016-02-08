@@ -14,9 +14,7 @@ namespace MyNetSensors.Nodes
 {
     public class MathClampNode : Node
     {
-        /// <summary>
-        /// MathClampNode (3 inputs, 1 output).
-        /// </summary>
+
         public MathClampNode() : base(3, 1)
         {
             this.Title = "Clamp";

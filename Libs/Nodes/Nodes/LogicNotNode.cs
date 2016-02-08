@@ -11,14 +11,12 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-  public class LogicNotNode : Node
+    public class LogicNotNode : Node
     {
-        /// <summary>
-        /// Not (1 input, 1 output).
-        /// </summary>
+
         public LogicNotNode() : base(1, 1)
-      {
-            this.Title = "Logic NOT";
+        {
+            this.Title = "NOT";
             this.Type = "Logic/NOT";
 
             Inputs[0].Type = DataType.Logical;

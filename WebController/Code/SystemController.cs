@@ -4,6 +4,8 @@
 */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting.Internal;
@@ -312,27 +314,27 @@ namespace MyNetSensors.WebController.Code
 
         public static void GenerateNodesJsListFile()
         {
-            var nodes = typeof(Node)
+            List<Node> nodes = typeof(Node)
                  .Assembly.GetTypes()
-                 .Where(
-                     t => t.IsSubclassOf(typeof(Node))
-                     || t.IsSubclassOf(typeof(UiNode)))
-                 .Where(t => !t.IsAbstract)
-                 .Select(t => (Node)Activator.CreateInstance(t));
+                 .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
+                 .Select(t => (Node)Activator.CreateInstance(t)).ToList();
 
-            var list = nodes.ToList();
+            nodes.AddRange(typeof(UiNode)
+                 .Assembly.GetTypes()
+                 .Where(t => t.IsSubclassOf(typeof(UiNode)) && !t.IsAbstract)
+                 .Select(t => (UiNode)Activator.CreateInstance(t)).ToList());
 
 
-            list = list.OrderBy(x => x.Type).ToList();
+            nodes = nodes.OrderBy(x => x.Type).ToList();
 
             string file = "(function () {\n";
 
-            foreach (var node in list)
+            foreach (var node in nodes)
                 file += node.GetJsListGenerationScript();
 
             file += "\n})();";
 
-            System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list-generated.js", file);
+            System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
         }
 
 

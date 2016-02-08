@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class MathSinNode : Node
     {
-        /// <summary>
-        /// Math Sin (1 inputs, 1 output).
-        /// </summary>
+
         public MathSinNode() : base(1, 1)
         {
-            this.Title = "Math Sin";
+            this.Title = "Sin";
             this.Type = "Math/Sin";
 
             Inputs[0].Type = DataType.Number;

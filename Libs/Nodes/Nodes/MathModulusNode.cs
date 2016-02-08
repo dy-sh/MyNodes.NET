@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class MathModulusNode : Node
     {
-        /// <summary>
-        /// Math Modulus (2 inputs, 1 output).
-        /// </summary>
+
         public MathModulusNode() : base(2, 1)
         {
-            this.Title = "Math Modulus";
+            this.Title = "Modulus";
             this.Type = "Math/Modulus";
 
             Inputs[0].Type = DataType.Number;

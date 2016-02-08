@@ -16,9 +16,6 @@ namespace MyNetSensors.Nodes
         private int part = 0;
         string result = null;
 
-        /// <summary>
-        /// Flip-Flop (1 input, 1 output).
-        /// </summary>
         public OperationFlipflopNode() : base(1, 1)
         {
             this.Title = "Flip-Flop";

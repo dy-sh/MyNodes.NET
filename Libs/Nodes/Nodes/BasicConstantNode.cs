@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace MyNetSensors.Nodes
 {
-    public class ConstantNode : Node
+    public class BasicConstantNode : Node
     {
 
 
-        public ConstantNode() : base(0,1)
+        public BasicConstantNode() : base(0,1)
         {
             this.Title = "Constant";
             this.Type = "Basic/Constant";

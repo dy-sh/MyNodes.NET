@@ -11,12 +11,10 @@ namespace MyNetSensors.Nodes
 
     public class MathRoundNode : Node
     {
-        /// <summary>
-        /// Math Round (1 inputs, 1 output).
-        /// </summary>
+
         public MathRoundNode() : base(1, 1)
         {
-            this.Title = "Math Round";
+            this.Title = "Round";
             this.Type = "Math/Round";
 
             Inputs[0].Type = DataType.Number;

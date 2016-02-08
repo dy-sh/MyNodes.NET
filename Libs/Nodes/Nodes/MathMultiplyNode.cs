@@ -11,12 +11,10 @@ namespace MyNetSensors.Nodes
 
     public class MathMultiplyNode : Node
     {
-        /// <summary>
-        /// Math Multiply (2 inputs, 1 output).
-        /// </summary>
+
         public MathMultiplyNode() : base(2, 1)
         {
-            this.Title = "Math Multiply";
+            this.Title = "Multiply";
             this.Type = "Math/Multiply";
 
             Inputs[0].Type = DataType.Number;

@@ -10,7 +10,7 @@ using System.Timers;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationGeneratorNode : Node
+    public class TimeGeneratorNode : Node
     {
         private int DEFAULT_VALUE = 1000;
 
@@ -21,10 +21,10 @@ namespace MyNetSensors.Nodes
 
         private Timer timer = new Timer();
 
-        public OperationGeneratorNode() : base(3, 1)
+        public TimeGeneratorNode() : base(3, 1)
         {
             this.Title = "Generator";
-            this.Type = "Operation/Generator";
+            this.Type = "Time/Generator";
 
             Inputs[0].Name = "Frequency";
             Inputs[1].Name = "Start";

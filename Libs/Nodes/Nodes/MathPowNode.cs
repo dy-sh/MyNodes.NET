@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class MathPowNode : Node
     {
-        /// <summary>
-        /// Math Pow (2 inputs, 1 output).
-        /// </summary>
+
         public MathPowNode() : base(2, 1)
         {
-            this.Title = "Math Pow";
+            this.Title = "Pow";
             this.Type = "Math/Pow";
 
             Inputs[0].Type = DataType.Number;

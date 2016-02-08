@@ -13,9 +13,7 @@ namespace MyNetSensors.Nodes
 {
     public class OperationGateNode : Node
     {
-        /// <summary>
-        /// Gate (2 input, 1 output).
-        /// </summary>
+
         public OperationGateNode() : base(2, 1)
         {
             this.Title = "Gate";

@@ -12,13 +12,13 @@ using System.Net.Http;
 
 namespace MyNetSensors.Nodes
 {
-    public class ConnectionRemoteTransmitter : Node
+    public class ConnectionRemoteTransmitterNode : Node
     {
         private string address;
         private string password;
         private int channel;
 
-        public ConnectionRemoteTransmitter() : base(4, 0)
+        public ConnectionRemoteTransmitterNode() : base(4, 0)
         {
             this.Title = "Remote Transmitter";
             this.Type = "Connection/Remote Transmitter";

@@ -11,9 +11,7 @@ namespace MyNetSensors.Nodes
 
     public class OperationCompareEqualNode : Node
     {
-        /// <summary>
-        /// Compare Equal (2 inputs, 1 output).
-        /// </summary>
+
         public OperationCompareEqualNode() : base(2, 1)
         {
             this.Title = "Compare Equal";

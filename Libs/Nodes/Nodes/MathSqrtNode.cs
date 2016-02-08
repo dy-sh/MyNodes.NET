@@ -13,12 +13,10 @@ namespace MyNetSensors.Nodes
 {
     public class MathSqrtNode : Node
     {
-        /// <summary>
-        /// Math Sqrt (1 inputs, 1 output).
-        /// </summary>
+
         public MathSqrtNode() : base(1, 1)
         {
-            this.Title = "Math Sqrt";
+            this.Title = "Sqrt";
             this.Type = "Math/Sqrt";
 
             Inputs[0].Type = DataType.Number;

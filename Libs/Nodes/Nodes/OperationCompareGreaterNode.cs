@@ -11,9 +11,7 @@ namespace MyNetSensors.Nodes
 
     public class OperationCompareGreaterNode : Node
     {
-        /// <summary>
-        /// Compare Greater (2 inputs, 1 output).
-        /// </summary>
+
         public OperationCompareGreaterNode() : base(2, 1)
         {
             this.Title = "Compare Greater";

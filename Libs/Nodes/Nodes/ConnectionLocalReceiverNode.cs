@@ -5,13 +5,13 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class ConnectionReceiverNode : Node
+    public class ConnectionLocalReceiverNode : Node
     {
 
-        public ConnectionReceiverNode() : base(0,1)
+        public ConnectionLocalReceiverNode() : base(0,1)
         {
-            this.Title = "Receiver";
-            this.Type = "Connection/Receiver";
+            this.Title = "Local Receiver";
+            this.Type = "Connection/Local Receiver";
 
             Settings.Add("Channel",new NodeSetting(NodeSettingType.Number, "Channel","0"));
         }

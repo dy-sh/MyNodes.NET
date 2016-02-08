@@ -13,9 +13,7 @@ namespace MyNetSensors.Nodes
 {
     public class SystemBeepAdvancedNode : Node
     {
-        /// <summary>
-        /// Beep Advanced (3 inputs). Beep with frequency and duration.
-        /// </summary>
+
         public SystemBeepAdvancedNode() : base(3, 0)
         {
             this.Title = "Beep Advanced";

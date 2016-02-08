@@ -11,12 +11,10 @@ namespace MyNetSensors.Nodes
 
     public class MathMinusNode : Node
     {
-        /// <summary>
-        /// Math Minus (2 inputs, 1 output).
-        /// </summary>
+
         public MathMinusNode() : base(2, 1)
         {
-            this.Title = "Math Minus";
+            this.Title = "Minus";
             this.Type = "Math/Minus";
 
             Inputs[0].Type = DataType.Number;

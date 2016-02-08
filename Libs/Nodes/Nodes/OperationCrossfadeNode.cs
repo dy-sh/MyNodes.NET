@@ -9,24 +9,22 @@ using System.Threading.Tasks;
 namespace MyNetSensors.Nodes
 {
 
-    public class OperationxFader : Node
+    public class OperationCrossfadeNode : Node
     {
-        /// <summary>
-        /// Math Minus (2 inputs, 1 output).
-        /// </summary>
-        public OperationxFader() : base(3, 1)
+
+        public OperationCrossfadeNode() : base(3, 1)
         {
-            this.Title = "xFader";
-            this.Type = "Operation/xFader";
+            this.Title = "Crossfade";
+            this.Type = "Operation/Crossfade";
 
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Inputs[2].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
 
-            Inputs[0].Name = "xFader";
-            Inputs[1].Name = "in 1";
-            Inputs[2].Name = "in 2";
+            Inputs[0].Name = "Crossfade";
+            Inputs[1].Name = "A";
+            Inputs[2].Name = "B";
 
         }
 

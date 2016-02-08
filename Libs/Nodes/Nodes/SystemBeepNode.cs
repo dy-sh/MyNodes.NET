@@ -13,9 +13,7 @@ namespace MyNetSensors.Nodes
 {
     public class SystemBeepNode : Node
     {
-        /// <summary>
-        /// Beep (1 input). Beep when input change, exclude NULL.
-        /// </summary>
+
         public SystemBeepNode() : base(1, 0)
         {
             this.Title = "Beep";

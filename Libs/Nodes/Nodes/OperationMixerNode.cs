@@ -11,9 +11,7 @@ namespace MyNetSensors.Nodes
 
     public class OperationMixerNode : Node
     {
-        /// <summary>
-        /// OperationMixerNode (2 inputs, 1 output).
-        /// </summary>
+
         public OperationMixerNode() : base(2, 1)
         {
             this.Title = "Mixer";

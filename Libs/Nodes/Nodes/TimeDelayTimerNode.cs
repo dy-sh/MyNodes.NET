@@ -8,7 +8,7 @@ using System;
 namespace MyNetSensors.Nodes
 {
 
-    public class DelayTimerNode : Node
+    public class TimeDelayTimerNode : Node
     {
         private int DEFAULT_VALUE = 5000;
 
@@ -17,10 +17,10 @@ namespace MyNetSensors.Nodes
         private DateTime lastTime;
 
 
-        public DelayTimerNode() : base(2, 1)
+        public TimeDelayTimerNode() : base(2, 1)
         {
             this.Title = "Delay Timer";
-            this.Type = "Delay/Delay Timer";
+            this.Type = "Time/Delay Timer";
 
             Inputs[0].Name = "Delay";
             Inputs[1].Name = "Start";
