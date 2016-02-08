@@ -3,15 +3,12 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-
+var REFRESH_DELAY = 2000;
 
 $(function () {
     getGatewayInfo();
     getNodesEngineInfo();
     getWebServerInfo();
-    setInterval(getGatewayInfo, 2000);
-    setInterval(getNodesEngineInfo, 2000);
-    setInterval(getWebServerInfo, 2000);
 });
 
 
@@ -116,9 +113,11 @@ function getNodesEngineInfo() {
         success: function (info) {
             $('#main-content').show();
             updateNodesEngineInfo(info);
+            setTimeout(getNodesEngineInfo, REFRESH_DELAY);
         },
         error: function () {
             $('#main-content').hide();
+            setTimeout(getNodesEngineInfo, REFRESH_DELAY);
         }
     });
 }
@@ -162,9 +161,11 @@ function getGatewayInfo() {
         success: function (gatewayInfo) {
             $('#main-content').show();
             updateGatewayInfo(gatewayInfo);
+            setTimeout(getGatewayInfo, REFRESH_DELAY);
         },
         error: function () {
             $('#main-content').hide();
+            setTimeout(getGatewayInfo, REFRESH_DELAY);
         }
     });
 }
@@ -228,9 +229,11 @@ function getWebServerInfo() {
         success: function (serverInfo) {
             $('#main-content').show();
             $('#users-count').html(serverInfo.RegisteredUsersCount);
+            setTimeout(getWebServerInfo, REFRESH_DELAY);
         },
         error: function () {
             $('#main-content').hide();
+            setTimeout(getWebServerInfo, REFRESH_DELAY);
         }
     });
 }
