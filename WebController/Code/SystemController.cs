@@ -281,7 +281,8 @@ namespace MyNetSensors.WebController.Code
 
         public static void StartNodesEngine()
         {
-            GenerateNodesJsListFile();
+            if (Boolean.Parse(configuration["Develop:GenerateNodesJsListFileOnStart"]))
+                GenerateNodesJsListFile();
 
             nodesEngine = new NodesEngine(nodesDb);
             nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);

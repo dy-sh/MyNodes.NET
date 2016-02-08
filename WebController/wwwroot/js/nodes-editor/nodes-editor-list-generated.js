@@ -556,4 +556,5 @@
             SystemBeepAdvancedNode.title = 'Beep Advanced';
             LiteGraph.registerNodeType('System/Beep Advanced', SystemBeepAdvancedNode);
 
-            })();
+            
+})();
