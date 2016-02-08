@@ -7,12 +7,13 @@ namespace MyNetSensors.Nodes
 {
     public class ConnectionReceiverNode : Node
     {
-        public int Channel { get; set; }
 
         public ConnectionReceiverNode() : base(0,1)
         {
             this.Title = "Receiver";
             this.Type = "Connection/Receiver";
+
+            Settings.Add("Channel",new NodeSetting(NodeSettingType.Number, "Channel","0"));
         }
 
         public override void Loop()
@@ -22,14 +23,7 @@ namespace MyNetSensors.Nodes
         public override void OnInputChange(Input input)
         {
         }
-
-        public void SetChannel(int channel)
-        {
-            Channel = channel;
-            LogInfo($"Channel changed to [{Channel}]");
-            UpdateMeInDb();
-        }
-
+        
         public void ReceiveValue(string value, string transmitPanelName)
         {
             LogInfo($"Received from [{transmitPanelName}: Transmitter]: [{value??"NULL"}]");

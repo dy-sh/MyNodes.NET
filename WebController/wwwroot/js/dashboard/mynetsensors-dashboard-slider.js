@@ -18,7 +18,16 @@ function createSlider(node) {
         $(sliderTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 
         var slider = $("#slider-" + node.Id)[0];
-        noUiSlider.create(slider, { start: 0, connect: 'lower', animate: false, range: { 'min': node.Min, 'max': node.Max } });
+        noUiSlider.create(slider,
+            {
+                start: 0,
+                connect: 'lower',
+                animate: false,
+                range: {
+                    'min': Number(node.Settings["Min"].Value),
+                    'max': Number(node.Settings["Max"].Value)
+                }
+            });
 
         slidersArray.push({
             Id: node.Id,
@@ -29,11 +38,11 @@ function createSlider(node) {
 
 
 function updateSlider(node) {
-    $('#sliderName-' + node.Id).html(node.Name);
+    $('#sliderName-' + node.Id).html(node.Settings["Name"].Value);
     $("#slider-" + node.Id)[0].noUiSlider.updateOptions({
         range: {
-            'min': node.Min,
-            'max': node.Max
+            'min': Number(node.Settings["Min"].Value),
+            'max': Number(node.Settings["Max"].Value)
         }
     });
 

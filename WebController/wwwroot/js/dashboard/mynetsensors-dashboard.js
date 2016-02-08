@@ -66,9 +66,6 @@ function createNode(node) {
         default:
     }
 
-    sortPanel(node.PanelId);
-
-
     updateNode(node);
 }
 
@@ -133,8 +130,8 @@ function updateNode(node) {
     }
 
     var oldPanelIndex = $('#node-' + node.Id).attr("panelIndex");
-    if (oldPanelIndex != node.PanelIndex) {
-        $('#node-' + node.Id).attr("panelIndex", node.PanelIndex);
+    if (oldPanelIndex != node.Settings["PanelIndex"].Value) {
+        $('#node-' + node.Id).attr("panelIndex", node.Settings["PanelIndex"].Value);
         sortPanel(node.PanelId);
     }
 

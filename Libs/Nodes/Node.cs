@@ -31,8 +31,11 @@ namespace MyNetSensors.Nodes
         public List<Input> Inputs { get; set; }
         public List<Output> Outputs { get; set; }
 
-        protected NodesEngine engine { get; set; }
-        
+        protected NodesEngine engine;
+
+        public Dictionary<string, NodeSetting> Settings { get; set; } = new Dictionary<string, NodeSetting>();
+
+
         public string PanelName
         {
             get
@@ -40,7 +43,7 @@ namespace MyNetSensors.Nodes
                 if (PanelId == engine?.MAIN_PANEL_ID)
                     return "Main Panel";
 
-                return engine?.GetPanelNode(PanelId)?.Name;
+                return engine?.GetPanelNode(PanelId)?.Settings["Name"].Value;
             }
         }
 
@@ -180,7 +183,7 @@ namespace MyNetSensors.Nodes
             if (input.Value == null)
                 return;
 
-            if (input.Type==DataType.Text)
+            if (input.Type == DataType.Text)
                 return;
 
             if (input.Type == DataType.Logical)
@@ -195,13 +198,29 @@ namespace MyNetSensors.Nodes
             if (input.Type == DataType.Number)
             {
                 double num;
-               
-                if (!double.TryParse(input.Value,out num))
+
+                if (!double.TryParse(input.Value, out num))
                 {
                     LogIncorrectInputValueError(input);
                     input.SetValueWithoutUpdate(null);
                 }
             }
+        }
+
+        public virtual bool SetSettings(Dictionary<string, string> data)
+        {
+            foreach (var d in data)
+            {
+                Settings[d.Key].Value = d.Value;
+            }
+
+            UpdateMe();
+            UpdateMeInDb();
+
+
+            LogInfo($"Settings changed");
+
+            return true;
         }
     }
 

@@ -10,12 +10,14 @@ namespace MyNetSensors.Nodes
 {
     public class ConnectionTransmitterNode : Node
     {
-        public int Channel { get; set; }
 
         public ConnectionTransmitterNode() : base(1,0)
         {
             this.Title = "Transmitter";
             this.Type = "Connection/Transmitter";
+
+            Settings.Add("Channel", new NodeSetting(NodeSettingType.Number, "Channel", "0"));
+
         }
 
         public override void Loop()
@@ -26,7 +28,7 @@ namespace MyNetSensors.Nodes
         {
             List<ConnectionReceiverNode> receivers=  engine.GetNodes()
                 .OfType<ConnectionReceiverNode>()
-                .Where(x => x.Channel == Channel)
+                .Where(x => x.Settings["Channel"].Value == Settings["Channel"].Value)
                 .ToList();
 
             foreach (var receiver in receivers)
@@ -34,13 +36,6 @@ namespace MyNetSensors.Nodes
                 receiver.ReceiveValue(input.Value,PanelName);
                 LogInfo($"Transmit to [{receiver.PanelName}: Receiver] : [{input.Value??"NULL"}]");
             }
-        }
-
-        public void SetChannel(int channel)
-        {
-            Channel = channel;
-            LogInfo($"Channel changed to [{Channel}]");
-            UpdateMeInDb();
         }
     }
 }

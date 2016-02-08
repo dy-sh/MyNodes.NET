@@ -310,12 +310,6 @@ function createOrUpdateNode(node) {
 
         newNode.title = node.title;
 
-        if (node.properties['Name'] != null)
-            newNode.title += " [" + node.properties['Name'] + "]";
-
-        if (node.properties['PanelName'] != null)
-            newNode.title = node.properties['PanelName'];
-
         newNode.inputs = node.inputs;
         newNode.outputs = node.outputs;
         newNode.id = node.id;

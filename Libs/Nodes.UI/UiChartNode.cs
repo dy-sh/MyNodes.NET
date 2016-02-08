@@ -13,8 +13,6 @@ namespace MyNetSensors.Nodes
 
         public int? State { get; set; }
 
-        public bool WriteInDatabase { get; set; }
-        public int UpdateInterval { get; set; }
         public DateTime WriteInDatabaseLastDate { get; set; }
 
 
@@ -30,9 +28,10 @@ namespace MyNetSensors.Nodes
             this.DefaultName = "Chart";
 
             NodeStates = new List<NodeState>();
-            WriteInDatabase = false;
-            UpdateInterval = 500;
             WriteInDatabaseLastDate = DateTime.Now;
+
+            Settings.Add("WriteInDatabase",new NodeSetting(NodeSettingType.Checkbox, "Write In Database","false"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "500"));
         }
 
         public override void Loop()
@@ -40,7 +39,9 @@ namespace MyNetSensors.Nodes
             if (!LastStateUpdated)
                 return;
 
-            if ((DateTime.Now - WriteInDatabaseLastDate).TotalMilliseconds < UpdateInterval)
+            int updateInteval = Int32.Parse(Settings["UpdateInterval"].Value);
+
+            if ((DateTime.Now - WriteInDatabaseLastDate).TotalMilliseconds < updateInteval)
                 return;
 
             LastStateUpdated = false;
@@ -49,7 +50,8 @@ namespace MyNetSensors.Nodes
             if (LastStateCached == null)
             {
                 State = null;
-                UpdateMe();
+               // UpdateMe();
+                return;
             }
 
             try
@@ -62,7 +64,7 @@ namespace MyNetSensors.Nodes
             catch (Exception)
             {
                 State = null;
-                LogError($"Incorrect input data in UI Chart [{Name}]");
+                LogError($"Incorrect input value.");
             }
         }
 
@@ -89,5 +91,6 @@ namespace MyNetSensors.Nodes
             State = null;
             LastStateUpdated = false;
         }
+
     }
 }

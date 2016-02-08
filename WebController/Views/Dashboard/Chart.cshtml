@@ -1,7 +1,7 @@
 ﻿@model MyNetSensors.Nodes.UiChartNode
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.Settings["Name"].Value;
 }
 <br/>
 <div class="ui container">

@@ -11,12 +11,14 @@ namespace MyNetSensors.Nodes
     public class PanelOutputNode : Node
     {
         //Id must be equal to panel output id
-        public string Name { get; set; }
 
         public PanelOutputNode() : base(1, 0)
         {
             this.Title = "Output";
             this.Type = "Main/Panel Output";
+
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
+
         }
 
         public override void Loop()
@@ -60,18 +62,21 @@ namespace MyNetSensors.Nodes
 
         public void UpdateName(string name)
         {
-            Name = name;
+            Settings["Name"].Value = name;
 
             Output output = engine.GetOutput(Id);
-            output.Name = Name;
+            output.Name = name;
 
             Node panel = engine.GetPanelNode(PanelId);
 
             engine.UpdateNode(panel);
-            engine.UpdateNode(this);
-
             engine.UpdateNodeInDb(panel);
-            engine.UpdateNodeInDb(this);
+        }
+
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            UpdateName(data["Name"]);
+            return base.SetSettings(data);
         }
     }
 }

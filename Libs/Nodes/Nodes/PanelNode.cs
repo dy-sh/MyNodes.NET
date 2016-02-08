@@ -10,12 +10,13 @@ namespace MyNetSensors.Nodes
 {
     public class PanelNode : Node
     {
-        public string Name { get; set; }
-
         public PanelNode() : base(0, 0)
         {
             this.Title = "Panel";
             this.Type = "Main/Panel";
+
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
+
         }
 
         public override void Loop()
@@ -39,7 +40,7 @@ namespace MyNetSensors.Nodes
                 Name = GenerateNewInputName()
             };
 
-            node.Name = input.Name;
+            node.Settings["Name"].Value = input.Name;
             AddInput(input);
 
             UpdateMe();
@@ -58,7 +59,7 @@ namespace MyNetSensors.Nodes
                 Name = GenerateOutputName()
             };
 
-            node.Name = output.Name;
+            node.Settings["Name"].Value = output.Name;
             AddOutput(output);
 
             UpdateMe();
@@ -102,8 +103,8 @@ namespace MyNetSensors.Nodes
         {
             this.engine = engine;
 
-            if (Name==null)
-            Name = GeneratePanelName();
+            if (string.IsNullOrEmpty(Settings["Name"].Value))
+                Settings["Name"].Value = GeneratePanelName();
 
             base.OnAddToEngine(engine);
             return true;
@@ -114,7 +115,7 @@ namespace MyNetSensors.Nodes
         {
             //auto naming
             List<PanelNode> panels = engine.GetPanelNodes();
-            List<string> names = panels.Select(x => x.Name).ToList();
+            List<string> names = panels.Select(x => x.Settings["Name"].Value).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"Panel {i}"))

@@ -121,66 +121,27 @@ namespace MyNetSensors.WebController.Controllers
                 }
             }
 
-            if (node is UiNode)
-            {
-                UiNode n = (UiNode) node;
-                litegraphNode.properties["Name"] = n.Name;
-                litegraphNode.properties["PanelIndex"] = n.PanelIndex.ToString();
-                litegraphNode.properties["ShowOnMainPage"] = n.ShowOnMainPage ? "true" : "false";
-            }
+            if (node.Settings!=null && node.Settings.Count>0)
+            litegraphNode.properties["Settings"] = JsonConvert.SerializeObject(node.Settings);
 
-            if (node is UiSliderNode)
-            {
-                UiSliderNode n = (UiSliderNode) node;
-                litegraphNode.properties["Min"] = n.Min.ToString();
-                litegraphNode.properties["Max"] = n.Max.ToString();
-            }
-
+            
             if (node is UiChartNode)
             {
                 UiChartNode n = (UiChartNode) node;
                 litegraphNode.properties["State"] = n.State.ToString();
-                litegraphNode.properties["WriteInDatabase"] = n.WriteInDatabase ? "true" : "false";
-                litegraphNode.properties["UpdateInterval"] = n.UpdateInterval.ToString();
             }
 
-            if (node is ConstantNode)
-            {
-                ConstantNode n = (ConstantNode) node;
-                litegraphNode.properties["Value"] = n.Value;
-            }
+            if (node.Settings.ContainsKey("Name") 
+                &&!string.IsNullOrEmpty(node.Settings["Name"].Value))
+                litegraphNode.title += " [" + node.Settings["Name"].Value + "]";
 
             if (node is PanelNode)
             {
-                PanelNode n = (PanelNode) node;
-                litegraphNode.properties["PanelName"] = n.Name;
+                if (node.Type == "Main/Panel")
+                    litegraphNode.title = node.Settings["Name"].Value;
             }
 
-            if (node is PanelInputNode)
-            {
-                PanelInputNode n = (PanelInputNode) node;
-                litegraphNode.properties["Name"] = n.Name;
-            }
 
-            if (node is PanelOutputNode)
-            {
-                PanelOutputNode n = (PanelOutputNode) node;
-                litegraphNode.properties["Name"] = n.Name;
-            }
-
-            if (node is ConnectionReceiverNode)
-            {
-                ConnectionReceiverNode n = (ConnectionReceiverNode) node;
-                litegraphNode.properties["Channel"] = n.Channel.ToString();
-                litegraphNode.properties["Name"] = n.Channel.ToString();
-            }
-
-            if (node is ConnectionTransmitterNode)
-            {
-                ConnectionTransmitterNode n = (ConnectionTransmitterNode) node;
-                litegraphNode.properties["Channel"] = n.Channel.ToString();
-                litegraphNode.properties["Name"] = n.Channel.ToString();
-            }
 
             return litegraphNode;
         }
@@ -420,154 +381,24 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        
 
 
         [Authorize(UserClaims.EditorEditor)]
-        public bool PanelSettings(string id, string panelname)
+        public bool SetNodeSettings(string id, Dictionary<string, string> data)
         {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Panel [{id}]. Does not exist.");
-                return false;
-            }
-
-            PanelNode node = (PanelNode) n;
-            node.Name = panelname;
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool InputOutputSettings(string id, string name)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Input/Output [{id}]. Does not exist.");
-                return false;
-            }
-
-            if (n is PanelInputNode)
-            {
-                PanelInputNode node = (PanelInputNode) n;
-                node.UpdateName(name);
-            }
-
-            if (n is PanelOutputNode)
-            {
-                PanelOutputNode node = (PanelOutputNode) n;
-                node.UpdateName(name);
-            }
-
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool UINodeSettings(string id, string name, int panelIndex, bool show)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
+            Node node = engine.GetNode(id);
+            if (node == null)
             {
                 engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
                 return false;
             }
 
-            UiNode node = (UiNode) n;
-            node.Name = name;
-            node.PanelIndex = panelIndex;
-            node.ShowOnMainPage = show;
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
+            return node.SetSettings(data);
         }
 
 
 
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool UISliderSettings(string id, string name, int panelIndex,int min, int max, bool show)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
-                return false;
-            }
-            if (min >= max)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Min must be > Max.");
-                return false;
-            }
-
-            UiSliderNode node = (UiSliderNode) n;
-            node.Name = name;
-            node.PanelIndex = panelIndex;
-            node.Min = min;
-            node.Max = max;
-            node.ShowOnMainPage = show;
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool ConstantSettings(string id, string value)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
-                return false;
-            }
-
-            ConstantNode node = (ConstantNode) n;
-            node.SetValue(value);
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
-        }
-
-
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool UIChartSettings(string id, string name, int panelIndex, bool show, bool writeInDatabase, int updateInterval)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
-                return false;
-            }
-
-            UiChartNode node = (UiChartNode) n;
-
-            if (node.WriteInDatabase && !writeInDatabase)
-                uiEngine.ClearChart(node.Id);
-
-            node.Name = name;
-            node.PanelIndex = panelIndex;
-            node.ShowOnMainPage = show;
-            node.WriteInDatabase = writeInDatabase;
-            node.UpdateInterval = updateInterval;
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-
-            return true;
-        }
 
 
         [Authorize(UserClaims.EditorObserver)]
@@ -602,7 +433,7 @@ namespace MyNetSensors.WebController.Controllers
 
                 string json = NodesEngineSerializer.SerializePanel(id, engine);
 
-                return File(Encoding.UTF8.GetBytes(json), "text/plain", node.Name + ".json");
+                return File(Encoding.UTF8.GetBytes(json), "text/plain", node.Settings["Name"].Value + ".json");
             });
         }
 
@@ -697,47 +528,8 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool ReceiverSettings(string id, int channel)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
-                return false;
-            }
-
-            ConnectionReceiverNode node = (ConnectionReceiverNode) n;
-            node.SetChannel(channel);
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.EditorEditor)]
-        public bool TransmitterSettings(string id, int channel)
-        {
-            Node n = engine.GetNode(id);
-            if (n == null)
-            {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
-                return false;
-            }
-
-            ConnectionTransmitterNode node = (ConnectionTransmitterNode) n;
-            node.SetChannel(channel);
-            engine.UpdateNode(node);
-            engine.UpdateNodeInDb(node);
-
-            return true;
-        }
-
-
+        
+        
 
 
         public async Task<int> ReceiverSetValue(string value, string channel, string password)

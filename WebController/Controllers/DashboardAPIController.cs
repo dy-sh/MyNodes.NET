@@ -27,7 +27,7 @@ namespace MyNetSensors.WebController.Controllers
 
                 PanelNode panel = engine.GetPanel(id);
 
-                return panel?.Name;
+                return panel?.Settings["Name"].Value;
             });
         }
 

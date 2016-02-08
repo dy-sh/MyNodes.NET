@@ -22,7 +22,7 @@ var playlist = [];
 var audioSpeech = new Audio();
 
 function updateSpeech(node) {
-    $('#speechName-' + node.Id).html(node.Name);
+    $('#speechName-' + node.Id).html(node.Settings["Name"].Value);
 
     if (node.Value == null || node.Value == "")
         return;

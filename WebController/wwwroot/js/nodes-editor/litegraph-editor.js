@@ -55,7 +55,7 @@ Editor.prototype.addMiniWindow = function (w, h) {
     var canvas = miniwindow.querySelector("canvas");
 
     var graphcanvas = new LGraphCanvas(canvas, this.graph);
-  //  graphcanvas.background_image = "images/litegraph/grid.png";
+    //  graphcanvas.background_image = "images/litegraph/grid.png";
     //derwish edit
     graphcanvas.scale = 0.1;
     //graphcanvas.allow_dragnodes = false;
@@ -290,7 +290,7 @@ Editor.prototype.importPanelFromURL = function (position) {
                 }
             });
         }
-       
+
     });
 }
 
@@ -352,7 +352,81 @@ Editor.prototype.exportPanelURL = function (id) {
         onHidden: function () {
         }
     }).modal('setting', 'transition', 'fade up').modal('show');
-   
+
+}
+
+
+
+
+//setting-elements templates
+var textSettingTemplate = Handlebars.compile($('#textSettingTemplate').html());
+var numberSettingTemplate = Handlebars.compile($('#numberSettingTemplate').html());
+var checkboxSettingTemplate = Handlebars.compile($('#checkboxSettingTemplate').html());
+
+
+function NodeSettings(node) {
+    $('#node-settings-title').html(node.type);
+
+    //parse settings from json
+    var settings = JSON.parse(node.properties['Settings']);
+
+    //clear old body
+    var body = $('#node-settings-body');
+    body.html(null);
+
+    //add setting-elements from templates
+    for (var i = 0; i < Object.keys(settings).length ; i++) {
+        var key = Object.keys(settings)[i];
+
+        settings[key].Key = key;
+
+        switch(settings[key].Type) {
+            case 0:
+                body.append(textSettingTemplate(settings[key]));
+                break;
+            case 1:
+                body.append(numberSettingTemplate(settings[key]));
+                break;
+            case 2:
+                body.append( checkboxSettingTemplate(settings[key]));
+                if (settings[key].Value == "true")
+                    $('#node-setting-' + key).prop('checked', true);
+                break;
+        }
+    }
+
+    
+    //modal panel
+    $('#node-settings-panel').modal({
+        dimmerSettings: { opacity: 0.3 },
+        onApprove: function () {
+
+            //get settings from form
+            var data = [];
+            for (var i = 0; i < Object.keys(settings).length ; i++) {
+                var key = Object.keys(settings)[i];
+
+                switch (settings[key].Type) {
+                    case 0:
+                        data.push({key: key, value: $('#node-setting-' + key).val()});
+                        break;
+                    case 1:
+                        data.push({key: key, value: $('#node-setting-' + key).val()});
+                        break;
+                    case 2:
+                        data.push({key: key, value: $('#node-setting-' + key).prop('checked')?"true":"false"});
+                        break;
+                }
+            }
+
+            //send settings
+            $.ajax({
+                url: "/NodesEditorAPI/SetNodeSettings/",
+                type: "POST",
+                data: {id: node.id, data: data}
+            });
+        }
+    }).modal('setting', 'transition', 'fade up').modal('show');
 }
 
 

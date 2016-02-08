@@ -3,16 +3,20 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
+
 namespace MyNetSensors.Nodes
 {
     public class ConstantNode : Node
     {
-        public string Value { get; set; }
+
 
         public ConstantNode() : base(0,1)
         {
             this.Title = "Constant";
             this.Type = "Basic/Constant";
+
+            Settings.Add("Value",new NodeSetting(NodeSettingType.Text, "Constant Value",""));
         }
 
         public override void Loop()
@@ -25,10 +29,20 @@ namespace MyNetSensors.Nodes
 
         public void SetValue(string value)
         {
-            Value = value;
-            LogInfo($"[{Value??"NULL"}]");
-            Outputs[0].Value = Value;
+            Settings["Value"].Value = value;
+
+            LogInfo($"[{value ?? "NULL"}]");
+
+            Outputs[0].Value = value;
+
+            UpdateMe();
             UpdateMeInDb();
+        }
+
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            SetValue(data["Value"]);
+            return true;
         }
     }
 }

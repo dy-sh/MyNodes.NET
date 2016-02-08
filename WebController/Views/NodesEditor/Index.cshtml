@@ -70,7 +70,7 @@
                     {
                         foreach (PanelNode panel in panelsStack)
                         {
-                            <a asp-action="Panel" asp-route-id="@panel.Id" class="ui inverted tiny basic button">@panel.Name</a>
+                            <a asp-action="Panel" asp-route-id="@panel.Id" class="ui inverted tiny basic button">@panel.Settings["Name"].Value</a>
                         }
                     }
                 }
@@ -81,7 +81,10 @@
 
     <div class="ui small modal" id="node-settings-panel">
         <div class="header" id="node-settings-title"></div>
-        <div class="content" id="node-settings-body"></div>
+        <div class="content">
+            <div class="ui form" id="node-settings-body">
+            </div>
+        </div>
         <div class="actions">
             <div class="ui cancel button">
                 Cancel
@@ -124,6 +127,40 @@
         </div>
     </div>
 
+
+
+
+    <script id="textSettingTemplate" type="text/x-handlebars-template">
+        @*<div class="ui attached basic segment">*@
+        <div class="field">
+            <label> {{Label}} </label>
+            <input type="text" id="node-setting-{{Key}}" value="{{Value}}">
+        </div>
+        @*</div>*@
+    </script>
+
+    <script id="numberSettingTemplate" type="text/x-handlebars-template">
+        @*<div class="ui attached basic segment">*@
+        <div class="field">
+            <label> {{Label}} </label>
+            <input type="number" id="node-setting-{{Key}}" value="{{Value}}">
+        </div>
+        @*</div>*@
+    </script>
+
+    <script id="checkboxSettingTemplate" type="text/x-handlebars-template">
+        @*<div class="ui attached basic segment">*@
+        <div class="field">
+            <div class="ui toggle checkbox">
+                <input type="checkbox" name="public" id="node-setting-{{Key}}" value="true">
+                <label> {{Label}} </label>
+            </div>
+        </div>
+        @*</div>*@
+    </script>
+
+
+
     <script>
         //this var used in litegraph.js
         var this_panel_id = "@ViewBag.panelId";
@@ -132,6 +169,7 @@
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/handlebars.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script type="text/javascript" src="~/js/nodes-editor/litegraph.js"></script>

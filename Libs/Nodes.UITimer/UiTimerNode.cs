@@ -7,7 +7,7 @@
         {
             this.Title = "UI Timer";
             this.Type = "UI/Timer";
-            this.Name = "Timer";
+            this.SetDefaultName("Timer");
         }
 
         public override void Loop()
@@ -20,7 +20,7 @@
 
         public void SetState(string state)
         {
-            LogInfo($"UI Timer [{Name}]: {state}");
+            LogInfo($"UI Timer [{Settings["Name"].Value}]: {state}");
             Outputs[0].Value = state;
         }
     }

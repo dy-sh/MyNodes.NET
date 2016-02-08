@@ -50,6 +50,7 @@
     <Compile Include="LiteGraph.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodesEngineSerializer.cs" />
+    <Compile Include="NodeSetting.cs" />
     <Compile Include="Nodes\ConnectionRemoteReceiverNode.cs" />
     <Compile Include="Nodes\ConnectionReceiverNode.cs" />
     <Compile Include="Nodes\ConnectionRemoteTransmitter.cs" />

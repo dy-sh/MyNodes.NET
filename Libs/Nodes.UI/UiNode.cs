@@ -7,17 +7,18 @@ namespace MyNetSensors.Nodes
 {
     public abstract class UiNode : Node
     {
-        public int PanelIndex { get; set; }
-        public string Name { get; set; }
         internal string DefaultName { get; set; }
-
-        public bool ShowOnMainPage { get; set; }
-
 
         public UiNode(int inputsCount, int outputsCount) : base(inputsCount, outputsCount)
         {
-            ShowOnMainPage = true;
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name",""));
+            Settings.Add("PanelIndex",new NodeSetting(NodeSettingType.Number, "Index on panel","0"));
+            Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page","true"));
         }
 
+        public void SetDefaultName(string name)
+        {
+            DefaultName = name;
+        }
     }
 }

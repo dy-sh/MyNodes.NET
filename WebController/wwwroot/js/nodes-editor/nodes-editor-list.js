@@ -27,8 +27,6 @@
         return [
             { content: "Open", callback: function () { window.location = "/NodesEditor/Panel/" + that.id; } },
             null, //null for horizontal line
-            { content: "Settings", callback: function () { PanelSettings(that) } },
-            null,
             { content: "Show on Dashboard", callback: function () { var win = window.open("/Dashboard/Panel/" + that.id, '_blank'); win.focus(); } },
             null,
             { content: "Export to file", callback: function () { var win = window.open("/NodesEditorAPI/SerializePanelToFile/" + that.id, '_blank'); win.focus(); } },
@@ -36,32 +34,6 @@
             { content: "Export URL", callback: function () { editor.exportPanelURL(that.id) } },
             null
         ];
-    }
-    function PanelSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['PanelName']);
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/PanelSettings/",
-                    type: "POST",
-                    data: {
-                        panelname: $('#node-settings-name').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     LiteGraph.registerNodeType("Main/Panel", Panel);
 
@@ -76,10 +48,6 @@
         };
         this.bgcolor = "#151515";
 
-    }
-    PanelInput.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { InputOutputSettings(that) } }, null];
     }
     PanelInput.title = "Panel Input";
     LiteGraph.registerNodeType("Main/Panel Input", PanelInput);
@@ -96,42 +64,8 @@
         };
         this.bgcolor = "#151515";
     }
-    PanelOutput.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { InputOutputSettings(that) } }, null];
-    }
     PanelOutput.title = "Panel Output";
     LiteGraph.registerNodeType("Main/Panel Output", PanelOutput);
-
-
-    function InputOutputSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/InputOutputSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
-
-
 
 
 
@@ -178,44 +112,6 @@
 
 
 
-    function UINodeSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form">' +
-            '<div class="fields">' +
-            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
-            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
-            '</div>' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
-            '</div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
-        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/UINodeSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        panelIndex: $('#node-settings-panelIndex').val(),
-                        show: $('#node-settings-show').prop('checked'),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
-
-
-
 
     //UI Label
     function UILabel() {
@@ -223,10 +119,6 @@
             'ObjectType': "MyNetSensors.Nodes.UiLabelNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UILabel.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
     }
     UILabel.title = "Label";
     LiteGraph.registerNodeType("UI/Label", UILabel);
@@ -240,10 +132,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UIState.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
-    }
     UIState.title = "State";
     LiteGraph.registerNodeType("UI/State", UIState);
 
@@ -255,10 +143,6 @@
             'ObjectType': "MyNetSensors.Nodes.UiProgressNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UIProgress.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
     }
     UIProgress.title = "Progress";
     LiteGraph.registerNodeType("UI/Progress", UIProgress);
@@ -272,10 +156,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UILog.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
-    }
     UILog.title = "Log";
     LiteGraph.registerNodeType("UI/Log", UILog);
 
@@ -287,10 +167,6 @@
             'ObjectType': "MyNetSensors.Nodes.UiButtonNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UIButton.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
     }
     UIButton.title = "Button";
     LiteGraph.registerNodeType("UI/Button", UIButton);
@@ -304,10 +180,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UIToggleButton.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
-    }
     UIToggleButton.title = "Toggle Button";
     LiteGraph.registerNodeType("UI/Toggle Button", UIToggleButton);
 
@@ -320,10 +192,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UISwitch.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
-    }
     UISwitch.title = "Switch";
     LiteGraph.registerNodeType("UI/Switch", UISwitch);
 
@@ -335,10 +203,6 @@
             'ObjectType': "MyNetSensors.Nodes.UiTextBoxNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UITextBox.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
     }
     UITextBox.title = "TextBox";
     LiteGraph.registerNodeType("UI/TextBox", UITextBox);
@@ -355,52 +219,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UISlider.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UISliderSettings(that) } }, null];
-    }
-    function UISliderSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form">' +
-            '<div class="fields">' +
-            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
-            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
-            '</div>' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
-            '<div class="ui divider"></div><div class="fields">' +
-            '<div class="field"><label>Min Value</label><input type="number" id="node-settings-min"></div>' +
-            '<div class="field"><label>Max Value</label><input type="number" id="node-settings-max"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
-        $('#node-settings-min').val(node.properties['Min']);
-        $('#node-settings-max').val(node.properties['Max']);
-        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/UISliderSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        panelIndex: $('#node-settings-panelIndex').val(),
-                        min: $('#node-settings-min').val(),
-                        max: $('#node-settings-max').val(),
-                        show: $('#node-settings-show').prop('checked'),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
     UISlider.title = "Slider";
     LiteGraph.registerNodeType("UI/Slider", UISlider);
 
@@ -415,10 +233,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UIRGBSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
-    }
     UIRGBSliders.title = "RGB Sliders";
     LiteGraph.registerNodeType("UI/RGB Sliders", UIRGBSliders);
 
@@ -430,10 +244,6 @@
             'ObjectType': "MyNetSensors.Nodes.UiRgbwSlidersNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UIRGBWSliders.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null];
     }
     UIRGBWSliders.title = "RGBW Sliders";
     LiteGraph.registerNodeType("UI/RGBW Sliders", UIRGBWSliders);
@@ -452,55 +262,6 @@
             'Assembly': "Nodes.UI"
         };
     }
-    UIChart.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UIChartSettings(that) } }, null];
-    }
-    function UIChartSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form">' +
-            '<div class="fields">' +
-            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
-            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
-            '</div>' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
-            '<div class="ui divider"></div><div class="fields">' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-usedb"><label>Write data in database</label></div></div>' +
-             '</div><div class="ui divider"></div><div class="fields">' +
-            '<div class="field">Update interval (ms): <input type="text" id="node-settings-update"></div>' +
-
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
-        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
-        $('#node-settings-usedb').prop('checked', node.properties['WriteInDatabase'] == "true");
-        $('#node-settings-update').val(node.properties['UpdateInterval']);
-
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/UIChartSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        panelIndex: $('#node-settings-panelIndex').val(),
-                        show: $('#node-settings-show').prop('checked'),
-                        writeInDatabase: $('#node-settings-usedb').prop('checked'),
-                        updateInterval: $('#node-settings-update').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
     UIChart.title = "Chart";
     LiteGraph.registerNodeType("UI/Chart", UIChart);
 
@@ -517,8 +278,9 @@
     }
     UITimer.prototype.getExtraMenuOptions = function (graphcanvas) {
         var that = this;
-        return [{ content: "Settings", callback: function () { UINodeSettings(that) } }, null,
-            { content: "Open interface", callback: function () { var win = window.open("/UITimer/Tasks/" + that.id, '_blank'); win.focus(); } }, null
+        return [
+        { content: "Open interface", callback: function () { var win = window.open("/UITimer/Tasks/" + that.id, '_blank'); win.focus(); } }
+            , null
         ];
     }
     UITimer.title = "Timer";
@@ -532,52 +294,12 @@
 
 
 
-    //UI Slider
+    //UISpeech
     function UISpeech() {
         this.properties = {
             'ObjectType': "MyNetSensors.Nodes.UiSpeechNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UISpeech.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UISpeechSettings(that) } }, null];
-    }
-    function UISpeechSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form">' +
-            '<div class="fields">' +
-            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
-            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
-            '</div>' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
-            '<div class="ui divider"></div><div class="fields">' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
-        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/UINodeSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        panelIndex: $('#node-settings-panelIndex').val(),
-                        show: $('#node-settings-show').prop('checked'),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     UISpeech.title = "Speech";
     LiteGraph.registerNodeType("UI/Speech", UISpeech);
@@ -587,52 +309,12 @@
 
 
 
-    //UI Slider
+    //UIAudio
     function UIAudio() {
         this.properties = {
             'ObjectType': "MyNetSensors.Nodes.UiAudioNode",
             'Assembly': "Nodes.UI"
         };
-    }
-    UIAudio.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { UIAudioSettings(that) } }, null];
-    }
-    function UIAudioSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form">' +
-            '<div class="fields">' +
-            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
-            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
-            '</div>' +
-            '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-
-            '<div class="ui divider"></div><div class="fields">' +
-            '</div></div>'
-        );
-
-        $('#node-settings-name').val(node.properties['Name']);
-        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
-        $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/UINodeSettings/",
-                    type: "POST",
-                    data: {
-                        name: $('#node-settings-name').val(),
-                        panelIndex: $('#node-settings-panelIndex').val(),
-                        show: $('#node-settings-show').prop('checked'),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     UIAudio.title = "Audio";
     LiteGraph.registerNodeType("UI/Audio", UIAudio);
@@ -652,36 +334,6 @@
             'ObjectType': "MyNetSensors.Nodes.ConstantNode",
             'Assembly': "Nodes"
         };
-    }
-    Constant.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { ConstantSettings(that) } }, null];
-    }
-    function ConstantSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Value: <input type="text" id="node-settings-value"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-value').val(node.properties['Value']);
-
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/ConstantSettings/",
-                    type: "POST",
-                    data: {
-                        value: $('#node-settings-value').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     Constant.title = "Constant";
     LiteGraph.registerNodeType("Basic/Constant", Constant);
@@ -715,35 +367,6 @@
             'Assembly': "Nodes"
         };
     }
-    ConnectionTransmitterNode.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { TransmitterSettings(that) } }, null];
-    }
-    function TransmitterSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Channel: <input type="number" id="node-settings-channel"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-channel').val(node.properties['Channel']);
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/TransmitterSettings/",
-                    type: "POST",
-                    data: {
-                        channel: $('#node-settings-channel').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
-    }
     ConnectionTransmitterNode.title = "Transmitter";
     LiteGraph.registerNodeType("Connection/Transmitter", ConnectionTransmitterNode);
 
@@ -755,35 +378,6 @@
             'ObjectType': "MyNetSensors.Nodes.ConnectionReceiverNode",
             'Assembly': "Nodes"
         };
-    }
-    ConnectionReceiverNode.prototype.getExtraMenuOptions = function (graphcanvas) {
-        var that = this;
-        return [{ content: "Settings", callback: function () { ReceiverSettings(that) } }, null];
-    }
-    function ReceiverSettings(node) {
-        $('#node-settings-title').html(node.type);
-
-        $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Channel: <input type="number" id="node-settings-channel"></div>' +
-            '</div></div>'
-        );
-
-        $('#node-settings-channel').val(node.properties['Channel']);
-
-        $('#node-settings-panel').modal({
-            dimmerSettings: { opacity: 0.3 },
-            onApprove: function () {
-                $.ajax({
-                    url: "/NodesEditorAPI/ReceiverSettings/",
-                    type: "POST",
-                    data: {
-                        channel: $('#node-settings-channel').val(),
-                        id: node.id
-                    }
-                });
-            }
-        }).modal('setting', 'transition', 'fade up').modal('show');
     }
     ConnectionReceiverNode.title = "Receiver";
     LiteGraph.registerNodeType("Connection/Receiver", ConnectionReceiverNode);
@@ -1104,7 +698,7 @@
             'ObjectType': "MyNetSensors.Nodes.OperationEventsFreqMeterNode",
             'Assembly': "Nodes"
         };
-        }
+    }
     OperationEventsFreqMeterNode.title = "Events Freq Meter";
     LiteGraph.registerNodeType("Operation/Events Freq Meter", OperationEventsFreqMeterNode);
 

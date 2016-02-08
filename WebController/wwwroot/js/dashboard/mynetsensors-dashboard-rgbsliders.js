@@ -91,7 +91,7 @@ function updateRGBSliders(node) {
     if (isNaN(g)) g = 0;
     if (isNaN(b)) b = 0;
 
-    $('#sliderName-' + node.Id).html(node.Name);
+    $('#sliderName-' + node.Id).html(node.Settings["Name"].Value);
     $("#slider-" + node.Id + "-r")[0].noUiSlider.set(r);
     $("#slider-" + node.Id + "-g")[0].noUiSlider.set(g);
     $("#slider-" + node.Id + "-b")[0].noUiSlider.set(b);
@@ -109,7 +109,7 @@ function updateRGBWSliders(node) {
     if (isNaN(b)) b = 0;
     if (isNaN(w)) w = 0;
 
-    $('#sliderName-' + node.Id).html(node.Name);
+    $('#sliderName-' + node.Id).html(node.Settings["Name"].Value);
     $("#slider-" + node.Id + "-r")[0].noUiSlider.set(r);
     $("#slider-" + node.Id + "-g")[0].noUiSlider.set(g);
     $("#slider-" + node.Id + "-b")[0].noUiSlider.set(b);

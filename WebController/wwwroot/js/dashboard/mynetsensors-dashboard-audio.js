@@ -21,7 +21,7 @@ function createAudio(node) {
 var audioPlayer = new Audio();
 
 function updateAudio(node) {
-    $('#audioName-' + node.Id).html(node.Name);
+    $('#audioName-' + node.Id).html(node.Settings["Name"].Value);
 
     var address = node.Address;
     var play = node.Play;

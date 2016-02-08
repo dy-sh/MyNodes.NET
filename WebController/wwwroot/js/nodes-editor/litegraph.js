@@ -4320,23 +4320,20 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function () {
 }
 
 LGraphCanvas.prototype.getNodeMenuOptions = function (node) {
-    var options = null;
+    var options = [];
+
+    //derwish added
+    if (node.properties["Settings"]) {
+        options.push({ content: "Settings", callback: function () { NodeSettings(node) } });
+        options.push(null);
+    }
+
+    options.push({ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse });
 
     if (node.getMenuOptions)
         options = node.getMenuOptions(this);
-    else
-        options = [
-            //derwish remove
-			//{ content: "Inputs", is_menu: true, disabled: true, callback: LGraphCanvas.onMenuNodeInputs },
-			//{content:"Outputs", is_menu: true, disabled:true, callback: LGraphCanvas.onMenuNodeOutputs },
-			//null,
-			{ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse }
-            //derwish remove
-			//{content:"Pin", callback: LGraphCanvas.onMenuNodePin },
-			//{content:"Colors", is_menu: true, callback: LGraphCanvas.onMenuNodeColors },
-			//{content:"Shapes", is_menu: true, callback: LGraphCanvas.onMenuNodeShapes },
-			//null
-        ];
+  
+
 
     if (node.getExtraMenuOptions) {
         var extra = node.getExtraMenuOptions(this);

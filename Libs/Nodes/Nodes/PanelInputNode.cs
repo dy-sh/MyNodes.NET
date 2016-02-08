@@ -11,12 +11,13 @@ namespace MyNetSensors.Nodes
     public class PanelInputNode : Node
     {
         //Id must be equal to panel input id
-        public string Name { get; set; }
 
         public PanelInputNode() : base(0, 1)
         {
             this.Title = "Input";
             this.Type = "Main/Panel Input";
+
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 
         public override void Loop()
@@ -58,18 +59,21 @@ namespace MyNetSensors.Nodes
 
         public void UpdateName(string name)
         {
-            Name = name;
+            Settings["Name"].Value = name;
 
             Input input = engine.GetInput(Id);
-            input.Name = Name;
+            input.Name = name;
 
             Node panel = engine.GetPanelNode(PanelId);
 
             engine.UpdateNode(panel);
-            engine.UpdateNode(this);
-
             engine.UpdateNodeInDb(panel);
-            engine.UpdateNodeInDb(this);
+        }
+
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            UpdateName(data["Name"]);
+            return base.SetSettings(data);
         }
     }
 }

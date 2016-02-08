@@ -39,7 +39,7 @@ namespace MyNetSensors.WebController.Controllers
                 return HttpNotFound();
 
             ViewBag.NodeId = node.Id;
-            ViewBag.Name = node.Name;
+            ViewBag.Name = node.Settings["Name"].Value;
 
             List<UITimerTask> tasks = tasksEngine.GetTasksForNode(id);
 
@@ -58,7 +58,7 @@ namespace MyNetSensors.WebController.Controllers
                 return HttpNotFound();
 
             ViewBag.NodeId = node.Id;
-            ViewBag.Name = node.Name;
+            ViewBag.Name = node.Settings["Name"].Value;
 
             UITimerTask task = new UITimerTask
             {
@@ -102,7 +102,7 @@ namespace MyNetSensors.WebController.Controllers
             if (node == null)
                 return HttpNotFound();
 
-            ViewBag.Name = node.Name;
+            ViewBag.Name = node.Settings["Name"].Value;
 
             return View(task);
         }

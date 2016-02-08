@@ -41,7 +41,7 @@ namespace MyNetSensors.WebController.Controllers
                 PanelNode panel = engine.GetPanel(id);
                 if (panel == null)
                     return HttpNotFound();
-                ViewBag.panelName = panel.Name;
+                ViewBag.panelName = panel.Settings["Name"].Value;
             }
 
             ViewBag.panelId = id;

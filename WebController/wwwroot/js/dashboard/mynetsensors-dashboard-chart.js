@@ -99,7 +99,7 @@ function addChartData(chartData, nodeId) {
 var firstUpdate=true;
 
 function updateChart(node) {
-    $('#chartName-' + node.Id).html(node.Name);
+    $('#chartName-' + node.Id).html(node.Settings["Name"].Value);
 
     if (!firstUpdate) {
         if (node.State == "0")

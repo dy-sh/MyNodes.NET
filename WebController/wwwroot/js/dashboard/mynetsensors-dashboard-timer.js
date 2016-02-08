@@ -16,6 +16,6 @@ function createTimer(node) {
 
 
 function updateTimer(node) {
-    $('#timer-name-' + node.Id).html(node.Name);
+    $('#timer-name-' + node.Id).html(node.Settings["Name"].Value);
 }
 

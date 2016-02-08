@@ -27,7 +27,7 @@
 
             @foreach (PanelNode panel in Model)
             {
-                <a asp-action="Panel" asp-route-id="@panel.Id">@panel.Name</a><br/>
+                <a asp-action="Panel" asp-route-id="@panel.Id">@panel.Settings["Name"].Value</a><br/>
                 <div class="ui divider"></div>
             }
         </h4>

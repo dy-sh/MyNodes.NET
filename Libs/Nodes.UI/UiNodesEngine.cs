@@ -47,7 +47,7 @@ namespace MyNetSensors.Nodes
 
             foreach (var chart in charts)
             {
-                if (!chart.WriteInDatabase) continue;
+                if (chart.Settings["WriteInDatabase"].Value!="true") continue;
 
                 List<NodeState> states = statesDb.GetStatesForNode(chart.Id);
                 chart.SetStates(states);
@@ -65,7 +65,7 @@ namespace MyNetSensors.Nodes
             if (node is UiChartNode)
             {
                 UiChartNode chart = (UiChartNode)node;
-                if (chart.WriteInDatabase && chart.State != null)
+                if (chart.Settings["WriteInDatabase"].Value == "true" && chart.State != null)
                 {
                     statesDb?.AddState(new NodeState(chart.Id, chart.State.ToString()));
                 }
@@ -89,8 +89,8 @@ namespace MyNetSensors.Nodes
 
             OnNewUiNode?.Invoke(n);
 
-            if (n.Name==null)
-                n.Name = GenerateName(n);
+            if (string.IsNullOrEmpty(n.Settings["Name"].Value))
+                n.Settings["Name"].Value = GenerateName(n);
 
             engine.UpdateNode(n);
             engine.UpdateNodeInDb(n);
@@ -100,7 +100,7 @@ namespace MyNetSensors.Nodes
         {
             //auto naming
             List<UiNode> nodes = GetUINodesForPanel(uiNode.PanelId);
-            List<string> names = nodes.Select(x => x.Name).ToList();
+            List<string> names = nodes.Select(x => x.Settings["Name"].Value).ToList();
             for (int i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"{uiNode.DefaultName} {i}"))
@@ -144,7 +144,7 @@ namespace MyNetSensors.Nodes
         public List<UiNode> GetUINodesForMainPage()
         {
             return engine.GetNodes()
-                .Where(n => n is UiNode && ((UiNode)n).ShowOnMainPage)
+                .Where(n => n is UiNode && ((UiNode)n).Settings["ShowOnMainPage"].Value=="true")
                 .Cast<UiNode>()
                 .ToList();
         }

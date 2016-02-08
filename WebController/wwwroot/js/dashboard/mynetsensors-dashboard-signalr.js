@@ -40,7 +40,7 @@ $(function () {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
-        } else if (!node.ShowOnMainPage)
+        } else if (node.Settings["ShowOnMainPage"].Value!="true")
             return;
 
         createNode(node);
@@ -50,7 +50,7 @@ $(function () {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
-        } else if (!node.ShowOnMainPage) {
+        } else if (node.Settings["ShowOnMainPage"].Value != "true") {
             //if ShowOnMainPage changed to false
             if ($('#node-' + node.Id).length != 0)
                 removeNode(node);
@@ -64,7 +64,7 @@ $(function () {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
                 return;
-        } else if (!node.ShowOnMainPage)
+        } else if (node.Settings["ShowOnMainPage"].Value != "true")
             return;
 
         removeNode(node);

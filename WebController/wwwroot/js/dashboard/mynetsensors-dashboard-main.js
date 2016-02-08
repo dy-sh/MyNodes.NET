@@ -84,7 +84,7 @@ function updateLabel(node) {
     if (node.Value == null)
         node.Value = "NULL";
 
-    $('#labelName-' + node.Id).html(node.Name);
+    $('#labelName-' + node.Id).html(node.Settings["Name"].Value);
     $('#labelValue-' + node.Id).html(node.Value);
 }
 
@@ -105,18 +105,18 @@ function updateState(node) {
         $('#state-null-' + node.Id).show();
     }
 
-    $('#stateName-' + node.Id).html(node.Name);
+    $('#stateName-' + node.Id).html(node.Settings["Name"].Value);
 }
 
 
 function updateTextBox(node) {
-    $('#textBoxName-' + node.Id).html(node.Name);
+    $('#textBoxName-' + node.Id).html(node.Settings["Name"].Value);
     $('#textBoxText-' + node.Id).val(node.Value);
 }
 
 
 function updateLog(node) {
-    $('#logName-' + node.Id).html(node.Name);
+    $('#logName-' + node.Id).html(node.Settings["Name"].Value);
     $('#log-' + node.Id).html(node.Log);
 
     if ($('#log-' + node.Id).get(0) != null)
@@ -134,7 +134,7 @@ function updateProgress(node) {
     if (node.Value < 0)
         node.Value = 0;
 
-    $('#progressName-' + node.Id).html(node.Name);
+    $('#progressName-' + node.Id).html(node.Settings["Name"].Value);
     $('#progressBar-' + node.Id).progress({
         percent: node.Value,
         showActivity: false
@@ -143,13 +143,13 @@ function updateProgress(node) {
 
 
 function updateButton(node) {
-    $('#buttonName-' + node.Id).html(node.Name);
+    $('#buttonName-' + node.Id).html(node.Settings["Name"].Value);
 
 }
 
 
 function updateToggleButton(node) {
-    $('#buttonName-' + node.Id).html(node.Name);
+    $('#buttonName-' + node.Id).html(node.Settings["Name"].Value);
     if (node.Value == "1")
         $('#button-' + node.Id).addClass("blue");
     else
@@ -158,8 +158,8 @@ function updateToggleButton(node) {
 
 
 function updateSwitch(node) {
-    $('#switchName-' + node.Id).html(node.Name);
-    $('#switch-' + node.Id).html(node.Name);
+    $('#switchName-' + node.Id).html(node.Settings["Name"].Value);
+    $('#switch-' + node.Id).html(node.Settings["Name"].Value);
     $('#switch-' + node.Id).prop('checked', node.Value == "1");
 }
 
