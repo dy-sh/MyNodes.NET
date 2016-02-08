@@ -63,17 +63,22 @@ function createNode(node) {
         case "UI/Audio":
             createAudio(node);
             break;
-    default:
+        default:
     }
+
+    sortPanel(node.PanelId);
+
+
     updateNode(node);
 }
 
 
 
 
+
 function updateNode(node) {
     //if ShowOnMainPage option changed to true
-    if ($('#node-' + node.Id).length==0)
+    if ($('#node-' + node.Id).length == 0)
         createNode(node);
 
     $('#activity-' + node.PanelId).show().fadeOut(150);
@@ -126,6 +131,13 @@ function updateNode(node) {
             break;
         default:
     }
+
+    var oldPanelIndex = $('#node-' + node.Id).attr("panelIndex");
+    if (oldPanelIndex != node.PanelIndex) {
+        $('#node-' + node.Id).attr("panelIndex", node.PanelIndex);
+        sortPanel(node.PanelId);
+    }
+
 }
 
 
@@ -134,10 +146,10 @@ function removeNode(node) {
     $('#node-' + node.Id).fadeOut(elementsFadeTime, function () {
 
         switch (node.Type) {
-        case "UI/Chart":
-            removeChart(node);
-            break;
-        default:
+            case "UI/Chart":
+                removeChart(node);
+                break;
+            default:
         }
 
 
@@ -167,3 +179,29 @@ function removePanel(panelId) {
         $(this).remove();
     });
 }
+
+
+function sortPanel(panelId) {
+    var myArray = $('#uiContainer-' + panelId).children();
+    var count = 0;
+
+    // sort based on timestamp attribute
+    myArray.sort(function (a, b) {
+
+        // convert to integers from strings
+        a = parseInt($(a).attr("panelIndex"), 10);
+        b = parseInt($(b).attr("panelIndex"), 10);
+        count += 2;
+        // compare
+        if (a > b) {
+            return 1;
+        } else if (a < b) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+
+    // put sorted results back on page
+    $('#uiContainer-' + panelId).html(myArray);
+};

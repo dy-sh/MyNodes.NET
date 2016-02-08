@@ -125,6 +125,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 UiNode n = (UiNode) node;
                 litegraphNode.properties["Name"] = n.Name;
+                litegraphNode.properties["PanelIndex"] = n.PanelIndex.ToString();
                 litegraphNode.properties["ShowOnMainPage"] = n.ShowOnMainPage ? "true" : "false";
             }
 
@@ -469,7 +470,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [Authorize(UserClaims.EditorEditor)]
-        public bool UINodeSettings(string id, string name, bool show)
+        public bool UINodeSettings(string id, string name, int panelIndex, bool show)
         {
             Node n = engine.GetNode(id);
             if (n == null)
@@ -480,6 +481,7 @@ namespace MyNetSensors.WebController.Controllers
 
             UiNode node = (UiNode) n;
             node.Name = name;
+            node.PanelIndex = panelIndex;
             node.ShowOnMainPage = show;
             engine.UpdateNode(node);
             engine.UpdateNodeInDb(node);
@@ -491,7 +493,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [Authorize(UserClaims.EditorEditor)]
-        public bool UISliderSettings(string id, string name, int min, int max, bool show)
+        public bool UISliderSettings(string id, string name, int panelIndex,int min, int max, bool show)
         {
             Node n = engine.GetNode(id);
             if (n == null)
@@ -507,6 +509,7 @@ namespace MyNetSensors.WebController.Controllers
 
             UiSliderNode node = (UiSliderNode) n;
             node.Name = name;
+            node.PanelIndex = panelIndex;
             node.Min = min;
             node.Max = max;
             node.ShowOnMainPage = show;
@@ -540,7 +543,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [Authorize(UserClaims.EditorEditor)]
-        public bool UIChartSettings(string id, string name, bool show, bool writeInDatabase, int updateInterval)
+        public bool UIChartSettings(string id, string name, int panelIndex, bool show, bool writeInDatabase, int updateInterval)
         {
             Node n = engine.GetNode(id);
             if (n == null)
@@ -555,6 +558,7 @@ namespace MyNetSensors.WebController.Controllers
                 uiEngine.ClearChart(node.Id);
 
             node.Name = name;
+            node.PanelIndex = panelIndex;
             node.ShowOnMainPage = show;
             node.WriteInDatabase = writeInDatabase;
             node.UpdateInterval = updateInterval;

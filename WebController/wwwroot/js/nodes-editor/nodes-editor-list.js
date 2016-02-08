@@ -182,15 +182,18 @@
         $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div><div class="fields">' +
+            '<div class="ui form">' +
+            '<div class="fields">' +
+            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
+            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
+            '</div>' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
 
-            '</div></div>'
+            '</div>'
         );
 
         $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
 
 
@@ -202,6 +205,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        panelIndex: $('#node-settings-panelIndex').val(),
                         show: $('#node-settings-show').prop('checked'),
                         id: node.id
                     }
@@ -359,17 +363,21 @@
         $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div><div class="fields">' +
+            '<div class="ui form">' +
+            '<div class="fields">' +
+            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
+            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
+            '</div>' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-            '</div><div class="ui divider"></div><div class="fields">' +
-            '<div class="field">Min Value:<input type="text" id="node-settings-min"></div>' +
-            '<div class="field">Max Value:<input type="text" id="node-settings-max"></div>' +
+
+            '<div class="ui divider"></div><div class="fields">' +
+            '<div class="field"><label>Min Value</label><input type="number" id="node-settings-min"></div>' +
+            '<div class="field"><label>Max Value</label><input type="number" id="node-settings-max"></div>' +
             '</div></div>'
         );
 
         $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
         $('#node-settings-min').val(node.properties['Min']);
         $('#node-settings-max').val(node.properties['Max']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
@@ -383,6 +391,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        panelIndex: $('#node-settings-panelIndex').val(),
                         min: $('#node-settings-min').val(),
                         max: $('#node-settings-max').val(),
                         show: $('#node-settings-show').prop('checked'),
@@ -451,11 +460,14 @@
         $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div><div class="fields">' +
+            '<div class="ui form">' +
+            '<div class="fields">' +
+            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
+            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
+            '</div>' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-            '</div><div class="ui divider"></div><div class="fields">' +
+
+            '<div class="ui divider"></div><div class="fields">' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-usedb"><label>Write data in database</label></div></div>' +
              '</div><div class="ui divider"></div><div class="fields">' +
             '<div class="field">Update interval (ms): <input type="text" id="node-settings-update"></div>' +
@@ -464,6 +476,7 @@
         );
 
         $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
         $('#node-settings-usedb').prop('checked', node.properties['WriteInDatabase'] == "true");
         $('#node-settings-update').val(node.properties['UpdateInterval']);
@@ -478,6 +491,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        panelIndex: $('#node-settings-panelIndex').val(),
                         show: $('#node-settings-show').prop('checked'),
                         writeInDatabase: $('#node-settings-usedb').prop('checked'),
                         updateInterval: $('#node-settings-update').val(),
@@ -533,15 +547,19 @@
         $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div><div class="fields">' +
+            '<div class="ui form">' +
+            '<div class="fields">' +
+            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
+            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
+            '</div>' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-            '</div><div class="ui divider"></div><div class="fields">' +
+
+            '<div class="ui divider"></div><div class="fields">' +
             '</div></div>'
         );
 
         $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
 
 
@@ -553,6 +571,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        panelIndex: $('#node-settings-panelIndex').val(),
                         show: $('#node-settings-show').prop('checked'),
                         id: node.id
                     }
@@ -583,15 +602,19 @@
         $('#node-settings-title').html(node.type);
 
         $('#node-settings-body').html(
-            '<div class="ui form"><div class="fields">' +
-            '<div class="field">Name: <input type="text" id="node-settings-name"></div>' +
-            '</div><div class="fields">' +
+            '<div class="ui form">' +
+            '<div class="fields">' +
+            '<div class="field"><label>Name</label><input type="text" id="node-settings-name"></div>' +
+            '<div class="field"><label>Order on panel</label><input type="number" id="node-settings-panelIndex"></div>' +
+            '</div>' +
             '<div class="field"><div class="ui toggle checkbox"><input type="checkbox" id="node-settings-show"><label>Show on Dashboard main page</label></div></div>' +
-            '</div><div class="ui divider"></div><div class="fields">' +
+
+            '<div class="ui divider"></div><div class="fields">' +
             '</div></div>'
         );
 
         $('#node-settings-name').val(node.properties['Name']);
+        $('#node-settings-panelIndex').val(node.properties['PanelIndex']);
         $('#node-settings-show').prop('checked', node.properties['ShowOnMainPage'] == "true");
 
 
@@ -603,6 +626,7 @@
                     type: "POST",
                     data: {
                         name: $('#node-settings-name').val(),
+                        panelIndex: $('#node-settings-panelIndex').val(),
                         show: $('#node-settings-show').prop('checked'),
                         id: node.id
                     }

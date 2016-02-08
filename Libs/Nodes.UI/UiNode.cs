@@ -7,7 +7,7 @@ namespace MyNetSensors.Nodes
 {
     public abstract class UiNode : Node
     {
-        public int PanelOrderIndex { get; set; }
+        public int PanelIndex { get; set; }
         public string Name { get; set; }
         internal string DefaultName { get; set; }
 

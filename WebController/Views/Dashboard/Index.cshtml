@@ -86,7 +86,7 @@
 
 
 <script id="labelTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="labelName-{{Id}}"></span>
         <div class="ui right floated basic disabled button nonbutton">
             <span class="ui blue basic label" id="labelValue-{{Id}}"></span>
@@ -95,7 +95,7 @@
 </script>
 
 <script id="stateTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="stateName-{{Id}}"></span>
         <div class="ui right floated basic disabled button nonbutton">
             <i class="big blue toggle on icon" id="state-on-{{Id}}" style="display:none"></i>
@@ -107,7 +107,7 @@
 
 
 <script id="textBoxTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="textBoxName-{{Id}}"></span>
         <div class="ui form text-box-form">
             <div class="ui field">
@@ -122,7 +122,7 @@
 
 
 <script id="logTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="logName-{{Id}}"></span>
         <button type="button" class="ui right floated tiny button" id="clear-log-{{Id}}">Clear</button>
         <br />
@@ -132,7 +132,7 @@
 
 
 <script id="progressTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="progressName-{{Id}}"></span>
         <div class="ui blue small progress" id="progressBar-{{Id}}">
             <div class="bar">
@@ -143,7 +143,7 @@
 </script>
 
 <script id="buttonTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <button class="ui right floated small button" id="button-{{Id}}">
             &nbsp <span id="buttonName-{{Id}}"></span> &nbsp
         </button>
@@ -151,7 +151,7 @@
 </script>
 
 <script id="toggleButtonTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <button class="ui right floated small toggle button" id="button-{{Id}}">
             &nbsp <span id="buttonName-{{Id}}"></span> &nbsp
         </button>
@@ -159,7 +159,7 @@
 </script>
 
 <script id="switchTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="switchName-{{Id}}"></span>
         <div class="ui right floated basic  button nonbutton">
             <label class="switch">
@@ -172,7 +172,7 @@
 </script>
 
 <script id="sliderTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="sliderName-{{Id}}"></span>
         <br />
         <div id="slider-{{Id}}"></div>
@@ -181,7 +181,7 @@
 
 
 <script id="rgbSlidersTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="sliderName-{{Id}}"></span>
         <br />
         <div id="slider-{{Id}}-r" class="spacebottom"></div>
@@ -191,7 +191,7 @@
 </script>
 
 <script id="rgbwSlidersTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="sliderName-{{Id}}"></span>
         <br />
         <div id="slider-{{Id}}-r" class="spacebottom"></div>
@@ -203,7 +203,7 @@
 
 
 <script id="chartTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <div class="ui mini right floated basic buttons">
             <button type="button" class="ui button" id="chart-clear-{{Id}}">Clear</button>
             <a href="/Dashboard/Chart/{{Id}}" class="ui button" id="chart-open-{{Id}}">Open</a>
@@ -222,7 +222,7 @@
 
 
 <script id="timerTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="timer-name-{{Id}}"></span>
         <div class="ui small right floated basic buttons">
             <a href="/UITimer/Tasks/{{Id}}" class="ui button" id="timer-open-{{Id}}">Open</a>
@@ -232,13 +232,13 @@
 
 
 <script id="speechTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="speechName-{{Id}}"></span>
     </div>
 </script>
 
 <script id="audioTemplate" type="text/x-handlebars-template">
-    <div class="ui attached clearing segment" id="node-{{Id}}">
+    <div class="ui attached clearing segment" id="node-{{Id}}" panelIndex="{{PanelIndex}}">
         <span id="audioName-{{Id}}"></span>
     </div>
 </script>
