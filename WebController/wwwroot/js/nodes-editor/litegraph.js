@@ -4613,8 +4613,10 @@ LiteGraph.createContextualMenu = function (values, options, ref_window) {
 
         if (aux == this) return;
         this.mouse_inside = false;
-        if (!this.block_close)
-            this.closeMenu();
+
+        //derwish remove
+        //if (!this.block_close)
+        //    this.closeMenu();
     });
 
     //insert before checking position
