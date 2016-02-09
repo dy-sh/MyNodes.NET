@@ -25,6 +25,9 @@ namespace MyNetSensors.WebController.Controllers
         private UITimerNodesEngine tasksEngine;
         private NodesEngine engine;
 
+        const string ERROR_MESSAGE= "Nodes Engine is not started.<br/><br/>   <a href='/Config'>Check settings</a>";
+
+
         public UITimerController()
         {
             tasksEngine = SystemController.uiTimerNodesEngine;
@@ -33,6 +36,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Tasks(string id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
 
             if (node == null)
@@ -52,6 +58,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult New(string id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
 
             if (node == null)
@@ -77,7 +86,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult New(UITimerTask task)
         {
-            task.IsRepeating = Request.Form["isRepeating"] != "false";
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
 
             bool result = tasksEngine.AddTask(task);
             if (!result)
@@ -92,6 +102,9 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             UITimerTask task = tasksEngine.GetTask(id);
 
             if (task == null)
@@ -113,7 +126,8 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult Edit(UITimerTask task)
         {
-            task.IsRepeating = Request.Form["isRepeating"] != "false";
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
 
             bool result = tasksEngine.UpdateTask(task);
             if (!result)
@@ -127,6 +141,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Remove(int id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             bool result = tasksEngine.RemoveTask(id);
             if (!result)
                 return HttpBadRequest();
@@ -141,6 +158,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Enable(int id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             UITimerTask task = tasksEngine.GetTask(id);
 
             if (task == null)
@@ -161,6 +181,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult Disable(int id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             UITimerTask task = tasksEngine.GetTask(id);
 
             if (task == null)
@@ -182,6 +205,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult ExecuteNow(int id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             bool result = tasksEngine.ExecuteNowTask(id);
             if (!result)
                 return HttpBadRequest();
@@ -196,6 +222,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult RemoveAll(string id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             bool result = tasksEngine.RemoveTasksForNode(id);
             if (!result)
                 return HttpBadRequest();
@@ -211,6 +240,9 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult RemoveCompleted(string id)
         {
+            if (engine == null || tasksEngine == null)
+                return View("Error", ERROR_MESSAGE);
+
             bool result = tasksEngine.RemoveCompletedTasksForNode(id);
             if (!result)
                 return HttpBadRequest();

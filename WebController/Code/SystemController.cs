@@ -324,6 +324,9 @@ namespace MyNetSensors.WebController.Code
                  .Where(t => t.IsSubclassOf(typeof(UiNode)) && !t.IsAbstract)
                  .Select(t => (UiNode)Activator.CreateInstance(t)).ToList());
 
+            nodes.Add((UiTimerNode)Activator.CreateInstance(typeof(UiTimerNode)));
+
+            
 
             nodes = nodes.OrderBy(x => x.Type).ToList();
 
@@ -335,6 +338,9 @@ namespace MyNetSensors.WebController.Code
             file += "\n})();";
 
             System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
+
+            logs.AddSystemInfo($"Generated nodes editor script with {nodes.Count} nodes");
+
         }
 
 

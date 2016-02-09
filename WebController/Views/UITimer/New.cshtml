@@ -45,15 +45,7 @@
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                @if (Model.IsRepeating)
-                                {
-                                    <input type="checkbox" name="isRepeating" checked>
-                                }
-                                else
-                                {
-                                    <input type="checkbox" name="isRepeating">
-                                }
-                                <input type="hidden" name="isRepeating" value="false">
+                                <input asp-for="IsRepeating">
                                 <label>Repeat task</label>
                             </div>
                         </div>
@@ -117,11 +109,11 @@
 @section scripts
 {
 
-    <script>
+<script>
         var fade = 500;
 
 
-        $("[name=isRepeating]").click(function () {
+        $("#IsRepeating").click(function () {
             if ($(this).is(":checked")) {
                 $('#repeatingPanel').fadeIn(fade);
                 $('#nonRepeatingPanel').hide();
@@ -132,7 +124,7 @@
         });
 
         $(function () {
-            $('[name=executionDate]').daterangepicker({
+            $('#ExecutionDate').daterangepicker({
                 format: 'DD.MM.YYYY HH:mm:ss',
                 "singleDatePicker": true,
                 "timePicker": true,
@@ -141,5 +133,5 @@
                 "timePickerSeconds": true
             });
         });
-    </script>
+</script>
 }
