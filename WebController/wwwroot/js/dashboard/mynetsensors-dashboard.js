@@ -57,8 +57,11 @@ function createNode(node) {
         case "UI/Timer":
             createTimer(node);
             break;
-        case "UI/Speech":
-            createSpeech(node);
+        case "UI/Voice Yandex":
+            createVoiceYandex(node);
+            break;
+        case "UI/Voice Google":
+            createVoiceGoogle(node);
             break;
         case "UI/Audio":
             createAudio(node);
@@ -120,8 +123,11 @@ function updateNode(node) {
         case "UI/Timer":
             updateTimer(node);
             break;
-        case "UI/Speech":
-            updateSpeech(node);
+        case "UI/Voice Yandex":
+            updateVoiceYandex(node);
+            break;
+        case "UI/Voice Google":
+            updateVoiceGoogle(node);
             break;
         case "UI/Audio":
             updateAudio(node);

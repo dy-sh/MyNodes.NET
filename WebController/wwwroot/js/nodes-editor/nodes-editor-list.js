@@ -666,18 +666,6 @@
 
             
 
-            //UiSpeechNode
-            function UiSpeechNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiSpeechNode',
-                    'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            UiSpeechNode.title = 'UI Speech';
-            LiteGraph.registerNodeType('UI/Speech', UiSpeechNode);
-
-            
-
             //UiStateNode
             function UiStateNode () {
                 this.properties = {
@@ -743,6 +731,30 @@
             }
             UiToggleButtonNode.title = 'UI Toggle';
             LiteGraph.registerNodeType('UI/Toggle Button', UiToggleButtonNode);
+
+            
+
+            //UiVoiceGoogleNode
+            function UiVoiceGoogleNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.UiVoiceGoogleNode',
+                    'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            UiVoiceGoogleNode.title = 'UI Voice Google';
+            LiteGraph.registerNodeType('UI/Voice Google', UiVoiceGoogleNode);
+
+            
+
+            //UiVoiceYandexNode
+            function UiVoiceYandexNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.UiVoiceYandexNode',
+                    'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            UiVoiceYandexNode.title = 'UI Voice Yandex';
+            LiteGraph.registerNodeType('UI/Voice Yandex', UiVoiceYandexNode);
 
             
 })();

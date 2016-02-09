@@ -8,24 +8,27 @@ var MAIN_PANEL_ID = "Main";
 var elementsFadeTime = 300;
 
 
+var voiceTemplate = Handlebars.compile($('#voiceTemplate').html());
 
 
-var speechTemplate = Handlebars.compile($('#speechTemplate').html());
-
-
-function createSpeech(node) {
-    $(speechTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
+function createVoiceYandex(node) {
+    $(voiceTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
 }
 
 
 var playlist = [];
 var audioSpeech = new Audio();
 
-function updateSpeech(node) {
-    $('#speechName-' + node.Id).html(node.Settings["Name"].Value);
+var yandex_api_key;
 
-    if (node.Value == null || node.Value == "")
+function updateVoiceYandex(node) {
+    $('#voiceName-' + node.Id).html(node.Settings["Name"].Value);
+
+    yandex_api_key = node.Settings["APIKey"].Value;
+
+    if (node.Value == null || node.Value == "" || yandex_api_key == null || yandex_api_key=="")
         return;
+
 
     playlist.push(node.Value);
 
@@ -42,7 +45,8 @@ function playNextTrack() {
         return;
 
     var text = playlist.shift();
-    var url = "https://tts.voicetech.yandex.net/generate?key=95134f06-ffa6-4e8d-8bf0-49f3d07a8918&text=" + text;
+
+    var url = "https://tts.voicetech.yandex.net/generate?key="+yandex_api_key+"&text=" + text;
 
     audioSpeech.src = url;
     audioSpeech.load();

@@ -5,15 +5,17 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class UiSpeechNode : UiNode
+    public class UiVoiceYandexNode : UiNode
     {
         public string Value { get; set; }
 
-        public UiSpeechNode() : base(1, 0)
+        public UiVoiceYandexNode() : base(1, 0)
         {
-            this.Title = "UI Speech";
-            this.Type = "UI/Speech";
-            this.DefaultName = "Speech";
+            this.Title = "UI Voice Yandex";
+            this.Type = "UI/Voice Yandex";
+            this.DefaultName = "Voice Yandex";
+
+            Settings.Add("APIKey",new NodeSetting(NodeSettingType.Text, "Yandex SpeechKit API-Key",""));
         }
 
         public override void Loop()

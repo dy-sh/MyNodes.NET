@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="ChartData.cs" />
     <Compile Include="UiAudioNode.cs" />
-    <Compile Include="UiSpeechNode.cs" />
+    <Compile Include="UiVoiceGoogleNode.cs" />
+    <Compile Include="UiVoiceYandexNode.cs" />
     <Compile Include="UiNodesEngine.cs" />
     <Compile Include="UiNode.cs" />
     <Compile Include="UiButtonNode.cs" />
