@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes.Nodes
 {
-    public class OperationAccumulatorNode:Node
+    public class OperationAccumulatorNode : Node
     {
         public int Value { get; set; }
 
-        public OperationAccumulatorNode():base(2,1)
+        public OperationAccumulatorNode() : base(2, 1)
         {
             this.Title = "Accumulator";
             this.Type = "Operation/Accumulator";
@@ -28,16 +28,17 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override void OnInputChange(Input input)
         {
+            int oldValue = Value;
+
             if (input == Inputs[0] && input.Value != null)
-            {
                 Value = Int32.Parse(input.Value);
-                Outputs[0].Value = Value.ToString();
-                UpdateMeInDb();
-            }
 
             if (input == Inputs[1] && input.Value != null)
+                Value += Int32.Parse(input.Value);
+
+            if (oldValue != Value)
             {
-                Value+= Int32.Parse(input.Value);
+                LogInfo($"[{Value}]");
                 Outputs[0].Value = Value.ToString();
                 UpdateMeInDb();
             }

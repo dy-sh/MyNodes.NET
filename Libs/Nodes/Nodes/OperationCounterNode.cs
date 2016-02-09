@@ -11,8 +11,7 @@ namespace MyNetSensors.Nodes
     public class OperationCounterNode : Node
     {
 
-        private int count = 0;
-        private int result = 0;
+        public int Value { get; set; }
 
 
         public OperationCounterNode() : base(3, 1)
@@ -20,7 +19,7 @@ namespace MyNetSensors.Nodes
             this.Title = "Counter";
             this.Type = "Operation/Counter";
 
-            Inputs[0].Name = "Set value";
+            Inputs[0].Name = "Set Value";
             Inputs[1].Name = "Count Up";
             Inputs[2].Name = "Count Down";
 
@@ -36,74 +35,22 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (input == Inputs[0])
+            int oldValue = Value;
+
+            if (input == Inputs[0] && input.Value != null)
+                Value = Int32.Parse(input.Value);
+
+            if (input == Inputs[1] && input.Value == "1")
+                Value++;
+
+            if (input == Inputs[2] && input.Value == "1")
+                Value--;
+
+            if (oldValue!= Value)
             {
-                if (Inputs[0].Value != null)
-                {
-                    count = 0;
-                    result = Int32.Parse(Inputs[0].Value);
-
-                    Outputs[0].Value = result.ToString();
-                    LogInfo($"Count set at {result}");
-
-                    return;
-                }
-                else
-                {
-                    count = 0;
-
-                    Outputs[0].Value = null;
-                    LogInfo($"Invalid set value");
-
-                    return;
-                }
-            }
-
-            if (input == Inputs[1])
-            {
-                if (input.Value == "1")
-                {
-                    if (Inputs[0].Value != null)
-                    {
-                        count++;
-                        int faderValue = Int32.Parse(Inputs[0].Value);
-                        result = faderValue + count;
-
-                        Outputs[0].Value = result.ToString();
-                        LogInfo($"Count = {result}");
-                    }
-                    else
-                    {
-                        count++;
-
-                        Outputs[0].Value = count.ToString();
-                        LogInfo($"Count = {count}");
-                    }
-                }
-            }
-
-            if (input == Inputs[2])
-            {
-                if (input.Value == "1")
-                {
-                    if (Inputs[0].Value != null)
-                    {
-                        count--;
-                        int faderValue = Int32.Parse(Inputs[0].Value);
-                        result = faderValue + count;
-
-                        Outputs[0].Value = result.ToString();
-                        LogInfo($"Count = {result}");
-                    }
-
-                    else
-                    {
-                        count--;
-
-                        Outputs[0].Value = count.ToString();
-                        LogInfo($"Count = {count}");
-                    }
-                }
+                LogInfo($"[{Value}]");
+                Outputs[0].Value = Value.ToString();
+                UpdateMeInDb();
             }
         }
     }

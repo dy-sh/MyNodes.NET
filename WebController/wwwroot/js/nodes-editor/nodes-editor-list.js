@@ -544,8 +544,10 @@
             SystemJsonFileNode.title = 'Json File';
             LiteGraph.registerNodeType('System/Json File', SystemJsonFileNode);
 
+            
+
             //SystemRunNode
-            function SystemRunNode() {
+            function SystemRunNode () {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.SystemRunNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
