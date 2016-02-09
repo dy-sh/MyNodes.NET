@@ -474,6 +474,18 @@
 
             
 
+            //OperationSeparatorNode
+            function OperationSeparatorNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationSeparatorNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationSeparatorNode.title = 'Separator';
+            LiteGraph.registerNodeType('Operation/Separator', OperationSeparatorNode);
+
+            
+
             //OperationSwitchInNode
             function OperationSwitchInNode () {
                 this.properties = {

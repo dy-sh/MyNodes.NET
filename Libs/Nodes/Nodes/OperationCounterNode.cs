@@ -27,6 +27,7 @@ namespace MyNetSensors.Nodes
             Inputs[1].Type = DataType.Logical;
             Inputs[2].Type = DataType.Logical;
             Outputs[0].Type = DataType.Text;
+            Outputs[0].Value = Value.ToString();
         }
 
         public override void Loop()

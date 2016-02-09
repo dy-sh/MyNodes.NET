@@ -21,6 +21,7 @@ namespace MyNetSensors.Nodes.Nodes
 
             Inputs[0].Name = "Set Value";
             Inputs[1].Name = "Add Value";
+            Outputs[0].Value = Value.ToString();
         }
         public override void Loop()
         {

@@ -174,9 +174,14 @@ namespace MyNetSensors.Nodes
         public void ResetInputs()
         {
             foreach (var input in Inputs)
-            {
                 input.Value = null;
-            }
+        }
+
+        public void ResetOutputs()
+        {
+            foreach (var output in Outputs)
+                if (output.Value != null)
+                    output.Value = null;
         }
 
         public virtual void CheckInputDataTypeIsCorrect(Input input)

@@ -32,6 +32,7 @@ namespace MyNetSensors.Nodes
 
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Logical;
+            Inputs[2].Type = DataType.Logical;
             Outputs[0].Type = DataType.Number;
 
             frequency = DEFAULT_VALUE;
