@@ -10,87 +10,101 @@ namespace MyNetSensors.Nodes
 
     public class OperationCounterNode : Node
     {
-        private int DEFAULT_VALUE = 1000;
 
-        public int Count { get; set; }
+        private int count = 0;
+        private int result = 0;
 
-        private double frequency;
-        private bool enabled = true;
-        private DateTime lastTime;
-        
 
         public OperationCounterNode() : base(3, 1)
         {
             this.Title = "Counter";
             this.Type = "Operation/Counter";
 
-            Inputs[0].Name = "Frequency";
-            Inputs[1].Name = "Start";
-            Inputs[2].Name = "Reset";
+            Inputs[0].Name = "Set value";
+            Inputs[1].Name = "Count Up";
+            Inputs[2].Name = "Count Down";
 
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Number;
-
-            lastTime = DateTime.Now;
-            frequency = DEFAULT_VALUE;
+            Inputs[2].Type = DataType.Logical;
+            Outputs[0].Type = DataType.Text;
         }
 
         public override void Loop()
         {
-            if (!enabled || frequency <= 0)
-                return;
-
-            TimeSpan elapsed = DateTime.Now - lastTime;
-            if (elapsed.TotalMilliseconds >= frequency)
-            {
-                Count++;
-                lastTime = DateTime.Now;
-
-                LogInfo($"{Count}");
-
-                Outputs[0].Value = Count.ToString();
-                UpdateMeInDb();
-            }
         }
 
         public override void OnInputChange(Input input)
         {
             if (input == Inputs[0])
             {
-                if (input.Value == null)
-                    frequency = DEFAULT_VALUE;
+                if (Inputs[0].Value != null)
+                {
+                    count = 0;
+                    result = Int32.Parse(Inputs[0].Value);
+
+                    Outputs[0].Value = result.ToString();
+                    LogInfo($"Count set at {result}");
+
+                    return;
+                }
                 else
-                    Double.TryParse(input.Value, out frequency);
+                {
+                    count = 0;
 
-                if (frequency < 0)
-                    frequency = 0;
+                    Outputs[0].Value = null;
+                    LogInfo($"Invalid set value");
 
-                LogInfo($"Frequency changed to {frequency} ms");
+                    return;
+                }
             }
-
 
             if (input == Inputs[1])
             {
-                enabled = input.Value != "0";
+                if (input.Value == "1")
+                {
+                    if (Inputs[0].Value != null)
+                    {
+                        count++;
+                        int faderValue = Int32.Parse(Inputs[0].Value);
+                        result = faderValue + count;
 
-                LogInfo(enabled ? "Started" : "Stopped");
+                        Outputs[0].Value = result.ToString();
+                        LogInfo($"Count = {result}");
+                    }
+                    else
+                    {
+                        count++;
+
+                        Outputs[0].Value = count.ToString();
+                        LogInfo($"Count = {count}");
+                    }
+                }
             }
-            
 
             if (input == Inputs[2])
             {
-                if (input.Value != "1")
-                    return;
+                if (input.Value == "1")
+                {
+                    if (Inputs[0].Value != null)
+                    {
+                        count--;
+                        int faderValue = Int32.Parse(Inputs[0].Value);
+                        result = faderValue + count;
 
-                Count = 0;
-                lastTime = DateTime.Now;
-                LogInfo("Reset");
-                UpdateMeInDb();
-                Outputs[0].Value = "0";
+                        Outputs[0].Value = result.ToString();
+                        LogInfo($"Count = {result}");
+                    }
+
+                    else
+                    {
+                        count--;
+
+                        Outputs[0].Value = count.ToString();
+                        LogInfo($"Count = {count}");
+                    }
+                }
             }
         }
-
-
     }
 }
