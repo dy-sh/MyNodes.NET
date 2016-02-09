@@ -42,15 +42,9 @@ namespace MyNetSensors.Nodes.Nodes
                 double val = double.Parse(Inputs[1].Value);
 
                 if (val >= threshold)
-                {
-                    LogInfo($"Hi: [{val}]");
                     Outputs[0].Value = val.ToString();
-                }
                 else
-                {
-                    LogInfo($"Lo: [{val}]");
                     Outputs[1].Value = val.ToString();
-                }
             }
         }
     }

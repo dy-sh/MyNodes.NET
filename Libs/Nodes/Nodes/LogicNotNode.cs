@@ -31,21 +31,11 @@ namespace MyNetSensors.Nodes
         {
             if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo("[NULL]");
-                Outputs[0].Value = null;
+                ResetOutputs();
                 return;
             }
 
-            string result;
-
-            if (Inputs[0].Value == "0")
-                result = "1";
-            else
-                result = "0";
-
-            LogInfo($"NOT [{Inputs[0].Value}] = [{result}]");
-
-            Outputs[0].Value = result;
+            Outputs[0].Value = Inputs[0].Value == "0" ? "1" : "0";
         }
     }
 }

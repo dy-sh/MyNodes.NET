@@ -32,8 +32,7 @@ namespace MyNetSensors.Nodes
         {
             if (Inputs.Any(i => i.Value == null))
             {
-                LogInfo("[NULL]");
-                Outputs[0].Value = null;
+                ResetOutputs();
                 return;
             }
 
@@ -41,9 +40,7 @@ namespace MyNetSensors.Nodes
 
             if (Inputs[0].Value == "1" && Inputs[1].Value == "1")
                 result = "1";
-
-            LogInfo($"[{Inputs[0].Value}] AND [{Inputs[1].Value}] = [{result}]");
-
+            
             Outputs[0].Value = result;
         }
     }

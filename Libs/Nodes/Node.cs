@@ -103,6 +103,8 @@ namespace MyNetSensors.Nodes
 
         public virtual void OnOutputChange(Output output)
         {
+            LogInfo($"{output.Name}: [{output.Value??"NULL"}]");
+
             //send state to linked nodes
             List<Link> list = engine?.GetLinksForOutput(output);
             foreach (var link in list)

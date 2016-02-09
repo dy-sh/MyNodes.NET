@@ -33,14 +33,7 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                LogInfo("null");
-
-                return;
-            }
-
-            if (Inputs[1].Value == "1")
+            if (input == Inputs[1] && Inputs[1].Value == "1")
             {
                 try
                 {

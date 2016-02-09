@@ -30,9 +30,7 @@ namespace MyNetSensors.Nodes
         public void SetValue(string value)
         {
             Settings["Value"].Value = value;
-
-            LogInfo($"[{value ?? "NULL"}]");
-
+            
             Outputs[0].Value = value;
 
             UpdateMe();
