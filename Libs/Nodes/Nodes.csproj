@@ -61,6 +61,7 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\OperationAccumulatorNode.cs" />
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\OperationEventsDelayMeterNode.cs" />

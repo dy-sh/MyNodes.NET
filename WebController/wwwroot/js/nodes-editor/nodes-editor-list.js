@@ -306,6 +306,18 @@
 
             
 
+            //OperationAccumulatorNode
+            function OperationAccumulatorNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationAccumulatorNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationAccumulatorNode.title = 'Accumulator';
+            LiteGraph.registerNodeType('Operation/Accumulator', OperationAccumulatorNode);
+
+            
+
             //OperationCompareEqualNode
             function OperationCompareEqualNode () {
                 this.properties = {
