@@ -49,6 +49,7 @@ namespace MyNetSensors.Gateways.MySensors
         public event Action OnConnected;
         public event GatewayStateEventHandler OnGatewayStateChanged;
         public event LogEventHandler OnLogMessage;
+        public event MessageEventHandler OnLogDecodedMessage;
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
 
@@ -253,11 +254,11 @@ namespace MyNetSensors.Gateways.MySensors
             string mes = message.ParseToMySensorsMessage();
             connectionPort.SendMessage(mes);
 
-            AddMessageToLog(message);
+            AddDecodedMessageToLog(message);
         }
 
 
-        public void AddMessageToLog(Message message)
+        public void AddDecodedMessageToLog(Message message)
         {
             if (!messagesLogEnabled)
                 return;
@@ -271,7 +272,7 @@ namespace MyNetSensors.Gateways.MySensors
             messagesLog.Add(message);
             hisotryDb?.AddMessage(message);
 
-            OnLogMessage?.Invoke(message.ToString());
+            OnLogDecodedMessage?.Invoke(message);
         }
 
 
@@ -326,7 +327,7 @@ namespace MyNetSensors.Gateways.MySensors
         {
             message.incoming = true;
 
-            AddMessageToLog(message);
+            AddDecodedMessageToLog(message);
 
             OnMessageRecieved?.Invoke(message);
 

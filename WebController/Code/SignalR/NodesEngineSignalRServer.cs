@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using MyNetSensors.Gateways.MySensors;
 using MyNetSensors.Nodes;
 using MyNetSensors.WebController.Controllers;
+using Node = MyNetSensors.Nodes.Node;
 
 
 namespace MyNetSensors.WebController.Code
@@ -23,8 +25,8 @@ namespace MyNetSensors.WebController.Code
             SystemController.OnStarted += OnSystemControllerStarted;
             SystemController.logs.OnGatewayLogInfo += OnLogRecord;
             SystemController.logs.OnGatewayLogError += OnLogRecord;
-            SystemController.logs.OnHardwareNodeLogInfo += OnLogRecord;
-            SystemController.logs.OnHardwareNodeLogError += OnLogRecord;
+            SystemController.logs.OnGatewayMessageLog += OnLogRecord;
+            SystemController.logs.OnGatewayDecodedMessageLog += OnLogRecord;
             SystemController.logs.OnDataBaseLogInfo += OnLogRecord;
             SystemController.logs.OnDataBaseLogError += OnLogRecord;
             SystemController.logs.OnNodesEngineLogInfo += OnLogRecord;
@@ -134,6 +136,11 @@ namespace MyNetSensors.WebController.Code
         {
             hub.Clients.All.OnLogRecord(record);
         }
-        
+
+        private static void OnLogRecord(Message message)
+        {
+            hub.Clients.All.OnLogRecord(new LogRecord(LogRecordSource.GatewayDecodedMessage,LogRecordType.Info,  message.ToString()));
+        }
+
     }
 }

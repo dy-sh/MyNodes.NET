@@ -32,10 +32,10 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
-        public IActionResult Controller()
+        public IActionResult System()
         {
-            ViewBag.LogType = "Controller";
-            ViewBag.PageName = "Controller";
+            ViewBag.LogType = "System";
+            ViewBag.PageName = "System";
             return View("Logs");
         }
 
@@ -46,13 +46,19 @@ namespace MyNetSensors.WebController.Controllers
             return View("Logs");
         }
 
-        public IActionResult HardwareNodes()
+        public IActionResult GatewayMessages()
         {
-            ViewBag.LogType = "HardwareNodes";
-            ViewBag.PageName = "Hardware Nodes";
+            ViewBag.LogType = "Gateway Messages";
+            ViewBag.PageName = "Gateway Messages";
             return View("Logs");
         }
 
+        public IActionResult GatewayDecodedMessages()
+        {
+            ViewBag.LogType = "Gateway Decoded Messages";
+            ViewBag.PageName = "Gateway Decoded Messages";
+            return View("Logs");
+        }
 
         public IActionResult Nodes()
         {
@@ -63,7 +69,7 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult NodesEngine()
         {
-            ViewBag.LogType = "NodesEngine";
+            ViewBag.LogType = "Nodes Engine";
             ViewBag.PageName = "Nodes Engine";
             return View("Logs");
         }
@@ -85,7 +91,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 return SystemController.logs.GetErrorsLogs();
             }
-            else if (logType == "Controller")
+            else if (logType == "System")
             {
                 return SystemController.logs.systemLog;
             }
@@ -93,15 +99,24 @@ namespace MyNetSensors.WebController.Controllers
             {
                 return SystemController.logs.gatewayLog;
             }
-            else if (logType == "HardwareNodes")
+            else if (logType == "Gateway Messages")
             {
-                return SystemController.logs.hardwareNodesLog;
+                return SystemController.logs.gatewayMessagesLog;
+            }
+            else if (logType == "Gateway Decoded Messages")
+            {
+                return SystemController.logs.gatewayDecodedMessagesLog
+                    .Select(log => new LogRecord(
+                        LogRecordSource.GatewayDecodedMessage, 
+                        LogRecordType.Info, 
+                        log.ToString()))
+                        .ToList();
             }
             else if (logType == "Nodes")
             {
                 return SystemController.logs.nodesLog;
             }
-            else if (logType == "NodesEngine")
+            else if (logType == "Nodes Engine")
             {
                 return SystemController.logs.nodesEngineLog;
             }
@@ -120,7 +135,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 SystemController.logs.ClearAllLogs();
             }
-            else if (logType == "Controller")
+            else if (logType == "System")
             {
                 SystemController.logs.systemLog.Clear();
             }
@@ -128,15 +143,19 @@ namespace MyNetSensors.WebController.Controllers
             {
                 SystemController.logs.gatewayLog.Clear();
             }
-            else if (logType == "HardwareNodes")
+            else if (logType == "Gateway Messages")
             {
-                SystemController.logs.hardwareNodesLog.Clear();
+                SystemController.logs.gatewayMessagesLog.Clear();
+            }
+            else if (logType == "Gateway Decoded Messages")
+            {
+                SystemController.logs.gatewayDecodedMessagesLog.Clear();
             }
             else if (logType == "Nodes")
             {
                 SystemController.logs.nodesLog.Clear();
             }
-            else if (logType == "NodesEngine")
+            else if (logType == "Nodes Engine")
             {
                 SystemController.logs.nodesEngineLog.Clear();
             }

@@ -4,14 +4,15 @@
 */
 
 var LogRecord = {
-    LogRecordOwner:
+    LogRecordSource:
     {
         Gateway:0,
-        HardwareNodes:1,
-        DataBase:2,
-        NodesEngine:3,
-        Nodes:4,
-        System:5
+        GatewayMessage:1,
+        GatewayDecodedMessage:2,
+        DataBase:3,
+        NodesEngine:4,
+        Nodes:5,
+        System:6
 
     },
 
@@ -135,21 +136,23 @@ function OnLogRecord(logRecord) {
 function addRecord(logRecord) {
     if (logType == "Errors" && logRecord.Type != LogRecord.LogRecordType.Error)
         return;
-    if (logType == "System" && logRecord.Owner != LogRecord.LogRecordOwner.System)
+    if (logType == "System" && logRecord.Source != LogRecord.LogRecordSource.System)
         return;
-    if (logType == "Gateway" && logRecord.Owner != LogRecord.LogRecordOwner.Gateway)
+    if (logType == "Gateway" && logRecord.Source != LogRecord.LogRecordSource.Gateway)
         return;
-    if (logType == "HardwareNodes" && logRecord.Owner != LogRecord.LogRecordOwner.HardwareNodes)
+    if (logType == "Gateway Messages" && logRecord.Source != LogRecord.LogRecordSource.GatewayMessage)
         return;
-    if (logType == "Nodes" && logRecord.Owner != LogRecord.LogRecordOwner.Nodes)
+    if (logType == "Gateway Decoded Messages" && logRecord.Source != LogRecord.LogRecordSource.GatewayDecodedMessage)
         return;
-    if (logType == "NodesEngine" && logRecord.Owner != LogRecord.LogRecordOwner.NodesEngine)
+    if (logType == "Nodes" && logRecord.Source != LogRecord.LogRecordSource.Nodes)
         return;
-    if (logType == "DataBase" && logRecord.Owner != LogRecord.LogRecordOwner.DataBase)
+    if (logType == "Nodes Engine" && logRecord.Source != LogRecord.LogRecordSource.NodesEngine)
+        return;
+    if (logType == "DataBase" && logRecord.Source != LogRecord.LogRecordSource.DataBase)
         return;
 
     if (logType == "All")
-        addOwner(logRecord);
+        addSource(logRecord);
 
     addDate(logRecord);
 
@@ -162,26 +165,29 @@ function addRecord(logRecord) {
     }
 };
 
-function addOwner(logRecord) {
-    switch (logRecord.Owner)
+function addSource(logRecord) {
+    switch (logRecord.Source)
     {
-        case LogRecord.LogRecordOwner.Gateway:
+        case LogRecord.LogRecordSource.Gateway:
             logRecord.Message= "GATEWAY: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.HardwareNodes:
+        case LogRecord.LogRecordSource.GatewayMessage:
             logRecord.Message = "GATEWAY: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.DataBase:
+        case LogRecord.LogRecordSource.GatewayDecodedMessage:
+            logRecord.Message = "GATEWAY: " + logRecord.Message;
+            break;
+        case LogRecord.LogRecordSource.DataBase:
             logRecord.Message = "DATABASE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.NodesEngine:
+        case LogRecord.LogRecordSource.NodesEngine:
             logRecord.Message = "NODES ENGINE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.Nodes:
+        case LogRecord.LogRecordSource.Nodes:
             logRecord.Message = "NODE: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordOwner.System:
-            logRecord.Message = "CONTROLLER: " + logRecord.Message;
+        case LogRecord.LogRecordSource.System:
+            logRecord.Message = "SYSTEM: " + logRecord.Message;
             break;
     }
 }

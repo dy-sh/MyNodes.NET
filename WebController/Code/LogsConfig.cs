@@ -9,6 +9,7 @@ namespace MyNetSensors.WebController.Code
     {
         public bool ShowGatewayState { get; set; } = true;
         public bool ShowGatewayMessages { get; set; } = true;
+        public bool ShowGatewayDecodedMessages { get; set; } = true;
         public bool ShowDataBaseState { get; set; } = true;
         public bool ShowNodesEngineState { get; set; } = true;
         public bool ShowNodesEngineNodes { get; set; } = true;
@@ -16,6 +17,7 @@ namespace MyNetSensors.WebController.Code
 
         public bool StoreGatewayState { get; set; } = true;
         public bool StoreGatewayMessages { get; set; } = true;
+        public bool StoreGatewayDecodedMessages { get; set; } = true;
         public bool StoreDataBaseState { get; set; } = true;
         public bool StoreNodesEngineState { get; set; } = true;
         public bool StoreNodesEngineNodes { get; set; } = true;
@@ -23,6 +25,7 @@ namespace MyNetSensors.WebController.Code
 
         public int MaxGatewayState { get; set; } = 1000;
         public int MaxGatewayMessages { get; set; } = 1000;
+        public int MaxGatewayDecodedMessages { get; set; } = 1000;
         public int MaxDataBaseState { get; set; } = 1000;
         public int MaxNodesEngineState { get; set; } = 1000;
         public int MaxNodesEngineNodes { get; set; } = 1000;

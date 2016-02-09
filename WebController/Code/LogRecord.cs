@@ -2,10 +2,11 @@
 
 namespace MyNetSensors.WebController.Code
 {
-    public enum LogRecordOwner
+    public enum LogRecordSource
     {
         Gateway,
-        HardwareNodes,
+        GatewayMessage,
+        GatewayDecodedMessage,
         DataBase,
         NodesEngine,
         Nodes,
@@ -20,17 +21,17 @@ namespace MyNetSensors.WebController.Code
 
     public class LogRecord
     {
-        public LogRecordOwner Owner { get; set; }
+        public LogRecordSource Source { get; set; }
         public LogRecordType Type { get; set; }
         public string Message { get; set; }
         public DateTime Date { get; set; }
 
         public LogRecord(){}
 
-        public LogRecord(LogRecordOwner owner, LogRecordType type, string message)
+        public LogRecord(LogRecordSource source, LogRecordType type, string message)
         {
             Date = DateTime.Now;
-            Owner = owner;
+            Source = source;
             Type = type;
             Message = message;
         }
@@ -42,19 +43,21 @@ namespace MyNetSensors.WebController.Code
 
         public string ToStringWithType()
         {
-            switch (Owner)
+            switch (Source)
             {
-                case LogRecordOwner.Gateway:
+                case LogRecordSource.Gateway:
                     return $"{Date}: GATEWAY: {Message}";
-                case LogRecordOwner.HardwareNodes:
+                case LogRecordSource.GatewayMessage:
                     return $"{Date}: GATEWAY: {Message}";
-                case LogRecordOwner.DataBase:
+                case LogRecordSource.GatewayDecodedMessage:
+                    return $"{Date}: GATEWAY: {Message}";
+                case LogRecordSource.DataBase:
                     return $"{Date}: DATABASE: {Message}";
-                case LogRecordOwner.NodesEngine:
+                case LogRecordSource.NodesEngine:
                     return $"{Date}: NODES ENGINE: {Message}";
-                case LogRecordOwner.Nodes:
+                case LogRecordSource.Nodes:
                     return $"{Date}: NODE: {Message}";
-                case LogRecordOwner.System:
+                case LogRecordSource.System:
                     return $"{Date}: SYSTEM: {Message}";
             }
             return null;

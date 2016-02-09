@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyNetSensors.Gateways.MySensors;
 
 namespace MyNetSensors.WebController.Code
 {
     public delegate void LogMessageEventHandler(LogRecord record);
+    public delegate void LogMySensorsMessageEventHandler(Message record);
     public class Logs
     {
         public List<LogRecord> gatewayLog = new List<LogRecord>();
-        public List<LogRecord> hardwareNodesLog = new List<LogRecord>();
+        public List<LogRecord> gatewayMessagesLog = new List<LogRecord>();
+        public List<Message> gatewayDecodedMessagesLog = new List<Message>();
         public List<LogRecord> dataBaseLog = new List<LogRecord>();
         public List<LogRecord> nodesEngineLog = new List<LogRecord>();
         public List<LogRecord> nodesLog = new List<LogRecord>();
@@ -16,8 +19,8 @@ namespace MyNetSensors.WebController.Code
 
         public event LogMessageEventHandler OnGatewayLogInfo;
         public event LogMessageEventHandler OnGatewayLogError;
-        public event LogMessageEventHandler OnHardwareNodeLogInfo;
-        public event LogMessageEventHandler OnHardwareNodeLogError;
+        public event LogMessageEventHandler OnGatewayMessageLog;
+        public event LogMySensorsMessageEventHandler OnGatewayDecodedMessageLog;
         public event LogMessageEventHandler OnDataBaseLogInfo;
         public event LogMessageEventHandler OnDataBaseLogError;
         public event LogMessageEventHandler OnNodesEngineLogInfo;
@@ -34,7 +37,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddGatewayInfo(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.Gateway, LogRecordType.Info, message);
 
             if (config.ShowGatewayState)
                 Show(logRecord);
@@ -51,7 +54,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddGatewayError(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.Gateway, LogRecordType.Error, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.Gateway, LogRecordType.Error, message);
 
             if (config.ShowGatewayState)
                 Show(logRecord);
@@ -66,43 +69,43 @@ namespace MyNetSensors.WebController.Code
             }
         }
 
-        public void AddHardwareNodeInfo(string message)
+        public void AddGatewayDecodedMessage(Message message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.HardwareNodes, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayDecodedMessage, LogRecordType.Info, message.ToString());
+
+            if (config.ShowGatewayDecodedMessages)
+                Show(logRecord);
+
+            OnGatewayDecodedMessageLog?.Invoke(message);
+
+            if (config.StoreGatewayDecodedMessages)
+            {
+                gatewayDecodedMessagesLog.Add(message);
+                if (gatewayDecodedMessagesLog.Count > config.MaxGatewayDecodedMessages)
+                    gatewayDecodedMessagesLog.RemoveAt(0);
+            }
+        }
+
+        public void AddGatewayMessage(string message)
+        {
+            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayMessage, LogRecordType.Info, message);
 
             if (config.ShowGatewayMessages)
                 Show(logRecord);
 
-            OnHardwareNodeLogInfo?.Invoke(logRecord);
+            OnGatewayMessageLog?.Invoke(logRecord);
 
             if (config.StoreGatewayMessages)
             {
-                hardwareNodesLog.Add(logRecord);
-                if (hardwareNodesLog.Count > config.MaxGatewayMessages)
-                    hardwareNodesLog.RemoveAt(0);
+                gatewayMessagesLog.Add(logRecord);
+                if (gatewayMessagesLog.Count > config.MaxGatewayMessages)
+                    gatewayMessagesLog.RemoveAt(0);
             }
         }
 
-        public void AddHardwareNodeError(string message)
-        {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.HardwareNodes, LogRecordType.Error, message);
-
-            if (config.ShowGatewayMessages)
-                Show(logRecord);
-
-            OnHardwareNodeLogError?.Invoke(logRecord);
-
-            if (config.StoreGatewayMessages)
-            {
-                hardwareNodesLog.Add(logRecord);
-                if (hardwareNodesLog.Count > config.MaxGatewayMessages)
-                    hardwareNodesLog.RemoveAt(0);
-            }
-        }
-        
         public void AddDataBaseInfo(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.DataBase, LogRecordType.Info, message);
 
             if (config.ShowDataBaseState)
                 Show(logRecord);
@@ -119,7 +122,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddDataBaseError(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.DataBase, LogRecordType.Error, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.DataBase, LogRecordType.Error, message);
 
             if (config.ShowDataBaseState)
                 Show(logRecord);
@@ -136,7 +139,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddNodesEngineInfo(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.NodesEngine, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.NodesEngine, LogRecordType.Info, message);
 
             if (config.ShowNodesEngineState)
                 Show(logRecord);
@@ -153,7 +156,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddNodesEngineError(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.NodesEngine, LogRecordType.Error, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.NodesEngine, LogRecordType.Error, message);
 
             if (config.ShowNodesEngineState)
                 Show(logRecord);
@@ -170,7 +173,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddNodeInfo(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.Nodes, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.Nodes, LogRecordType.Info, message);
 
             if (config.ShowNodesEngineNodes)
                 Show(logRecord);
@@ -186,7 +189,7 @@ namespace MyNetSensors.WebController.Code
         }
         public void AddNodeError(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.Nodes, LogRecordType.Error, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.Nodes, LogRecordType.Error, message);
 
             if (config.ShowNodesEngineNodes)
                 Show(logRecord);
@@ -204,7 +207,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddSystemInfo(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.System, LogRecordType.Info, message);
 
             if (config.ShowSystemState)
                 Show(logRecord);
@@ -221,7 +224,7 @@ namespace MyNetSensors.WebController.Code
 
         public void AddSystemError(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordOwner.System, LogRecordType.Error, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.System, LogRecordType.Error, message);
 
             if (config.ShowSystemState)
                 Show(logRecord);
@@ -243,7 +246,7 @@ namespace MyNetSensors.WebController.Code
         {
             List<LogRecord> list = new List<LogRecord>();
             list.AddRange(gatewayLog);
-            list.AddRange(hardwareNodesLog);
+            list.AddRange(gatewayMessagesLog);
             list.AddRange(nodesEngineLog);
             list.AddRange(nodesLog);
             list.AddRange(dataBaseLog);
@@ -255,7 +258,6 @@ namespace MyNetSensors.WebController.Code
         {
             List<LogRecord> list = new List<LogRecord>();
             list.AddRange(gatewayLog.Where(x=>x.Type==LogRecordType.Error));
-            list.AddRange(hardwareNodesLog.Where(x => x.Type == LogRecordType.Error));
             list.AddRange(nodesEngineLog.Where(x => x.Type == LogRecordType.Error));
             list.AddRange(nodesLog.Where(x => x.Type == LogRecordType.Error));
             list.AddRange(dataBaseLog.Where(x => x.Type == LogRecordType.Error));
@@ -266,7 +268,8 @@ namespace MyNetSensors.WebController.Code
         public void ClearAllLogs()
         {
             gatewayLog.Clear();
-            hardwareNodesLog.Clear();
+            gatewayMessagesLog.Clear();
+            gatewayDecodedMessagesLog.Clear();
             nodesEngineLog.Clear();
             nodesLog.Clear();
             dataBaseLog.Clear();
@@ -280,24 +283,27 @@ namespace MyNetSensors.WebController.Code
                 Console.ForegroundColor = ConsoleColor.Red;
             else
             {
-                switch (record.Owner)
+                switch (record.Source)
                 {
-                    case LogRecordOwner.Gateway:
+                    case LogRecordSource.Gateway:
                         Console.ForegroundColor = ConsoleColor.Green;
                         break;
-                    case LogRecordOwner.HardwareNodes:
+                    case LogRecordSource.GatewayMessage:
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         break;
-                    case LogRecordOwner.DataBase:
+                    case LogRecordSource.GatewayDecodedMessage:
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        break;
+                    case LogRecordSource.DataBase:
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogRecordOwner.NodesEngine:
+                    case LogRecordSource.NodesEngine:
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         break;
-                    case LogRecordOwner.Nodes:
+                    case LogRecordSource.Nodes:
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         break;
-                    case LogRecordOwner.System:
+                    case LogRecordSource.System:
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                 }

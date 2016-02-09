@@ -149,6 +149,7 @@ namespace MyNetSensors.WebController.Code
                 {
                     ShowGatewayState = Boolean.Parse(configuration["Logs:ShowGatewayState"]),
                     ShowGatewayMessages = Boolean.Parse(configuration["Logs:ShowGatewayMessages"]),
+                    ShowGatewayDecodedMessages = Boolean.Parse(configuration["Logs:ShowGatewayDecodedMessages"]),
                     ShowDataBaseState = Boolean.Parse(configuration["Logs:ShowDataBaseState"]),
                     ShowNodesEngineState = Boolean.Parse(configuration["Logs:ShowNodesEngineState"]),
                     ShowNodesEngineNodes = Boolean.Parse(configuration["Logs:ShowNodesEngineNodes"]),
@@ -156,6 +157,7 @@ namespace MyNetSensors.WebController.Code
 
                     StoreGatewayState = Boolean.Parse(configuration["Logs:StoreGatewayState"]),
                     StoreGatewayMessages = Boolean.Parse(configuration["Logs:StoreGatewayMessages"]),
+                    StoreGatewayDecodedMessages = Boolean.Parse(configuration["Logs:StoreGatewayDecodedMessages"]),
                     StoreDataBaseState = Boolean.Parse(configuration["Logs:StoreDataBaseState"]),
                     StoreNodesEngineState = Boolean.Parse(configuration["Logs:StoreNodesEngineState"]),
                     StoreNodesEngineNodes = Boolean.Parse(configuration["Logs:StoreNodesEngineNodes"]),
@@ -163,6 +165,7 @@ namespace MyNetSensors.WebController.Code
 
                     MaxGatewayState = Int32.Parse(configuration["Logs:MaxGatewayState"]),
                     MaxGatewayMessages = Int32.Parse(configuration["Logs:MaxGatewayMessages"]),
+                    MaxGatewayDecodedMessages = Int32.Parse(configuration["Logs:MaxGatewayDecodedMessages"]),
                     MaxDataBaseState = Int32.Parse(configuration["Logs:MaxDataBaseState"]),
                     MaxNodesEngineState = Int32.Parse(configuration["Logs:MaxNodesEngineState"]),
                     MaxNodesEngineNodes = Int32.Parse(configuration["Logs:MaxNodesEngineNodes"]),
@@ -370,11 +373,10 @@ namespace MyNetSensors.WebController.Code
 
             gateway.enableAutoAssignId = gatewayConfig.EnableAutoAssignId;
 
-            gateway.OnLogMessage += logs.AddHardwareNodeInfo;
+            gateway.OnLogDecodedMessage += logs.AddGatewayDecodedMessage;
+            gateway.OnLogMessage += logs.AddGatewayMessage;
             gateway.OnLogInfo += logs.AddGatewayInfo;
             gateway.OnLogError += logs.AddGatewayError;
-            gateway.connectionPort.OnLogInfo += logs.AddGatewayInfo;
-            // gateway.connectionPort.OnLogMessage += logs.AddHardwareNodeInfo;
             gateway.endlessConnectionAttempts = true;
             gateway.messagesLogEnabled = gatewayConfig.EnableMessagesLog;
             gateway.OnConnected += GatewayConnected;
