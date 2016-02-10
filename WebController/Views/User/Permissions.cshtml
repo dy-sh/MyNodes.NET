@@ -35,77 +35,84 @@
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="DashboardObserver"/>
-                                <label>Observe Dashboard</label>
+                                <label>Dashboard: Observe</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="DashboardEditor"/>
-                                <label>Control Dashboard</label>
+                                <label>Dashboard: Control</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="EditorObserver"/>
-                                <label>Observe Editor</label>
+                                <label>Editor: Observe</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="EditorEditor"/>
-                                <label>Control Editor</label>
+                                <label>Editor: Control</label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input asp-for="EditorProtectedAccess" />
+                                <label>Editor: Edit nodes with protected access</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="HardwareObserver"/>
-                                <label>Observe Hardware</label>
+                                <label>Hardware: Observe</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="LogsObserver"/>
-                                <label>Observe logs</label>
+                                <label>Logs: Observe</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="LogsEditor"/>
-                                <label>Clear logs</label>
+                                <label>Logs: Clear</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="ConfigObserver"/>
-                                <label>Observe system config</label>
+                                <label>Config: Observe</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="ConfigEditor"/>
-                                <label>Сhange system config</label>
+                                <label>Config: Change system settings</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="UsersObserver"/>
-                                <label>Observe users list</label>
+                                <label>Config: Observe users list</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
                                 <input asp-for="UsersEditor" />
-                                <label>Edit users data and permissions</label>
+                                <label>Config: Edit users data and permissions</label>
                             </div>
                         </div>
                         <br/>

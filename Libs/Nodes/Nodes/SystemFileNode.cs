@@ -33,6 +33,7 @@ namespace MyNetSensors.Nodes
             Outputs[0].Type = DataType.Text;
 
             options.LogOutputChanges = false;
+            options.ProtectedAccess = true;
         }
 
         public override void Loop()

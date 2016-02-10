@@ -25,6 +25,8 @@ namespace MyNetSensors.Nodes
 
             Inputs[0].Type = DataType.Text;
             Inputs[1].Type = DataType.Logical;
+
+            options.ProtectedAccess = true;
         }
 
         public override void Loop()

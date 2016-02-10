@@ -9,6 +9,7 @@ namespace MyNetSensors.Nodes
     public class NodeOptions
     {
         public bool LogOutputChanges = true;
+        public bool ProtectedAccess = false;
 
     }
 }

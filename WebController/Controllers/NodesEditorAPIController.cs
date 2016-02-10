@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
@@ -232,6 +233,17 @@ namespace MyNetSensors.WebController.Controllers
                         $"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. Does not exist.");
                     return false;
                 }
+
+                if (outNode.GetNodeOptions().ProtectedAccess || inNode.GetNodeOptions().ProtectedAccess)
+                {
+                    if (!User.HasClaim(x=>x.Type== UserClaims.EditorProtectedAccess))
+                    {
+                        engine.LogEngineError(
+                            $"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. No permissions for protected access.");
+                        return false;
+                    }
+                }
+
                 engine.RemoveLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
 
                 return true;
@@ -258,6 +270,16 @@ namespace MyNetSensors.WebController.Controllers
                     return false;
                 }
 
+                if (outNode.GetNodeOptions().ProtectedAccess || inNode.GetNodeOptions().ProtectedAccess)
+                {
+                    if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                    {
+                        engine.LogEngineError(
+                            $"Can`t create link from [{link.origin_id}] to [{link.target_id}]. No permissions for protected access.");
+                        return false;
+                    }
+                }
+
                 engine.AddLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
                 return true;
             });
@@ -276,12 +298,22 @@ namespace MyNetSensors.WebController.Controllers
                 string type = node.properties["ObjectType"];
                 string assemblyName = node.properties["Assembly"];
 
-                Node newNode = AddNode(type, assemblyName);
+                Node newNode = CreateNode(type, assemblyName);
 
                 if (newNode == null)
                 {
                     engine.LogEngineError($"Can`t create node [{node.properties["ObjectType"]}]. Type does not exist.");
                     return false;
+                }
+
+                if (newNode.GetNodeOptions().ProtectedAccess)
+                {
+                    if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                    {
+                        engine.LogEngineError(
+                            $"Can`t create node [{node.properties["ObjectType"]}]. No permissions for protected access.");
+                        return false;
+                    }
                 }
 
                 newNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
@@ -296,7 +328,7 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
-        private Node AddNode(string type, string assemblyName)
+        private Node CreateNode(string type, string assemblyName)
         {
             try
             {
@@ -320,6 +352,24 @@ namespace MyNetSensors.WebController.Controllers
             {
                 if (engine == null)
                     return false;
+
+                Node node = engine.GetNode(id);
+
+                if (node == null)
+                {
+                    engine.LogEngineError($"Can`t clone node [{id}]. Does not exist.");
+                    return false;
+                }
+
+                if (node.GetNodeOptions().ProtectedAccess)
+                {
+                    if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                    {
+                        engine.LogEngineError(
+                            $"Can`t clone node [{node.Type}]. No permissions for protected access.");
+                        return false;
+                    }
+                }
 
                 engine.CloneNode(id);
 
@@ -345,6 +395,16 @@ namespace MyNetSensors.WebController.Controllers
                 {
                     engine.LogEngineError($"Can`t remove node [{node.id}]. Does not exist.");
                     return false;
+                }
+
+                if (oldNode.GetNodeOptions().ProtectedAccess)
+                {
+                    if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                    {
+                        engine.LogEngineError(
+                            $"Can`t remove node [{oldNode.Type}]. No permissions for protected access.");
+                        return false;
+                    }
                 }
 
                 engine.RemoveNode(oldNode);
@@ -389,8 +449,18 @@ namespace MyNetSensors.WebController.Controllers
             Node node = engine.GetNode(id);
             if (node == null)
             {
-                engine.LogEngineError($"Can`t set settings for Node [{id}]. Does not exist.");
+                engine.LogEngineError($"Can`t set settings for node [{id}]. Does not exist.");
                 return false;
+            }
+
+            if (node.GetNodeOptions().ProtectedAccess)
+            {
+                if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                {
+                    engine.LogEngineError(
+                        $"Can`t  set settings for node [{node.Type}]. No permissions for protected access.");
+                    return false;
+                }
             }
 
             return node.SetSettings(data);
@@ -458,6 +528,20 @@ namespace MyNetSensors.WebController.Controllers
                     List<Node> nodes;
                     List<Link> links;
                     NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
+
+                    foreach (var node in nodes)
+                    {
+                        if (node.GetNodeOptions().ProtectedAccess)
+                        {
+                            if (!User.HasClaim(с => с.Type == UserClaims.EditorProtectedAccess))
+                            {
+                                engine.LogEngineError(
+                                    $"Can`t import panel. Panel contains the nodes with protected access. No permissions for this operation.");
+                                return true;
+                            }
+                        }
+                    }
+
 
                     //set position to panel
                     nodes[0].Position = new Position(x, y);

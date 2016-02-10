@@ -258,6 +258,11 @@ namespace MyNetSensors.Nodes
         {
             return "This node does not have a description.";
         }
+
+        public NodeOptions GetNodeOptions()
+        {
+            return options;
+        }
     }
 
 
