@@ -317,32 +317,39 @@ namespace MyNetSensors.WebController.Code
 
         public static void GenerateNodesJsListFile()
         {
-            List<Node> nodes = typeof(Node)
-                 .Assembly.GetTypes()
-                 .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
-                 .Select(t => (Node)Activator.CreateInstance(t)).ToList();
+            try
+            {
+                List<Node> nodes = typeof (Node)
+                    .Assembly.GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof (Node)) && !t.IsAbstract)
+                    .Select(t => (Node) Activator.CreateInstance(t)).ToList();
 
-            nodes.AddRange(typeof(UiNode)
-                 .Assembly.GetTypes()
-                 .Where(t => t.IsSubclassOf(typeof(UiNode)) && !t.IsAbstract)
-                 .Select(t => (UiNode)Activator.CreateInstance(t)).ToList());
+                nodes.AddRange(typeof (UiNode)
+                    .Assembly.GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof (UiNode)) && !t.IsAbstract)
+                    .Select(t => (UiNode) Activator.CreateInstance(t)).ToList());
 
-            nodes.Add((UiTimerNode)Activator.CreateInstance(typeof(UiTimerNode)));
+                nodes.Add((UiTimerNode) Activator.CreateInstance(typeof (UiTimerNode)));
 
-            
 
-            nodes = nodes.OrderBy(x => x.Type).ToList();
 
-            string file = "(function () {\n";
+                nodes = nodes.OrderBy(x => x.Type).ToList();
 
-            foreach (var node in nodes)
-                file += node.GetJsListGenerationScript();
+                string file = "(function () {\n";
 
-            file += "\n})();";
+                foreach (var node in nodes)
+                    file += node.GetJsListGenerationScript();
 
-            System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
+                file += "\n})();";
 
-            logs.AddSystemInfo($"Generated nodes editor script with {nodes.Count} nodes");
+                System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
+
+                logs.AddSystemInfo($"Generated nodes editor script with {nodes.Count} nodes");
+            }
+            catch (Exception ex)
+            {
+                logs.AddSystemError($"Failed to generate nodes editor script. "+ex.Message);
+            }
 
         }
 

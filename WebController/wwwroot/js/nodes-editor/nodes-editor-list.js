@@ -522,6 +522,18 @@
 
             
 
+            //RgbRgbwToNumbersNode
+            function RgbRgbwToNumbersNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbwToNumbersNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbRgbwToNumbersNode.title = 'RGBW to Numbers';
+            LiteGraph.registerNodeType('RGB/RGBW to Numbers', RgbRgbwToNumbersNode);
+
+            
+
             //SystemBeepNode
             function SystemBeepNode () {
                 this.properties = {
