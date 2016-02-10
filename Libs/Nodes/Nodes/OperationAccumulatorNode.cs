@@ -32,10 +32,10 @@ namespace MyNetSensors.Nodes.Nodes
             double oldValue = Value;
 
             if (input == Inputs[0] && input.Value != null)
-                Value = Int32.Parse(input.Value);
+                Value = double.Parse(input.Value);
 
             if (input == Inputs[1] && input.Value != null)
-                Value += Int32.Parse(input.Value);
+                Value += double.Parse(input.Value);
 
             if (oldValue != Value)
             {
