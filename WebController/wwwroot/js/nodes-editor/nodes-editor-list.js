@@ -534,6 +534,18 @@
 
             
 
+            //RgbRgbRemapNode
+            function RgbRgbRemapNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbRemapNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbRgbRemapNode.title = 'RGB Remap';
+            LiteGraph.registerNodeType('RGB/RGB Remap', RgbRgbRemapNode);
+
+            
+
             //RgbRgbToNumbersNode
             function RgbRgbToNumbersNode () {
                 this.properties = {

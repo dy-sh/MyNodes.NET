@@ -61,7 +61,7 @@ namespace MyNetSensors.Nodes
             }
             catch
             {
-                Outputs[0].Value = null;
+                ResetOutputs();
             }
         }
     }
