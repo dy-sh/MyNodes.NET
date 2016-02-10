@@ -253,6 +253,11 @@ namespace MyNetSensors.Nodes
 
             ";
         }
+
+        public virtual string GetNodeDescription()
+        {
+            return "This node does not have a description.";
+        }
     }
 
 

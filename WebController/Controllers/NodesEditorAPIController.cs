@@ -527,8 +527,14 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        
-        
+        [Authorize(UserClaims.EditorObserver)]
+        public string GetNodeDescription(string id)
+        {
+            Node node = engine.GetNode(id);
+
+            return node == null ? "" : node.GetNodeDescription();
+        }
+
 
 
         public async Task<int> ReceiverSetValue(string value, string channel, string password)

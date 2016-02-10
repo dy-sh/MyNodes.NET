@@ -42,5 +42,10 @@ namespace MyNetSensors.Nodes
             SetValue(data["Value"]);
             return true;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node simply stores the specified value.";
+        }
     }
 }

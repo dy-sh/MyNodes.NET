@@ -2504,7 +2504,7 @@ LGraphCanvas.prototype.processMouseDown = function (e) {
         if (!e.shiftKey) //REFACTOR: integrate with function
         {
             //derwish edit
-                //no node or another node selected
+            //no node or another node selected
             if (!n || !this.selected_nodes[n.id]) {
 
                 var todeselect = [];
@@ -4328,11 +4328,16 @@ LGraphCanvas.prototype.getNodeMenuOptions = function (node) {
         options.push(null);
     }
 
+
+    options.push({ content: "Description", callback: function () { editor.showNodeDescrition(node) } });
+    options.push(null);
+
+
     options.push({ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse });
 
     if (node.getMenuOptions)
         options = node.getMenuOptions(this);
-  
+
 
 
     if (node.getExtraMenuOptions) {

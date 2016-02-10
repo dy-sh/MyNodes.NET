@@ -431,4 +431,31 @@ function NodeSettings(node) {
 
 
 
+Editor.prototype.showNodeDescrition = function (node) {
+
+    $('#modal-panel-title').html(node.type);
+    $('#modal-panel-form').html(
+               '<div class="field">' +
+               '<textarea id="modal-panel-text"></textarea>' +
+               '</div>');
+
+    $('#modal-panel').modal({
+        dimmerSettings: { opacity: 0.3 },
+        onHidden: function () {
+        }
+    }).modal('setting', 'transition', 'fade up').modal('show');
+
+    $.ajax({
+        url: "/NodesEditorAPI/GetNodeDescription/",
+        type: "POST",
+        data: { id: node.id },
+        success: function (result) {
+            $('#modal-panel-text').html(result);
+            $('#modal-panel-text').fadeIn(300);
+            $('#modal-panel-message').hide();
+        }
+    });
+}
+
+
 LiteGraph.Editor = Editor;
