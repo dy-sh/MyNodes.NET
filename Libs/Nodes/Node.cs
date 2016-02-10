@@ -33,7 +33,7 @@ namespace MyNetSensors.Nodes
 
         protected NodesEngine engine;
 
-        protected bool LogOutputChanges = true;
+        protected NodeOptions options=new NodeOptions();
 
         public Dictionary<string, NodeSetting> Settings { get; set; } = new Dictionary<string, NodeSetting>();
 
@@ -104,7 +104,7 @@ namespace MyNetSensors.Nodes
 
         public virtual void OnOutputChange(Output output)
         {
-            if (LogOutputChanges)
+            if (options.LogOutputChanges)
                 LogInfo($"{output.Name}: [{output.Value ?? "NULL"}]");
 
             //send state to linked nodes

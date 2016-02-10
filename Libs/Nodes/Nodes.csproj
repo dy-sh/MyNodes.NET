@@ -49,6 +49,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="NodeOptions.cs" />
     <Compile Include="NodesEngineSerializer.cs" />
     <Compile Include="NodeSetting.cs" />
     <Compile Include="Nodes\ConnectionRemoteReceiverNode.cs" />
