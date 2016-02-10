@@ -27,7 +27,6 @@ namespace MyNetSensors.Nodes
         public void Send(string value)
         {
             Value = value;
-            LogInfo($"UI TextBox [{Settings["Name"].Value}]: [{Value??"NULL"}]");
             Outputs[0].Value = Value;
 
             UpdateMe();

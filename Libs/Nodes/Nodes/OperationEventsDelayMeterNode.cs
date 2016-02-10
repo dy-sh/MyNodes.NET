@@ -37,7 +37,6 @@ namespace MyNetSensors.Nodes
             double delay = (DateTime.Now - lasTime).TotalMilliseconds;
             lasTime = DateTime.Now;
 
-            LogInfo($"[{delay}] ms");
             Outputs[0].Value = delay.ToString();
         }
     }

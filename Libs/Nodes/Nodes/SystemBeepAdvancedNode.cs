@@ -49,7 +49,7 @@ namespace MyNetSensors.Nodes
                     f = (f < 37) ? 37 : (f > 32767) ? 32767 : f;
 
                     Beep(f, d);
-                    LogInfo($"Beep {f}Hz {d}mS");
+                    LogInfo($"Beep");
                 }
                 catch
                 {

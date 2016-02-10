@@ -46,7 +46,6 @@ namespace MyNetSensors.Nodes
 
             Double xout = a * (1 - xf / 100) + b * xf / 100;
 
-            LogInfo($"[{xout}]");
             Outputs[0].Value = xout.ToString();
         }
     }

@@ -38,7 +38,6 @@ namespace MyNetSensors.Nodes
             Double a = Double.Parse(Inputs[0].Value);
             Double b = Math.Tan(a);
 
-            LogInfo($"Tan [{a}] = [{b}]");
             Outputs[0].Value = b.ToString();
         }
     }

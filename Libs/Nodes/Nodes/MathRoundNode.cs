@@ -36,7 +36,6 @@ namespace MyNetSensors.Nodes
             Double a = Double.Parse(Inputs[0].Value);
             int b = (int)Math.Round(a);
 
-            LogInfo($"[{a}] rounded to [{b}]");
             Outputs[0].Value = b.ToString();
         }
     }

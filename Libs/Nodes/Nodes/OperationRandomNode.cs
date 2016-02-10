@@ -45,7 +45,6 @@ namespace MyNetSensors.Nodes
                 double rnd = rand.Next(min, max);
                 rnd = rnd / 100;
 
-                LogInfo($"[{rnd}]");
                 Outputs[0].Value = rnd.ToString();
             }
 

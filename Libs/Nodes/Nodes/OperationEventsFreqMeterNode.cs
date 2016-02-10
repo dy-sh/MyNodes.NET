@@ -47,6 +47,7 @@ namespace MyNetSensors.Nodes
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
+            //dont start if engine is not started
             if (engine == null || !engine.IsStarted())
                 return;
 
@@ -55,7 +56,6 @@ namespace MyNetSensors.Nodes
 
             countWas = count;
             count = 0;
-            LogInfo($"[{countWas}] events/sec");
             Outputs[0].Value = countWas.ToString();
             countWas = 0;
         }

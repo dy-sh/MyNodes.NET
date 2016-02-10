@@ -29,7 +29,6 @@ namespace MyNetSensors.Nodes
         public void SetValue(string value)
         {
             Value = value;
-            LogInfo($"UI RGB Sliders [{Settings["Name"].Value}]: [{Value}]");
             Outputs[0].Value = Value;
 
             UpdateMe();

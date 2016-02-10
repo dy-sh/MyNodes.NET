@@ -39,16 +39,7 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            if (Inputs[1].Value == "1")
-            {
-                LogInfo($"[{Inputs[0].Value}]");
-                Outputs[0].Value = Inputs[0].Value;
-            }
-            else
-            {
-                Outputs[0].Value = null;
-                LogInfo($"[NULL]");
-            }
+            Outputs[0].Value = Inputs[1].Value == "1" ? Inputs[0].Value : null;
         }
     }
 }

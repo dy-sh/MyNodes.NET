@@ -25,11 +25,9 @@ namespace MyNetSensors.Nodes
 
         public void Click()
         {
-            LogInfo($"UI Button [{Settings["Name"].Value}]: [1]");
             Outputs[0].Value = "1";
             UpdateMe();
 
-            LogInfo($"UI Button [{Settings["Name"].Value}]: [0]");
             Outputs[0].Value = "0";
             UpdateMe();
         }

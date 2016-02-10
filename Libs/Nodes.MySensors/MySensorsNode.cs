@@ -39,34 +39,34 @@ namespace MyNetSensors.Nodes
 
             MySensorsNodeInput mySensorsNodeInput = (MySensorsNodeInput)input;
 
-            LogInfo($"Hardware Node{nodeId} Sensor{mySensorsNodeInput.sensorId} input: {input.Value}");
+            //LogInfo($"Hardware Node{nodeId} Sensor{mySensorsNodeInput.sensorId} input: {input.Value}");
 
             if (MySensorsNodesEngine.gateway != null)
                 MySensorsNodesEngine.gateway.SendSensorState(mySensorsNodeInput.nodeId, mySensorsNodeInput.sensorId,
                     input.Value);
             else
             {
-                LogError($"Can`t send message to Node[{mySensorsNodeInput.nodeId}] Sensor[{mySensorsNodeInput.sensorId}]. Gateway is not connected.");
+               // LogError($"Can`t send message to Node[{mySensorsNodeInput.nodeId}] Sensor[{mySensorsNodeInput.sensorId}]. Gateway is not connected.");
             }
         }
 
-        public override void OnOutputChange(Output output)
-        {
-            if (output is MySensorsNodeOutput)
-            {
-                MySensorsNodeOutput mySensorsNodeOutput = (MySensorsNodeOutput) output;
-                LogInfo(
-                    $"Hardware Node{nodeId} Sensor{mySensorsNodeOutput.sensorId} output: {output.Value}");
-            }
-            else
-            {
-                LogInfo($"Hardware Node{nodeId} {output.Name} : {output.Value}");
+        //public override void OnOutputChange(Output output)
+        //{
+        //    if (output is MySensorsNodeOutput)
+        //    {
+        //        MySensorsNodeOutput mySensorsNodeOutput = (MySensorsNodeOutput) output;
+        //        LogInfo(
+        //            $"Hardware Node{nodeId} Sensor{mySensorsNodeOutput.sensorId} output: {output.Value}");
+        //    }
+        //    else
+        //    {
+        //        LogInfo($"Hardware Node{nodeId} {output.Name} : {output.Value}");
 
-            };
+        //    };
 
 
-            base.OnOutputChange(output);
-        }
+        //    base.OnOutputChange(output);
+        //}
 
         private void CreateInputsOutputs(Gateways.MySensors.Node node)
         {

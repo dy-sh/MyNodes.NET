@@ -11,7 +11,7 @@ namespace MyNetSensors.Nodes
     public class OperationCounterNode : Node
     {
 
-        public int Value { get; set; }
+        public double Value { get; set; }
 
 
         public OperationCounterNode() : base(3, 1)
@@ -36,10 +36,10 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            int oldValue = Value;
+            double oldValue = Value;
 
             if (input == Inputs[0] && input.Value != null)
-                Value = Int32.Parse(input.Value);
+                Value = double.Parse(input.Value);
 
             if (input == Inputs[1] && input.Value == "1")
                 Value++;
@@ -49,7 +49,6 @@ namespace MyNetSensors.Nodes
 
             if (oldValue!= Value)
             {
-                LogInfo($"[{Value}]");
                 Outputs[0].Value = Value.ToString();
                 UpdateMeInDb();
             }

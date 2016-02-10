@@ -36,7 +36,6 @@ namespace MyNetSensors.Nodes
         public void SetValue(int value)
         {
             Value = value;
-            LogInfo($"UI Slider [{Settings["Name"].Value}]: [{Value}]");
             Outputs[0].Value = Value.ToString();
 
             UpdateMe();

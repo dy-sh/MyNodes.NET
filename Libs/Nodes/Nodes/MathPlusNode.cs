@@ -40,7 +40,6 @@ namespace MyNetSensors.Nodes
             Double b = Double.Parse(Inputs[1].Value);
             Double c = a + b;
 
-            LogInfo($"[{a}] + [{b}] = [{c}]");
             Outputs[0].Value = c.ToString();
         }
     }

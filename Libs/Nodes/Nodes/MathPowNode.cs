@@ -40,7 +40,6 @@ namespace MyNetSensors.Nodes
             Double b = Double.Parse(Inputs[1].Value);
             Double c = Math.Pow(a, b);
 
-            LogInfo($"Pow [{a}] to [{b}]");
             Outputs[0].Value = c.ToString();
         }
     }

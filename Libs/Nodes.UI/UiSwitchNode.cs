@@ -29,7 +29,6 @@ namespace MyNetSensors.Nodes
         public void Toggle()
         {
             Value = Value == "0" ? "1" : "0";
-            LogInfo($"UI Switch [{Settings["Name"].Value}]: [{Value}]");
             Outputs[0].Value = Value;
 
             UpdateMe();

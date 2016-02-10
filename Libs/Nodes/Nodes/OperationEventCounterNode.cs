@@ -37,14 +37,12 @@ namespace MyNetSensors.Nodes
             {
                 Count = 0;
                 LogInfo($"Reset");
-                Outputs[0].Value = "0";
             }
             else if (input == Inputs[0])
-            {
                 Count++;
-                LogInfo($"[{Count}]");
-                Outputs[0].Value = Count.ToString();
-            }
+
+            Outputs[0].Value = Count.ToString();
+            UpdateMeInDb();
         }
     }
 }

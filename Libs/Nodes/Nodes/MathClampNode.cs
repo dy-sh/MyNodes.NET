@@ -55,7 +55,6 @@ namespace MyNetSensors.Nodes
 
             Double result = (value < min) ? min : (value > max) ? max : value;
 
-            LogInfo($"[{value}] clamped to [{result}]");
             Outputs[0].Value = result.ToString();
         }
     }

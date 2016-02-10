@@ -37,16 +37,7 @@ namespace MyNetSensors.Nodes
             Double a = Double.Parse(Inputs[0].Value);
             Double b = Double.Parse(Inputs[1].Value);
 
-            if (a > b)
-            {
-                LogInfo($"[{a}] > [{b}]");
-                Outputs[0].Value = "1";
-            }
-            else
-            {
-                LogInfo($"[{a}] < [{b}]");
-                Outputs[0].Value = "0";
-            }
+            Outputs[0].Value = a > b ? "1" : "0";
         }
     }
 }

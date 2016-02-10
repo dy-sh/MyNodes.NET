@@ -35,6 +35,8 @@ namespace MyNetSensors.Nodes
             Inputs[4].Type = DataType.Logical;
             Inputs[5].Type = DataType.Logical;
             Outputs[0].Type = DataType.Text;
+
+            LogOutputChanges = false;
         }
 
         public override void Loop()

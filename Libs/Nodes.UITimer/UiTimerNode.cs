@@ -20,7 +20,6 @@
 
         public void SetState(string state)
         {
-            LogInfo($"[{state}]");
             Outputs[0].Value = state;
         }
 

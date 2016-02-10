@@ -57,13 +57,11 @@ namespace MyNetSensors.Nodes
                 Double outMax = Double.Parse(Inputs[4].Value);
 
                 Double result = (value - inMin) / (InMax - inMin) * (outMax - outMin) + outMin;
-                LogInfo($"[{value}] remapped to [{result}]");
                 Outputs[0].Value = result.ToString();
             }
             catch
             {
                 Outputs[0].Value = null;
-                LogInfo("[NULL]");
             }
         }
     }

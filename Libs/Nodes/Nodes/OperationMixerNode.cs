@@ -31,7 +31,6 @@ namespace MyNetSensors.Nodes
             if (Inputs[1].Value != null) mixOut = mixOut + Inputs[1].Value;
 
             Outputs[0].Value = mixOut;
-            LogInfo($"[{mixOut??"NULL"}]");
         }
     }
 }

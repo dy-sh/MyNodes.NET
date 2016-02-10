@@ -72,7 +72,6 @@ namespace MyNetSensors.Nodes
                     break;
             }
 
-            LogInfo($"[{Inputs[0].Value}] Flip-Flop to [{result}]");
             Outputs[0].Value = result;
         }
     }

@@ -51,8 +51,6 @@ namespace MyNetSensors.Nodes
 
             Count = 1 - Count;
 
-            LogInfo($"{Count}");
-
             Outputs[0].Value = Count.ToString();
         }
 

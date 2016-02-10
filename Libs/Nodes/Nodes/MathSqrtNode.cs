@@ -40,13 +40,11 @@ namespace MyNetSensors.Nodes
                 Double a = Double.Parse(Inputs[0].Value);
                 Double b = Math.Sqrt(a);
 
-                LogInfo($"Sqrt [{a}] = [{b}]");
                 Outputs[0].Value = b.ToString();
             }
             catch
             {
                 Outputs[0].Value = null;
-                LogInfo("[NULL]");
             }
         }
     }
