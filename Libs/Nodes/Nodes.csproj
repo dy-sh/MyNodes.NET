@@ -61,6 +61,7 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\RgbNumbersToRgbNode.cs" />
     <Compile Include="Nodes\RgbRgbwToNumbersNode.cs" />
     <Compile Include="Nodes\RgbRgbToNumbersNode.cs" />
     <Compile Include="Nodes\OperationSeparatorNode.cs" />

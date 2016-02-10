@@ -33,7 +33,7 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (input.Value == null)
+            if (Inputs.Any(i => i.Value == null))
             {
                 ResetOutputs();
                 return;
