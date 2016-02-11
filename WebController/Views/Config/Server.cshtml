@@ -1,0 +1,62 @@
+﻿@model MyNetSensors.WebController.Code.WebServerConfig
+
+@{
+    ViewBag.Title = "Web Server";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Server" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui basic segment">
+
+                        <div class="field">
+                            <label>Address</label>
+                            <input type="text" asp-for="Address"/>
+                            <span asp-validation-for="Address" />
+                        </div>
+                    </div>
+
+
+                    <div class="ui basic segment">
+
+
+                        Stop server and execute "dnx web" to start server on a new IP-address.
+                        <br />
+                        <br/>
+                        <b>If server will not be available at the specified address,
+                            start server by executing "dnx localhost", and go to http://localhost:1312.
+                        </b>
+                    </div>
+       
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Index" class="ui button">Cancel</a>
+                            <input type="submit" value="Save" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

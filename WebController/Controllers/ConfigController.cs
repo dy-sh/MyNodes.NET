@@ -250,6 +250,37 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult Server()
+        {
+            return View(SystemController.webServerConfig);
+        }
+
+
+
+        [Authorize(UserClaims.ConfigEditor)]
+
+        [HttpPost]
+        public IActionResult Server(WebServerConfig model)
+        {
+            if (model != null)
+            {
+                SystemController.webServerConfig = model;
+
+                dynamic json = ReadConfig();
+                json.WebServer.Address = model.Address;
+                WriteConfig(json);
+
+                json= JObject.Parse(System.IO.File.ReadAllText("project.json"));
+                json.commands.web = $"Microsoft.AspNet.Server.Kestrel --server.urls {model.Address}";
+                System.IO.File.WriteAllText("project.json", json.ToString());
+
+                configuration.Reload();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 
 }

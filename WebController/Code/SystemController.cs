@@ -29,6 +29,7 @@ namespace MyNetSensors.WebController.Code
         //CONFIG
         public static GatewayConfig gatewayConfig;
         public static WebServerRules webServerRules;
+        public static WebServerConfig webServerConfig;
         public static DataBaseConfig dataBaseConfig;
         public static NodesEngineConfig nodesEngineConfig;
 
@@ -191,6 +192,11 @@ namespace MyNetSensors.WebController.Code
                 {
                     AllowFullAccessWithoutAuthorization = Boolean.Parse(configuration["WebServer:Rules:AllowFullAccessWithoutAuthorization"]),
                     AllowRegistrationOfNewUsers = Boolean.Parse(configuration["WebServer:Rules:AllowRegistrationOfNewUsers"])
+                };
+
+                webServerConfig = new WebServerConfig
+                {
+                    Address = configuration["WebServer:Address"]
                 };
 
             }

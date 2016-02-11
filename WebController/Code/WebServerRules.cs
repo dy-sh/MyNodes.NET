@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyNetSensors.WebController.ViewModels.Config
+﻿namespace MyNetSensors.WebController.Code
 {
     public class WebServerRules
     {
