@@ -1,6 +1,6 @@
 {
   "userSecretsId": "aspnet5-WebServer-dc3c76a8-981e-44dc-bfe3-f2f4f7dd6bf3",
-  "version": "2.0.0-*",
+  "version": "2.0.1",
   "compilationOptions": {
     "emitEntryPoint": true
   },

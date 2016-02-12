@@ -16,6 +16,7 @@ namespace MyNetSensors.Nodes
 
         public SystemBeepNode() : base("System","Beep",1, 0)
         {
+            Inputs[0].Name = "Start";
             Inputs[0].Type = DataType.Logical;
         }
 
@@ -25,12 +26,7 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                return;
-            }
-
-            if (Inputs[0].Value == "1")
+            if (input.Value == "1")
             {
                 Beep();
                 LogInfo("Beep");
