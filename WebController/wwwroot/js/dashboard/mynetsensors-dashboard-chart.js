@@ -71,7 +71,8 @@ function createChart(node) {
 
     //Loading data frow server
     $.ajax({
-        url: "/DashboardAPI/GetChartData/" + node.Id, //get nodeId from viewbag before
+        url: "/DashboardAPI/GetValue/", 
+        data: { 'nodeId': node.Id, 'name':"chartData" },
         dataType: "json",
         success: function (chartData) {
             if (chartData != null) {

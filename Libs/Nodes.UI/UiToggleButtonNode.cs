@@ -3,6 +3,8 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
+
 namespace MyNetSensors.Nodes
 {
     public class UiToggleButtonNode : UiNode
@@ -23,13 +25,16 @@ namespace MyNetSensors.Nodes
         {
         }
 
-        public void Toggle()
+
+        public override bool SetValues(Dictionary<string, string> values)
         {
             Value = Value == "0" ? "1" : "0";
             Outputs[0].Value = Value;
 
             UpdateMe();
             UpdateMeInDb();
+
+            return true;
         }
     }
 }

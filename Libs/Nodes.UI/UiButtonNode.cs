@@ -3,6 +3,8 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
+
 namespace MyNetSensors.Nodes
 {
     public class UiButtonNode : UiNode
@@ -20,13 +22,17 @@ namespace MyNetSensors.Nodes
         {
         }
 
-        public void Click()
+    
+        public override bool SetValues(Dictionary<string, string> values)
         {
             Outputs[0].Value = "1";
             UpdateMe();
 
             Outputs[0].Value = "0";
             UpdateMe();
+
+            return true;
         }
+
     }
 }

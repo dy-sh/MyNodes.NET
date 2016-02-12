@@ -5,6 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MyNetSensors.Nodes
 {
@@ -21,12 +24,12 @@ namespace MyNetSensors.Nodes
         private bool LastStateUpdated { get; set; }
 
 
-        public UiChartNode() : base("Chart",1, 0)
+        public UiChartNode() : base("Chart", 1, 0)
         {
             NodeStates = new List<NodeState>();
             WriteInDatabaseLastDate = DateTime.Now;
 
-            Settings.Add("WriteInDatabase",new NodeSetting(NodeSettingType.Checkbox, "Write In Database","false"));
+            Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write In Database", "false"));
             Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "500"));
         }
 
@@ -46,7 +49,7 @@ namespace MyNetSensors.Nodes
             if (LastStateCached == null)
             {
                 State = null;
-               // UpdateMe();
+                // UpdateMe();
                 return;
             }
 
@@ -88,5 +91,24 @@ namespace MyNetSensors.Nodes
             LastStateUpdated = false;
         }
 
+        public override string GetValue(string name)
+        {
+            List<NodeState> nodeStates = GetStates();
+
+            if (nodeStates == null || !nodeStates.Any())
+                return null;
+
+            //copy to array to prevent changing data error
+            NodeState[] nodeStatesArray = new NodeState[nodeStates.Count];
+            nodeStates.CopyTo(nodeStatesArray);
+
+            List<ChartData> chartData = nodeStatesArray.Select(item => new ChartData
+            {
+                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
+                y = item.State == "0" ? "-0.01" : item.State
+            }).ToList();
+
+            return JsonConvert.SerializeObject(chartData);
+        }
     }
 }

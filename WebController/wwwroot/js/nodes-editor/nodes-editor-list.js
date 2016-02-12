@@ -825,7 +825,7 @@
                     , null
                 ];
             }
-            UiTimerNode.title = 'UI Timer';
+            UiTimerNode.title = 'Timer';
             LiteGraph.registerNodeType('UI/Timer', UiTimerNode);
 
             

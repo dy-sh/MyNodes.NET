@@ -3,6 +3,9 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace MyNetSensors.Nodes
 {
     public class UiRgbSlidersNode : UiNode
@@ -22,14 +25,17 @@ namespace MyNetSensors.Nodes
         public override void OnInputChange(Input input)
         {
         }
+        
 
-        public void SetValue(string value)
+        public override bool SetValues(Dictionary<string, string> values)
         {
-            Value = value;
+            Value = values.FirstOrDefault().Value;
             Outputs[0].Value = Value;
 
             UpdateMe();
             UpdateMeInDb();
+
+            return true;
         }
     }
 }

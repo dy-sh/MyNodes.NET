@@ -55,114 +55,31 @@ namespace MyNetSensors.WebController.Controllers
 
 
         [Authorize(UserClaims.DashboardEditor)]
-        public bool ClearLog(string nodeId)
-        {
-            engine.ClearLog(nodeId);
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public bool TextBoxSend(string nodeId, string value)
-        {
-            engine.TextBoxSend(nodeId, value);
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public bool ButtonClick(string nodeId)
-        {
-            engine.ButtonClick(nodeId);
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public bool ToggleButtonClick(string nodeId)
-        {
-            engine.ToggleButtonClick(nodeId);
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public bool SwitchClick(string nodeId)
-        {
-            engine.SwitchClick(nodeId);
-            return true;
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public async Task<bool> SliderChange(string nodeId, int value)
+        public async Task<bool> SetValues(string nodeId, Dictionary<string, string> values)
         {
             return await Task.Run(() =>
             {
-                engine.SliderChange(nodeId, value);
-                return true;
+                UiNode node = engine.GetUINode(nodeId);
+                if (node == null)
+                    return false;
+
+                return node.SetValues(values);
             });
         }
 
-
-
         [Authorize(UserClaims.DashboardEditor)]
-        public async Task<bool> RGBSlidersChange(string nodeId, string value)
+        public async Task<string> GetValue(string nodeId, string name)
         {
             return await Task.Run(() =>
             {
-                engine.RGBSlidersChange(nodeId, value);
-                return true;
-            });
-        }
-
-
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public async Task<bool> RGBWSlidersChange(string nodeId, string value)
-        {
-            return await Task.Run(() =>
-            {
-                engine.RGBWSlidersChange(nodeId, value);
-                return true;
-            });
-        }
-
-
-
-
-        public async Task<List<ChartData>> GetChartData(string id)
-        {
-            return await Task.Run(() =>
-            {
-                UiChartNode chart = engine.GetUINode(id) as UiChartNode;
-                if (chart == null)
+                UiNode node = engine.GetUINode(nodeId);
+                if (node == null)
                     return null;
 
-                List<NodeState> nodeStates = chart.GetStates();
-
-                if (nodeStates == null || !nodeStates.Any())
-                    return null;
-
-                //copy to array to prevent changing data error
-                NodeState[] nodeStatesArray = new NodeState[nodeStates.Count];
-                nodeStates.CopyTo(nodeStatesArray);
-
-                return nodeStatesArray.Select(item => new ChartData
-                {
-                    x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
-                    y = item.State == "0" ? "-0.01" : item.State
-                }).ToList();
+                return node.GetValue(name);
             });
         }
-
-
-
+        
 
         [Authorize(UserClaims.DashboardEditor)]
         public bool ClearChart(string nodeId)
@@ -170,5 +87,6 @@ namespace MyNetSensors.WebController.Controllers
             engine.ClearChart(nodeId);
             return true;
         }
+
     }
 }

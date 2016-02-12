@@ -8,7 +8,8 @@
         "pdb": "../../Libs/Nodes.UI/obj/{configuration}/Nodes.UI.pdb"
       },
       "dependencies": {
-        "Nodes": "1.0.0-*"
+        "Nodes": "1.0.0-*",
+        "Newtonsoft.Json": "8.0.2"
       }
     }
   }

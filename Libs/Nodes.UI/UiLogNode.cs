@@ -4,6 +4,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace MyNetSensors.Nodes
 {
@@ -26,10 +27,14 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public void ClearLog()
+        public override bool SetValues(Dictionary<string, string> values)
         {
+            //clear log
+
             Log = "";
             UpdateMe();
+
+            return true;
         }
     }
 }

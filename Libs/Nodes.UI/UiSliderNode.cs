@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
@@ -29,14 +30,6 @@ namespace MyNetSensors.Nodes
         {
         }
 
-        public void SetValue(int value)
-        {
-            Value = value;
-            Outputs[0].Value = Value.ToString();
-
-            UpdateMe();
-            UpdateMeInDb();
-        }
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
@@ -50,6 +43,25 @@ namespace MyNetSensors.Nodes
             }
 
             return base.SetSettings(data);
+        }
+
+        public override bool SetValues(Dictionary<string, string> values)
+        {
+            try
+            {
+                Value = Int32.Parse(values.FirstOrDefault().Value);
+                Outputs[0].Value = Value.ToString();
+
+                UpdateMe();
+                UpdateMeInDb();
+
+                return true;
+            }
+            catch
+            {
+                LogError("Can`t set value. Incorrect data.");
+                return false;
+            }
         }
     }
 }

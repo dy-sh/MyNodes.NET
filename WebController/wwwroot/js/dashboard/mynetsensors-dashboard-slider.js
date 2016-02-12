@@ -92,9 +92,9 @@ function sendSliders() {
 
 function sendSliderChange(nodeId, value) {
     $.ajax({
-        url: "/DashboardAPI/SliderChange/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId, 'value': value }
+        data: { 'nodeId': nodeId, 'values': { slider:value } }
     });
 }
 

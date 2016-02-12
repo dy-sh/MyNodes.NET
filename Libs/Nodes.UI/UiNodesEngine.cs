@@ -156,96 +156,7 @@ namespace MyNetSensors.Nodes
                 .Cast<UiNode>()
                 .ToList();
         }
-
-
-        public void ClearLog(string nodeId)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiLogNode))
-                return;
-
-            UiLogNode uiLogNode = (UiLogNode)n;
-            uiLogNode.ClearLog();
-        }
-
-
-        public void ButtonClick(string nodeId)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiButtonNode))
-                return;
-
-            UiButtonNode uiNode = (UiButtonNode)n;
-            uiNode.Click();
-        }
-
-
-
-        public void ToggleButtonClick(string nodeId)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiToggleButtonNode))
-                return;
-
-            UiToggleButtonNode uiToggleButtonNode = (UiToggleButtonNode)n;
-            uiToggleButtonNode.Toggle();
-        }
-
-        public void SwitchClick(string nodeId)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiSwitchNode))
-                return;
-
-            UiSwitchNode uiSwitchNode = (UiSwitchNode)n;
-            uiSwitchNode.Toggle();
-        }
-
-        public void SliderChange(string nodeId, int value)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiSliderNode))
-                return;
-
-            UiSliderNode uiSliderNode = (UiSliderNode)n;
-            uiSliderNode.SetValue(value);
-        }
-
-
-        public void RGBSlidersChange(string nodeId, string value)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiRgbSlidersNode))
-                return;
-
-            UiRgbSlidersNode uiRgbSlidersNode = (UiRgbSlidersNode)n;
-            uiRgbSlidersNode.SetValue(value);
-        }
-
-
-        public void RGBWSlidersChange(string nodeId, string value)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiRgbwSlidersNode))
-                return;
-
-            UiRgbwSlidersNode uiNode = (UiRgbwSlidersNode)n;
-            uiNode.SetValue(value);
-        }
-
-
-
-
-
-        public void TextBoxSend(string nodeId, string value)
-        {
-            Node n = engine.GetNode(nodeId);
-            if (!(n is UiTextBoxNode))
-                return;
-
-            UiTextBoxNode uiTextBoxNode = (UiTextBoxNode)n;
-            uiTextBoxNode.Send(value);
-        }
+        
 
 
         public void ClearChart(string nodeId)
@@ -261,5 +172,7 @@ namespace MyNetSensors.Nodes
             engine.UpdateNode(uiNode);
             engine.UpdateNodeInDb(uiNode);
         }
+
+
     }
 }

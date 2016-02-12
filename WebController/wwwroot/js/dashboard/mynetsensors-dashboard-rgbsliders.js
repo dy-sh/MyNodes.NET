@@ -215,17 +215,17 @@ function sendSliders() {
 
 function sendRGBSlidersChange(nodeId, value) {
     $.ajax({
-        url: "/DashboardAPI/RGBSlidersChange/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId, 'value': value }
+        data: { 'nodeId': nodeId, 'values': { sliders: value } }
     });
 }
 
 function sendRGBWSlidersChange(nodeId, value) {
     $.ajax({
-        url: "/DashboardAPI/RGBWSlidersChange/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId, 'value': value }
+        data: { 'nodeId': nodeId, 'values': { sliders: value } }
     });
 }
 

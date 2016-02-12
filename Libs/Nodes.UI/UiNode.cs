@@ -3,6 +3,8 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
+
 namespace MyNetSensors.Nodes
 {
     public abstract class UiNode : Node
@@ -20,6 +22,16 @@ namespace MyNetSensors.Nodes
         public void SetDefaultName(string name)
         {
             DefaultName = name;
+        }
+
+        public virtual bool SetValues(Dictionary<string, string> values)
+        {
+            return false;
+        }
+
+        public virtual string GetValue(string name)
+        {
+            return null;
         }
     }
 }

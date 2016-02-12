@@ -169,11 +169,11 @@ function updateSwitch(node) {
 
 
 function sendTextBox(nodeId) {
-    var val = $('#textBoxText-' + nodeId).val();
+    var value = $('#textBoxText-' + nodeId).val();
     $.ajax({
-        url: "/DashboardAPI/TextBoxSend/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId, 'value': val }
+        data: { 'nodeId': nodeId, 'values': { text: value } }
     });
 }
 
@@ -181,33 +181,33 @@ function sendTextBox(nodeId) {
 
 function sendClearLog(nodeId) {
     $.ajax({
-        url: "/DashboardAPI/ClearLog/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId }
+        data: { 'nodeId': nodeId, 'values': { clear: "true" } }
     });
 }
 
 function sendButtonClick(nodeId) {
     $.ajax({
-        url: "/DashboardAPI/ButtonClick/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId }
+        data: { 'nodeId': nodeId, 'values': { click: "true" } }
     });
 }
 
 function sendToggleButtonClick(nodeId) {
     $.ajax({
-        url: "/DashboardAPI/ToggleButtonClick/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId }
+        data: { 'nodeId': nodeId, 'values': { click: "true" } }
     });
 }
 
 function sendSwitchClick(nodeId) {
     $.ajax({
-        url: "/DashboardAPI/SwitchClick/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { 'nodeId': nodeId }
+        data: { 'nodeId': nodeId, 'values': { click: "true" } }
     });
 }
 
