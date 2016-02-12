@@ -158,7 +158,8 @@ renderStep();
 $(document).ready(function () {
     //Loading data frow server
     $.ajax({
-        url: "/DashboardAPI/GetChartData/" + nodeId, //get nodeId from viewbag before
+        url: "/DashboardAPI/GetValue/",
+        data: { 'nodeId': nodeId, 'name': "chartData" }, //get nodeId from viewbag before
         dataType: "json",
         success: function (chartData) {
             $('#infoPanel').hide();

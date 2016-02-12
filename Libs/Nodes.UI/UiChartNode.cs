@@ -16,7 +16,7 @@ namespace MyNetSensors.Nodes
 
         public int? State { get; set; }
 
-        public DateTime WriteInDatabaseLastDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
 
 
         private List<NodeState> NodeStates { get; set; }
@@ -27,7 +27,7 @@ namespace MyNetSensors.Nodes
         public UiChartNode() : base("Chart", 1, 0)
         {
             NodeStates = new List<NodeState>();
-            WriteInDatabaseLastDate = DateTime.Now;
+            LastUpdateDate = DateTime.Now;
 
             Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write In Database", "false"));
             Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "500"));
@@ -40,11 +40,11 @@ namespace MyNetSensors.Nodes
 
             int updateInteval = Int32.Parse(Settings["UpdateInterval"].Value);
 
-            if ((DateTime.Now - WriteInDatabaseLastDate).TotalMilliseconds < updateInteval)
+            if ((DateTime.Now - LastUpdateDate).TotalMilliseconds < updateInteval)
                 return;
 
             LastStateUpdated = false;
-            WriteInDatabaseLastDate = DateTime.Now;
+            LastUpdateDate = DateTime.Now;
 
             if (LastStateCached == null)
             {
