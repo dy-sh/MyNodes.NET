@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class MathTanNode : Node
     {
 
-        public MathTanNode() : base(1, 1)
+        public MathTanNode() : base("Math","Tan",1, 1)
         {
-            this.Title = "Tan";
-            this.Type = "Math/Tan";
-
             Inputs[0].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
         }

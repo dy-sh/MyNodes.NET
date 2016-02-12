@@ -5,15 +5,12 @@
 
 namespace MyNetSensors.Nodes
 {
-  public class UiStateNode : UiNode
+    public class UiStateNode : UiNode
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public UiStateNode() : base(1, 0)
-      {
-            this.Title = "UI State";
-            this.Type = "UI/State";
-            this.DefaultName = "State";
+        public UiStateNode() : base("State", 1, 0)
+        {
         }
 
         public override void Loop()

@@ -10,12 +10,8 @@ namespace MyNetSensors.Nodes
         public string Address { get; set; }
         public bool Play { get; set; }
 
-        public UiAudioNode() : base(2, 0)
+        public UiAudioNode() : base("Audio",2, 0)
         {
-            this.Title = "UI Audio";
-            this.Type = "UI/Audio";
-            this.DefaultName = "Audio";
-
             Inputs[0].Name = "Audio URL";
             Inputs[1].Name = "Play";
             Inputs[0].Type = DataType.Text;

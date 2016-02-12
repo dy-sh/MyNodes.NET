@@ -18,52 +18,52 @@ function createNode(node) {
         createPanel(node);
     }
     switch (node.Type) {
-        case "UI/Label":
+        case "Label":
             createLabel(node);
             break;
-        case "UI/State":
+        case "State":
             createState(node);
             break;
-        case "UI/Log":
+        case "Log":
             createLog(node);
             break;
-        case "UI/TextBox":
+        case "TextBox":
             createTextBox(node);
             break;
-        case "UI/Progress":
+        case "Progress":
             createProgress(node);
             break;
-        case "UI/Button":
+        case "Button":
             createButton(node);
             break;
-        case "UI/Toggle Button":
+        case "Toggle":
             createToggleButton(node);
             break;
-        case "UI/Switch":
+        case "Switch":
             createSwitch(node);
             break;
-        case "UI/Slider":
+        case "Slider":
             createSlider(node);
             break;
-        case "UI/RGB Sliders":
+        case "RGB Sliders":
             createRGBSliders(node);
             break;
-        case "UI/RGBW Sliders":
+        case "RGBW Sliders":
             createRGBWSliders(node);
             break;
-        case "UI/Chart":
+        case "Chart":
             createChart(node);
             break;
-        case "UI/Timer":
+        case "Timer":
             createTimer(node);
             break;
-        case "UI/Voice Yandex":
+        case "Voice Yandex":
             createVoiceYandex(node);
             break;
-        case "UI/Voice Google":
+        case "Voice Google":
             createVoiceGoogle(node);
             break;
-        case "UI/Audio":
+        case "Audio":
             createAudio(node);
             break;
         default:
@@ -84,52 +84,52 @@ function updateNode(node) {
     $('#activity-' + node.PanelId).show().fadeOut(150);
 
     switch (node.Type) {
-        case "UI/Label":
+        case "Label":
             updateLabel(node);
             break;
-        case "UI/State":
+        case "State":
             updateState(node);
             break;
-        case "UI/Log":
+        case "Log":
             updateLog(node);
             break;
-        case "UI/TextBox":
+        case "TextBox":
             updateTextBox(node);
             break;
-        case "UI/Progress":
+        case "Progress":
             updateProgress(node);
             break;
-        case "UI/Button":
+        case "Button":
             updateButton(node);
             break;
-        case "UI/Toggle Button":
+        case "Toggle":
             updateToggleButton(node);
             break;
-        case "UI/Switch":
+        case "Switch":
             updateSwitch(node);
             break;
-        case "UI/Slider":
+        case "Slider":
             updateSlider(node);
             break;
-        case "UI/RGB Sliders":
+        case "RGB Sliders":
             updateRGBSliders(node);
             break;
-        case "UI/RGBW Sliders":
+        case "RGBW Sliders":
             updateRGBWSliders(node);
             break;
-        case "UI/Chart":
+        case "Chart":
             updateChart(node);
             break;
-        case "UI/Timer":
+        case "Timer":
             updateTimer(node);
             break;
-        case "UI/Voice Yandex":
+        case "Voice Yandex":
             updateVoiceYandex(node);
             break;
-        case "UI/Voice Google":
+        case "Voice Google":
             updateVoiceGoogle(node);
             break;
-        case "UI/Audio":
+        case "Audio":
             updateAudio(node);
             break;
         default:
@@ -149,7 +149,7 @@ function removeNode(node) {
     $('#node-' + node.Id).fadeOut(elementsFadeTime, function () {
 
         switch (node.Type) {
-            case "UI/Chart":
+            case "Chart":
                 removeChart(node);
                 break;
             default:

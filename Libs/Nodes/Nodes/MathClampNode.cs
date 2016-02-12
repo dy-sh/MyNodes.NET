@@ -15,11 +15,8 @@ namespace MyNetSensors.Nodes
     public class MathClampNode : Node
     {
 
-        public MathClampNode() : base(3, 1)
+        public MathClampNode() : base("Math","Clamp",3, 1)
         {
-            this.Title = "Clamp";
-            this.Type = "Math/Clamp";
-
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Min";
             Inputs[2].Name = "Max";

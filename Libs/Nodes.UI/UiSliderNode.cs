@@ -12,12 +12,8 @@ namespace MyNetSensors.Nodes
     {
         public int Value { get; set; }
 
-        public UiSliderNode() : base(0, 1)
+        public UiSliderNode() : base("Slider",0, 1)
         {
-            this.Title = "UI Slider";
-            this.Type = "UI/Slider";
-            this.DefaultName = "Slider";
-
             Settings.Add("Min", new NodeSetting(NodeSettingType.Number, "Min Value", "0"));
             Settings.Add("Max", new NodeSetting(NodeSettingType.Number, "Max Value", "100"));
 

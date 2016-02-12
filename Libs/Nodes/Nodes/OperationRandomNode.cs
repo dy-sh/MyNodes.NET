@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
         private int DEFAULT_MAX = 100;
 
 
-        public OperationRandomNode() : base(3, 1)
+        public OperationRandomNode() : base("Operation","Random",3, 1)
         {
-            this.Title = "Random";
-            this.Type = "Operation/Random";
-
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Min Value";
             Inputs[2].Name = "Max Value";

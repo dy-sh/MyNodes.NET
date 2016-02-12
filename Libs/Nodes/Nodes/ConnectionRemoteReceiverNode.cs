@@ -11,11 +11,8 @@ namespace MyNetSensors.Nodes
         private int channel;
 
 
-        public ConnectionRemoteReceiverNode() : base(2, 1)
+        public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver",2, 1)
         {
-            this.Title = "Remote Receiver";
-            this.Type = "Connection/Remote Receiver";
-
             Inputs[0].Name = "Channel";
             Inputs[1].Name = "Password";
 

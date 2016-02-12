@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
         public double Value { get; set; }
 
 
-        public OperationCounterNode() : base(3, 1)
+        public OperationCounterNode() : base("Operation","Counter",3, 1)
         {
-            this.Title = "Counter";
-            this.Type = "Operation/Counter";
-
             Inputs[0].Name = "Set Value";
             Inputs[1].Name = "Count Up";
             Inputs[2].Name = "Count Down";

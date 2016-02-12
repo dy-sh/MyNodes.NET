@@ -8,11 +8,8 @@ namespace MyNetSensors.Nodes
     public class ConnectionLocalReceiverNode : Node
     {
 
-        public ConnectionLocalReceiverNode() : base(0,1)
+        public ConnectionLocalReceiverNode() : base("Connection", "Local Receiver",0,1)
         {
-            this.Title = "Local Receiver";
-            this.Type = "Connection/Local Receiver";
-
             Settings.Add("Channel",new NodeSetting(NodeSettingType.Number, "Channel","0"));
         }
 

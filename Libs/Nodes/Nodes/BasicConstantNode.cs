@@ -11,12 +11,9 @@ namespace MyNetSensors.Nodes
     {
 
 
-        public BasicConstantNode() : base(0,1)
+        public BasicConstantNode() : base("Basic", "Constant", 0, 1)
         {
-            this.Title = "Constant";
-            this.Type = "Basic/Constant";
-
-            Settings.Add("Value",new NodeSetting(NodeSettingType.Text, "Constant Value",""));
+            Settings.Add("Value", new NodeSetting(NodeSettingType.Text, "Constant Value", ""));
         }
 
         public override void Loop()
@@ -30,7 +27,7 @@ namespace MyNetSensors.Nodes
         public void SetValue(string value)
         {
             Settings["Value"].Value = value;
-            
+
             Outputs[0].Value = value;
 
             UpdateMe();

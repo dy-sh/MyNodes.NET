@@ -10,11 +10,8 @@ namespace MyNetSensors.Nodes.Nodes
     public class RgbRgbwRemapNode : Node
     {
 
-        public RgbRgbwRemapNode() : base(5, 1)
+        public RgbRgbwRemapNode() : base("RGB","RGBW Remap",5, 1)
         {
-            this.Title = "RGBW Remap";
-            this.Type = "RGB/RGBW Remap";
-
             Inputs[0].Name = "RGBW Value";
             Inputs[1].Name = "RGBW InMin";
             Inputs[2].Name = "RGBW InMax";

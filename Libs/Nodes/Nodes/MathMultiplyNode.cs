@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class MathMultiplyNode : Node
     {
 
-        public MathMultiplyNode() : base(2, 1)
+        public MathMultiplyNode() : base("Math","Multiply",2, 1)
         {
-            this.Title = "Multiply";
-            this.Type = "Math/Multiply";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

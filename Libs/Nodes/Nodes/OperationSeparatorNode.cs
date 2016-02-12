@@ -9,11 +9,8 @@ namespace MyNetSensors.Nodes.Nodes
     public class OperationSeparatorNode : Node
     {
 
-        public OperationSeparatorNode() : base(2, 2)
+        public OperationSeparatorNode() : base("Operation","Separator",2, 2)
         {
-            this.Title = "Separator";
-            this.Type = "Operation/Separator";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

@@ -5,15 +5,12 @@
 
 namespace MyNetSensors.Nodes
 {
-  public class UiProgressNode : UiNode
+    public class UiProgressNode : UiNode
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public UiProgressNode() : base(1, 0)
-      {
-            this.Title = "UI Progress";
-            this.Type = "UI/Progress";
-            this.DefaultName = "Progress";
+        public UiProgressNode() : base("Progress", 1, 0)
+        {
         }
 
         public override void Loop()

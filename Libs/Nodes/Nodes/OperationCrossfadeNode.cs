@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class OperationCrossfadeNode : Node
     {
 
-        public OperationCrossfadeNode() : base(3, 1)
+        public OperationCrossfadeNode() : base("Operation","Crossfade",3, 1)
         {
-            this.Title = "Crossfade";
-            this.Type = "Operation/Crossfade";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Inputs[2].Type = DataType.Number;

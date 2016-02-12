@@ -5,17 +5,14 @@
 
 namespace MyNetSensors.Nodes
 {
-  public class UiRgbwSlidersNode : UiNode
+    public class UiRgbwSlidersNode : UiNode
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public UiRgbwSlidersNode() : base(0, 1)
-      {
-            this.Title = "UI RGBW Sliders";
-            this.Type = "UI/RGBW Sliders";
-            this.DefaultName = "RGBW";
+        public UiRgbwSlidersNode() : base("RGBW Sliders", 0, 1)
+        {
             Value = "00000000";
-           Outputs[0].Value = Value.ToString();
+            Outputs[0].Value = Value.ToString();
         }
 
         public override void Loop()

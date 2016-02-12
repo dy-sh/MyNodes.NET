@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class MathModulusNode : Node
     {
 
-        public MathModulusNode() : base(2, 1)
+        public MathModulusNode() : base("Math","Modulus",2, 1)
         {
-            this.Title = "Modulus";
-            this.Type = "Math/Modulus";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

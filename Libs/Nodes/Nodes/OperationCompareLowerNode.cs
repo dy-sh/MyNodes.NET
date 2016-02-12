@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class OperationCompareLowerNode : Node
     {
 
-        public OperationCompareLowerNode() : base(2, 1)
+        public OperationCompareLowerNode() : base("Operation","Compare Lower",2, 1)
         {
-            this.Title = "Compare Lower";
-            this.Type = "Operation/Compare Lower";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Logical;

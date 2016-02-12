@@ -3,11 +3,8 @@
     public class UiTimerNode:UiNode
     {
 
-        public UiTimerNode():base(0,1)
+        public UiTimerNode():base("Timer",0,1)
         {
-            this.Title = "UI Timer";
-            this.Type = "UI/Timer";
-            this.SetDefaultName("Timer");
         }
 
         public override void Loop()

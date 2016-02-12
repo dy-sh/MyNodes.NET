@@ -23,7 +23,7 @@ namespace MyNetSensors.Nodes
     {
         public string Id { get; set; }
         public string PanelId { get; set; }
-        public string Title { get; set; }
+        public string Category { get; set; }
         public string Type { get; set; }
         public Position Position { get; set; }
         public Size Size { get; set; }
@@ -33,7 +33,7 @@ namespace MyNetSensors.Nodes
 
         protected NodesEngine engine;
 
-        protected NodeOptions options=new NodeOptions();
+        protected NodeOptions options = new NodeOptions();
 
         public Dictionary<string, NodeSetting> Settings { get; set; } = new Dictionary<string, NodeSetting>();
 
@@ -49,9 +49,12 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        public Node(int inputsCount, int outputsCount)
+        public Node(string category, string type, int inputsCount, int outputsCount)
         {
             Id = Guid.NewGuid().ToString();
+
+            Type = type;
+            Category = category;
 
             Outputs = new List<Output>();
             for (int i = 0; i < outputsCount; i++)
@@ -74,24 +77,16 @@ namespace MyNetSensors.Nodes
             PanelId = "Main";
         }
 
-        public Node()
-        {
-            Id = Guid.NewGuid().ToString();
-            Inputs = new List<Input>();
-            Outputs = new List<Output>();
-            PanelId = "Main";
-        }
-
 
 
         public void LogInfo(string message)
         {
-            engine?.LogNodesInfo($"{PanelName}: {Title}: {message}");
+            engine?.LogNodesInfo($"{PanelName}: {Type}: {message}");
         }
 
         public void LogError(string message)
         {
-            engine?.LogNodesError($"{PanelName}: {Title}: {message}");
+            engine?.LogNodesError($"{PanelName}: {Type}: {message}");
         }
 
         public void LogIncorrectInputValueError(Input input)
@@ -248,8 +243,8 @@ namespace MyNetSensors.Nodes
                     'Assembly': '" + assembly + @"'
                 };
             }
-            " + className + @".title = '" + this.Title + @"';
-            LiteGraph.registerNodeType('" + this.Type + "', " + className + @");
+            " + className + @".title = '" + this.Type + @"';
+            LiteGraph.registerNodeType('" + this.Category+"/"+ this.Type+ "', " + className + @");
 
             ";
         }

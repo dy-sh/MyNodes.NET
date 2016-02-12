@@ -15,11 +15,8 @@ namespace MyNetSensors.Nodes
     public class SystemJsonFileNode : Node
     {
 
-        public SystemJsonFileNode() : base(6, 1)
+        public SystemJsonFileNode() : base("System","Json File",6, 1)
         {
-            this.Title = "Json File";
-            this.Type = "System/Json File";
-
             Inputs[0].Name = "File Name";
             Inputs[1].Name = "Key";
             Inputs[2].Name = "Value";

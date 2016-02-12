@@ -339,7 +339,7 @@ namespace MyNetSensors.WebController.Code
 
 
 
-                nodes = nodes.OrderBy(x => x.Type).ToList();
+                nodes = nodes.OrderBy(x => x.Category+x.Type).ToList();
 
                 string file = "(function () {\n";
 

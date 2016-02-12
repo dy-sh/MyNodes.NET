@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class LogicAndNode : Node
     {
 
-        public LogicAndNode() : base(2, 1)
+        public LogicAndNode() : base("Logic", "AND", 2, 1)
         {
-            this.Title = "AND";
-            this.Type = "Logic/AND";
-
             Inputs[0].Type = DataType.Logical;
             Inputs[1].Type = DataType.Logical;
             Outputs[0].Type = DataType.Logical;
@@ -40,7 +37,7 @@ namespace MyNetSensors.Nodes
 
             if (Inputs[0].Value == "1" && Inputs[1].Value == "1")
                 result = "1";
-            
+
             Outputs[0].Value = result;
         }
     }

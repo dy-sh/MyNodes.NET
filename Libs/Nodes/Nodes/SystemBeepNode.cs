@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class SystemBeepNode : Node
     {
 
-        public SystemBeepNode() : base(1, 0)
+        public SystemBeepNode() : base("System","Beep",1, 0)
         {
-            this.Title = "Beep";
-            this.Type = "System/Beep";
-
             Inputs[0].Type = DataType.Logical;
         }
 

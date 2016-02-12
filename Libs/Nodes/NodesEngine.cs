@@ -197,7 +197,7 @@ namespace MyNetSensors.Nodes
                     changedInputsStack.Remove(input);
                 }
                 catch { }
-                LogEngineError($"Message dropped at Node [{node.PanelName}: {node.Title}].");
+                LogEngineError($"Message dropped at Node [{node.PanelName}: {node.Type}].");
                 return;
             }
             changedInputsStack.Add(input);

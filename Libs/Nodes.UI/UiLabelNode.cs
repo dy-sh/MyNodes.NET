@@ -9,11 +9,8 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiLabelNode() : base(1, 0)
+        public UiLabelNode() : base("Label",1, 0)
         {
-            this.Title = "UI Label";
-            this.Type = "UI/Label";
-            this.DefaultName = "Label";
         }
 
         public override void Loop()

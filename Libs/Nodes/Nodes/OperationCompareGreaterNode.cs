@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class OperationCompareGreaterNode : Node
     {
 
-        public OperationCompareGreaterNode() : base(2, 1)
+        public OperationCompareGreaterNode() : base("Operation","Compare Greater",2, 1)
         {
-            this.Title = "Compare Greater";
-            this.Type = "Operation/Compare Greater";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Logical;

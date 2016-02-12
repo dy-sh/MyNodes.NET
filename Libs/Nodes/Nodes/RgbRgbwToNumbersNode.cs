@@ -10,11 +10,8 @@ namespace MyNetSensors.Nodes.Nodes
     public class RgbRgbwToNumbersNode : Node
     {
 
-        public RgbRgbwToNumbersNode() : base(1, 4)
+        public RgbRgbwToNumbersNode() : base("RGB","RGBW to Numbers",1, 4)
         {
-            this.Title = "RGBW to Numbers";
-            this.Type = "RGB/RGBW to Numbers";
-
             Inputs[0].Type = DataType.Text;
             Outputs[0].Type = DataType.Number;
             Outputs[1].Type = DataType.Number;

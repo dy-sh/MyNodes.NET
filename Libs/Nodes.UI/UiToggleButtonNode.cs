@@ -5,16 +5,12 @@
 
 namespace MyNetSensors.Nodes
 {
-  public class UiToggleButtonNode : UiNode
+    public class UiToggleButtonNode : UiNode
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public UiToggleButtonNode() : base(0, 1)
-      {
-            this.Title = "UI Toggle";
-            this.Type = "UI/Toggle Button";
-            this.DefaultName = "Toggle";
-
+        public UiToggleButtonNode() : base("Toggle", 0, 1)
+        {
             Value = "0";
             Outputs[0].Value = Value;
         }

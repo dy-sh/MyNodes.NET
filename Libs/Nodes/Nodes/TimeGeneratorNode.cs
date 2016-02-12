@@ -21,11 +21,8 @@ namespace MyNetSensors.Nodes
 
         private Timer timer = new Timer();
 
-        public TimeGeneratorNode() : base(3, 1)
+        public TimeGeneratorNode() : base("Time","Generator",3, 1)
         {
-            this.Title = "Generator";
-            this.Type = "Time/Generator";
-
             Inputs[0].Name = "Frequency";
             Inputs[1].Name = "Start";
             Inputs[2].Name = "Reset";

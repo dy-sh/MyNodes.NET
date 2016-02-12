@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class MathPowNode : Node
     {
 
-        public MathPowNode() : base(2, 1)
+        public MathPowNode() : base("Math","Pow",2, 1)
         {
-            this.Title = "Pow";
-            this.Type = "Math/Pow";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

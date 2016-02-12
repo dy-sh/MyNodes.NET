@@ -673,7 +673,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiAudioNode.title = 'UI Audio';
+            UiAudioNode.title = 'Audio';
             LiteGraph.registerNodeType('UI/Audio', UiAudioNode);
 
             
@@ -685,7 +685,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiButtonNode.title = 'UI Button';
+            UiButtonNode.title = 'Button';
             LiteGraph.registerNodeType('UI/Button', UiButtonNode);
 
             
@@ -697,7 +697,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiChartNode.title = 'UI Chart';
+            UiChartNode.title = 'Chart';
             LiteGraph.registerNodeType('UI/Chart', UiChartNode);
 
             
@@ -709,7 +709,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiLabelNode.title = 'UI Label';
+            UiLabelNode.title = 'Label';
             LiteGraph.registerNodeType('UI/Label', UiLabelNode);
 
             
@@ -721,7 +721,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiLogNode.title = 'UI Log';
+            UiLogNode.title = 'Log';
             LiteGraph.registerNodeType('UI/Log', UiLogNode);
 
             
@@ -733,7 +733,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiProgressNode.title = 'UI Progress';
+            UiProgressNode.title = 'Progress';
             LiteGraph.registerNodeType('UI/Progress', UiProgressNode);
 
             
@@ -745,7 +745,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiRgbSlidersNode.title = 'UI RGB Sliders';
+            UiRgbSlidersNode.title = 'RGB Sliders';
             LiteGraph.registerNodeType('UI/RGB Sliders', UiRgbSlidersNode);
 
             
@@ -757,7 +757,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiRgbwSlidersNode.title = 'UI RGBW Sliders';
+            UiRgbwSlidersNode.title = 'RGBW Sliders';
             LiteGraph.registerNodeType('UI/RGBW Sliders', UiRgbwSlidersNode);
 
             
@@ -769,7 +769,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiSliderNode.title = 'UI Slider';
+            UiSliderNode.title = 'Slider';
             LiteGraph.registerNodeType('UI/Slider', UiSliderNode);
 
             
@@ -781,7 +781,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiStateNode.title = 'UI State';
+            UiStateNode.title = 'State';
             LiteGraph.registerNodeType('UI/State', UiStateNode);
 
             
@@ -793,7 +793,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiSwitchNode.title = 'UI Switch';
+            UiSwitchNode.title = 'Switch';
             LiteGraph.registerNodeType('UI/Switch', UiSwitchNode);
 
             
@@ -805,7 +805,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiTextBoxNode.title = 'UI TextBox';
+            UiTextBoxNode.title = 'TextBox';
             LiteGraph.registerNodeType('UI/TextBox', UiTextBoxNode);
 
             
@@ -837,8 +837,8 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiToggleButtonNode.title = 'UI Toggle';
-            LiteGraph.registerNodeType('UI/Toggle Button', UiToggleButtonNode);
+            UiToggleButtonNode.title = 'Toggle';
+            LiteGraph.registerNodeType('UI/Toggle', UiToggleButtonNode);
 
             
 
@@ -849,7 +849,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiVoiceGoogleNode.title = 'UI Voice Google';
+            UiVoiceGoogleNode.title = 'Voice Google';
             LiteGraph.registerNodeType('UI/Voice Google', UiVoiceGoogleNode);
 
             
@@ -861,7 +861,7 @@
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            UiVoiceYandexNode.title = 'UI Voice Yandex';
+            UiVoiceYandexNode.title = 'Voice Yandex';
             LiteGraph.registerNodeType('UI/Voice Yandex', UiVoiceYandexNode);
 
             

@@ -58,8 +58,8 @@ namespace MyNetSensors.WebController.Controllers
         {
             LiteGraph.Node litegraphNode = new LiteGraph.Node
             {
-                title = node.Title,
-                type = node.Type,
+                title = node.Type,
+                type = node.Category + "/" + node.Type,
                 id = node.Id,
                 panel_id = node.PanelId
             };
@@ -68,10 +68,10 @@ namespace MyNetSensors.WebController.Controllers
             litegraphNode.properties["ObjectType"] = node.GetType().ToString();
 
             if (node.Position != null)
-                litegraphNode.pos = new[] {node.Position.X, node.Position.Y};
+                litegraphNode.pos = new[] { node.Position.X, node.Position.Y };
 
             if (node.Size != null)
-                litegraphNode.size = new[] {node.Size.Width, node.Size.Height};
+                litegraphNode.size = new[] { node.Size.Width, node.Size.Height };
 
             litegraphNode.inputs = new List<LiteGraph.Input>();
             litegraphNode.outputs = new List<LiteGraph.Output>();
@@ -122,18 +122,18 @@ namespace MyNetSensors.WebController.Controllers
                 }
             }
 
-            if (node.Settings!=null && node.Settings.Count>0)
-            litegraphNode.properties["Settings"] = JsonConvert.SerializeObject(node.Settings);
+            if (node.Settings != null && node.Settings.Count > 0)
+                litegraphNode.properties["Settings"] = JsonConvert.SerializeObject(node.Settings);
 
-            
+
             if (node is UiChartNode)
             {
-                UiChartNode n = (UiChartNode) node;
+                UiChartNode n = (UiChartNode)node;
                 litegraphNode.properties["State"] = n.State.ToString();
             }
 
-            if (node.Settings.ContainsKey("Name") 
-                &&!string.IsNullOrEmpty(node.Settings["Name"].Value))
+            if (node.Settings.ContainsKey("Name")
+                && !string.IsNullOrEmpty(node.Settings["Name"].Value))
                 litegraphNode.title += " [" + node.Settings["Name"].Value + "]";
 
             if (node is PanelNode)
@@ -236,7 +236,7 @@ namespace MyNetSensors.WebController.Controllers
 
                 if (outNode.GetNodeOptions().ProtectedAccess || inNode.GetNodeOptions().ProtectedAccess)
                 {
-                    if (!User.HasClaim(x=>x.Type== UserClaims.EditorProtectedAccess))
+                    if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
                     {
                         engine.LogEngineError(
                             $"Can`t remove link from [{link.origin_id}] to [{link.target_id}]. No permissions for protected access.");
@@ -316,9 +316,9 @@ namespace MyNetSensors.WebController.Controllers
                     }
                 }
 
-                newNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
+                newNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
                 if (node.size.Length == 2)
-                    newNode.Size = new Size {Width = node.size[0], Height = node.size[1]};
+                    newNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
                 //newNode.Id = node.id;
                 newNode.PanelId = node.panel_id ?? MAIN_PANEL_ID;
 
@@ -333,7 +333,7 @@ namespace MyNetSensors.WebController.Controllers
             try
             {
                 var newObject = Activator.CreateInstance(assemblyName, type);
-                return (Node) newObject.Unwrap();
+                return (Node)newObject.Unwrap();
             }
             catch
             {
@@ -366,7 +366,7 @@ namespace MyNetSensors.WebController.Controllers
                     if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
                     {
                         engine.LogEngineError(
-                            $"Can`t clone node [{node.Type}]. No permissions for protected access.");
+                            $"Can`t clone node [{node.Category}/{node.Type}]. No permissions for protected access.");
                         return false;
                     }
                 }
@@ -402,7 +402,7 @@ namespace MyNetSensors.WebController.Controllers
                     if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
                     {
                         engine.LogEngineError(
-                            $"Can`t remove node [{oldNode.Type}]. No permissions for protected access.");
+                            $"Can`t remove node [{oldNode.Category}/{oldNode.Type}]. No permissions for protected access.");
                         return false;
                     }
                 }
@@ -429,8 +429,8 @@ namespace MyNetSensors.WebController.Controllers
                     return false;
                 }
 
-                oldNode.Position = new Position {X = node.pos[0], Y = node.pos[1]};
-                oldNode.Size = new Size {Width = node.size[0], Height = node.size[1]};
+                oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
+                oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
 
                 engine.UpdateNode(oldNode);
                 engine.UpdateNodeInDb(oldNode);
@@ -440,7 +440,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        
+
 
 
         [Authorize(UserClaims.EditorEditor)]
@@ -458,7 +458,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
                 {
                     engine.LogEngineError(
-                        $"Can`t  set settings for node [{node.Type}]. No permissions for protected access.");
+                        $"Can`t  set settings for node [{node.Category}/{node.Type}]. No permissions for protected access.");
                     return false;
                 }
             }
@@ -566,7 +566,7 @@ namespace MyNetSensors.WebController.Controllers
 
 
 
-  
+
         //todo authorize?
 
         public async Task<NodesEngineInfo> GetNodesEngineInfo()

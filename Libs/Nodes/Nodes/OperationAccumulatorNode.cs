@@ -10,11 +10,8 @@ namespace MyNetSensors.Nodes.Nodes
     {
         public double Value { get; set; }
 
-        public OperationAccumulatorNode() : base(2, 1)
+        public OperationAccumulatorNode() : base("Operation","Accumulator",2, 1)
         {
-            this.Title = "Accumulator";
-            this.Type = "Operation/Accumulator";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

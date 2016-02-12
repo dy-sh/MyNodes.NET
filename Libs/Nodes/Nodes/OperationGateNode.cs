@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class OperationGateNode : Node
     {
 
-        public OperationGateNode() : base(2, 1)
+        public OperationGateNode() : base("Operation","Gate",2, 1)
         {
-            this.Title = "Gate";
-            this.Type = "Operation/Gate";
-
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Key";
 

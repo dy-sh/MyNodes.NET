@@ -5,16 +5,13 @@
 
 namespace MyNetSensors.Nodes
 {
-  public class UiSwitchNode : UiNode
+    public class UiSwitchNode : UiNode
     {
-      public string Value { get; set; }
+        public string Value { get; set; }
 
-      public UiSwitchNode() : base(0, 1)
-      {
-            this.Title = "UI Switch";
-            this.Type = "UI/Switch";
-            this.DefaultName = "Switch";
-           Value = "0";
+        public UiSwitchNode() : base("Switch", 0, 1)
+        {
+            Value = "0";
             Outputs[0].Value = Value;
         }
 

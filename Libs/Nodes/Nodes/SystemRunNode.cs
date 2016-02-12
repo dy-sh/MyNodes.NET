@@ -15,11 +15,8 @@ namespace MyNetSensors.Nodes
     public class SystemRunNode : Node
     {
 
-        public SystemRunNode() : base(2, 0)
+        public SystemRunNode() : base("System","Run",2, 0)
         {
-            this.Title = "Run";
-            this.Type = "System/Run";
-
             Inputs[0].Name = "Path";
             Inputs[1].Name = "Start";
 

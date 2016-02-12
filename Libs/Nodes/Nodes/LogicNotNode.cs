@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class LogicNotNode : Node
     {
 
-        public LogicNotNode() : base(1, 1)
+        public LogicNotNode() : base("Logic", "NOT",1, 1)
         {
-            this.Title = "NOT";
-            this.Type = "Logic/NOT";
-
             Inputs[0].Type = DataType.Logical;
             Outputs[0].Type = DataType.Logical;
         }

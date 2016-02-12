@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class SystemBeepAdvancedNode : Node
     {
 
-        public SystemBeepAdvancedNode() : base(3, 0)
+        public SystemBeepAdvancedNode() : base("System","Beep Advanced",3, 0)
         {
-            this.Title = "Beep Advanced";
-            this.Type = "System/Beep Advanced";
-
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Frequency";
             Inputs[2].Name = "Duration";

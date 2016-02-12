@@ -7,11 +7,8 @@ namespace MyNetSensors.Nodes
 {
     public class UiButtonNode : UiNode
     {
-        public UiButtonNode() : base(0, 1)
+        public UiButtonNode() : base("Button", 0, 1)
         {
-            this.Title = "UI Button";
-            this.Type = "UI/Button";
-            this.DefaultName = "Button";
             Outputs[0].Value = "0";
         }
 

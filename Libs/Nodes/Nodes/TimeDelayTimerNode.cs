@@ -17,11 +17,8 @@ namespace MyNetSensors.Nodes
         private DateTime lastTime;
 
 
-        public TimeDelayTimerNode() : base(2, 1)
+        public TimeDelayTimerNode() : base("Time","Delay Timer",2, 1)
         {
-            this.Title = "Delay Timer";
-            this.Type = "Time/Delay Timer";
-
             Inputs[0].Name = "Delay";
             Inputs[1].Name = "Start";
             //Inputs[2].Name = "Reset";

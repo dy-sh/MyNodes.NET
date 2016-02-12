@@ -9,11 +9,8 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiTextBoxNode() : base(0, 1)
+        public UiTextBoxNode() : base("TextBox",0, 1)
         {
-            this.Title = "UI TextBox";
-            this.Type = "UI/TextBox";
-            this.DefaultName = "TextBox";
         }
 
         public override void Loop()

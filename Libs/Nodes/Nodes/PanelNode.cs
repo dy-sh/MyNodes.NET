@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
 
     public class PanelNode : Node
     {
-        public PanelNode() : base(0, 0)
+        public PanelNode() : base("Main","Panel",0, 0)
         {
-            this.Title = "Panel";
-            this.Type = "Main/Panel";
-
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 

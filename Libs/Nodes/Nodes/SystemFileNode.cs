@@ -13,11 +13,8 @@ namespace MyNetSensors.Nodes
     public class SystemFileNode : Node
     {
 
-        public SystemFileNode() : base(5, 1)
+        public SystemFileNode() : base("System","File",5, 1)
         {
-            this.Title = "File";
-            this.Type = "System/File";
-
             Inputs[0].Name = "File Name";
             Inputs[1].Name = "Text";
             Inputs[2].Name = "Read";

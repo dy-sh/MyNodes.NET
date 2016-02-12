@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class OperationCompareEqualNode : Node
     {
 
-        public OperationCompareEqualNode() : base(2, 1)
+        public OperationCompareEqualNode() : base("Operation","Compare Equal",2, 1)
         {
-            this.Title = "Compare Equal";
-            this.Type = "Operation/Compare Equal";
-
             Inputs[0].Type = DataType.Text;
             Inputs[1].Type = DataType.Text;
             Outputs[0].Type = DataType.Logical;

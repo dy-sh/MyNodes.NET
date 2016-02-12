@@ -9,11 +9,8 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiVoiceGoogleNode() : base(1, 0)
+        public UiVoiceGoogleNode() : base("Voice Google",1, 0)
         {
-            this.Title = "UI Voice Google";
-            this.Type = "UI/Voice Google";
-            this.DefaultName = "Voice Google";
         }
 
         public override void Loop()

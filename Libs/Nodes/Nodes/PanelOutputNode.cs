@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     {
         //Id must be equal to panel output id
 
-        public PanelOutputNode() : base(1, 0)
+        public PanelOutputNode() : base("Main","Panel Output",1, 0)
         {
-            this.Title = "Output";
-            this.Type = "Main/Panel Output";
-
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 

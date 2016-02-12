@@ -11,13 +11,9 @@ namespace MyNetSensors.Nodes
     public class ConnectionLocalTransmitterNode : Node
     {
 
-        public ConnectionLocalTransmitterNode() : base(1,0)
+        public ConnectionLocalTransmitterNode() : base("Connection", "Local Transmitter",1,0)
         {
-            this.Title = "Local Transmitter";
-            this.Type = "Connection/Local Transmitter";
-
             Settings.Add("Channel", new NodeSetting(NodeSettingType.Number, "Channel", "0"));
-
         }
 
         public override void Loop()

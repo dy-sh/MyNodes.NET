@@ -13,11 +13,8 @@ namespace MyNetSensors.Nodes
     {
         public int Count { get; set; }
 
-        public OperationEventCounterNode() : base(2, 1)
+        public OperationEventCounterNode() : base("Operation","Event Counter",2, 1)
         {
-            this.Title = "Event Counter";
-            this.Type = "Operation/Event Counter";
-
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Reset";
 

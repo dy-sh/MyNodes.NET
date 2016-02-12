@@ -12,16 +12,15 @@ namespace MyNetSensors.Nodes
         public int nodeId;
 
 
-        public MySensorsNode(Gateways.MySensors.Node node) : base(0, 0)
+        public MySensorsNode(Gateways.MySensors.Node node) : base("Nodes","Hardware",0, 0)
         {
             this.nodeId = node.Id;
-            this.Title = node.GetSimpleName2();
-            this.Type = "Nodes/Hardware";
+            this.Type = node.GetSimpleName2();
             CreateInputsOutputs(node);
         }
 
 
-        public MySensorsNode() : base(0, 0)
+        public MySensorsNode() : base("Nodes", "Hardware",0, 0)
         {
 
         }

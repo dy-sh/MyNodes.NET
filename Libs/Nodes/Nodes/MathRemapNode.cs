@@ -15,11 +15,8 @@ namespace MyNetSensors.Nodes
     public class MathRemapNode : Node
     {
 
-        public MathRemapNode() : base(5, 1)
+        public MathRemapNode() : base("Math","Remap",5, 1)
         {
-            this.Title = "Remap";
-            this.Type = "Math/Remap";
-
             Inputs[0].Name = "Value";
             Inputs[1].Name = "InMin";
             Inputs[2].Name = "InMax";

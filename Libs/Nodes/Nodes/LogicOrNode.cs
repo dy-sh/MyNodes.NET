@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class LogicOrNode : Node
     {
 
-        public LogicOrNode() : base(2, 1)
+        public LogicOrNode() : base("Logic","OR",2, 1)
         {
-            this.Title = "OR";
-            this.Type = "Logic/OR";
-
             Inputs[0].Type = DataType.Logical;
             Inputs[1].Type = DataType.Logical;
             Outputs[0].Type = DataType.Logical;

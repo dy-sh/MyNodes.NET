@@ -18,11 +18,8 @@ namespace MyNetSensors.Nodes
         private string password;
         private int channel;
 
-        public ConnectionRemoteTransmitterNode() : base(4, 0)
+        public ConnectionRemoteTransmitterNode() : base("Connection", "Remote Transmitter",4, 0)
         {
-            this.Title = "Remote Transmitter";
-            this.Type = "Connection/Remote Transmitter";
-
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Address";
             Inputs[2].Name = "Channel";

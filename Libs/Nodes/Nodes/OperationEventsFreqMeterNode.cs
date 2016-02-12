@@ -16,11 +16,8 @@ namespace MyNetSensors.Nodes
         private int countWas;
         private Timer timer = new Timer();
 
-        public OperationEventsFreqMeterNode() : base(1, 1)
+        public OperationEventsFreqMeterNode() : base("Operation","Events Freq Meter",1, 1)
         {
-            this.Title = "Events Freq Meter";
-            this.Type = "Operation/Events Freq Meter";
-
             Outputs[0].Name = "Events/sec";
 
             Inputs[0].Type = DataType.Text;

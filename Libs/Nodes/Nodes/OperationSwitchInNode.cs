@@ -15,11 +15,8 @@ namespace MyNetSensors.Nodes
     public class OperationSwitchInNode : Node
     {
 
-        public OperationSwitchInNode() : base(11, 1)
+        public OperationSwitchInNode() : base("Operation","Switch in",11, 1)
         {
-            this.Title = "Switch in";
-            this.Type = "Operation/Switch in";
-
             Inputs[0].Name = "Switch";
             Inputs[1].Name = "Value1";
             Inputs[2].Name = "Value2";

@@ -14,11 +14,8 @@ namespace MyNetSensors.Nodes
     public class MathPlusNode : Node
     {
 
-        public MathPlusNode() : base(2, 1)
+        public MathPlusNode() : base("Math","Plus",2, 1)
         {
-            this.Title = "Plus";
-            this.Type = "Math/Plus";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

@@ -12,11 +12,8 @@ namespace MyNetSensors.Nodes
     public class MathDivideNode : Node
     {
 
-        public MathDivideNode() : base(2, 1)
+        public MathDivideNode() : base("Math","Divide",2, 1)
         {
-            this.Title = "Divide";
-            this.Type = "Math/Divide";
-
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;

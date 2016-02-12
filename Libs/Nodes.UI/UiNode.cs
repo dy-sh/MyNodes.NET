@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
     {
         internal string DefaultName { get; set; }
 
-        public UiNode(int inputsCount, int outputsCount) : base(inputsCount, outputsCount)
+        public UiNode(string title,int inputsCount, int outputsCount) : base("UI", title, inputsCount, outputsCount)
         {
+            DefaultName = title;
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name",""));
             Settings.Add("PanelIndex",new NodeSetting(NodeSettingType.Number, "Index on panel","0"));
             Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page","true"));

@@ -14,10 +14,8 @@ namespace MyNetSensors.Nodes
     public class MathCosNode : Node
     {
 
-        public MathCosNode() : base(1, 1)
+        public MathCosNode() : base("Math","Cos",1, 1)
         {
-            this.Title = "Cos";
-            this.Type = "Math/Cos";
 
             Inputs[0].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
