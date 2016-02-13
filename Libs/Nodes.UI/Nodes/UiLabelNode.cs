@@ -22,7 +22,5 @@ namespace MyNetSensors.Nodes
             Value = input.Value;
             UpdateMe();
         }
-
-
     }
 }

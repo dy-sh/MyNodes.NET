@@ -45,23 +45,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartData.cs" />
-    <Compile Include="UiAudioNode.cs" />
-    <Compile Include="UiVoiceGoogleNode.cs" />
-    <Compile Include="UiVoiceYandexNode.cs" />
+    <Compile Include="Nodes\UiAudioNode.cs" />
+    <Compile Include="Nodes\UiVoiceGoogleNode.cs" />
+    <Compile Include="Nodes\UiVoiceYandexNode.cs" />
     <Compile Include="UiNodesEngine.cs" />
     <Compile Include="UiNode.cs" />
-    <Compile Include="UiButtonNode.cs" />
-    <Compile Include="UiChartNode.cs" />
-    <Compile Include="UiTextBoxNode.cs" />
-    <Compile Include="UiStateNode.cs" />
-    <Compile Include="UiLogNode.cs" />
-    <Compile Include="UiRgbwSlidersNode.cs" />
-    <Compile Include="UiRgbSlidersNode.cs" />
-    <Compile Include="UiSwitchNode.cs" />
-    <Compile Include="UiToggleButtonNode.cs" />
-    <Compile Include="UiSliderNode.cs" />
-    <Compile Include="UiProgressNode.cs" />
-    <Compile Include="UiLabelNode.cs" />
+    <Compile Include="Nodes\UiButtonNode.cs" />
+    <Compile Include="Nodes\UiChartNode.cs" />
+    <Compile Include="Nodes\UiTextBoxNode.cs" />
+    <Compile Include="Nodes\UiStateNode.cs" />
+    <Compile Include="Nodes\UiLogNode.cs" />
+    <Compile Include="Nodes\UiRgbwSlidersNode.cs" />
+    <Compile Include="Nodes\UiRgbSlidersNode.cs" />
+    <Compile Include="Nodes\UiSwitchNode.cs" />
+    <Compile Include="Nodes\UiToggleButtonNode.cs" />
+    <Compile Include="Nodes\UiSliderNode.cs" />
+    <Compile Include="Nodes\UiProgressNode.cs" />
+    <Compile Include="Nodes\UiLabelNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Custom\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

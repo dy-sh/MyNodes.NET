@@ -19,11 +19,6 @@ namespace MyNetSensors.Nodes
             Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page","true"));
         }
 
-        public void SetDefaultName(string name)
-        {
-            DefaultName = name;
-        }
-
         public virtual bool SetValues(Dictionary<string, string> values)
         {
             return false;
