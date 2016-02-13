@@ -172,11 +172,11 @@ namespace MyNetSensors.Nodes
             PanelNode.prototype.getExtraMenuOptions = function (graphcanvas) {
                 var that = this;
                 return [
-                    { content: 'Open', callback: function () { window.location = '/NodesEditor/Panel/' + that.id; } },
+                    { content: 'Open', callback: function () { window.location = '/NodeEditor/Panel/' + that.id; } },
                     null, //null for horizontal line
                     { content: 'Show on Dashboard', callback: function () { var win = window.open('/Dashboard/Panel/' + that.id, '_blank'); win.focus(); } },
                     null,
-                    { content: 'Export to file', callback: function () { var win = window.open('/NodesEditorAPI/SerializePanelToFile/' + that.id, '_blank'); win.focus(); } },
+                    { content: 'Export to file', callback: function () { var win = window.open('/NodeEditorAPI/SerializePanelToFile/' + that.id, '_blank'); win.focus(); } },
                     { content: 'Export to script', callback: function () { editor.exportPanelToScript(that.id) } },
                     { content: 'Export URL', callback: function () { editor.exportPanelURL(that.id) } },
                     null

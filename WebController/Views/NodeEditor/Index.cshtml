@@ -1,7 +1,7 @@
 ﻿@using MyNetSensors.Nodes
 @{
     Layout = null;
-    ViewBag.Title = "Nodes Editor";
+    ViewBag.Title = "Node Editor";
 }
 
 
@@ -63,7 +63,7 @@
             }
 
             <div class="ui tiny buttons">
-                <a asp-controller="NodesEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
+                <a asp-controller="NodeEditor" asp-action="Index" class="ui inverted tiny basic button">Main Panel</a>
                 @{
                     List<PanelNode> panelsStack = ViewBag.panelsStack;
                     if (panelsStack != null && panelsStack.Any())

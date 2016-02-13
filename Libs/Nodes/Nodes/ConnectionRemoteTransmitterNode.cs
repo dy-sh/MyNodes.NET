@@ -75,7 +75,7 @@ namespace MyNetSensors.Nodes
             {
                 using (var client = new HttpClient())
                 {
-                    string url = address + "/NodesEditorApi/ReceiverSetValue/";
+                    string url = address + "/NodeEditorApi/ReceiverSetValue/";
 
                     var content = new FormUrlEncodedContent(new[]
                     {

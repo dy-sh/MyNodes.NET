@@ -127,7 +127,7 @@ namespace MyNetSensors.SoftNodes
         //    {
         //        using (var client = new HttpClient())
         //        {
-        //            string url = serverAddress + "/NodesEditorApi/ReceiverSetValue/";
+        //            string url = serverAddress + "/NodeEditorApi/ReceiverSetValue/";
 
         //            var content = new FormUrlEncodedContent(new[]
         //            {

@@ -135,7 +135,7 @@ Editor.prototype.importPanelFromFile = function (position) {
             var filebody = evt.target.result;
 
             $.ajax({
-                url: "/NodesEditorAPI/ImportPanelJson/",
+                url: "/NodeEditorAPI/ImportPanelJson/",
                 type: "POST",
                 data: {
                     json: filebody,
@@ -192,7 +192,7 @@ Editor.prototype.importPanelFromScript = function (position) {
         // $('#import-script-body').hide();
 
         $.ajax({
-            url: "/NodesEditorAPI/ImportPanelJson/",
+            url: "/NodeEditorAPI/ImportPanelJson/",
             type: "POST",
             data: {
                 json: $('#modal-panel-text').val(),
@@ -269,7 +269,7 @@ Editor.prototype.importPanelFromURL = function (position) {
 
         function importPanel(script) {
             $.ajax({
-                url: "/NodesEditorAPI/ImportPanelJson/",
+                url: "/NodeEditorAPI/ImportPanelJson/",
                 type: "POST",
                 data: {
                     json: script,
@@ -318,7 +318,7 @@ Editor.prototype.exportPanelToScript = function (id) {
     }).modal('setting', 'transition', 'fade up').modal('show');
 
     $.ajax({
-        url: "/NodesEditorAPI/SerializePanel/",
+        url: "/NodeEditorAPI/SerializePanel/",
         type: "POST",
         data: { id: id },
         success: function (result) {
@@ -337,7 +337,7 @@ Editor.prototype.exportPanelURL = function (id) {
                '<div class="field">' +
                'URL:  <input type="text" id="modal-panel-text">' +
                '</div>');
-    var url = $(location).attr('host') + "/NodesEditorAPI/SerializePanel/" + id;
+    var url = $(location).attr('host') + "/NodeEditorAPI/SerializePanel/" + id;
 
     var prefix = 'http://';
     if (url.substr(0, prefix.length) !== prefix) {
@@ -421,7 +421,7 @@ function NodeSettings(node) {
 
             //send settings
             $.ajax({
-                url: "/NodesEditorAPI/SetNodeSettings/",
+                url: "/NodeEditorAPI/SetNodeSettings/",
                 type: "POST",
                 data: {id: node.id, data: data}
             });
@@ -446,7 +446,7 @@ Editor.prototype.showNodeDescrition = function (node) {
     }).modal('setting', 'transition', 'fade up').modal('show');
 
     $.ajax({
-        url: "/NodesEditorAPI/GetNodeDescription/",
+        url: "/NodeEditorAPI/GetNodeDescription/",
         type: "POST",
         data: { id: node.id },
         success: function (result) {

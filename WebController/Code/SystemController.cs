@@ -350,11 +350,11 @@ namespace MyNetSensors.WebController.Code
 
                 System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
 
-                logs.AddSystemInfo($"Generated nodes editor script with {nodes.Count} nodes");
+                logs.AddSystemInfo($"Generated node editor script with {nodes.Count} nodes");
             }
             catch (Exception ex)
             {
-                logs.AddSystemError($"Failed to generate nodes editor script. "+ex.Message);
+                logs.AddSystemError($"Failed to generate node editor script. "+ex.Message);
             }
 
         }

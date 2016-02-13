@@ -31,7 +31,7 @@ $(function () {
 
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         graph.clear();
-        window.location.replace("/NodesEditor/");
+        window.location.replace("/NodeEditor/");
         noty({ text: 'All nodes have been deleted!', type: 'error' });
     };
 
@@ -53,7 +53,7 @@ $(function () {
     clientsHub.client.OnRemoveNode = function (nodeId) {
         //if current panel removed
         if (nodeId == this_panel_id) {
-            window.location = "/NodesEditor/";
+            window.location = "/NodeEditor/";
         }
 
         var node = graph.getNodeById(nodeId);
@@ -153,7 +153,7 @@ $("#sendButton").click(function () {
     //console.log(graph);
     var gr = JSON.stringify(graph.serialize());
     $.ajax({
-        url: '/NodesEditorAPI/PutGraph',
+        url: '/NodeEditorAPI/PutGraph',
         type: 'POST',
         data: { json: gr.toString() }
     }).done(function () {
@@ -197,7 +197,7 @@ $("#fullscreen-button").click(function () {
 function send_create_link(link) {
 
     $.ajax({
-        url: '/NodesEditorAPI/CreateLink',
+        url: '/NodeEditorAPI/CreateLink',
         type: 'POST',
         data: { 'link': link }
     }).done(function () {
@@ -208,7 +208,7 @@ function send_create_link(link) {
 function send_remove_link(link) {
 
     $.ajax({
-        url: '/NodesEditorAPI/RemoveLink',
+        url: '/NodeEditorAPI/RemoveLink',
         type: 'POST',
         data: { 'link': link }
     }).done(function () {
@@ -221,7 +221,7 @@ function send_create_node(node) {
 
     var serializedNode = node.serialize();
     $.ajax({
-        url: '/NodesEditorAPI/AddNode',
+        url: '/NodeEditorAPI/AddNode',
         type: 'POST',
         data: { 'node': serializedNode }
     }).done(function () {
@@ -231,7 +231,7 @@ function send_create_node(node) {
 
 function send_clone_node(node) {
     $.ajax({
-        url: '/NodesEditorAPI/CloneNode',
+        url: '/NodeEditorAPI/CloneNode',
         type: 'POST',
         data: { 'id': node.id }
     }).done(function () {
@@ -243,7 +243,7 @@ function send_remove_node(node) {
 
     var serializedNode = node.serialize();
     $.ajax({
-        url: '/NodesEditorAPI/RemoveNode',
+        url: '/NodeEditorAPI/RemoveNode',
         type: 'POST',
         data: { 'node': serializedNode }
     }).done(function () {
@@ -255,7 +255,7 @@ function send_update_node(node) {
 
     var serializedNode = node.serialize();
     $.ajax({
-        url: '/NodesEditorAPI/UpdateNode',
+        url: '/NodeEditorAPI/UpdateNode',
         type: 'POST',
         data: { 'node': serializedNode }
     }).done(function () {
@@ -267,7 +267,7 @@ function send_update_node(node) {
 function getGraph() {
 
     $.ajax({
-        url: "/NodesEditorAPI/GetGraph",
+        url: "/NodeEditorAPI/GetGraph",
         type: "POST",
         success: function (loadedGraph) {
             graph.configure(loadedGraph);
@@ -278,7 +278,7 @@ function getGraph() {
 function getNodes() {
 
     $.ajax({
-        url: "/NodesEditorAPI/GetNodes",
+        url: "/NodeEditorAPI/GetNodes",
         type: "POST",
         data: { 'panelId': window.this_panel_id },
         success: function (nodes) {
@@ -371,7 +371,7 @@ function createOrUpdateNode(node) {
 function getLinks() {
 
     $.ajax({
-        url: "/NodesEditorAPI/GetLinks",
+        url: "/NodeEditorAPI/GetLinks",
         type: "POST",
         data: { 'panelId': window.this_panel_id },
         success: function (links) {

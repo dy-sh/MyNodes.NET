@@ -22,7 +22,7 @@ using Node = MyNetSensors.Nodes.Node;
 namespace MyNetSensors.WebController.Controllers
 {
 
-    public class NodesEditorAPIController : Controller
+    public class NodeEditorAPIController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
 

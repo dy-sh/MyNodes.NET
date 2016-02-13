@@ -95,37 +95,37 @@ namespace MyNetSensors.WebController.Code
 
         private static void OnNewLink(Link link)
         {
-            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
-            LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLinkToLiteGraphLink(link);
+            NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
+            LiteGraph.Link liteGraphLink = nodeEditorApi.ConvertLinkToLiteGraphLink(link);
             hub.Clients.All.OnNewLink(liteGraphLink);
         }
 
         private static void OnRemoveLink(Link link)
         {
-            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
-            LiteGraph.Link liteGraphLink = nodesEditorApi.ConvertLinkToLiteGraphLink(link);
+            NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
+            LiteGraph.Link liteGraphLink = nodeEditorApi.ConvertLinkToLiteGraphLink(link);
             hub.Clients.All.OnRemoveLink(liteGraphLink);
         }
 
         private static void OnRemoveNode(Node node)
         {
-            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
-            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
+            NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
             hub.Clients.All.OnRemoveNode(liteGraphNode.id);
         }
 
         private static void OnNodeUpdated(Node node)
         {
-            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
-            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
+            NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
             hub.Clients.All.OnNodeUpdated(liteGraphNode);
 
         }
 
         private static void OnNewNode(Node node)
         {
-            NodesEditorAPIController nodesEditorApi = new NodesEditorAPIController();
-            LiteGraph.Node liteGraphNode = nodesEditorApi.ConvertNodeToLiteGraphNode(node);
+            NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
+            LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
             hub.Clients.All.OnNewNode(liteGraphNode);
         }
 

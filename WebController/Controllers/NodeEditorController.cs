@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 namespace MyNetSensors.WebController.Controllers
 {
     [Authorize(UserClaims.EditorObserver)]
-    public class NodesEditorController : Controller
+    public class NodeEditorController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
 

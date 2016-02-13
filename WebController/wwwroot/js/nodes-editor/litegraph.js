@@ -4291,7 +4291,7 @@ LGraphCanvas.prototype.getCanvasMenuOptions = function () {
 
             options.push(null);
 
-            var back_url = "/NodesEditor/";
+            var back_url = "/NodeEditor/";
 
             if (window.owner_panel_id != MAIN_PANEL_ID)
                 back_url += "Panel/" + window.owner_panel_id;
