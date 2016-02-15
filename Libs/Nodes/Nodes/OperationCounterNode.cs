@@ -3,18 +3,11 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-
 namespace MyNetSensors.Nodes
 {
-
     public class OperationCounterNode : Node
     {
-
-        public double Value { get; set; }
-
-
-        public OperationCounterNode() : base("Operation","Counter",3, 1)
+        public OperationCounterNode() : base("Operation", "Counter", 3, 1)
         {
             Inputs[0].Name = "Set Value";
             Inputs[1].Name = "Count Up";
@@ -27,13 +20,12 @@ namespace MyNetSensors.Nodes
             Outputs[0].Value = Value.ToString();
         }
 
-        public override void Loop()
-        {
-        }
+        public double Value { get; set; }
+
 
         public override void OnInputChange(Input input)
         {
-            double oldValue = Value;
+            var oldValue = Value;
 
             if (input == Inputs[0] && input.Value != null)
                 Value = double.Parse(input.Value);
@@ -44,7 +36,7 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[2] && input.Value == "1")
                 Value--;
 
-            if (oldValue!= Value)
+            if (oldValue != Value)
             {
                 Outputs[0].Value = Value.ToString();
                 UpdateMeInDb();

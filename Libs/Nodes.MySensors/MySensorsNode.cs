@@ -22,14 +22,9 @@ namespace MyNetSensors.Nodes
 
         public MySensorsNode() : base("Nodes", "Hardware",0, 0)
         {
-
         }
 
 
-
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {

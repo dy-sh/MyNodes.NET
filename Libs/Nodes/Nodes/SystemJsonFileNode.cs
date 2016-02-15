@@ -1,21 +1,14 @@
 ﻿//planer-pro copyright 2015 GPL - license.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MyNetSensors.Nodes
 {
-
     public class SystemJsonFileNode : Node
     {
-
-        public SystemJsonFileNode() : base("System","Json File",6, 1)
+        public SystemJsonFileNode() : base("System", "Json File", 6, 1)
         {
             Inputs[0].Name = "File Name";
             Inputs[1].Name = "Key";
@@ -37,16 +30,13 @@ namespace MyNetSensors.Nodes
             options.ProtectedAccess = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
             //delete
             if (input == Inputs[5] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
+                var fileName = Inputs[0].Value;
                 try
                 {
                     File.Delete(fileName);
@@ -61,21 +51,23 @@ namespace MyNetSensors.Nodes
             //write
             if (input == Inputs[4] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
-                string key = Inputs[1].Value;
-                string value = Inputs[2].Value;
-                JObject json=null;
+                var fileName = Inputs[0].Value;
+                var key = Inputs[1].Value;
+                var value = Inputs[2].Value;
+                JObject json = null;
                 try
                 {
-                    string text = File.ReadAllText(fileName);
+                    var text = File.ReadAllText(fileName);
                     json = JObject.Parse(text);
                 }
-                catch { }
+                catch
+                {
+                }
 
                 try
                 {
-                    if (json==null)
-                        json=new JObject();
+                    if (json == null)
+                        json = new JObject();
                     json.Remove(key);
                     json.Add(key, value);
                     File.WriteAllText(fileName, json.ToString());
@@ -89,12 +81,12 @@ namespace MyNetSensors.Nodes
             //read
             if (input == Inputs[3] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
-                string key = Inputs[1].Value;
+                var fileName = Inputs[0].Value;
+                var key = Inputs[1].Value;
                 try
                 {
-                    string text = File.ReadAllText(fileName);
-                    JObject json = JObject.Parse(text);
+                    var text = File.ReadAllText(fileName);
+                    var json = JObject.Parse(text);
                     Outputs[0].Value = json.GetValue(key).ToString();
                 }
                 catch (Exception)

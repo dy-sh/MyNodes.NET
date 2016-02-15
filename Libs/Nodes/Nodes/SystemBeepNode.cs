@@ -4,24 +4,16 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
     public class SystemBeepNode : Node
     {
-
-        public SystemBeepNode() : base("System","Beep",1, 0)
+        public SystemBeepNode() : base("System", "Beep", 1, 0)
         {
             Inputs[0].Name = "Start";
             Inputs[0].Type = DataType.Logical;
-        }
-
-        public override void Loop()
-        {
         }
 
         public override void OnInputChange(Input input)

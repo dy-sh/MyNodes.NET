@@ -3,19 +3,11 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MyNetSensors.Nodes
 {
     public class MathRemapNode : Node
     {
-
-        public MathRemapNode() : base("Math","Remap",5, 1)
+        public MathRemapNode() : base("Math", "Remap", 5, 1)
         {
             Inputs[0].Name = "Value";
             Inputs[1].Name = "InMin";
@@ -29,31 +21,23 @@ namespace MyNetSensors.Nodes
             Inputs[3].Type = DataType.Number;
             Inputs[4].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
             try
             {
+                var value = double.Parse(Inputs[0].Value);
 
-                Double value = Double.Parse(Inputs[0].Value);
+                var inMin = double.Parse(Inputs[1].Value);
+                var InMax = double.Parse(Inputs[2].Value);
+                var outMin = double.Parse(Inputs[3].Value);
+                var outMax = double.Parse(Inputs[4].Value);
 
-                Double inMin = Double.Parse(Inputs[1].Value);
-                Double InMax = Double.Parse(Inputs[2].Value);
-                Double outMin = Double.Parse(Inputs[3].Value);
-                Double outMax = Double.Parse(Inputs[4].Value);
-
-                Double result = (value - inMin) / (InMax - inMin) * (outMax - outMin) + outMin;
+                var result = (value - inMin)/(InMax - inMin)*(outMax - outMin) + outMin;
                 Outputs[0].Value = result.ToString();
             }
             catch

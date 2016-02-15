@@ -206,7 +206,11 @@ namespace MyNetSensors.Nodes
 
             OnInputStateUpdated?.Invoke(input);
 
-            node.OnInputChange(input);
+            if (node.GetNodeOptions().ResetOutputsWhenAnyInputIsNull
+                && node.Inputs.Any(i => i.Value == null))
+                node.ResetOutputs();
+            else
+                node.OnInputChange(input);
 
             try
             {
@@ -630,7 +634,12 @@ namespace MyNetSensors.Nodes
                 //update node internal logic
                 Node node = GetInputOwner(input);
                 node.CheckInputDataTypeIsCorrect(input);
-                node.OnInputChange(input);
+
+                if (node.GetNodeOptions().ResetOutputsWhenAnyInputIsNull
+                    && node.Inputs.Any(i => i.Value == null))
+                    node.ResetOutputs();
+                else
+                    node.OnInputChange(input);
             }
         }
 

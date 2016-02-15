@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbwToNumbersNode : Node
     {
-
-        public RgbRgbwToNumbersNode() : base("RGB","RGBW to Numbers",1, 4)
+        public RgbRgbwToNumbersNode() : base("RGB", "RGBW to Numbers", 1, 4)
         {
             Inputs[0].Type = DataType.Text;
             Outputs[0].Type = DataType.Number;
@@ -23,30 +17,23 @@ namespace MyNetSensors.Nodes.Nodes
             Outputs[1].Name = "G";
             Outputs[2].Name = "B";
             Outputs[3].Name = "W";
-        }
-        public override void Loop()
-        {
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
             try
             {
-                string hexString = input.Value;
+                var hexString = input.Value;
 
                 if (hexString[0] == '#')
                     hexString = hexString.Remove(0, 1);
 
-                int r = int.Parse(hexString.Substring(0, 2), NumberStyles.HexNumber);
-                int g = int.Parse(hexString.Substring(2, 2), NumberStyles.HexNumber);
-                int b = int.Parse(hexString.Substring(4, 2), NumberStyles.HexNumber);
-                int w = int.Parse(hexString.Substring(6, 2), NumberStyles.HexNumber);
+                var r = int.Parse(hexString.Substring(0, 2), NumberStyles.HexNumber);
+                var g = int.Parse(hexString.Substring(2, 2), NumberStyles.HexNumber);
+                var b = int.Parse(hexString.Substring(4, 2), NumberStyles.HexNumber);
+                var w = int.Parse(hexString.Substring(6, 2), NumberStyles.HexNumber);
 
                 Outputs[0].Value = r.ToString();
                 Outputs[1].Value = g.ToString();
@@ -59,7 +46,5 @@ namespace MyNetSensors.Nodes.Nodes
                 ResetOutputs();
             }
         }
-
-
     }
 }

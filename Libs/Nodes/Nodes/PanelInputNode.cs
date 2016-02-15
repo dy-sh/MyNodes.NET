@@ -4,7 +4,6 @@
 */
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
@@ -12,18 +11,11 @@ namespace MyNetSensors.Nodes
     {
         //Id must be equal to panel input id
 
-        public PanelInputNode() : base("Main","Panel Input",0, 1)
+        public PanelInputNode() : base("Main", "Panel Input", 0, 1)
         {
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 
-        public override void Loop()
-        {
-        }
-
-        public override void OnInputChange(Input input)
-        {
-        }
 
         public override bool OnAddToEngine(NodesEngine engine)
         {
@@ -33,7 +25,7 @@ namespace MyNetSensors.Nodes
                 return false;
             }
 
-            PanelNode panel = engine.GetPanelNode(PanelId);
+            var panel = engine.GetPanelNode(PanelId);
             if (panel == null)
             {
                 LogError($"Can`t create panel input. Panel [{PanelId}] does not exist.");
@@ -46,11 +38,10 @@ namespace MyNetSensors.Nodes
             return true;
         }
 
-       
 
         public override void OnRemove()
         {
-            PanelNode panel = engine.GetPanelNode(PanelId);
+            var panel = engine.GetPanelNode(PanelId);
             panel?.RemoveInput(this);
         }
 
@@ -58,7 +49,7 @@ namespace MyNetSensors.Nodes
         {
             Settings["Name"].Value = name;
 
-            Input input = engine.GetInput(Id);
+            var input = engine.GetInput(Id);
             input.Name = name;
 
             Node panel = engine.GetPanelNode(PanelId);

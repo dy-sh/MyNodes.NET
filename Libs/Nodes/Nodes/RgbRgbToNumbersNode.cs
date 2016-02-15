@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbToNumbersNode : Node
     {
-
-        public RgbRgbToNumbersNode() : base("RGB","RGB to Numbers",1, 3)
+        public RgbRgbToNumbersNode() : base("RGB", "RGB to Numbers", 1, 3)
         {
             Inputs[0].Type = DataType.Text;
             Outputs[0].Type = DataType.Number;
@@ -21,29 +15,23 @@ namespace MyNetSensors.Nodes.Nodes
             Outputs[0].Name = "R";
             Outputs[1].Name = "G";
             Outputs[2].Name = "B";
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
-        public override void Loop()
-        {
-        }
+
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
             try
             {
-                string hexString = input.Value;
+                var hexString = input.Value;
 
                 if (hexString[0] == '#')
                     hexString = hexString.Remove(0, 1);
 
-                int r = int.Parse(hexString.Substring(0, 2), NumberStyles.HexNumber);
-                int g = int.Parse(hexString.Substring(2, 2), NumberStyles.HexNumber);
-                int b = int.Parse(hexString.Substring(4, 2), NumberStyles.HexNumber);
+                var r = int.Parse(hexString.Substring(0, 2), NumberStyles.HexNumber);
+                var g = int.Parse(hexString.Substring(2, 2), NumberStyles.HexNumber);
+                var b = int.Parse(hexString.Substring(4, 2), NumberStyles.HexNumber);
 
                 Outputs[0].Value = r.ToString();
                 Outputs[1].Value = g.ToString();
@@ -55,7 +43,5 @@ namespace MyNetSensors.Nodes.Nodes
                 ResetOutputs();
             }
         }
-
-
     }
 }

@@ -4,17 +4,14 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
     public class SystemBeepAdvancedNode : Node
     {
-
-        public SystemBeepAdvancedNode() : base("System","Beep Advanced",3, 0)
+        public SystemBeepAdvancedNode() : base("System", "Beep Advanced", 3, 0)
         {
             Inputs[0].Name = "Start";
             Inputs[1].Name = "Frequency";
@@ -23,10 +20,6 @@ namespace MyNetSensors.Nodes
             Inputs[0].Type = DataType.Logical;
             Inputs[1].Type = DataType.Number;
             Inputs[2].Type = DataType.Number;
-        }
-
-        public override void Loop()
-        {
         }
 
         public override void OnInputChange(Input input)
@@ -40,10 +33,10 @@ namespace MyNetSensors.Nodes
             {
                 try
                 {
-                    int f = Int32.Parse(Inputs[1].Value);
-                    int d = Int32.Parse(Inputs[2].Value);
+                    var f = int.Parse(Inputs[1].Value);
+                    var d = int.Parse(Inputs[2].Value);
 
-                    f = (f < 37) ? 37 : (f > 32767) ? 32767 : f;
+                    f = f < 37 ? 37 : f > 32767 ? 32767 : f;
 
                     Beep(f, d);
                     LogInfo($"Beep");

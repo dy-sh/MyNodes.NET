@@ -3,19 +3,11 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MyNetSensors.Nodes
 {
     public class MathClampNode : Node
     {
-
-        public MathClampNode() : base("Math","Clamp",3, 1)
+        public MathClampNode() : base("Math", "Clamp", 3, 1)
         {
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Min";
@@ -25,23 +17,16 @@ namespace MyNetSensors.Nodes
             Inputs[1].Type = DataType.Number;
             Inputs[2].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
-            Double value = Double.Parse(Inputs[0].Value);
-            Double min = Double.Parse(Inputs[1].Value);
-            Double max = Double.Parse(Inputs[2].Value);
+            var value = double.Parse(Inputs[0].Value);
+            var min = double.Parse(Inputs[1].Value);
+            var max = double.Parse(Inputs[2].Value);
 
             if (min > max)
             {
@@ -50,7 +35,7 @@ namespace MyNetSensors.Nodes
                 return;
             }
 
-            Double result = (value < min) ? min : (value > max) ? max : value;
+            var result = value < min ? min : value > max ? max : value;
 
             Outputs[0].Value = result.ToString();
         }

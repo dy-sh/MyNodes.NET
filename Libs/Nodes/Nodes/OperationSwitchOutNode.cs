@@ -3,19 +3,11 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MyNetSensors.Nodes
 {
     public class OperationSwitchOutNode : Node
     {
-
-        public OperationSwitchOutNode() : base("Operation","Switch out",2, 10)
+        public OperationSwitchOutNode() : base("Operation", "Switch out", 2, 10)
         {
             Inputs[0].Name = "Switch";
             Inputs[1].Name = "Value";
@@ -54,7 +46,7 @@ namespace MyNetSensors.Nodes
         {
             if (Inputs[0].Value != null)
             {
-                int sw = Int32.Parse(Inputs[0].Value);
+                var sw = int.Parse(Inputs[0].Value);
 
                 if (sw > 0 && sw <= 10)
                 {

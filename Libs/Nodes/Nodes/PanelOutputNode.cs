@@ -4,7 +4,6 @@
 */
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
@@ -12,19 +11,16 @@ namespace MyNetSensors.Nodes
     {
         //Id must be equal to panel output id
 
-        public PanelOutputNode() : base("Main","Panel Output",1, 0)
+        public PanelOutputNode() : base("Main", "Panel Output", 1, 0)
         {
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
-            if (engine!=null)
-            engine.GetOutput(Id).Value = input.Value;
+            if (engine != null)
+                engine.GetOutput(Id).Value = input.Value;
         }
 
         public override bool OnAddToEngine(NodesEngine engine)
@@ -35,7 +31,7 @@ namespace MyNetSensors.Nodes
                 return false;
             }
 
-            PanelNode panel = engine.GetPanelNode(PanelId);
+            var panel = engine.GetPanelNode(PanelId);
             if (panel == null)
             {
                 LogError($"Can`t create panel output. Panel [{PanelId}] does not exist.");
@@ -48,11 +44,10 @@ namespace MyNetSensors.Nodes
             return true;
         }
 
-    
 
         public override void OnRemove()
         {
-            PanelNode panel = engine.GetPanelNode(PanelId);
+            var panel = engine.GetPanelNode(PanelId);
             panel?.RemoveOutput(this);
         }
 
@@ -60,7 +55,7 @@ namespace MyNetSensors.Nodes
         {
             Settings["Name"].Value = name;
 
-            Output output = engine.GetOutput(Id);
+            var output = engine.GetOutput(Id);
             output.Name = name;
 
             Node panel = engine.GetPanelNode(PanelId);

@@ -5,20 +5,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-
 
 namespace MyNetSensors.Nodes
 {
     public class ConnectionRemoteTransmitterNode : Node
     {
         private string address;
-        private string password;
         private int channel;
+        private string password;
 
-        public ConnectionRemoteTransmitterNode() : base("Connection", "Remote Transmitter",4, 0)
+        public ConnectionRemoteTransmitterNode() : base("Connection", "Remote Transmitter", 4, 0)
         {
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Address";
@@ -31,9 +28,6 @@ namespace MyNetSensors.Nodes
             Inputs[3].Type = DataType.Text;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
@@ -49,7 +43,7 @@ namespace MyNetSensors.Nodes
                 string pass = null;
 
                 if (password != null)
-                    for (int i = 0; i < password.Length; i++)
+                    for (var i = 0; i < password.Length; i++)
                     {
                         pass += "*";
                     }
@@ -75,7 +69,7 @@ namespace MyNetSensors.Nodes
             {
                 using (var client = new HttpClient())
                 {
-                    string url = address + "/NodeEditorApi/ReceiverSetValue/";
+                    var url = address + "/NodeEditorApi/ReceiverSetValue/";
 
                     var content = new FormUrlEncodedContent(new[]
                     {
@@ -87,7 +81,7 @@ namespace MyNetSensors.Nodes
                     LogInfo($"Send to [{address}] channel [{channel}]: [{value ?? "NULL"}]");
 
                     var result = await client.PostAsync(url, content);
-                    string resultContent = result.Content.ReadAsStringAsync().Result;
+                    var resultContent = result.Content.ReadAsStringAsync().Result;
 
                     if (resultContent == "0")
                     {
@@ -101,7 +95,6 @@ namespace MyNetSensors.Nodes
                     {
                         LogError($"[{address}]: No receivers with channel [{channel}].");
                     }
-
                 }
             }
             catch (Exception ex)

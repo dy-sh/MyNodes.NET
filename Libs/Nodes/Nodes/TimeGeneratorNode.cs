@@ -3,25 +3,20 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Diagnostics;
 using System.Timers;
 
 namespace MyNetSensors.Nodes
 {
-
     public class TimeGeneratorNode : Node
     {
-        private int DEFAULT_VALUE = 1000;
-
-        public int Count { get; set; }
-
-        private double frequency;
+        private readonly int DEFAULT_VALUE = 1000;
         private bool enabled = true;
 
-        private Timer timer = new Timer();
+        private double frequency;
 
-        public TimeGeneratorNode() : base("Time","Generator",3, 1)
+        private readonly Timer timer = new Timer();
+
+        public TimeGeneratorNode() : base("Time", "Generator", 3, 1)
         {
             Inputs[0].Name = "Frequency";
             Inputs[1].Name = "Start";
@@ -40,6 +35,8 @@ namespace MyNetSensors.Nodes
             timer.Start();
         }
 
+        public int Count { get; set; }
+
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
@@ -51,11 +48,6 @@ namespace MyNetSensors.Nodes
             Outputs[0].Value = Count.ToString();
         }
 
-        public override void Loop()
-        {
-
-        }
-
         public override void OnInputChange(Input input)
         {
             if (input == Inputs[0])
@@ -63,7 +55,7 @@ namespace MyNetSensors.Nodes
                 if (input.Value == null)
                     frequency = DEFAULT_VALUE;
                 else
-                    Double.TryParse(input.Value, out frequency);
+                    double.TryParse(input.Value, out frequency);
 
                 if (frequency < 1)
                     frequency = 1;
@@ -98,7 +90,5 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = "0";
             }
         }
-
-
     }
 }

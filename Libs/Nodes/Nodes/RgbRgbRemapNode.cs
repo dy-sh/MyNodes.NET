@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbRemapNode : Node
     {
-
-        public RgbRgbRemapNode() : base("RGB","RGB Remap",5, 1)
+        public RgbRgbRemapNode() : base("RGB", "RGB Remap", 5, 1)
         {
             Inputs[0].Name = "RGB Value";
             Inputs[1].Name = "RGB InMin";
@@ -24,26 +18,20 @@ namespace MyNetSensors.Nodes.Nodes
             Inputs[3].Type = DataType.Text;
             Inputs[4].Type = DataType.Text;
             Outputs[0].Type = DataType.Text;
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
-        public override void Loop()
-        {
-        }
+
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
             try
             {
-                string valueRGB = Inputs[0].Value;
-                string inMinRGB = Inputs[1].Value;
-                string inMaxRGB = Inputs[2].Value;
-                string outMinRGB = Inputs[3].Value;
-                string outMaxRGB = Inputs[4].Value;
+                var valueRGB = Inputs[0].Value;
+                var inMinRGB = Inputs[1].Value;
+                var inMaxRGB = Inputs[2].Value;
+                var outMinRGB = Inputs[3].Value;
+                var outMaxRGB = Inputs[4].Value;
 
 
                 if (valueRGB[0] == '#')
@@ -61,18 +49,18 @@ namespace MyNetSensors.Nodes.Nodes
                 if (outMaxRGB[0] == '#')
                     outMaxRGB = outMaxRGB.Remove(0, 1);
 
-                string resultRGB="";
+                var resultRGB = "";
 
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
-                    int value = int.Parse(valueRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
-                    int inMin = int.Parse(inMinRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
-                    int inMax = int.Parse(inMaxRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
-                    int outMin = int.Parse(outMinRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
-                    int outMax = int.Parse(outMaxRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
+                    var value = int.Parse(valueRGB.Substring(i*2, 2), NumberStyles.HexNumber);
+                    var inMin = int.Parse(inMinRGB.Substring(i*2, 2), NumberStyles.HexNumber);
+                    var inMax = int.Parse(inMaxRGB.Substring(i*2, 2), NumberStyles.HexNumber);
+                    var outMin = int.Parse(outMinRGB.Substring(i*2, 2), NumberStyles.HexNumber);
+                    var outMax = int.Parse(outMaxRGB.Substring(i*2, 2), NumberStyles.HexNumber);
 
-                    int result = (int)Remap(value, inMin, inMax, outMin, outMax);
-                    result = Clamp(result,0,255);
+                    var result = (int) Remap(value, inMin, inMax, outMin, outMax);
+                    result = Clamp(result, 0, 255);
 
                     resultRGB += result.ToString("X2");
                 }
@@ -88,12 +76,12 @@ namespace MyNetSensors.Nodes.Nodes
 
         private double Remap(double value, double inMin, double inMax, double outMin, double outMax)
         {
-            return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
+            return (value - inMin)/(inMax - inMin)*(outMax - outMin) + outMin;
         }
 
         private int Clamp(int value, int min, int max)
         {
-            return (value < min) ? min : (value > max) ? max : value;
+            return value < min ? min : value > max ? max : value;
         }
     }
 }

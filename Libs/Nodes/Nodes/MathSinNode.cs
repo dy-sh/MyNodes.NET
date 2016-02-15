@@ -4,36 +4,24 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
     public class MathSinNode : Node
     {
-
-        public MathSinNode() : base("Math","Sin",1, 1)
+        public MathSinNode() : base("Math", "Sin", 1, 1)
         {
             Inputs[0].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
-            Double a = Double.Parse(Inputs[0].Value);
-            Double b = Math.Sin(a);
+            var a = double.Parse(Inputs[0].Value);
+            var b = Math.Sin(a);
 
             Outputs[0].Value = b.ToString();
         }

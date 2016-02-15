@@ -13,9 +13,6 @@ namespace MyNetSensors.Nodes
         {
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {

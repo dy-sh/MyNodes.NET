@@ -18,14 +18,6 @@ namespace MyNetSensors.Nodes
             Outputs[0].Value = Value.ToString();
         }
 
-        public override void Loop()
-        {
-        }
-
-        public override void OnInputChange(Input input)
-        {
-        }
-        
 
         public override bool SetValues(Dictionary<string, string> values)
         {

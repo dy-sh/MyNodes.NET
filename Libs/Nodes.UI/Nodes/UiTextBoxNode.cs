@@ -16,13 +16,6 @@ namespace MyNetSensors.Nodes
         {
         }
 
-        public override void Loop()
-        {
-        }
-
-        public override void OnInputChange(Input input)
-        {
-        }
 
         public override bool SetValues(Dictionary<string, string> values)
         {

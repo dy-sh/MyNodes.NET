@@ -9,20 +9,11 @@ namespace MyNetSensors.Nodes
 {
     public class BasicConstantNode : Node
     {
-
-
         public BasicConstantNode() : base("Basic", "Constant", 0, 1)
         {
             Settings.Add("Value", new NodeSetting(NodeSettingType.Text, "Constant Value", ""));
         }
 
-        public override void Loop()
-        {
-        }
-
-        public override void OnInputChange(Input input)
-        {
-        }
 
         public void SetValue(string value)
         {

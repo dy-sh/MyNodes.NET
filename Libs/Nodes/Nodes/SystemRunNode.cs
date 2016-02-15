@@ -4,18 +4,13 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
     public class SystemRunNode : Node
     {
-
-        public SystemRunNode() : base("System","Run",2, 0)
+        public SystemRunNode() : base("System", "Run", 2, 0)
         {
             Inputs[0].Name = "Path";
             Inputs[1].Name = "Start";
@@ -26,9 +21,6 @@ namespace MyNetSensors.Nodes
             options.ProtectedAccess = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
@@ -36,7 +28,7 @@ namespace MyNetSensors.Nodes
             {
                 try
                 {
-                    String path = Inputs[0].Value;
+                    var path = Inputs[0].Value;
 
                     var proc1 = new ProcessStartInfo();
                     proc1.UseShellExecute = true;

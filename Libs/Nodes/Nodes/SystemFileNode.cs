@@ -1,19 +1,13 @@
 ﻿//planer-pro copyright 2015 GPL - license.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
-
     public class SystemFileNode : Node
     {
-
-        public SystemFileNode() : base("System","File",5, 1)
+        public SystemFileNode() : base("System", "File", 5, 1)
         {
             Inputs[0].Name = "File Name";
             Inputs[1].Name = "Text";
@@ -33,16 +27,12 @@ namespace MyNetSensors.Nodes
             options.ProtectedAccess = true;
         }
 
-        public override void Loop()
-        {
-        }
-
         public override void OnInputChange(Input input)
         {
             //delete
             if (input == Inputs[4] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
+                var fileName = Inputs[0].Value;
                 try
                 {
                     File.Delete(fileName);
@@ -57,10 +47,10 @@ namespace MyNetSensors.Nodes
             //write
             if (input == Inputs[3] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
+                var fileName = Inputs[0].Value;
                 try
                 {
-                    string text = Inputs[1].Value;
+                    var text = Inputs[1].Value;
                     File.AppendAllText(fileName, text);
                 }
                 catch (Exception)
@@ -72,10 +62,10 @@ namespace MyNetSensors.Nodes
             //read
             if (input == Inputs[2] && input.Value == "1")
             {
-                string fileName = Inputs[0].Value;
+                var fileName = Inputs[0].Value;
                 try
                 {
-                    string text = File.ReadAllText(fileName);
+                    var text = File.ReadAllText(fileName);
                     Outputs[0].Value = text;
                 }
                 catch (Exception)

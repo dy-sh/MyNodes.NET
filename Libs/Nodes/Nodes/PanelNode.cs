@@ -3,23 +3,17 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace MyNetSensors.Nodes
 {
-
     public class PanelNode : Node
     {
-        public PanelNode() : base("Main","Panel",0, 0)
+        public PanelNode() : base("Main", "Panel", 0, 0)
         {
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
@@ -32,7 +26,7 @@ namespace MyNetSensors.Nodes
             if (Inputs.Any(x => x.Id == node.Id))
                 return;
 
-            Input input = new Input
+            var input = new Input
             {
                 Id = node.Id,
                 Name = GenerateNewInputName()
@@ -51,7 +45,7 @@ namespace MyNetSensors.Nodes
                 return;
 
 
-            Output output = new Output
+            var output = new Output
             {
                 Id = node.Id,
                 Name = GenerateOutputName()
@@ -65,12 +59,11 @@ namespace MyNetSensors.Nodes
         }
 
 
-
         public bool RemoveInput(PanelInputNode node)
         {
-            Input input = engine.GetInput(node.Id);
+            var input = engine.GetInput(node.Id);
 
-            Link link = engine.GetLinkForInput(input);
+            var link = engine.GetLinkForInput(input);
             if (link != null)
                 engine.RemoveLink(link);
 
@@ -82,9 +75,9 @@ namespace MyNetSensors.Nodes
 
         public bool RemoveOutput(PanelOutputNode node)
         {
-            Output output = engine.GetOutput(node.Id);
+            var output = engine.GetOutput(node.Id);
 
-            List<Link> links = engine.GetLinksForOutput(output);
+            var links = engine.GetLinksForOutput(output);
             foreach (var link in links)
                 engine.RemoveLink(link);
 
@@ -93,8 +86,6 @@ namespace MyNetSensors.Nodes
             UpdateMeInDb();
             return true;
         }
-
-
 
 
         public override bool OnAddToEngine(NodesEngine engine)
@@ -112,9 +103,9 @@ namespace MyNetSensors.Nodes
         private string GeneratePanelName()
         {
             //auto naming
-            List<PanelNode> panels = engine.GetPanelNodes();
-            List<string> names = panels.Select(x => x.Settings["Name"].Value).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
+            var panels = engine.GetPanelNodes();
+            var names = panels.Select(x => x.Settings["Name"].Value).ToList();
+            for (var i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"Panel {i}"))
                     return $"Panel {i}";
@@ -125,7 +116,7 @@ namespace MyNetSensors.Nodes
 
         public override void OnRemove()
         {
-            List<Node> nodesList = engine.GetNodesForPanel(Id, false);
+            var nodesList = engine.GetNodesForPanel(Id, false);
             foreach (var n in nodesList)
             {
                 engine.RemoveNode(n);
@@ -135,8 +126,8 @@ namespace MyNetSensors.Nodes
         private string GenerateNewInputName()
         {
             //auto naming
-            List<string> names = Inputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
+            var names = Inputs.Select(x => x.Name).ToList();
+            for (var i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"In {i}"))
                     return $"In {i}";
@@ -147,8 +138,8 @@ namespace MyNetSensors.Nodes
         private string GenerateOutputName()
         {
             //auto naming
-            List<string> names = Outputs.Select(x => x.Name).ToList();
-            for (int i = 1; i <= names.Count + 1; i++)
+            var names = Outputs.Select(x => x.Name).ToList();
+            for (var i = 1; i <= names.Count + 1; i++)
             {
                 if (!names.Contains($"Out {i}"))
                     return $"Out {i}";

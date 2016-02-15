@@ -10,6 +10,6 @@ namespace MyNetSensors.Nodes
     {
         public bool LogOutputChanges = true;
         public bool ProtectedAccess = false;
-
+        public bool ResetOutputsWhenAnyInputIsNull=false;
     }
 }

@@ -94,8 +94,8 @@ namespace MyNetSensors.Nodes
             LogError($"Incorrect value in [{input.Name}]: [{input.Value}]");
         }
 
-        public abstract void Loop();
-        public abstract void OnInputChange(Input input);
+        public virtual void Loop() { }
+        public virtual void OnInputChange(Input input) {}
 
         public virtual void OnOutputChange(Output output)
         {

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetSensors.Nodes.Nodes
+﻿namespace MyNetSensors.Nodes.Nodes
 {
     public class OperationAccumulatorNode : Node
     {
-        public double Value { get; set; }
-
-        public OperationAccumulatorNode() : base("Operation","Accumulator",2, 1)
+        public OperationAccumulatorNode() : base("Operation", "Accumulator", 2, 1)
         {
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
@@ -20,13 +12,12 @@ namespace MyNetSensors.Nodes.Nodes
             Inputs[1].Name = "Add Value";
             Outputs[0].Value = Value.ToString();
         }
-        public override void Loop()
-        {
-        }
+
+        public double Value { get; set; }
 
         public override void OnInputChange(Input input)
         {
-            double oldValue = Value;
+            var oldValue = Value;
 
             if (input == Inputs[0] && input.Value != null)
                 Value = double.Parse(input.Value);

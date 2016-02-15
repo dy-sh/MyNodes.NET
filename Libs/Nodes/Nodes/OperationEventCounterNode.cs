@@ -1,19 +1,10 @@
 ﻿//planer-pro copyright 2015 GPL - license.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MyNetSensors.Nodes
 {
-
     public class OperationEventCounterNode : Node
     {
-        public int Count { get; set; }
-
-        public OperationEventCounterNode() : base("Operation","Event Counter",2, 1)
+        public OperationEventCounterNode() : base("Operation", "Event Counter", 2, 1)
         {
             Inputs[0].Name = "Value";
             Inputs[1].Name = "Reset";
@@ -23,10 +14,7 @@ namespace MyNetSensors.Nodes
             Outputs[0].Type = DataType.Number;
         }
 
-        public override void Loop()
-        {
-        }
-
+        public int Count { get; set; }
 
         public override void OnInputChange(Input input)
         {

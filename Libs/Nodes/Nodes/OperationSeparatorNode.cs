@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyNetSensors.Nodes.Nodes
+﻿namespace MyNetSensors.Nodes.Nodes
 {
     public class OperationSeparatorNode : Node
     {
-
-        public OperationSeparatorNode() : base("Operation","Separator",2, 2)
+        public OperationSeparatorNode() : base("Operation", "Separator", 2, 2)
         {
             Inputs[0].Type = DataType.Number;
             Inputs[1].Type = DataType.Number;
@@ -20,23 +13,17 @@ namespace MyNetSensors.Nodes.Nodes
             Inputs[1].Name = "Value";
             Outputs[0].Name = "Hi";
             Outputs[1].Name = "Lo";
+
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
-        public override void Loop()
-        {
-        }
+
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
             if (input == Inputs[1])
             {
-                double threshold = double.Parse(Inputs[0].Value);
-                double val = double.Parse(Inputs[1].Value);
+                var threshold = double.Parse(Inputs[0].Value);
+                var val = double.Parse(Inputs[1].Value);
 
                 if (val >= threshold)
                     Outputs[0].Value = val.ToString();

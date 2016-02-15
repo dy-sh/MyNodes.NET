@@ -18,9 +18,6 @@ namespace MyNetSensors.Nodes
             Inputs[1].Type = DataType.Logical;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {

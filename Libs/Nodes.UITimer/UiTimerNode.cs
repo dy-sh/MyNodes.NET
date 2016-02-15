@@ -7,14 +7,6 @@
         {
         }
 
-        public override void Loop()
-        {
-        }
-
-        public override void OnInputChange(Input input)
-        {
-        }
-
         public void SetState(string state)
         {
             Outputs[0].Value = state;

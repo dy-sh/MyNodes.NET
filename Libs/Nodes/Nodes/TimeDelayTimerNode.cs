@@ -7,17 +7,16 @@ using System;
 
 namespace MyNetSensors.Nodes
 {
-
     public class TimeDelayTimerNode : Node
     {
-        private int DEFAULT_VALUE = 5000;
+        private readonly int DEFAULT_VALUE = 5000;
 
         private double delay;
-        private bool enabled = false;
+        private bool enabled;
         private DateTime lastTime;
 
 
-        public TimeDelayTimerNode() : base("Time","Delay Timer",2, 1)
+        public TimeDelayTimerNode() : base("Time", "Delay Timer", 2, 1)
         {
             Inputs[0].Name = "Delay";
             Inputs[1].Name = "Start";
@@ -37,10 +36,9 @@ namespace MyNetSensors.Nodes
             if (!enabled || delay <= 0)
                 return;
 
-            TimeSpan elapsed = DateTime.Now - lastTime;
+            var elapsed = DateTime.Now - lastTime;
             if (elapsed.TotalMilliseconds >= delay)
             {
-                
                 lastTime = DateTime.Now;
 
                 LogInfo($"Time trigger");
@@ -57,7 +55,7 @@ namespace MyNetSensors.Nodes
                 if (input.Value == null)
                     delay = DEFAULT_VALUE;
                 else
-                    Double.TryParse(input.Value, out delay);
+                    double.TryParse(input.Value, out delay);
 
                 if (delay < 0)
                     delay = 0;
@@ -80,7 +78,7 @@ namespace MyNetSensors.Nodes
                     Outputs[0].Value = "0";
                 }
 
-                LogInfo(enabled ? "Started" : "Stopped, reseted" );
+                LogInfo(enabled ? "Started" : "Stopped, reseted");
             }
 
             /*if (input == Inputs[2])

@@ -4,36 +4,23 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyNetSensors.Nodes
 {
     public class MathTanNode : Node
     {
-
-        public MathTanNode() : base("Math","Tan",1, 1)
+        public MathTanNode() : base("Math", "Tan", 1, 1)
         {
             Inputs[0].Type = DataType.Number;
             Outputs[0].Type = DataType.Number;
-        }
 
-        public override void Loop()
-        {
+            options.ResetOutputsWhenAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)
         {
-            if (Inputs.Any(i => i.Value == null))
-            {
-                ResetOutputs();
-                return;
-            }
-
-            Double a = Double.Parse(Inputs[0].Value);
-            Double b = Math.Tan(a);
+            var a = double.Parse(Inputs[0].Value);
+            var b = Math.Tan(a);
 
             Outputs[0].Value = b.ToString();
         }

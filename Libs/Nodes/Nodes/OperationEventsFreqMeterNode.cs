@@ -1,22 +1,16 @@
 ﻿//planer-pro copyright 2015 GPL - license.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace MyNetSensors.Nodes
 {
-
     public class OperationEventsFreqMeterNode : Node
     {
         private int count;
         private int countWas;
-        private Timer timer = new Timer();
+        private readonly Timer timer = new Timer();
 
-        public OperationEventsFreqMeterNode() : base("Operation","Events Freq Meter",1, 1)
+        public OperationEventsFreqMeterNode() : base("Operation", "Events Freq Meter", 1, 1)
         {
             Outputs[0].Name = "Events/sec";
 
@@ -29,10 +23,6 @@ namespace MyNetSensors.Nodes
             timer.Interval = 1000;
             timer.Elapsed += TimerElapsed;
             timer.Start();
-        }
-
-        public override void Loop()
-        {
         }
 
 

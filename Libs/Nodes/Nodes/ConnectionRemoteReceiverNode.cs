@@ -7,11 +7,11 @@ namespace MyNetSensors.Nodes
 {
     public class ConnectionRemoteReceiverNode : Node
     {
-        private string password;
         private int channel;
+        private string password;
 
 
-        public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver",2, 1)
+        public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver", 2, 1)
         {
             Inputs[0].Name = "Channel";
             Inputs[1].Name = "Password";
@@ -21,9 +21,6 @@ namespace MyNetSensors.Nodes
             Outputs[0].Type = DataType.Text;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {
@@ -39,7 +36,7 @@ namespace MyNetSensors.Nodes
                 string pass = null;
 
                 if (password != null)
-                    for (int i = 0; i < password.Length; i++)
+                    for (var i = 0; i < password.Length; i++)
                     {
                         pass += "*";
                     }
