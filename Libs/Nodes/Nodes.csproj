@@ -57,6 +57,7 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
+    <Compile Include="Nodes\OperationFreqDivider.cs" />
     <Compile Include="Nodes\RgbRgbwRemapNode.cs" />
     <Compile Include="Nodes\RgbRgbRemapNode.cs" />
     <Compile Include="Nodes\RgbNumbersToRgbwNode.cs" />

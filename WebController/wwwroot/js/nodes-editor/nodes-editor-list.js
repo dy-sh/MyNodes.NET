@@ -438,6 +438,18 @@
 
             
 
+            //OperationFreqDivider
+            function OperationFreqDivider () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.OperationFreqDivider',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationFreqDivider.title = 'Freq Divider';
+            LiteGraph.registerNodeType('Operation/Freq Divider', OperationFreqDivider);
+
+            
+
             //OperationGateNode
             function OperationGateNode () {
                 this.properties = {
