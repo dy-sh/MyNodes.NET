@@ -10,12 +10,10 @@ namespace MyNetSensors.Nodes
         private int countWas;
         private readonly Timer timer = new Timer();
 
-        public OperationEventsFreqMeterNode() : base("Operation", "Events Freq Meter", 1, 1)
+        public OperationEventsFreqMeterNode() : base("Operation", "Events Freq Meter")
         {
-            Outputs[0].Name = "Events/sec";
-
-            Inputs[0].Type = DataType.Text;
-            Outputs[0].Type = DataType.Number;
+            AddInput();
+            AddOutput("Events/sec", DataType.Number);
 
             Outputs[0].Value = "0";
 

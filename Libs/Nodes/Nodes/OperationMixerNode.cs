@@ -4,8 +4,11 @@ namespace MyNetSensors.Nodes
 {
     public class OperationMixerNode : Node
     {
-        public OperationMixerNode() : base("Operation", "Mixer", 2, 1)
+        public OperationMixerNode() : base("Operation", "Mixer")
         {
+            AddInput();
+            AddInput();
+            AddOutput();
         }
 
 

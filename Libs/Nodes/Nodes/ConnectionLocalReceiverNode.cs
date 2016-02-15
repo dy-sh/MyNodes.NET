@@ -7,8 +7,9 @@ namespace MyNetSensors.Nodes
 {
     public class ConnectionLocalReceiverNode : Node
     {
-        public ConnectionLocalReceiverNode() : base("Connection", "Local Receiver", 0, 1)
+        public ConnectionLocalReceiverNode() : base("Connection", "Local Receiver")
         {
+            AddOutput();
             Settings.Add("Channel", new NodeSetting(NodeSettingType.Number, "Channel", "0"));
         }
 

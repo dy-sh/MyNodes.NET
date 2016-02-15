@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
 {
     public class BasicConstantNode : Node
     {
-        public BasicConstantNode() : base("Basic", "Constant", 0, 1)
+        public BasicConstantNode() : base("Basic", "Constant")
         {
+            AddOutput();
             Settings.Add("Value", new NodeSetting(NodeSettingType.Text, "Constant Value", ""));
         }
 

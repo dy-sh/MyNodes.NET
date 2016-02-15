@@ -2,19 +2,15 @@
 {
     public class OperationSeparatorNode : Node
     {
-        public OperationSeparatorNode() : base("Operation", "Separator", 2, 2)
+        public OperationSeparatorNode() : base("Operation", "Separator")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput("Treshold", DataType.Number);
+            AddInput("Value", DataType.Number);
 
-            Inputs[0].Name = "Treshold";
-            Inputs[1].Name = "Value";
-            Outputs[0].Name = "Hi";
-            Outputs[1].Name = "Lo";
+            AddOutput("Hi", DataType.Number);
+            AddOutput("Lo", DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

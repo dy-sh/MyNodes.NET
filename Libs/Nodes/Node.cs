@@ -35,7 +35,7 @@ namespace MyNetSensors.Nodes
 
         protected NodeOptions options = new NodeOptions();
 
-        public Dictionary<string, NodeSetting> Settings { get; set; } = new Dictionary<string, NodeSetting>();
+        public Dictionary<string, NodeSetting> Settings { get; set; }
 
 
         public string PanelName
@@ -49,7 +49,7 @@ namespace MyNetSensors.Nodes
             }
         }
 
-        public Node(string category, string type, int inputsCount, int outputsCount)
+        public Node(string category, string type)
         {
             Id = Guid.NewGuid().ToString();
 
@@ -57,22 +57,9 @@ namespace MyNetSensors.Nodes
             Category = category;
 
             Outputs = new List<Output>();
-            for (int i = 0; i < outputsCount; i++)
-            {
-                if (outputsCount == 1)
-                    AddOutput(new Output { Name = "Out" });
-                else
-                    AddOutput(new Output { Name = $"Out {i + 1}" });
-            }
-
             Inputs = new List<Input>();
-            for (int i = 0; i < inputsCount; i++)
-            {
-                if (inputsCount == 1)
-                    AddInput(new Input { Name = "In" });
-                else
-                    AddInput(new Input { Name = $"In {i + 1}" });
-            }
+            Settings = new Dictionary<string, NodeSetting>();
+
 
             PanelId = "Main";
         }
@@ -95,7 +82,7 @@ namespace MyNetSensors.Nodes
         }
 
         public virtual void Loop() { }
-        public virtual void OnInputChange(Input input) {}
+        public virtual void OnInputChange(Input input) { }
 
         public virtual void OnOutputChange(Output output)
         {
@@ -149,7 +136,7 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public virtual void AddInput(Input input)
+        public void AddInput(Input input)
         {
             Inputs.Add(input);
 
@@ -157,13 +144,40 @@ namespace MyNetSensors.Nodes
                 input.OnInputChange += engine.OnInputChange;
         }
 
-        public virtual void AddOutput(Output output)
+        public void AddOutput(Output output)
         {
             Outputs.Add(output);
 
             if (engine != null)
                 output.OnOutputChange += engine.OnOutputChange;
         }
+
+        public void AddInput(string name, DataType type = DataType.Text, bool isOptional = false)
+        {
+            if (name == null)
+                name = Inputs.Count == 1 ? "In" : "In " + Inputs.Count;
+
+            AddInput(new Input(name, type, isOptional));
+        }
+
+        public void AddOutput(string name, DataType type = DataType.Text)
+        {
+            if (name == null)
+                name = Outputs.Count == 1 ? "Out" : "Out " + Outputs.Count;
+
+            AddOutput(new Output(name, type));
+        }
+
+        public void AddInput(DataType type = DataType.Text, bool isOptional = false)
+        {
+            AddInput(null, type, isOptional);
+        }
+
+        public void AddOutput(DataType type = DataType.Text)
+        {
+            AddOutput(null, type);
+        }
+
 
         public void ShowActivity()
         {
@@ -244,7 +258,7 @@ namespace MyNetSensors.Nodes
                 };
             }
             " + className + @".title = '" + this.Type + @"';
-            LiteGraph.registerNodeType('" + this.Category+"/"+ this.Type+ "', " + className + @");
+            LiteGraph.registerNodeType('" + this.Category + "/" + this.Type + "', " + className + @");
 
             ";
         }

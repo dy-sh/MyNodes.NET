@@ -10,6 +10,7 @@ namespace MyNetSensors.Nodes
         public string Name { get; set; }
         public DataType Type { get; set; }
         public int SlotIndex { get; set; }
+        public bool IsOptional { get; set; }
 
         public event InputEventHandler OnInputChange;
 
@@ -29,6 +30,14 @@ namespace MyNetSensors.Nodes
         {
             Id = Guid.NewGuid().ToString();
             Type = DataType.Text;
+        }
+
+        public Input(string name, DataType type= DataType.Text, bool isOptional=false)
+        {
+            Id = Guid.NewGuid().ToString();
+            Name = name;
+            Type = type;
+            IsOptional = isOptional;
         }
 
         public void SetValueWithoutUpdate(string value)

@@ -7,26 +7,29 @@ namespace MyNetSensors.Nodes
 {
     public class MathClampNode : Node
     {
-        public MathClampNode() : base("Math", "Clamp", 3, 1)
+        public MathClampNode() : base("Math", "Clamp")
         {
-            Inputs[0].Name = "Value";
-            Inputs[1].Name = "Min";
-            Inputs[2].Name = "Max";
+            AddInput("Value", DataType.Number);
+            AddInput("Min", DataType.Number, true);
+            AddInput("Max", DataType.Number, true);
+            AddOutput(DataType.Number);
 
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
-
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 
         public override void OnInputChange(Input input)
         {
-            var value = double.Parse(Inputs[0].Value);
-            var min = double.Parse(Inputs[1].Value);
-            var max = double.Parse(Inputs[2].Value);
+            double min = 0;
+            double max = 100;
+
+            double value = double.Parse(Inputs[0].Value);
+
+            if (Inputs[1].Value != null)
+                min = double.Parse(Inputs[1].Value);
+
+            if (Inputs[2].Value != null)
+                max = double.Parse(Inputs[2].Value);
 
             if (min > max)
             {

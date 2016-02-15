@@ -4,22 +4,17 @@ namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbRemapNode : Node
     {
-        public RgbRgbRemapNode() : base("RGB", "RGB Remap", 5, 1)
+        public RgbRgbRemapNode() : base("RGB", "RGB Remap")
         {
-            Inputs[0].Name = "RGB Value";
-            Inputs[1].Name = "RGB InMin";
-            Inputs[2].Name = "RGB InMax";
-            Inputs[3].Name = "RGB OutMin";
-            Inputs[4].Name = "RGB OutMax";
+            AddInput("RGB Value");
+            AddInput("RGB InMin");
+            AddInput("RGB InMax");
+            AddInput("RGB OutMin");
+            AddInput("RGB OutMax");
 
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Text;
-            Inputs[2].Type = DataType.Text;
-            Inputs[3].Type = DataType.Text;
-            Inputs[4].Type = DataType.Text;
-            Outputs[0].Type = DataType.Text;
+            AddOutput("RGB");
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

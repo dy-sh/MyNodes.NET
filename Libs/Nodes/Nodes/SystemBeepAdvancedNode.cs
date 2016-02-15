@@ -11,15 +11,11 @@ namespace MyNetSensors.Nodes
 {
     public class SystemBeepAdvancedNode : Node
     {
-        public SystemBeepAdvancedNode() : base("System", "Beep Advanced", 3, 0)
+        public SystemBeepAdvancedNode() : base("System", "Beep Advanced")
         {
-            Inputs[0].Name = "Start";
-            Inputs[1].Name = "Frequency";
-            Inputs[2].Name = "Duration";
-
-            Inputs[0].Type = DataType.Logical;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
+            AddInput("Start", DataType.Logical);
+            AddInput("Frequency", DataType.Number);
+            AddInput("Duration", DataType.Number);
         }
 
         public override void OnInputChange(Input input)

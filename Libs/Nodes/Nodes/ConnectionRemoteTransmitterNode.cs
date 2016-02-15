@@ -15,17 +15,12 @@ namespace MyNetSensors.Nodes
         private int channel;
         private string password;
 
-        public ConnectionRemoteTransmitterNode() : base("Connection", "Remote Transmitter", 4, 0)
+        public ConnectionRemoteTransmitterNode() : base("Connection", "Remote Transmitter")
         {
-            Inputs[0].Name = "Value";
-            Inputs[1].Name = "Address";
-            Inputs[2].Name = "Channel";
-            Inputs[3].Name = "Password";
-
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Text;
-            Inputs[2].Type = DataType.Number;
-            Inputs[3].Type = DataType.Text;
+            AddInput("Value", DataType.Number);
+            AddInput("Address", DataType.Text);
+            AddInput("Channel", DataType.Number, true);
+            AddInput("Password", DataType.Text, true);
         }
 
 

@@ -4,22 +4,17 @@ namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbwRemapNode : Node
     {
-        public RgbRgbwRemapNode() : base("RGB", "RGBW Remap", 5, 1)
+        public RgbRgbwRemapNode() : base("RGB", "RGBW Remap")
         {
-            Inputs[0].Name = "RGBW Value";
-            Inputs[1].Name = "RGBW InMin";
-            Inputs[2].Name = "RGBW InMax";
-            Inputs[3].Name = "RGBW OutMin";
-            Inputs[4].Name = "RGBW OutMax";
+            AddInput("RGBW Value");
+            AddInput("RGBW InMin");
+            AddInput("RGBW InMax");
+            AddInput("RGBW OutMin");
+            AddInput("RGBW OutMax");
 
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Text;
-            Inputs[2].Type = DataType.Text;
-            Inputs[3].Type = DataType.Text;
-            Inputs[4].Type = DataType.Text;
-            Outputs[0].Type = DataType.Text;
+            AddOutput("RGBW");
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

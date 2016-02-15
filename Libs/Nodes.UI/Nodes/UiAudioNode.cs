@@ -10,19 +10,17 @@ namespace MyNetSensors.Nodes
         public string Address { get; set; }
         public bool Play { get; set; }
 
-        public UiAudioNode() : base("Audio",2, 0)
+        public UiAudioNode() : base("UI", "Audio")
         {
-            Inputs[0].Name = "Audio URL";
-            Inputs[1].Name = "Play";
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Logical;
+            AddInput("Audio URL");
+            AddInput("Play", DataType.Logical);
         }
 
 
         public override void OnInputChange(Input input)
         {
             Address = Inputs[0].Value;
-            Play = Inputs[1].Value=="1";
+            Play = Inputs[1].Value == "1";
             UpdateMe();
         }
 

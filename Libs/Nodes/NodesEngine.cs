@@ -206,8 +206,8 @@ namespace MyNetSensors.Nodes
 
             OnInputStateUpdated?.Invoke(input);
 
-            if (node.GetNodeOptions().ResetOutputsWhenAnyInputIsNull
-                && node.Inputs.Any(i => i.Value == null))
+            if (node.GetNodeOptions().ResetOutputsIfAnyInputIsNull
+                && node.Inputs.Any(i => !i.IsOptional && i.Value == null))
                 node.ResetOutputs();
             else
                 node.OnInputChange(input);
@@ -635,8 +635,8 @@ namespace MyNetSensors.Nodes
                 Node node = GetInputOwner(input);
                 node.CheckInputDataTypeIsCorrect(input);
 
-                if (node.GetNodeOptions().ResetOutputsWhenAnyInputIsNull
-                    && node.Inputs.Any(i => i.Value == null))
+                if (node.GetNodeOptions().ResetOutputsIfAnyInputIsNull
+                    && node.Inputs.Any(i => !i.IsOptional && i.Value == null))
                     node.ResetOutputs();
                 else
                     node.OnInputChange(input);

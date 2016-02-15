@@ -12,8 +12,9 @@ namespace MyNetSensors.Nodes
     {
         public string Log { get; set; }
 
-        public UiLogNode() : base("Log",1, 0)
+        public UiLogNode() : base("UI", "Log")
         {
+            AddInput();
         }
 
 

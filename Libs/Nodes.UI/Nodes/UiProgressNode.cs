@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiProgressNode() : base("Progress", 1, 0)
+        public UiProgressNode() : base("UI", "Progress")
         {
+            AddInput();
         }
 
 

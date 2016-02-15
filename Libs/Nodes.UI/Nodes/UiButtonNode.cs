@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
 {
     public class UiButtonNode : UiNode
     {
-        public UiButtonNode() : base("Button", 0, 1)
+        public UiButtonNode() : base("UI", "Button")
         {
+            AddOutput();
             Outputs[0].Value = "0";
         }
 

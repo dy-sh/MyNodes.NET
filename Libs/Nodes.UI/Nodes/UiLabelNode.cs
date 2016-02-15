@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiLabelNode() : base("Label",1, 0)
+        public UiLabelNode() : base("UI", "Label")
         {
+            AddInput();
         }
 
 

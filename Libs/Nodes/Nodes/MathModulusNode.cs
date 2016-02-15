@@ -7,13 +7,13 @@ namespace MyNetSensors.Nodes
 {
     public class MathModulusNode : Node
     {
-        public MathModulusNode() : base("Math", "Modulus", 2, 1)
+        public MathModulusNode() : base("Math", "Modulus")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput(DataType.Number);
+            AddInput(DataType.Number);
+            AddOutput(DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

@@ -12,7 +12,7 @@ namespace MyNetSensors.Nodes
         public int nodeId;
 
 
-        public MySensorsNode(Gateways.MySensors.Node node) : base("Nodes","Hardware",0, 0)
+        public MySensorsNode(Gateways.MySensors.Node node) : base("Nodes","Hardware")
         {
             this.nodeId = node.Id;
             this.Type = node.GetSimpleName2();
@@ -20,7 +20,7 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public MySensorsNode() : base("Nodes", "Hardware",0, 0)
+        public MySensorsNode() : base("Nodes", "Hardware")
         {
         }
 

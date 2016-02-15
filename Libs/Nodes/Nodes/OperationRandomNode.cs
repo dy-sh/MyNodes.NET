@@ -10,16 +10,12 @@ namespace MyNetSensors.Nodes
         private readonly int DEFAULT_MIN = 0;
 
 
-        public OperationRandomNode() : base("Operation", "Random", 3, 1)
+        public OperationRandomNode() : base("Operation", "Random")
         {
-            Inputs[0].Name = "Start";
-            Inputs[1].Name = "Min Value";
-            Inputs[2].Name = "Max Value";
-
-            Inputs[0].Type = DataType.Logical;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput("Trigger", DataType.Logical);
+            AddInput("Min Value", DataType.Number,true);
+            AddInput("Max Value", DataType.Number, true);
+            AddOutput("Out");
         }
 
 

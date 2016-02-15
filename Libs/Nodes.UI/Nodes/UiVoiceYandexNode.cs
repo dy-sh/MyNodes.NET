@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiVoiceYandexNode() : base("Voice Yandex",1, 0)
+        public UiVoiceYandexNode() : base("UI", "Voice Yandex")
         {
+            AddInput();
             Settings.Add("APIKey",new NodeSetting(NodeSettingType.Text, "Yandex SpeechKit API-Key",""));
         }
 

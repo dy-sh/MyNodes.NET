@@ -4,21 +4,16 @@ namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbwToNumbersNode : Node
     {
-        public RgbRgbwToNumbersNode() : base("RGB", "RGBW to Numbers", 1, 4)
+        public RgbRgbwToNumbersNode() : base("RGB", "RGBW to Numbers")
         {
-            Inputs[0].Type = DataType.Text;
-            Outputs[0].Type = DataType.Number;
-            Outputs[1].Type = DataType.Number;
-            Outputs[2].Type = DataType.Number;
-            Outputs[3].Type = DataType.Number;
+            AddInput("RGB");
 
-            Inputs[0].Name = "RGB";
-            Outputs[0].Name = "R";
-            Outputs[1].Name = "G";
-            Outputs[2].Name = "B";
-            Outputs[3].Name = "W";
-
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            AddOutput("R", DataType.Number);
+            AddOutput("G", DataType.Number);
+            AddOutput("B", DataType.Number);
+            AddOutput("W", DataType.Number);
+         
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

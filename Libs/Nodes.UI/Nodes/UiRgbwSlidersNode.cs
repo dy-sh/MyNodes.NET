@@ -12,8 +12,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiRgbwSlidersNode() : base("RGBW Sliders", 0, 1)
+        public UiRgbwSlidersNode() : base("UI", "RGBW Sliders")
         {
+            AddOutput();
             Value = "00000000";
             Outputs[0].Value = Value.ToString();
         }

@@ -7,13 +7,13 @@ namespace MyNetSensors.Nodes
 {
     public class LogicAndNode : Node
     {
-        public LogicAndNode() : base("Logic", "AND", 2, 1)
+        public LogicAndNode() : base("Logic", "AND")
         {
-            Inputs[0].Type = DataType.Logical;
-            Inputs[1].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Logical;
+            AddInput(DataType.Logical);
+            AddInput(DataType.Logical);
+            AddOutput(DataType.Logical);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

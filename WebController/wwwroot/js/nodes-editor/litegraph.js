@@ -40,6 +40,8 @@ var LiteGraph = {
     CANVAS_GRID_SIZE: 10,
     NODE_TITLE_COLOR: "#222",
     NODE_DEFAULT_COLOR: "#999",
+    NODE_DEFAULT_IO_COLOR: "#999",
+    NODE_OPTIONAL_IO_COLOR: "#777",
     NODE_DEFAULT_BGCOLOR: "#373737",
     NODE_DEFAULT_BOXCOLOR: "#000",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
@@ -3597,7 +3599,7 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 if (render_text) {
                     var text = slot.label != null ? slot.label : slot.name;
                     if (text) {
-                        ctx.fillStyle = color;
+                        ctx.fillStyle = slot.isOptional ? LiteGraph.NODE_OPTIONAL_IO_COLOR : LiteGraph.NODE_DEFAULT_IO_COLOR;
                         ctx.fillText(text, pos[0] + 10, pos[1] + 5);
                     }
                 }

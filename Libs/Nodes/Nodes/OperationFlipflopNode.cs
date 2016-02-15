@@ -10,12 +10,12 @@ namespace MyNetSensors.Nodes
         private int part;
         private string result;
 
-        public OperationFlipflopNode() : base("Operation", "Flip-Flop", 1, 1)
+        public OperationFlipflopNode() : base("Operation", "Flip-Flop")
         {
-            Inputs[0].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Logical;
+            AddInput(DataType.Logical);
+            AddOutput(DataType.Logical);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

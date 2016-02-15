@@ -9,12 +9,12 @@ namespace MyNetSensors.Nodes
 {
     public class MathTanNode : Node
     {
-        public MathTanNode() : base("Math", "Tan", 1, 1)
+        public MathTanNode() : base("Math", "Tan")
         {
-            Inputs[0].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput(DataType.Number);
+            AddOutput(DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiStateNode() : base("State", 1, 0)
+        public UiStateNode() : base("UI", "State")
         {
+            AddInput();
         }
 
 

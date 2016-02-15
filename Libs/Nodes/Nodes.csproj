@@ -57,7 +57,7 @@
     <Compile Include="Nodes\LogicOrNode.cs" />
     <Compile Include="Nodes\MathCosNode.cs" />
     <Compile Include="Nodes\MathDivideNode.cs" />
-    <Compile Include="Nodes\OperationFreqDivider.cs" />
+    <Compile Include="Nodes\OperationFreqDividerNode.cs" />
     <Compile Include="Nodes\RgbRgbwRemapNode.cs" />
     <Compile Include="Nodes\RgbRgbRemapNode.cs" />
     <Compile Include="Nodes\RgbNumbersToRgbwNode.cs" />
@@ -71,7 +71,6 @@
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\OperationEventsDelayMeterNode.cs" />
     <Compile Include="Nodes\OperationEventsFreqMeterNode.cs" />
-    <Compile Include="Nodes\OperationSwitchOutNode.cs" />
     <Compile Include="Nodes\OperationCrossfadeNode.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="Nodes\OperationFlipflopNode.cs" />
     <Compile Include="Nodes\OperationGateNode.cs" />
     <Compile Include="Nodes\OperationRandomNode.cs" />
-    <Compile Include="Nodes\OperationSwitchInNode.cs" />
     <Compile Include="Nodes\PanelOutputNode.cs" />
     <Compile Include="Nodes\PanelInputNode.cs" />
     <Compile Include="Nodes\PanelNode.cs" />

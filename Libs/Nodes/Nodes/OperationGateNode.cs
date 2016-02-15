@@ -7,21 +7,15 @@ namespace MyNetSensors.Nodes
 {
     public class OperationGateNode : Node
     {
-        public OperationGateNode() : base("Operation", "Gate", 2, 1)
+        public OperationGateNode() : base("Operation", "Gate")
         {
-            Inputs[0].Name = "Value";
-            Inputs[1].Name = "Key";
+            AddInput("Value");
+            AddInput("Key",DataType.Logical);
+            AddOutput();
 
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Text;
-
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
-        public override void Loop()
-        {
-        }
 
         public override void OnInputChange(Input input)
         {

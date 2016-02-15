@@ -9,12 +9,12 @@ namespace MyNetSensors.Nodes
 {
     public class MathSinNode : Node
     {
-        public MathSinNode() : base("Math", "Sin", 1, 1)
+        public MathSinNode() : base("Math", "Sin")
         {
-            Inputs[0].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput(DataType.Number);
+            AddOutput(DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

@@ -7,21 +7,15 @@ namespace MyNetSensors.Nodes
 {
     public class SystemFileNode : Node
     {
-        public SystemFileNode() : base("System", "File", 5, 1)
+        public SystemFileNode() : base("System", "File")
         {
-            Inputs[0].Name = "File Name";
-            Inputs[1].Name = "Text";
-            Inputs[2].Name = "Read";
-            Inputs[3].Name = "Write";
-            Inputs[4].Name = "Clear";
-            Outputs[0].Name = "Text";
+            AddInput("File Name", DataType.Text);
+            AddInput("Text", DataType.Text,true);
+            AddInput("Read", DataType.Logical, true);
+            AddInput("Write", DataType.Logical, true);
+            AddInput("Clear", DataType.Logical, true);
 
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Text;
-            Inputs[2].Type = DataType.Logical;
-            Inputs[3].Type = DataType.Logical;
-            Inputs[4].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Text;
+            AddOutput("Text");
 
             options.LogOutputChanges = false;
             options.ProtectedAccess = true;

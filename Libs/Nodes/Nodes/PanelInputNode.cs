@@ -11,8 +11,9 @@ namespace MyNetSensors.Nodes
     {
         //Id must be equal to panel input id
 
-        public PanelInputNode() : base("Main", "Panel Input", 0, 1)
+        public PanelInputNode() : base("Main", "Panel Input")
         {
+            AddOutput();
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
         }
 

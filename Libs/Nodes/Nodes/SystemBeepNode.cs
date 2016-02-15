@@ -10,10 +10,9 @@ namespace MyNetSensors.Nodes
 {
     public class SystemBeepNode : Node
     {
-        public SystemBeepNode() : base("System", "Beep", 1, 0)
+        public SystemBeepNode() : base("System", "Beep")
         {
-            Inputs[0].Name = "Start";
-            Inputs[0].Type = DataType.Logical;
+            AddInput("Start", DataType.Logical);
         }
 
         public override void OnInputChange(Input input)

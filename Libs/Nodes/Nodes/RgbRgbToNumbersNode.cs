@@ -4,19 +4,15 @@ namespace MyNetSensors.Nodes.Nodes
 {
     public class RgbRgbToNumbersNode : Node
     {
-        public RgbRgbToNumbersNode() : base("RGB", "RGB to Numbers", 1, 3)
+        public RgbRgbToNumbersNode() : base("RGB", "RGB to Numbers")
         {
-            Inputs[0].Type = DataType.Text;
-            Outputs[0].Type = DataType.Number;
-            Outputs[1].Type = DataType.Number;
-            Outputs[2].Type = DataType.Number;
+            AddInput("RGB");
 
-            Inputs[0].Name = "RGB";
-            Outputs[0].Name = "R";
-            Outputs[1].Name = "G";
-            Outputs[2].Name = "B";
+            AddOutput("R", DataType.Number);
+            AddOutput("G", DataType.Number);
+            AddOutput("B", DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

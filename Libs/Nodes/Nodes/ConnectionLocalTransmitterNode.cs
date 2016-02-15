@@ -9,8 +9,9 @@ namespace MyNetSensors.Nodes
 {
     public class ConnectionLocalTransmitterNode : Node
     {
-        public ConnectionLocalTransmitterNode() : base("Connection", "Local Transmitter", 1, 0)
+        public ConnectionLocalTransmitterNode() : base("Connection", "Local Transmitter")
         {
+            AddInput();
             Settings.Add("Channel", new NodeSetting(NodeSettingType.Number, "Channel", "0"));
         }
 

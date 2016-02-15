@@ -7,22 +7,16 @@ namespace MyNetSensors.Nodes
 {
     public class MathRemapNode : Node
     {
-        public MathRemapNode() : base("Math", "Remap", 5, 1)
+        public MathRemapNode() : base("Math", "Remap")
         {
-            Inputs[0].Name = "Value";
-            Inputs[1].Name = "InMin";
-            Inputs[2].Name = "InMax";
-            Inputs[3].Name = "OutMin";
-            Inputs[4].Name = "OutMax";
+            AddInput("Value", DataType.Number);
+            AddInput("InMin", DataType.Number);
+            AddInput("InMax", DataType.Number);
+            AddInput("OutMin", DataType.Number);
+            AddInput("OutMax", DataType.Number);
+            AddOutput("Out", DataType.Number);
 
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
-            Inputs[3].Type = DataType.Number;
-            Inputs[4].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
-
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

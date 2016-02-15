@@ -11,8 +11,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiSwitchNode() : base("Switch", 0, 1)
+        public UiSwitchNode() : base("UI", "Switch")
         {
+            AddOutput();
             Value = "0";
             Outputs[0].Value = Value;
         }

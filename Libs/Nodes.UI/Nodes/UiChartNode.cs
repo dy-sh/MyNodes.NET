@@ -24,8 +24,10 @@ namespace MyNetSensors.Nodes
         private bool LastStateUpdated { get; set; }
 
 
-        public UiChartNode() : base("Chart", 1, 0)
+        public UiChartNode() : base("UI", "Chart")
         {
+            AddInput();
+
             NodeStates = new List<NodeState>();
             LastUpdateDate = DateTime.Now;
 

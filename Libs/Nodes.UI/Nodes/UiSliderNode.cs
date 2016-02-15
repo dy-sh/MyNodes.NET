@@ -13,12 +13,13 @@ namespace MyNetSensors.Nodes
     {
         public int Value { get; set; }
 
-        public UiSliderNode() : base("Slider",0, 1)
+        public UiSliderNode() : base("UI", "Slider")
         {
+            AddOutput();
+
             Settings.Add("Min", new NodeSetting(NodeSettingType.Number, "Min Value", "0"));
             Settings.Add("Max", new NodeSetting(NodeSettingType.Number, "Max Value", "100"));
 
-            Value = 0;
             Outputs[0].Value = Value.ToString();
         }
 

@@ -86,7 +86,8 @@ namespace MyNetSensors.WebController.Controllers
                     {
                         name = input.Name,
                         type = "string",
-                        link = engine.GetLinkForInput(input)?.Id
+                        link = engine.GetLinkForInput(input)?.Id,
+                        isOptional = input.IsOptional
                     });
                 }
             }

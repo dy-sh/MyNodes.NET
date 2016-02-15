@@ -10,13 +10,10 @@ namespace MyNetSensors.Nodes
 {
     public class SystemRunNode : Node
     {
-        public SystemRunNode() : base("System", "Run", 2, 0)
+        public SystemRunNode() : base("System", "Run")
         {
-            Inputs[0].Name = "Path";
-            Inputs[1].Name = "Start";
-
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Logical;
+            AddInput("Command");
+            AddInput("Start", DataType.Logical);
 
             options.ProtectedAccess = true;
         }

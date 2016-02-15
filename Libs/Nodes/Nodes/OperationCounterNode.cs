@@ -7,21 +7,18 @@ namespace MyNetSensors.Nodes
 {
     public class OperationCounterNode : Node
     {
-        public OperationCounterNode() : base("Operation", "Counter", 3, 1)
-        {
-            Inputs[0].Name = "Set Value";
-            Inputs[1].Name = "Count Up";
-            Inputs[2].Name = "Count Down";
-
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Logical;
-            Inputs[2].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Text;
-            Outputs[0].Value = Value.ToString();
-        }
-
         public double Value { get; set; }
 
+        public OperationCounterNode() : base("Operation", "Counter")
+        {
+            AddInput("Set Value", DataType.Number,true);
+            AddInput("Count Up", DataType.Logical, true);
+            AddInput("Count Down", DataType.Logical, true);
+            AddOutput("Out",DataType.Number);
+
+            Outputs[0].Value = Value.ToString();
+        }
+        
 
         public override void OnInputChange(Input input)
         {

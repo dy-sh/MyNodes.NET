@@ -16,16 +16,13 @@ namespace MyNetSensors.Nodes
 
         private readonly Timer timer = new Timer();
 
-        public TimeGeneratorNode() : base("Time", "Generator", 3, 1)
+        public TimeGeneratorNode() : base("Time", "Generator")
         {
-            Inputs[0].Name = "Frequency";
-            Inputs[1].Name = "Start";
-            Inputs[2].Name = "Reset";
+            AddInput("Frequency", DataType.Number,true);
+            AddInput("Start", DataType.Logical, true);
+            AddInput("Reset", DataType.Logical, true);
 
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Logical;
-            Inputs[2].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Number;
+            AddOutput("Out",DataType.Logical);
 
             frequency = DEFAULT_VALUE;
 

@@ -4,18 +4,14 @@ namespace MyNetSensors.Nodes
 {
     public class OperationCrossfadeNode : Node
     {
-        public OperationCrossfadeNode() : base("Operation", "Crossfade", 3, 1)
+        public OperationCrossfadeNode() : base("Operation", "Crossfade")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput("Crossfade", DataType.Number);
+            AddInput("A", DataType.Number);
+            AddInput("B", DataType.Number);
+            AddOutput("Out", DataType.Number);
 
-            Inputs[0].Name = "Crossfade";
-            Inputs[1].Name = "A";
-            Inputs[2].Name = "B";
-
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

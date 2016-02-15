@@ -8,12 +8,10 @@ namespace MyNetSensors.Nodes
     {
         private DateTime lasTime;
 
-        public OperationEventsDelayMeterNode() : base("Operation", "Events Delay Meter", 1, 1)
+        public OperationEventsDelayMeterNode() : base("Operation", "Events Delay Meter")
         {
-            Outputs[0].Name = "Delay (ms)";
-
-            Inputs[0].Type = DataType.Text;
-            Outputs[0].Type = DataType.Number;
+            AddInput();
+            AddOutput("Delay (ms)",DataType.Number);
 
             lasTime = DateTime.Now;
         }

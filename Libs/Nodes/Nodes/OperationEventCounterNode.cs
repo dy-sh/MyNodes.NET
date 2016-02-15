@@ -4,17 +4,14 @@ namespace MyNetSensors.Nodes
 {
     public class OperationEventCounterNode : Node
     {
-        public OperationEventCounterNode() : base("Operation", "Event Counter", 2, 1)
-        {
-            Inputs[0].Name = "Value";
-            Inputs[1].Name = "Reset";
-
-            Inputs[0].Type = DataType.Text;
-            Inputs[1].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Number;
-        }
-
         public int Count { get; set; }
+
+        public OperationEventCounterNode() : base("Operation", "Event Counter")
+        {
+            AddInput("Value", DataType.Text);
+            AddInput("Reset", DataType.Logical, true);
+            AddOutput("Out", DataType.Number);
+        }
 
         public override void OnInputChange(Input input)
         {

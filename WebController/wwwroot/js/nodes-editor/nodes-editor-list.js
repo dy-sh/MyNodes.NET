@@ -438,15 +438,15 @@
 
             
 
-            //OperationFreqDivider
-            function OperationFreqDivider () {
+            //OperationFreqDividerNode
+            function OperationFreqDividerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationFreqDivider',
+                    'ObjectType': 'MyNetSensors.Nodes.OperationFreqDividerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            OperationFreqDivider.title = 'Freq Divider';
-            LiteGraph.registerNodeType('Operation/Freq Divider', OperationFreqDivider);
+            OperationFreqDividerNode.title = 'Freq Divider';
+            LiteGraph.registerNodeType('Operation/Freq Divider', OperationFreqDividerNode);
 
             
 
@@ -495,30 +495,6 @@
             }
             OperationSeparatorNode.title = 'Separator';
             LiteGraph.registerNodeType('Operation/Separator', OperationSeparatorNode);
-
-            
-
-            //OperationSwitchInNode
-            function OperationSwitchInNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationSwitchInNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationSwitchInNode.title = 'Switch in';
-            LiteGraph.registerNodeType('Operation/Switch in', OperationSwitchInNode);
-
-            
-
-            //OperationSwitchOutNode
-            function OperationSwitchOutNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationSwitchOutNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationSwitchOutNode.title = 'Switch out';
-            LiteGraph.registerNodeType('Operation/Switch out', OperationSwitchOutNode);
 
             
 

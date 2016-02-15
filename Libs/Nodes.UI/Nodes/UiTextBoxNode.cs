@@ -12,8 +12,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiTextBoxNode() : base("TextBox",0, 1)
+        public UiTextBoxNode() : base("UI", "TextBox")
         {
+            AddOutput();
         }
 
 

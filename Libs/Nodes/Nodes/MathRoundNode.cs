@@ -6,12 +6,12 @@ namespace MyNetSensors.Nodes
 {
     public class MathRoundNode : Node
     {
-        public MathRoundNode() : base("Math", "Round", 1, 1)
+        public MathRoundNode() : base("Math", "Round")
         {
-            Inputs[0].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput(DataType.Number);
+            AddOutput(DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

@@ -16,16 +16,11 @@ namespace MyNetSensors.Nodes
         private DateTime lastTime;
 
 
-        public TimeDelayTimerNode() : base("Time", "Delay Timer", 2, 1)
+        public TimeDelayTimerNode() : base("Time", "Delay Timer")
         {
-            Inputs[0].Name = "Delay";
-            Inputs[1].Name = "Start";
-            //Inputs[2].Name = "Reset";
-
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Logical;
-            //Inputs[2].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Number;
+            AddInput("Delay", DataType.Number);
+            AddInput("Start", DataType.Logical);
+            AddOutput(DataType.Number);
 
             lastTime = DateTime.Now;
             delay = DEFAULT_VALUE;

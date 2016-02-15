@@ -4,13 +4,13 @@ namespace MyNetSensors.Nodes
 {
     public class MathMinusNode : Node
     {
-        public MathMinusNode() : base("Math", "Minus", 2, 1)
+        public MathMinusNode() : base("Math", "Minus")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Outputs[0].Type = DataType.Number;
+            AddInput(DataType.Number);
+            AddInput(DataType.Number);
+            AddOutput(DataType.Number);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

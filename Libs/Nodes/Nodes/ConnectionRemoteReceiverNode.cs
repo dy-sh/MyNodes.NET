@@ -11,14 +11,11 @@ namespace MyNetSensors.Nodes
         private string password;
 
 
-        public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver", 2, 1)
+        public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver")
         {
-            Inputs[0].Name = "Channel";
-            Inputs[1].Name = "Password";
-
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Text;
-            Outputs[0].Type = DataType.Text;
+            AddInput("Channel",DataType.Number,true);
+            AddInput("Password", DataType.Text, true);
+            AddOutput("Out");
         }
 
 

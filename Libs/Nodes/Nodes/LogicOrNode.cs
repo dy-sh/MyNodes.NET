@@ -7,13 +7,13 @@ namespace MyNetSensors.Nodes
 {
     public class LogicOrNode : Node
     {
-        public LogicOrNode() : base("Logic", "OR", 2, 1)
+        public LogicOrNode() : base("Logic", "OR")
         {
-            Inputs[0].Type = DataType.Logical;
-            Inputs[1].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Logical;
+            AddInput(DataType.Logical);
+            AddInput(DataType.Logical);
+            AddOutput(DataType.Logical);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

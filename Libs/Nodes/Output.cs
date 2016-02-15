@@ -28,5 +28,12 @@ namespace MyNetSensors.Nodes
             Id = Guid.NewGuid().ToString();
             Type = DataType.Text;
         }
+
+        public Output(string name, DataType type = DataType.Text)
+        {
+            Id = Guid.NewGuid().ToString();
+            Name = name;
+            Type = type;
+        }
     }
 }

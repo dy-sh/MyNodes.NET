@@ -7,12 +7,12 @@ namespace MyNetSensors.Nodes
 {
     public class LogicNotNode : Node
     {
-        public LogicNotNode() : base("Logic", "NOT", 1, 1)
+        public LogicNotNode() : base("Logic", "NOT")
         {
-            Inputs[0].Type = DataType.Logical;
-            Outputs[0].Type = DataType.Logical;
+            AddInput( DataType.Logical);
+            AddOutput( DataType.Logical);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 

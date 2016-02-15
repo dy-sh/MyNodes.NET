@@ -3,8 +3,9 @@
     public class UiTimerNode:UiNode
     {
 
-        public UiTimerNode():base("Timer",0,1)
+        public UiTimerNode():base("UI", "Timer")
         {
+            AddOutput();
         }
 
         public void SetState(string state)

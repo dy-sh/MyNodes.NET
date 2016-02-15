@@ -2,21 +2,16 @@
 {
     public class RgbNumbersToRgbwNode : Node
     {
-        public RgbNumbersToRgbwNode() : base("RGB", "Numbers to RGBW", 4, 1)
+        public RgbNumbersToRgbwNode() : base("RGB", "Numbers to RGBW")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Inputs[2].Type = DataType.Number;
-            Inputs[3].Type = DataType.Number;
-            Outputs[0].Type = DataType.Text;
+            AddInput("R", DataType.Number);
+            AddInput("G", DataType.Number);
+            AddInput("B", DataType.Number);
+            AddInput("W", DataType.Number);
 
-            Inputs[0].Name = "R";
-            Inputs[1].Name = "G";
-            Inputs[2].Name = "B";
-            Inputs[3].Name = "W";
-            Outputs[0].Name = "RGB";
+            AddOutput("RGB", DataType.Text);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

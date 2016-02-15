@@ -4,13 +4,13 @@ namespace MyNetSensors.Nodes
 {
     public class OperationCompareGreaterNode : Node
     {
-        public OperationCompareGreaterNode() : base("Operation", "Compare Greater", 2, 1)
+        public OperationCompareGreaterNode() : base("Operation", "Compare Greater")
         {
-            Inputs[0].Type = DataType.Number;
-            Inputs[1].Type = DataType.Number;
-            Outputs[0].Type = DataType.Logical;
+            AddInput(DataType.Logical);
+            AddInput(DataType.Logical);
+            AddOutput(DataType.Logical);
 
-            options.ResetOutputsWhenAnyInputIsNull = true;
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
         public override void OnInputChange(Input input)

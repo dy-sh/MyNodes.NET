@@ -11,8 +11,9 @@ namespace MyNetSensors.Nodes
     {
         public string Value { get; set; }
 
-        public UiToggleButtonNode() : base("Toggle", 0, 1)
+        public UiToggleButtonNode() : base("UI", "Toggle")
         {
+            AddOutput();
             Value = "0";
             Outputs[0].Value = Value;
         }
