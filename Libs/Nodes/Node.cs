@@ -155,7 +155,13 @@ namespace MyNetSensors.Nodes
         public void AddInput(string name, DataType type = DataType.Text, bool isOptional = false)
         {
             if (name == null)
-                name = Inputs.Count == 1 ? "In" : "In " + Inputs.Count;
+            {
+                name = !Inputs.Any() ? "In" : "In " + (Inputs.Count + 1);
+                if (Inputs.Count == 1 && Inputs[0].Name == "In")
+                    Inputs[0].Name = "In 1";
+            }
+
+
 
             AddInput(new Input(name, type, isOptional));
         }
@@ -163,7 +169,11 @@ namespace MyNetSensors.Nodes
         public void AddOutput(string name, DataType type = DataType.Text)
         {
             if (name == null)
-                name = Outputs.Count == 1 ? "Out" : "Out " + Outputs.Count;
+            {
+                name = !Outputs.Any() ? "Out" : "Out " + (Outputs.Count + 1);
+                if (Outputs.Count == 1 && Outputs[0].Name == "Out")
+                    Outputs[0].Name = "Out 1";
+            }
 
             AddOutput(new Output(name, type));
         }

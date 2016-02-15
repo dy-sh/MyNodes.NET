@@ -1,1 +1,1 @@
-dnx web
+dnx localhost
