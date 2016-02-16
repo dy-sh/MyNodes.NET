@@ -26,9 +26,7 @@ function guid() {
 var MAIN_PANEL_ID = "Main";
 
 
-
 var LiteGraph = {
-
     NODE_TITLE_HEIGHT: 16,
     NODE_SLOT_HEIGHT: 15,
     //derwish edit
@@ -40,15 +38,30 @@ var LiteGraph = {
     CANVAS_GRID_SIZE: 10,
     NODE_TITLE_COLOR: "#222",
     NODE_DEFAULT_COLOR: "#999",
-    NODE_DEFAULT_IO_COLOR: "#999",
-    NODE_OPTIONAL_IO_COLOR: "#777",
+    NODE_DEFAULT_IO_COLOR: "#AAA",
+    NODE_OPTIONAL_IO_COLOR: "#888",
     NODE_DEFAULT_BGCOLOR: "#373737",
     NODE_DEFAULT_BOXCOLOR: "#000",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
+    MENU_TEXT_COLOR: "#BBB",
     MAX_NUMBER_OF_NODES: 1000, //avoid infinite loops
     DEFAULT_POSITION: [100, 100],//default node position
     node_images_path: "",
+
+    DataType:
+    {
+        Text: 0,
+        Number: 1,
+        Logical: 2
+    },
+
+    DataTypeColor:
+    {
+        0: "#8BB",
+        1: "#8B8",
+        2: "#BB8"
+    },
 
     proxy: null, //used to redirect calls
 
@@ -258,7 +271,10 @@ function LGraph() {
 }
 
 //default supported types
-LGraph.supported_types = ["number", "string", "boolean"];
+LGraph.supported_types =
+    [LiteGraph.DataType.Text,
+    LiteGraph.DataType.Number,
+    LiteGraph.DataType.Logical];
 
 //used to know which types of connections support this graph (some graphs do not allow certain types)
 LGraph.prototype.getSupportedTypes = function () { return this.supported_types || LGraph.supported_types; }
@@ -725,10 +741,9 @@ LGraph.prototype.findNodesByClass = function (classObject) {
 */
 
 LGraph.prototype.findNodesByType = function (type) {
-    var type = type.toLowerCase();
     var r = [];
     for (var i in this._nodes)
-        if (this._nodes[i].type.toLowerCase() == type)
+        if (this._nodes[i].type == type)
             r.push(this._nodes[i]);
     return r;
 }
@@ -823,7 +838,7 @@ LGraph.prototype.changeGlobalInputType = function (name, type) {
     if (!this.global_inputs[name])
         return false;
 
-    if (this.global_inputs[name].type.toLowerCase() == type.toLowerCase())
+    if (this.global_inputs[name].type == type)
         return;
 
     this.global_inputs[name].type = type;
@@ -897,7 +912,7 @@ LGraph.prototype.changeGlobalOutputType = function (name, type) {
     if (!this.global_outputs[name])
         return false;
 
-    if (this.global_outputs[name].type.toLowerCase() == type.toLowerCase())
+    if (this.global_outputs[name].type == type)
         return;
 
     this.global_outputs[name].type = type;
@@ -1741,7 +1756,7 @@ LGraphNode.prototype.connect = function (slot, node, target_slot, linkId) {
     }
     else if (!output.type ||  //generic output
 			!node.inputs[target_slot].type || //generic input
-			output.type.toLowerCase() == node.inputs[target_slot].type.toLowerCase()) //same type
+			output.type == node.inputs[target_slot].type) //same type
     {
         //info: link structure => [ 0:link_id, 1:start_node_id, 2:start_slot, 3:end_node_id, 4:end_slot ]
         //var link = [ this.graph.last_link_id++, this.id, slot, node.id, target_slot ];
@@ -2073,7 +2088,8 @@ function LGraphCanvas(canvas, graph, skip_render) {
         this.startRendering();
 }
 
-LGraphCanvas.link_type_colors = { 'number': "#ACC", 'string': "#AAC", 'node': "#DCA" };
+
+LGraphCanvas.link_type_colors = { 0: "#8BB", 1: "#8B8", 2: "#BB8" };
 
 
 /**
@@ -2706,7 +2722,7 @@ LGraphCanvas.prototype.processMouseMove = function (e) {
                 var slot = this.isOverNodeInput(n, e.canvasX, e.canvasY, pos);
                 if (slot != -1 && n.inputs[slot]) {
                     var slot_type = n.inputs[slot].type;
-                    if (!this.connecting_output.type || !slot_type || slot_type.toLowerCase() == this.connecting_output.type.toLowerCase())
+                    if (!this.connecting_output.type || !slot_type || slot_type == this.connecting_output.type)
                         this._highlight_input = pos;
                 }
                 else
@@ -3577,10 +3593,10 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 var slot = node.inputs[i];
 
                 ctx.globalAlpha = editor_alpha;
-                if (this.connecting_node != null && this.connecting_output.type && node.inputs[i].type && this.connecting_output.type.toLowerCase() != node.inputs[i].type.toLowerCase())
+                if (this.connecting_node != null && this.connecting_output.type && node.inputs[i].type && this.connecting_output.type != node.inputs[i].type)
                     ctx.globalAlpha = 0.4 * editor_alpha;
 
-                ctx.fillStyle = slot.link != null ? "#7F7" : "#AAA";
+                ctx.fillStyle = slot.link != null ? "#7F7" : LiteGraph.DataTypeColor[slot.type];
 
                 var pos = node.getConnectionPos(true, i);
                 pos[0] -= node.pos[0];
@@ -3621,7 +3637,7 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 pos[0] -= node.pos[0];
                 pos[1] -= node.pos[1];
 
-                ctx.fillStyle = slot.links && slot.links.length ? "#7F7" : "#AAA";
+                ctx.fillStyle = slot.links && slot.links.length ? "#7F7" : LiteGraph.DataTypeColor[slot.type];
                 ctx.beginPath();
                 //ctx.rect( node.size[0] - 14,i*14,10,10);
 
@@ -4562,7 +4578,7 @@ LiteGraph.createContextualMenu = function (values, options, ref_window) {
     style.position = "fixed";
     style.top = "100px";
     style.left = "100px";
-    style.color = "#BBD";
+    style.color = LiteGraph.MENU_TEXT_COLOR;
     style.padding = "2px";
     style.borderBottom = "1px solid #BBD";
     style.backgroundColor = "#353535";

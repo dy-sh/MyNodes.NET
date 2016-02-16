@@ -85,7 +85,7 @@ namespace MyNetSensors.WebController.Controllers
                     litegraphNode.inputs.Add(new LiteGraph.Input
                     {
                         name = input.Name,
-                        type = "string",
+                        type = (int)input.Type,
                         link = engine.GetLinkForInput(input)?.Id,
                         isOptional = input.IsOptional
                     });
@@ -108,7 +108,7 @@ namespace MyNetSensors.WebController.Controllers
                         litegraphNode.outputs.Add(new LiteGraph.Output
                         {
                             name = output.Name,
-                            type = "string",
+                            type = (int)output.Type,
                             links = linksIds
                         });
                     }
@@ -117,7 +117,7 @@ namespace MyNetSensors.WebController.Controllers
                         litegraphNode.outputs.Add(new LiteGraph.Output
                         {
                             name = output.Name,
-                            type = "string"
+                            type = (int)output.Type
                         });
                     }
                 }

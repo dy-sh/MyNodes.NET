@@ -44,7 +44,7 @@ namespace LiteGraph
     public class Input
     {
         public string name { get; set; }
-        public string type { get; set; }
+        public int type { get; set; }
         public string link { get; set; }
         public bool isOptional { get; set; }
     }
@@ -52,7 +52,7 @@ namespace LiteGraph
     public class Output
     {
         public string name { get; set; }
-        public string type { get; set; }
+        public int type { get; set; }
         public string[] links { get; set; }
         public bool isOptional { get; set; }
 
