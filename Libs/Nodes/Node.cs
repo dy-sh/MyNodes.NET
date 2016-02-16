@@ -189,6 +189,37 @@ namespace MyNetSensors.Nodes
         }
 
 
+        public void RemoveInput(Input input)
+        {
+            if (!Inputs.Contains(input))
+            {
+                LogError("Can`t remove input. Does not exist.");
+                return;
+            }
+
+            var link = engine.GetLinkForInput(input);
+            if (link != null)
+                engine.RemoveLink(link);
+
+            Inputs.Remove(input);
+        }
+
+        public void RemoveOutput(Output output)
+        {
+            if (!Outputs.Contains(output))
+            {
+                LogError("Can`t remove output. Does not exist.");
+                return;
+            }
+
+            var links = engine.GetLinksForOutput(output);
+            foreach (var link in links)
+                engine.RemoveLink(link);
+
+            Outputs.Remove(output);
+        }
+
+
         public void ShowActivity()
         {
             engine.ShowNodeActivity(this);

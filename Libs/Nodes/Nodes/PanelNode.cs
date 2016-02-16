@@ -59,29 +59,23 @@ namespace MyNetSensors.Nodes
         }
 
 
-        public bool RemoveInput(PanelInputNode node)
+        public bool RemovePanelInput(PanelInputNode node)
         {
             var input = engine.GetInput(node.Id);
 
-            var link = engine.GetLinkForInput(input);
-            if (link != null)
-                engine.RemoveLink(link);
-
-            Inputs.Remove(input);
+            RemoveInput(input);
+            
             UpdateMe();
             UpdateMeInDb();
             return true;
         }
 
-        public bool RemoveOutput(PanelOutputNode node)
+        public bool RemovePanelOutput(PanelOutputNode node)
         {
             var output = engine.GetOutput(node.Id);
 
-            var links = engine.GetLinksForOutput(output);
-            foreach (var link in links)
-                engine.RemoveLink(link);
-
-            Outputs.Remove(output);
+            RemoveOutput(output);
+           
             UpdateMe();
             UpdateMeInDb();
             return true;

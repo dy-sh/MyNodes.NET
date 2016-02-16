@@ -49,7 +49,7 @@ namespace MyNetSensors.Nodes
         public override void OnRemove()
         {
             var panel = engine.GetPanelNode(PanelId);
-            panel?.RemoveOutput(this);
+            panel?.RemovePanelOutput(this);
         }
 
         public void UpdateName(string name)
