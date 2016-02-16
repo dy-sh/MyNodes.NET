@@ -22,16 +22,23 @@ namespace MyNetSensors.Nodes
 
         public override void OnInputChange(Input input)
         {
-            int index = (int)double.Parse(Inputs[0].Value);
-
-
-            if (index < 1 || index > Outputs.Count)
+            try
             {
-                LogError("Output Number is out of range");
-                return;
-            }
+                int index = (int)double.Parse(Inputs[0].Value);
 
-            Outputs[index-1].Value = Inputs[1].Value;
+
+                if (index < 1 || index > Outputs.Count)
+                {
+                    LogError("Output Number is out of range");
+                    return;
+                }
+
+                Outputs[index - 1].Value = Inputs[1].Value;
+            }
+            catch
+            {
+                LogIncorrectInputValueError(Inputs[0]);
+            }
         }
 
         public override bool SetSettings(Dictionary<string, string> data)
