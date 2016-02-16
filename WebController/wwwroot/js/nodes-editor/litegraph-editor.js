@@ -13,7 +13,7 @@ function Editor(container_id, options) {
     //create graph
     var graph = this.graph = new LGraph();
     var graphcanvas = this.graphcanvas = new LGraphCanvas(canvas, graph);
-    graphcanvas.background_image = "/images/litegraph/grid.png";
+   // graphcanvas.background_image = "/images/litegraph/grid.png";
     graph.onAfterExecute = function () { graphcanvas.draw(true) };
 
     //add stuff

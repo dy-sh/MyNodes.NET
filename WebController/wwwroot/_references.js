@@ -8,8 +8,8 @@
 /// <reference path="js/dashboard/mynetsensors-dashboard-signalr.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-slider.js" />
 /// <reference path="js/dashboard/mynetsensors-dashboard-timer.js" />
-/// <reference path="js/dashboard/mynetsensors-dashboard-voice.js" />
-/// <reference path="js/dashboard/mynetsensors-dashboard-voice-yandex - copy.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-voice-google.js" />
+/// <reference path="js/dashboard/mynetsensors-dashboard-voice-yandex.js" />
 /// <reference path="js/daterangepicker/daterangepicker.js" />
 /// <reference path="js/handlebars.min.js" />
 /// <reference path="js/mynetsensors-config-page.js" />
@@ -22,6 +22,15 @@
 /// <reference path="js/nodes-editor/litegraph-editor.js" />
 /// <reference path="js/nodes-editor/nodes-editor-list.js" />
 /// <reference path="js/nodes-editor/nodes-editor-signalr.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme1.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme10.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme2.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme4.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme5.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme6 - copy.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme7.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme8.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme9.js" />
 /// <reference path="js/slider/nouislider.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/bootstrap-select/dist/js/bootstrap-select.js" />

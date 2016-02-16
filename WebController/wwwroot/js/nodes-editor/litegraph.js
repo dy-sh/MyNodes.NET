@@ -44,10 +44,19 @@ var LiteGraph = {
     NODE_DEFAULT_BOXCOLOR: "#000",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
+    TITLE_TEXT_FONT: "bold 13px Arial",
+    INNER_TEXT_FONT: "normal 12px Arial",
+    SHADOWS_WIDTH: 2,
     MENU_TEXT_COLOR: "#BBB",
+    MENU_BG_COLOR: "#353535",
+    BG_IMAGE: "/images/litegraph/grid.png",
     MAX_NUMBER_OF_NODES: 1000, //avoid infinite loops
-    DEFAULT_POSITION: [100, 100],//default node position
+    DEFAULT_POSITION: [100, 100], //default node position
     node_images_path: "",
+
+    RENDER_CONNECTION_ARROWS: true,
+    CONNECTIONS_WIDTH: 4,
+    CONNECTIONS_SHADOW: 4,
 
     DataType:
     {
@@ -2116,6 +2125,7 @@ LGraphCanvas.prototype.clear = function () {
     this.editor_alpha = 1; //used for transition
     this.pause_rendering = false;
     this.render_shadows = true;
+    this.shadows_width = LiteGraph.SHADOWS_WIDTH;
     this.clear_background = true;
 
     this.render_only_selected = true;
@@ -2133,18 +2143,22 @@ LGraphCanvas.prototype.clear = function () {
     this.last_mouse = [0, 0];
     this.last_mouseclick = 0;
 
-    this.title_text_font = "bold 14px Arial";
-    this.inner_text_font = "normal 12px Arial";
+    this.title_text_font = LiteGraph.TITLE_TEXT_FONT;
+    this.inner_text_font = LiteGraph.INNER_TEXT_FONT;
 
     this.render_connections_shadows = false; //too much cpu
     this.render_connections_border = true;
     this.render_curved_connections = true;
-    this.render_connection_arrows = true;
+    this.render_connection_arrows = LiteGraph.RENDER_CONNECTION_ARROWS;
 
-    this.connections_width = 4;
+    this.connections_width = LiteGraph.CONNECTIONS_WIDTH;
+    this.connections_shadow = LiteGraph.CONNECTIONS_SHADOW;
 
     if (this.onClear) this.onClear();
     //this.UIinit();
+
+    if (this.onClear) this.onClear();
+
 }
 
 /**
@@ -3249,7 +3263,7 @@ LGraphCanvas.prototype.computeVisibleNodes = function () {
 LGraphCanvas.prototype.draw = function (force_canvas, force_bgcanvas) {
     //fps counting
     var now = LiteGraph.getTime();
-    this.render_time = (now - this.last_draw_time) * 0.001;
+    this.render_time = (now - this.last__time) * 0.001;
     this.last_draw_time = now;
 
     if (this.graph) {
@@ -3423,13 +3437,13 @@ LGraphCanvas.prototype.drawBackCanvas = function () {
 
 
         //render BG
-        if (this.background_image && this.scale > 0.5) {
+        if (LiteGraph.BG_IMAGE && this.scale > 0.5) {
             ctx.globalAlpha = (1.0 - 0.5 / this.scale) * this.editor_alpha;
             ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = false;
-            if (!this._bg_img || this._bg_img.name != this.background_image) {
+            if (!this._bg_img || this._bg_img.name != LiteGraph.BG_IMAGE) {
                 this._bg_img = new Image();
-                this._bg_img.name = this.background_image;
-                this._bg_img.src = this.background_image;
+                this._bg_img.name = LiteGraph.BG_IMAGE;
+                this._bg_img.src = LiteGraph.BG_IMAGE;
                 var that = this;
                 this._bg_img.onload = function () {
                     that.draw(true, true);
@@ -3517,8 +3531,8 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
     }
     else if (this.render_shadows) {
         ctx.shadowColor = "rgba(0,0,0,0.5)";
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        ctx.shadowOffsetX = this.shadows_width;
+        ctx.shadowOffsetY = this.shadows_width;
         ctx.shadowBlur = 3;
     }
     else
@@ -3551,7 +3565,7 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
     ctx.globalAlpha = editor_alpha;
 
     //clip if required (mask)
-    var shape = node.shape || "box";
+    var shape = node.shape || LiteGraph.NODE_DEFAULT_SHAPE;
     var size = new Float32Array(node.size);
     if (node.flags.collapsed) {
         size[0] = LiteGraph.NODE_COLLAPSED_WIDTH;
@@ -3569,8 +3583,7 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
             ctx.roundRect(0, 0, size[0], size[1], 10);
         }
         else if (shape == "circle") {
-            ctx.beginPath();
-            ctx.arc(size[0] * 0.5, size[1] * 0.5, size[0] * 0.5, 0, Math.PI * 2);
+            ctx.roundRect(0, 0, size[0], size[1], 10);
         }
         ctx.clip();
     }
@@ -3658,7 +3671,7 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 if (render_text) {
                     var text = slot.label != null ? slot.label : slot.name;
                     if (text) {
-                        ctx.fillStyle = color;
+                        ctx.fillStyle = LiteGraph.NODE_DEFAULT_IO_COLOR;
                         ctx.fillText(text, pos[0] - 10, pos[1] + 5);
                     }
                 }
@@ -3694,7 +3707,7 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
     var title_height = LiteGraph.NODE_TITLE_HEIGHT;
 
     //render depending on shape
-    var shape = node.shape || "box";
+    var shape = node.shape || LiteGraph.NODE_DEFAULT_SHAPE;
     if (shape == "box") {
         ctx.beginPath();
         ctx.rect(0, no_title ? 0 : -title_height, size[0] + 1, no_title ? size[1] : size[1] + title_height);
@@ -3707,13 +3720,12 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
             ctx.strokeStyle = fgcolor;
         }
     }
-    else if (node.shape == "round") {
-        ctx.roundRect(0, no_title ? 0 : -title_height, size[0], no_title ? size[1] : size[1] + title_height, 10);
+    else if (shape == "round") {
+        ctx.roundRect(0, no_title ? 0 : -title_height, size[0], no_title ? size[1] : size[1] + title_height, 4);
         ctx.fill();
     }
-    else if (node.shape == "circle") {
-        ctx.beginPath();
-        ctx.arc(size[0] * 0.5, size[1] * 0.5, size[0] * 0.5, 0, Math.PI * 2);
+    else if (shape == "circle") {
+        ctx.roundRect(0, no_title ? 0 : -title_height, size[0], no_title ? size[1] : size[1] + title_height, 8);
         ctx.fill();
     }
 
@@ -3735,15 +3747,21 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
     if (!no_title) {
         ctx.fillStyle = fgcolor || LiteGraph.NODE_DEFAULT_COLOR;
         var old_alpha = ctx.globalAlpha;
-        ctx.globalAlpha = 0.5 * old_alpha;
+        //ctx.globalAlpha = 0.5 * old_alpha;
         if (shape == "box") {
             ctx.beginPath();
             ctx.rect(0, -title_height, size[0] + 1, title_height);
             ctx.fill()
             //ctx.stroke();
         }
-        else if (shape == "round") {
-            ctx.roundRect(0, -title_height, size[0], title_height, 10, 0);
+        else if (shape == "round" ) {
+            ctx.roundRect(0, -title_height, size[0], title_height, 4, 0);
+            //ctx.fillRect(0,8,size[0],NODE_TITLE_HEIGHT - 12);
+            ctx.fill();
+            //ctx.stroke();
+        }
+        else if ( shape == "circle") {
+            ctx.roundRect(0, -title_height, size[0], title_height, 8, 0);
             //ctx.fillRect(0,8,size[0],NODE_TITLE_HEIGHT - 12);
             ctx.fill();
             //ctx.stroke();
@@ -3752,7 +3770,7 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
         //box
         ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
         ctx.beginPath();
-        if (shape == "round")
+        if (shape == "round" || shape == "circle")
             ctx.arc(title_height * 0.5, title_height * -0.5, (title_height - 6) * 0.5, 0, Math.PI * 2);
         else
             ctx.rect(3, -title_height + 3, title_height - 6, title_height - 6);
@@ -3778,17 +3796,17 @@ LGraphCanvas.prototype.drawNodeCollapsed = function (node, ctx, fgcolor, bgcolor
     var collapsed_radius = LiteGraph.NODE_COLLAPSED_RADIUS;
 
     //circle shape
-    var shape = node.shape || "box";
+    var shape = node.shape || LiteGraph.NODE_DEFAULT_SHAPE;
     if (shape == "circle") {
         ctx.beginPath();
-        ctx.arc(node.size[0] * 0.5, node.size[1] * 0.5, collapsed_radius, 0, Math.PI * 2);
+        ctx.roundRect(node.size[0] * 0.5 - collapsed_radius, node.size[1] * 0.5 - collapsed_radius, 2 * collapsed_radius, 2 * collapsed_radius, 5);
         ctx.fill();
         ctx.shadowColor = "rgba(0,0,0,0)";
         ctx.stroke();
 
         ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
         ctx.beginPath();
-        ctx.arc(node.size[0] * 0.5, node.size[1] * 0.5, collapsed_radius * 0.5, 0, Math.PI * 2);
+        ctx.roundRect(node.size[0] * 0.5 - collapsed_radius * 0.5, node.size[1] * 0.5 - collapsed_radius * 0.5, collapsed_radius, collapsed_radius, 2);
         ctx.fill();
     }
     else if (shape == "round") //rounded box
@@ -3874,7 +3892,7 @@ LGraphCanvas.prototype.renderLink = function (ctx, a, b, color) {
     var dist = distance(a, b);
 
     if (this.render_connections_border && this.scale > 0.6)
-        ctx.lineWidth = this.connections_width + 4;
+        ctx.lineWidth = this.connections_width + this.connections_shadow;
 
     ctx.beginPath();
 
@@ -4581,7 +4599,7 @@ LiteGraph.createContextualMenu = function (values, options, ref_window) {
     style.color = LiteGraph.MENU_TEXT_COLOR;
     style.padding = "2px";
     style.borderBottom = "1px solid #BBD";
-    style.backgroundColor = "#353535";
+    style.backgroundColor = LiteGraph.MENU_BG_COLOR;
 
     //title
     if (options.title) {
