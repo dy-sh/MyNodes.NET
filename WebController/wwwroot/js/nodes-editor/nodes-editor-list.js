@@ -486,6 +486,18 @@
 
             
 
+            //OperationRouterOneToMultipleNode
+            function OperationRouterOneToMultipleNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.OperationRouterOneToMultipleNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationRouterOneToMultipleNode.title = 'Router One-Multiple';
+            LiteGraph.registerNodeType('Operation/Router One-Multiple', OperationRouterOneToMultipleNode);
+
+            
+
             //OperationSeparatorNode
             function OperationSeparatorNode () {
                 this.properties = {
