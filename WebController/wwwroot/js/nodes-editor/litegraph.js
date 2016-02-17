@@ -2871,10 +2871,12 @@ LGraphCanvas.prototype.processMouseUp = function (e) {
                         //prevent connection of different types
                        // if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
 
-                            //derwish added
+                        //derwish added
+                        if (input != null) {
                             var link = { origin_id: this.connecting_node.id, origin_slot: this.connecting_slot, target_id: node.id, target_slot: 0 };
                             send_create_link(link);
-                            //derwish removed
+                        }
+                        //derwish removed
                             //this.connecting_node.connect(this.connecting_slot, node, 0);
                        // }
                     }
@@ -2887,6 +2889,7 @@ LGraphCanvas.prototype.processMouseUp = function (e) {
             this.connecting_pos = null;
             this.connecting_node = null;
             this.connecting_slot = -1;
+            this._highlight_input = null;
 
         }//not dragging connection
         else if (this.resizing_node) {
