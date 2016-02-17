@@ -18,7 +18,7 @@
     LiteGraph.IO_NODE_COLOR = "#FFFBF6";
     LiteGraph.IO_NODE_BGCOLOR = "#EFEBE6";
 
-    LiteGraph.NODE_DEFAULT_BOXCOLOR = "#FFFBF6";
+    //LiteGraph.NODE_DEFAULT_BOXCOLOR = "#FFFBF6";
     LiteGraph.NODE_ACTIVE_BOXCOLOR = "#444";
     LiteGraph.NODE_DEFAULT_IO_COLOR = "#3E454D";
     LiteGraph.NODE_OPTIONAL_IO_COLOR = "#777";

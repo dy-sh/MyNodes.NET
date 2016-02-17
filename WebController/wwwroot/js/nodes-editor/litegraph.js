@@ -49,7 +49,7 @@ var LiteGraph = {
 
     NODE_DEFAULT_IO_COLOR: "#999",
     NODE_OPTIONAL_IO_COLOR: "#777",
-    NODE_DEFAULT_BOXCOLOR: "#373737",
+   // NODE_DEFAULT_BOXCOLOR: "#373737",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
     TITLE_TEXT_FONT: "bold 13px Arial",
@@ -3793,7 +3793,7 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
         }
 
         //box
-        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
+        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR || fgcolor;
         ctx.beginPath();
         if (shape == "round" || shape == "circle")
             ctx.arc(title_height * 0.5, title_height * -0.5, (title_height - 6) * 0.5, 0, Math.PI * 2);
@@ -3829,7 +3829,7 @@ LGraphCanvas.prototype.drawNodeCollapsed = function (node, ctx, fgcolor, bgcolor
         ctx.shadowColor = "rgba(0,0,0,0)";
         ctx.stroke();
 
-        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
+        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR || fgcolor;
         ctx.beginPath();
         ctx.roundRect(node.size[0] * 0.5 - collapsed_radius * 0.5, node.size[1] * 0.5 - collapsed_radius * 0.5, collapsed_radius, collapsed_radius, 2);
         ctx.fill();
@@ -3842,7 +3842,7 @@ LGraphCanvas.prototype.drawNodeCollapsed = function (node, ctx, fgcolor, bgcolor
         ctx.shadowColor = "rgba(0,0,0,0)";
         ctx.stroke();
 
-        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
+        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR || fgcolor;
         ctx.beginPath();
         ctx.roundRect(node.size[0] * 0.5 - collapsed_radius * 0.5, node.size[1] * 0.5 - collapsed_radius * 0.5, collapsed_radius, collapsed_radius, 2);
         ctx.fill();
@@ -3856,7 +3856,7 @@ LGraphCanvas.prototype.drawNodeCollapsed = function (node, ctx, fgcolor, bgcolor
         ctx.shadowColor = "rgba(0,0,0,0)";
         ctx.stroke();
 
-        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR;
+        ctx.fillStyle = node.boxcolor || LiteGraph.NODE_DEFAULT_BOXCOLOR || fgcolor;
         ctx.beginPath();
         //ctx.rect(node.size[0] * 0.5 - collapsed_radius*0.5, uiNode.size[1] * 0.5 - collapsed_radius*0.5, collapsed_radius,collapsed_radius);
         ctx.rect(collapsed_radius * 0.5, collapsed_radius * 0.5, collapsed_radius, collapsed_radius);
