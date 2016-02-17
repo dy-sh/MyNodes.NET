@@ -37,10 +37,18 @@ var LiteGraph = {
     NODE_COLLAPSED_WIDTH: 150,
     CANVAS_GRID_SIZE: 10,
     NODE_TITLE_COLOR: "#222",
+
     NODE_DEFAULT_COLOR: "#777",
+    NODE_DEFAULT_BGCOLOR: "#373737",
+
+    PANEL_NODE_COLOR: "#777",
+    PANEL_NODE_BGCOLOR: "#373737",
+
+    IO_NODE_COLOR: "#777",
+    IO_NODE_BGCOLOR: "#373737",
+
     NODE_DEFAULT_IO_COLOR: "#999",
     NODE_OPTIONAL_IO_COLOR: "#777",
-    NODE_DEFAULT_BGCOLOR: "#373737",
     NODE_DEFAULT_BOXCOLOR: "#373737",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
@@ -71,6 +79,7 @@ var LiteGraph = {
         1: "#AAA",
         2: "#AAA"
     },
+    NEW_LINK_COLOR:"#CCC",
 
     proxy: null, //used to redirect calls
 
@@ -3359,7 +3368,8 @@ LGraphCanvas.prototype.drawFrontCanvas = function () {
         //current connection
         if (this.connecting_pos != null) {
             ctx.lineWidth = this.connections_width;
-            var link_color = this.connecting_output.type == 'node' ? "#F85" : "#AFA";
+            var link_color = LiteGraph.NEW_LINK_COLOR;
+                //this.connecting_output.type == 'node' ? "#F85" : "#AFA";
             this.renderLink(ctx, this.connecting_pos, [this.canvas_mouse[0], this.canvas_mouse[1]], link_color);
 
             ctx.beginPath();
@@ -4598,7 +4608,7 @@ LiteGraph.createContextualMenu = function (values, options, ref_window) {
     style.left = "100px";
     style.color = LiteGraph.MENU_TEXT_COLOR;
     style.padding = "2px";
-    style.borderBottom = "1px solid #BBD";
+    style.borderBottom = "1px solid " + LiteGraph.MENU_TEXT_COLOR;
     style.backgroundColor = LiteGraph.MENU_BG_COLOR;
 
     //title
