@@ -23,14 +23,12 @@
 /// <reference path="js/nodes-editor/nodes-editor-list.js" />
 /// <reference path="js/nodes-editor/nodes-editor-signalr.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme1.js" />
-/// <reference path="js/nodes-editor/nodes-editor-theme10.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme2.js" />
-/// <reference path="js/nodes-editor/nodes-editor-theme4.js" />
+/// <reference path="js/nodes-editor/nodes-editor-theme3.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme5.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme6 - copy.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme7.js" />
 /// <reference path="js/nodes-editor/nodes-editor-theme8.js" />
-/// <reference path="js/nodes-editor/nodes-editor-theme9.js" />
 /// <reference path="js/slider/nouislider.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/bootstrap-select/dist/js/bootstrap-select.js" />

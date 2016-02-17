@@ -32,6 +32,7 @@ namespace MyNetSensors.WebController.Code
         public static WebServerConfig webServerConfig;
         public static DataBaseConfig dataBaseConfig;
         public static NodesEngineConfig nodesEngineConfig;
+        public static NodeEditorConfig nodeEditorConfig;
 
 
         //VARIABLES
@@ -178,6 +179,11 @@ namespace MyNetSensors.WebController.Code
                 {
                     Enable = Boolean.Parse(configuration["NodesEngine:Enable"]),
                     UpdateInterval = Int32.Parse(configuration["NodesEngine:UpdateInterval"])
+                };
+
+                nodeEditorConfig = new NodeEditorConfig
+                {
+                    Theme = int.Parse(configuration["NodeEditor:Theme"])
                 };
 
                 dataBaseConfig = new DataBaseConfig

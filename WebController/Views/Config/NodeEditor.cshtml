@@ -1,0 +1,80 @@
+﻿@model MyNetSensors.WebController.Code.NodeEditorConfig
+
+@{
+    ViewBag.Title = "Node Editor Settings";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <p>
+        < <a asp-action="Index">Config</a>
+    </p>
+    <div class="ui divider"></div>
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="NodeEditor" asp-anti-forgery="true" class="ui form">
+                    <div class="ui basic segment">
+
+                        <h5>Select theme</h5>
+                        <div class="fields">
+                            <div class="ten wide field">
+
+                                <div class="ui selection button dropdown">
+                                    <input type="hidden" name="Theme" value="@Model.Theme">
+                                    <i class="dropdown icon"></i>
+                                    @{
+                                        var themes = Model.GetThemesList();
+                                        <div class="text">@themes[Model.Theme]</div>
+
+                                        <div class="menu">
+                                            @for (int i = 0; i < themes.Count; i++)
+                                            {
+                                            <div class="item" data-value="@i">@themes[i]</div>
+                                            }
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+
+                    </div>
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Index" class="ui button">Cancel</a>
+                            <input type="submit" value="Select" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -33,6 +33,8 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.split = split;
             ViewBag.panelId = MAIN_PANEL_ID;
 
+            ViewBag.Theme = SystemController.nodeEditorConfig.Theme;
+
             return View();
         }
 
@@ -72,6 +74,8 @@ namespace MyNetSensors.WebController.Controllers
 
             panelsStack.Reverse();
             ViewBag.panelsStack = panelsStack;
+
+            ViewBag.Theme = SystemController.nodeEditorConfig.Theme;
 
 
             return View("Index");

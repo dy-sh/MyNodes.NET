@@ -8,15 +8,15 @@
     LiteGraph.NODE_COLLAPSED_WIDTH = 150;
     LiteGraph.CANVAS_GRID_SIZE = 10;
 
-    LiteGraph.NODE_TITLE_COLOR = "#C9CAC4";
+    LiteGraph.NODE_TITLE_COLOR = "#B9BAB4";
     LiteGraph.NODE_DEFAULT_COLOR = "#262B2F";
     LiteGraph.NODE_DEFAULT_BGCOLOR = "#464B4F";
 
     LiteGraph.NODE_DEFAULT_BOXCOLOR = "#363B3F";
     LiteGraph.NODE_ACTIVE_BOXCOLOR = "#EEE";
-    LiteGraph.NODE_DEFAULT_IO_COLOR = "#C9CAC4";
-    LiteGraph.NODE_OPTIONAL_IO_COLOR = "#999A94";
-    LiteGraph.NODE_DEFAULT_SHAPE = "round";
+    LiteGraph.NODE_DEFAULT_IO_COLOR = "#F5F5F5";
+    LiteGraph.NODE_OPTIONAL_IO_COLOR = "#CCC";
+    LiteGraph.NODE_DEFAULT_SHAPE = "box";
     LiteGraph.SHADOWS_WIDTH = 1;
     LiteGraph.MENU_TEXT_COLOR = "#CCC";
     LiteGraph.MENU_BG_COLOR = "#262B2F";
@@ -26,15 +26,15 @@
 
 
     LiteGraph.RENDER_CONNECTION_ARROWS = false;
-    LiteGraph.CONNECTIONS_WIDTH = 3;
+    LiteGraph.CONNECTIONS_WIDTH = 2;
     LiteGraph.CONNECTIONS_SHADOW = 1;
     LiteGraph.DataTypeColor =
     {
-        0: "#EEE",//AAA
-        1: "#9AE",//5AD
-        2: "#EB8"//DA5
+        0: "#AAA",//AAA
+        1: "#9AB",//5AD
+        2: "#BA9"//DA5
     };
-    LGraphCanvas.link_type_colors = { 0: "#EEE", 1: "#9AE", 2: "#EB8" };
+    LGraphCanvas.link_type_colors = { 0: "#AAA", 1: "#9AB", 2: "#BA9" };
 
 })();
 

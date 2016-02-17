@@ -281,6 +281,29 @@ namespace MyNetSensors.WebController.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult NodeEditor()
+        {
+            return View(SystemController.nodeEditorConfig);
+        }
+
+
+        [Authorize(UserClaims.ConfigEditor)]
+
+        [HttpPost]
+        public IActionResult NodeEditor(NodeEditorConfig model)
+        {
+            dynamic json = ReadConfig();
+            json.NodeEditor = JObject.FromObject(model);
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.nodeEditorConfig = model;
+
+            return RedirectToAction("Index");
+        }
     }
 
 }

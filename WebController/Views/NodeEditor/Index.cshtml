@@ -2,6 +2,8 @@
 @{
     Layout = null;
     ViewBag.Title = "Node Editor";
+
+    int theme = ViewBag.Theme ?? 1;
 }
 
 
@@ -18,7 +20,7 @@
     <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/css/litegraph.css">
     <link rel="stylesheet" type="text/css" href="~/css/litegraph-editor.css">
-    <link rel="stylesheet" type="text/css" href="~/css/litegraph-theme1.css">
+    <link rel="stylesheet" type="text/css" href="@Html.Raw($"~/css/litegraph-theme" +theme+".css")">
     <link rel="stylesheet" type="text/css" href="~/css/site-black.css">
 </head>
 <body>
@@ -175,7 +177,7 @@
     <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script type="text/javascript" src="~/js/nodes-editor/litegraph.js"></script>
     <script type="text/javascript" src="~/js/nodes-editor/litegraph-editor.js"></script>
-    <script type="text/javascript" src="~/js/nodes-editor/nodes-editor-theme1.js"></script>
+    <script type="text/javascript" src="@Html.Raw("~/js/nodes-editor/nodes-editor-theme"+theme+".js")"></script>
     <script type="text/javascript" src="~/js/nodes-editor/nodes-editor-list.js"></script>
     <script type="text/javascript" src="~/js/nodes-editor/nodes-editor-signalr.js"></script>
     <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>

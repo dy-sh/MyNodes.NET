@@ -37,17 +37,17 @@ var LiteGraph = {
     NODE_COLLAPSED_WIDTH: 150,
     CANVAS_GRID_SIZE: 10,
     NODE_TITLE_COLOR: "#222",
-    NODE_DEFAULT_COLOR: "#999",
-    NODE_DEFAULT_IO_COLOR: "#AAA",
-    NODE_OPTIONAL_IO_COLOR: "#888",
+    NODE_DEFAULT_COLOR: "#777",
+    NODE_DEFAULT_IO_COLOR: "#999",
+    NODE_OPTIONAL_IO_COLOR: "#777",
     NODE_DEFAULT_BGCOLOR: "#373737",
-    NODE_DEFAULT_BOXCOLOR: "#000",
+    NODE_DEFAULT_BOXCOLOR: "#373737",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
     TITLE_TEXT_FONT: "bold 13px Arial",
     INNER_TEXT_FONT: "normal 12px Arial",
     SHADOWS_WIDTH: 2,
-    MENU_TEXT_COLOR: "#BBB",
+    MENU_TEXT_COLOR: "#BBD",
     MENU_BG_COLOR: "#353535",
     BG_IMAGE: "/images/litegraph/grid.png",
     MAX_NUMBER_OF_NODES: 1000, //avoid infinite loops
@@ -67,9 +67,9 @@ var LiteGraph = {
 
     DataTypeColor:
     {
-        0: "#8BB",
-        1: "#8B8",
-        2: "#BB8"
+        0: "#AAA",
+        1: "#AAA",
+        2: "#AAA"
     },
 
     proxy: null, //used to redirect calls
@@ -2098,7 +2098,7 @@ function LGraphCanvas(canvas, graph, skip_render) {
 }
 
 
-LGraphCanvas.link_type_colors = { 0: "#8BB", 1: "#8B8", 2: "#BB8" };
+LGraphCanvas.link_type_colors = { 0: "#AAC", 1: "#AAC", 2: "#AAC" };
 
 
 /**
