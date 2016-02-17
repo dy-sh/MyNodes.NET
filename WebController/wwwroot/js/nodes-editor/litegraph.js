@@ -3520,6 +3520,12 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
     var glow = false;
 
     var color = node.color || LiteGraph.NODE_DEFAULT_COLOR;
+
+    if (node.type == "Main/Panel")
+        color = LiteGraph.PANEL_NODE_COLOR;
+    else if (node.type == "Main/Panel Input" || node.type == "Main/Panel Output")
+        color = LiteGraph.IO_NODE_COLOR;
+
     //if (this.selected) color = "#88F";
 
     var render_title = true;
@@ -3706,13 +3712,22 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
     ctx.strokeStyle = fgcolor || LiteGraph.NODE_DEFAULT_COLOR;
     ctx.fillStyle = bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR;
 
+    if (node.type == "Main/Panel") {
+        ctx.strokeStyle = fgcolor || LiteGraph.PANEL_NODE_COLOR;
+        ctx.fillStyle = bgcolor || LiteGraph.PANEL_NODE_BGCOLOR;
+        color = LiteGraph.PANEL_NODE_COLOR;
+    } else if (node.type == "Main/Panel Input" || node.type == "Main/Panel Output") {
+        ctx.strokeStyle = fgcolor || LiteGraph.IO_NODE_COLOR;
+        ctx.fillStyle = bgcolor || LiteGraph.IO_NODE_BGCOLOR;
+    }
+
     /* gradient test
-	var grad = ctx.createLinearGradient(0,0,0,node.size[1]);
-	grad.addColorStop(0, "#AAA");
-	grad.addColorStop(0.5, fgcolor || LiteGraph.NODE_DEFAULT_COLOR);
-	grad.addColorStop(1, bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR);
-	ctx.fillStyle = grad;
-	//*/
+    var grad = ctx.createLinearGradient(0,0,0,node.size[1]);
+    grad.addColorStop(0, "#AAA");
+    grad.addColorStop(0.5, fgcolor || LiteGraph.NODE_DEFAULT_COLOR);
+    grad.addColorStop(1, bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR);
+    ctx.fillStyle = grad;
+    //*/
 
     var title_height = LiteGraph.NODE_TITLE_HEIGHT;
 

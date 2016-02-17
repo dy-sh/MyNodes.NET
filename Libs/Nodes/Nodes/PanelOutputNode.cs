@@ -71,22 +71,5 @@ namespace MyNetSensors.Nodes
             return base.SetSettings(data);
         }
 
-        public override string GetJsListGenerationScript()
-        {
-            return @"
-
-            //PanelOutputNode
-            function PanelOutputNode() {
-                this.properties = {
-                    ObjectType: 'MyNetSensors.Nodes.PanelOutputNode',
-                    'Assembly': 'Nodes'
-                };
-                this.bgcolor = '#151515';
-            }
-            PanelOutputNode.title = 'Panel Output';
-            LiteGraph.registerNodeType('Main/Panel Output', PanelOutputNode);
-
-            ";
-        }
     }
 }

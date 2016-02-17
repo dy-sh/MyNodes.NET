@@ -151,7 +151,6 @@ namespace MyNetSensors.Nodes
                     'ObjectType': 'MyNetSensors.Nodes.PanelNode',
                     'Assembly': 'Nodes'
                 };
-                this.bgcolor = '#565656';
             }
             PanelNode.title = 'Panel';
             PanelNode.prototype.getExtraMenuOptions = function (graphcanvas) {

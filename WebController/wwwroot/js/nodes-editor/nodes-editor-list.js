@@ -103,7 +103,6 @@
                     'ObjectType': 'MyNetSensors.Nodes.PanelNode',
                     'Assembly': 'Nodes'
                 };
-                this.bgcolor = '#565656';
             }
             PanelNode.title = 'Panel';
             PanelNode.prototype.getExtraMenuOptions = function (graphcanvas) {
@@ -123,14 +122,12 @@
 
             
 
-            //PanelOutputNode
-            function PanelInputNode() {
+            //PanelInputNode
+            function PanelInputNode () {
                 this.properties = {
-                    ObjectType: 'MyNetSensors.Nodes.PanelInputNode',
-                    'Assembly': 'Nodes'
+                    'ObjectType': 'MyNetSensors.Nodes.PanelInputNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
-                this.bgcolor = '#151515';
-
             }
             PanelInputNode.title = 'Panel Input';
             LiteGraph.registerNodeType('Main/Panel Input', PanelInputNode);
@@ -138,12 +135,11 @@
             
 
             //PanelOutputNode
-            function PanelOutputNode() {
+            function PanelOutputNode () {
                 this.properties = {
-                    ObjectType: 'MyNetSensors.Nodes.PanelOutputNode',
-                    'Assembly': 'Nodes'
+                    'ObjectType': 'MyNetSensors.Nodes.PanelOutputNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
-                this.bgcolor = '#151515';
             }
             PanelOutputNode.title = 'Panel Output';
             LiteGraph.registerNodeType('Main/Panel Output', PanelOutputNode);
