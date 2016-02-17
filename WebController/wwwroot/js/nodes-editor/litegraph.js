@@ -1775,9 +1775,11 @@ LGraphNode.prototype.connect = function (slot, node, target_slot, linkId) {
             output.links = [];
         output.links.push({ id: node.id, slot: -1 });
     }
-    else if (!output.type ||  //generic output
-			!node.inputs[target_slot].type || //generic input
-			output.type == node.inputs[target_slot].type) //same type
+    else
+        //prevent connection of different types
+        //if (!output.type ||  //generic output
+		//	!node.inputs[target_slot].type || //generic input
+		//	output.type == node.inputs[target_slot].type) //same type
     {
         //info: link structure => [ 0:link_id, 1:start_node_id, 2:start_slot, 3:end_node_id, 4:end_slot ]
         //var link = [ this.graph.last_link_id++, this.id, slot, node.id, target_slot ];
@@ -2747,8 +2749,10 @@ LGraphCanvas.prototype.processMouseMove = function (e) {
                 var pos = this._highlight_input || [0, 0];
                 var slot = this.isOverNodeInput(n, e.canvasX, e.canvasY, pos);
                 if (slot != -1 && n.inputs[slot]) {
-                    var slot_type = n.inputs[slot].type;
-                    if (!this.connecting_output.type || !slot_type || slot_type == this.connecting_output.type)
+
+                    //prevent connection different types
+                    //var slot_type = n.inputs[slot].type;
+                    //if (!this.connecting_output.type || !slot_type || slot_type == this.connecting_output.type)
                         this._highlight_input = pos;
                 }
                 else
@@ -2863,14 +2867,16 @@ LGraphCanvas.prototype.processMouseUp = function (e) {
                     else { //not on top of an input
                         var input = node.getInputInfo(0);
                         //simple connect
-                        if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
+
+                        //prevent connection of different types
+                       // if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
 
                             //derwish added
                             var link = { origin_id: this.connecting_node.id, origin_slot: this.connecting_slot, target_id: node.id, target_slot: 0 };
                             send_create_link(link);
                             //derwish removed
                             //this.connecting_node.connect(this.connecting_slot, node, 0);
-                        }
+                       // }
                     }
 
 
@@ -3624,7 +3630,9 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 var slot = node.inputs[i];
 
                 ctx.globalAlpha = editor_alpha;
-                //hide not compatible inputs
+
+                //prevent connection of different types
+                //hide not compatible inputs 
                 //if (this.connecting_node != null && this.connecting_output.type && node.inputs[i].type && this.connecting_output.type != node.inputs[i].type)
                 //    ctx.globalAlpha = 0.4 * editor_alpha;
 
