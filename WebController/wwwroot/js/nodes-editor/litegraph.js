@@ -1778,8 +1778,8 @@ LGraphNode.prototype.connect = function (slot, node, target_slot, linkId) {
     else
         //prevent connection of different types
         //if (!output.type ||  //generic output
-		//	!node.inputs[target_slot].type || //generic input
-		//	output.type == node.inputs[target_slot].type) //same type
+        //	!node.inputs[target_slot].type || //generic input
+        //	output.type == node.inputs[target_slot].type) //same type
     {
         //info: link structure => [ 0:link_id, 1:start_node_id, 2:start_slot, 3:end_node_id, 4:end_slot ]
         //var link = [ this.graph.last_link_id++, this.id, slot, node.id, target_slot ];
@@ -1907,8 +1907,7 @@ LGraphNode.prototype.disconnectInput = function (slot) {
 
         //check outputs
         for (var i = 0, l = output.links.length; i < l; i++) {
-            if (link_id == output.links[i])
-             {
+            if (link_id == output.links[i]) {
                 output.links.splice(i, 1);
                 break;
             }
@@ -2752,7 +2751,7 @@ LGraphCanvas.prototype.processMouseMove = function (e) {
                     //prevent connection different types
                     //var slot_type = n.inputs[slot].type;
                     //if (!this.connecting_output.type || !slot_type || slot_type == this.connecting_output.type)
-                        this._highlight_input = pos;
+                    this._highlight_input = pos;
                 }
                 else
                     this._highlight_input = null;
@@ -2868,7 +2867,7 @@ LGraphCanvas.prototype.processMouseUp = function (e) {
                         //simple connect
 
                         //prevent connection of different types
-                       // if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
+                        // if (input && !input.link && input.type == this.connecting_output.type) { //toLowerCase missing
 
                         //derwish added
                         if (input != null) {
@@ -2876,8 +2875,8 @@ LGraphCanvas.prototype.processMouseUp = function (e) {
                             send_create_link(link);
                         }
                         //derwish removed
-                            //this.connecting_node.connect(this.connecting_slot, node, 0);
-                       // }
+                        //this.connecting_node.connect(this.connecting_slot, node, 0);
+                        // }
                     }
 
 
@@ -4182,6 +4181,8 @@ LGraphCanvas.onMenuImport = function (node, e, prev_menu, canvas, first_event) {
             editor.importPanelFromURL(pos);
         }
 
+        LiteGraph.closeAllContextualMenus();
+
         return false;
     }
     return false;
@@ -4307,9 +4308,14 @@ LGraphCanvas.onMenuNodeShapes = function (node, e) {
     return false;
 }
 
-LGraphCanvas.onMenuNodeRemove = function (node) {
-    if (node.removable == false) return;
-    send_remove_node(node);
+LGraphCanvas.onMenuNodeRemove = function (node, e, prev_menu, canvas, first_event) {
+    //if (node.removable == false) return;
+
+    if (node.id in canvas.selected_nodes)
+        send_remove_nodes(canvas.selected_nodes);
+    else
+        send_remove_node(node);
+
     //derwish remove
     //node.graph.remove(uiNode);
     //node.setDirtyCanvas(true, true);

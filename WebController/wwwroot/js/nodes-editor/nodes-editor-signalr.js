@@ -251,6 +251,23 @@ function send_remove_node(node) {
     });
 };
 
+function send_remove_nodes(nodes) {
+
+    var array = [];
+
+    for (var n in nodes) {
+        array.push(nodes[n].id);
+    }
+
+    $.ajax({
+        url: '/NodeEditorAPI/RemoveNodes',
+        type: 'POST',
+        data: { 'nodes': array }
+    }).done(function () {
+
+    });
+};
+
 function send_update_node(node) {
 
     var serializedNode = node.serialize();

@@ -414,6 +414,39 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
+        [Authorize(UserClaims.EditorEditor)]
+        public async Task<bool> RemoveNodes(List<string> nodes)
+        {
+            return await Task.Run(() =>
+            {
+                foreach (var id in nodes)
+                {
+                    Node oldNode = engine.GetNode(id);
+                    if (oldNode == null)
+                    {
+                        engine.LogEngineError($"Can`t remove node [{id}]. Does not exist.");
+                        return false;
+                    }
+
+                    if (oldNode.GetNodeOptions().ProtectedAccess)
+                    {
+                        if (!User.HasClaim(x => x.Type == UserClaims.EditorProtectedAccess))
+                        {
+                            engine.LogEngineError(
+                                $"Can`t remove node [{oldNode.Category}/{oldNode.Type}]. No permissions for protected access.");
+                            continue;
+                        }
+                    }
+
+                    engine.RemoveNode(oldNode);
+                }
+
+                return true;
+            });
+        }
+
+
+
 
         [Authorize(UserClaims.EditorEditor)]
         public async Task<bool> UpdateNode(LiteGraph.Node node)
