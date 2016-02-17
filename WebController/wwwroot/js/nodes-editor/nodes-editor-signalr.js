@@ -85,9 +85,9 @@ $(function () {
         if (link.panel_id != window.this_panel_id)
             return;
 
-        var node = graph.getNodeById(link.origin_id);
+        //var node = graph.getNodeById(link.origin_id);
         var targetNode = graph.getNodeById(link.target_id);
-        node.disconnectOutput(link.target_slot, targetNode);
+        //node.disconnectOutput(link.target_slot, targetNode);
         targetNode.disconnectInput(link.target_slot);
     };
 

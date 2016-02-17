@@ -1907,9 +1907,8 @@ LGraphNode.prototype.disconnectInput = function (slot) {
 
         //check outputs
         for (var i = 0, l = output.links.length; i < l; i++) {
-            var link_id = output.links[i];
-            var link_info = this.graph.links[link_id];
-            if (link_info.target_id == this.id) {
+            if (link_id == output.links[i])
+             {
                 output.links.splice(i, 1);
                 break;
             }
