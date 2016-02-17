@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationRouterOneToMultipleNode : Node
+    public class ConnectionRouterOneToMultipleNode : Node
     {
-        public OperationRouterOneToMultipleNode() : base("Operation", "Router One-Multiple")
+        public ConnectionRouterOneToMultipleNode() : base("Connection", "Router One-Multiple")
         {
             AddInput("Output Number", DataType.Number);
             AddInput("Value", DataType.Text, true);

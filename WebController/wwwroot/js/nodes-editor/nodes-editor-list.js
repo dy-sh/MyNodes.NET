@@ -13,6 +13,30 @@
 
             
 
+            //ConnectionGateNode
+            function ConnectionGateNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.ConnectionGateNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            ConnectionGateNode.title = 'Gate';
+            LiteGraph.registerNodeType('Connection/Gate', ConnectionGateNode);
+
+            
+
+            //ConnectionHubNode
+            function ConnectionHubNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.ConnectionHubNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            ConnectionHubNode.title = 'Hub';
+            LiteGraph.registerNodeType('Connection/Hub', ConnectionHubNode);
+
+            
+
             //ConnectionLocalReceiverNode
             function ConnectionLocalReceiverNode () {
                 this.properties = {
@@ -58,6 +82,42 @@
             }
             ConnectionRemoteTransmitterNode.title = 'Remote Transmitter';
             LiteGraph.registerNodeType('Connection/Remote Transmitter', ConnectionRemoteTransmitterNode);
+
+            
+
+            //ConnectionRouterMultipleToOneNode
+            function ConnectionRouterMultipleToOneNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRouterMultipleToOneNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            ConnectionRouterMultipleToOneNode.title = 'Router Multiple-One';
+            LiteGraph.registerNodeType('Connection/Router Multiple-One', ConnectionRouterMultipleToOneNode);
+
+            
+
+            //ConnectionRouterOneToMultipleNode
+            function ConnectionRouterOneToMultipleNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRouterOneToMultipleNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            ConnectionRouterOneToMultipleNode.title = 'Router One-Multiple';
+            LiteGraph.registerNodeType('Connection/Router One-Multiple', ConnectionRouterOneToMultipleNode);
+
+            
+
+            //ConnectionSeparatorNode
+            function ConnectionSeparatorNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.ConnectionSeparatorNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            ConnectionSeparatorNode.title = 'Separator';
+            LiteGraph.registerNodeType('Connection/Separator', ConnectionSeparatorNode);
 
             
 
@@ -446,18 +506,6 @@
 
             
 
-            //OperationGateNode
-            function OperationGateNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationGateNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationGateNode.title = 'Gate';
-            LiteGraph.registerNodeType('Operation/Gate', OperationGateNode);
-
-            
-
             //OperationMixerNode
             function OperationMixerNode () {
                 this.properties = {
@@ -479,42 +527,6 @@
             }
             OperationRandomNode.title = 'Random';
             LiteGraph.registerNodeType('Operation/Random', OperationRandomNode);
-
-            
-
-            //OperationRouterMultipleToOne
-            function OperationRouterMultipleToOne () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationRouterMultipleToOne',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationRouterMultipleToOne.title = 'Router Multiple-One';
-            LiteGraph.registerNodeType('Operation/Router Multiple-One', OperationRouterMultipleToOne);
-
-            
-
-            //OperationRouterOneToMultipleNode
-            function OperationRouterOneToMultipleNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationRouterOneToMultipleNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationRouterOneToMultipleNode.title = 'Router One-Multiple';
-            LiteGraph.registerNodeType('Operation/Router One-Multiple', OperationRouterOneToMultipleNode);
-
-            
-
-            //OperationSeparatorNode
-            function OperationSeparatorNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationSeparatorNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationSeparatorNode.title = 'Separator';
-            LiteGraph.registerNodeType('Operation/Separator', OperationSeparatorNode);
 
             
 

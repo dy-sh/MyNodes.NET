@@ -5,9 +5,9 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationGateNode : Node
+    public class ConnectionGateNode : Node
     {
-        public OperationGateNode() : base("Operation", "Gate")
+        public ConnectionGateNode() : base("Connection", "Gate")
         {
             AddInput("Value");
             AddInput("Key",DataType.Logical);
