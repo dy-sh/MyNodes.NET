@@ -18,9 +18,9 @@ namespace MyNetSensors.WebController.Code
                 "Dark Nodes",
                 "Pro",
                 "R6",
-                "Bright Nodes",
-                "White",
                 "Old Paper",
+                "White",
+                "Bright Nodes",
                 "Green Field"
             };
         } 

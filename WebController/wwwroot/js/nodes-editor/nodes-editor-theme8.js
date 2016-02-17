@@ -27,10 +27,12 @@
     LiteGraph.SHADOWS_WIDTH = 1;
     LiteGraph.MENU_TEXT_COLOR = "#DDD";
     LiteGraph.MENU_BG_COLOR = "#606059";
-    LiteGraph.BG_IMAGE = null,
-    LiteGraph.TITLE_TEXT_FONT = "normal 13px Arial",
-    LiteGraph.INNER_TEXT_FONT = "normal 12px Arial",
+    LiteGraph.BG_IMAGE = null;
+    LiteGraph.TITLE_TEXT_FONT = "normal 13px Arial";
+    LiteGraph.INNER_TEXT_FONT = "normal 12px Arial";
 
+    LiteGraph.SELECTION_COLOR = "#FFF";
+    LiteGraph.SELECTION_WIDTH = 2;
 
     LiteGraph.RENDER_CONNECTION_ARROWS = false;
     LiteGraph.CONNECTIONS_WIDTH = 3;

@@ -26,10 +26,12 @@
     LiteGraph.SHADOWS_WIDTH = 1;
     LiteGraph.MENU_TEXT_COLOR = "#CCC";
     LiteGraph.MENU_BG_COLOR = "#464B4F";
-    LiteGraph.BG_IMAGE = "/images/litegraph/gridA3.png",
-    LiteGraph.TITLE_TEXT_FONT = "normal 13px Arial",
-    LiteGraph.INNER_TEXT_FONT = "normal 12px Arial",
+    LiteGraph.BG_IMAGE = "/images/litegraph/gridA3.png";
+    LiteGraph.TITLE_TEXT_FONT = "normal 13px Arial";
+    LiteGraph.INNER_TEXT_FONT = "normal 12px Arial";
 
+    LiteGraph.SELECTION_COLOR = "#FFF";
+    LiteGraph.SELECTION_WIDTH = 2;
 
     LiteGraph.RENDER_CONNECTION_ARROWS = false;
     LiteGraph.CONNECTIONS_WIDTH = 2;

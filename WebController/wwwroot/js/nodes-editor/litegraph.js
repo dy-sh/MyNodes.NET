@@ -49,7 +49,7 @@ var LiteGraph = {
 
     NODE_DEFAULT_IO_COLOR: "#999",
     NODE_OPTIONAL_IO_COLOR: "#777",
-   // NODE_DEFAULT_BOXCOLOR: "#373737",
+    // NODE_DEFAULT_BOXCOLOR: "#373737",
     NODE_ACTIVE_BOXCOLOR: "#AEF",
     NODE_DEFAULT_SHAPE: "box",
     TITLE_TEXT_FONT: "bold 13px Arial",
@@ -66,6 +66,9 @@ var LiteGraph = {
     CONNECTIONS_WIDTH: 4,
     CONNECTIONS_SHADOW: 4,
 
+    SELECTION_COLOR: "#FFF",
+    SELECTION_WIDTH: 2,
+
     DataType:
     {
         Text: 0,
@@ -79,7 +82,7 @@ var LiteGraph = {
         1: "#AAA",
         2: "#AAA"
     },
-    NEW_LINK_COLOR:"#CCC",
+    NEW_LINK_COLOR: "#CCC",
 
     proxy: null, //used to redirect calls
 
@@ -3369,7 +3372,7 @@ LGraphCanvas.prototype.drawFrontCanvas = function () {
         if (this.connecting_pos != null) {
             ctx.lineWidth = this.connections_width;
             var link_color = LiteGraph.NEW_LINK_COLOR;
-                //this.connecting_output.type == 'node' ? "#F85" : "#AFA";
+            //this.connecting_output.type == 'node' ? "#F85" : "#AFA";
             this.renderLink(ctx, this.connecting_pos, [this.canvas_mouse[0], this.canvas_mouse[1]], link_color);
 
             ctx.beginPath();
@@ -3538,12 +3541,11 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
     if (node.mouseOver) glow = true;
 
     if (node.selected) {
-        /*
-		ctx.shadowColor = "#EEEEFF";//glow ? "#AAF" : "#000";
-		ctx.shadowOffsetX = 0;
-		ctx.shadowOffsetY = 0;
-		ctx.shadowBlur = 1;
-		*/
+        ctx.shadowColor = LiteGraph.SELECTION_COLOR;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = LiteGraph.SELECTION_WIDTH;
+
     }
     else if (this.render_shadows) {
         ctx.shadowColor = "rgba(0,0,0,0.5)";
@@ -3622,7 +3624,12 @@ LGraphCanvas.prototype.drawNode = function (node, ctx) {
                 var slot = node.inputs[i];
 
                 ctx.globalAlpha = editor_alpha;
-                if (this.connecting_node != null && this.connecting_output.type && node.inputs[i].type && this.connecting_output.type != node.inputs[i].type)
+                //hide not compatible inputs
+                //if (this.connecting_node != null && this.connecting_output.type && node.inputs[i].type && this.connecting_output.type != node.inputs[i].type)
+                //    ctx.globalAlpha = 0.4 * editor_alpha;
+
+                //hide self inputs
+                if (this.connecting_node == node)
                     ctx.globalAlpha = 0.4 * editor_alpha;
 
                 ctx.fillStyle = slot.link != null ? "#7F7" : LiteGraph.DataTypeColor[slot.type];
@@ -3737,13 +3744,13 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
         ctx.beginPath();
         ctx.rect(0, no_title ? 0 : -title_height, size[0] + 1, no_title ? size[1] : size[1] + title_height);
         ctx.fill();
-        ctx.shadowColor = "transparent";
+        //ctx.shadowColor = "transparent";
 
-        if (selected) {
-            ctx.strokeStyle = "#CCC";
-            ctx.strokeRect(-0.5, no_title ? -0.5 : -title_height + -0.5, size[0] + 2, no_title ? (size[1] + 2) : (size[1] + title_height + 2) - 1);
-            ctx.strokeStyle = fgcolor;
-        }
+        //if (selected) {
+        //    ctx.strokeStyle = "#CCC";
+        //    ctx.strokeRect(-0.5, no_title ? -0.5 : -title_height + -0.5, size[0] + 2, no_title ? (size[1] + 2) : (size[1] + title_height + 2) - 1);
+        //    ctx.strokeStyle = fgcolor;
+        //}
     }
     else if (shape == "round") {
         ctx.roundRect(0, no_title ? 0 : -title_height, size[0], no_title ? size[1] : size[1] + title_height, 4);
@@ -3779,13 +3786,13 @@ LGraphCanvas.prototype.drawNodeShape = function (node, ctx, size, fgcolor, bgcol
             ctx.fill()
             //ctx.stroke();
         }
-        else if (shape == "round" ) {
+        else if (shape == "round") {
             ctx.roundRect(0, -title_height, size[0], title_height, 4, 0);
             //ctx.fillRect(0,8,size[0],NODE_TITLE_HEIGHT - 12);
             ctx.fill();
             //ctx.stroke();
         }
-        else if ( shape == "circle") {
+        else if (shape == "circle") {
             ctx.roundRect(0, -title_height, size[0], title_height, 8, 0);
             //ctx.fillRect(0,8,size[0],NODE_TITLE_HEIGHT - 12);
             ctx.fill();

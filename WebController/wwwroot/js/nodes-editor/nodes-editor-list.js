@@ -109,18 +109,6 @@
 
             
 
-            //ConnectionSeparatorNode
-            function ConnectionSeparatorNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.ConnectionSeparatorNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            ConnectionSeparatorNode.title = 'Separator';
-            LiteGraph.registerNodeType('Connection/Separator', ConnectionSeparatorNode);
-
-            
-
             //LogicAndNode
             function LogicAndNode () {
                 this.properties = {
@@ -130,6 +118,54 @@
             }
             LogicAndNode.title = 'AND';
             LiteGraph.registerNodeType('Logic/AND', LogicAndNode);
+
+            
+
+            //LogicCompareEqualNode
+            function LogicCompareEqualNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareEqualNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            LogicCompareEqualNode.title = 'Compare Equal';
+            LiteGraph.registerNodeType('Logic/Compare Equal', LogicCompareEqualNode);
+
+            
+
+            //LogicCompareGreaterNode
+            function LogicCompareGreaterNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareGreaterNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            LogicCompareGreaterNode.title = 'Compare Greater';
+            LiteGraph.registerNodeType('Logic/Compare Greater', LogicCompareGreaterNode);
+
+            
+
+            //LogicCompareLowerNode
+            function LogicCompareLowerNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareLowerNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            LogicCompareLowerNode.title = 'Compare Lower';
+            LiteGraph.registerNodeType('Logic/Compare Lower', LogicCompareLowerNode);
+
+            
+
+            //LogicCompareNotEqualNode
+            function LogicCompareNotEqualNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareNotEqualNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            LogicCompareNotEqualNode.title = 'Compare NotEqual';
+            LiteGraph.registerNodeType('Logic/Compare NotEqual', LogicCompareNotEqualNode);
 
             
 
@@ -374,54 +410,6 @@
 
             
 
-            //OperationCompareEqualNode
-            function OperationCompareEqualNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCompareEqualNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationCompareEqualNode.title = 'Compare Equal';
-            LiteGraph.registerNodeType('Operation/Compare Equal', OperationCompareEqualNode);
-
-            
-
-            //OperationCompareGreaterNode
-            function OperationCompareGreaterNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCompareGreaterNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationCompareGreaterNode.title = 'Compare Greater';
-            LiteGraph.registerNodeType('Operation/Compare Greater', OperationCompareGreaterNode);
-
-            
-
-            //OperationCompareLowerNode
-            function OperationCompareLowerNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCompareLowerNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationCompareLowerNode.title = 'Compare Lower';
-            LiteGraph.registerNodeType('Operation/Compare Lower', OperationCompareLowerNode);
-
-            
-
-            //OperationCompareNotEqualNode
-            function OperationCompareNotEqualNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCompareNotEqualNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationCompareNotEqualNode.title = 'Compare NotEqual';
-            LiteGraph.registerNodeType('Operation/Compare NotEqual', OperationCompareNotEqualNode);
-
-            
-
             //OperationCounterNode
             function OperationCounterNode () {
                 this.properties = {
@@ -527,6 +515,18 @@
             }
             OperationRandomNode.title = 'Random';
             LiteGraph.registerNodeType('Operation/Random', OperationRandomNode);
+
+            
+
+            //OperationSeparatorNode
+            function OperationSeparatorNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationSeparatorNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationSeparatorNode.title = 'Separator';
+            LiteGraph.registerNodeType('Operation/Separator', OperationSeparatorNode);
 
             
 

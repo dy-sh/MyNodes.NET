@@ -1,8 +1,8 @@
 ﻿namespace MyNetSensors.Nodes.Nodes
 {
-    public class ConnectionSeparatorNode : Node
+    public class OperationSeparatorNode : Node
     {
-        public ConnectionSeparatorNode() : base("Connection", "Separator")
+        public OperationSeparatorNode() : base("Operation", "Separator")
         {
             AddInput("Treshold", DataType.Number);
             AddInput("Value", DataType.Number);

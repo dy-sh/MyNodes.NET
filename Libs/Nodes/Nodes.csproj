@@ -67,7 +67,7 @@
     <Compile Include="Nodes\RgbNumbersToRgbNode.cs" />
     <Compile Include="Nodes\RgbRgbwToNumbersNode.cs" />
     <Compile Include="Nodes\RgbRgbToNumbersNode.cs" />
-    <Compile Include="Nodes\ConnectionSeparatorNode.cs" />
+    <Compile Include="Nodes\OperationSeparatorNode.cs" />
     <Compile Include="Nodes\SystemRunNode.cs" />
     <Compile Include="Nodes\OperationAccumulatorNode.cs" />
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
@@ -89,10 +89,10 @@
     <Compile Include="Nodes\MathSinNode.cs" />
     <Compile Include="Nodes\MathSqrtNode.cs" />
     <Compile Include="Nodes\MathTanNode.cs" />
-    <Compile Include="Nodes\OperationCompareEqualNode.cs" />
-    <Compile Include="Nodes\OperationCompareGreaterNode.cs" />
-    <Compile Include="Nodes\OperationCompareLowerNode.cs" />
-    <Compile Include="Nodes\OperationCompareNotEqualNode.cs" />
+    <Compile Include="Nodes\LogicCompareEqualNode.cs" />
+    <Compile Include="Nodes\LogicCompareGreaterNode.cs" />
+    <Compile Include="Nodes\LogicCompareLowerNode.cs" />
+    <Compile Include="Nodes\LogicCompareNotEqualNode.cs" />
     <Compile Include="Nodes\OperationFlipflopNode.cs" />
     <Compile Include="Nodes\ConnectionGateNode.cs" />
     <Compile Include="Nodes\OperationRandomNode.cs" />

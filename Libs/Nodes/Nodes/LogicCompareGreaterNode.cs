@@ -2,9 +2,9 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationCompareGreaterNode : Node
+    public class LogicCompareGreaterNode : Node
     {
-        public OperationCompareGreaterNode() : base("Operation", "Compare Greater")
+        public LogicCompareGreaterNode() : base("Logic", "Compare Greater")
         {
             AddInput(DataType.Logical);
             AddInput(DataType.Logical);

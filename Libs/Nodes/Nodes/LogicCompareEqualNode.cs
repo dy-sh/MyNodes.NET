@@ -2,9 +2,9 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationCompareEqualNode : Node
+    public class LogicCompareEqualNode : Node
     {
-        public OperationCompareEqualNode() : base("Operation", "Compare Equal")
+        public LogicCompareEqualNode() : base("Logic", "Compare Equal")
         {
             AddInput();
             AddInput();
