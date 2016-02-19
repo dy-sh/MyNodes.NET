@@ -40,21 +40,13 @@ namespace MyNetSensors.Nodes
 
         public override bool SetValues(Dictionary<string, string> values)
         {
-            try
-            {
-                Value = Int32.Parse(values.FirstOrDefault().Value);
-                Outputs[0].Value = Value.ToString();
+            Value = Int32.Parse(values.FirstOrDefault().Value);
+            Outputs[0].Value = Value.ToString();
 
-                UpdateMe();
-                UpdateMeInDb();
+            UpdateMe();
+            UpdateMeInDb();
 
-                return true;
-            }
-            catch
-            {
-                LogError("Can`t set value. Incorrect data.");
-                return false;
-            }
+            return true;
         }
     }
 }

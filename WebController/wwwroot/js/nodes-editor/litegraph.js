@@ -4413,11 +4413,9 @@ LGraphCanvas.prototype.getNodeMenuOptions = function (node) {
     }
 
 
-    options.push({ content: "Description", callback: function () { editor.showNodeDescrition(node) } });
-    options.push(null);
 
 
-    options.push({ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse });
+
 
     if (node.getMenuOptions)
         options = node.getMenuOptions(this);
@@ -4434,6 +4432,11 @@ LGraphCanvas.prototype.getNodeMenuOptions = function (node) {
 
     if (node.clonable !== false)
         options.push({ content: "Clone", callback: LGraphCanvas.onMenuNodeClone });
+
+    options.push({ content: "Description", callback: function () { editor.showNodeDescrition(node) } });
+
+    options.push({ content: "Collapse", callback: LGraphCanvas.onMenuNodeCollapse });
+
     if (node.removable !== false)
         options.push({ content: "Remove", callback: LGraphCanvas.onMenuNodeRemove });
 

@@ -109,6 +109,19 @@
 
             
 
+            function MySensorsNode() {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
+                    'Assembly': 'Nodes.MySensors'
+                };
+                this.clonable = false;
+            }
+            MySensorsNode.title = 'MySensors Node';
+            MySensorsNode.skip_list = true;
+            LiteGraph.registerNodeType('Hardware/MySensors', MySensorsNode);
+
+            
+
             //LogicAndNode
             function LogicAndNode () {
                 this.properties = {
@@ -407,6 +420,18 @@
             }
             OperationAccumulatorNode.title = 'Accumulator';
             LiteGraph.registerNodeType('Operation/Accumulator', OperationAccumulatorNode);
+
+            
+
+            //OperationControlShaperNode
+            function OperationControlShaperNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.OperationControlShaperNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationControlShaperNode.title = 'Control Shaper';
+            LiteGraph.registerNodeType('Operation/Control Shaper', OperationControlShaperNode);
 
             
 

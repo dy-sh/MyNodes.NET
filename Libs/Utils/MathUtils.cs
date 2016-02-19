@@ -19,17 +19,32 @@
             return (value < min) ? min : (value > max) ? max : value;
         }
 
-        public static uint Map(uint value, uint fromMin, uint fromMax, uint toMin, uint toMax)
+        public static double Clamp(double value, double min, double max)
         {
-            return (uint)Map((float)value, (float)fromMin, (float)fromMax, (float)toMin, (float)toMax);
+            return (value < min) ? min : (value > max) ? max : value;
+        }
+
+        public static uint Remap(uint value, uint fromMin, uint fromMax, uint toMin, uint toMax)
+        {
+            return (uint)Map(value, fromMin, fromMax, toMin, toMax);
         }
 
         public static int Map(int value, int fromMin, int fromMax, int toMin, int toMax)
         {
-            return (int) Map((float) value, (float) fromMin, (float) fromMax, (float) toMin, (float) toMax);
+            return (int)Map(value, fromMin, fromMax, toMin, toMax);
         }
 
-        public static float Map(float value, float fromMin, float fromMax, float toMin, float toMax)
+        public static float Remap(float value, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            return (float)Map(value, fromMin, fromMax, toMin, toMax);
+        }
+
+        public static double Remap(double value, double fromMin, double fromMax, double toMin, double toMax)
+        {
+            return (double)Map(value, fromMin, fromMax, toMin, toMax);
+        }
+
+        public static double Map(double value, double fromMin, double fromMax, double toMin, double toMax)
         {
             return (value - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
         }

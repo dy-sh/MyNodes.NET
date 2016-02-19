@@ -325,6 +325,11 @@ function createOrUpdateNode(node) {
         //create new
         var newNode = LiteGraph.createNode(node.type);
 
+        if (newNode==null) {
+            console.error("Can`t create node of type: ["+node.type+"]");
+            return;
+        };
+
         newNode.title = node.title;
 
         newNode.inputs = node.inputs;

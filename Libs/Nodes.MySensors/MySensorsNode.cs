@@ -12,15 +12,15 @@ namespace MyNetSensors.Nodes
         public int nodeId;
 
 
-        public MySensorsNode(Gateways.MySensors.Node node) : base("Nodes","Hardware")
+        public MySensorsNode(Gateways.MySensors.Node node) : base("Hardware","MySensors")
         {
             this.nodeId = node.Id;
-            this.Type = node.GetSimpleName2();
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", node.GetSimpleName2()));
             CreateInputsOutputs(node);
         }
 
 
-        public MySensorsNode() : base("Nodes", "Hardware")
+        public MySensorsNode() : base("Hardware", "MySensors")
         {
         }
 
@@ -117,7 +117,7 @@ namespace MyNetSensors.Nodes
             }
             MySensorsNode.title = 'MySensors Node';
             MySensorsNode.skip_list = true;
-            LiteGraph.registerNodeType('Nodes/Hardware', MySensorsNode);
+            LiteGraph.registerNodeType('Hardware/MySensors', MySensorsNode);
 
             ";
         }

@@ -331,21 +331,29 @@ namespace MyNetSensors.WebController.Code
         {
             try
             {
-                List<Node> nodes = typeof (Node)
-                    .Assembly.GetTypes()
-                    .Where(t => t.IsSubclassOf(typeof (Node)) && !t.IsAbstract)
-                    .Select(t => (Node) Activator.CreateInstance(t)).ToList();
 
-                nodes.AddRange(typeof (UiNode)
-                    .Assembly.GetTypes()
-                    .Where(t => t.IsSubclassOf(typeof (UiNode)) && !t.IsAbstract)
-                    .Select(t => (UiNode) Activator.CreateInstance(t)).ToList());
-
-                nodes.Add((UiTimerNode) Activator.CreateInstance(typeof (UiTimerNode)));
+                List<Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                     .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
+                    .Select(t => (Node)Activator.CreateInstance(t)).ToList();
 
 
+                //List<Node> nodes = typeof (Node)
+                //    .Assembly.GetTypes()
+                //    .Where(t => t.IsSubclassOf(typeof (Node)) && !t.IsAbstract)
+                //    .Select(t => (Node) Activator.CreateInstance(t)).ToList();
 
-                nodes = nodes.OrderBy(x => x.Category+x.Type).ToList();
+                //nodes.AddRange(typeof(UiNode)
+                //    .Assembly.GetTypes()
+                //    .Where(t => t.IsSubclassOf(typeof(UiNode)) && !t.IsAbstract)
+                //    .Select(t => (UiNode)Activator.CreateInstance(t)).ToList());
+
+                //nodes.Add((UiTimerNode)Activator.CreateInstance(typeof(UiTimerNode)));
+                //nodes.Add((MySensorsNode) Activator.CreateInstance(typeof (MySensorsNode)));
+
+
+
+                nodes = nodes.OrderBy(x => x.Category + x.Type).ToList();
 
                 string file = "(function () {\n";
 
@@ -360,7 +368,7 @@ namespace MyNetSensors.WebController.Code
             }
             catch (Exception ex)
             {
-                logs.AddSystemError($"Failed to generate node editor script. "+ex.Message);
+                logs.AddSystemError($"Failed to generate node editor script. " + ex.Message);
             }
 
         }
