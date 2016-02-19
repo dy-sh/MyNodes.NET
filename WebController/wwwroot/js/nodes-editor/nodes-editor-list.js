@@ -699,15 +699,27 @@
 
             
 
-            //TimeGeneratorNode
-            function TimeGeneratorNode () {
+            //TimeIteratorNode
+            function TimeIteratorNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeGeneratorNode',
+                    'ObjectType': 'MyNetSensors.Nodes.TimeIteratorNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            TimeGeneratorNode.title = 'Generator';
-            LiteGraph.registerNodeType('Time/Generator', TimeGeneratorNode);
+            TimeIteratorNode.title = 'Iterator';
+            LiteGraph.registerNodeType('Time/Iterator', TimeIteratorNode);
+
+            
+
+            //TimeTickerNode
+            function TimeTickerNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeTickerNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeTickerNode.title = 'Ticker';
+            LiteGraph.registerNodeType('Time/Ticker', TimeTickerNode);
 
             
 
