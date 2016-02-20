@@ -83,7 +83,7 @@ namespace MyNetSensors.Nodes
             }
             else
             {
-                oldNode.Type = node.GetSimpleName2();
+                oldNode.Settings["Name"].Value = node.GetSimpleName2();
                 engine.UpdateNode(oldNode);
                 engine.UpdateNodeInDb(oldNode);
             }
