@@ -14,12 +14,17 @@ namespace MyNetSensors.Nodes
             AddOutput();
 
             options.ResetOutputsIfAnyInputIsNull = true;
+
+            Settings.Add("sendnull", new NodeSetting(NodeSettingType.Checkbox, "Send null when closed", "true"));
         }
 
 
         public override void OnInputChange(Input input)
         {
-            Outputs[0].Value = Inputs[1].Value == "1" ? Inputs[0].Value : null;
+            if (Inputs[1].Value== "1")
+                Outputs[0].Value = Inputs[0].Value;
+            else if (Settings["sendnull"].Value=="true")
+                ResetOutputs();
         }
     }
 }
