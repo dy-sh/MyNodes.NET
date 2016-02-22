@@ -106,8 +106,7 @@
     <Compile Include="NodesEngine.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="NodeState.cs" />
-    <Compile Include="Nodes\SystemBeepAdvancedNode.cs" />
-    <Compile Include="Nodes\SystemBeepNode.cs" />
+    <Compile Include="Nodes\UtilityBeepNode.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

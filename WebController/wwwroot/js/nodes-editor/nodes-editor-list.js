@@ -603,30 +603,6 @@
 
             
 
-            //SystemBeepNode
-            function SystemBeepNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.SystemBeepNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            SystemBeepNode.title = 'Beep';
-            LiteGraph.registerNodeType('System/Beep', SystemBeepNode);
-
-            
-
-            //SystemBeepAdvancedNode
-            function SystemBeepAdvancedNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.SystemBeepAdvancedNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            SystemBeepAdvancedNode.title = 'Beep Advanced';
-            LiteGraph.registerNodeType('System/Beep Advanced', SystemBeepAdvancedNode);
-
-            
-
             //SystemFileNode
             function SystemFileNode () {
                 this.properties = {
@@ -920,6 +896,18 @@
             }
             UiVoiceYandexNode.title = 'Voice Yandex';
             LiteGraph.registerNodeType('UI/Voice Yandex', UiVoiceYandexNode);
+
+            
+
+            //UtilityBeepNode
+            function UtilityBeepNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.UtilityBeepNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            UtilityBeepNode.title = 'Beep';
+            LiteGraph.registerNodeType('Utility/Beep', UtilityBeepNode);
 
             
 })();
