@@ -4,13 +4,13 @@ using System.Timers;
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationEventsFreqMeterNode : Node
+    public class TimeFrequencyMeterNode : Node
     {
         private int count;
         private int countWas;
         private readonly Timer timer = new Timer();
 
-        public OperationEventsFreqMeterNode() : base("Operation", "Events Freq Meter")
+        public TimeFrequencyMeterNode() : base("Time", "Frequency Meter")
         {
             AddInput();
             AddOutput("Events/sec", DataType.Number);

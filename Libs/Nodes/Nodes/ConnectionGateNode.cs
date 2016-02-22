@@ -15,7 +15,7 @@ namespace MyNetSensors.Nodes
 
             options.ResetOutputsIfAnyInputIsNull = true;
 
-            Settings.Add("sendnull", new NodeSetting(NodeSettingType.Checkbox, "Send null when closed", "true"));
+            Settings.Add("sendnull", new NodeSetting(NodeSettingType.Checkbox, "Send null when closed", "false"));
         }
 
 

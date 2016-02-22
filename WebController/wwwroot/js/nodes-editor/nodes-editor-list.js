@@ -423,18 +423,6 @@
 
             
 
-            //OperationControlShaperNode
-            function OperationControlShaperNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationControlShaperNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationControlShaperNode.title = 'Control Shaper';
-            LiteGraph.registerNodeType('Operation/Control Shaper', OperationControlShaperNode);
-
-            
-
             //OperationCounterNode
             function OperationCounterNode () {
                 this.properties = {
@@ -471,30 +459,6 @@
 
             
 
-            //OperationEventsDelayMeterNode
-            function OperationEventsDelayMeterNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationEventsDelayMeterNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationEventsDelayMeterNode.title = 'Events Delay Meter';
-            LiteGraph.registerNodeType('Operation/Events Delay Meter', OperationEventsDelayMeterNode);
-
-            
-
-            //OperationEventsFreqMeterNode
-            function OperationEventsFreqMeterNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationEventsFreqMeterNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationEventsFreqMeterNode.title = 'Events Freq Meter';
-            LiteGraph.registerNodeType('Operation/Events Freq Meter', OperationEventsFreqMeterNode);
-
-            
-
             //OperationFlipflopNode
             function OperationFlipflopNode () {
                 this.properties = {
@@ -516,6 +480,18 @@
             }
             OperationFreqDividerNode.title = 'Freq Divider';
             LiteGraph.registerNodeType('Operation/Freq Divider', OperationFreqDividerNode);
+
+            
+
+            //OperationLinearShaperNode
+            function OperationLinearShaperNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.OperationLinearShaperNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationLinearShaperNode.title = 'Linear Shaper';
+            LiteGraph.registerNodeType('Operation/Linear Shaper', OperationLinearShaperNode);
 
             
 
@@ -687,15 +663,39 @@
 
             
 
-            //TimeDelayTimerNode
-            function TimeDelayTimerNode () {
+            //TimeDelayMeterNode
+            function TimeDelayMeterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayTimerNode',
+                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayMeterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            TimeDelayTimerNode.title = 'Delay Timer';
-            LiteGraph.registerNodeType('Time/Delay Timer', TimeDelayTimerNode);
+            TimeDelayMeterNode.title = 'Delay Meter';
+            LiteGraph.registerNodeType('Time/Delay Meter', TimeDelayMeterNode);
+
+            
+
+            //TimeFrequencyMeterNode
+            function TimeFrequencyMeterNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeFrequencyMeterNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeFrequencyMeterNode.title = 'Frequency Meter';
+            LiteGraph.registerNodeType('Time/Frequency Meter', TimeFrequencyMeterNode);
+
+            
+
+            //TimeIntervalTimerNode
+            function TimeIntervalTimerNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeIntervalTimerNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeIntervalTimerNode.title = 'Interval Timer';
+            LiteGraph.registerNodeType('Time/Interval Timer', TimeIntervalTimerNode);
 
             
 

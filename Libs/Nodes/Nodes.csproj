@@ -53,7 +53,7 @@
     <Compile Include="Nodes\ConnectionLocalTransmitterNode.cs" />
     <Compile Include="Nodes\BasicConstantNode.cs" />
     <Compile Include="Nodes\ConnectionHubNode.cs" />
-    <Compile Include="Nodes\OperationControlShaperNode.cs" />
+    <Compile Include="Nodes\OperationLinearShaperNode.cs" />
     <Compile Include="Nodes\LogicAndNode.cs" />
     <Compile Include="Nodes\LogicNotNode.cs" />
     <Compile Include="Nodes\LogicOrNode.cs" />
@@ -73,8 +73,8 @@
     <Compile Include="Nodes\OperationAccumulatorNode.cs" />
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
-    <Compile Include="Nodes\OperationEventsDelayMeterNode.cs" />
-    <Compile Include="Nodes\OperationEventsFreqMeterNode.cs" />
+    <Compile Include="Nodes\TimeDelayMeterNode.cs" />
+    <Compile Include="Nodes\TimeFrequencyMeterNode.cs" />
     <Compile Include="Nodes\OperationCrossfadeNode.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
     <Compile Include="Nodes\MathModulusNode.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="Nodes\MathClampNode.cs" />
     <Compile Include="Nodes\MathRemapNode.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
-    <Compile Include="Nodes\TimeDelayTimerNode.cs" />
+    <Compile Include="Nodes\TimeIntervalTimerNode.cs" />
     <Compile Include="Nodes\TimeIteratorNode.cs" />
     <Compile Include="Nodes\TimeTickerNode.cs" />
     <Compile Include="Nodes\OperationMixerNode.cs" />

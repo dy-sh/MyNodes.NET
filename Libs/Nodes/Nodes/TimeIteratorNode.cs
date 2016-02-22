@@ -31,8 +31,8 @@ namespace MyNetSensors.Nodes
             AddInput("Start", DataType.Logical, true);
             AddInput("Stop", DataType.Logical, true);
 
-            AddOutput("Event", DataType.Logical);
-            AddOutput("Gate", DataType.Logical);
+            AddOutput("Trigger", DataType.Logical);
+            AddOutput("Enabled", DataType.Logical);
 
             interval = DEFAULT_INTERVAL;
 

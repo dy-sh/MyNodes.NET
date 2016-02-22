@@ -4,11 +4,11 @@ using System;
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationEventsDelayMeterNode : Node
+    public class TimeDelayMeterNode : Node
     {
         private DateTime lasTime;
 
-        public OperationEventsDelayMeterNode() : base("Operation", "Events Delay Meter")
+        public TimeDelayMeterNode() : base("Time", "Delay Meter")
         {
             AddInput();
             AddOutput("Delay (ms)",DataType.Number);

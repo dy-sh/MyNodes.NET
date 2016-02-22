@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationControlShaperNode : Node
+    public class OperationLinearShaperNode : Node
     {
-        public OperationControlShaperNode() : base("Operation", "Control Shaper")
+        public OperationLinearShaperNode() : base("Operation", "Linear Shaper")
         {
             AddInput("Value", DataType.Number);
             AddOutput();
