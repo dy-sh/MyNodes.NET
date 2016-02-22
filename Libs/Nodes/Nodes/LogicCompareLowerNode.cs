@@ -6,8 +6,8 @@ namespace MyNetSensors.Nodes
     {
         public LogicCompareLowerNode() : base("Logic", "Compare Lower")
         {
-            AddInput(DataType.Logical);
-            AddInput(DataType.Logical);
+            AddInput(DataType.Number);
+            AddInput(DataType.Number);
             AddOutput(DataType.Logical);
 
             options.ResetOutputsIfAnyInputIsNull = true;
