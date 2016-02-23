@@ -83,5 +83,13 @@ namespace MyNetSensors.Nodes.Nodes
         {
             return value < min ? min : value > max ? max : value;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node works the same way as Math/Remap, " +
+                   "but accepts and outputs RGB color.\n" +
+                   "Using this node, you can replace the white color to other (FFFFFF to AABBCC). " +
+                   "Or, for example, to exclude red color (FFFFFF to 00FFFF).";
+        }
     }
 }

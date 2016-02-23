@@ -49,5 +49,11 @@ namespace MyNetSensors.Nodes.Nodes
 
             Outputs[0].Value = result;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node converts three numbers to RGB color. " +
+                   "For example: 255, 170, 0 will be converted to \"FFAA00\".";
+        }
     }
 }
