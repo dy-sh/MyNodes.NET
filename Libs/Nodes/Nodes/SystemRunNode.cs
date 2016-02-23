@@ -39,7 +39,7 @@ namespace MyNetSensors.Nodes
                 }
                 catch (Exception)
                 {
-                    LogInfo("Incorrect path");
+                    LogInfo("Incorrect command");
                 }
             }
         }

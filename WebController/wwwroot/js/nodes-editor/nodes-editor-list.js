@@ -423,6 +423,18 @@
 
             
 
+            //OperationConcatenationNode
+            function OperationConcatenationNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.OperationConcatenationNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationConcatenationNode.title = 'Concatenation';
+            LiteGraph.registerNodeType('Operation/Concatenation', OperationConcatenationNode);
+
+            
+
             //OperationCounterNode
             function OperationCounterNode () {
                 this.properties = {
@@ -492,18 +504,6 @@
             }
             OperationLinearShaperNode.title = 'Linear Shaper';
             LiteGraph.registerNodeType('Operation/Linear Shaper', OperationLinearShaperNode);
-
-            
-
-            //OperationMixerNode
-            function OperationMixerNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationMixerNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationMixerNode.title = 'Mixer';
-            LiteGraph.registerNodeType('Operation/Mixer', OperationMixerNode);
 
             
 
@@ -648,6 +648,18 @@
             }
             TimeDelayMeterNode.title = 'Delay Meter';
             LiteGraph.registerNodeType('Time/Delay Meter', TimeDelayMeterNode);
+
+            
+
+            //TimeDelayedValueNode
+            function TimeDelayedValueNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayedValueNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeDelayedValueNode.title = 'Delayed Value';
+            LiteGraph.registerNodeType('Time/Delayed Value', TimeDelayedValueNode);
 
             
 

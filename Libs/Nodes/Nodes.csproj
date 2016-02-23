@@ -82,10 +82,11 @@
     <Compile Include="Nodes\MathClampNode.cs" />
     <Compile Include="Nodes\MathRemapNode.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
+    <Compile Include="Nodes\TimeDelayedValueNode.cs" />
     <Compile Include="Nodes\TimeIntervalTimerNode.cs" />
     <Compile Include="Nodes\TimeIteratorNode.cs" />
     <Compile Include="Nodes\TimeTickerNode.cs" />
-    <Compile Include="Nodes\OperationMixerNode.cs" />
+    <Compile Include="Nodes\OperationConcatenationNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />
