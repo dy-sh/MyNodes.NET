@@ -43,5 +43,10 @@ namespace MyNetSensors.Nodes
                 }
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node can execute any system command in Windows.";
+        }
     }
 }

@@ -92,5 +92,15 @@ namespace MyNetSensors.Nodes
                 }
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node can read and write Json file on the disk." +
+                   "Send the file name To the input named File Name. The path can be omitted. " +
+                   "With logic inputs named Read, Write, Delete File you can perform the requested operation. " +
+                   "Specify the key that you want to read/write." +
+                   "The value that you want to write, send to Value input. " +
+                   "Read value will be sent to the output.";
+        }
     }
 }
