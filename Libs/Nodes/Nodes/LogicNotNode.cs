@@ -20,5 +20,11 @@ namespace MyNetSensors.Nodes
         {
             Outputs[0].Value = Inputs[0].Value == "0" ? "1" : "0";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node performs a logical \"NOT\" operation." +
+                   "It accepts only logical values (\"0\"/\"1\").";
+        }
     }
 }

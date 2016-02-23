@@ -25,5 +25,13 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = (val >= from && val <= to) ? "1" : "0";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node checks whether the value in the specified range. " +
+                   "For example 5.5, will be in range from -1 to 10. " +
+                   "Or 1 will be in range from 0 to 1. " +
+                   "The node accepts numbers and produces a logical value.";
+        }
     }
 }

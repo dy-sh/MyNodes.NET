@@ -25,5 +25,11 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = result;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node performs a logical \"OR\" operation." +
+                   "It accepts only logical values (\"0\"/\"1\").";
+        }
     }
 }

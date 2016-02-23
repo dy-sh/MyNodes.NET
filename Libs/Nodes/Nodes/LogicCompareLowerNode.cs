@@ -20,5 +20,10 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = a < b ? "1" : "0";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node works the opposite of how the Compare Greater node.";
+        }
     }
 }
