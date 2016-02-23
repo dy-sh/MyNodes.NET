@@ -134,6 +134,18 @@
 
             
 
+            //CheckInRangeNode
+            function CheckInRangeNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.CheckInRangeNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            CheckInRangeNode.title = 'Check In Range';
+            LiteGraph.registerNodeType('Logic/Check In Range', CheckInRangeNode);
+
+            
+
             //LogicCompareEqualNode
             function LogicCompareEqualNode () {
                 this.properties = {

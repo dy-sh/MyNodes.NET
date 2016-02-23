@@ -1,5 +1,5 @@
 /*  MyNetSensors 
-    Copyright (C) 2015 Derwish <derwish.pro@gmail.com>
+    Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
