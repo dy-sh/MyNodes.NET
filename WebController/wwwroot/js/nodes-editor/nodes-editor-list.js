@@ -687,6 +687,18 @@
 
             
 
+            //TimeFadeNode
+            function TimeFadeNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeFadeNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeFadeNode.title = 'Fade';
+            LiteGraph.registerNodeType('Time/Fade', TimeFadeNode);
+
+            
+
             //TimeFrequencyMeterNode
             function TimeFrequencyMeterNode () {
                 this.properties = {
