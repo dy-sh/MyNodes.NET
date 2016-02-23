@@ -64,5 +64,12 @@ namespace MyNetSensors.Nodes
             UpdateName(data["Name"]);
             return base.SetSettings(data);
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node adds the Input to the panel." +
+                   "The value that comes on the outside of the panel, " +
+                   "becomes available inside the panel.";
+        }
     }
 }

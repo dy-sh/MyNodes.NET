@@ -71,5 +71,11 @@ namespace MyNetSensors.Nodes
             return base.SetSettings(data);
         }
 
+        public override string GetNodeDescription()
+        {
+            return "This node adds the Output to the panel." +
+                   "The value that comes to this input inside the panel, " +
+                   "becomes accessible from outside the panel.";
+        }
     }
 }

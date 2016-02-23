@@ -170,5 +170,18 @@ namespace MyNetSensors.Nodes
 
             ";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node can contain other nodes. " +
+                   "You can add any number of inputs/outputs to this node, " +
+                   "and connect them with the nodes inside. " +
+                   "Thus you can create your own nodes, which are named Panels. " +
+                   "You can export the panels to save them on disk and import later. " +
+                   "Or, you can share your panels with other people. " +
+                   "Each panel has its own dashboard. " +
+                   "You can add UI nodes, to create a separate control interface. " +
+                   "Each UI panel will be available in the browser via a separate link. ";
+        }
     }
 }
