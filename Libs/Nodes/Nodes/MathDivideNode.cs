@@ -29,5 +29,10 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = null;
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node divides one number by another.";
+        }
     }
 }

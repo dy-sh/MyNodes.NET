@@ -25,5 +25,10 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = c.ToString();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node adds two numbers.";
+        }
     }
 }

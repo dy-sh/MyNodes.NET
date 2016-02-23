@@ -25,5 +25,10 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = b.ToString();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node produces the sine of a number.";
+        }
     }
 }

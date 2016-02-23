@@ -31,5 +31,10 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = null;
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node produces the square root of a number.";
+        }
     }
 }

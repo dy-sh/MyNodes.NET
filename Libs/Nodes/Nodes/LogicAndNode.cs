@@ -29,7 +29,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node performs a logical \"AND\" operation. " +
+            return "This node performs a logical \"AND\" operation. \n" +
                    "It accepts only logical values (\"0\"/\"1\").";
         }
     }

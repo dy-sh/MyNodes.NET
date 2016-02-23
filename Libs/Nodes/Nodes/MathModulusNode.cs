@@ -24,5 +24,10 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = c.ToString();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node performs modulo operation (finds the remainder after division of one number by another).";
+        }
     }
 }
