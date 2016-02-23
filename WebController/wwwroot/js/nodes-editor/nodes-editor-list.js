@@ -543,6 +543,18 @@
 
             
 
+            //OperationStackNode
+            function OperationStackNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationStackNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationStackNode.title = 'Stack';
+            LiteGraph.registerNodeType('Operation/Stack', OperationStackNode);
+
+            
+
             //RgbNumbersToRgbNode
             function RgbNumbersToRgbNode () {
                 this.properties = {

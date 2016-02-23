@@ -53,6 +53,7 @@
     <Compile Include="Nodes\ConnectionLocalTransmitterNode.cs" />
     <Compile Include="Nodes\BasicConstantNode.cs" />
     <Compile Include="Nodes\ConnectionHubNode.cs" />
+    <Compile Include="Nodes\OperationStackNode.cs" />
     <Compile Include="Nodes\OperationQueueNode.cs" />
     <Compile Include="Nodes\OperationLinearShaperNode.cs" />
     <Compile Include="Nodes\LogicAndNode.cs" />
