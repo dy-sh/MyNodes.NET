@@ -191,7 +191,7 @@ namespace MyNetSensors.Nodes
 
         public void RemoveInput(Input input)
         {
-            if (!Inputs.Contains(input))
+            if (input==null || !Inputs.Contains(input))
             {
                 LogError("Can`t remove input. Does not exist.");
                 return;
@@ -206,7 +206,7 @@ namespace MyNetSensors.Nodes
 
         public void RemoveOutput(Output output)
         {
-            if (!Outputs.Contains(output))
+            if (output==null || !Outputs.Contains(output))
             {
                 LogError("Can`t remove output. Does not exist.");
                 return;
@@ -217,6 +217,34 @@ namespace MyNetSensors.Nodes
                 engine.RemoveLink(link);
 
             Outputs.Remove(output);
+        }
+
+
+        public void RemoveOutput(string name)
+        {
+            Output output = Outputs.FirstOrDefault(x => x.Name == name);
+            RemoveOutput(output);
+        }
+
+
+        public void RemoveInput(string name)
+        {
+            Input input = Inputs.FirstOrDefault(x => x.Name == name);
+            RemoveInput(input);
+        }
+
+
+        public Output GetOutput(string name)
+        {
+            Output output = Outputs.FirstOrDefault(x => x.Name == name);
+            return output;
+        }
+
+
+        public Input GetInput(string name)
+        {
+            Input input = Inputs.FirstOrDefault(x => x.Name == name);
+            return input;
         }
 
 

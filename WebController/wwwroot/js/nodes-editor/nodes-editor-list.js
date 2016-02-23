@@ -663,6 +663,18 @@
 
             
 
+            //TimeClockNode
+            function TimeClockNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeClockNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeClockNode.title = 'Clock';
+            LiteGraph.registerNodeType('Time/Clock', TimeClockNode);
+
+            
+
             //TimeDelayNode
             function TimeDelayNode () {
                 this.properties = {

@@ -76,6 +76,7 @@
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
+    <Compile Include="Nodes\TimeClockNode.cs" />
     <Compile Include="Nodes\TimeSmoothByRangeNode.cs" />
     <Compile Include="Nodes\TimeFadeNode.cs" />
     <Compile Include="Nodes\TimeSmoothByTimeNode.cs" />
