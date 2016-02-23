@@ -120,5 +120,26 @@ namespace MyNetSensors.Nodes
         {
             return (value < min) ? min : (value > max) ? max : value;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "With this node you can set conditional curve. " +
+                   "The curve represents, how will change value on the output. " +
+                   "The Input named \"Value\" takes a value from 0 to 100. " +
+                   "This is a relative position on the curve. " +
+                   "You can create any number of points " +
+                   "on the curve in the settings of the node. " +
+                   "By default, there are three points: 0,50,100. " +
+                   "Each point corresponds to its input. " +
+                   "The value on input determines what value will be on output, " +
+                   "when the position will be at this point. \n\n" +
+                   "For example, input 0=10, input 50=0, input 100=10. \n" +
+                   "Now if \"Value\" is 0, the output will be 10. \n" +
+                   "If \"Value\" is 50, the output will be 0.  \n" +
+                   "If \"Value\" is 100, the output will be 10. \n" +
+                   "Intermediate values between 0-100 " +
+                   "will be intermediate values between 10-50-10.\n\n" +
+                   "Thus you can have a smooth change values as you need.";
+        }
     }
 }

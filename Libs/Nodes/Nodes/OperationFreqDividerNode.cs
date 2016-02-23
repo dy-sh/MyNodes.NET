@@ -52,5 +52,20 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = divideBy * (width / 100) > Counter ? "1" : "0";
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node divides the frequency. \n" +
+                   "Input \"Devide by\" specifies the number of clock cycles. \n" +
+                   "\"Width %\" input specifies the percentage width of the positive portion " +
+                   "of the cycle (if not set it is 50%). \n" +
+                   "Input \"Trigger\" toggles the clock cycles. \n\n" +
+                   "For example, \"Devide by\"=4. The \"Width %\" is not connected (50). \n" +
+                   "Sending \"1\" constantly to the Trigger input, " +
+                   "you will get the following sequence on output: 1100 1100 1100... \n\n" +
+                   "Or, for example, \"Devide by\"=10. The \"Width %\"=80. \n" +
+                   "Switching Trigger you will get: 1111111100 1111111100 1111111100... " +
+                   "(80% of 1, 20% of 0).";
+        }
     }
 }

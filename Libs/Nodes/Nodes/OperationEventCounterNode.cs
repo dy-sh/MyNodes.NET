@@ -29,5 +29,11 @@ namespace MyNetSensors.Nodes
             Outputs[0].Value = Count.ToString();
             UpdateMeInDb();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node counts how many events occurred at the \"Value\" input. \n" +
+                   "Any incoming value, including null, will be taken.";
+        }
     }
 }

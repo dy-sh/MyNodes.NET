@@ -34,5 +34,13 @@ namespace MyNetSensors.Nodes
                 Outputs[0].Value = rnd.ToString();
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node generates random values. " +
+                   "You can set the minimum and maximum limit.";
+        }
+
+
     }
 }

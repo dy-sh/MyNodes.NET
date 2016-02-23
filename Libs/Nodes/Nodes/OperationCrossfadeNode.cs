@@ -24,5 +24,15 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = xout.ToString();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node makes the crossfade between two values. " +
+                   "\"Crossfade\" input takes a value from 0 to 100. " +
+                   "If Crossfade is 0, the output will be equal to A. " +
+                   "If Crossfade is 100, then the output is equal to B. " +
+                   "The intermediate value between 0 and 100 will give " +
+                   "intermediate number between A and B. ";
+        }
     }
 }

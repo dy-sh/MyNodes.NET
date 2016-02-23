@@ -57,5 +57,12 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = result;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node divides the frequency by 2. \n" +
+                   "For example, if you send to the input of the following sequence: " +
+                   "1010 1010, the output is 1100 1100.";
+        }
     }
 }

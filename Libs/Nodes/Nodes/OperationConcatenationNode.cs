@@ -22,5 +22,12 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = value;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node makes the concatenation of two text values. " +
+                   "For example, In1=\"Hello \", In2=\"World\", the output is \"Hello World\". " +
+                   "In1=\"20\", In2=\"16\", the output is \"2016\".";
+        }
     }
 }

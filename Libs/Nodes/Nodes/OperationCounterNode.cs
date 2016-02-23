@@ -14,6 +14,7 @@ namespace MyNetSensors.Nodes
             AddInput("Set Value", DataType.Number,true);
             AddInput("Count Up", DataType.Logical, true);
             AddInput("Count Down", DataType.Logical, true);
+            AddInput("Reset", DataType.Logical, true);
             AddOutput("Out",DataType.Number);
 
             Outputs[0].Value = Value.ToString();
@@ -33,11 +34,24 @@ namespace MyNetSensors.Nodes
             if (input == Inputs[2] && input.Value == "1")
                 Value--;
 
+            if (input == Inputs[3] && input.Value == "1")
+                Value=0;
+
             if (oldValue != Value)
             {
                 Outputs[0].Value = Value.ToString();
                 UpdateMeInDb();
             }
+        }
+
+        public override string GetNodeDescription()
+        {
+            return "This node increases by 1 an internal counter " +
+                   "when a logical \"1\" comes  to the input \"Count Up\". \n" +
+                   "The counter decreases by 1 " +
+                   "when a logical \"1\" comes  to the input \"Count Down\". \n" +
+                   "You can override internal value to the specified value (Set Value). \n" +
+                   "Logical \"1\" on Reset input will set internal value to 0.";
         }
     }
 }

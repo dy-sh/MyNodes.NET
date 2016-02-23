@@ -32,5 +32,14 @@ namespace MyNetSensors.Nodes.Nodes
                     Outputs[1].Value = val.ToString();
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "All incoming values are compared with Treshold " +
+                   "and are divided into two outputs. " +
+                   "Values that are greater than or equal to the Treshold " +
+                   "are sent to the output \"Hi\"." +
+                   "Those that less, goes to \"Lo\". ";
+        }
     }
 }
