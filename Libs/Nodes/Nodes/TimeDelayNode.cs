@@ -11,7 +11,7 @@ using Timer = System.Timers.Timer;
 
 namespace MyNetSensors.Nodes
 {
-    public class TimeDelayedValueNode : Node
+    public class TimeDelayNode : Node
     {
         private class DelayedValue
         {
@@ -33,7 +33,7 @@ namespace MyNetSensors.Nodes
 
         private List<DelayedValue> delayedValues=new List<DelayedValue>();
 
-        public TimeDelayedValueNode() : base("Time", "Delayed Value")
+        public TimeDelayNode() : base("Time", "Delay")
         {
             AddInput("Value");
             AddInput("Interval", DataType.Number, true);

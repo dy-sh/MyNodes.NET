@@ -76,6 +76,7 @@
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
+    <Compile Include="Nodes\TimeSmoothByTimeNode.cs" />
     <Compile Include="Nodes\TimeFrequencyMeterNode.cs" />
     <Compile Include="Nodes\OperationCrossfadeNode.cs" />
     <Compile Include="Nodes\MathMinusNode.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="Nodes\MathClampNode.cs" />
     <Compile Include="Nodes\MathRemapNode.cs" />
     <Compile Include="Nodes\MathPowNode.cs" />
-    <Compile Include="Nodes\TimeDelayedValueNode.cs" />
+    <Compile Include="Nodes\TimeDelayNode.cs" />
     <Compile Include="Nodes\TimeIntervalTimerNode.cs" />
     <Compile Include="Nodes\TimeIteratorNode.cs" />
     <Compile Include="Nodes\TimeTickerNode.cs" />

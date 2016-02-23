@@ -663,6 +663,18 @@
 
             
 
+            //TimeDelayNode
+            function TimeDelayNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeDelayNode.title = 'Delay';
+            LiteGraph.registerNodeType('Time/Delay', TimeDelayNode);
+
+            
+
             //TimeDelayMeterNode
             function TimeDelayMeterNode () {
                 this.properties = {
@@ -672,18 +684,6 @@
             }
             TimeDelayMeterNode.title = 'Delay Meter';
             LiteGraph.registerNodeType('Time/Delay Meter', TimeDelayMeterNode);
-
-            
-
-            //TimeDelayedValueNode
-            function TimeDelayedValueNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayedValueNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            TimeDelayedValueNode.title = 'Delayed Value';
-            LiteGraph.registerNodeType('Time/Delayed Value', TimeDelayedValueNode);
 
             
 
@@ -720,6 +720,18 @@
             }
             TimeIteratorNode.title = 'Iterator';
             LiteGraph.registerNodeType('Time/Iterator', TimeIteratorNode);
+
+            
+
+            //TimeSmoothByTimeNode
+            function TimeSmoothByTimeNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeSmoothByTimeNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeSmoothByTimeNode.title = 'Smooth By Time';
+            LiteGraph.registerNodeType('Time/Smooth By Time', TimeSmoothByTimeNode);
 
             
 

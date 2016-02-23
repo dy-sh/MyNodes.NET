@@ -22,7 +22,7 @@ namespace MyNetSensors.Nodes
 
         private DateTime lastPercentUpdateTime;
         private DateTime startTime;
-        private DateTime endTime;
+
 
         public TimeIntervalTimerNode() : base("Time", "Interval Timer")
         {
@@ -57,19 +57,19 @@ namespace MyNetSensors.Nodes
             double updateInterval;
             double.TryParse(Settings["PercentUpdateInterval"].Value, out updateInterval);
 
-            if ((DateTime.Now - lastPercentUpdateTime).TotalMilliseconds >= updateInterval)
-            {
-                double elapsed = (DateTime.Now - startTime).TotalMilliseconds;
-                double percent = elapsed / interval * 100;
-                if (percent > 100)
-                    percent = 100;
-                String sperc = percent.ToString("F2");
-                if (sperc != Outputs[2].Value)
-                {
-                    Outputs[2].Value = percent.ToString("F2");
-                }
+            if ((DateTime.Now - lastPercentUpdateTime).TotalMilliseconds < updateInterval)
+                return;
 
-                lastPercentUpdateTime = DateTime.Now;
+            lastPercentUpdateTime = DateTime.Now;
+
+            double elapsed = (DateTime.Now - startTime).TotalMilliseconds;
+            double percent = elapsed / interval * 100;
+            if (percent > 100)
+                percent = 100;
+            String sperc = percent.ToString("F2");
+            if (sperc != Outputs[2].Value)
+            {
+                Outputs[2].Value = percent.ToString("F2");
             }
         }
 
@@ -125,7 +125,6 @@ namespace MyNetSensors.Nodes
             timer.Stop();
 
             startTime = DateTime.Now;
-            endTime = startTime.AddMilliseconds(interval);
             enabled = true;
 
             timer.Interval = interval;
