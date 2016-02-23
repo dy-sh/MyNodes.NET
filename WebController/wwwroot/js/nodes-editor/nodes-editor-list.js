@@ -723,6 +723,18 @@
 
             
 
+            //TimeSmoothByRangeNode
+            function TimeSmoothByRangeNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TimeSmoothByRangeNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TimeSmoothByRangeNode.title = 'Smooth By Range';
+            LiteGraph.registerNodeType('Time/Smooth By Range', TimeSmoothByRangeNode);
+
+            
+
             //TimeSmoothByTimeNode
             function TimeSmoothByTimeNode () {
                 this.properties = {
