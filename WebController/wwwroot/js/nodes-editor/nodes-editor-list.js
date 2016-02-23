@@ -507,6 +507,18 @@
 
             
 
+            //OperationQueueNode
+            function OperationQueueNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationQueueNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationQueueNode.title = 'Queue';
+            LiteGraph.registerNodeType('Operation/Queue', OperationQueueNode);
+
+            
+
             //OperationRandomNode
             function OperationRandomNode () {
                 this.properties = {

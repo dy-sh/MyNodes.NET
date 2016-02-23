@@ -1,0 +1,41 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace MyNetSensors.Nodes.Nodes
+{
+    public class OperationQueueNode : Node
+    {
+       public Queue<string> Values { get; set; }
+
+        public OperationQueueNode() : base("Operation", "Queue")
+        {
+            AddInput("Add Value");
+            AddInput("Get Value", DataType.Logical,true);
+            AddOutput("Value");
+            AddOutput("Count",DataType.Number);
+
+            Values =new Queue<string>();
+            Outputs[1].Value = Values.Count.ToString();
+
+            options.LogOutputChanges = false;
+        }
+
+        public override void OnInputChange(Input input)
+        {
+            if (input == Inputs[0] && input.Value != null)
+            {
+                Values.Enqueue(input.Value);
+                Outputs[1].Value = Values.Count.ToString();
+                UpdateMeInDb();
+            }
+
+            if (input == Inputs[1] && input.Value =="1")
+            {
+                LogInfo($"{ Outputs[0].Name}: [{ input.Value ?? "NULL"}]");
+                Outputs[0].Value = Values.Any()? Values.Dequeue():null;
+                Outputs[1].Value = Values.Count.ToString();
+                UpdateMeInDb();
+            }
+        }
+    }
+}

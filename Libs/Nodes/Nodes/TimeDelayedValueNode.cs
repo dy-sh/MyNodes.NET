@@ -35,10 +35,10 @@ namespace MyNetSensors.Nodes
 
         public TimeDelayedValueNode() : base("Time", "Delayed Value")
         {
-            AddInput("Value", DataType.Number);
+            AddInput("Value");
             AddInput("Interval", DataType.Number, true);
 
-            AddOutput("Value", DataType.Logical);
+            AddOutput("Value");
 
             interval = DEFAULT_INTERVAL;
         }
