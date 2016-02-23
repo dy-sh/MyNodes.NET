@@ -14,7 +14,7 @@ namespace MyNetSensors.Nodes
     public class UiChartNode : UiNode
     {
 
-        public int? State { get; set; }
+        public double? State { get; set; }
 
         public DateTime LastUpdateDate { get; set; }
 
@@ -57,7 +57,7 @@ namespace MyNetSensors.Nodes
 
             try
             {
-                int val = Int32.Parse(LastStateCached);
+                double val = double.Parse(LastStateCached);
                 NodeStates.Add(new NodeState(Id, val.ToString()));
                 State = val;
                 UpdateMe();
