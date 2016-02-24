@@ -181,6 +181,18 @@
 
             
 
+            //FiltersPreventValueNode
+            function FiltersPreventValueNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventValueNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersPreventValueNode.title = 'Prevent Value';
+            LiteGraph.registerNodeType('Filters/Prevent Value', FiltersPreventValueNode);
+
+            
+
             function MySensorsNode() {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
