@@ -109,6 +109,18 @@
 
             
 
+            //FiltersOnlyFromRangeNode
+            function FiltersOnlyFromRangeNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyFromRangeNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyFromRangeNode.title = 'Only From Range';
+            LiteGraph.registerNodeType('Filters/Only From Range', FiltersOnlyFromRangeNode);
+
+            
+
             //FiltersOnlyLogicNode
             function FiltersOnlyLogicNode () {
                 this.properties = {
