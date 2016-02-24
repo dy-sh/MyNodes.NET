@@ -42,5 +42,14 @@ namespace MyNetSensors.Nodes
 
             ";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node that performs a timer function. " +
+                   "This node can be configured on the dashboard. " +
+                   "You can create multiple timer events in the interface of this node. " +
+                   "The node conveniently use to schedule any action, " +
+                   "without going into the editor.";
+        }
     }
 }

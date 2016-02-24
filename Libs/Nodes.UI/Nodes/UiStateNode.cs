@@ -21,6 +21,11 @@ namespace MyNetSensors.Nodes
             UpdateMe();
         }
 
-
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It displays a switch on the dashboard " +
+                   "that can be used to monitor the status of any node. " +
+                   "It takes logical 0 or 1. When another value, the node will be red.";
+        }
     }
 }

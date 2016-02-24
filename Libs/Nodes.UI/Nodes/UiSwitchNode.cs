@@ -29,5 +29,10 @@ namespace MyNetSensors.Nodes
 
             return true;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It displays a switch on the dashboard. ";
+        }
     }
 }

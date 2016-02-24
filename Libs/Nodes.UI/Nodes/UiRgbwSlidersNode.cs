@@ -30,5 +30,11 @@ namespace MyNetSensors.Nodes
 
             return true;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It displays four sliders on the dashboard " +
+                     "with which you can specify an RGBW color.";
+        }
     }
 }

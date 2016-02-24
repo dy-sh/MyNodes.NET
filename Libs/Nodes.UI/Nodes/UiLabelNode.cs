@@ -20,5 +20,11 @@ namespace MyNetSensors.Nodes
             Value = input.Value;
             UpdateMe();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It displays a label on the dashboard. " +
+                   "Label can display any text.";
+        }
     }
 }

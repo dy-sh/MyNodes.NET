@@ -21,6 +21,11 @@ namespace MyNetSensors.Nodes
             UpdateMe();
         }
 
-
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It displays a progress bar on the dashboard. " +
+                   "The progress bar may display the progress of a certain event in percent. " +
+                   "It takes a value from 0 to 100.";
+        }
     }
 }

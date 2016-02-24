@@ -126,5 +126,10 @@ namespace MyNetSensors.Nodes
 
             ";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is hardware MySenosrs node.";
+        }
     }
 }

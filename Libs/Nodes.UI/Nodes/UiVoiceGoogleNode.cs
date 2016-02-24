@@ -21,6 +21,13 @@ namespace MyNetSensors.Nodes
             UpdateMe();
         }
 
-
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It can generate speech from the incoming text. " +
+                   "As the TTS engine is used built-in Google Chrome TTS, " +
+                   "so this node will work in this browser only. " +
+                   "You'll hear the voice if you have opened the panel on the dashboard, " +
+                   "in which there is this node.";
+        }
     }
 }

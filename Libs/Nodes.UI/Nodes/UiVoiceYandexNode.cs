@@ -22,6 +22,14 @@ namespace MyNetSensors.Nodes
             UpdateMe();
         }
 
-
+        public override string GetNodeDescription()
+        {
+            return "This is a UI node. It can generate speech from the incoming text. " +
+                   "As the TTS engine is used Yandex SpeachKit TTS, " +
+                   "so you need to enter Yandex SpeechKit API-Key in the settings of the node, " +
+                   "which you can get free on the Yandex website, registering as a developer. " +
+                   "You'll hear the voice if you have opened the panel on the dashboard, " +
+                   "in which there is this node.";
+        }
     }
 }
