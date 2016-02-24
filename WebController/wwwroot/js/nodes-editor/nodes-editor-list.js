@@ -157,6 +157,18 @@
 
             
 
+            //FiltersPreventDuplicationNode
+            function FiltersPreventDuplicationNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventDuplicationNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersPreventDuplicationNode.title = 'Prevent Duplication';
+            LiteGraph.registerNodeType('Filters/Prevent Duplication', FiltersPreventDuplicationNode);
+
+            
+
             //FiltersPreventNullNode
             function FiltersPreventNullNode () {
                 this.properties = {

@@ -47,6 +47,7 @@
     <Compile Include="NodeOptions.cs" />
     <Compile Include="NodesEngineSerializer.cs" />
     <Compile Include="NodeSetting.cs" />
+    <Compile Include="Nodes\FiltersPreventDuplicationNode.cs" />
     <Compile Include="Nodes\FiltersPreventNullNode.cs" />
     <Compile Include="Nodes\FiltersOnlyLogicNode.cs" />
     <Compile Include="Nodes\FiltersOnlyNumbersNode.cs" />
