@@ -109,6 +109,42 @@
 
             
 
+            //FiltersOnlyLogicNode
+            function FiltersOnlyLogicNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyLogicNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyLogicNode.title = 'Only Logic';
+            LiteGraph.registerNodeType('Filters/Only Logic', FiltersOnlyLogicNode);
+
+            
+
+            //FiltersOnlyOneNode
+            function FiltersOnlyOneNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyOneNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyOneNode.title = 'Only One';
+            LiteGraph.registerNodeType('Filters/Only One', FiltersOnlyOneNode);
+
+            
+
+            //FiltersOnlyZeroNode
+            function FiltersOnlyZeroNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyZeroNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyZeroNode.title = 'Only Zero';
+            LiteGraph.registerNodeType('Filters/Only Zero', FiltersOnlyZeroNode);
+
+            
+
             function MySensorsNode() {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
