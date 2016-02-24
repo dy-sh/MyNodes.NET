@@ -217,6 +217,18 @@
 
             
 
+            //FiltersReduceEventsNode
+            function FiltersReduceEventsNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersReduceEventsNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersReduceEventsNode.title = 'Reduce Events';
+            LiteGraph.registerNodeType('Filters/Reduce Events', FiltersReduceEventsNode);
+
+            
+
             function MySensorsNode() {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
