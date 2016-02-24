@@ -17,7 +17,9 @@ using MyNetSensors.Nodes;
 using MyNetSensors.Repositories.EF.SQLite;
 using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
+using MyNetSensors.WebController.ViewModels.NodeEditor;
 using Newtonsoft.Json;
+using Node = MyNetSensors.Nodes.Node;
 
 
 namespace MyNetSensors.WebController.Controllers
@@ -51,7 +53,7 @@ namespace MyNetSensors.WebController.Controllers
 
             ViewBag.split = split;
 
-            if (id == null || id== MAIN_PANEL_ID)
+            if (id == null || id == MAIN_PANEL_ID)
                 return RedirectToAction("Index");
 
             PanelNode panel = engine.GetPanelNode(id);
@@ -97,6 +99,25 @@ namespace MyNetSensors.WebController.Controllers
             else
                 ViewBag.route = "Panel/" + id;
             return View();
+        }
+
+        public IActionResult NodesDescription()
+        {
+            List<Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                 .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
+                .Select(t => (Node)Activator.CreateInstance(t)).ToList();
+
+            nodes = nodes.OrderBy(x => x.Category + x.Type).ToList();
+
+            List<NodeDescription> descrition = nodes.Select(node => new NodeDescription
+            {
+                category = node.Category,
+                type = node.Type,
+                description = node.GetNodeDescription()
+            }).ToList();
+
+            return View(descrition);
         }
     }
 }

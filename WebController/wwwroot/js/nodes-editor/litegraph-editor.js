@@ -435,9 +435,13 @@ Editor.prototype.showNodeDescrition = function (node) {
 
     $('#modal-panel-title').html(node.type);
     $('#modal-panel-form').html(
-               '<div class="field">' +
-               '<textarea id="modal-panel-text"></textarea>' +
-               '</div>');
+        '<div class="field">' +
+        '<a href="/NodeEditor/NodesDescription">Show description of all nodes</a>' +
+        '</div>' +
+        '<div class="field">' +
+        '<textarea id="modal-panel-text"></textarea>' +
+        '</div>'
+    );
 
     $('#modal-panel').modal({
         dimmerSettings: { opacity: 0.3 },
