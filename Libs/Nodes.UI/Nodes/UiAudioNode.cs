@@ -26,7 +26,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It can play any audio files on the dashboard.";
+            return "This is a UI node. It can play any audio files on the dashboard. <br><br>" +
+                   "To use this node in mobile browsers, " +
+                   "you need to enable in the browser settings playing audio in the background.";
         }
     }
 }

@@ -81,7 +81,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node introduces a delay in the flow of events. " +
+            return "This node introduces a delay in the flow of events. <br/>" +
                    "All incoming values (including null) " +
                    "will be sent to the output after a specified time interval.";
         }

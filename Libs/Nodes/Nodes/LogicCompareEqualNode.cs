@@ -31,9 +31,9 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node compares two values and sends \"1\" to the output " +
-                   "if the values are equal, or \"0\" if not equal. \n" +
-                   "It can compare text or numbers. \n" +
-                   "For example, the node will assume that \"1\" and \"1.0\" are equal. \n" +
+                   "if the values are equal, or \"0\" if not equal. <br/>" +
+                   "It can compare text or numbers. <br/>" +
+                   "For example, the node will assume that \"1\" and \"1.0\" are equal. <br/>" +
                    "\"Hello\" and \"HELLO\" are not equal. ";
         }
     }

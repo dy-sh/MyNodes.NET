@@ -30,7 +30,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node measures the delay between the incoming events. " +
+            return "This node measures the delay between the incoming events. <br/>" +
                    "Any value sent to the input (including null) will be accepted.";
         }
     }

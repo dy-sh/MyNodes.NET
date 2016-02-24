@@ -87,9 +87,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node can be used to link several nodes with one node. " +
+            return "This node can be used to link several nodes with one node. <br/>" +
                    "You can change which node will send messages (using input \"Active Input\"). " +
-                   "The rest nodes will be blocked. " +
+                   "The rest nodes will be blocked. <br/>" +
                    "In the settings you can specify the number of inputs.";
         }
     }

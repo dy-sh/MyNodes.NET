@@ -75,7 +75,7 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node plays a sound on the server (not in the browser) " +
-                   "of specified frequency and duration. " +
+                   "of specified frequency and duration. <br/>" +
                    "If you do not specify the frequency and duration, " +
                    "will be used default: 2000Hz, 200ms.";
         }

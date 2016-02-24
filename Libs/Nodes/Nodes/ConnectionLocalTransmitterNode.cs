@@ -33,16 +33,16 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node works in conjunction with Local Receiver, " +
-                   "and provides a connection of nodes without a graphical wires. \n" +
+                   "and provides a connection of nodes without a graphical wires. <br/>" +
                    "You can use this nodes to connect nodes that are far away " +
                    "from each other (for example on different panels) and you don't " +
-                   "want to drag the \"wire\" so far. \n" +
+                   "want to drag the \"wire\" so far. <br/>" +
                    "Set the same channel on transmitter and receiver to link them. " +
-                   "If you do not specify a channel, it will use channel 0 by default. \n" +
-                   "You can also use this node for broadcast. " +
+                   "If you do not specify a channel, it will use channel 0 by default. <br/>" +
+                   "You can also use this node for broadcast. <br/>" +
                    "For example, you want a lot nodes on different panels " +
                    "heard the message from one node. " +
-                   "Use a lot of receivers configured on the same channel. " +
+                   "Use a lot of receivers configured on the same channel. <br/>" +
                    "Or, you want to one node received messages " +
                    "on input from different nodes. " +
                    "Use many transmitters on the same channel. ";

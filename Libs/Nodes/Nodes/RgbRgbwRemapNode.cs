@@ -86,7 +86,7 @@ namespace MyNetSensors.Nodes.Nodes
         public override string GetNodeDescription()
         {
             return "This node works the same way as Math/Remap, " +
-                   "but accepts and outputs RGBW color. \n" +
+                   "but accepts and outputs RGBW color. <br/>" +
                    "Using this node, you can replace the white color to other (FFFFFFFF to AABBCCFF). " +
                    "Or, for example, to exclude red color (FFFFFFFF to 00FFFFFF).";
         }

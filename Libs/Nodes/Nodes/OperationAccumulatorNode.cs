@@ -37,8 +37,8 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node adds the incoming value (Add Value) again and again. \n" +
-                   "The output gives the result of all the additions. \n" +
+            return "This node adds the incoming value (Add Value) again and again. <br/>" +
+                   "The output gives the result of all the additions. <br/>" +
                    "The internal counter can be overridden by the input Set Value.";
         }
     }

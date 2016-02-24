@@ -32,7 +32,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node counts how many events occurred at the \"Value\" input. \n" +
+            return "This node counts how many events occurred at the \"Value\" input. <br/>" +
                    "Any incoming value, including null, will be taken.";
         }
     }

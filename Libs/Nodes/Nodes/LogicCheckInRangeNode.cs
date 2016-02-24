@@ -28,9 +28,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node checks whether the value in the specified range. \n" +
-                   "For example 5.5, will be in range from -1 to 10. \n" +
-                   "Or 1 will be in range from 0 to 1. \n" +
+            return "This node checks whether the value in the specified range. <br/>" +
+                   "For example 5.5, will be in range from -1 to 10. <br/>" +
+                   "Or 1 will be in range from 0 to 1. <br/>" +
                    "The node accepts numbers and produces a logical value.";
         }
     }

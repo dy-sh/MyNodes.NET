@@ -23,8 +23,8 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It displays a progress bar on the dashboard. " +
-                   "The progress bar may display the progress of a certain event in percent. " +
+            return "This is a UI node. It displays a progress bar on the dashboard. <br/>" +
+                   "The progress bar may display the progress of a certain event in percent. <br/>" +
                    "It takes a value from 0 to 100.";
         }
     }

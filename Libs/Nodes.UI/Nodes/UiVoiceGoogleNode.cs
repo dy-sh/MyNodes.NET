@@ -23,9 +23,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It can generate speech from the incoming text. " +
+            return "This is a UI node. It can generate speech from the incoming text. <br/>" +
                    "As the TTS engine is used built-in Google Chrome TTS, " +
-                   "so this node will work in this browser only. " +
+                   "so this node will work in this browser only. <br/>" +
                    "You'll hear the voice if you have opened the panel on the dashboard, " +
                    "in which there is this node.";
         }

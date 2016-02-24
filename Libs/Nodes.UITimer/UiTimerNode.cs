@@ -45,9 +45,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node that performs a timer function. " +
-                   "This node can be configured on the dashboard. " +
-                   "You can create multiple timer events in the interface of this node. " +
+            return "This is a UI node. It performs a timer function. <br/>" +
+                   "This node can be configured on the dashboard. <br/>" +
+                   "You can create multiple timer events in the interface of this node. <br/>" +
                    "The node conveniently use to schedule any action, " +
                    "without going into the editor.";
         }

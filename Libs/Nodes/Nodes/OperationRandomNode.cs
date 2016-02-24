@@ -37,7 +37,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node generates random values. " +
+            return "This node generates random values. <br/>" +
                    "You can set the minimum and maximum limit.";
         }
 

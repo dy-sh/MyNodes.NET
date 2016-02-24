@@ -101,18 +101,18 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node works in conjunction with the Remote Receiver, " +
-                   "and provides a remote connection of nodes."+
+                   "and provides a remote connection of nodes. <br/>" +
                    "The principle of operation of this node is the same as the local version, " +
                    "but this node can be used to link the nodes are located on different " +
-                   "servers in a local network or in the Internet. " +
-                   "With this node you can merge several systems MyNetSensors " +
-                   "into one system. To link the transmitter and the receiver, " +
+                   "servers in a local network or in the Internet. <br/>" +
+                   "With this node you can merge several systems MyNetSensors into one system. <br/>" +
+                   "To link the transmitter and the receiver, " +
                    "you need to set the channel (like on the local version), " +
-                   "address (and port) of the server and password. " +
+                   "address (and port) of the server and password. <br/>" +
                    "The server address (and port) - exactly the same, " +
-                   "which it access in the browser (\"http://192.168.1.2:1312\" for example). " +
-                   "The passwords in the transmitter and receiver must match. " +
-                   "If you do not specify a channel, it will use channel 0 by default. " +
+                   "which it access in the browser (\"http://192.168.1.2:1312\" for example). <br/>" +
+                   "The passwords in the transmitter and receiver must match. <br/>" +
+                   "If you do not specify a channel, it will use channel 0 by default. <br/>" +
                    "If you do not specify a password, the password will not be used.";
         }
     }

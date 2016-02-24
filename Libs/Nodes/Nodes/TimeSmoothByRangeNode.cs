@@ -131,15 +131,17 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node makes a smooth transition of values. " +
-                   "It avoids abrupt changes of the value on the output. " +
+            return "This node makes a smooth transition of values. <br/>" +
+                   "It avoids abrupt changes of the value on the output. <br/>" +
                    "The input named \"Max/s\" sets the limit range at which " +
-                   "the output can change in 1 second. \n\n" +
-                   "For example, you set the Max/s to \"5\". " +
-                   "Send \"10\" to the input. The node gradually changes the output value to 10. " +
+                   "the output can change in 1 second. <br/><br/>" +
+
+                   "For example, you set the Max/s to \"5\". <br/>" +
+                   "Send \"10\" to the input. The node gradually changes the output value to 10. <br/>" +
                    "Then you send \"20\", and after 2 seconds a value " +
                    "of the output will be 20, but between 10 and 20 will " +
-                   "be 11,12,13,14,15,16,17,18,19.\n\n" +
+                   "be 11,12,13,14,15,16,17,18,19. <br/><br/>" +
+
                    "In the settings of the node you can increase the refresh rate " +
                    "to make the transition more smoother. " +
                    "Or, reduce the refresh rate to reduce CPU load.";

@@ -73,7 +73,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node adds the Output to the panel." +
+            return "This node adds the Output to the panel. <br/>" +
                    "The value that comes to this input inside the panel, " +
                    "becomes accessible from outside the panel.";
         }

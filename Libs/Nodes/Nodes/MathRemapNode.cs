@@ -42,11 +42,11 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node remaps a number. \n" +
-                   "For example, InMin=1, InMax=100, OutMin=10, OutMax=20. \n" +
-                   "If the Value is 1, Out is 10. \n" +
-                   "If the Value is 100, Out is 20. \n" +
-                   "If the Value is 50, Out is 20. \n";
+            return "This node remaps a number. <br/>" +
+                   "For example, InMin=1, InMax=100, OutMin=10, OutMax=20. <br/>" +
+                   "If the Value is 1, Out is 10. <br/>" +
+                   "If the Value is 100, Out is 20. <br/>" +
+                   "If the Value is 50, Out is 20. <br/>";
         }
     }
 }

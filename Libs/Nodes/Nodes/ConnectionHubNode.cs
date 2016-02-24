@@ -104,18 +104,18 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node sends a value from any of its inputs to all its outputs. " +
-                   "The usage of this node can be very wide. Lets consider a few examples. \n\n" +
+            return "This node sends a value from any of its inputs to all its outputs. <br/>" +
+                   "The usage of this node can be very wide. Lets consider a few examples. <br/><br/>" +
 
-                   "Connecting many-to-one. \n" +
+                   "Connecting many-to-one. <br/>" +
                    "For example, you want to connect several different nodes to " +
                    "the input of one node. By default, this is impossible, " +
                    "because one input can only have one connection. " +
                    "But you can work around this limitation by using a hub. " +
                    "Connect multiple devices to the hub, then connect " +
-                   "the hub to the input of the node.\n\n" +
+                   "the hub to the input of the node.<br/><br/>" +
 
-                   "Connecting one-to-many.  \n" +
+                   "Connecting one-to-many.  <br/>" +
                    "If you connect multiple nodes to one output of a node, " +
                    "node will send the value to all nodes that are connected, " +
                    "but you can't control the order in which it will do it. " +
@@ -123,9 +123,9 @@ namespace MyNetSensors.Nodes
                    "Connect the output of the node to the hub and then " +
                    "connect the other nodes to the hub's outputs " +
                    "in the order in which they should receive the value. " +
-                   "The hub sends a value on the outputs starting with the first output. \n\n" +
+                   "The hub sends a value on the outputs starting with the first output. <br/><br/>" +
 
-                   "Connecting many-to-many.  \n" +
+                   "Connecting many-to-many.  <br/>" +
                    "Create many inputs and outputs in the hub to link several nodes. " +
                    "All devices on the outputs of the hub " +
                    "will receive a message from any node in the input.";

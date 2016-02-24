@@ -115,7 +115,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is the system clock. " +
+            return "This is the system clock. <br/>" +
                    "In the settings you can enable additional outputs " +
                    "and configure the refresh rate of the outputs.";
         }

@@ -37,8 +37,8 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It displays a log on the dashboard. " +
-                   "The log displays all the values that it receives. " +
+            return "This is a UI node. It displays a log on the dashboard. <br/>" +
+                   "The log displays all the values that it receives. <br/>" +
                    "It is very convenient to use for debugging your system or for the monitoring.";
         }
     }

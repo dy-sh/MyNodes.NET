@@ -51,7 +51,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It displays a slider on the dashboard. " +
+            return "This is a UI node. It displays a slider on the dashboard. <br/>" +
                    "You can set the minimum and maximum value of the slider. " +
                    "By default it is 0-100.";
         }

@@ -49,8 +49,8 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node converts RGBW color to four numbers. \n" +
-                   "For example: \"FFAA00FF\" will be converted to 255, 170, 0, 255. \n" +
+            return "This node converts RGBW color to four numbers. <br/>" +
+                   "For example: \"FFAA00FF\" will be converted to 255, 170, 0, 255. <br/>" +
                    "Node takes color with a # sign at the beginning or without it.";
         }
     }

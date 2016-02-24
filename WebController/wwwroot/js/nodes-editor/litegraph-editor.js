@@ -436,18 +436,12 @@ Editor.prototype.showNodeDescrition = function (node) {
     $('#modal-panel-title').html(node.type);
     $('#modal-panel-form').html(
         '<div class="field">' +
-        '<a href="/NodeEditor/NodesDescription">Show description of all nodes</a>' +
+        '<div id="modal-panel-text"></div>' +
         '</div>' +
         '<div class="field">' +
-        '<textarea id="modal-panel-text"></textarea>' +
+        '<a href="/NodeEditor/NodesDescription">Show description of all nodes</a>' +
         '</div>'
     );
-
-    $('#modal-panel').modal({
-        dimmerSettings: { opacity: 0.3 },
-        onHidden: function () {
-        }
-    }).modal('setting', 'transition', 'fade up').modal('show');
 
     $.ajax({
         url: "/NodeEditorAPI/GetNodeDescription/",
@@ -457,6 +451,12 @@ Editor.prototype.showNodeDescrition = function (node) {
             $('#modal-panel-text').html(result);
             $('#modal-panel-text').fadeIn(300);
             $('#modal-panel-message').hide();
+
+            $('#modal-panel').modal({
+                dimmerSettings: { opacity: 0.3 },
+                onHidden: function () {
+                }
+            }).modal('setting', 'transition', 'fade up').modal('show');
         }
     });
 }

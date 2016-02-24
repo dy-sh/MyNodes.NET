@@ -55,15 +55,17 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node divides the frequency. \n" +
-                   "Input \"Devide by\" specifies the number of clock cycles. \n" +
+            return "This node divides the frequency. <br/>" +
+                   "Input \"Devide by\" specifies the number of clock cycles. <br/>" +
                    "\"Width %\" input specifies the percentage width of the positive portion " +
-                   "of the cycle (if not set it is 50%). \n" +
-                   "Input \"Trigger\" toggles the clock cycles. \n\n" +
-                   "For example, \"Devide by\"=4. The \"Width %\" is not connected (50). \n" +
+                   "of the cycle (if not set it is 50%). <br/>" +
+                   "Input \"Trigger\" toggles the clock cycles. <br/><br/>" +
+
+                   "For example, \"Devide by\"=4. The \"Width %\" is not connected (50). <br/>" +
                    "Sending \"1\" constantly to the Trigger input, " +
-                   "you will get the following sequence on output: 1100 1100 1100... \n\n" +
-                   "Or, for example, \"Devide by\"=10. The \"Width %\"=80. \n" +
+                   "you will get the following sequence on output: 1100 1100 1100... <br/><br/>" +
+
+                   "Or, for example, \"Devide by\"=10. The \"Width %\"=80. <br/>" +
                    "Switching Trigger you will get: 1111111100 1111111100 1111111100... " +
                    "(80% of 1, 20% of 0).";
         }

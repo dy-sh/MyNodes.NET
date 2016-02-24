@@ -27,10 +27,10 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node makes the crossfade between two values. " +
-                   "\"Crossfade\" input takes a value from 0 to 100. " +
-                   "If Crossfade is 0, the output will be equal to A. " +
-                   "If Crossfade is 100, then the output is equal to B. " +
+            return "This node makes the crossfade between two values. <br/>" +
+                   "\"Crossfade\" input takes a value from 0 to 100. <br/>" +
+                   "If Crossfade is 0, the output will be equal to A. <br/>" +
+                   "If Crossfade is 100, then the output is equal to B. <br/>" +
                    "The intermediate value between 0 and 100 will give " +
                    "intermediate number between A and B. ";
         }

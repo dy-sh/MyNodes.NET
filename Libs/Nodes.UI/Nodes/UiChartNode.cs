@@ -115,15 +115,15 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It displays a chart on the dashboard. " +
+            return "This is a UI node. It displays a chart on the dashboard. <br/>" +
                    "The chart shows the history of values, " +
-                   "and updated in real time. You can view the chart in various styles. " +
+                   "and updated in real time. You can view the chart in various styles. <br/>" +
                    "If you want to show someone some range of the history on the chart, " +
                    "then press the Share button and a link will be generated at exactly " +
-                   "that moment that you see now. The chart style will be included. " +
+                   "that moment that you see now. The chart style will be included. <br/>" +
                    "If you enable Autosroll, then the chart will automatically move " +
-                   "to the current time. It is convenient to observe changes in real time. " +
-                   "You can also share a link to real-time style of chart. " +
+                   "to the current time. It is convenient to observe changes in real time. <br/>" +
+                   "You can also share a link to real-time style of chart. <br/>" +
                    "The chart scale will also be included in the link. ";
         }
     }

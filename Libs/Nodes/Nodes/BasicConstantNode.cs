@@ -34,7 +34,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node simply stores the specified value." +
+            return "This node simply stores the specified value. <br/>" +
                    "You can set the value in the settings.";
         }
     }

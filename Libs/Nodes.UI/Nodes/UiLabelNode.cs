@@ -23,7 +23,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This is a UI node. It displays a label on the dashboard. " +
+            return "This is a UI node. It displays a label on the dashboard. <br/>" +
                    "Label can display any text.";
         }
     }

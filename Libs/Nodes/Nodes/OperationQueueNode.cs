@@ -45,9 +45,9 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node stores all the incoming values, and puts them in a queue. \n" +
-                   "You can read the values from the queue at any time. \n" +
-                   "Node can be used as a buffer. \n" +
+            return "This node stores all the incoming values, and puts them in a queue. <br/>" +
+                   "You can read the values from the queue at any time. <br/>" +
+                   "Node can be used as a buffer. <br/>" +
                    "Values are stored in the database and available after restart of the server.";
         }
     }

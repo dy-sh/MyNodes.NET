@@ -52,7 +52,7 @@ namespace MyNetSensors.Nodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node converts three numbers to RGB color. " +
+            return "This node converts three numbers to RGB color. <br/>" +
                    "For example: 255, 170, 0 will be converted to \"FFAA00\".";
         }
     }

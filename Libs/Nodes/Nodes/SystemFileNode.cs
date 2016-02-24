@@ -75,10 +75,10 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node can read and write any file on the disk." +
-                   "Send the file name To the input named File Name. The path can be omitted. " +
-                   "With logic inputs named Read, Write, Clear you can perform the requested operation. " +
-                   "The input named Text set a text value to be written to the file. " +
+            return "This node can read and write any file on the disk. <br/>" +
+                   "Send the file name To the input named File Name. The path can be omitted. <br/>" +
+                   "With logic inputs named Read, Write, Clear you can perform the requested operation. <br/>" +
+                   "The input named Text set a text value to be written to the file. <br/>" +
                    "The contents of the file will be sent to the output.";
         }
     }

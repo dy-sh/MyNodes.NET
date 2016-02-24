@@ -173,14 +173,14 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node can contain other nodes. " +
+            return "This node can contain other nodes. <br/>" +
                    "You can add any number of inputs/outputs to this node, " +
-                   "and connect them with the nodes inside. " +
-                   "Thus you can create your own nodes, which are named Panels. " +
+                   "and connect them with the nodes inside. <br/>" +
+                   "Thus you can create your own nodes, which are named Panels.<br/> " +
                    "You can export the panels to save them on disk and import later. " +
-                   "Or, you can share your panels with other people. " +
-                   "Each panel has its own dashboard. " +
-                   "You can add UI nodes, to create a separate control interface. " +
+                   "Or, you can share your panels with other people. <br/>" +
+                   "Each panel has its own dashboard. <br/>" +
+                   "You can add UI nodes, to create a separate control interface. <br/>" +
                    "Each UI panel will be available in the browser via a separate link. ";
         }
     }

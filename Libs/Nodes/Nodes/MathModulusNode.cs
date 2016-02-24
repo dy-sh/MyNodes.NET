@@ -27,7 +27,8 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node performs modulo operation (finds the remainder after division of one number by another).";
+            return "This node performs modulo operation " +
+                   "(finds the remainder after division of one number by another).";
         }
     }
 }

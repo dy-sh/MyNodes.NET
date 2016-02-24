@@ -132,13 +132,15 @@ namespace MyNetSensors.Nodes
                    "By default, there are three points: 0,50,100. " +
                    "Each point corresponds to its input. " +
                    "The value on input determines what value will be on output, " +
-                   "when the position will be at this point. \n\n" +
-                   "For example, input 0=10, input 50=0, input 100=10. \n" +
-                   "Now if \"Value\" is 0, the output will be 10. \n" +
-                   "If \"Value\" is 50, the output will be 0.  \n" +
-                   "If \"Value\" is 100, the output will be 10. \n" +
+                   "when the position will be at this point. <br/><br/>" +
+
+                   "For example, input 0=10, input 50=0, input 100=10. <br/>" +
+                   "Now if \"Value\" is 0, the output will be 10. <br/>" +
+                   "If \"Value\" is 50, the output will be 0.  <br/>" +
+                   "If \"Value\" is 100, the output will be 10. <br/>" +
                    "Intermediate values between 0-100 " +
-                   "will be intermediate values between 10-50-10.\n\n" +
+                   "will be intermediate values between 10-50-10. <br/><br/>" +
+
                    "Thus you can have a smooth change values as you need.";
         }
     }

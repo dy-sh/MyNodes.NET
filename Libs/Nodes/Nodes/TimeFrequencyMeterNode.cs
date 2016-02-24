@@ -50,7 +50,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node measures the rate at which events arrive at the input. " +
+            return "This node measures the rate at which events arrive at the input. <br/>" +
                    "Any value including null will be taken.";
         }
     }

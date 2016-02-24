@@ -23,7 +23,7 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node works in conjunction with Local Trasmitter, " +
-                   "and provides a connection of nodes without a graphical wires. \n" +
+                   "and provides a connection of nodes without a graphical wires. <br/>" +
                    "Read the description to Local Trasmitter to understand how it works.";
         }
     }

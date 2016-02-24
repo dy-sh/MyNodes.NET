@@ -45,11 +45,11 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node limits the value to the specified range. " +
-                   "For example, Min=3, Max=5. " +
-                   "Now, if the \"Value\" input is 1, the output will be 3. " +
-                   "If the value is 6, the output will be 5. " +
-                   "If the value is 2.5, the output will be 2.5. ";
+            return "This node limits the value to the specified range. <br/>" +
+                   "For example, Min=3, Max=5. <br/>" +
+                   "Now, if the \"Value\" input is 1, the output will be 3. <br/>" +
+                   "If the value is 6, the output will be 5. <br/>" +
+                   "If the value is 2.5, the output will be 2.5. <br/>";
         }
     }
 }

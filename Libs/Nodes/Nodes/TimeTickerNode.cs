@@ -85,9 +85,9 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node generates a sequence like 101010... with specified time interval. " +
+            return "This node generates a sequence like 101010... with specified time interval. <br/>" +
                    "You can set the time interval and activate the timer, " +
-                   "giving \"1\" to the input named \"Start/Stop\". " +
+                   "giving \"1\" to the input named \"Start/Stop\". <br/>" +
                    "If \"Generate Zero\" option is enabled in the settings of the node, " +
                    "node will generate a sequence like 101010... " +
                    "If disabled, the output will be 111111...";

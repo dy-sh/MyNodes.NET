@@ -67,7 +67,7 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node works in conjunction with Remote Trasmitter, " +
-                    "and provides a remote connection of nodes. \n" +
+                    "and provides a remote connection of nodes. <br/>" +
                     "Read the description to Remote Trasmitter to understand how it works.";
         }
     }

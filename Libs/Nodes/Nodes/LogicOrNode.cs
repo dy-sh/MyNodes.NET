@@ -28,7 +28,7 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node performs a logical \"OR\" operation." +
+            return "This node performs a logical \"OR\" operation.<br/>" +
                    "It accepts only logical values (\"0\"/\"1\").";
         }
     }

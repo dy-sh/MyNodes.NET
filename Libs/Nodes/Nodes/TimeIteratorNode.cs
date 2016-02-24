@@ -147,14 +147,14 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node generates a logical \"1\" specified number " +
-                   "of times with specified time interval. " +
+                   "of times with specified time interval. <br/>" +
                    "You can set the time interval and activate the timer, " +
-                   "giving \"1\" to the input named \"Start\". " +
+                   "giving \"1\" to the input named \"Start\". <br/>" +
                    "The timer will send \"1\" to the output named \"Trigger\" " +
-                   "as many times as specified by the input named \"Enents Count\". " +
+                   "as many times as specified by the input named \"Enents Count\". <br/>" +
                    "The output named \"Enabled\" sends \"1\" " +
                    "when the timer is in the active state, and switches to \"0\" " +
-                   "when the timer has finished to work." +
+                   "when the timer has finished to work. <br/>" +
                    "If \"Generate Zero\" option is enabled in the settings of the node, " +
                    "node will generate a sequence like 101010... " +
                    "If disabled, the output will be 111111...";

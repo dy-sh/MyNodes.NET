@@ -47,10 +47,10 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node increases by 1 an internal counter " +
-                   "when a logical \"1\" comes  to the input \"Count Up\". \n" +
+                   "when a logical \"1\" comes  to the input \"Count Up\". <br/>" +
                    "The counter decreases by 1 " +
-                   "when a logical \"1\" comes  to the input \"Count Down\". \n" +
-                   "You can override internal value to the specified value (Set Value). \n" +
+                   "when a logical \"1\" comes  to the input \"Count Down\". <br/>" +
+                   "You can override internal value to the specified value (Set Value). <br/>" +
                    "Logical \"1\" on Reset input will set internal value to 0.";
         }
     }

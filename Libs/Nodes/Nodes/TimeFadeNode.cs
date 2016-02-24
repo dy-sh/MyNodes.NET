@@ -134,10 +134,10 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node makes a smooth transition from one value to another. " +
-                   "You can specify the time interval for which the value must change. " +
+            return "This node makes a smooth transition from one value to another. <br/>" +
+                   "You can specify the time interval for which the value must change. <br/>" +
                    "The output is named \"Enabled\" sends \"1\" " +
-                   "when the node is in the active state (makes the transition)." +
+                   "when the node is in the active state (makes the transition). <br/>" +
                    "In the settings of the node you can increase the refresh rate " +
                    "to make the transition more smoother. " +
                    "Or, reduce the refresh rate to reduce CPU load.";
