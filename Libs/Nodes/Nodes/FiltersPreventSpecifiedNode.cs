@@ -5,12 +5,12 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class FiltersPreventValueNode : Node
+    public class FiltersPreventSpecifiedNode : Node
     {
-        public FiltersPreventValueNode() : base("Filters", "Prevent Value")
+        public FiltersPreventSpecifiedNode() : base("Filters", "Prevent Specified")
         {
-            AddInput("Input Value");
-            AddInput("Prevent Value");
+            AddInput("Value");
+            AddInput("Sample");
             AddOutput();
         }
 
@@ -24,8 +24,8 @@ namespace MyNetSensors.Nodes
         public override string GetNodeDescription()
         {
             return "This node filters the input values. " +
-                   "It transmits the value from \"Input Value\" " +
-                   "only if it is not equal \"Prevent Value\".";
+                   "It transmits the value from input named \"Value\" " +
+                   "only if it is not equal to \"Sample\".";
         }
     }
 }

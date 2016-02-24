@@ -145,6 +145,18 @@
 
             
 
+            //FiltersOnlySpecifiedNode
+            function FiltersOnlySpecifiedNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlySpecifiedNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlySpecifiedNode.title = 'Only Specified';
+            LiteGraph.registerNodeType('Filters/Only Specified', FiltersOnlySpecifiedNode);
+
+            
+
             //FiltersOnlyZeroNode
             function FiltersOnlyZeroNode () {
                 this.properties = {
@@ -181,15 +193,15 @@
 
             
 
-            //FiltersPreventValueNode
-            function FiltersPreventValueNode () {
+            //FiltersPreventSpecifiedNode
+            function FiltersPreventSpecifiedNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventValueNode',
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventSpecifiedNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
-            FiltersPreventValueNode.title = 'Prevent Value';
-            LiteGraph.registerNodeType('Filters/Prevent Value', FiltersPreventValueNode);
+            FiltersPreventSpecifiedNode.title = 'Prevent Specified';
+            LiteGraph.registerNodeType('Filters/Prevent Specified', FiltersPreventSpecifiedNode);
 
             
 
