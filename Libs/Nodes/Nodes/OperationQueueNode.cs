@@ -16,6 +16,7 @@ namespace MyNetSensors.Nodes.Nodes
         {
             AddInput("Add Value");
             AddInput("Get Value", DataType.Logical,true);
+            AddInput("Clear", DataType.Logical,true);
             AddOutput("Value");
             AddOutput("Count",DataType.Number);
 
@@ -38,6 +39,14 @@ namespace MyNetSensors.Nodes.Nodes
             {
                 LogInfo($"{ Outputs[0].Name}: [{ input.Value ?? "NULL"}]");
                 Outputs[0].Value = Values.Any()? Values.Dequeue():null;
+                Outputs[1].Value = Values.Count.ToString();
+                UpdateMeInDb();
+            }
+
+            if (input == Inputs[2] && input.Value == "1")
+            {
+                LogInfo($"Clear");
+                Values.Clear();
                 Outputs[1].Value = Values.Count.ToString();
                 UpdateMeInDb();
             }
