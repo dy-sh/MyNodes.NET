@@ -150,5 +150,18 @@ namespace MyNetSensors.Nodes
             Outputs[1].Value = "0";
             Outputs[2].Value = "0";
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node represents a timer. " +
+                   "You can set the time interval and activate the timer, " +
+                   "giving \"1\" to the input named \"Start/Stop\". " +
+                   "After specified time interval, the output named \"Trigger\" sends \"1\". " +
+                   "The output named \"Enabled\" sends \"1\" " +
+                   "when the timer is in the active state. " +
+                   "The output named \"Progress\" sends " +
+                   "the current state of the timer in percentage " +
+                   "(what percentage of the time interval has expired). ";
+        }
     }
 }

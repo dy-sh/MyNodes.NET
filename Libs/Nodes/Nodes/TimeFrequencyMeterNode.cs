@@ -47,5 +47,11 @@ namespace MyNetSensors.Nodes
             Outputs[0].Value = countWas.ToString();
             countWas = 0;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node measures the rate at which events arrive at the input. " +
+                   "Any value including null will be taken.";
+        }
     }
 }

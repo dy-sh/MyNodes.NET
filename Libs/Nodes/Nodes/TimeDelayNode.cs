@@ -78,5 +78,12 @@ namespace MyNetSensors.Nodes
                 LogInfo($"Interval changed to {interval} ms");
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node introduces a delay in the flow of events. " +
+                   "All incoming values (including null) " +
+                   "will be sent to the output after a specified time interval.";
+        }
     }
 }

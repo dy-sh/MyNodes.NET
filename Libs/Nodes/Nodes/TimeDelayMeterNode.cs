@@ -27,5 +27,11 @@ namespace MyNetSensors.Nodes
 
             Outputs[0].Value = delay.ToString();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node measures the delay between the incoming events. " +
+                   "Any value sent to the input (including null) will be accepted.";
+        }
     }
 }

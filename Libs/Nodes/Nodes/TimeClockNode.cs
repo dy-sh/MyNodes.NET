@@ -112,5 +112,12 @@ namespace MyNetSensors.Nodes
             UpdateMe();
             UpdateMeInDb();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This is the system clock. " +
+                   "In the settings you can enable additional outputs " +
+                   "and configure the refresh rate of the outputs.";
+        }
     }
 }

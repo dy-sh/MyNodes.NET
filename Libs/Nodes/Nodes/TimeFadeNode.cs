@@ -131,5 +131,16 @@ namespace MyNetSensors.Nodes
         {
             return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node makes a smooth transition from one value to another. " +
+                   "You can specify the time interval for which the value must change. " +
+                   "The output is named \"Enabled\" sends \"1\" " +
+                   "when the node is in the active state (makes the transition)." +
+                   "In the settings of the node you can increase the refresh rate " +
+                   "to make the transition more smoother. " +
+                   "Or, reduce the refresh rate to reduce CPU load.";
+        }
     }
 }

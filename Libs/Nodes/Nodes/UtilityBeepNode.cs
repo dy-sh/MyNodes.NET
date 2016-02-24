@@ -71,5 +71,13 @@ namespace MyNetSensors.Nodes
         {
             await Task.Run(() => Console.Beep(freq, dur));
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node plays a sound on the server (not in the browser) " +
+                   "of specified frequency and duration. " +
+                   "If you do not specify the frequency and duration, " +
+                   "will be used default: 2000Hz, 200ms.";
+        }
     }
 }
