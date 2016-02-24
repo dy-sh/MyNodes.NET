@@ -10,7 +10,7 @@ namespace MyNetSensors.Nodes
         public FiltersOnlyZeroNode() : base("Filters", "Only Zero")
         {
             AddInput();
-            AddOutput();
+            AddOutput("Out", DataType.Logical);
         }
 
 
@@ -22,7 +22,8 @@ namespace MyNetSensors.Nodes
 
         public override string GetNodeDescription()
         {
-            return "";
+            return "This node filters the input values. " +
+                   "It transmits the value only if it is a \"0\".";
         }
     }
 }

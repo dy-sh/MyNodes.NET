@@ -5,25 +5,25 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class FiltersOnlyLogicNode : Node
+    public class FiltersPreventNullNode : Node
     {
-        public FiltersOnlyLogicNode() : base("Filters", "Only Logic")
+        public FiltersPreventNullNode() : base("Filters", "Prevent Null")
         {
             AddInput();
-            AddOutput("Out", DataType.Logical);
+            AddOutput();
         }
 
 
         public override void OnInputChange(Input input)
         {
-            if (input.Value == "1" || input.Value == "0")
+            if (input.Value != null)
                 Outputs[0].Value = input.Value;
         }
 
         public override string GetNodeDescription()
         {
             return "This node filters the input values. " +
-                   "It transmits the value only if it is a logical value (0 or 1).";
+                   "It transmits the value only if it is not a null.";
         }
     }
 }

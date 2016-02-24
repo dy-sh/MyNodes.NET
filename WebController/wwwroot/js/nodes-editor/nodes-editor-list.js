@@ -121,6 +121,18 @@
 
             
 
+            //FiltersOnlyNumbersNode
+            function FiltersOnlyNumbersNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyNumbersNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyNumbersNode.title = 'Only Numbers';
+            LiteGraph.registerNodeType('Filters/Only Numbers', FiltersOnlyNumbersNode);
+
+            
+
             //FiltersOnlyOneNode
             function FiltersOnlyOneNode () {
                 this.properties = {
@@ -142,6 +154,18 @@
             }
             FiltersOnlyZeroNode.title = 'Only Zero';
             LiteGraph.registerNodeType('Filters/Only Zero', FiltersOnlyZeroNode);
+
+            
+
+            //FiltersPreventNullNode
+            function FiltersPreventNullNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventNullNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersPreventNullNode.title = 'Prevent Null';
+            LiteGraph.registerNodeType('Filters/Prevent Null', FiltersPreventNullNode);
 
             
 

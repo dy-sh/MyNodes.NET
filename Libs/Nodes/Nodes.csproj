@@ -47,7 +47,9 @@
     <Compile Include="NodeOptions.cs" />
     <Compile Include="NodesEngineSerializer.cs" />
     <Compile Include="NodeSetting.cs" />
+    <Compile Include="Nodes\FiltersPreventNullNode.cs" />
     <Compile Include="Nodes\FiltersOnlyLogicNode.cs" />
+    <Compile Include="Nodes\FiltersOnlyNumbersNode.cs" />
     <Compile Include="Nodes\FiltersOnlyZeroNode.cs" />
     <Compile Include="Nodes\FiltersOnlyOneNode.cs" />
     <Compile Include="Nodes\ConnectionRemoteReceiverNode.cs" />

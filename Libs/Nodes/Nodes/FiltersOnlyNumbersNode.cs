@@ -5,25 +5,27 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class FiltersOnlyLogicNode : Node
+    public class FiltersOnlyNumbersNode : Node
     {
-        public FiltersOnlyLogicNode() : base("Filters", "Only Logic")
+        public FiltersOnlyNumbersNode() : base("Filters", "Only Numbers")
         {
             AddInput();
-            AddOutput("Out", DataType.Logical);
+            AddOutput("Out",DataType.Number);
         }
 
 
         public override void OnInputChange(Input input)
         {
-            if (input.Value == "1" || input.Value == "0")
-                Outputs[0].Value = input.Value;
+            double val;
+
+            if (double.TryParse(input.Value, out val))
+                Outputs[0].Value = val.ToString();
         }
 
         public override string GetNodeDescription()
         {
             return "This node filters the input values. " +
-                   "It transmits the value only if it is a logical value (0 or 1).";
+                   "It transmits the value only if it is a number.";
         }
     }
 }
