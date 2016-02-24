@@ -19,5 +19,12 @@ namespace MyNetSensors.Nodes
             LogInfo($"Received from [{transmitPanelName}: Transmitter]: [{value ?? "NULL"}]");
             Outputs[0].Value = value;
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node works in conjunction with Local Trasmitter, " +
+                   "and provides a connection of nodes without a graphical wires. \n" +
+                   "Read the description to Local Trasmitter to understand how it works.";
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace MyNetSensors.Nodes
     {
         public ConnectionRouterMultipleToOneNode() : base("Connection", "Router Multiple-One")
         {
-            AddInput("Input Number", DataType.Number);
+            AddInput("Active Input", DataType.Number);
             AddInput("In 1", DataType.Text, true);
             AddInput("In 2", DataType.Text, true);
             AddOutput();
@@ -83,6 +83,14 @@ namespace MyNetSensors.Nodes
 
 
             return base.SetSettings(data);
+        }
+
+        public override string GetNodeDescription()
+        {
+            return "This node can be used to link several nodes with one node. " +
+                   "You can change which node will send messages (using input \"Active Input\"). " +
+                   "The rest nodes will be blocked. " +
+                   "In the settings you can specify the number of inputs.";
         }
     }
 }

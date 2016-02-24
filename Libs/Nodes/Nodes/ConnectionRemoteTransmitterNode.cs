@@ -97,5 +97,23 @@ namespace MyNetSensors.Nodes
                 LogError(ex.Message);
             }
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node works in conjunction with the Remote Receiver, " +
+                   "and provides a remote connection of nodes."+
+                   "The principle of operation of this node is the same as the local version, " +
+                   "but this node can be used to link the nodes are located on different " +
+                   "servers in a local network or in the Internet. " +
+                   "With this node you can merge several systems MyNetSensors " +
+                   "into one system. To link the transmitter and the receiver, " +
+                   "you need to set the channel (like on the local version), " +
+                   "address (and port) of the server and password. " +
+                   "The server address (and port) - exactly the same, " +
+                   "which it access in the browser (\"http://192.168.1.2:1312\" for example). " +
+                   "The passwords in the transmitter and receiver must match. " +
+                   "If you do not specify a channel, it will use channel 0 by default. " +
+                   "If you do not specify a password, the password will not be used.";
+        }
     }
 }

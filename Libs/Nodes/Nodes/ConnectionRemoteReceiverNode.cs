@@ -13,7 +13,7 @@ namespace MyNetSensors.Nodes
 
         public ConnectionRemoteReceiverNode() : base("Connection", "Remote Receiver")
         {
-            AddInput("Channel",DataType.Number,true);
+            AddInput("Channel", DataType.Number, true);
             AddInput("Password", DataType.Text, true);
             AddOutput("Out");
         }
@@ -62,6 +62,13 @@ namespace MyNetSensors.Nodes
         public int GetChannel()
         {
             return channel;
+        }
+
+        public override string GetNodeDescription()
+        {
+            return "This node works in conjunction with Remote Trasmitter, " +
+                    "and provides a remote connection of nodes. \n" +
+                    "Read the description to Remote Trasmitter to understand how it works.";
         }
     }
 }

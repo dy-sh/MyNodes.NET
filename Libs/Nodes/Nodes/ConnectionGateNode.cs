@@ -26,5 +26,13 @@ namespace MyNetSensors.Nodes
             else if (Settings["sendnull"].Value=="true")
                 ResetOutputs();
         }
+
+        public override string GetNodeDescription()
+        {
+            return "This node can block the transfer of messages from one node to another. " +
+                   "Send \"1\" to \"Key\" to allow the transfer or \"0\" to block the transfer. " +
+                   "If you enable the option \"Send null when closed\" in the settings node, " +
+                   "then the node will send null to the output when the transmission is locked.";
+        }
     }
 }
