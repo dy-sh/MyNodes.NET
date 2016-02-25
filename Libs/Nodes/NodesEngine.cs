@@ -23,7 +23,7 @@ namespace MyNetSensors.Nodes
         private int UPDATE_NODES_INTEVAL = 1;
 
         private INodesRepository nodesDb;
-        public INodesStatesRepository statesDb;
+        public INodesDataRepository dataDb;
 
         private Timer updateNodesTimer = new Timer();
         private List<Node> nodes = new List<Node>();
@@ -61,7 +61,7 @@ namespace MyNetSensors.Nodes
 
 
 
-        public NodesEngine(INodesRepository nodesDb = null, INodesStatesRepository statesDb = null)
+        public NodesEngine(INodesRepository nodesDb = null, INodesDataRepository dataDb = null)
         {
             //var x= AppDomain.CurrentDomain.GetAssemblies()
             //           .SelectMany(assembly => assembly.GetTypes())
@@ -71,7 +71,7 @@ namespace MyNetSensors.Nodes
             NodesEngine.nodesEngine = this;
 
             this.nodesDb = nodesDb;
-            this.statesDb = statesDb;
+            this.dataDb = dataDb;
 
             updateNodesTimer.Elapsed += UpdateNodes;
             updateNodesTimer.Interval = UPDATE_NODES_INTEVAL;
@@ -692,7 +692,7 @@ namespace MyNetSensors.Nodes
 
             nodesDb?.RemoveAllNodes();
             nodesDb?.RemoveAllLinks();
-            statesDb?.RemoveAllStates();
+            dataDb?.RemoveAllNodesData();
 
             OnRemoveAllNodesAndLinks?.Invoke();
         }

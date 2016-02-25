@@ -12,15 +12,15 @@ namespace MyNetSensors.Nodes
 {
     public class UiLogNode : UiNode
     {
-        public NodeState LastRecord { get; set; }
+        public NodeData LastRecord { get; set; }
 
-        private List<NodeState> log;
+        private List<NodeData> log;
 
         public UiLogNode() : base("UI", "Log")
         {
             AddInput();
 
-            log = new List<NodeState>();
+            log = new List<NodeData>();
 
             Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write in database", "false"));
             Settings.Add("MaxRecords", new NodeSetting(NodeSettingType.Number, "The maximum number of log records", "100"));
@@ -33,7 +33,7 @@ namespace MyNetSensors.Nodes
             if (max < 0)
                 max = 0;
 
-            LastRecord = new NodeState(Id, input.Value);
+            LastRecord = new NodeData(Id, input.Value);
             log.Add(LastRecord);
 
             while (log.Count > max)
@@ -50,7 +50,9 @@ namespace MyNetSensors.Nodes
         private void RemoveStates()
         {
             log.Clear();
-            RemoveAllNodeData();
+            LastRecord = null;
+            if (Settings["WriteInDatabase"].Value == "true")
+                RemoveAllNodeData();
         }
 
         public override string GetValue(string name)
@@ -73,8 +75,8 @@ namespace MyNetSensors.Nodes
 
         private void GetStatesFromRepository()
         {
-            List<NodeState> states = GetAllNodeData();
-            log = states ?? new List<NodeState>();
+            List<NodeData> states = GetAllNodeData();
+            log = states ?? new List<NodeData>();
         }
 
         public override void OnRemove()
@@ -93,17 +95,13 @@ namespace MyNetSensors.Nodes
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            if (data["WriteInDatabase"] == "false"
-                && Settings["WriteInDatabase"].Value == "true")
+            if (data["WriteInDatabase"] == "false" && Settings["WriteInDatabase"].Value == "true")
             {
-                log = new List<NodeState>();
+                log.Clear();
                 LastRecord = null;
             }
-            else if (data["WriteInDatabase"] == "true"
-                && Settings["WriteInDatabase"].Value == "false")
-            {
+            else if (data["WriteInDatabase"] == "true" && Settings["WriteInDatabase"].Value == "false")
                 GetStatesFromRepository();
-            }
 
             return base.SetSettings(data);
         }

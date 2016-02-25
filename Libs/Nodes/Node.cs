@@ -346,21 +346,21 @@ namespace MyNetSensors.Nodes
 
         public void AddNodeData(string data, int? maxDbRecords = null)
         {
-            engine?.statesDb?.AddState(new NodeState(Id, data), maxDbRecords);
+            engine?.dataDb?.AddNodeData(new NodeData(Id, data), maxDbRecords);
         }
 
-        public List<NodeState> GetAllNodeData()
+        public List<NodeData> GetAllNodeData()
         {
             return engine?
-                .statesDb?
-                .GetStatesForNode(Id)?
+                .dataDb?
+                .GetAllNodeDataForNode(Id)?
                 .OrderBy(x=>x.DateTime)
                 .ToList();
         }
 
         public void RemoveAllNodeData()
         {
-            engine?.statesDb?.RemoveStatesForNode(Id);
+            engine?.dataDb?.RemoveAllNodeDataForNode(Id);
         }
     }
 

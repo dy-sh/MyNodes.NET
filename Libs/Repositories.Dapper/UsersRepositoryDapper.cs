@@ -33,7 +33,7 @@ namespace MyNetSensors.Repositories.Dapper
                 try
                 {
                     db.Open();
-                    db.Execute("CREATE DATABASE [Users]");
+                    db.Execute("CREATE DATABASE [MyNetSensors]");
                 }
                 catch
                 {

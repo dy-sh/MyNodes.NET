@@ -7,23 +7,23 @@ using System;
 
 namespace MyNetSensors.Nodes
 {
-    public class NodeState
+    public class NodeData
     {
         public int Id { get; set; }
         public string NodeId { get; set; }
-        public string State { get; set; }
         public DateTime DateTime { get; set; }
+        public string Value { get; set; }
 
 
-        public NodeState()
+        public NodeData()
         {
             DateTime = DateTime.Now;
         }
 
-        public NodeState(string nodeId, string state)
+        public NodeData(string nodeId, string value)
         {
             NodeId = nodeId;
-            State = state;
+            Value = value;
             DateTime = DateTime.Now;
         }
     }

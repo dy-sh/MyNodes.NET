@@ -132,11 +132,11 @@
   <ItemGroup>
     <Compile Include="DbContext\NodesDbContext.cs" />
     <Compile Include="DbContext\MySensorsNodesDbContext.cs" />
-    <Compile Include="DbContext\NodesStatesHistoryDbContext.cs" />
+    <Compile Include="DbContext\NodesDataDbContext.cs" />
     <Compile Include="DbContext\MySensorsMessagesDbContext.cs" />
     <Compile Include="DbContext\UsersDbContext.cs" />
     <Compile Include="DbContext\UITimerNodesDbContext.cs" />
-    <Compile Include="NodesStatesRepositoryEf.cs" />
+    <Compile Include="NodesDataRepositoryEf.cs" />
     <Compile Include="MySensorsMessagesRepositoryEf.cs" />
     <Compile Include="MySensorsRepositoryEf.cs" />
     <Compile Include="NodesRepositoryEf.cs" />

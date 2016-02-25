@@ -15,13 +15,13 @@ namespace MyNetSensors.Nodes
     {
         public ChartData LastRecord { get; set; }
 
-        private List<NodeState> log;
+        private List<NodeData> log;
 
         public UiChartNode() : base("UI", "Chart")
         {
             AddInput(DataType.Number);
 
-            log = new List<NodeState>();
+            log = new List<NodeData>();
 
             Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write in database", "false"));
             Settings.Add("MaxRecords", new NodeSetting(NodeSettingType.Number, "The maximum number of chart points", "100"));
@@ -38,7 +38,7 @@ namespace MyNetSensors.Nodes
                 max = 0;
 
             LastRecord = new ChartData(DateTime.Now, input.Value);
-            log.Add(new NodeState(Id, input.Value));
+            log.Add(new NodeData(Id, input.Value));
 
             while (log.Count > max)
                 log.Remove(log.First());
@@ -55,7 +55,9 @@ namespace MyNetSensors.Nodes
         private void RemoveStates()
         {
             log.Clear();
-            RemoveAllNodeData();
+            LastRecord = null;
+            if (Settings["WriteInDatabase"].Value == "true")
+                RemoveAllNodeData();
         }
 
         public override string GetValue(string name)
@@ -64,11 +66,11 @@ namespace MyNetSensors.Nodes
                 return null;
 
             //copy to array to prevent changing data error
-            NodeState[] nodeStatesArray = new NodeState[log.Count];
-            log.CopyTo(nodeStatesArray);
+            NodeData[] nodeDatasArray = new NodeData[log.Count];
+            log.CopyTo(nodeDatasArray);
 
-            List<ChartData> chartData = nodeStatesArray.Select(
-                state => new ChartData(state.DateTime, state.State)).ToList();
+            List<ChartData> chartData = nodeDatasArray.Select(
+                state => new ChartData(state.DateTime, state.Value)).ToList();
 
             return JsonConvert.SerializeObject(chartData);
         }
@@ -86,8 +88,8 @@ namespace MyNetSensors.Nodes
 
         private void GetStatesFromRepository()
         {
-            List<NodeState> states = GetAllNodeData();
-            log = states ?? new List<NodeState>();
+            List<NodeData> states = GetAllNodeData();
+            log = states ?? new List<NodeData>();
         }
 
         public override void OnRemove()
@@ -106,17 +108,13 @@ namespace MyNetSensors.Nodes
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            if (data["WriteInDatabase"] == "false"
-                && Settings["WriteInDatabase"].Value == "true")
+            if (data["WriteInDatabase"] == "false" && Settings["WriteInDatabase"].Value == "true")
             {
-                log = new List<NodeState>();
+                log.Clear();
                 LastRecord = null;
             }
-            else if (data["WriteInDatabase"] == "true"
-                && Settings["WriteInDatabase"].Value == "false")
-            {
+            else if (data["WriteInDatabase"] == "true" && Settings["WriteInDatabase"].Value == "false")
                 GetStatesFromRepository();
-            }
 
             return base.SetSettings(data);
         }

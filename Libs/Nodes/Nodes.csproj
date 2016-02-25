@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="INodesRepository.cs" />
-    <Compile Include="INodesStatesRepository.cs" />
+    <Compile Include="INodesDataRepository.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LiteGraph.cs" />
     <Compile Include="Node.cs" />
@@ -123,7 +123,7 @@
     <Compile Include="Nodes\MathPlusNode.cs" />
     <Compile Include="NodesEngine.cs" />
     <Compile Include="Link.cs" />
-    <Compile Include="NodeState.cs" />
+    <Compile Include="NodeData.cs" />
     <Compile Include="Nodes\UtilityBeepNode.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Position.cs" />

@@ -48,7 +48,7 @@ namespace MyNetSensors.WebController.Code
         public static MySensorsNodesEngine mySensorsNodesEngine;
         public static UiNodesEngine uiNodesEngine;
         public static INodesRepository nodesDb;
-        public static INodesStatesRepository nodesStatesDb;
+        public static INodesDataRepository nodesDataDb;
         public static UITimerNodesEngine uiTimerNodesEngine;
         public static IUITimerNodesRepository uiTimerNodesDb;
 
@@ -230,7 +230,7 @@ namespace MyNetSensors.WebController.Code
             if (!dataBaseConfig.Enable)
             {
                 nodesDb = null;
-                nodesStatesDb = null;
+                nodesDataDb = null;
                 mySensorsDb = null;
                 mySensorsMessagesDb = null;
                 uiTimerNodesDb = null;
@@ -245,14 +245,14 @@ namespace MyNetSensors.WebController.Code
             if (dataBaseConfig.UseInternalDb)
             {
                 NodesDbContext nodesDbContext = (NodesDbContext)services.GetService(typeof(NodesDbContext));
-                NodesStatesHistoryDbContext nodesStatesHistoryDbContext = (NodesStatesHistoryDbContext)services.GetService(typeof(NodesStatesHistoryDbContext));
+                NodesDataDbContext nodesDataDbContext = (NodesDataDbContext)services.GetService(typeof(NodesDataDbContext));
                 MySensorsNodesDbContext mySensorsNodesDbContext = (MySensorsNodesDbContext)services.GetService(typeof(MySensorsNodesDbContext));
                 MySensorsMessagesDbContext mySensorsMessagesDbContext = (MySensorsMessagesDbContext)services.GetService(typeof(MySensorsMessagesDbContext));
                 UITimerNodesDbContext uiTimerNodesDbContext = (UITimerNodesDbContext)services.GetService(typeof(UITimerNodesDbContext));
                 UsersDbContext usersDbContext = (UsersDbContext)services.GetService(typeof(UsersDbContext));
 
                 nodesDb = new NodesRepositoryEf(nodesDbContext);
-                nodesStatesDb = new NodesStatesRepositoryEf(nodesStatesHistoryDbContext);
+                nodesDataDb = new NodesDataRepositoryEf(nodesDataDbContext);
                 mySensorsDb = new MySensorsRepositoryEf(mySensorsNodesDbContext);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryEf(mySensorsMessagesDbContext);
                 uiTimerNodesDb = new UITimerNodesRepositoryEf(uiTimerNodesDbContext);
@@ -267,7 +267,7 @@ namespace MyNetSensors.WebController.Code
                 }
 
                 nodesDb = new NodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
-                nodesStatesDb = new NodesStatesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
+                nodesDataDb = new NodesDataRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsDb = new MySensorsRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
@@ -287,9 +287,9 @@ namespace MyNetSensors.WebController.Code
             nodesDb.OnLogInfo += logs.AddDataBaseInfo;
             nodesDb.OnLogError += logs.AddDataBaseError;
 
-            nodesStatesDb.SetWriteInterval(dataBaseConfig.WriteInterval);
-            nodesStatesDb.OnLogInfo += logs.AddDataBaseInfo;
-            nodesStatesDb.OnLogError += logs.AddDataBaseError;
+            nodesDataDb.SetWriteInterval(dataBaseConfig.WriteInterval);
+            nodesDataDb.OnLogInfo += logs.AddDataBaseInfo;
+            nodesDataDb.OnLogError += logs.AddDataBaseError;
 
             logs.AddSystemInfo("Database connected.");
         }
@@ -305,7 +305,7 @@ namespace MyNetSensors.WebController.Code
             if (Boolean.Parse(configuration["Develop:GenerateNodesJsListFileOnStart"]))
                 GenerateNodesJsListFile();
 
-            nodesEngine = new NodesEngine(nodesDb, nodesStatesDb);
+            nodesEngine = new NodesEngine(nodesDb, nodesDataDb);
             nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);
             nodesEngine.OnLogEngineInfo += logs.AddNodesEngineInfo;
             nodesEngine.OnLogEngineError += logs.AddNodesEngineError;
@@ -440,7 +440,7 @@ namespace MyNetSensors.WebController.Code
             mySensorsMessagesDb.RemoveAllMessages();
             nodesDb.RemoveAllLinks();
             nodesDb.RemoveAllNodes();
-            nodesStatesDb.RemoveAllStates();
+            nodesDataDb.RemoveAllNodesData();
             uiTimerNodesDb.RemoveAllTasks();
             usersDb.RemoveAllUsers();
         }

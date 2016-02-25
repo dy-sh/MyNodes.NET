@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodesStatesRepositoryDapper.cs" />
+    <Compile Include="NodesDataRepositoryDapper.cs" />
     <Compile Include="MySensorsMessagesRepositoryDapper.cs" />
     <Compile Include="MySensorsRepositoryDapper.cs" />
     <Compile Include="NodesRepositoryDapper.cs" />

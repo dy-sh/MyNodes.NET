@@ -52,7 +52,7 @@ function updateLog(node) {
     //var t = moment(node.LastRecord.DateTime).format("DD.MM.YYYY H:mm:ss");
     if (node.LastRecord == null
         || (lastLog[node.Id] != null
-        && lastLog[node.Id].State == node.LastRecord.State
+        && lastLog[node.Id].Value == node.LastRecord.Value
         && lastLog[node.Id].DateTime == node.LastRecord.DateTime))
         return;
 
@@ -70,7 +70,7 @@ function addLogData(record, nodeId, maxRecords) {
     $('#log-' + nodeId).append(
         '<div class="log-record">'
         + moment(record.DateTime).format("DD.MM.YYYY H:mm:ss.SSS")
-        + ": " + record.State + "<br>"
+        + ": " + record.Value + "<br>"
         + '</div>'
         );
 

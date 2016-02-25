@@ -42,24 +42,20 @@ namespace MyNetSensors.WebController
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //if (Boolean.Parse(Configuration["DataBase:Enable"])
-            //    && Boolean.Parse(Configuration["DataBase:UseInternalDb"]))
-            //{
-                services.AddEntityFramework()
-                    .AddSqlite()
-                    .AddDbContext<NodesDbContext>(options =>
-                        options.UseSqlite("Data Source=Nodes.sqlite"))
-                    .AddDbContext<NodesStatesHistoryDbContext>(options =>
-                        options.UseSqlite("Data Source=NodesStatesHistory.sqlite"))
-                    .AddDbContext<MySensorsNodesDbContext>(options =>
-                        options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
-                    .AddDbContext<MySensorsMessagesDbContext>(options =>
-                        options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
-                    .AddDbContext<UITimerNodesDbContext>(options =>
-                        options.UseSqlite("Data Source=UITimerNodes.sqlite"))
-                    .AddDbContext<UsersDbContext>(options =>
-                        options.UseSqlite("Data Source=Users.sqlite"));
-            //}
+            services.AddEntityFramework()
+                .AddSqlite()
+                .AddDbContext<NodesDbContext>(options =>
+                    options.UseSqlite("Data Source=Nodes.sqlite"))
+                .AddDbContext<NodesDataDbContext>(options =>
+                    options.UseSqlite("Data Source=NodesData.sqlite"))
+                .AddDbContext<MySensorsNodesDbContext>(options =>
+                    options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
+                .AddDbContext<MySensorsMessagesDbContext>(options =>
+                    options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
+                .AddDbContext<UITimerNodesDbContext>(options =>
+                    options.UseSqlite("Data Source=UITimerNodes.sqlite"))
+                .AddDbContext<UsersDbContext>(options =>
+                    options.UseSqlite("Data Source=Users.sqlite"));
 
             services.AddMvc();
 

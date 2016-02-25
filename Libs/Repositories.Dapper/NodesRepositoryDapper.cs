@@ -126,6 +126,19 @@ namespace MyNetSensors.Repositories.Dapper
 
         public void CreateDb()
         {
+            using (var db = new SqlConnection(connectionString + ";Database= master"))
+            {
+                try
+                {
+                    //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
+                    db.Open();
+                    db.Execute("CREATE DATABASE [MyNetSensors]");
+                }
+                catch
+                {
+                }
+            }
+
             CreateNodesTable();
             CreateLinksTable();
         }
