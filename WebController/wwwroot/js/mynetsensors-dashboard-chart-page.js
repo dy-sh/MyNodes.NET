@@ -37,20 +37,20 @@ $(function () {
     };
     
 
-    clientsHub.client.OnNodeUpdated = function (node) {
+    clientsHub.client.OnUiNodeUpdated = function (node) {
         if (node.Id == nodeId)//nodeId initialized from ViewBag
             updateChart(node);
     };
 
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         noty({ text: 'This Node was removed!', type: 'error', timeout: false });
-        $('#panelsContainer').html(null);
+        $('#panelsContainer').empty();
     };
 
-    clientsHub.client.OnRemoveNode = function (node) {
+    clientsHub.client.OnRemoveUiNode = function (node) {
         if (node.Id == nodeId) {
             noty({ text: 'This Node was removed!', type: 'error', timeout: false });
-            $('#panelsContainer').html(null);
+            $('#panelsContainer').empty();
         }
     };
 
@@ -92,20 +92,15 @@ function getGatewayInfo() {
     });
 }
 
-
+var lastChartData;
 
 function updateChart(node) {
     $('.chartName').html(node.Name);
 
-    if (node.State == "0")
-        node.State = "-0.01";
+    if (node.LastRecord == null || lastChartData == node.LastRecord.x)
+        return;
 
-    //Add new point to chart
-    var now = vis.moment().format("YYYY-MM-DD HH:mm:ss.SSS");
-    dataset.add({
-        x: now,
-        y: node.State
-    });
+    addChartData(node.LastRecord, node.Settings.MaxRecords.Value);
 }
 
 
@@ -166,7 +161,7 @@ $(document).ready(function () {
             $('#chartPanel').fadeIn(elementsFadeTime);
 
             if (chartData != null) {
-                addChartData(chartData);
+                setChartData(chartData);
             } else {
                 showAll();
             }
@@ -185,8 +180,10 @@ $(document).ready(function () {
 
 
 
-function addChartData(chartData) {
+function setChartData(chartData) {
     dataset.add(chartData);
+
+    lastChartData = chartData[chartData.length - 1].x;
 
     var start, end;
 
@@ -214,6 +211,23 @@ function addChartData(chartData) {
     };
     graph2d.setOptions(options);
 }
+
+
+function addChartData(chartData, maxRecords) {
+    dataset.add(chartData);
+
+    lastChartData = chartData.x;
+
+    var unwanted = dataset.length - maxRecords;
+    if (unwanted > 0) {
+        var items = dataset.get();
+        for (var i = 0; i < unwanted; i++) {
+            dataset.remove(items[i]);
+        }
+    }
+}
+
+
 
 
 function onCharTypeChange() {
@@ -363,10 +377,10 @@ function share() {
 
 $('#clear-button').click(function () {
     $.ajax({
-        url: "/DashboardAPI/ClearChart/",
+        url: "/DashboardAPI/SetValues/",
         type: "POST",
-        data: { nodeId: nodeId },
-        success: function (connected) {
+        data: { 'nodeId': nodeId, 'values': { Clear: "true" } },
+        success: function () {
             dataset.clear();
         }
     });

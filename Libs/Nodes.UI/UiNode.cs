@@ -11,6 +11,9 @@ namespace MyNetSensors.Nodes
     {
         internal string DefaultName { get; set; }
 
+        protected UiNodesEngine uiEngine;
+
+
         public UiNode(string category, string type) : base(category, type)
         {
             DefaultName = type;
@@ -27,6 +30,11 @@ namespace MyNetSensors.Nodes
         public virtual string GetValue(string name)
         {
             return null;
+        }
+
+        public virtual void OnAddToUiEngine(UiNodesEngine uiEngine)
+        {
+            this.uiEngine = uiEngine;
         }
     }
 }

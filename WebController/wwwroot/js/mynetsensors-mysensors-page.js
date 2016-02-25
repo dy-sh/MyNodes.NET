@@ -111,7 +111,7 @@ function getNodes() {
 
 
 function onReturnNodes(nodes) {
-    $('#nodesContainer').html(null);
+    $('#nodesContainer').empty();
 
     for (var i = 0; i < nodes.length; i++) {
         createOrUpdateNode(nodes[i]);

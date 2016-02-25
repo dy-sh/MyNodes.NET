@@ -35,11 +35,10 @@ namespace MyNetSensors.Repositories.Dapper
 
         public NodesRepositoryDapper(string connectionString)
         {
-            updateDbTimer.Elapsed += UpdateDbTimerEvent;
-
             this.connectionString = connectionString;
             CreateDb();
 
+            updateDbTimer.Elapsed += UpdateDbTimerEvent;
             if (writeInterval > 0)
             {
                 updateDbTimer.Interval = writeInterval;

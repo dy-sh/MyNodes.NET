@@ -84,14 +84,6 @@ namespace MyNetSensors.WebController.Controllers
                 return node.GetValue(name);
             });
         }
-        
-
-        [Authorize(UserClaims.DashboardEditor)]
-        public bool ClearChart(string nodeId)
-        {
-            engine.ClearChart(nodeId);
-            return true;
-        }
 
     }
 }

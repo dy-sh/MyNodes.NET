@@ -13,111 +13,108 @@ namespace MyNetSensors.Nodes
 {
     public class UiChartNode : UiNode
     {
+        public ChartData LastRecord { get; set; }
 
-        public double? State { get; set; }
-
-        public DateTime LastUpdateDate { get; set; }
-
-
-        private List<NodeState> NodeStates { get; set; }
-        private string LastStateCached { get; set; }
-        private bool LastStateUpdated { get; set; }
-
+        private List<NodeState> log;
 
         public UiChartNode() : base("UI", "Chart")
         {
-            AddInput();
+            AddInput(DataType.Number);
 
-            NodeStates = new List<NodeState>();
-            LastUpdateDate = DateTime.Now;
+            log = new List<NodeState>();
 
-            Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write In Database", "false"));
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "500"));
+            Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write in database", "false"));
+            Settings.Add("MaxRecords", new NodeSetting(NodeSettingType.Number, "The maximum number of chart points", "100"));
         }
 
-        public override void Loop()
-        {
-            if (!LastStateUpdated)
-                return;
-
-            int updateInteval = Int32.Parse(Settings["UpdateInterval"].Value);
-
-            if ((DateTime.Now - LastUpdateDate).TotalMilliseconds < updateInteval)
-                return;
-
-            LastStateUpdated = false;
-            LastUpdateDate = DateTime.Now;
-
-            if (LastStateCached == null)
-            {
-                State = null;
-                // UpdateMe();
-                return;
-            }
-
-            try
-            {
-                double val = double.Parse(LastStateCached);
-                NodeStates.Add(new NodeState(Id, val.ToString()));
-                State = val;
-                UpdateMe();
-            }
-            catch (Exception)
-            {
-                State = null;
-                LogError($"Incorrect input value.");
-            }
-        }
 
         public override void OnInputChange(Input input)
         {
-            LastStateCached = input.Value;
-            LastStateUpdated = true;
+            if (input.Value == null)
+                return;
+
+            int max = (int)double.Parse(Settings["MaxRecords"].Value);
+            if (max < 0)
+                max = 0;
+
+            LastRecord = new ChartData(DateTime.Now, input.Value);
+            log.Add(new NodeState(Id, input.Value));
+
+            while (log.Count > max)
+                log.Remove(log.First());
+
+            UpdateMe();
+
+            if (Settings["WriteInDatabase"].Value == "true")
+                uiEngine?.statesDb?.AddState(new NodeState(Id, input.Value), max);
         }
 
-        public List<NodeState> GetStates()
-        {
-            return NodeStates;
-        }
 
-        public void SetStates(List<NodeState> states)
-        {
-            NodeStates = states ?? new List<NodeState>();
-            LastStateUpdated = false;
-        }
 
-        public void RemoveStates()
+        private void RemoveStates()
         {
-            NodeStates.Clear();
-            State = null;
-            LastStateUpdated = false;
+            log.Clear();
+            uiEngine?.statesDb?.RemoveStatesForNode(Id);
         }
 
         public override string GetValue(string name)
         {
-            List<NodeState> nodeStates = GetStates();
-
-            if (nodeStates == null || !nodeStates.Any())
+            if (log == null || !log.Any())
                 return null;
 
             //copy to array to prevent changing data error
-            NodeState[] nodeStatesArray = new NodeState[nodeStates.Count];
-            nodeStates.CopyTo(nodeStatesArray);
+            NodeState[] nodeStatesArray = new NodeState[log.Count];
+            log.CopyTo(nodeStatesArray);
 
-            List<ChartData> chartData = nodeStatesArray.Select(item => new ChartData
-            {
-                x = $"{item.DateTime:yyyy-MM-dd HH:mm:ss.fff}",
-                y = item.State == "0" ? "-0.01" : item.State
-            }).ToList();
+            List<ChartData> chartData = nodeStatesArray.Select(
+                state => new ChartData(state.DateTime, state.State)).ToList();
 
             return JsonConvert.SerializeObject(chartData);
         }
 
+
+        public override void OnAddToUiEngine(UiNodesEngine uiEngine)
+        {
+            base.OnAddToUiEngine(uiEngine);
+            GetStatesFromRepository();
+        }
+
+        private void GetStatesFromRepository()
+        {
+            if (uiEngine?.statesDb == null || Settings["WriteInDatabase"].Value != "true")
+                return;
+
+            List<NodeState> states = uiEngine?.statesDb?.GetStatesForNode(Id);
+            log = states ?? new List<NodeState>();
+            if (log != null && log.Any())
+            {
+                NodeState last = log.OrderBy(x => x.DateTime).Last();
+                LastRecord = new ChartData(last.DateTime, last.State);
+            }
+        }
+
+        public override void OnRemove()
+        {
+            base.OnRemove();
+            uiEngine?.statesDb?.RemoveStatesForNode(Id);
+        }
+
+        public override bool SetValues(Dictionary<string, string> values)
+        {
+            if (values.ContainsKey("Clear"))
+                RemoveStates();
+
+            return true;
+        }
+
+
+
         public override string GetNodeDescription()
         {
             return "This is a UI node. It displays a chart on the dashboard. <br/>" +
-                   "The chart shows the history of values, " +
-                   "and updated in real time. You can view the chart in various styles. <br/>" +
+                   "The chart shows the history of values, and updated in real time.  <br/><br/>" +
+                   "You can enable writing chart points into the database in the settings of the node. " +
+                   "You can view the chart in various styles. <br/>" +
                    "If you want to show someone some range of the history on the chart, " +
                    "then press the Share button and a link will be generated at exactly " +
                    "that moment that you see now. The chart style will be included. <br/>" +

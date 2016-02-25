@@ -30,7 +30,7 @@ $(function () {
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         window.location.replace("/Dashboard/");
         noty({ text: 'All nodes have been deleted!', type: 'error' });
-        //$('#panelsContainer').html(null);
+        //$('#panelsContainer').empty();
     };
 
 
@@ -84,7 +84,7 @@ $(function () {
                 noty({ text: 'Connected to web server.', type: 'alert' });
                 //waiting while server initialized and read db
                 setTimeout(function () {
-                    $("#panelsContainer").html(null);
+                    $("#panelsContainer").empty();
                     $("#panelsContainer").show();
                     getNodes();
                     getGatewayInfo();
@@ -144,7 +144,7 @@ function getNodes() {
 }
 
 function onReturnNodes(nodes) {
-    $("#panelsContainer").html(null);
+    $("#panelsContainer").empty();
 
     if (!nodes || nodes.length == 0) {
         $('#empty-message').show();

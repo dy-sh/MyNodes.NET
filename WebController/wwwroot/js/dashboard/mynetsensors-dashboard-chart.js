@@ -30,9 +30,9 @@ function createChart(node) {
 
     $('#chart-clear-' + node.Id).click(function () {
         $.ajax({
-            url: "/DashboardAPI/ClearChart/",
+            url: "/DashboardAPI/SetValues/",
             type: "POST",
-            data: {nodeId: node.Id},
+            data: { 'nodeId': node.Id, 'values': { Clear: "true" } },
             success: function () {
                 dataset[node.Id].clear();
             }
@@ -71,12 +71,20 @@ function createChart(node) {
 
     //Loading data frow server
     $.ajax({
-        url: "/DashboardAPI/GetValue/", 
-        data: { 'nodeId': node.Id, 'name':"chartData" },
+        url: "/DashboardAPI/GetValue/",
+        data: { 'nodeId': node.Id, 'name': "chartData" },
         dataType: "json",
         success: function (chartData) {
+            dataset[node.Id].clear();
             if (chartData != null) {
-                addChartData(chartData, node.Id);
+                addChartData(chartData, node.Id, node.Settings.MaxRecords.Value);
+
+                var options = {
+                    start: vis.moment().add(-30, 'seconds'),
+                    end: vis.moment()
+                };
+
+                graph2d[node.Id].setOptions(options);
             } else {
                 showNow(node.Id);
             }
@@ -84,37 +92,34 @@ function createChart(node) {
     });
 }
 
+var lastChartData = {};
 
 
-function addChartData(chartData, nodeId) {
+function addChartData(chartData, nodeId, maxRecords) {
     dataset[nodeId].add(chartData);
+    if (chartData.length != undefined)
+        lastChartData[nodeId] = chartData[chartData.length - 1].x;
+    else
+        lastChartData[nodeId] = chartData.x;
 
-    var options = {
-        start: vis.moment().add(-30, 'seconds'),
-        end: vis.moment()
-    };
-
-    graph2d[nodeId].setOptions(options);
+    var unwanted = dataset[nodeId].length - maxRecords;
+    if (unwanted > 0) {
+        var items = dataset[nodeId].get();
+        for (var i = 0; i < unwanted; i++) {
+            dataset[nodeId].remove(items[i]);
+        }
+    }
 }
 
-var firstUpdate=true;
+
 
 function updateChart(node) {
     $('#chartName-' + node.Id).html(node.Settings["Name"].Value);
 
-    if (!firstUpdate) {
-        if (node.State == "0")
-            node.State = "-0.01";
+    if (node.LastRecord == null || lastChartData[node.Id] == node.LastRecord.x)
+        return;
 
-        //Add new point to chart
-        var now = vis.moment().format("YYYY-MM-DD HH:mm:ss.SSS");
-        dataset[node.Id].add({
-            x: now,
-            y: node.State
-        });
-    }
-
-    firstUpdate = false;
+    addChartData(node.LastRecord, node.Id, node.Settings.MaxRecords.Value);
 }
 
 

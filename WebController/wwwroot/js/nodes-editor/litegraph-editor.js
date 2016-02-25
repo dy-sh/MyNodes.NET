@@ -372,7 +372,7 @@ function NodeSettings(node) {
 
     //clear old body
     var body = $('#node-settings-body');
-    body.html(null);
+    body.empty();
 
     //add setting-elements from templates
     for (var i = 0; i < Object.keys(settings).length ; i++) {

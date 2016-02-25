@@ -33,13 +33,13 @@ $(function () {
 
     clientsHub.client.OnRemoveAllNodesAndLinks = function () {
         noty({ text: 'This Node was removed!', type: 'error', timeout: false });
-        $('#panelsContainer').html(null);
+        $('#panelsContainer').empty();
     };
 
     clientsHub.client.OnRemoveNode = function (node) {
         if (node.Id == nodeId) {
             noty({ text: 'This Node was removed!', type: 'error', timeout: false });
-            $('#panelsContainer').html(null);
+            $('#panelsContainer').empty();
         }
     };
 
@@ -94,7 +94,7 @@ $('#clear-button').click(function () {
         type: "POST",
         data: { nodeId: nodeId },
         success: function (connected) {
-            $('#history-table').html(null);
+            $('#history-table').empty();
         }
     });
 });

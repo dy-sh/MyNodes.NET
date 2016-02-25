@@ -14,7 +14,6 @@ var progressTemplate = Handlebars.compile($('#progressTemplate').html());
 var buttonTemplate = Handlebars.compile($('#buttonTemplate').html());
 var toggleButtonTemplate = Handlebars.compile($('#toggleButtonTemplate').html());
 var switchTemplate = Handlebars.compile($('#switchTemplate').html());
-var logTemplate = Handlebars.compile($('#logTemplate').html());
 var stateTemplate = Handlebars.compile($('#stateTemplate').html());
 var textBoxTemplate = Handlebars.compile($('#textBoxTemplate').html());
 var chartTemplate = Handlebars.compile($('#chartTemplate').html());
@@ -34,12 +33,7 @@ function createState(node) {
 }
 
 
-function createLog(node) {
-    $(logTemplate(node)).hide().appendTo("#uiContainer-" + node.PanelId).fadeIn(elementsFadeTime);
-    $('#clear-log-' + node.Id).click(function () {
-        sendClearLog(node.Id);
-    });
-}
+
 
 
 function createTextBox(node) {
@@ -115,13 +109,7 @@ function updateTextBox(node) {
 }
 
 
-function updateLog(node) {
-    $('#logName-' + node.Id).html(node.Settings["Name"].Value);
-    $('#log-' + node.Id).html(node.Log);
 
-    if ($('#log-' + node.Id).get(0) != null)
-        $('#log-' + node.Id).animate({ scrollTop: $('#log-' + node.Id).get(0).scrollHeight }, 0);
-}
 
 
 function updateProgress(node) {
@@ -179,13 +167,6 @@ function sendTextBox(nodeId) {
 
 
 
-function sendClearLog(nodeId) {
-    $.ajax({
-        url: "/DashboardAPI/SetValues/",
-        type: "POST",
-        data: { 'nodeId': nodeId, 'values': { clear: "true" } }
-    });
-}
 
 function sendButtonClick(nodeId) {
     $.ajax({

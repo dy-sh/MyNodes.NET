@@ -18,7 +18,7 @@ namespace MyNetSensors.Nodes
 
         private static NodesEngine engine;
 
-        private INodesStatesRepository statesDb;
+        public INodesStatesRepository statesDb;
 
 
 
@@ -32,58 +32,30 @@ namespace MyNetSensors.Nodes
             engine.OnNodeUpdated += OnNodeUpdated;
             engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
 
-            GetStatesFromRepository();
+            List<UiNode> nodes = engine.GetNodes()
+                .OfType<UiNode>()
+                .ToList();
+
+            foreach (var node in nodes)
+                node.OnAddToUiEngine(this);
         }
 
         private void OnRemoveAllNodesAndLinks()
         {
             statesDb?.RemoveAllStates();
         }
-
-        private void GetStatesFromRepository()
-        {
-            if (statesDb == null)
-                return;
-
-            List<UiChartNode> charts = engine.GetNodes()
-                .Where(n => n is UiChartNode)
-                .Cast<UiChartNode>()
-                .ToList();
-
-            foreach (var chart in charts)
-            {
-                if (chart.Settings["WriteInDatabase"].Value!="true") continue;
-
-                List<NodeState> states = statesDb.GetStatesForNode(chart.Id);
-                chart.SetStates(states);
-            }
-        }
-
-
+        
 
         private void OnNodeUpdated(Node node)
         {
             if (node is UiNode)
                 OnUiNodeUpdated?.Invoke((UiNode)node);
-
-
-            if (node is UiChartNode)
-            {
-                UiChartNode chart = (UiChartNode)node;
-                if (chart.Settings["WriteInDatabase"].Value == "true" && chart.State != null)
-                {
-                    statesDb?.AddState(new NodeState(chart.Id, chart.State.ToString()));
-                }
-            }
         }
 
         private void OnRemoveNode(Node node)
         {
             if (node is UiNode)
                 OnRemoveUiNode?.Invoke((UiNode)node);
-
-            if (node is UiChartNode)
-                statesDb?.RemoveStatesForNode(node.Id);
         }
 
         private void OnNewNode(Node node)
@@ -91,6 +63,8 @@ namespace MyNetSensors.Nodes
             if (!(node is UiNode)) return;
 
             UiNode n = (UiNode)node;
+
+            n.OnAddToUiEngine(this);
 
             OnNewUiNode?.Invoke(n);
 
@@ -161,23 +135,6 @@ namespace MyNetSensors.Nodes
                 .Cast<UiNode>()
                 .ToList();
         }
-        
-
-
-        public void ClearChart(string nodeId)
-        {
-            UiChartNode uiNode = engine.GetNode(nodeId) as UiChartNode;
-            if (uiNode == null)
-                return;
-
-            uiNode.RemoveStates();
-            statesDb?.RemoveStatesForNode(nodeId);
-
-            //send update ivent
-            engine.UpdateNode(uiNode);
-            engine.UpdateNodeInDb(uiNode);
-        }
-
 
     }
 }

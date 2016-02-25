@@ -11,7 +11,11 @@ namespace MyNetSensors.Nodes
 
     public interface INodesStatesRepository
     {
-        void AddState(NodeState state);
+        event LogEventHandler OnLogInfo;
+        event LogEventHandler OnLogError;
+        void SetWriteInterval(int ms);
+
+        void AddState(NodeState state,int maxStatesCount);
         List<NodeState> GetStatesForNode(string nodeId);
         void RemoveStatesForNode(string nodeId);
         void RemoveAllStates();

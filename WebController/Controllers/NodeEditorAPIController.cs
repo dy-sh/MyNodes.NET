@@ -132,12 +132,6 @@ namespace MyNetSensors.WebController.Controllers
                 litegraphNode.properties["Settings"] = JsonConvert.SerializeObject(node.Settings);
 
 
-            if (node is UiChartNode)
-            {
-                UiChartNode n = (UiChartNode)node;
-                litegraphNode.properties["State"] = n.State.ToString();
-            }
-
             if (node.Settings.ContainsKey("Name")
                 && !string.IsNullOrEmpty(node.Settings["Name"].Value))
                 litegraphNode.title += " [" + node.Settings["Name"].Value + "]";

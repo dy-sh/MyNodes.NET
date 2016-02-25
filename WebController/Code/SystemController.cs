@@ -287,6 +287,10 @@ namespace MyNetSensors.WebController.Code
             nodesDb.OnLogInfo += logs.AddDataBaseInfo;
             nodesDb.OnLogError += logs.AddDataBaseError;
 
+            nodesStatesDb.SetWriteInterval(dataBaseConfig.WriteInterval);
+            nodesStatesDb.OnLogInfo += logs.AddDataBaseInfo;
+            nodesStatesDb.OnLogError += logs.AddDataBaseError;
+
             logs.AddSystemInfo("Database connected.");
         }
 
