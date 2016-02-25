@@ -5,13 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
-
-
-using MyNetSensors.Gateways;
 using MyNetSensors.Nodes;
 using MyNetSensors.Users;
 using MyNetSensors.WebController.Code;
@@ -22,7 +18,6 @@ namespace MyNetSensors.WebController.Controllers
 
     public class UITimerController : Controller
     {
-        private UITimerNodesEngine tasksEngine;
         private NodesEngine engine;
 
         const string ERROR_MESSAGE= "Nodes Engine is not started.<br/><br/>   <a href='/Config'>Check settings</a>";
@@ -30,13 +25,12 @@ namespace MyNetSensors.WebController.Controllers
 
         public UITimerController()
         {
-            tasksEngine = SystemController.uiTimerNodesEngine;
             engine = SystemController.nodesEngine;
         }
 
         public ActionResult Tasks(string id)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
@@ -47,7 +41,7 @@ namespace MyNetSensors.WebController.Controllers
             ViewBag.NodeId = node.Id;
             ViewBag.Name = node.Settings["Name"].Value;
 
-            List<UITimerTask> tasks = tasksEngine.GetTasksForNode(id);
+            List<UITimerTask> tasks = node.GetAllTasks();
 
             return View(tasks);
         }
@@ -58,11 +52,10 @@ namespace MyNetSensors.WebController.Controllers
         [HttpGet]
         public ActionResult New(string id)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
-
             if (node == null)
                 return HttpNotFound();
 
@@ -86,12 +79,14 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult New(UITimerTask task)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.AddTask(task);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.AddTask(task);
 
             return RedirectToAction("Tasks", new { id = task.NodeId});
         }
@@ -100,19 +95,17 @@ namespace MyNetSensors.WebController.Controllers
         [Authorize(UserClaims.DashboardEditor)]
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id, int id2)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            UITimerTask task = tasksEngine.GetTask(id);
-
-            if (task == null)
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
                 return HttpNotFound();
 
-            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
-
-            if (node == null)
+            UITimerTask task = node.GetTask(id2);
+            if (task == null)
                 return HttpNotFound();
 
             ViewBag.Name = node.Settings["Name"].Value;
@@ -126,12 +119,14 @@ namespace MyNetSensors.WebController.Controllers
         [HttpPost]
         public ActionResult Edit(UITimerTask task)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.UpdateTask(task);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.UpdateTask(task);
 
             return RedirectToAction("Tasks", new { id = task.NodeId });
         }
@@ -139,14 +134,16 @@ namespace MyNetSensors.WebController.Controllers
 
         [Authorize(UserClaims.DashboardEditor)]
 
-        public ActionResult Remove(int id)
+        public ActionResult Remove(string id, int id2)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.RemoveTask(id);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.RemoveTask(id2);
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -156,21 +153,22 @@ namespace MyNetSensors.WebController.Controllers
 
         [Authorize(UserClaims.DashboardEditor)]
 
-        public ActionResult Enable(int id)
+        public ActionResult Enable(string id, int id2)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            UITimerTask task = tasksEngine.GetTask(id);
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
 
+            UITimerTask task = node.GetTask(id2);
             if (task == null)
                 return HttpNotFound();
 
             task.Enabled = true;
 
-            bool result = tasksEngine.UpdateTask(task);
-            if (!result)
-                return HttpBadRequest();
+            node.UpdateTask(task);
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -179,21 +177,22 @@ namespace MyNetSensors.WebController.Controllers
 
         [Authorize(UserClaims.DashboardEditor)]
 
-        public ActionResult Disable(int id)
+        public ActionResult Disable(string id, int id2)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            UITimerTask task = tasksEngine.GetTask(id);
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
 
+            UITimerTask task = node.GetTask(id2);
             if (task == null)
                 return HttpNotFound();
 
             task.Enabled = false;
 
-            bool result = tasksEngine.UpdateTask(task);
-            if (!result)
-                return HttpBadRequest();
+            node.UpdateTask(task);
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -203,14 +202,16 @@ namespace MyNetSensors.WebController.Controllers
 
         [Authorize(UserClaims.DashboardEditor)]
 
-        public ActionResult ExecuteNow(int id)
+        public ActionResult ExecuteNow(string id, int id2)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.ExecuteNowTask(id);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.ExecuteNowTask(id2);
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -222,12 +223,14 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult RemoveAll(string id)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.RemoveTasksForNode(id);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.RemoveAllTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());
@@ -240,12 +243,14 @@ namespace MyNetSensors.WebController.Controllers
 
         public ActionResult RemoveCompleted(string id)
         {
-            if (engine == null || tasksEngine == null)
+            if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
-            bool result = tasksEngine.RemoveCompletedTasksForNode(id);
-            if (!result)
-                return HttpBadRequest();
+            UiTimerNode node = engine.GetNode(id) as UiTimerNode;
+            if (node == null)
+                return HttpNotFound();
+
+            node.RemoveCompletedTasks();
 
             if (Request.Headers["Referer"].Any())
                 return Redirect(Request.Headers["Referer"].ToString());

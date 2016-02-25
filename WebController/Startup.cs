@@ -52,8 +52,6 @@ namespace MyNetSensors.WebController
                     options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
                 .AddDbContext<MySensorsMessagesDbContext>(options =>
                     options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
-                .AddDbContext<UITimerNodesDbContext>(options =>
-                    options.UseSqlite("Data Source=UITimerNodes.sqlite"))
                 .AddDbContext<UsersDbContext>(options =>
                     options.UseSqlite("Data Source=Users.sqlite"));
 

@@ -23,7 +23,8 @@ namespace MyNetSensors.Repositories.Dapper
 
         private int writeInterval = 5000;
         private Timer updateDbTimer = new Timer();
-        private List<NodeData> cachedData = new List<NodeData>();
+        private List<NodeData> cachedNewData = new List<NodeData>();
+        private List<NodeData> cachedUpdatedData = new List<NodeData>();
         private Dictionary<string, int?> maxRecords = new Dictionary<string, int?>(); //nodeId,maxRecords
 
         public event LogEventHandler OnLogInfo;
@@ -84,7 +85,7 @@ namespace MyNetSensors.Repositories.Dapper
             updateDbTimer.Stop();
             try
             {
-                int count = cachedData.Count;
+                int count = cachedNewData.Count;
                 if (count == 0)
                 {
                     updateDbTimer.Start();
@@ -115,13 +116,14 @@ namespace MyNetSensors.Repositories.Dapper
         {
             int inserts = 0;
 
-            List<NodeData> data = cachedData;
-            cachedData = new List<NodeData>();
+            List<NodeData> data = cachedNewData;
+            cachedNewData = new List<NodeData>();
 
             List<NodeData> dataToWrite = new List<NodeData>();
 
             using (var db = new SqlConnection(connectionString))
             {
+                //-------WRITE NEW---------
                 while (data.Any())
                 {
                     string nodeId = data.First().NodeId;
@@ -132,7 +134,7 @@ namespace MyNetSensors.Repositories.Dapper
                     if (maxRecords[nodeId] != null)
                     {
                         int dbCount =
-                            db.Query<int>("SELECT COUNT(*) FROM [NodesData] WHERE NodeId=@nodeId", new {nodeId})
+                            db.Query<int>("SELECT COUNT(*) FROM [NodesData] WHERE NodeId=@nodeId", new { nodeId })
                                 .Single();
 
                         int allCount = dbCount + dataForNode.Count;
@@ -144,7 +146,7 @@ namespace MyNetSensors.Repositories.Dapper
                             if (removeFromDb > 0)
                                 db.Query(
                                     $"DELETE FROM [NodesData] WHERE Id IN (SELECT TOP {more} Id FROM [NodesData] WHERE NodeId=@nodeId ORDER BY DateTime ASC);",
-                                    new {nodeId});
+                                    new { nodeId });
 
                             int removeFromCached = dataForNode.Count - max;
                             if (removeFromCached > 0)
@@ -160,135 +162,184 @@ namespace MyNetSensors.Repositories.Dapper
 
                 await db.ExecuteAsync(sqlQuery, dataToWrite);
                 inserts += dataToWrite.Count;
+
+
+                //-------WRITE UPDATED---------
+                List<NodeData> updated = cachedUpdatedData;
+                cachedUpdatedData = new List<NodeData>();
+                inserts += updated.Count;
+
+                sqlQuery =
+                    "UPDATE [NodesData] SET " +
+                    "Value = @Value " +
+                    "DateTime = @DateTime " +
+                    "WHERE Id = @Id";
+
+                db.Execute(sqlQuery, updated);
             }
 
             return inserts;
         }
 
-        public void AddNodeData(NodeData data, int? maxDbRecords)
+    public void AddNodeData(NodeData nodeData, int? maxDbRecords)
+    {
+        if (writeInterval != 0)
         {
-            if (writeInterval != 0)
-            {
-                maxRecords[data.NodeId] = maxDbRecords;
-                cachedData.Add(data);
-                return;
-            }
-
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-                var sqlQuery = "INSERT INTO [NodesData] (NodeId, DateTime, Value) "
-                               +
-                               "VALUES(@NodeId, @DateTime, @Value); "
-                               + "SELECT CAST(SCOPE_IDENTITY() as int)";
-                db.Query(sqlQuery, data);
-
-                //remove extra data
-                if (maxDbRecords != null)
-                {
-                    int count =
-                        db.Query<int>("SELECT COUNT(*) FROM [NodesData] WHERE NodeId=@nodeId", new {data.NodeId})
-                            .Single();
-
-                    int more = count - maxDbRecords.Value + 1;
-
-                    if (more > 0)
-                        db.Query(
-                            $"DELETE FROM [NodesData] WHERE Id IN (SELECT TOP {more} Id FROM [NodesData] WHERE NodeId=@nodeId ORDER BY DateTime ASC);",
-                            new {data.NodeId});
-                }
-            }
+            maxRecords[nodeData.NodeId] = maxDbRecords;
+            cachedNewData.Add(nodeData);
+            return;
         }
 
+        AddNodeDataImmediately(nodeData, maxDbRecords);
+    }
 
-
-        public List<NodeData> GetAllNodeDataForNode(string nodeId)
+    public int AddNodeDataImmediately(NodeData nodeData, int? maxDbRecords = null)
+    {
+        int id = -1;
+        using (var db = new SqlConnection(connectionString))
         {
-            using (var db = new SqlConnection(connectionString))
+            db.Open();
+            var sqlQuery = "INSERT INTO [NodesData] (NodeId, DateTime, Value) "
+                           +
+                           "VALUES(@NodeId, @DateTime, @Value); "
+                           + "SELECT CAST(SCOPE_IDENTITY() as int)";
+            id = db.Query<int>(sqlQuery, nodeData).Single();
+
+            //remove extra data
+            if (maxDbRecords != null)
             {
-                db.Open();
+                int count =
+                    db.Query<int>("SELECT COUNT(*) FROM [NodesData] WHERE NodeId=@nodeId", new { nodeData.NodeId })
+                        .Single();
 
-                try
-                {
-                    string req = $"SELECT * FROM [NodesData] WHERE NodeId=@nodeId";
-                    return db.Query<NodeData>(req, new { nodeId }).ToList();
-                }
-                catch { }
+                int more = count - maxDbRecords.Value + 1;
 
-                return null;
+                if (more > 0)
+                    db.Query(
+                        $"DELETE FROM [NodesData] WHERE Id IN (SELECT TOP {more} Id FROM [NodesData] WHERE NodeId=@nodeId ORDER BY DateTime ASC);",
+                        new { nodeData.NodeId });
             }
         }
+        return id;
+    }
 
-        public NodeData GetNodeData(int id)
+    public void UpdateNodeData(NodeData nodeData)
+    {
+        if (writeInterval != 0)
         {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                try
-                {
-                    return db.Query<NodeData>("SELECT * FROM [NodesData] WHERE Id=@id", new {id})
-                        .FirstOrDefault();
-                }
-                catch { }
-
-                return null;
-            }
+            cachedUpdatedData.RemoveAll(x => x.Id == nodeData.Id);
+            cachedUpdatedData.Add(nodeData);
+            return;
         }
 
-        public void RemoveAllNodeDataForNode(string nodeId)
+        UpdateNodeDataImmediately(nodeData);
+    }
+
+    public void UpdateNodeDataImmediately(NodeData nodeData)
+    {
+        using (var db = new SqlConnection(connectionString))
         {
-            cachedData.RemoveAll(x => x.NodeId == nodeId);
+            db.Open();
+            var sqlQuery =
+                "UPDATE [NodesData] SET " +
+                "Value = @Value " +
+                "DateTime = @DateTime " +
+                "WHERE Id = @Id";
 
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                db.Query($"DELETE FROM [NodesData] WHERE NodeId=@nodeId", new { nodeId });
-            }
-        }
-
-        public void RemoveNodeData(int id)
-        {
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                db.Query($"DELETE FROM [NodesData] WHERE Id=@id", new { id });
-            }
-        }
-
-        public void RemoveAllNodesData()
-        {
-            cachedData.Clear();
-
-            using (var db = new SqlConnection(connectionString))
-            {
-                db.Open();
-
-                db.Query("TRUNCATE TABLE [NodesData]");
-            }
-        }
-
-        public void LogInfo(string message)
-        {
-            OnLogInfo?.Invoke(message);
-        }
-
-        public void LogError(string message)
-        {
-            OnLogError?.Invoke(message);
-        }
-
-        public void SetWriteInterval(int ms)
-        {
-            writeInterval = ms;
-            updateDbTimer.Stop();
-            if (writeInterval > 0)
-            {
-                updateDbTimer.Interval = writeInterval;
-                updateDbTimer.Start();
-            }
+            db.Execute(sqlQuery, nodeData);
         }
     }
+
+
+    public List<NodeData> GetAllNodeDataForNode(string nodeId)
+    {
+        using (var db = new SqlConnection(connectionString))
+        {
+            db.Open();
+
+            try
+            {
+                string req = $"SELECT * FROM [NodesData] WHERE NodeId=@nodeId";
+                return db.Query<NodeData>(req, new { nodeId }).ToList();
+            }
+            catch { }
+
+            return null;
+        }
+    }
+
+    public NodeData GetNodeData(int id)
+    {
+        using (var db = new SqlConnection(connectionString))
+        {
+            db.Open();
+
+            try
+            {
+                return db.Query<NodeData>("SELECT * FROM [NodesData] WHERE Id=@id", new { id })
+                    .FirstOrDefault();
+            }
+            catch { }
+
+            return null;
+        }
+    }
+
+    public void RemoveAllNodeDataForNode(string nodeId)
+    {
+        cachedNewData.RemoveAll(x => x.NodeId == nodeId);
+        cachedUpdatedData.RemoveAll(x => x.NodeId == nodeId);
+
+        using (var db = new SqlConnection(connectionString))
+        {
+            db.Open();
+
+            db.Query($"DELETE FROM [NodesData] WHERE NodeId=@nodeId", new { nodeId });
+        }
+    }
+
+    public void RemoveNodeData(int id)
+    {
+        using (var db = new SqlConnection(connectionString))
+        {
+            db.Open();
+
+            db.Query($"DELETE FROM [NodesData] WHERE Id=@id", new { id });
+        }
+    }
+
+    public void RemoveAllNodesData()
+    {
+        cachedNewData.Clear();
+        cachedUpdatedData.Clear();
+
+        using (var db = new SqlConnection(connectionString))
+        {
+            db.Open();
+
+            db.Query("TRUNCATE TABLE [NodesData]");
+        }
+    }
+
+    public void LogInfo(string message)
+    {
+        OnLogInfo?.Invoke(message);
+    }
+
+    public void LogError(string message)
+    {
+        OnLogError?.Invoke(message);
+    }
+
+    public void SetWriteInterval(int ms)
+    {
+        writeInterval = ms;
+        updateDbTimer.Stop();
+        if (writeInterval > 0)
+        {
+            updateDbTimer.Interval = writeInterval;
+            updateDbTimer.Start();
+        }
+    }
+}
 }

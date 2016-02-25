@@ -349,6 +349,25 @@ namespace MyNetSensors.Nodes
             engine?.dataDb?.AddNodeData(new NodeData(Id, data), maxDbRecords);
         }
 
+        public int AddNodeDataImmediately(string data, int? maxDbRecords = null)
+        {
+            if (engine == null)
+                return -1;
+
+            return engine.dataDb.AddNodeDataImmediately(new NodeData(Id, data), maxDbRecords);
+        }
+
+        public void UpdateNodeData(NodeData nodeData)
+        {
+            engine?.dataDb?.UpdateNodeData(nodeData);
+        }
+
+        public void UpdateNodeDataImmediately(NodeData nodeData)
+        {
+            engine?.dataDb?.UpdateNodeDataImmediately(nodeData);
+        }
+
+
         public List<NodeData> GetAllNodeData()
         {
             return engine?
@@ -361,6 +380,11 @@ namespace MyNetSensors.Nodes
         public void RemoveAllNodeData()
         {
             engine?.dataDb?.RemoveAllNodeDataForNode(Id);
+        }
+
+        public void RemoveNodeData(int id)
+        {
+            engine?.dataDb?.RemoveNodeData(id);
         }
     }
 

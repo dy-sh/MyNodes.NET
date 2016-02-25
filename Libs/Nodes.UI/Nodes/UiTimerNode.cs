@@ -6,42 +6,72 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace MyNetSensors.Nodes
 {
-    public class UITimerNodesEngine
+    public class UiTimerNode : UiNode
     {
-        private NodesEngine engine;
-        private IUITimerNodesRepository db;
 
-        private List<UITimerTask> tasks;
+        private List<UITimerTask> tasks = new List<UITimerTask>();
+        private bool abortExecuting;
 
-        private bool abortExecuting = false;
-
-        public UITimerNodesEngine(NodesEngine engine, IUITimerNodesRepository db = null)
+        public UiTimerNode() : base("UI", "Timer")
         {
-            this.db = db;
-            this.engine = engine;
-
-            tasks = db?.GetAllTasks();
-            if (tasks == null)
-                tasks = new List<UITimerTask>();
-
-            engine.OnRemoveNode += OnRemoveNode;
-            engine.OnUpdateLoop += UpdateTasks;
-            engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
+            AddOutput();
+            GetTasksFromDB();
         }
 
-        private void OnRemoveAllNodesAndLinks()
+        public void SetState(string state)
+        {
+            Outputs[0].Value = state;
+        }
+
+
+        #region ---------------- Tasks Repository -------------------------
+        private void GetTasksFromDB()
         {
             tasks = new List<UITimerTask>();
-            db?.RemoveAllTasks();
+            List<NodeData> data = GetAllNodeData();
+            foreach (var nodeData in data)
+            {
+                UITimerTask task = JsonConvert.DeserializeObject<UITimerTask>(nodeData.Value);
+                tasks.Add(task);
+            }
         }
 
-        private void OnRemoveNode(Node node)
+        private void UpdateTaskInDb(UITimerTask task)
         {
-            RemoveTasksForNode(node.Id);
+            NodeData data = new NodeData
+            {
+                DateTime = DateTime.Now,
+                Id = task.Id,
+                NodeId = Id,
+                Value = JsonConvert.SerializeObject(task)
+            };
+
+            UpdateNodeData(data);
         }
+
+        private void AddTaskToDb(UITimerTask task)
+        {
+            int id = AddNodeDataImmediately(JsonConvert.SerializeObject(task));
+            task.Id = id;
+        }
+
+        private void RemoveTaskFromDb(int id)
+        {
+            RemoveNodeData(id);
+        }
+
+        #endregion
+
+        public override void OnRemove()
+        {
+            RemoveAllNodeData();
+            base.OnRemove();
+        }
+
 
 
         //used to abort UpdateTasks() method
@@ -50,7 +80,8 @@ namespace MyNetSensors.Nodes
             abortExecuting = true;
         }
 
-        private void UpdateTasks()
+
+        public override void Loop()
         {
             try
             {
@@ -71,6 +102,7 @@ namespace MyNetSensors.Nodes
 
 
 
+
         private void Execute(UITimerTask task)
         {
             task.RepeatingDoneCount++;
@@ -83,24 +115,16 @@ namespace MyNetSensors.Nodes
                     && task.RepeatingDoneCount >= task.RepeatingNeededCount)
                     task.IsCompleted = true;
 
-                if (task.ExecutionValue == task.RepeatingAValue)
-                    task.ExecutionValue = task.RepeatingBValue;
-                else
-                    task.ExecutionValue = task.RepeatingAValue;
+                task.ExecutionValue = task.ExecutionValue == task.RepeatingAValue
+                    ? task.RepeatingBValue : task.RepeatingAValue;
 
                 if (!task.IsCompleted)
                     task.ExecutionDate = DateTime.Now.AddMilliseconds(task.RepeatingInterval);
             }
 
-            db?.UpdateTask(task);
+            UpdateTaskInDb(task);
 
-            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
-            if (node == null)
-            {
-                engine.LogEngineError($"Can`t execute task for Node [{task.NodeId}]. Not found.");
-                return;
-            }
-            node.SetState(task.ExecutionValue);
+            Outputs[0].Value = task.ExecutionValue;
         }
 
 
@@ -108,15 +132,13 @@ namespace MyNetSensors.Nodes
         {
             List<UITimerTask> tasksForUpdate = tasks.Where(x => x.Enabled).ToList();
 
-            foreach (var task in tasksForUpdate)
+            foreach (var task in tasksForUpdate.Where(task => task.Enabled))
             {
                 task.Enabled = false;
+                UpdateTaskInDb(task);
             }
 
             AbortExecuting();
-
-            if (tasksForUpdate.Any())
-                db?.UpdateTasks(tasksForUpdate);
         }
 
         public void RemoveAllTasks()
@@ -124,28 +146,17 @@ namespace MyNetSensors.Nodes
             tasks.Clear();
             AbortExecuting();
 
-            db?.RemoveAllTasks();
+            RemoveAllNodeData();
         }
 
-        public List<UITimerTask> GetTasksForNode(string id)
-        {
-            return tasks.Where(x => x.NodeId == id).ToList();
-        }
+
 
         public bool AddTask(UITimerTask task)
         {
-            UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
-
-            if (node == null)
-                return false;
-
             if (task.IsRepeating)
                 task.ExecutionValue = task.RepeatingBValue;
 
-            if (db != null)
-            {
-                task.Id = db.AddTask(task);
-            }
+            AddTaskToDb(task);
 
             tasks.Add(task);
             AbortExecuting();
@@ -156,6 +167,11 @@ namespace MyNetSensors.Nodes
         public UITimerTask GetTask(int id)
         {
             return tasks.FirstOrDefault(x => x.Id == id);
+        }
+
+        public List<UITimerTask> GetAllTasks()
+        {
+            return tasks;
         }
 
         public bool UpdateTask(UITimerTask task)
@@ -184,7 +200,7 @@ namespace MyNetSensors.Nodes
                 oldTask.ExecutionValue = oldTask.RepeatingBValue;
 
 
-            db?.UpdateTask(oldTask);
+            UpdateTaskInDb(oldTask);
 
             return true;
         }
@@ -198,7 +214,22 @@ namespace MyNetSensors.Nodes
             tasks.Remove(oldTask);
             AbortExecuting();
 
-            db?.RemoveTask(oldTask.Id);
+            RemoveTaskFromDb(oldTask.Id);
+
+            return true;
+        }
+
+
+
+        public bool RemoveCompletedTasks()
+        {
+            var list = tasks.Where(x => x.IsCompleted).ToList();
+            foreach (var task in list)
+            {
+                tasks.Remove(task);
+                RemoveTaskFromDb(task.Id);
+            }
+            AbortExecuting();
 
             return true;
         }
@@ -213,32 +244,44 @@ namespace MyNetSensors.Nodes
             return true;
         }
 
-        public bool RemoveTasksForNode(string id)
+ 
+
+
+
+
+
+        public override string GetJsListGenerationScript()
         {
-            var list = tasks.Where(x => x.NodeId == id).ToList();
-            foreach (var task in list)
-            {
-                tasks.Remove(task);
+            return @"
+
+            //UiTimerNode
+            function UiTimerNode() {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.UiTimerNode',
+                    'Assembly': 'Nodes.UITimer'
+                };
             }
-            AbortExecuting();
+            UiTimerNode.prototype.getExtraMenuOptions = function(graphcanvas)
+            {
+                var that = this;
+                return [
+                { content: 'Open interface', callback: function() { var win = window.open('/UITimer/Tasks/' + that.id, '_blank'); win.focus(); } }
+                    , null
+                ];
+            }
+            UiTimerNode.title = 'Timer';
+            LiteGraph.registerNodeType('UI/Timer', UiTimerNode);
 
-            db?.RemoveTasks(list);
-
-            return true;
+            ";
         }
 
-        public bool RemoveCompletedTasksForNode(string id)
+        public override string GetNodeDescription()
         {
-            var list = tasks.Where(x => x.NodeId == id && x.IsCompleted).ToList();
-            foreach (var task in list)
-            {
-                tasks.Remove(task);
-            }
-            AbortExecuting();
-
-            db?.RemoveTasks(list);
-
-            return true;
+            return "This is a UI node. It performs a timer function. <br/>" +
+                   "This node can be configured on the dashboard. <br/>" +
+                   "You can create multiple timer events in the interface of this node. <br/>" +
+                   "The node conveniently use to schedule any action, " +
+                   "without going into the editor.";
         }
     }
 }

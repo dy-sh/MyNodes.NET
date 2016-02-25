@@ -49,8 +49,6 @@ namespace MyNetSensors.WebController.Code
         public static UiNodesEngine uiNodesEngine;
         public static INodesRepository nodesDb;
         public static INodesDataRepository nodesDataDb;
-        public static UITimerNodesEngine uiTimerNodesEngine;
-        public static IUITimerNodesRepository uiTimerNodesDb;
 
         public static Logs logs = new Logs();
 
@@ -233,7 +231,6 @@ namespace MyNetSensors.WebController.Code
                 nodesDataDb = null;
                 mySensorsDb = null;
                 mySensorsMessagesDb = null;
-                uiTimerNodesDb = null;
                 usersDb = null;
                 return;
             }
@@ -248,14 +245,12 @@ namespace MyNetSensors.WebController.Code
                 NodesDataDbContext nodesDataDbContext = (NodesDataDbContext)services.GetService(typeof(NodesDataDbContext));
                 MySensorsNodesDbContext mySensorsNodesDbContext = (MySensorsNodesDbContext)services.GetService(typeof(MySensorsNodesDbContext));
                 MySensorsMessagesDbContext mySensorsMessagesDbContext = (MySensorsMessagesDbContext)services.GetService(typeof(MySensorsMessagesDbContext));
-                UITimerNodesDbContext uiTimerNodesDbContext = (UITimerNodesDbContext)services.GetService(typeof(UITimerNodesDbContext));
                 UsersDbContext usersDbContext = (UsersDbContext)services.GetService(typeof(UsersDbContext));
 
                 nodesDb = new NodesRepositoryEf(nodesDbContext);
                 nodesDataDb = new NodesDataRepositoryEf(nodesDataDbContext);
                 mySensorsDb = new MySensorsRepositoryEf(mySensorsNodesDbContext);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryEf(mySensorsMessagesDbContext);
-                uiTimerNodesDb = new UITimerNodesRepositoryEf(uiTimerNodesDbContext);
                 usersDb = new UsersRepositoryEf(usersDbContext);
             }
             else
@@ -270,7 +265,6 @@ namespace MyNetSensors.WebController.Code
                 nodesDataDb = new NodesDataRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsDb = new MySensorsRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 mySensorsMessagesDb = new MySensorsMessagesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
-                uiTimerNodesDb = new UITimerNodesRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
                 usersDb = new UsersRepositoryDapper(dataBaseConfig.ExternalDbConnectionString);
             }
 
@@ -318,7 +312,6 @@ namespace MyNetSensors.WebController.Code
                 mySensorsNodesEngine = null;
 
             uiNodesEngine = new UiNodesEngine(nodesEngine);
-            uiTimerNodesEngine = new UITimerNodesEngine(nodesEngine, uiTimerNodesDb);
 
             if (!nodesEngineConfig.Enable) return;
 
@@ -441,7 +434,6 @@ namespace MyNetSensors.WebController.Code
             nodesDb.RemoveAllLinks();
             nodesDb.RemoveAllNodes();
             nodesDataDb.RemoveAllNodesData();
-            uiTimerNodesDb.RemoveAllTasks();
             usersDb.RemoveAllUsers();
         }
     }

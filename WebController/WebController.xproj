@@ -26,7 +26,6 @@
     <ProjectReference Include="..\Libs\Gateways.MySensors\Gateways.MySensors.csproj" />
     <ProjectReference Include="..\Libs\LogicalNodesRepositoryDappers\LogicalNodesRepositoryDappers.csproj" />
     <ProjectReference Include="..\Libs\Nodes.MySensors\Nodes.MySensors.csproj" />
-    <ProjectReference Include="..\Libs\Nodes.UITimer\Nodes.UITimer.csproj" />
     <ProjectReference Include="..\Libs\Nodes.UI\Nodes.UI.csproj" />
     <ProjectReference Include="..\Libs\NodesTasks\NodesTasks.csproj" />
     <ProjectReference Include="..\Libs\Nodes\Nodes.csproj" />

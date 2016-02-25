@@ -15,7 +15,10 @@ namespace MyNetSensors.Nodes
         event LogEventHandler OnLogError;
         void SetWriteInterval(int ms);
 
-        void AddNodeData(NodeData data, int? maxDbRecords = null);
+        void AddNodeData(NodeData nodeData, int? maxDbRecords = null);
+        int AddNodeDataImmediately(NodeData nodeData, int? maxDbRecords = null);
+        void UpdateNodeData(NodeData nodeData);
+        void UpdateNodeDataImmediately(NodeData nodeData);
         List<NodeData> GetAllNodeDataForNode(string nodeId);
         NodeData GetNodeData(int id);
         void RemoveAllNodeDataForNode(string nodeId);

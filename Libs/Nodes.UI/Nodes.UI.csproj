@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ChartData.cs" />
     <Compile Include="Nodes\UiAudioNode.cs" />
+    <Compile Include="Nodes\UiTimerNode.cs" />
     <Compile Include="Nodes\UiVoiceGoogleNode.cs" />
     <Compile Include="Nodes\UiVoiceYandexNode.cs" />
     <Compile Include="UiNodesEngine.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Nodes\UiProgressNode.cs" />
     <Compile Include="Nodes\UiLabelNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UITimerTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nodes\Nodes.csproj">

@@ -19,7 +19,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
     {
         private int writeInterval = 5000;
         private Timer updateDbTimer = new Timer();
-        private List<NodeData> cachedData = new List<NodeData>();
+        private List<NodeData> cachedNewData = new List<NodeData>();
+        private List<NodeData> cachedUpdatedData = new List<NodeData>();
         private Dictionary<string, int?> maxRecords = new Dictionary<string, int?>(); //nodeId,maxRecords
 
         public event LogEventHandler OnLogInfo;
@@ -59,7 +60,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             updateDbTimer.Stop();
             try
             {
-                int count = cachedData.Count;
+                int count = cachedNewData.Count;
                 if (count == 0)
                 {
                     updateDbTimer.Start();
@@ -90,8 +91,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
         {
             int inserts = 0;
 
-            List<NodeData> data = cachedData;
-            cachedData = new List<NodeData>();
+            //-------WRITE NEW---------
+            List<NodeData> data = cachedNewData;
+            cachedNewData = new List<NodeData>();
 
             while (data.Any())
             {
@@ -130,30 +132,48 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 inserts += dataForNode.Count;
             }
 
+            //-------WRITE UPDATED---------
+            List<NodeData> updated = cachedUpdatedData;
+            cachedUpdatedData = new List<NodeData>();
+            inserts += updated.Count;
+
+            foreach (var nodeData in updated)
+            {
+                NodeData old = db.NodesData.FirstOrDefault(x => x.Id == nodeData.Id);
+                old.Value = nodeData.Value;
+                old.DateTime = nodeData.DateTime;
+            }
+
+
             db.SaveChanges();
             return inserts;
         }
 
-        public void AddNodeData(NodeData data, int? maxDbRecords)
+        public void AddNodeData(NodeData nodeData, int? maxDbRecords)
         {
             if (writeInterval != 0)
             {
-                maxRecords[data.NodeId] = maxDbRecords;
-                cachedData.Add(data);
+                maxRecords[nodeData.NodeId] = maxDbRecords;
+                cachedNewData.Add(nodeData);
                 return;
             }
 
-            db.NodesData.Add(data);
+            AddNodeDataImmediately(nodeData, maxDbRecords);
+        }
+
+        public int AddNodeDataImmediately(NodeData nodeData, int? maxDbRecords = null)
+        {
+            db.NodesData.Add(nodeData);
 
             //remove extra data
             if (maxDbRecords != null)
             {
-                int count = db.NodesData.Count(x => x.NodeId == data.NodeId);
+                int count = db.NodesData.Count(x => x.NodeId == nodeData.NodeId);
                 int more = count - maxDbRecords.Value + 1;
                 if (more > 0)
                 {
                     List<NodeData> removeList = db.NodesData
-                        .Where(x => x.NodeId == data.NodeId)
+                        .Where(x => x.NodeId == nodeData.NodeId)
                         .OrderBy(x => x.DateTime)
                         .Take(more)
                         .ToList();
@@ -162,8 +182,35 @@ namespace MyNetSensors.Repositories.EF.SQLite
             }
 
             db.SaveChanges();
+            return nodeData.Id;
         }
 
+        public void UpdateNodeData(NodeData nodeData)
+        {
+            if (writeInterval != 0)
+            {
+                cachedUpdatedData.RemoveAll(x => x.Id == nodeData.Id);
+                cachedUpdatedData.Add(nodeData);
+                return;
+            }
+
+            UpdateNodeDataImmediately(nodeData);
+        }
+
+        public void UpdateNodeDataImmediately(NodeData nodeData)
+        {
+            NodeData old = GetNodeData(nodeData.Id);
+            if (old == null)
+            {
+                LogError("Cant update node data. Does not exist.");
+                return;
+            }
+
+            old.Value = nodeData.Value;
+            old.DateTime = nodeData.DateTime;
+            //db.Update(old);
+            db.SaveChanges();
+        }
 
 
         public List<NodeData> GetAllNodeDataForNode(string nodeId)
@@ -178,7 +225,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void RemoveAllNodeDataForNode(string nodeId)
         {
-            cachedData.RemoveAll(x => x.NodeId == nodeId);
+            cachedNewData.RemoveAll(x => x.NodeId == nodeId);
+            cachedUpdatedData.RemoveAll(x => x.NodeId == nodeId);
 
             db.RemoveRange(db.NodesData.Where(x => x.NodeId == nodeId));
             db.SaveChanges();
@@ -196,7 +244,8 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         public void RemoveAllNodesData()
         {
-            cachedData.Clear();
+            cachedNewData.Clear();
+            cachedUpdatedData.Clear();
 
             db.NodesData.RemoveRange(db.NodesData);
             db.SaveChanges();
