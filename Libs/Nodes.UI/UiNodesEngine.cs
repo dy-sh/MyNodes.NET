@@ -17,20 +17,15 @@ namespace MyNetSensors.Nodes
         public event UiNodeEventHandler OnUiNodeUpdated;
 
         private static NodesEngine engine;
-
-        public INodesStatesRepository statesDb;
-
+        
 
 
-        public UiNodesEngine(NodesEngine engine, INodesStatesRepository statesDb = null)
+        public UiNodesEngine(NodesEngine engine)
         {
-            this.statesDb = statesDb;
-
             UiNodesEngine.engine = engine;
             engine.OnNewNode += OnNewNode;
             engine.OnRemoveNode += OnRemoveNode;
             engine.OnNodeUpdated += OnNodeUpdated;
-            engine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
 
             List<UiNode> nodes = engine.GetNodes()
                 .OfType<UiNode>()
@@ -39,13 +34,8 @@ namespace MyNetSensors.Nodes
             foreach (var node in nodes)
                 node.OnAddToUiEngine(this);
         }
-
-        private void OnRemoveAllNodesAndLinks()
-        {
-            statesDb?.RemoveAllStates();
-        }
         
-
+        
         private void OnNodeUpdated(Node node)
         {
             if (node is UiNode)

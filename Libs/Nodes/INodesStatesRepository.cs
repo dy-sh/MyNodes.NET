@@ -15,7 +15,7 @@ namespace MyNetSensors.Nodes
         event LogEventHandler OnLogError;
         void SetWriteInterval(int ms);
 
-        void AddState(NodeState state,int maxStatesCount);
+        void AddState(NodeState state, int? maxStatesCount = null);
         List<NodeState> GetStatesForNode(string nodeId);
         void RemoveStatesForNode(string nodeId);
         void RemoveAllStates();

@@ -305,7 +305,7 @@ namespace MyNetSensors.WebController.Code
             if (Boolean.Parse(configuration["Develop:GenerateNodesJsListFileOnStart"]))
                 GenerateNodesJsListFile();
 
-            nodesEngine = new NodesEngine(nodesDb);
+            nodesEngine = new NodesEngine(nodesDb, nodesStatesDb);
             nodesEngine.SetUpdateInterval(nodesEngineConfig.UpdateInterval);
             nodesEngine.OnLogEngineInfo += logs.AddNodesEngineInfo;
             nodesEngine.OnLogEngineError += logs.AddNodesEngineError;
@@ -317,7 +317,7 @@ namespace MyNetSensors.WebController.Code
             else
                 mySensorsNodesEngine = null;
 
-            uiNodesEngine = new UiNodesEngine(nodesEngine, nodesStatesDb);
+            uiNodesEngine = new UiNodesEngine(nodesEngine);
             uiTimerNodesEngine = new UITimerNodesEngine(nodesEngine, uiTimerNodesDb);
 
             if (!nodesEngineConfig.Enable) return;

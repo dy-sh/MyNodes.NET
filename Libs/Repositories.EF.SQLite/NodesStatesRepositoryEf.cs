@@ -20,7 +20,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
         private int writeInterval = 5000;
         private Timer updateDbTimer = new Timer();
         private List<NodeState> cachedStates = new List<NodeState>();
-        private Dictionary<string, int> maxStates = new Dictionary<string, int>(); //nodeId,maxStates
+        private Dictionary<string, int?> maxStates = new Dictionary<string, int?>(); //nodeId,maxStates
 
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
@@ -88,7 +88,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
         private int WriteCached()
         {
-            int inserts=0;
+            int inserts = 0;
 
             List<NodeState> states = cachedStates;
             cachedStates = new List<NodeState>();
@@ -99,38 +99,42 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 List<NodeState> statesForNode = states.Where(x => x.NodeId == nodeId).ToList();
                 states.RemoveAll(x => x.NodeId == nodeId);
 
-                int dbCount = historyDb.NodesStates.Count(x => x.NodeId == nodeId);
-
-                int allCount = dbCount + statesForNode.Count;
-                int max = maxStates[nodeId];
-                int more = allCount - max;
-                if (more > 0)
+                //remove extra data
+                if (maxStates[nodeId] != null)
                 {
-                    int removeFromDb = allCount - max;
-                    if (removeFromDb > 0)
+                    int dbCount = historyDb.NodesStates.Count(x => x.NodeId == nodeId);
+
+                    int allCount = dbCount + statesForNode.Count;
+                    int max = maxStates[nodeId].Value;
+                    int more = allCount - max;
+                    if (more > 0)
                     {
-                        List<NodeState> removeList = historyDb.NodesStates
-                            .Where(x => x.NodeId == nodeId)
-                            .OrderBy(x=>x.DateTime)
-                            .Take(more)
-                            .ToList();
-                        historyDb.NodesStates.RemoveRange(removeList);
+                        int removeFromDb = allCount - max;
+                        if (removeFromDb > 0)
+                        {
+                            List<NodeState> removeList = historyDb.NodesStates
+                                .Where(x => x.NodeId == nodeId)
+                                .OrderBy(x => x.DateTime)
+                                .Take(more)
+                                .ToList();
+                            historyDb.NodesStates.RemoveRange(removeList);
+                        }
+
+                        int removeFromCached = statesForNode.Count - max;
+                        if (removeFromCached > 0)
+                            statesForNode.RemoveRange(0, removeFromCached);
                     }
-      
-                    int removeFromCached = statesForNode.Count - max;
-                    if (removeFromCached > 0)
-                        statesForNode.RemoveRange(0, removeFromCached);
                 }
 
                 historyDb.NodesStates.AddRange(statesForNode);
                 inserts += statesForNode.Count;
-
-                historyDb.SaveChanges();
             }
+
+            historyDb.SaveChanges();
             return inserts;
         }
 
-        public void AddState(NodeState state, int maxStatesCount)
+        public void AddState(NodeState state, int? maxStatesCount)
         {
             if (writeInterval != 0)
             {
@@ -141,22 +145,26 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
             historyDb.NodesStates.Add(state);
 
-            int count = historyDb.NodesStates.Count(x => x.NodeId == state.NodeId);
-
-            int more = count - maxStatesCount + 1;
-
-            if (more > 0)
+            //remove extra data
+            if (maxStatesCount != null)
             {
-                List<NodeState> removeList = historyDb.NodesStates
-                            .Where(x => x.NodeId == state.NodeId)
-                            .OrderBy(x=>x.DateTime)
-                            .Take(more)
-                            .ToList();
-                historyDb.NodesStates.RemoveRange(removeList);
+                int count = historyDb.NodesStates.Count(x => x.NodeId == state.NodeId);
+                int more = count - maxStatesCount.Value + 1;
+                if (more > 0)
+                {
+                    List<NodeState> removeList = historyDb.NodesStates
+                        .Where(x => x.NodeId == state.NodeId)
+                        .OrderBy(x => x.DateTime)
+                        .Take(more)
+                        .ToList();
+                    historyDb.NodesStates.RemoveRange(removeList);
+                }
             }
 
             historyDb.SaveChanges();
         }
+
+
 
         public List<NodeState> GetStatesForNode(string nodeId)
         {

@@ -191,7 +191,7 @@ namespace MyNetSensors.Nodes
 
         public void RemoveInput(Input input)
         {
-            if (input==null || !Inputs.Contains(input))
+            if (input == null || !Inputs.Contains(input))
             {
                 LogError("Can`t remove input. Does not exist.");
                 return;
@@ -206,7 +206,7 @@ namespace MyNetSensors.Nodes
 
         public void RemoveOutput(Output output)
         {
-            if (output==null || !Outputs.Contains(output))
+            if (output == null || !Outputs.Contains(output))
             {
                 LogError("Can`t remove output. Does not exist.");
                 return;
@@ -340,6 +340,27 @@ namespace MyNetSensors.Nodes
         public NodeOptions GetNodeOptions()
         {
             return options;
+        }
+
+
+
+        public void AddNodeData(string data, int? maxDbRecords = null)
+        {
+            engine?.statesDb?.AddState(new NodeState(Id, data), maxDbRecords);
+        }
+
+        public List<NodeState> GetAllNodeData()
+        {
+            return engine?
+                .statesDb?
+                .GetStatesForNode(Id)?
+                .OrderBy(x=>x.DateTime)
+                .ToList();
+        }
+
+        public void RemoveAllNodeData()
+        {
+            engine?.statesDb?.RemoveStatesForNode(Id);
         }
     }
 

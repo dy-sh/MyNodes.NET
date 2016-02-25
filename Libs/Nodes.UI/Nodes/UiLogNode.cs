@@ -42,7 +42,7 @@ namespace MyNetSensors.Nodes
             UpdateMe();
 
             if (Settings["WriteInDatabase"].Value == "true")
-                uiEngine?.statesDb?.AddState(new NodeState(Id, input.Value), max);
+                AddNodeData(input.Value, max);
         }
 
 
@@ -50,7 +50,7 @@ namespace MyNetSensors.Nodes
         private void RemoveStates()
         {
             log.Clear();
-            uiEngine?.statesDb?.RemoveStatesForNode(Id);
+            RemoveAllNodeData();
         }
 
         public override string GetValue(string name)
@@ -61,30 +61,26 @@ namespace MyNetSensors.Nodes
             return JsonConvert.SerializeObject(log);
         }
 
-
-        public override void OnAddToUiEngine(UiNodesEngine uiEngine)
+        public override bool OnAddToEngine(NodesEngine engine)
         {
-            base.OnAddToUiEngine(uiEngine);
-            GetStatesFromRepository();
+            this.engine = engine;
+
+            if (Settings["WriteInDatabase"].Value == "true")
+                GetStatesFromRepository();
+
+            return base.OnAddToEngine(engine);
         }
 
         private void GetStatesFromRepository()
         {
-            if (uiEngine?.statesDb == null || Settings["WriteInDatabase"].Value != "true")
-                return;
-
-            List<NodeState> states = uiEngine?.statesDb?.GetStatesForNode(Id);
+            List<NodeState> states = GetAllNodeData();
             log = states ?? new List<NodeState>();
-            if (log != null && log.Any())
-            {
-                LastRecord = log.OrderBy(x => x.DateTime).Last();
-            }
         }
 
         public override void OnRemove()
         {
+            RemoveAllNodeData();
             base.OnRemove();
-            uiEngine?.statesDb?.RemoveStatesForNode(Id);
         }
 
         public override bool SetValues(Dictionary<string, string> values)
@@ -95,13 +91,32 @@ namespace MyNetSensors.Nodes
             return true;
         }
 
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            if (data["WriteInDatabase"] == "false"
+                && Settings["WriteInDatabase"].Value == "true")
+            {
+                log = new List<NodeState>();
+                LastRecord = null;
+            }
+            else if (data["WriteInDatabase"] == "true"
+                && Settings["WriteInDatabase"].Value == "false")
+            {
+                GetStatesFromRepository();
+            }
+
+            return base.SetSettings(data);
+        }
+
 
         public override string GetNodeDescription()
         {
             return "This is a UI node. It displays a log on the dashboard. <br/>" +
                    "The log displays all the values that it receives. <br/>" +
-                   "It is very convenient to use for debugging your system or for the monitoring." +
-                   "You can enable writing log into the database in the settings of the node. ";
+                   "It is very convenient to use for debugging your system or for the monitoring. <br/>" +
+                   "You can enable writing log into the database in the settings of the node. <br/>" +
+                   "You can also specify the maximum number of records in the database. " +
+                   "Old records will be deleted automatically.";
         }
     }
 }
