@@ -78,7 +78,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 float messagesPerSec = (float)inserts / (float)elapsed * 1000;
                 LogInfo($"Writing nodes data: {elapsed} ms ({inserts} inserts, {(int)messagesPerSec} inserts/sec)");
             }
-            catch (Exception ex)
+            catch 
             {
 
             }

@@ -21,7 +21,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
     public class MySensorsRepositoryEf : IMySensorsRepository
     {
-        private string connectionString;
 
         //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
@@ -196,7 +195,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 Sensor sensor = db.Sensors.FirstOrDefault(x => x.Id == id);
                 return sensor;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }

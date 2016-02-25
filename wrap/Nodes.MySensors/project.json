@@ -8,8 +8,8 @@
         "pdb": "../../Libs/Nodes.MySensors/obj/{configuration}/Nodes.MySensors.pdb"
       },
       "dependencies": {
-        "Nodes": "1.0.0-*",
-        "Gateways.MySensors": "1.0.0-*"
+        "Gateways.MySensors": "1.0.0-*",
+        "Nodes": "1.0.0-*"
       }
     }
   }

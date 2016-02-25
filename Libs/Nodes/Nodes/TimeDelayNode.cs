@@ -27,7 +27,6 @@ namespace MyNetSensors.Nodes
 
         private readonly int DEFAULT_INTERVAL = 1000;
 
-        private bool enabled;
 
         private double interval;
 

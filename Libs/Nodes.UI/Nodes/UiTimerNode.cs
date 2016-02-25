@@ -19,13 +19,8 @@ namespace MyNetSensors.Nodes
         public UiTimerNode() : base("UI", "Timer")
         {
             AddOutput();
-            GetTasksFromDB();
         }
 
-        public void SetState(string state)
-        {
-            Outputs[0].Value = state;
-        }
 
 
         #region ---------------- Tasks Repository -------------------------
@@ -66,12 +61,26 @@ namespace MyNetSensors.Nodes
 
         #endregion
 
+        public override bool OnAddToEngine(NodesEngine engine)
+        {
+            this.engine = engine;
+
+            GetTasksFromDB();
+
+            return base.OnAddToEngine(engine);
+        }
+
         public override void OnRemove()
         {
             RemoveAllNodeData();
             base.OnRemove();
         }
 
+
+        public void SetState(string state)
+        {
+            Outputs[0].Value = state;
+        }
 
 
         //used to abort UpdateTasks() method

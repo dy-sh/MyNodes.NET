@@ -20,31 +20,13 @@
     <DnxInvisibleContent Include="package.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary2\ClassLibrary2.csproj" />
-    <ProjectReference Include="..\GatewayRepository\GatewayRepository.csproj" />
-    <ProjectReference Include="..\Gateway\Gateway.csproj" />
     <ProjectReference Include="..\Libs\Gateways.MySensors\Gateways.MySensors.csproj" />
-    <ProjectReference Include="..\Libs\LogicalNodesRepositoryDappers\LogicalNodesRepositoryDappers.csproj" />
     <ProjectReference Include="..\Libs\Nodes.MySensors\Nodes.MySensors.csproj" />
     <ProjectReference Include="..\Libs\Nodes.UI\Nodes.UI.csproj" />
-    <ProjectReference Include="..\Libs\NodesTasks\NodesTasks.csproj" />
     <ProjectReference Include="..\Libs\Nodes\Nodes.csproj" />
     <ProjectReference Include="..\Libs\Repositories.Dapper\Repositories.Dapper.csproj" />
     <ProjectReference Include="..\Libs\Repositories.EF.SQLite\Repositories.EF.SQLite.csproj" />
-    <ProjectReference Include="..\Libs\SerialController\SerialControl.csproj" />
-    <ProjectReference Include="..\Libs\SerialControl\SerialControl.csproj" />
-    <ProjectReference Include="..\Libs\UITimerNodes\UITimerNodes.csproj" />
     <ProjectReference Include="..\Libs\Users\Users.csproj" />
-    <ProjectReference Include="..\MyNetSensors.GatewayRepository\MyNetSensors.GatewayRepository.csproj" />
-    <ProjectReference Include="..\MyNetSensors.Gateway\MyNetSensors.Gateway.csproj" />
-    <ProjectReference Include="..\MyNetSensors.NodesLinks\MyNetSensors.NodesLinks.csproj" />
-    <ProjectReference Include="..\MyNetSensors.NodeTasks\MyNetSensors.NodeTasks.csproj" />
-    <ProjectReference Include="..\MyNetSensors.SensorsHistoryRepository\MyNetSensors.SensorsHistoryRepository.csproj" />
-    <ProjectReference Include="..\NodesEditor\NodesEditor.csproj" />
-    <ProjectReference Include="..\NodesLinks\NodesLinks.csproj" />
-    <ProjectReference Include="..\NodeTasks\NodeTasks.csproj" />
-    <ProjectReference Include="..\SensorsHistoryRepository\SensorsHistoryRepository.csproj" />
-    <ProjectReference Include="..\SerialController\SerialController.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

@@ -219,7 +219,7 @@ namespace MyNetSensors.Nodes
                 if (changedInputsStack.Contains(input))
                 changedInputsStack.Remove(input);
             }
-            catch (ArgumentOutOfRangeException e){ }
+            catch { }
 
         }
 

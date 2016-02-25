@@ -190,7 +190,7 @@ namespace MyNetSensors.Gateways.MySensors
 
                 OnUnexpectedlyDisconnected?.Invoke();
                 if (reconnectIfDisconnected)
-                    Connect();
+                    Connect().Wait();
             }
         }
 
@@ -479,7 +479,6 @@ namespace MyNetSensors.Gateways.MySensors
             Node node = GetNode(mes.nodeId);
 
             Sensor sensor = node.GetSensor(mes.sensorId);
-            bool isNewSensor = false;
 
             if (sensor == null)
             {

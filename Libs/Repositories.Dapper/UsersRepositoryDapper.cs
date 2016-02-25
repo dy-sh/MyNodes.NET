@@ -56,7 +56,7 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [ClaimsJson] [nvarchar](max) NULL
                         ) ON [PRIMARY] ");
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }

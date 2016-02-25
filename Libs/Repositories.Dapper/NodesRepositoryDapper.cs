@@ -70,7 +70,7 @@ namespace MyNetSensors.Repositories.Dapper
                 float messagesPerSec = (float)count / (float)elapsed * 1000;
                 LogInfo($"Writing nodes: {elapsed} ms ({count} inserts, {(int)messagesPerSec} inserts/sec)");
             }
-            catch (Exception ex)
+            catch
             {
 
             }

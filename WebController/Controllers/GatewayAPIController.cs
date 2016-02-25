@@ -117,7 +117,7 @@ namespace MyNetSensors.WebController.Controllers
 
         [Authorize(UserClaims.EditorEditor)]
 
-        public async Task<bool> RemoveAllNodes()
+        public bool RemoveAllNodes()
         {
             gateway.RemoveAllNodes();
             return true;

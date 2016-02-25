@@ -21,7 +21,6 @@ namespace MyNetSensors.Repositories.EF.SQLite
 
     public class MySensorsMessagesRepositoryEf : IMySensorsMessagesRepository
     {
-        private string connectionString;
 
         //if writeInterval==0, every message will be instantly writing to DB
         //and this will increase the reliability of the system, 
@@ -135,7 +134,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 float messagesPerSec = (float) messages/(float) elapsed*1000;
                 LogInfo($"Writing gateway messages: {elapsed} ms ({messages} inserts, {(int) messagesPerSec} inserts/sec)");
             }
-            catch(Exception ex)
+            catch
             {
                 
             }

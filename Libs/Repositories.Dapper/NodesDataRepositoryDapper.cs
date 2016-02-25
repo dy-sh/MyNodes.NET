@@ -74,7 +74,7 @@ namespace MyNetSensors.Repositories.Dapper
 	                    [Value] [nvarchar](max) NULL 
                         ) ON [PRIMARY] ");
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }
@@ -103,7 +103,7 @@ namespace MyNetSensors.Repositories.Dapper
                 float messagesPerSec = (float)inserts / (float)elapsed * 1000;
                 LogInfo($"Writing nodes data: {elapsed} ms ({inserts} inserts, {(int)messagesPerSec} inserts/sec)");
             }
-            catch (Exception ex)
+            catch
             {
 
             }

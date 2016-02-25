@@ -242,7 +242,7 @@ namespace MyNetSensors.WebController.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(NewUserModel model)
+        public IActionResult Add(NewUserModel model)
         {
             if (db == null)
                 return View("Error", NO_DB_ERROR);
@@ -288,7 +288,7 @@ namespace MyNetSensors.WebController.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(User model)
+        public IActionResult Edit(User model)
         {
             if (db == null)
                 return View("Error", NO_DB_ERROR);
@@ -328,7 +328,7 @@ namespace MyNetSensors.WebController.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Permissions(UserPermissions model,int userId)
+        public IActionResult Permissions(UserPermissions model,int userId)
         {
             if (db == null)
                 return View("Error", NO_DB_ERROR);
