@@ -10,7 +10,7 @@ namespace MyNetSensors.Nodes
         public ChartData(DateTime time, string value)
         {
             x = $"{time:yyyy-MM-dd HH:mm:ss.fff}";
-            y = value == "0" ? "-0.01" : value; //-0.01 to set zero visible
+            y = value; //"0" ? "-0.01" : value;  to set zero visible
         }
     }
 }

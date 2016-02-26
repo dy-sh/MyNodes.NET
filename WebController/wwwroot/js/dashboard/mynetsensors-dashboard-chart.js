@@ -9,7 +9,7 @@ var chartTemplate = Handlebars.compile($('#chartTemplate').html());
 
 var elementsFadeTime = 300;
 
-var CHART_HEIGHT = "200px";
+var CHART_HEIGHT = "190px";
 
 
 
@@ -47,14 +47,21 @@ function createChart(node) {
         showAll(node.Id);
     });
 
-
+    $('#chart-style-' + node.Id).click(function () {
+        changeStyle(node.Id);
+    });
 
 
 
     container[node.Id] = document.getElementById('chart-body-' + node.Id);
 
     autoScroll[node.Id] = "continuous";
-    chartType[node.Id] = "bars";
+
+    if (node.Style == null)
+        chartType[node.Id] = "bars";
+    else
+        chartType[node.Id] = node.Style;
+
 
     options[node.Id] = {
         height: CHART_HEIGHT,
@@ -66,6 +73,7 @@ function createChart(node) {
     dataset[node.Id] = new vis.DataSet();
     graph2d[node.Id] = new vis.Graph2d(container[node.Id], dataset[node.Id], options[node.Id]);
 
+    updateChartType(node.Id);
 
 
 
@@ -75,7 +83,7 @@ function createChart(node) {
         data: { 'nodeId': node.Id, 'name': "chartData" },
         dataType: "json",
         success: function (chartData) {
-            dataset[node.Id].clear();
+           // dataset[node.Id].clear();
             if (chartData != null) {
                 addChartData(chartData, node.Id, node.Settings.MaxRecords.Value);
 
@@ -101,6 +109,22 @@ function addChartData(chartData, nodeId, maxRecords) {
         lastChartData[nodeId] = chartData[chartData.length - 1].x;
     else
         lastChartData[nodeId] = chartData.x;
+
+
+    //var options = {
+    //    dataAxis: {
+    //        left: {
+    //            range: {
+    //                min: Number(dataset[nodeId].min('y').y),
+    //                max: Number(dataset[nodeId].max('y').y)
+    //            }
+    //        }
+    //    }
+    //};
+    //graph2d[nodeId].setOptions(options);
+
+    //graph2d[nodeId].linegraph.options.dataAxis.left.range.min = dataset[nodeId].min('y').y;
+    //graph2d[nodeId].linegraph.options.dataAxis.left.range.max = dataset[nodeId].max('y').y;
 
     var unwanted = dataset[nodeId].length - maxRecords;
     if (unwanted > 0) {
@@ -228,9 +252,9 @@ function updateChartType(nodeId) {
 
 
     //setOptions cause a bug when switching to dots!!!
-    //graph2d.setOptions(options);
+    graph2d[nodeId].setOptions(options[nodeId]);
     //thats why we need redraw:
-    redrawChart(options);
+    //redrawChart(options);
 
 
 }
@@ -285,4 +309,38 @@ function showAll(nodeId) {
         end: end
     };
     graph2d[nodeId].setWindow(window);
+}
+
+
+function changeStyle(nodeId) {
+    switch (chartType[nodeId]) {
+        case 'bars':
+            chartType[nodeId] = 'splines';
+            break;
+        case 'splines':
+            chartType[nodeId] = 'shadedsplines';
+            break;
+        case 'shadedsplines':
+            chartType[nodeId] = 'lines';
+            break;
+        case 'lines':
+            chartType[nodeId] = 'shadedlines';
+            break;
+        case 'shadedlines':
+            chartType[nodeId] = 'dots';
+            break;
+        case 'dots':
+            chartType[nodeId] = 'bars';
+            break;
+        default:
+            break;
+    }
+
+    updateChartType(nodeId);
+
+    $.ajax({
+        url: "/DashboardAPI/SetValues/",
+        type: "POST",
+        data: { 'nodeId': nodeId, 'values': { Style: chartType[nodeId] } }
+    });
 }

@@ -14,6 +14,7 @@ namespace MyNetSensors.Nodes
     public class UiChartNode : UiNode
     {
         public ChartData LastRecord { get; set; }
+        public string Style { get; set; }
 
         private List<NodeData> log;
 
@@ -126,6 +127,12 @@ namespace MyNetSensors.Nodes
         {
             if (values.ContainsKey("Clear"))
                 RemoveStates();
+
+            if (values.ContainsKey("Style"))
+            {
+                Style = values["Style"];
+                UpdateMeInDb();
+            }
 
             return true;
         }

@@ -169,6 +169,7 @@ input[type="checkbox"].input-validation-error {
 
 .vis-timeline {
     border: 0px;
+    font-size: 11px;
 }
 
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-minor {
@@ -178,3 +179,5 @@ input[type="checkbox"].input-validation-error {
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-major {
     border-color: #e5e5e5;
 }
+
+
