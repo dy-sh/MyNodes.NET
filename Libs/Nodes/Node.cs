@@ -377,6 +377,11 @@ namespace MyNetSensors.Nodes
                 .ToList();
         }
 
+        public NodeData GetNodeData(int id)
+        {
+            return engine?.dataDb?.GetNodeData(id);
+        }
+
         public void RemoveAllNodeData()
         {
             engine?.dataDb?.RemoveAllNodeDataForNode(Id);
