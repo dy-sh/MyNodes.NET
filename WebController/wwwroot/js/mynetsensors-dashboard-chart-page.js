@@ -18,7 +18,7 @@ var dataset = new vis.DataSet();
 var options;
 var graph2d = new vis.Graph2d(container, dataset, groups, options);
 
-
+//var nodeId - initialized from ViewBag
 
 
 
@@ -38,7 +38,7 @@ $(function () {
     
 
     clientsHub.client.OnUiNodeUpdated = function (node) {
-        if (node.Id == nodeId)//nodeId initialized from ViewBag
+        if (node.Id == nodeId)
             updateChart(node);
     };
 
@@ -233,6 +233,12 @@ function addChartData(chartData, maxRecords) {
 function onCharTypeChange() {
     charType = $("#charttype").dropdown('get value')[0];
     updateCharType();
+
+    $.ajax({
+        url: "/DashboardAPI/SetValues/",
+        type: "POST",
+        data: { 'nodeId': nodeId, 'values': { Style: charType } }
+    });
 }
 
 function updateCharType() {
@@ -295,9 +301,9 @@ function updateCharType() {
 
 
     //setOptions cause a bug when switching to dots!!!
-    //graph2d.setOptions(options);
+    graph2d.setOptions(options);
     //thats why we need redraw:
-    redrawChart(options);
+    //redrawChart(options);
 
 
 }

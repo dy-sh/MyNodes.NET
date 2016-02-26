@@ -78,16 +78,20 @@ namespace MyNetSensors.WebController.Controllers
             if (engine == null)
                 return HttpBadRequest();
 
-            UiChartNode chart = engine.GetUINode(id) as UiChartNode;
-            if (chart == null)
+            UiChartNode node = engine.GetUINode(id) as UiChartNode;
+            if (node == null)
                 return new HttpNotFoundResult();
 
             ViewBag.autoscroll = autoscroll;
+
+            if (style == null)
+                style = node.Style;
+
             ViewBag.style = style;
             ViewBag.start = start ?? "0";
             ViewBag.end = end ?? "0";
 
-            return View(chart);
+            return View(node);
         }
     }
 }
