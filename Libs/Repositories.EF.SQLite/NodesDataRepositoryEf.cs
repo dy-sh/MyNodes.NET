@@ -60,7 +60,7 @@ namespace MyNetSensors.Repositories.EF.SQLite
             updateDbTimer.Stop();
             try
             {
-                int count = cachedNewData.Count;
+                int count = cachedNewData.Count + cachedUpdatedData.Count;
                 if (count == 0)
                 {
                     updateDbTimer.Start();
@@ -78,9 +78,9 @@ namespace MyNetSensors.Repositories.EF.SQLite
                 float messagesPerSec = (float)inserts / (float)elapsed * 1000;
                 LogInfo($"Writing nodes data: {elapsed} ms ({inserts} inserts, {(int)messagesPerSec} inserts/sec)");
             }
-            catch 
+            catch (Exception ex)
             {
-
+                LogError("Failed to write node data. " + ex.Message);
             }
 
             updateDbTimer.Start();
@@ -92,58 +92,63 @@ namespace MyNetSensors.Repositories.EF.SQLite
             int inserts = 0;
 
             //-------WRITE NEW---------
-            List<NodeData> data = cachedNewData;
-            cachedNewData = new List<NodeData>();
-
-            while (data.Any())
+            if (cachedNewData.Count > 0)
             {
-                string nodeId = data.First().NodeId;
-                List<NodeData> dataForNode = data.Where(x => x.NodeId == nodeId).ToList();
-                data.RemoveAll(x => x.NodeId == nodeId);
+                List<NodeData> data = cachedNewData;
+                cachedNewData = new List<NodeData>();
 
-                //remove extra data
-                if (maxRecords[nodeId] != null)
+                while (data.Any())
                 {
-                    int dbCount = db.NodesData.Count(x => x.NodeId == nodeId);
+                    string nodeId = data.First().NodeId;
+                    List<NodeData> dataForNode = data.Where(x => x.NodeId == nodeId).ToList();
+                    data.RemoveAll(x => x.NodeId == nodeId);
 
-                    int allCount = dbCount + dataForNode.Count;
-                    int max = maxRecords[nodeId].Value;
-                    int more = allCount - max;
-                    if (more > 0)
+                    //remove extra data
+                    if (maxRecords[nodeId] != null)
                     {
-                        int removeFromDb = allCount - max;
-                        if (removeFromDb > 0)
+                        int dbCount = db.NodesData.Count(x => x.NodeId == nodeId);
+
+                        int allCount = dbCount + dataForNode.Count;
+                        int max = maxRecords[nodeId].Value;
+                        int more = allCount - max;
+                        if (more > 0)
                         {
-                            List<NodeData> removeList = db.NodesData
-                                .Where(x => x.NodeId == nodeId)
-                                .OrderBy(x => x.DateTime)
-                                .Take(more)
-                                .ToList();
-                            db.NodesData.RemoveRange(removeList);
+                            int removeFromDb = allCount - max;
+                            if (removeFromDb > 0)
+                            {
+                                List<NodeData> removeList = db.NodesData
+                                    .Where(x => x.NodeId == nodeId)
+                                    .OrderBy(x => x.DateTime)
+                                    .Take(more)
+                                    .ToList();
+                                db.NodesData.RemoveRange(removeList);
+                            }
+
+                            int removeFromCached = dataForNode.Count - max;
+                            if (removeFromCached > 0)
+                                dataForNode.RemoveRange(0, removeFromCached);
                         }
-
-                        int removeFromCached = dataForNode.Count - max;
-                        if (removeFromCached > 0)
-                            dataForNode.RemoveRange(0, removeFromCached);
                     }
-                }
 
-                db.NodesData.AddRange(dataForNode);
-                inserts += dataForNode.Count;
+                    db.NodesData.AddRange(dataForNode);
+                    inserts += dataForNode.Count;
+                }
             }
 
             //-------WRITE UPDATED---------
-            List<NodeData> updated = cachedUpdatedData;
-            cachedUpdatedData = new List<NodeData>();
-            inserts += updated.Count;
-
-            foreach (var nodeData in updated)
+            if (cachedUpdatedData.Count > 0)
             {
-                NodeData old = db.NodesData.FirstOrDefault(x => x.Id == nodeData.Id);
-                old.Value = nodeData.Value;
-                old.DateTime = nodeData.DateTime;
-            }
+                List<NodeData> updated = cachedUpdatedData;
+                cachedUpdatedData = new List<NodeData>();
+                inserts += updated.Count;
 
+                foreach (var nodeData in updated)
+                {
+                    NodeData old = db.NodesData.FirstOrDefault(x => x.Id == nodeData.Id);
+                    old.Value = nodeData.Value;
+                    old.DateTime = nodeData.DateTime;
+                }
+            }
 
             db.SaveChanges();
             return inserts;

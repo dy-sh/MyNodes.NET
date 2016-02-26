@@ -1063,7 +1063,7 @@
             function UiTimerNode() {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.UiTimerNode',
-                    'Assembly': 'Nodes.UITimer'
+                    'Assembly': 'Nodes.UI'
                 };
             }
             UiTimerNode.prototype.getExtraMenuOptions = function(graphcanvas)

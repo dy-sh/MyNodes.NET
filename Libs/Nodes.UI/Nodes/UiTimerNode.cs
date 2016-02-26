@@ -31,6 +31,7 @@ namespace MyNetSensors.Nodes
             foreach (var nodeData in data)
             {
                 UITimerTask task = JsonConvert.DeserializeObject<UITimerTask>(nodeData.Value);
+                task.Id = nodeData.Id;
                 tasks.Add(task);
             }
         }
@@ -267,7 +268,7 @@ namespace MyNetSensors.Nodes
             function UiTimerNode() {
                 this.properties = {
                     'ObjectType': 'MyNetSensors.Nodes.UiTimerNode',
-                    'Assembly': 'Nodes.UITimer'
+                    'Assembly': 'Nodes.UI'
                 };
             }
             UiTimerNode.prototype.getExtraMenuOptions = function(graphcanvas)

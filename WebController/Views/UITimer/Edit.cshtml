@@ -14,7 +14,7 @@
     <h2>@ViewBag.Title</h2>
     <div>
         < <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-        < <a asp-controller="Tasks" asp-action="Tasks">Tasks</a>
+        < <a asp-controller="UITimer" asp-action="Tasks" asp-route-id="@Model.NodeId">Tasks</a>
     </div>
     <div class="ui divider"></div>
 
@@ -28,9 +28,10 @@
                 <form asp-action="Edit" asp-anti-forgery="true" class="ui form">
                     <div class="ui attached segment">
 
+                        <input type="hidden" id="Id" name="Id" value=@Model.Id />
+                        <input type="hidden" id="TaskId" name="TaskId" value=@Model.Id />
                         <input type="hidden" asp-for="NodeId" />
                         <input type="hidden" asp-for="Enabled" />
-                        <input type="hidden" asp-for="Id" />
 
                         <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
 

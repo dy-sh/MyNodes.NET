@@ -117,11 +117,12 @@ namespace MyNetSensors.WebController.Controllers
         [Authorize(UserClaims.DashboardEditor)]
 
         [HttpPost]
-        public ActionResult Edit(UITimerTask task)
+        public ActionResult Edit(UITimerTask task,int TaskId)
         {
             if (engine == null)
                 return View("Error", ERROR_MESSAGE);
 
+            task.Id = TaskId; //pasing id dont work!
             UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
             if (node == null)
                 return HttpNotFound();

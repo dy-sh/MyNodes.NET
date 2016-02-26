@@ -48,35 +48,35 @@
                         {
                             if (task.Enabled)
                             {
-                                <a asp-action="Disable" class="ui button" asp-route-id="@task.Id"><b>Disable</b></a>
+                                <a asp-action="Disable" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Disable</b></a>
                             }
                             else
                             {
-                                <a asp-action="Enable" class="ui button" asp-route-id="@task.Id"><b>Enable</b></a>
+                                <a asp-action="Enable" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Enable</b></a>
                             }
 
                             if (task.IsRepeating)
                             {
-                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Restart</b></a>
                             }
                             else
                             {
-                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Execute</b></a>
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Execute</b></a>
                             }
                         }
                         else
                         {
                             if (task.IsRepeating)
                             {
-                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Restart</b></a>
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Restart</b></a>
                             }
                             else
                             {
-                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@task.Id"><b>Execute</b></a>
+                                <a asp-action="ExecuteNow" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Execute</b></a>
                             }
                         }
-                        <a asp-action="Edit" class="ui button" asp-route-id="@task.Id"><b>Edit</b></a>
-                        <a asp-action="Remove" class="ui button" asp-route-id="@task.Id"><b>Delete</b></a>
+                        <a asp-action="Edit" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Edit</b></a>
+                        <a asp-action="Remove" class="ui button" asp-route-id="@ViewBag.NodeId" asp-route-id2="@task.Id"><b>Delete</b></a>
                     </div>
 
                     @if (task.IsCompleted)
