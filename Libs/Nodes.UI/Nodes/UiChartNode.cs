@@ -17,6 +17,10 @@ namespace MyNetSensors.Nodes
 
         private List<NodeData> log;
 
+        private NodeData LastRecordCached { get; set; }
+        private bool LastRecordUpdated { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+
         public UiChartNode() : base("UI", "Chart")
         {
             AddInput(DataType.Number);
@@ -25,20 +29,29 @@ namespace MyNetSensors.Nodes
 
             Settings.Add("WriteInDatabase", new NodeSetting(NodeSettingType.Checkbox, "Write in database", "false"));
             Settings.Add("MaxRecords", new NodeSetting(NodeSettingType.Number, "The maximum number of chart points", "100"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "100"));
         }
 
 
-        public override void OnInputChange(Input input)
+
+        public override void Loop()
         {
-            if (input.Value == null)
+            if (!LastRecordUpdated || LastRecordCached==null)
                 return;
+
+            int updateInteval = (int)double.Parse(Settings["UpdateInterval"].Value);
+            if ((DateTime.Now - LastUpdateDate).TotalMilliseconds < updateInteval)
+                return;
+
+            LastRecordUpdated = false;
+            LastUpdateDate = DateTime.Now;
 
             int max = (int)double.Parse(Settings["MaxRecords"].Value);
             if (max < 0)
                 max = 0;
 
-            LastRecord = new ChartData(DateTime.Now, input.Value);
-            log.Add(new NodeData(Id, input.Value));
+            LastRecord = new ChartData(LastRecordCached.DateTime, LastRecordCached.Value);
+            log.Add(LastRecordCached);
 
             while (log.Count > max)
                 log.Remove(log.First());
@@ -46,8 +59,17 @@ namespace MyNetSensors.Nodes
             UpdateMe();
 
             if (Settings["WriteInDatabase"].Value == "true")
-                AddNodeData(input.Value, max);
+                AddNodeData(LastRecordCached.Value, max);
 
+        }
+
+        public override void OnInputChange(Input input)
+        {
+            if (input.Value == null)
+                return;
+
+            LastRecordCached = new NodeData(Id, input.Value);
+            LastRecordUpdated = true;
         }
 
 
@@ -55,6 +77,8 @@ namespace MyNetSensors.Nodes
         private void RemoveStates()
         {
             log.Clear();
+            LastRecordCached = null;
+            LastRecordUpdated = false;
             LastRecord = null;
             if (Settings["WriteInDatabase"].Value == "true")
                 RemoveAllNodeData();
@@ -111,6 +135,8 @@ namespace MyNetSensors.Nodes
             if (data["WriteInDatabase"] == "false" && Settings["WriteInDatabase"].Value == "true")
             {
                 log.Clear();
+                LastRecordCached = null;
+                LastRecordUpdated = false;
                 LastRecord = null;
             }
             else if (data["WriteInDatabase"] == "true" && Settings["WriteInDatabase"].Value == "false")
@@ -127,7 +153,14 @@ namespace MyNetSensors.Nodes
 
                    "You can enable writing chart data into the database in the settings of the node. <br/>" +
                    "You can also specify the maximum number of records in the database. " +
-                   "Old records will be deleted automatically. <br/>" +
+                   "Old records will be deleted automatically. <br/><br/>" +
+
+                   "By default, the graph shows not all values. " +
+                   "Too frequent update of the value is ignored. " +
+                   "By default, the graph is updated 5 times per second. " +
+                   "You can set the refresh rate in the settings of the node. " +
+                   "Increase the refresh rate if you want to have a more detailed graph. " +
+                   "Reduce the refresh rate, if your browser started to lag. <br/><br/>" +
 
                    "The chart can be displayed in different styles. <br/>" +
                    "If you want to show someone some range of the history on the chart, " +
