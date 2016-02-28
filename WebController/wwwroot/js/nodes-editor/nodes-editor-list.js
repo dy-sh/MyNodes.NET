@@ -459,6 +459,18 @@
 
             
 
+            //MathMaxNode
+            function MathMaxNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.MathMaxNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            MathMaxNode.title = 'Max';
+            LiteGraph.registerNodeType('Math/Max', MathMaxNode);
+
+            
+
             //MathMinusNode
             function MathMinusNode () {
                 this.properties = {
