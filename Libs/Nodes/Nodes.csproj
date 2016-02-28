@@ -67,6 +67,7 @@
     <Compile Include="Nodes\LogicCheckInRangeNode.cs" />
     <Compile Include="Nodes\MathAverageNode.cs" />
     <Compile Include="Nodes\MathMaxNode.cs" />
+    <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
     <Compile Include="Nodes\OperationQueueNode.cs" />
     <Compile Include="Nodes\OperationLinearShaperNode.cs" />

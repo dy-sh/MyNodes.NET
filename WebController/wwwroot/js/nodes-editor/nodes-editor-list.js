@@ -471,6 +471,18 @@
 
             
 
+            //MathMinNode
+            function MathMinNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.MathMinNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            MathMinNode.title = 'Min';
+            LiteGraph.registerNodeType('Math/Min', MathMinNode);
+
+            
+
             //MathMinusNode
             function MathMinusNode () {
                 this.properties = {
