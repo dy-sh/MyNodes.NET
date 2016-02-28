@@ -891,6 +891,18 @@
 
             
 
+            //TextStringLengthNode
+            function TextStringLengthNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextStringLengthNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextStringLengthNode.title = 'String Length';
+            LiteGraph.registerNodeType('Text/String Length', TextStringLengthNode);
+
+            
+
             //TimeClockNode
             function TimeClockNode () {
                 this.properties = {

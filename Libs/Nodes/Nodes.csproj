@@ -90,6 +90,7 @@
     <Compile Include="Nodes\MathSumNode.cs" />
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
+    <Compile Include="Nodes\TextStringLengthNode.cs" />
     <Compile Include="Nodes\TextCharAtIndexNode.cs" />
     <Compile Include="Nodes\TextSplitStringsNode.cs" />
     <Compile Include="Nodes\TextASCIICharNode.cs" />
