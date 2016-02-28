@@ -831,6 +831,18 @@
 
             
 
+            //TextASCIICharNode
+            function TextASCIICharNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextASCIICharNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextASCIICharNode.title = 'ASCII Char';
+            LiteGraph.registerNodeType('Text/ASCII Char', TextASCIICharNode);
+
+            
+
             //TextConcatenationNode
             function TextConcatenationNode () {
                 this.properties = {
