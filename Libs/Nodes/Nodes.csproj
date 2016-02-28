@@ -65,6 +65,7 @@
     <Compile Include="Nodes\BasicConstantNode.cs" />
     <Compile Include="Nodes\ConnectionHubNode.cs" />
     <Compile Include="Nodes\LogicCheckInRangeNode.cs" />
+    <Compile Include="Nodes\MathAverageNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
     <Compile Include="Nodes\OperationQueueNode.cs" />
     <Compile Include="Nodes\OperationLinearShaperNode.cs" />

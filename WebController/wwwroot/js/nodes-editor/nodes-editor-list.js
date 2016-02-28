@@ -411,6 +411,18 @@
 
             
 
+            //MathAverageNode
+            function MathAverageNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.MathAverageNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            MathAverageNode.title = 'Average';
+            LiteGraph.registerNodeType('Math/Average', MathAverageNode);
+
+            
+
             //MathClampNode
             function MathClampNode () {
                 this.properties = {
