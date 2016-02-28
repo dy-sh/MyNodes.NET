@@ -125,7 +125,10 @@ namespace MyNetSensors.WebController.Code
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
             hub.Clients.All.OnNodeUpdated(liteGraphNode);
 
+            if (node is PanelNode)
+                hub.Clients.All.OnPanelNodeUpdated(liteGraphNode);
         }
+
 
         private static void OnNewNode(Node node)
         {

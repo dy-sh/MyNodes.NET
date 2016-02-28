@@ -183,6 +183,11 @@ function removePanel(panelId) {
     });
 }
 
+function updatePanel(node) {
+    var settings =  JSON.parse(node.properties["Settings"]);
+    $('#panelTitle-' + node.id).html(settings.Name.Value);
+}
+
 
 function sortPanel(panelId) {
 

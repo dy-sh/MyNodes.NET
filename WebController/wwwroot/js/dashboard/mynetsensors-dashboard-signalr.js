@@ -60,6 +60,12 @@ $(function () {
         updateNode(node);
     };
 
+
+    clientsHub.client.OnPanelNodeUpdated = function (node) {
+        updatePanel(node);
+    };
+
+
     clientsHub.client.OnRemoveUiNode = function (node) {
         if (this_panel_id != null && this_panel_id != "") {
             if (node.PanelId != this_panel_id)
