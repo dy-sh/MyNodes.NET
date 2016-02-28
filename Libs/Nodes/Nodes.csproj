@@ -91,6 +91,7 @@
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\TextASCIICharNode.cs" />
+    <Compile Include="Nodes\TextASCIICodeNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
     <Compile Include="Nodes\TimeClockNode.cs" />
     <Compile Include="Nodes\TimeSmoothByRangeNode.cs" />
