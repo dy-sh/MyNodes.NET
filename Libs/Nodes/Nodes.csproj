@@ -48,6 +48,7 @@
     <Compile Include="NodesEngineSerializer.cs" />
     <Compile Include="NodeSetting.cs" />
     <Compile Include="Nodes\FiltersOnlyFromRangeNode.cs" />
+    <Compile Include="Nodes\FiltersOnlyLowerNode.cs" />
     <Compile Include="Nodes\FiltersPreventDuplicationNode.cs" />
     <Compile Include="Nodes\FiltersOnlySpecifiedNode.cs" />
     <Compile Include="Nodes\FiltersReduceEventsNode.cs" />
@@ -81,9 +82,9 @@
     <Compile Include="Nodes\RgbNumbersToRgbNode.cs" />
     <Compile Include="Nodes\RgbRgbwToNumbersNode.cs" />
     <Compile Include="Nodes\RgbRgbToNumbersNode.cs" />
-    <Compile Include="Nodes\OperationSeparatorNode.cs" />
+    <Compile Include="Nodes\FiltersOnlyGreaterNode.cs" />
     <Compile Include="Nodes\SystemRunNode.cs" />
-    <Compile Include="Nodes\OperationAccumulatorNode.cs" />
+    <Compile Include="Nodes\MathSumNode.cs" />
     <Compile Include="Nodes\SystemJsonFileNode.cs" />
     <Compile Include="Nodes\SystemFileNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="Nodes\TimeIntervalTimerNode.cs" />
     <Compile Include="Nodes\TimeIteratorNode.cs" />
     <Compile Include="Nodes\TimeTickerNode.cs" />
-    <Compile Include="Nodes\OperationConcatenationNode.cs" />
+    <Compile Include="Nodes\TextConcatenationNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
     <Compile Include="Nodes\MathRoundNode.cs" />
     <Compile Include="Nodes\MathSinNode.cs" />

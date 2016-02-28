@@ -107,7 +107,7 @@ namespace MyNetSensors.Nodes
             for (int i = 1; i < count; i++)
             {
                 double point = 100D / (count - 1) * i;
-                Inputs[i + 1].Name = point.ToString("##.#");
+                Inputs[i + 1].Name = point.ToString("0.##");
             }
         }
 

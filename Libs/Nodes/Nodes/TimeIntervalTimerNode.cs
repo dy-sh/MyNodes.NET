@@ -66,10 +66,10 @@ namespace MyNetSensors.Nodes
             double percent = elapsed / interval * 100;
             if (percent > 100)
                 percent = 100;
-            String sperc = percent.ToString("F2");
+            String sperc = percent.ToString("0.##");
             if (sperc != Outputs[2].Value)
             {
-                Outputs[2].Value = percent.ToString("F2");
+                Outputs[2].Value = percent.ToString("0.##");
             }
         }
 

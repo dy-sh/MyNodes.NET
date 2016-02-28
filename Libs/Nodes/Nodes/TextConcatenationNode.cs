@@ -2,9 +2,9 @@
 
 namespace MyNetSensors.Nodes
 {
-    public class OperationConcatenationNode : Node
+    public class TextConcatenationNode : Node
     {
-        public OperationConcatenationNode() : base("Operation", "Concatenation")
+        public TextConcatenationNode() : base("Text", "Concatenation")
         {
             AddInput();
             AddInput();

@@ -121,6 +121,18 @@
 
             
 
+            //FiltersOnlyGreaterNode
+            function FiltersOnlyGreaterNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.FiltersOnlyGreaterNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyGreaterNode.title = 'Only Greater';
+            LiteGraph.registerNodeType('Filters/Only Greater', FiltersOnlyGreaterNode);
+
+            
+
             //FiltersOnlyLogicNode
             function FiltersOnlyLogicNode () {
                 this.properties = {
@@ -130,6 +142,18 @@
             }
             FiltersOnlyLogicNode.title = 'Only Logic';
             LiteGraph.registerNodeType('Filters/Only Logic', FiltersOnlyLogicNode);
+
+            
+
+            //FiltersOnlyLowerNode
+            function FiltersOnlyLowerNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.FiltersOnlyLowerNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            FiltersOnlyLowerNode.title = 'Only Lower';
+            LiteGraph.registerNodeType('Filters/Only Lower', FiltersOnlyLowerNode);
 
             
 
@@ -531,6 +555,18 @@
 
             
 
+            //MathSumNode
+            function MathSumNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.Nodes.MathSumNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            MathSumNode.title = 'Sum';
+            LiteGraph.registerNodeType('Math/Sum', MathSumNode);
+
+            
+
             //MathTanNode
             function MathTanNode () {
                 this.properties = {
@@ -540,30 +576,6 @@
             }
             MathTanNode.title = 'Tan';
             LiteGraph.registerNodeType('Math/Tan', MathTanNode);
-
-            
-
-            //OperationAccumulatorNode
-            function OperationAccumulatorNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationAccumulatorNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationAccumulatorNode.title = 'Accumulator';
-            LiteGraph.registerNodeType('Operation/Accumulator', OperationAccumulatorNode);
-
-            
-
-            //OperationConcatenationNode
-            function OperationConcatenationNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationConcatenationNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationConcatenationNode.title = 'Concatenation';
-            LiteGraph.registerNodeType('Operation/Concatenation', OperationConcatenationNode);
 
             
 
@@ -660,18 +672,6 @@
             }
             OperationRandomNode.title = 'Random';
             LiteGraph.registerNodeType('Operation/Random', OperationRandomNode);
-
-            
-
-            //OperationSeparatorNode
-            function OperationSeparatorNode () {
-                this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationSeparatorNode',
-                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-                };
-            }
-            OperationSeparatorNode.title = 'Separator';
-            LiteGraph.registerNodeType('Operation/Separator', OperationSeparatorNode);
 
             
 
@@ -792,6 +792,18 @@
             }
             SystemRunNode.title = 'Run';
             LiteGraph.registerNodeType('System/Run', SystemRunNode);
+
+            
+
+            //TextConcatenationNode
+            function TextConcatenationNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextConcatenationNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextConcatenationNode.title = 'Concatenation';
+            LiteGraph.registerNodeType('Text/Concatenation', TextConcatenationNode);
 
             
 
