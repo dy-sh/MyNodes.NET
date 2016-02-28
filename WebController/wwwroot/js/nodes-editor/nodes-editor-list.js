@@ -879,6 +879,18 @@
 
             
 
+            //TextCutSubstringNode
+            function TextCutSubstringNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextCutSubstringNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextCutSubstringNode.title = 'Cut Substring';
+            LiteGraph.registerNodeType('Text/Cut Substring', TextCutSubstringNode);
+
+            
+
             //TextSplitStringsNode
             function TextSplitStringsNode () {
                 this.properties = {
