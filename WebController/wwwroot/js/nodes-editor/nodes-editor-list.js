@@ -855,6 +855,18 @@
 
             
 
+            //TextCharAtIndexNode
+            function TextCharAtIndexNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextCharAtIndexNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextCharAtIndexNode.title = 'Char At Index';
+            LiteGraph.registerNodeType('Text/Char At Index', TextCharAtIndexNode);
+
+            
+
             //TextConcatenationNode
             function TextConcatenationNode () {
                 this.properties = {
