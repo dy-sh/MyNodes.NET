@@ -867,6 +867,18 @@
 
             
 
+            //TextSplitStringsNode
+            function TextSplitStringsNode () {
+                this.properties = {
+                    'ObjectType': 'MyNetSensors.Nodes.TextSplitStringsNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            TextSplitStringsNode.title = 'Split Strings';
+            LiteGraph.registerNodeType('Text/Split Strings', TextSplitStringsNode);
+
+            
+
             //TimeClockNode
             function TimeClockNode () {
                 this.properties = {
