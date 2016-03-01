@@ -615,6 +615,18 @@
 
             
 
+            //OperationAnyToOneNode
+            function OperationAnyToOneNode () {
+                this.properties = {
+                    'ObjectType': 'MyNodes.Nodes.OperationAnyToOneNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            OperationAnyToOneNode.title = 'Any To One';
+            LiteGraph.registerNodeType('Operation/Any To One', OperationAnyToOneNode);
+
+            
+
             //OperationCounterNode
             function OperationCounterNode () {
                 this.properties = {
