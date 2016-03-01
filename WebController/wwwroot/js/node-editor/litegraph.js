@@ -3496,8 +3496,8 @@ LGraphCanvas.prototype.drawBackCanvas = function () {
         //ctx.fillRect( this.visible_area[0] + 10, this.visible_area[1] + 10, this.visible_area[2] - this.visible_area[0] - 20, this.visible_area[3] - this.visible_area[1] - 20);
 
         //bg
-        ctx.strokeStyle = "#235";
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+     //   ctx.strokeStyle = "#235";
+     //   ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
         if (this.render_connections_shadows) {
             ctx.shadowColor = "#000";

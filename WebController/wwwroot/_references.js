@@ -32,7 +32,6 @@
 /// <reference path="js/node-editor/node-editor-theme6.js" />
 /// <reference path="js/node-editor/node-editor-theme7.js" />
 /// <reference path="js/node-editor/node-editor-theme8.js" />
-/// <reference path="js/site.min.js" />
 /// <reference path="js/slider/nouislider.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />
 /// <reference path="lib/jquery-validation/dist/jquery.validate.js" />
