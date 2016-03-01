@@ -69,6 +69,7 @@
     <Compile Include="Nodes\MathMaxNode.cs" />
     <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
+    <Compile Include="Nodes\RgbRandomRgbNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
     <Compile Include="Nodes\OperationQueueNode.cs" />
     <Compile Include="Nodes\OperationLinearShaperNode.cs" />

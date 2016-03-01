@@ -16,6 +16,8 @@ namespace MyNodes.Nodes
             AddInput("Min Value", DataType.Number,true);
             AddInput("Max Value", DataType.Number, true);
             AddOutput("Out");
+
+            options.ResetOutputsIfAnyInputIsNull = true;
         }
 
 
@@ -37,7 +39,8 @@ namespace MyNodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node generates random values. <br/>" +
+            return "This node generates random numbers. <br/>" +
+                   "To generate a number, send \"1\" to \"Trigger\" input. <br/>" +
                    "You can set the minimum and maximum limit.";
         }
 

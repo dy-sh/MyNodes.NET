@@ -759,6 +759,18 @@
 
             
 
+            //RgbRandomRgbNode
+            function RgbRandomRgbNode () {
+                this.properties = {
+                    'ObjectType': 'MyNodes.Nodes.RgbRandomRgbNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbRandomRgbNode.title = 'Random RGB';
+            LiteGraph.registerNodeType('RGB/Random RGB', RgbRandomRgbNode);
+
+            
+
             //RgbRgbRemapNode
             function RgbRgbRemapNode () {
                 this.properties = {
