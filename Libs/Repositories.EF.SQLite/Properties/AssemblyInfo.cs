@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Repositories.EF.SQLite")]
+[assembly: AssemblyTitle("MyNodes.EF.SQLite")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MyNetSensors")]
-[assembly: AssemblyProduct("Repositories.EF.SQLite")]
+[assembly: AssemblyCompany("MyNodes")]
+[assembly: AssemblyProduct("MyNodes.EF.SQLite")]
 [assembly: AssemblyCopyright("Copyright ©  2015-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

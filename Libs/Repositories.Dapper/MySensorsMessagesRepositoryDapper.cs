@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -10,10 +10,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using Dapper;
-using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors;
+using MyNodes.Gateways;
+using MyNodes.Gateways.MySensors;
 
-namespace MyNetSensors.Repositories.Dapper
+namespace MyNodes.Repositories.Dapper
 {
 
 
@@ -66,7 +66,7 @@ namespace MyNetSensors.Repositories.Dapper
                 {
                     //db = new SqlConnection("Data Source=.\\sqlexpress; Database= master; Integrated Security=True;");
                     db.Open();
-                    db.Execute("CREATE DATABASE [MyNetSensors]");
+                    db.Execute("CREATE DATABASE [MyNodes]");
                 }
                 catch
                 {

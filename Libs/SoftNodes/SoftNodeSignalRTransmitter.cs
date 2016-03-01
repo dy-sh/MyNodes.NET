@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.AspNet.SignalR.Client;
 
-namespace MyNetSensors.SoftNodes
+namespace MyNodes.SoftNodes
 {
     public class SoftNodeSignalRTransmitter
     {

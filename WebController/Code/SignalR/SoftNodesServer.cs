@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using MyNetSensors.Nodes;
-using MyNetSensors.WebController.Controllers;
+using MyNodes.Nodes;
+using MyNodes.WebController.Controllers;
 
 
-namespace MyNetSensors.WebController.Code
+namespace MyNodes.WebController.Code
 {
     public static class SoftNodesServer
     {

@@ -4,7 +4,7 @@
             //BasicConstantNode
             function BasicConstantNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.BasicConstantNode',
+                    'ObjectType': 'MyNodes.Nodes.BasicConstantNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -16,7 +16,7 @@
             //ConnectionGateNode
             function ConnectionGateNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionGateNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionGateNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -28,7 +28,7 @@
             //ConnectionHubNode
             function ConnectionHubNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionHubNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionHubNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -40,7 +40,7 @@
             //ConnectionLocalReceiverNode
             function ConnectionLocalReceiverNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionLocalReceiverNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionLocalReceiverNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -52,7 +52,7 @@
             //ConnectionLocalTransmitterNode
             function ConnectionLocalTransmitterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionLocalTransmitterNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionLocalTransmitterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -64,7 +64,7 @@
             //ConnectionRemoteReceiverNode
             function ConnectionRemoteReceiverNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRemoteReceiverNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionRemoteReceiverNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -76,7 +76,7 @@
             //ConnectionRemoteTransmitterNode
             function ConnectionRemoteTransmitterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRemoteTransmitterNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionRemoteTransmitterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -88,7 +88,7 @@
             //ConnectionRouterMultipleToOneNode
             function ConnectionRouterMultipleToOneNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRouterMultipleToOneNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionRouterMultipleToOneNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -100,7 +100,7 @@
             //ConnectionRouterOneToMultipleNode
             function ConnectionRouterOneToMultipleNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.ConnectionRouterOneToMultipleNode',
+                    'ObjectType': 'MyNodes.Nodes.ConnectionRouterOneToMultipleNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -112,7 +112,7 @@
             //FiltersOnlyFromRangeNode
             function FiltersOnlyFromRangeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyFromRangeNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlyFromRangeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -124,7 +124,7 @@
             //FiltersOnlyGreaterNode
             function FiltersOnlyGreaterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.FiltersOnlyGreaterNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.FiltersOnlyGreaterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -136,7 +136,7 @@
             //FiltersOnlyLogicNode
             function FiltersOnlyLogicNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyLogicNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlyLogicNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -148,7 +148,7 @@
             //FiltersOnlyLowerNode
             function FiltersOnlyLowerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.FiltersOnlyLowerNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.FiltersOnlyLowerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -160,7 +160,7 @@
             //FiltersOnlyNumbersNode
             function FiltersOnlyNumbersNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyNumbersNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlyNumbersNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -172,7 +172,7 @@
             //FiltersOnlyOneNode
             function FiltersOnlyOneNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyOneNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlyOneNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -184,7 +184,7 @@
             //FiltersOnlySpecifiedNode
             function FiltersOnlySpecifiedNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlySpecifiedNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlySpecifiedNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -196,7 +196,7 @@
             //FiltersOnlyZeroNode
             function FiltersOnlyZeroNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersOnlyZeroNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersOnlyZeroNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -208,7 +208,7 @@
             //FiltersPreventDuplicationNode
             function FiltersPreventDuplicationNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventDuplicationNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersPreventDuplicationNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -220,7 +220,7 @@
             //FiltersPreventNullNode
             function FiltersPreventNullNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventNullNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersPreventNullNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -232,7 +232,7 @@
             //FiltersPreventSpecifiedNode
             function FiltersPreventSpecifiedNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersPreventSpecifiedNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersPreventSpecifiedNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -244,7 +244,7 @@
             //FiltersReduceEventsNode
             function FiltersReduceEventsNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.FiltersReduceEventsNode',
+                    'ObjectType': 'MyNodes.Nodes.FiltersReduceEventsNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -255,7 +255,7 @@
 
             function MySensorsNode() {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MySensorsNode',
+                    'ObjectType': 'MyNodes.Nodes.MySensorsNode',
                     'Assembly': 'Nodes.MySensors'
                 };
                 this.clonable = false;
@@ -269,7 +269,7 @@
             //LogicAndNode
             function LogicAndNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicAndNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicAndNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -281,7 +281,7 @@
             //CheckInRangeNode
             function CheckInRangeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.CheckInRangeNode',
+                    'ObjectType': 'MyNodes.Nodes.CheckInRangeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -293,7 +293,7 @@
             //LogicCompareEqualNode
             function LogicCompareEqualNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareEqualNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicCompareEqualNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -305,7 +305,7 @@
             //LogicCompareGreaterNode
             function LogicCompareGreaterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareGreaterNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicCompareGreaterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -317,7 +317,7 @@
             //LogicCompareLowerNode
             function LogicCompareLowerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareLowerNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicCompareLowerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -329,7 +329,7 @@
             //LogicCompareNotEqualNode
             function LogicCompareNotEqualNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicCompareNotEqualNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicCompareNotEqualNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -341,7 +341,7 @@
             //LogicNotNode
             function LogicNotNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicNotNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicNotNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -353,7 +353,7 @@
             //LogicOrNode
             function LogicOrNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.LogicOrNode',
+                    'ObjectType': 'MyNodes.Nodes.LogicOrNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -365,7 +365,7 @@
             //PanelNode
             function PanelNode() {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.PanelNode',
+                    'ObjectType': 'MyNodes.Nodes.PanelNode',
                     'Assembly': 'Nodes'
                 };
             }
@@ -390,7 +390,7 @@
             //PanelInputNode
             function PanelInputNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.PanelInputNode',
+                    'ObjectType': 'MyNodes.Nodes.PanelInputNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -402,7 +402,7 @@
             //PanelOutputNode
             function PanelOutputNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.PanelOutputNode',
+                    'ObjectType': 'MyNodes.Nodes.PanelOutputNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -414,7 +414,7 @@
             //MathAverageNode
             function MathAverageNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathAverageNode',
+                    'ObjectType': 'MyNodes.Nodes.MathAverageNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -426,7 +426,7 @@
             //MathClampNode
             function MathClampNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathClampNode',
+                    'ObjectType': 'MyNodes.Nodes.MathClampNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -438,7 +438,7 @@
             //MathCosNode
             function MathCosNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathCosNode',
+                    'ObjectType': 'MyNodes.Nodes.MathCosNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -450,7 +450,7 @@
             //MathDivideNode
             function MathDivideNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathDivideNode',
+                    'ObjectType': 'MyNodes.Nodes.MathDivideNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -462,7 +462,7 @@
             //MathMaxNode
             function MathMaxNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathMaxNode',
+                    'ObjectType': 'MyNodes.Nodes.MathMaxNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -474,7 +474,7 @@
             //MathMinNode
             function MathMinNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathMinNode',
+                    'ObjectType': 'MyNodes.Nodes.MathMinNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -486,7 +486,7 @@
             //MathMinusNode
             function MathMinusNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathMinusNode',
+                    'ObjectType': 'MyNodes.Nodes.MathMinusNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -498,7 +498,7 @@
             //MathModulusNode
             function MathModulusNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathModulusNode',
+                    'ObjectType': 'MyNodes.Nodes.MathModulusNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -510,7 +510,7 @@
             //MathMultiplyNode
             function MathMultiplyNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathMultiplyNode',
+                    'ObjectType': 'MyNodes.Nodes.MathMultiplyNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -522,7 +522,7 @@
             //MathPlusNode
             function MathPlusNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathPlusNode',
+                    'ObjectType': 'MyNodes.Nodes.MathPlusNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -534,7 +534,7 @@
             //MathPowNode
             function MathPowNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathPowNode',
+                    'ObjectType': 'MyNodes.Nodes.MathPowNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -546,7 +546,7 @@
             //MathRemapNode
             function MathRemapNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathRemapNode',
+                    'ObjectType': 'MyNodes.Nodes.MathRemapNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -558,7 +558,7 @@
             //MathRoundNode
             function MathRoundNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathRoundNode',
+                    'ObjectType': 'MyNodes.Nodes.MathRoundNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -570,7 +570,7 @@
             //MathSinNode
             function MathSinNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathSinNode',
+                    'ObjectType': 'MyNodes.Nodes.MathSinNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -582,7 +582,7 @@
             //MathSqrtNode
             function MathSqrtNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathSqrtNode',
+                    'ObjectType': 'MyNodes.Nodes.MathSqrtNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -594,7 +594,7 @@
             //MathSumNode
             function MathSumNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.MathSumNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.MathSumNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -606,7 +606,7 @@
             //MathTanNode
             function MathTanNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.MathTanNode',
+                    'ObjectType': 'MyNodes.Nodes.MathTanNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -618,7 +618,7 @@
             //OperationCounterNode
             function OperationCounterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCounterNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationCounterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -630,7 +630,7 @@
             //OperationCrossfadeNode
             function OperationCrossfadeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationCrossfadeNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationCrossfadeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -642,7 +642,7 @@
             //OperationEventCounterNode
             function OperationEventCounterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationEventCounterNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationEventCounterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -654,7 +654,7 @@
             //OperationFlipflopNode
             function OperationFlipflopNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationFlipflopNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationFlipflopNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -666,7 +666,7 @@
             //OperationFreqDividerNode
             function OperationFreqDividerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationFreqDividerNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationFreqDividerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -678,7 +678,7 @@
             //OperationLinearShaperNode
             function OperationLinearShaperNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationLinearShaperNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationLinearShaperNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -690,7 +690,7 @@
             //OperationQueueNode
             function OperationQueueNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationQueueNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.OperationQueueNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -702,7 +702,7 @@
             //OperationRandomNode
             function OperationRandomNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.OperationRandomNode',
+                    'ObjectType': 'MyNodes.Nodes.OperationRandomNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -714,7 +714,7 @@
             //OperationStackNode
             function OperationStackNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.OperationStackNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.OperationStackNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -726,7 +726,7 @@
             //RgbNumbersToRgbNode
             function RgbNumbersToRgbNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbNumbersToRgbNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbNumbersToRgbNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -738,7 +738,7 @@
             //RgbNumbersToRgbwNode
             function RgbNumbersToRgbwNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbNumbersToRgbwNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbNumbersToRgbwNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -750,7 +750,7 @@
             //RgbRgbRemapNode
             function RgbRgbRemapNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbRemapNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbRgbRemapNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -762,7 +762,7 @@
             //RgbRgbToNumbersNode
             function RgbRgbToNumbersNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbToNumbersNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbRgbToNumbersNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -774,7 +774,7 @@
             //RgbRgbwRemapNode
             function RgbRgbwRemapNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbwRemapNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbRgbwRemapNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -786,7 +786,7 @@
             //RgbRgbwToNumbersNode
             function RgbRgbwToNumbersNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.Nodes.RgbRgbwToNumbersNode',
+                    'ObjectType': 'MyNodes.Nodes.Nodes.RgbRgbwToNumbersNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -798,7 +798,7 @@
             //SystemFileNode
             function SystemFileNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.SystemFileNode',
+                    'ObjectType': 'MyNodes.Nodes.SystemFileNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -810,7 +810,7 @@
             //SystemJsonFileNode
             function SystemJsonFileNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.SystemJsonFileNode',
+                    'ObjectType': 'MyNodes.Nodes.SystemJsonFileNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -822,7 +822,7 @@
             //SystemRunNode
             function SystemRunNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.SystemRunNode',
+                    'ObjectType': 'MyNodes.Nodes.SystemRunNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -834,7 +834,7 @@
             //TextASCIICharNode
             function TextASCIICharNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextASCIICharNode',
+                    'ObjectType': 'MyNodes.Nodes.TextASCIICharNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -846,7 +846,7 @@
             //TextASCIICodeNode
             function TextASCIICodeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextASCIICodeNode',
+                    'ObjectType': 'MyNodes.Nodes.TextASCIICodeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -858,7 +858,7 @@
             //TextCharAtIndexNode
             function TextCharAtIndexNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextCharAtIndexNode',
+                    'ObjectType': 'MyNodes.Nodes.TextCharAtIndexNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -870,7 +870,7 @@
             //TextConcatenationNode
             function TextConcatenationNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextConcatenationNode',
+                    'ObjectType': 'MyNodes.Nodes.TextConcatenationNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -882,7 +882,7 @@
             //TextCutSubstringNode
             function TextCutSubstringNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextCutSubstringNode',
+                    'ObjectType': 'MyNodes.Nodes.TextCutSubstringNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -894,7 +894,7 @@
             //TextSplitStringsNode
             function TextSplitStringsNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextSplitStringsNode',
+                    'ObjectType': 'MyNodes.Nodes.TextSplitStringsNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -906,7 +906,7 @@
             //TextStringLengthNode
             function TextStringLengthNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TextStringLengthNode',
+                    'ObjectType': 'MyNodes.Nodes.TextStringLengthNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -918,7 +918,7 @@
             //TimeClockNode
             function TimeClockNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeClockNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeClockNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -930,7 +930,7 @@
             //TimeDelayNode
             function TimeDelayNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeDelayNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -942,7 +942,7 @@
             //TimeDelayMeterNode
             function TimeDelayMeterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeDelayMeterNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeDelayMeterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -954,7 +954,7 @@
             //TimeFadeNode
             function TimeFadeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeFadeNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeFadeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -966,7 +966,7 @@
             //TimeFrequencyMeterNode
             function TimeFrequencyMeterNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeFrequencyMeterNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeFrequencyMeterNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -978,7 +978,7 @@
             //TimeIntervalTimerNode
             function TimeIntervalTimerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeIntervalTimerNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeIntervalTimerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -990,7 +990,7 @@
             //TimeIteratorNode
             function TimeIteratorNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeIteratorNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeIteratorNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1002,7 +1002,7 @@
             //TimeSmoothByRangeNode
             function TimeSmoothByRangeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeSmoothByRangeNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeSmoothByRangeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1014,7 +1014,7 @@
             //TimeSmoothByTimeNode
             function TimeSmoothByTimeNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeSmoothByTimeNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeSmoothByTimeNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1026,7 +1026,7 @@
             //TimeTickerNode
             function TimeTickerNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.TimeTickerNode',
+                    'ObjectType': 'MyNodes.Nodes.TimeTickerNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1038,7 +1038,7 @@
             //UiAudioNode
             function UiAudioNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiAudioNode',
+                    'ObjectType': 'MyNodes.Nodes.UiAudioNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1050,7 +1050,7 @@
             //UiButtonNode
             function UiButtonNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiButtonNode',
+                    'ObjectType': 'MyNodes.Nodes.UiButtonNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1062,7 +1062,7 @@
             //UiChartNode
             function UiChartNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiChartNode',
+                    'ObjectType': 'MyNodes.Nodes.UiChartNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1074,7 +1074,7 @@
             //UiLabelNode
             function UiLabelNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiLabelNode',
+                    'ObjectType': 'MyNodes.Nodes.UiLabelNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1086,7 +1086,7 @@
             //UiLogNode
             function UiLogNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiLogNode',
+                    'ObjectType': 'MyNodes.Nodes.UiLogNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1098,7 +1098,7 @@
             //UiProgressNode
             function UiProgressNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiProgressNode',
+                    'ObjectType': 'MyNodes.Nodes.UiProgressNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1110,7 +1110,7 @@
             //UiRgbSlidersNode
             function UiRgbSlidersNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiRgbSlidersNode',
+                    'ObjectType': 'MyNodes.Nodes.UiRgbSlidersNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1122,7 +1122,7 @@
             //UiRgbwSlidersNode
             function UiRgbwSlidersNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiRgbwSlidersNode',
+                    'ObjectType': 'MyNodes.Nodes.UiRgbwSlidersNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1134,7 +1134,7 @@
             //UiSliderNode
             function UiSliderNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiSliderNode',
+                    'ObjectType': 'MyNodes.Nodes.UiSliderNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1146,7 +1146,7 @@
             //UiStateNode
             function UiStateNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiStateNode',
+                    'ObjectType': 'MyNodes.Nodes.UiStateNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1158,7 +1158,7 @@
             //UiSwitchNode
             function UiSwitchNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiSwitchNode',
+                    'ObjectType': 'MyNodes.Nodes.UiSwitchNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1170,7 +1170,7 @@
             //UiTextBoxNode
             function UiTextBoxNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiTextBoxNode',
+                    'ObjectType': 'MyNodes.Nodes.UiTextBoxNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1182,7 +1182,7 @@
             //UiTimerNode
             function UiTimerNode() {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiTimerNode',
+                    'ObjectType': 'MyNodes.Nodes.UiTimerNode',
                     'Assembly': 'Nodes.UI'
                 };
             }
@@ -1202,7 +1202,7 @@
             //UiToggleButtonNode
             function UiToggleButtonNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiToggleButtonNode',
+                    'ObjectType': 'MyNodes.Nodes.UiToggleButtonNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1214,7 +1214,7 @@
             //UiVoiceGoogleNode
             function UiVoiceGoogleNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiVoiceGoogleNode',
+                    'ObjectType': 'MyNodes.Nodes.UiVoiceGoogleNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1226,7 +1226,7 @@
             //UiVoiceYandexNode
             function UiVoiceYandexNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UiVoiceYandexNode',
+                    'ObjectType': 'MyNodes.Nodes.UiVoiceYandexNode',
                     'Assembly': 'Nodes.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }
@@ -1238,7 +1238,7 @@
             //UtilityBeepNode
             function UtilityBeepNode () {
                 this.properties = {
-                    'ObjectType': 'MyNetSensors.Nodes.UtilityBeepNode',
+                    'ObjectType': 'MyNodes.Nodes.UtilityBeepNode',
                     'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
                 };
             }

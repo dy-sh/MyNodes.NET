@@ -1,4 +1,4 @@
-﻿namespace MyNetSensors.Utils
+﻿namespace MyNodes.Utils
 {
     public static class MathUtils
     {

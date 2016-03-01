@@ -7,7 +7,7 @@
     <ProjectGuid>{1AA4E1FF-1F56-47D5-840C-9D99D872D6E1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScreenColorTransmitterSignalR</RootNamespace>
+    <RootNamespace>MyNodes.ScreenColorTransmitter</RootNamespace>
     <AssemblyName>ScreenColorTransmitterSignalR</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

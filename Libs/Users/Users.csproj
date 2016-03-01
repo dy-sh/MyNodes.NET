@@ -7,7 +7,7 @@
     <ProjectGuid>{564C8900-69C2-4756-AE54-FA254C92D5A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.Users</RootNamespace>
+    <RootNamespace>MyNodes.Users</RootNamespace>
     <AssemblyName>Users</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

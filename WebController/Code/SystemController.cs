@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
-using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors;
-using MyNetSensors.Nodes;
-using MyNetSensors.Repositories.Dapper;
-using MyNetSensors.Repositories.EF.SQLite;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.ViewModels.Config;
+using MyNodes.Gateways;
+using MyNodes.WebController.ViewModels.Config;
 using Newtonsoft.Json;
-using Node = MyNetSensors.Nodes.Node;
+using Node = MyNodes.Nodes.Node;
 using System.Linq;
+using MyNodes.Gateways.MySensors;
+using MyNodes.Nodes;
+using MyNodes.Repositories.Dapper;
+using MyNodes.Repositories.EF.SQLite;
+using MyNodes.Users;
 
-namespace MyNetSensors.WebController.Code
+namespace MyNodes.WebController.Code
 {
     public static class SystemController
     {
@@ -77,7 +77,7 @@ namespace MyNetSensors.WebController.Code
                 {
                     firstRun = true;
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("\nThis is the first run of the system. \nYou can configure MyNetSensors from the web interface.\n");
+                    Console.WriteLine("\nWelcome to MyNodes.NET. \nPlease configure the system in the web interface.\n");
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
 
@@ -329,10 +329,10 @@ namespace MyNetSensors.WebController.Code
             try
             {
 
-                List<Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
+                List<Nodes.Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                     .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
-                    .Select(t => (Node)Activator.CreateInstance(t)).ToList();
+                     .Where(t => t.IsSubclassOf(typeof(Nodes.Node)) && !t.IsAbstract)
+                    .Select(t => (Nodes.Node)Activator.CreateInstance(t)).ToList();
 
                 nodes = nodes.OrderBy(x => x.Category + x.Type).ToList();
 
@@ -343,7 +343,7 @@ namespace MyNetSensors.WebController.Code
 
                 file += "\n})();";
 
-                System.IO.File.WriteAllText("wwwroot/js/nodes-editor/nodes-editor-list.js", file);
+                System.IO.File.WriteAllText("wwwroot/js/node-editor/node-editor-list.js", file);
 
                 logs.AddSystemInfo($"Generated node editor script with {nodes.Count} nodes");
             }

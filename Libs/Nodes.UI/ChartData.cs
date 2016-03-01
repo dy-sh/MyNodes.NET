@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class ChartData
     {

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Data.Entity;
-using MyNetSensors.Gateways.MySensors;
-using Node = MyNetSensors.Gateways.MySensors.Node;
+using MyNodes.Gateways.MySensors;
+using Node = MyNodes.Gateways.MySensors.Node;
 
-namespace MyNetSensors.Repositories.EF.SQLite
+namespace MyNodes.Repositories.EF.SQLite
 {
     public class MySensorsNodesDbContext:DbContext
     {
-        public DbSet<Node> Nodes { get; set; }
+        public DbSet<Gateways.MySensors.Node> Nodes { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
     }
 }

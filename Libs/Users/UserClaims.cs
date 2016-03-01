@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.Users
+namespace MyNodes.Users
 {
     public static class UserClaims
     {

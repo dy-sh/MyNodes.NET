@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.WebController.ViewModels.User
+namespace MyNodes.WebController.ViewModels.User
 {
     public class RegisterModel
     {

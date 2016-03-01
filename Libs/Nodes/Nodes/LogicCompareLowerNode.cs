@@ -1,6 +1,6 @@
 ﻿//planer-pro copyright 2015 GPL - license.
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class LogicCompareLowerNode : Node
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{C323003B-AFA8-464A-B3CA-18F07DD6CDEE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.Gateways.MySensors</RootNamespace>
+    <RootNamespace>MyNodes.Gateways.MySensors</RootNamespace>
     <AssemblyName>Gateways.MySensors</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

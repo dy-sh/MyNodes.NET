@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Entity;
-using MyNetSensors.Nodes;
+using MyNodes.Nodes;
 
-namespace MyNetSensors.Repositories.EF.SQLite
+namespace MyNodes.Repositories.EF.SQLite
 {
     public class NodesDbContext:DbContext
     {

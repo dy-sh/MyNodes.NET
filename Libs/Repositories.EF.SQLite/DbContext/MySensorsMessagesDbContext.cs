@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Entity;
-using MyNetSensors.Gateways.MySensors;
+using MyNodes.Gateways.MySensors;
 
-namespace MyNetSensors.Repositories.EF.SQLite
+namespace MyNodes.Repositories.EF.SQLite
 {
     public class MySensorsMessagesDbContext : DbContext
     {

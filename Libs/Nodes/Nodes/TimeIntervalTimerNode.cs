@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -8,7 +8,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class TimeIntervalTimerNode : Node
     {

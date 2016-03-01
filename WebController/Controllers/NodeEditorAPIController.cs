@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -12,19 +12,19 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.Gateways;
+using MyNodes.Gateways;
 using LiteGraph;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Features;
-using MyNetSensors.Nodes;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
+using MyNodes.Nodes;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
 using Newtonsoft.Json;
-using Link = MyNetSensors.Nodes.Link;
-using Node = MyNetSensors.Nodes.Node;
+using Link = MyNodes.Nodes.Link;
+using Node = MyNodes.Nodes.Node;
 
-namespace MyNetSensors.WebController.Controllers
+namespace MyNodes.WebController.Controllers
 {
 
     public class NodeEditorAPIController : Controller
@@ -47,7 +47,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (panelId == null)
                     panelId = MAIN_PANEL_ID;
 
-                List<Node> nodes = engine.GetNodes();
+                List<Nodes.Node> nodes = engine.GetNodes();
                 if (nodes == null || !nodes.Any())
                     return null;
 
@@ -59,7 +59,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public LiteGraph.Node ConvertNodeToLiteGraphNode(Node node)
+        public LiteGraph.Node ConvertNodeToLiteGraphNode(Nodes.Node node)
         {
             LiteGraph.Node litegraphNode = new LiteGraph.Node
             {
@@ -102,7 +102,7 @@ namespace MyNetSensors.WebController.Controllers
                 List<Nodes.Output> orderedOutputs = node.Outputs.OrderBy(x => x.SlotIndex).ToList();
                 foreach (var output in orderedOutputs)
                 {
-                    List<Link> links = engine.GetLinksForOutput(output);
+                    List<Nodes.Link> links = engine.GetLinksForOutput(output);
                     if (links != null)
                     {
                         string[] linksIds = new string[links.Count];
@@ -147,7 +147,7 @@ namespace MyNetSensors.WebController.Controllers
         }
 
 
-        public LiteGraph.Link ConvertLinkToLiteGraphLink(Link link)
+        public LiteGraph.Link ConvertLinkToLiteGraphLink(Nodes.Link link)
         {
             if (link == null)
                 return null;
@@ -174,7 +174,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (engine == null)
                     return null;
 
-                List<Link> links = engine.GetLinks();
+                List<Nodes.Link> links = engine.GetLinks();
                 if (links == null || !links.Any())
                     return null;
 
@@ -188,7 +188,7 @@ namespace MyNetSensors.WebController.Controllers
 
         private int GetInputSlot(string inputId)
         {
-            foreach (Node node in engine.GetNodes())
+            foreach (Nodes.Node node in engine.GetNodes())
             {
                 for (int i = 0; i < node.Inputs.Count; i++)
                 {
@@ -201,7 +201,7 @@ namespace MyNetSensors.WebController.Controllers
 
         private int GetOutputSlot(string outputId)
         {
-            foreach (Node node in engine.GetNodes())
+            foreach (Nodes.Node node in engine.GetNodes())
             {
                 for (int i = 0; i < node.Outputs.Count; i++)
                 {
@@ -225,8 +225,8 @@ namespace MyNetSensors.WebController.Controllers
                 if (link.origin_id == null || link.target_id == null)
                     return false;
 
-                Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
-                Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
+                Nodes.Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
+                Nodes.Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
                 if (outNode == null || inNode == null)
                 {
                     engine.LogEngineError(
@@ -260,8 +260,8 @@ namespace MyNetSensors.WebController.Controllers
                 if (engine == null)
                     return false;
 
-                Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
-                Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
+                Nodes.Node outNode = SystemController.nodesEngine.GetNode(link.origin_id);
+                Nodes.Node inNode = SystemController.nodesEngine.GetNode(link.target_id);
 
                 if (outNode == null || inNode == null)
                 {
@@ -298,7 +298,7 @@ namespace MyNetSensors.WebController.Controllers
                 string type = node.properties["ObjectType"];
                 string assemblyName = node.properties["Assembly"];
 
-                Node newNode = CreateNode(type, assemblyName);
+                Nodes.Node newNode = CreateNode(type, assemblyName);
 
                 if (newNode == null)
                 {
@@ -328,12 +328,12 @@ namespace MyNetSensors.WebController.Controllers
             });
         }
 
-        private Node CreateNode(string type, string assemblyName)
+        private Nodes.Node CreateNode(string type, string assemblyName)
         {
             try
             {
                 var newObject = Activator.CreateInstance(assemblyName, type);
-                return (Node)newObject.Unwrap();
+                return (Nodes.Node)newObject.Unwrap();
             }
             catch
             {
@@ -353,7 +353,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (engine == null)
                     return false;
 
-                Node node = engine.GetNode(id);
+                Nodes.Node node = engine.GetNode(id);
 
                 if (node == null)
                 {
@@ -390,7 +390,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (engine == null)
                     return false;
 
-                Node oldNode = engine.GetNode(node.id);
+                Nodes.Node oldNode = engine.GetNode(node.id);
                 if (oldNode == null)
                 {
                     engine.LogEngineError($"Can`t remove node [{node.id}]. Does not exist.");
@@ -420,7 +420,7 @@ namespace MyNetSensors.WebController.Controllers
             {
                 foreach (var id in nodes)
                 {
-                    Node oldNode = engine.GetNode(id);
+                    Nodes.Node oldNode = engine.GetNode(id);
                     if (oldNode == null)
                     {
                         engine.LogEngineError($"Can`t remove node [{id}]. Does not exist.");
@@ -455,7 +455,7 @@ namespace MyNetSensors.WebController.Controllers
                 if (engine == null)
                     return false;
 
-                Node oldNode = engine.GetNode(node.id);
+                Nodes.Node oldNode = engine.GetNode(node.id);
                 if (oldNode == null)
                 {
                     engine.LogEngineError($"Can`t update node [{node.id}]. Does not exist.");
@@ -479,7 +479,7 @@ namespace MyNetSensors.WebController.Controllers
         [Authorize(UserClaims.EditorEditor)]
         public bool SetNodeSettings(string id, Dictionary<string, string> data)
         {
-            Node node = engine.GetNode(id);
+            Nodes.Node node = engine.GetNode(id);
             if (node == null)
             {
                 engine.LogEngineError($"Can`t set settings for node [{id}]. Does not exist.");
@@ -558,8 +558,8 @@ namespace MyNetSensors.WebController.Controllers
 
                 try
                 {
-                    List<Node> nodes;
-                    List<Link> links;
+                    List<Nodes.Node> nodes;
+                    List<Nodes.Link> links;
                     NodesEngineSerializer.DeserializePanel(json, out nodes, out links);
 
                     foreach (var node in nodes)
@@ -647,7 +647,7 @@ namespace MyNetSensors.WebController.Controllers
         [Authorize(UserClaims.EditorObserver)]
         public string GetNodeDescription(string id)
         {
-            Node node = engine.GetNode(id);
+            Nodes.Node node = engine.GetNode(id);
 
             return node == null ? "" : node.GetNodeDescription();
         }

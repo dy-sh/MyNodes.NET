@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -11,9 +11,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MyNetSensors.Gateways.MySensors;
+using MyNodes.Gateways.MySensors;
 
-namespace MyNetSensors.WebController.Code
+namespace MyNodes.WebController.Code
 {
     public class EthernetConnectionPort : IGatewayConnectionPort
     {

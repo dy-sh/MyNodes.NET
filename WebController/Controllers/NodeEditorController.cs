@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -9,20 +9,20 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.Gateways;
+using MyNodes.Gateways;
 using LiteGraph;
 using Microsoft.AspNet.Authorization;
 using Microsoft.Extensions.Configuration;
-using MyNetSensors.Nodes;
-using MyNetSensors.Repositories.EF.SQLite;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.ViewModels.NodeEditor;
+using MyNodes.Repositories.EF.SQLite;
+using MyNodes.Nodes;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
+using MyNodes.WebController.ViewModels.NodeEditor;
 using Newtonsoft.Json;
-using Node = MyNetSensors.Nodes.Node;
+using Node = MyNodes.Nodes.Node;
 
 
-namespace MyNetSensors.WebController.Controllers
+namespace MyNodes.WebController.Controllers
 {
     [Authorize(UserClaims.EditorObserver)]
     public class NodeEditorController : Controller
@@ -103,10 +103,10 @@ namespace MyNetSensors.WebController.Controllers
 
         public IActionResult NodesDescription()
         {
-            List<Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
+            List<Nodes.Node> nodes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                 .Where(t => t.IsSubclassOf(typeof(Node)) && !t.IsAbstract)
-                .Select(t => (Node)Activator.CreateInstance(t)).ToList();
+                 .Where(t => t.IsSubclassOf(typeof(Nodes.Node)) && !t.IsAbstract)
+                .Select(t => (Nodes.Node)Activator.CreateInstance(t)).ToList();
 
             nodes = nodes.OrderBy(x => x.Category + x.Type).ToList();
 

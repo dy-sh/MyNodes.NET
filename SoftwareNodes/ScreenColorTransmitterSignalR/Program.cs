@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using MyNetSensors.SoftNodes;
+using MyNodes.SoftNodes;
 
 namespace ScreenColorTransmitterSignalR
 {

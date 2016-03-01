@@ -7,8 +7,8 @@
     <ProjectGuid>{7A2EAAEA-6C8A-4D18-83B6-7ED44FCC3A5A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScreenColor</RootNamespace>
-    <AssemblyName>ScreenColor</AssemblyName>
+    <RootNamespace>MyNodes.ScreenColorTransmitter</RootNamespace>
+    <AssemblyName>ScreenColorTransmitter</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

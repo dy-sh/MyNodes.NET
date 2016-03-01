@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.WebController.ViewModels.Config
+namespace MyNodes.WebController.ViewModels.Config
 {
     public class SerialGatewayViewModel
     {

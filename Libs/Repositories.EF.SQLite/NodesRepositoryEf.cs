@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -10,9 +10,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using Microsoft.Data.Entity;
-using MyNetSensors.Nodes;
+using MyNodes.Nodes;
 
-namespace MyNetSensors.Repositories.EF.SQLite
+namespace MyNodes.Repositories.EF.SQLite
 {
     public class NodesRepositoryEf : INodesRepository
     {

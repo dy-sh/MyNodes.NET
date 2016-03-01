@@ -1,15 +1,15 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
 using System.Collections.Generic;
 using System.Linq;
-using MyNetSensors.Gateways;
-using MyNetSensors.Gateways.MySensors;
-using Node = MyNetSensors.Nodes.Node;
+using MyNodes.Gateways;
+using MyNodes.Gateways.MySensors;
+using Node = MyNodes.Nodes.Node;
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class MySensorsNodesEngine
     {

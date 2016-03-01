@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class ConnectionRemoteTransmitterNode : Node
     {
@@ -105,7 +105,7 @@ namespace MyNetSensors.Nodes
                    "The principle of operation of this node is the same as the local version, " +
                    "but this node can be used to link the nodes are located on different " +
                    "servers in a local network or in the Internet. <br/>" +
-                   "With this node you can merge several systems MyNetSensors into one system. <br/>" +
+                   "With this node you can merge several MyNodes.NET systems into one system. <br/>" +
                    "To link the transmitter and the receiver, " +
                    "you need to set the channel (like on the local version), " +
                    "address (and port) of the server and password. <br/>" +

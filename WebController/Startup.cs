@@ -15,11 +15,11 @@ using Microsoft.Data.Entity.Query.ExpressionTranslators.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyNetSensors.Repositories.EF.SQLite;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
+using MyNodes.Repositories.EF.SQLite;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
 
-namespace MyNetSensors.WebController
+namespace MyNodes.WebController
 {
     public class Startup
     {

@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -12,13 +12,13 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.ViewModels.Config;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
+using MyNodes.WebController.ViewModels.Config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MyNetSensors.WebController.Controllers
+namespace MyNodes.WebController.Controllers
 {
     [Authorize(UserClaims.ConfigObserver)]
     public class ConfigController : Controller

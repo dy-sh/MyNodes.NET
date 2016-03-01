@@ -1,4 +1,4 @@
-﻿@using MyNetSensors.Nodes
+﻿@using MyNodes.Nodes
 @{
     Layout = null;
     ViewBag.Title = "Node Editor";
@@ -28,7 +28,7 @@
     <!-- Header Menu-->
     <div class="ui inverted fixed big borderless main menu">
         <div class="ui container">
-            <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNetSensors</h3></a>
+            <a asp-controller="Home" asp-action="About" class="ui item fadebefore"><h3>MyNodes.NET</h3></a>
             <div class="right menu">
 
             </div>
@@ -175,11 +175,11 @@
     <script src="~/js/handlebars.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
-    <script type="text/javascript" src="~/js/nodes-editor/litegraph.js"></script>
-    <script type="text/javascript" src="~/js/nodes-editor/litegraph-editor.js"></script>
-    <script type="text/javascript" src="@Html.Raw("~/js/nodes-editor/nodes-editor-theme"+theme+".js")"></script>
-    <script type="text/javascript" src="~/js/nodes-editor/nodes-editor-list.js"></script>
-    <script type="text/javascript" src="~/js/nodes-editor/nodes-editor-signalr.js"></script>
+    <script type="text/javascript" src="~/js/node-editor/litegraph.js"></script>
+    <script type="text/javascript" src="~/js/node-editor/litegraph-editor.js"></script>
+    <script type="text/javascript" src="@Html.Raw("~/js/node-editor/node-editor-theme"+theme+".js")"></script>
+    <script type="text/javascript" src="~/js/node-editor/node-editor-list.js"></script>
+    <script type="text/javascript" src="~/js/node-editor/node-editor-signalr.js"></script>
     <script asp-src-include="~/lib/signalr/jquery.signalr.js"></script>
     <script src="~/signalr/hubs" type="text/javascript"></script>
 

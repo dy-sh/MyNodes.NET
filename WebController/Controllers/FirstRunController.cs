@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -13,15 +13,15 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyNetSensors.Repositories.EF.SQLite;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
-using MyNetSensors.WebController.ViewModels.Config;
-using MyNetSensors.WebController.ViewModels.FirstRun;
-using MyNetSensors.WebController.ViewModels.User;
+using MyNodes.Repositories.EF.SQLite;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
+using MyNodes.WebController.ViewModels.Config;
+using MyNodes.WebController.ViewModels.FirstRun;
+using MyNodes.WebController.ViewModels.User;
 using Newtonsoft.Json.Linq;
 
-namespace MyNetSensors.WebController.Controllers
+namespace MyNodes.WebController.Controllers
 {
     public class FirstRunController : Controller
     {

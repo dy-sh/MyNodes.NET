@@ -3,7 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using MyNetSensors.Repositories.EF.SQLite;
+using MyNodes.Repositories.EF.SQLite;
 
 namespace WebController.Migrations
 {

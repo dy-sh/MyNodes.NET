@@ -7,7 +7,7 @@
     <ProjectGuid>{80CE261C-2829-445C-8DD6-CEDED5996EE9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyNetSensors.Repositories.Dapper</RootNamespace>
+    <RootNamespace>MyNodes.Repositories.Dapper</RootNamespace>
     <AssemblyName>Repositories.Dapper</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

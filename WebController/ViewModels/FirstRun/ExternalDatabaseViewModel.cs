@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.WebController.ViewModels.FirstRun
+namespace MyNodes.WebController.ViewModels.FirstRun
 {
     public class ExternalDatabaseViewModel
     {

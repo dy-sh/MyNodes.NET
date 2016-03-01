@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
-using MyNetSensors.Nodes;
-using MyNetSensors.Users;
-using MyNetSensors.WebController.Code;
+using MyNodes.Nodes;
+using MyNodes.Users;
+using MyNodes.WebController.Code;
 
-namespace MyNetSensors.WebController.Controllers
+namespace MyNodes.WebController.Controllers
 {
     [Authorize(UserClaims.DashboardObserver)]
 

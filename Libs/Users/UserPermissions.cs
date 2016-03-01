@@ -1,4 +1,4 @@
-﻿namespace MyNetSensors.Users
+﻿namespace MyNodes.Users
 {
     public class UserPermissions
     {

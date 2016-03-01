@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace MyNetSensors.Nodes
+namespace MyNodes.Nodes
 {
     public class Position
     {

@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyNetSensors.Users;
+using MyNodes.Users;
 
-namespace MyNetSensors.Repositories.EF.SQLite
+namespace MyNodes.Repositories.EF.SQLite
 {
     public class UsersRepositoryEf : IUsersRepository
     {

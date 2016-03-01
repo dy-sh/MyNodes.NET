@@ -1,4 +1,4 @@
-﻿/*  MyNetSensors 
+﻿/*  MyNodes.NET 
     Copyright (C) 2016 Derwish <derwish.pro@gmail.com>
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
@@ -9,13 +9,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using MyNetSensors.Gateways.MySensors;
-using MyNetSensors.Nodes;
-using MyNetSensors.WebController.Controllers;
-using Node = MyNetSensors.Nodes.Node;
+using MyNodes.Gateways.MySensors;
+using MyNodes.Nodes;
+using MyNodes.WebController.Controllers;
+using Node = MyNodes.Nodes.Node;
 
 
-namespace MyNetSensors.WebController.Code
+namespace MyNodes.WebController.Code
 {
     public static class NodesEngineSignalRServer
     {
@@ -92,7 +92,7 @@ namespace MyNetSensors.WebController.Code
         }
 
         
-        private static void OnNodeActivity(Node node)
+        private static void OnNodeActivity(Nodes.Node node)
         {
             hub.Clients.All.OnNodeActivity(node.Id);
         }
@@ -112,14 +112,14 @@ namespace MyNetSensors.WebController.Code
             hub.Clients.All.OnRemoveLink(liteGraphLink);
         }
 
-        private static void OnRemoveNode(Node node)
+        private static void OnRemoveNode(Nodes.Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
             hub.Clients.All.OnRemoveNode(liteGraphNode.id);
         }
 
-        private static void OnNodeUpdated(Node node)
+        private static void OnNodeUpdated(Nodes.Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
@@ -130,7 +130,7 @@ namespace MyNetSensors.WebController.Code
         }
 
 
-        private static void OnNewNode(Node node)
+        private static void OnNewNode(Nodes.Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);

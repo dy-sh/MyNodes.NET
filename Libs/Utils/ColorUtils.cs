@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace MyNetSensors.Utils
+namespace MyNodes.Utils
 {
     public static class ColorUtils
     {

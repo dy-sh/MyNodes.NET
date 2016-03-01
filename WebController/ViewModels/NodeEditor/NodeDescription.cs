@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyNetSensors.WebController.ViewModels.NodeEditor
+namespace MyNodes.WebController.ViewModels.NodeEditor
 {
     public class NodeDescription
     {
