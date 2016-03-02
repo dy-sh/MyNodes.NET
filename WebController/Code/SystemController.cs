@@ -142,7 +142,6 @@ namespace MyNodes.WebController.Code
                     SerialGatewayConfig = serialGatewayConfig,
                     EthernetGatewayConfig = ethernetGatewayConfig,
                     EnableAutoAssignId = Boolean.Parse(configuration["Gateway:EnableAutoAssignId"]),
-                    EnableMessagesLog = Boolean.Parse(configuration["Gateway:EnableMessagesLog"])
                 };
 
                 logs.config = new LogsConfig
@@ -386,7 +385,6 @@ namespace MyNodes.WebController.Code
             gateway.OnLogInfo += logs.AddGatewayInfo;
             gateway.OnLogError += logs.AddGatewayError;
             gateway.endlessConnectionAttempts = true;
-            gateway.messagesLogEnabled = gatewayConfig.EnableMessagesLog;
             gateway.OnConnected += GatewayConnected;
             gateway.OnDisconnected += GatewayDisconnected;
 

@@ -13,7 +13,6 @@ namespace MyNodes.WebController.Code
     public class GatewayConfig
     {
         public bool EnableAutoAssignId { get; set; }
-        public bool EnableMessagesLog { get; set; }
         public bool LogState { get; set; }
         public bool LogMessages { get; set; }
 

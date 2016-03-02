@@ -29,7 +29,6 @@ namespace MyNodes.Gateways.MySensors
     {
         public IGatewayConnectionPort connectionPort;
         public bool enableAutoAssignId = true;
-        public bool messagesLogEnabled = true;
         public bool endlessConnectionAttempts = true;
         public bool reconnectIfDisconnected = true;
         public int ATTEMPTS_TO_COMMUNICATE = 5;
@@ -53,7 +52,6 @@ namespace MyNodes.Gateways.MySensors
         public event LogEventHandler OnLogInfo;
         public event LogEventHandler OnLogError;
 
-        private List<Message> messagesLog;
         private List<Node> nodes;
 
         GatewayAliveChecker gatewayAliveChecker;
@@ -68,7 +66,6 @@ namespace MyNodes.Gateways.MySensors
             this.db = db;
             this.hisotryDb = hisotryDb;
 
-            messagesLog = hisotryDb?.GetMessages() ?? new List<Message>();
             nodes = db?.GetNodes() ?? new List<Node>();
 
             gatewayAliveChecker = new GatewayAliveChecker(this);
@@ -83,18 +80,7 @@ namespace MyNodes.Gateways.MySensors
         }
 
 
-        public List<Message> GetMessagesLog()
-        {
-            return messagesLog;
-        }
-
-        public void ClearMessagesLog()
-        {
-            messagesLog.Clear();
-            hisotryDb?.RemoveAllMessages();
-        }
-
-
+     
         internal void LogInfo(string message)
         {
             OnLogInfo?.Invoke(message);
@@ -254,23 +240,18 @@ namespace MyNodes.Gateways.MySensors
             string mes = message.ParseToMySensorsMessage();
             connectionPort.SendMessage(mes);
 
+
             AddDecodedMessageToLog(message);
         }
 
 
         public void AddDecodedMessageToLog(Message message)
         {
-            if (!messagesLogEnabled)
-                return;
-
             //ignore check alive message
             if (message.nodeId == 0
                 && message.messageType == MessageType.C_INTERNAL
                 && message.subType == (int)InternalDataType.I_VERSION)
                 return;
-
-            messagesLog.Add(message);
-            hisotryDb?.AddMessage(message);
 
             OnLogDecodedMessage?.Invoke(message);
         }
