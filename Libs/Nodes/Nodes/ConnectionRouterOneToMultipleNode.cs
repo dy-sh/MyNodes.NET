@@ -14,8 +14,8 @@ namespace MyNodes.Nodes
         {
             AddInput("Active Output", DataType.Number);
             AddInput("Value", DataType.Text, true);
-            AddOutput();
-            AddOutput();
+            AddOutput("Out 0");
+            AddOutput("Out 1");
 
             options.ResetOutputsIfAnyInputIsNull = true;
 
@@ -27,7 +27,7 @@ namespace MyNodes.Nodes
         {
             try
             {
-                int index = (int)double.Parse(Inputs[0].Value);
+                int index = (int)double.Parse(Inputs[0].Value) + 1;
 
 
                 if (index < 1 || index > Outputs.Count)
@@ -61,7 +61,7 @@ namespace MyNodes.Nodes
                 int addCount = count - Outputs.Count;
 
                 for (int i = 0; i < addCount; i++)
-                    AddOutput();
+                    AddOutput("Out " + Outputs.Count);
 
                 LogInfo($"Added {addCount} new outputs");
                 UpdateMe();

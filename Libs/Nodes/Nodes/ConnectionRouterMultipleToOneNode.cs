@@ -13,13 +13,13 @@ namespace MyNodes.Nodes
         public ConnectionRouterMultipleToOneNode() : base("Connection", "Router Multiple-One")
         {
             AddInput("Active Input", DataType.Number);
-            AddInput("In 1", DataType.Text, true);
-            AddInput("In 2", DataType.Text, true);
+            AddInput("In 0",DataType.Text, true);
+            AddInput("In 1",DataType.Text, true);
             AddOutput();
 
             options.ResetOutputsIfAnyInputIsNull = true;
 
-            Settings.Add("inputs", new NodeSetting(NodeSettingType.Number, "Inputs count", (Inputs.Count-1).ToString()));
+            Settings.Add("inputs", new NodeSetting(NodeSettingType.Number, "Inputs count", (Inputs.Count - 1).ToString()));
         }
 
 
@@ -27,12 +27,12 @@ namespace MyNodes.Nodes
         {
             try
             {
-                int index = (int) double.Parse(Inputs[0].Value);
+                int index = (int)double.Parse(Inputs[0].Value) + 1;
 
-                if(input!=Inputs[0] && input!=Inputs[index])
+                if (input != Inputs[0] && input != Inputs[index])
                     return;
 
-                if (index < 1 || index > Inputs.Count-1)
+                if (index < 1 || index > Inputs.Count - 1)
                 {
                     LogError("Input Number is out of range");
                     return;
@@ -58,20 +58,20 @@ namespace MyNodes.Nodes
 
             data["inputs"] = count.ToString();
 
-            if (count > Inputs.Count-1)
+            if (count > Inputs.Count - 1)
             {
-                int addCount = count - Inputs.Count+1;
+                int addCount = count - Inputs.Count + 1;
 
                 for (int i = 0; i < addCount; i++)
-                    AddInput("In " + Inputs.Count , DataType.Text, true);
+                    AddInput("In " + (Inputs.Count-1), DataType.Text, true);
 
                 LogInfo($"Added {addCount} new inputs");
                 UpdateMe();
                 UpdateMeInDb();
             }
-            else if (count < Inputs.Count-1)
+            else if (count < Inputs.Count - 1)
             {
-                int remCount = Inputs.Count-1 - count;
+                int remCount = Inputs.Count - 1 - count;
 
                 for (int i = 0; i < remCount; i++)
                     RemoveInput(Inputs.Last());
