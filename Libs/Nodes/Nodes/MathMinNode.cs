@@ -11,15 +11,13 @@ namespace MyNodes.Nodes
 {
     public class MathMinNode : Node
     {
-        private List<double> Values { get; set; }
+        private double? min { get; set; }
 
         public MathMinNode() : base("Math", "Min")
         {
             AddInput("Value", DataType.Number,true);
             AddInput("Reset", DataType.Logical, true);
             AddOutput("Out",DataType.Number);
-
-            Values=new List<double>();
         }
         
 
@@ -27,13 +25,18 @@ namespace MyNodes.Nodes
         {
             if (input == Inputs[0] && input.Value != null)
             {
-                Values.Add(double.Parse(input.Value));
-                Outputs[0].Value = Values.Min().ToString("0.##");
+                double val = double.Parse(input.Value);
+
+                if (min == null || val < min)
+                {
+                    min = val;
+                    Outputs[0].Value = min.ToString();
+                }
             }
 
             if (input == Inputs[1] && input.Value == "1")
             {
-                Values.Clear();
+                min = null;
                 Outputs[0].Value = null;
             }
         }

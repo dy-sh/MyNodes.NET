@@ -11,29 +11,32 @@ namespace MyNodes.Nodes
 {
     public class MathMaxNode : Node
     {
-        private List<double> Values { get; set; }
+        private double? max { get; set; }
 
         public MathMaxNode() : base("Math", "Max")
         {
-            AddInput("Value", DataType.Number,true);
+            AddInput("Value", DataType.Number, true);
             AddInput("Reset", DataType.Logical, true);
-            AddOutput("Out",DataType.Number);
-
-            Values=new List<double>();
+            AddOutput("Out", DataType.Number);
         }
-        
+
 
         public override void OnInputChange(Input input)
         {
             if (input == Inputs[0] && input.Value != null)
             {
-                Values.Add(double.Parse(input.Value));
-                Outputs[0].Value = Values.Max().ToString("0.##");
+                double val = double.Parse(input.Value);
+
+                if (max == null || val > max)
+                {
+                    max = val;
+                    Outputs[0].Value = max.ToString();
+                }
             }
 
             if (input == Inputs[1] && input.Value == "1")
             {
-                Values.Clear();
+                max = null;
                 Outputs[0].Value = null;
             }
         }
