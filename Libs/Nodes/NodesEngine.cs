@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@ namespace MyNodes.Nodes
         private INodesRepository nodesDb;
         public INodesDataRepository dataDb;
 
-        private Timer updateNodesTimer = new Timer();
+        //  private Timer updateNodesTimer = new Timer();
         private List<Node> nodes = new List<Node>();
         private List<Link> links = new List<Link>();
 
@@ -58,23 +59,19 @@ namespace MyNodes.Nodes
         public delegate void OutputEventHandler(Output output);
         public delegate void LinkEventHandler(Link link);
 
+        private DateTime lastUpdateTime;
 
 
 
         public NodesEngine(INodesRepository nodesDb = null, INodesDataRepository dataDb = null)
         {
-            //var x= AppDomain.CurrentDomain.GetAssemblies()
-            //           .SelectMany(assembly => assembly.GetTypes())
-            //           .Where(type => type.IsSubclassOf(typeof(Node))).ToList();
-
 
             NodesEngine.nodesEngine = this;
 
             this.nodesDb = nodesDb;
             this.dataDb = dataDb;
 
-            updateNodesTimer.Elapsed += UpdateNodes;
-            updateNodesTimer.Interval = UPDATE_NODES_INTEVAL;
+            lastUpdateTime = DateTime.Now;
 
             activityTimer.Elapsed += UpdateShowActivity;
             activityTimer.Interval = SHOW_ACTIVITY_INTERVAL;
@@ -85,6 +82,8 @@ namespace MyNodes.Nodes
                 GetNodesFromRepository();
                 GetLinksFromRepository();
             }
+
+            UpdateNodesLoop();
         }
 
 
@@ -106,7 +105,7 @@ namespace MyNodes.Nodes
 
             started = true;
 
-            updateNodesTimer.Start();
+            //     updateNodesTimer.Start();
             OnStart?.Invoke();
             LogEngineInfo("Started");
         }
@@ -120,7 +119,7 @@ namespace MyNodes.Nodes
             started = false;
             starting = false;
 
-            updateNodesTimer.Stop();
+            //       updateNodesTimer.Stop();
             changedInputsStack.Clear();
 
             OnStop?.Invoke();
@@ -187,7 +186,7 @@ namespace MyNodes.Nodes
 
             Node node = GetInputOwner(input.Id);
 
-            if(node==null)
+            if (node == null)
                 return;
 
             ShowNodeActivity(node);
@@ -199,7 +198,7 @@ namespace MyNodes.Nodes
                     changedInputsStack.Remove(input);
                 }
                 catch { }
-                LogEngineError($"Message dropped at Node [{node.PanelName}: {node.Type}].");
+                LogEngineError($"Event dropped in [{node.PanelName}: {node.Type}].");
                 return;
             }
             changedInputsStack.Add(input);
@@ -217,7 +216,7 @@ namespace MyNodes.Nodes
             try
             {
                 if (changedInputsStack.Contains(input))
-                changedInputsStack.Remove(input);
+                    changedInputsStack.Remove(input);
             }
             catch { }
 
@@ -241,32 +240,41 @@ namespace MyNodes.Nodes
         }
 
 
-        private void UpdateNodes(object sender, ElapsedEventArgs e)
+        private void UpdateNodesLoop()
         {
-            if (nodes == null || !nodes.Any())
-                return;
-
-            updateNodesTimer.Stop();
-
-            try
+            Task.Run((() =>
             {
-                //to prevent changing of collection while writing to db is not yet finished
-                Node[] nodesTemp = new Node[nodes.Count];
-                nodes.CopyTo(nodesTemp);
-
-                foreach (var node in nodesTemp)
+                while (true)
                 {
-                    node.Loop();
-                    if (!started)
-                        break;
+                    if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < UPDATE_NODES_INTEVAL)
+                        continue;
+
+                    lastUpdateTime = DateTime.Now;
+
+                    if (nodes == null || !nodes.Any())
+                        continue;
+
+                    try
+                    {
+                         //to prevent changing of collection while writing to db is not yet finished
+                         Node[] nodesTemp = new Node[nodes.Count];
+                        nodes.CopyTo(nodesTemp);
+
+                        foreach (var node in nodesTemp)
+                        {
+                            node.Loop();
+                            if (!started)
+                                break;
+                        }
+
+                        OnUpdateLoop?.Invoke();
+                    }
+                    catch
+                    {
+                    }
+
                 }
-
-                OnUpdateLoop?.Invoke();
-            }
-            catch { }
-
-            if (started)
-                updateNodesTimer.Start();
+            }));
         }
 
 
@@ -299,9 +307,6 @@ namespace MyNodes.Nodes
         public void SetUpdateInterval(int ms)
         {
             UPDATE_NODES_INTEVAL = ms;
-            updateNodesTimer.Stop();
-            updateNodesTimer.Interval = UPDATE_NODES_INTEVAL;
-            updateNodesTimer.Start();
         }
 
         public int GetUpdateInterval()
@@ -416,7 +421,7 @@ namespace MyNodes.Nodes
 
         public void UpdateNode(Node node)
         {
-          //  LogEngineInfo($"Update node [{node.GetType().Name}]");
+            //  LogEngineInfo($"Update node [{node.GetType().Name}]");
             OnNodeUpdated?.Invoke(node);
         }
 
@@ -430,7 +435,7 @@ namespace MyNodes.Nodes
                 return;
             }
 
-          //  LogEngineInfo($"Update node in DB [{node.GetType().Name}]");
+            //  LogEngineInfo($"Update node in DB [{node.GetType().Name}]");
             nodesDb?.UpdateNode(node);
         }
 
