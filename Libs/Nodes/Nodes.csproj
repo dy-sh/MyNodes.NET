@@ -69,6 +69,7 @@
     <Compile Include="Nodes\MathMaxNode.cs" />
     <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
+    <Compile Include="Nodes\RgbFadeRgbNode.cs" />
     <Compile Include="Nodes\RgbRandomRgbwNode.cs" />
     <Compile Include="Nodes\RgbRandomRgbNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="Nodes\TextASCIICodeNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
     <Compile Include="Nodes\TimeClockNode.cs" />
-    <Compile Include="Nodes\RgbFadeRgbNode.cs" />
+    <Compile Include="Nodes\RgbFadeRgbwNode.cs" />
     <Compile Include="Nodes\TimeSmoothByRangeNode.cs" />
     <Compile Include="Nodes\TimeFadeNode.cs" />
     <Compile Include="Nodes\TimeSmoothByTimeNode.cs" />

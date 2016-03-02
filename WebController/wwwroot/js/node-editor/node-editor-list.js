@@ -747,6 +747,18 @@
 
             
 
+            //RgbFadeRgbwNode
+            function RgbFadeRgbwNode () {
+                this.properties = {
+                    'ObjectType': 'MyNodes.Nodes.RgbFadeRgbwNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbFadeRgbwNode.title = 'Fade RGBW';
+            LiteGraph.registerNodeType('RGB/Fade RGBW', RgbFadeRgbwNode);
+
+            
+
             //RgbNumbersToRgbNode
             function RgbNumbersToRgbNode () {
                 this.properties = {
