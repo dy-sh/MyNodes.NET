@@ -101,6 +101,7 @@
     <Compile Include="Nodes\TextASCIICodeNode.cs" />
     <Compile Include="Nodes\TimeDelayMeterNode.cs" />
     <Compile Include="Nodes\TimeClockNode.cs" />
+    <Compile Include="Nodes\RgbFadeRgbNode.cs" />
     <Compile Include="Nodes\TimeSmoothByRangeNode.cs" />
     <Compile Include="Nodes\TimeFadeNode.cs" />
     <Compile Include="Nodes\TimeSmoothByTimeNode.cs" />
