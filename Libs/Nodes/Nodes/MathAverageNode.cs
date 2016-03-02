@@ -15,20 +15,33 @@ namespace MyNodes.Nodes
 
         public MathAverageNode() : base("Math", "Average")
         {
-            AddInput("Value", DataType.Number,true);
+            AddInput("Value", DataType.Number, true);
             AddInput("Reset", DataType.Logical, true);
-            AddOutput("Out",DataType.Number);
+            AddOutput("Out", DataType.Number);
 
-            Values=new List<double>();
+            Values = new List<double>();
+
+            Settings.Add("maxvalues", new NodeSetting(NodeSettingType.Number, "Max count of the last values", "1000"));
         }
-        
+
 
         public override void OnInputChange(Input input)
         {
             if (input == Inputs[0] && input.Value != null)
             {
+                int maxValues=10;
+                int.TryParse(Settings["maxvalues"].Value, out maxValues);
+
                 Values.Add(double.Parse(input.Value));
-                Outputs[0].Value = (Values.Sum()/Values.Count).ToString("0.##");
+
+                if (Values.Count > maxValues)
+                {
+                    int more = Values.Count - maxValues;
+                    for (int i = 0; i < more; i++)
+                        Values.RemoveAt(0);
+                }
+
+                Outputs[0].Value = (Values.Sum() / Values.Count).ToString("0.##");
             }
 
             if (input == Inputs[1] && input.Value == "1")
