@@ -3,6 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System;
 using System.Collections.Generic;
 using System.Timers;
 
@@ -18,7 +19,7 @@ namespace MyNodes.Nodes
 
         private double interval;
 
-        private readonly Timer timer = new Timer();
+        private DateTime lastTime;
 
         public TimeTickerNode() : base("Time", "Ticker")
         {
@@ -31,26 +32,37 @@ namespace MyNodes.Nodes
 
             Settings.Add("zero", new NodeSetting(NodeSettingType.Checkbox, "Generate Zero", "true"));
 
-            timer = new Timer();
-            timer.Interval = interval / 2;
-            timer.Elapsed += TimerElapsed;
-            timer.Start();
+            lastTime = DateTime.Now;
         }
 
 
-
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        public override void Loop()
         {
             if (!enabled)
                 return;
 
-            state = !state;
+            if (Settings["zero"].Value == "true")
+            {
+                if ((DateTime.Now - lastTime).TotalMilliseconds < interval / 2)
+                    return;
 
-            if (Settings["zero"].Value == "true" )
+                state = !state;
+                lastTime = DateTime.Now;
+
                 Outputs[0].Value = state ? "1" : "0";
-            else if (state)
+            }
+            else
+            {
+                if ((DateTime.Now - lastTime).TotalMilliseconds < interval)
+                    return;
+
+                lastTime = DateTime.Now;
+
                 Outputs[0].Value = "1";
+            }
         }
+
+
 
         public override void OnInputChange(Input input)
         {
@@ -61,13 +73,6 @@ namespace MyNodes.Nodes
                 else
                     double.TryParse(input.Value, out interval);
 
-                if (interval < 1)
-                    interval = 1;
-
-                timer.Stop();
-                timer.Interval = interval / 2;
-                timer.Start();
-
                 LogInfo($"Interval changed to {interval} ms");
             }
 
@@ -75,11 +80,9 @@ namespace MyNodes.Nodes
             if (input == Inputs[1])
             {
                 enabled = input.Value == "1" || input.Value == null;
-                timer.Enabled = enabled;
                 state = enabled;
                 LogInfo(enabled ? "Start" : "Stop");
                 Outputs[0].Value = state ? "1" : "0";
-
             }
         }
 
