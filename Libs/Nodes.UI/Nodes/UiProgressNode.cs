@@ -15,6 +15,7 @@ namespace MyNodes.Nodes
         private DateTime lastUpdateTime;
         private double? interval;
         private bool waitingToSend;
+        private string lastValue;
 
         public UiProgressNode() : base("UI", "Progress")
         {
@@ -30,31 +31,17 @@ namespace MyNodes.Nodes
             if (interval == null)
                 interval = double.Parse(Settings["UpdateInterval"].Value);
 
-            if (!waitingToSend || (DateTime.Now - lastUpdateTime).TotalMilliseconds < interval)
+            if (lastValue == Value || (DateTime.Now - lastUpdateTime).TotalMilliseconds < interval)
                 return;
-
             lastUpdateTime = DateTime.Now;
-            waitingToSend = false;
 
+            Value = lastValue;
             UpdateMe();
         }
 
         public override void OnInputChange(Input input)
         {
-            Value = input.Value;
-
-            if (interval == null)
-                interval = double.Parse(Settings["UpdateInterval"].Value);
-
-            if ((DateTime.Now - lastUpdateTime).TotalMilliseconds >= interval)
-            {
-                lastUpdateTime = DateTime.Now;
-                UpdateMe();
-            }
-            else
-            {
-                waitingToSend = true;
-            }
+            lastValue = input.Value;
         }
 
         public override bool SetSettings(Dictionary<string, string> data)
@@ -68,8 +55,7 @@ namespace MyNodes.Nodes
             return "This is a UI node. It displays a progress bar on the dashboard. <br/>" +
                    "The progress bar may display the progress of a certain event in percent. <br/>" +
                    "It takes a value from 0 to 100.<br/>" +
-                   "You can set update interval in the settings of the node.";
-
+                   "You can set the refresh rate in the settings of the node. ";
         }
     }
 }
