@@ -35,7 +35,7 @@ namespace MyNodes.WebController.Code
             if (nodesEngine != null)
             {
                 nodesEngine.OnNewNode += OnNewNode;
-                nodesEngine.OnNodeUpdated += OnNodeUpdated;
+                nodesEngine.OnNodeUpdatedInEditor += OnNodeUpdated;
                 nodesEngine.OnRemoveNode += OnRemoveNode;
                 nodesEngine.OnRemoveLink += OnRemoveLink;
                 nodesEngine.OnNewLink += OnNewLink;

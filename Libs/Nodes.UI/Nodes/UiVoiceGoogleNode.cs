@@ -18,7 +18,7 @@ namespace MyNodes.Nodes
         public override void OnInputChange(Input input)
         {
             Value = input.Value;
-            UpdateMe();
+            UpdateMeOnDashboard();
         }
 
         public override string GetNodeDescription()

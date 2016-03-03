@@ -66,7 +66,7 @@ namespace MyNodes.Nodes
                     AddInput("In " + (Inputs.Count-1), DataType.Text, true);
 
                 LogInfo($"Added {addCount} new inputs");
-                UpdateMe();
+                UpdateMeInEditor();
                 UpdateMeInDb();
             }
             else if (count < Inputs.Count - 1)
@@ -77,7 +77,7 @@ namespace MyNodes.Nodes
                     RemoveInput(Inputs.Last());
 
                 LogInfo($"Removed {remCount} inputs");
-                UpdateMe();
+                UpdateMeInEditor();
                 UpdateMeInDb();
             }
 

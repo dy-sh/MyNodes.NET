@@ -125,9 +125,14 @@ namespace MyNodes.Nodes
             return true;
         }
 
-        public void UpdateMe()
+        public void UpdateMeOnDashboard()
         {
-            engine?.UpdateNode(this);
+            engine?.UpdateNodeOnDashboard(this);
+        }
+
+        public void UpdateMeInEditor()
+        {
+            engine?.UpdateNodeInEditor(this);
         }
 
         public void UpdateMeInDb()
@@ -302,7 +307,7 @@ namespace MyNodes.Nodes
                 Settings[d.Key].Value = d.Value;
             }
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
 
 

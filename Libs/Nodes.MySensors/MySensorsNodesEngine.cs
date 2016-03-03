@@ -89,7 +89,7 @@ namespace MyNodes.Nodes
             else
             {
                 oldNode.Settings["Name"].Value = node.GetSimpleName2();
-                engine.UpdateNode(oldNode);
+                engine.UpdateNodeInEditor(oldNode);
                 engine.UpdateNodeInDb(oldNode);
             }
         }
@@ -101,7 +101,7 @@ namespace MyNodes.Nodes
             {
                 MySensorsNode node = GetMySensorsNode(sensor.nodeId);
                 node.AddInputAndOutput(sensor);
-                engine.UpdateNode(node);
+                engine.UpdateNodeInEditor(node);
                 engine.UpdateNodeInDb(node);
             }
             else

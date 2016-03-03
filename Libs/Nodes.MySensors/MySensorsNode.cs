@@ -17,7 +17,7 @@ namespace MyNodes.Nodes
         public int nodeId;
 
 
-        public MySensorsNode(Gateways.MySensors.Node node) : base("Hardware","MySensors")
+        public MySensorsNode(Gateways.MySensors.Node node) : base("Hardware", "MySensors")
         {
             this.nodeId = node.Id;
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", node.GetSimpleName2()));
@@ -45,7 +45,7 @@ namespace MyNodes.Nodes
                     input.Value);
             else
             {
-               // LogError($"Can`t send message to Node[{mySensorsNodeInput.nodeId}] Sensor[{mySensorsNodeInput.sensorId}]. Gateway is not connected.");
+                // LogError($"Can`t send message to Node[{mySensorsNodeInput.nodeId}] Sensor[{mySensorsNodeInput.sensorId}]. Gateway is not connected.");
             }
         }
 
@@ -101,11 +101,11 @@ namespace MyNodes.Nodes
             {
                 output = new Output { Name = "Battery" };
                 output.SlotIndex = Int32.MaxValue;
-               AddOutput(output);
+                AddOutput(output);
+                UpdateMeInEditor();
             }
 
             output.Value = batteryLevel.ToString();
-            UpdateMe();
             UpdateMeInDb();
         }
 

@@ -50,7 +50,7 @@ namespace MyNodes.Nodes
             ChangeInputsCount(ins);
             ChangeOutputsCount(outs);
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
 
 

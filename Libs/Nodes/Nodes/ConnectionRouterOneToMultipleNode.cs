@@ -64,7 +64,7 @@ namespace MyNodes.Nodes
                     AddOutput("Out " + Outputs.Count);
 
                 LogInfo($"Added {addCount} new outputs");
-                UpdateMe();
+                UpdateMeInEditor();
                 UpdateMeInDb();
             }
             else if (count < Outputs.Count)
@@ -75,7 +75,7 @@ namespace MyNodes.Nodes
                     RemoveOutput(Outputs.Last());
 
                 LogInfo($"Removed {remCount} outputs");
-                UpdateMe();
+                UpdateMeInEditor();
                 UpdateMeInDb();
             }
 

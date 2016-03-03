@@ -43,7 +43,7 @@ namespace MyNodes.Nodes
             Value = Int32.Parse(values.FirstOrDefault().Value);
             Outputs[0].Value = Value.ToString();
 
-            UpdateMe();
+            UpdateMeOnDashboard();
             UpdateMeInDb();
 
             return true;

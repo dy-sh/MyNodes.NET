@@ -21,12 +21,10 @@ namespace MyNodes.Nodes
         public override bool SetValues(Dictionary<string, string> values)
         {
             Outputs[0].Value = "1";
-            UpdateMe();
 
             if (Settings["zero"].Value == "true")
             {
                 Outputs[0].Value = "0";
-                UpdateMe();
             }
 
             return true;

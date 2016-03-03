@@ -17,9 +17,9 @@ namespace MyNodes.Nodes
         public UiNode(string category, string type) : base(category, type)
         {
             DefaultName = type;
-            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name",""));
-            Settings.Add("PanelIndex",new NodeSetting(NodeSettingType.Number, "Index on panel","0"));
-            Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page","true"));
+            Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
+            Settings.Add("PanelIndex", new NodeSetting(NodeSettingType.Number, "Index on panel", "0"));
+            Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page", "true"));
         }
 
         public virtual bool SetValues(Dictionary<string, string> values)
@@ -35,6 +35,13 @@ namespace MyNodes.Nodes
         public virtual void OnAddToUiEngine(UiNodesEngine uiEngine)
         {
             this.uiEngine = uiEngine;
+        }
+
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            bool result = base.SetSettings(data);
+            UpdateMeOnDashboard();
+            return result;
         }
     }
 }

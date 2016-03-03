@@ -92,7 +92,7 @@ namespace MyNodes.Nodes
 
             LogInfo($"Added additional outputs");
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
         }
 
@@ -109,7 +109,7 @@ namespace MyNodes.Nodes
 
             LogInfo($"Removed additional outputs");
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
         }
 

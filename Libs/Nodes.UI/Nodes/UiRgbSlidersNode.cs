@@ -25,7 +25,7 @@ namespace MyNodes.Nodes
             Value = values.FirstOrDefault().Value;
             Outputs[0].Value = Value;
 
-            UpdateMe();
+            UpdateMeOnDashboard();
             UpdateMeInDb();
 
             return true;

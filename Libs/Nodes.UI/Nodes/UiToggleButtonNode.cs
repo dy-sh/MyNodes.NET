@@ -24,7 +24,7 @@ namespace MyNodes.Nodes
             Value = Value == "0" ? "1" : "0";
             Outputs[0].Value = Value;
 
-            UpdateMe();
+            UpdateMeOnDashboard();
             UpdateMeInDb();
 
             return true;

@@ -57,7 +57,7 @@ namespace MyNodes.Nodes
             while (log.Count > max)
                 log.Remove(log.First());
 
-            UpdateMe();
+            UpdateMeOnDashboard();
 
             if (Settings["WriteInDatabase"].Value == "true")
                 AddNodeData(LastRecordCached.Value, max);

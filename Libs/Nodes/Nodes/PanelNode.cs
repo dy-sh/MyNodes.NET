@@ -3,6 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyNodes.Nodes
@@ -35,7 +36,7 @@ namespace MyNodes.Nodes
             node.Settings["Name"].Value = input.Name;
             AddInput(input);
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
         }
 
@@ -54,7 +55,7 @@ namespace MyNodes.Nodes
             node.Settings["Name"].Value = output.Name;
             AddOutput(output);
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
         }
 
@@ -64,8 +65,8 @@ namespace MyNodes.Nodes
             var input = engine.GetInput(node.Id);
 
             RemoveInput(input);
-            
-            UpdateMe();
+
+            UpdateMeInEditor();
             UpdateMeInDb();
             return true;
         }
@@ -75,8 +76,8 @@ namespace MyNodes.Nodes
             var output = engine.GetOutput(node.Id);
 
             RemoveOutput(output);
-           
-            UpdateMe();
+
+            UpdateMeInEditor();
             UpdateMeInDb();
             return true;
         }
@@ -140,6 +141,15 @@ namespace MyNodes.Nodes
             }
             return null;
         }
+
+
+        public override bool SetSettings(Dictionary<string, string> data)
+        {
+            bool result = base.SetSettings(data);
+            UpdateMeOnDashboard();
+            return result;
+        }
+
 
         public override string GetJsListGenerationScript()
         {

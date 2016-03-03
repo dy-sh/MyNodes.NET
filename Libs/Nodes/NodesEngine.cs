@@ -41,7 +41,8 @@ namespace MyNodes.Nodes
 
         public event NodeEventHandler OnNewNode;
         public event NodeEventHandler OnRemoveNode;
-        public event NodeEventHandler OnNodeUpdated;
+        public event NodeEventHandler OnNodeUpdatedOnDashboard;
+        public event NodeEventHandler OnNodeUpdatedInEditor;
         public event NodeEventHandler OnNodeActivity;
         public event InputEventHandler OnInputStateUpdated;
         public event OutputEventHandler OnOutputStateUpdated;
@@ -419,11 +420,17 @@ namespace MyNodes.Nodes
 
 
 
-        public void UpdateNode(Node node)
+        public void UpdateNodeOnDashboard(Node node)
         {
-            //  LogEngineInfo($"Update node [{node.GetType().Name}]");
-            OnNodeUpdated?.Invoke(node);
+            OnNodeUpdatedOnDashboard?.Invoke(node);
         }
+
+
+        public void UpdateNodeInEditor(Node node)
+        {
+            OnNodeUpdatedInEditor?.Invoke(node);
+        }
+
 
         public void UpdateNodeInDb(Node node)
         {
@@ -461,7 +468,7 @@ namespace MyNodes.Nodes
                 output.Name = name;
                 Node node = GetOutputOwner(output);
                 UpdateNodeInDb(node);
-                UpdateNode(node);
+                UpdateNodeInEditor(node);
             }
 
             output.Value = value;
@@ -483,7 +490,7 @@ namespace MyNodes.Nodes
                 input.Name = name;
                 Node node = GetInputOwner(input);
                 UpdateNodeInDb(node);
-                UpdateNode(node);
+                UpdateNodeInEditor(node);
             }
 
             input.Value = value;

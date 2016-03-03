@@ -22,7 +22,7 @@ namespace MyNodes.Nodes
 
             Outputs[0].Value = value;
 
-            UpdateMe();
+            UpdateMeOnDashboard();
             UpdateMeInDb();
         }
 

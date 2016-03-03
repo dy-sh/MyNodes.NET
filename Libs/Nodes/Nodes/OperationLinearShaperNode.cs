@@ -72,7 +72,7 @@ namespace MyNodes.Nodes
 
             ChangeInputsCount(count);
 
-            UpdateMe();
+            UpdateMeInEditor();
             UpdateMeInDb();
 
             return base.SetSettings(data);

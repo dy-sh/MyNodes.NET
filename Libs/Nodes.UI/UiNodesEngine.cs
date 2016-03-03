@@ -26,7 +26,7 @@ namespace MyNodes.Nodes
             UiNodesEngine.engine = engine;
             engine.OnNewNode += OnNewNode;
             engine.OnRemoveNode += OnRemoveNode;
-            engine.OnNodeUpdated += OnNodeUpdated;
+            engine.OnNodeUpdatedOnDashboard += OnNodeUpdatedOnDashboard;
 
             List<UiNode> nodes = engine.GetNodes()
                 .OfType<UiNode>()
@@ -37,7 +37,7 @@ namespace MyNodes.Nodes
         }
         
         
-        private void OnNodeUpdated(Node node)
+        private void OnNodeUpdatedOnDashboard(Node node)
         {
             if (node is UiNode)
                 OnUiNodeUpdated?.Invoke((UiNode)node);
@@ -59,13 +59,14 @@ namespace MyNodes.Nodes
             UiNode n = (UiNode)node;
 
             n.OnAddToUiEngine(this);
-
-            OnNewUiNode?.Invoke(n);
-
+            
             if (string.IsNullOrEmpty(n.Settings["Name"].Value))
                 n.Settings["Name"].Value = GenerateName(n);
 
-            engine.UpdateNode(n);
+            OnNewUiNode?.Invoke(n);
+
+            engine.UpdateNodeInEditor(n);
+            //engine.UpdateNodeOnDashboard(n);
             engine.UpdateNodeInDb(n);
         }
 

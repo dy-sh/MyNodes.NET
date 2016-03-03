@@ -21,7 +21,7 @@ namespace MyNodes.Nodes
         {
             Address = Inputs[0].Value;
             Play = Inputs[1].Value == "1";
-            UpdateMe();
+            UpdateMeOnDashboard();
         }
 
         public override string GetNodeDescription()

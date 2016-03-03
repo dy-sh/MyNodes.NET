@@ -15,7 +15,6 @@ namespace MyNodes.Nodes
 
         private DateTime lastUpdateTime;
         private double? interval;
-        private bool waitingToSend;
         private string lastValue;
 
         public UiLabelNode() : base("UI", "Label")
@@ -35,7 +34,7 @@ namespace MyNodes.Nodes
             lastUpdateTime = DateTime.Now;
 
             Value = lastValue;
-            UpdateMe();
+            UpdateMeOnDashboard();
         }
 
         public override void OnInputChange(Input input)

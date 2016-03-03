@@ -462,11 +462,19 @@ namespace MyNodes.WebController.Controllers
                     return false;
                 }
 
-                oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
-                oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+                if (oldNode.Position == null || oldNode.Size == null
+                    || oldNode.Position.X != node.pos[0] || oldNode.Position.Y != node.pos[1]
+                    || oldNode.Size.Width != node.size[0] || oldNode.Size.Height != node.size[1])
+                {
+                    if (node.pos != null)
+                        oldNode.Position = new Position { X = node.pos[0], Y = node.pos[1] };
 
-                engine.UpdateNode(oldNode);
-                engine.UpdateNodeInDb(oldNode);
+                    if (node.size != null)
+                        oldNode.Size = new Size { Width = node.size[0], Height = node.size[1] };
+
+                    engine.UpdateNodeInEditor(oldNode);
+                    engine.UpdateNodeInDb(oldNode);
+                }
 
                 return true;
             });

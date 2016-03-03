@@ -55,7 +55,7 @@ namespace MyNodes.Nodes
 
             Node panel = engine.GetPanelNode(PanelId);
 
-            engine.UpdateNode(panel);
+            engine.UpdateNodeInEditor(panel);
             engine.UpdateNodeInDb(panel);
         }
 

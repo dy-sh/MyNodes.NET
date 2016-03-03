@@ -32,7 +32,7 @@ namespace MyNodes.Nodes
             lastUpdateTime = DateTime.Now;
 
             Value = lastValue;
-            UpdateMe();
+            UpdateMeOnDashboard();
         }
 
         public override void OnInputChange(Input input)
