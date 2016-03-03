@@ -54,7 +54,7 @@ namespace MyNodes.WebController.Code
         
         private static void OnNodeActivity(Node node)
         {
-            hub.Clients.All.OnNodeActivity(node.Id);
+            hub.Clients.Group(node.PanelId).OnNodeActivity(node.Id);
         }
 
 
@@ -62,35 +62,35 @@ namespace MyNodes.WebController.Code
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Link liteGraphLink = nodeEditorApi.ConvertLinkToLiteGraphLink(link);
-            hub.Clients.All.OnNewLink(liteGraphLink);
+            hub.Clients.Group(link.PanelId).OnNewLink(liteGraphLink);
         }
 
         private static void OnRemoveLink(Link link)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Link liteGraphLink = nodeEditorApi.ConvertLinkToLiteGraphLink(link);
-            hub.Clients.All.OnRemoveLink(liteGraphLink);
+            hub.Clients.Group(link.PanelId).OnRemoveLink(liteGraphLink);
         }
 
         private static void OnRemoveNode(Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnRemoveNode(liteGraphNode.id);
+            hub.Clients.Group(node.PanelId).OnRemoveNode(liteGraphNode.id);
         }
 
         private static void OnNodeUpdated(Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnNodeUpdated(liteGraphNode);
+            hub.Clients.Group(node.PanelId).OnNodeUpdated(liteGraphNode);
         }
 
         private static void OnNewNode(Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();
             LiteGraph.Node liteGraphNode = nodeEditorApi.ConvertNodeToLiteGraphNode(node);
-            hub.Clients.All.OnNewNode(liteGraphNode);
+            hub.Clients.Group(node.PanelId).OnNewNode(liteGraphNode);
         }
 
         private static void OnGatewayConnected()

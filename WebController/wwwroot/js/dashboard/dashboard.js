@@ -77,7 +77,7 @@ function createNode(node) {
 
 
 function updateNode(node) {
-    //if ShowOnMainPage option changed to true
+    //if ShowOnHomePage option changed to true
     if ($('#node-' + node.Id).length == 0)
         createNode(node);
 

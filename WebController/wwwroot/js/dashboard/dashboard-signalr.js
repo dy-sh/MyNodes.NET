@@ -37,26 +37,10 @@ $(function () {
   
 
     clientsHub.client.OnNewUiNode = function (node) {
-        if (this_panel_id != null && this_panel_id != "") {
-            if (node.PanelId != this_panel_id)
-                return;
-        } else if (node.Settings["ShowOnMainPage"].Value!="true")
-            return;
-
         createNode(node);
     };
 
     clientsHub.client.OnUiNodeUpdated = function (node) {
-        if (this_panel_id != null && this_panel_id != "") {
-            if (node.PanelId != this_panel_id)
-                return;
-        } else if (node.Settings["ShowOnMainPage"].Value != "true") {
-            //if ShowOnMainPage changed to false
-            if ($('#node-' + node.Id).length != 0)
-                removeNode(node);
-            return;
-        }
-
         updateNode(node);
     };
 
@@ -67,17 +51,18 @@ $(function () {
 
 
     clientsHub.client.OnRemoveUiNode = function (node) {
-        if (this_panel_id != null && this_panel_id != "") {
-            if (node.PanelId != this_panel_id)
-                return;
-        } else if (node.Settings["ShowOnMainPage"].Value != "true")
-            return;
+        removeNode(node);
+    };
 
+    clientsHub.client.OnHideFromHomePage = function (node) {
         removeNode(node);
     };
 
 
-    $.connection.hub.start();
+    $.connection.hub.start(
+    function () {
+        clientsHub.server.join(this_panel_id);
+    });
 
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.reconnecting) {
@@ -129,9 +114,9 @@ function getGatewayInfo() {
 
 
 function getNodes() {
-    if (window.this_panel_id == null || window.this_panel_id == "") {
+    if (window.this_panel_id == "Home") {
         $.ajax({
-            url: "/DashboardAPI/GetUINodesForMainPage/",
+            url: "/DashboardAPI/GetUINodesForHomePage/",
             type: "POST",
             success: function (nodes) {
                 onReturnNodes(nodes);

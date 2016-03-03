@@ -15,6 +15,7 @@ namespace MyNodes.Nodes
         public event UiNodeEventHandler OnNewUiNode;
         public event UiNodeEventHandler OnRemoveUiNode;
         public event UiNodeEventHandler OnUiNodeUpdated;
+        public event UiNodeEventHandler OnHideFromHomePage;
         public event NodeEventHandler OnPanelNodeUpdated;
 
         private static NodesEngine engine;
@@ -115,10 +116,10 @@ namespace MyNodes.Nodes
                 .ToList();
         }
 
-        public List<UiNode> GetUINodesForMainPage()
+        public List<UiNode> GetUINodesForHomePage()
         {
             return engine.GetNodes()
-                .Where(n => n is UiNode && ((UiNode)n).Settings["ShowOnMainPage"].Value=="true")
+                .Where(n => n is UiNode && ((UiNode)n).Settings["ShowOnHomePage"].Value=="true")
                 .Cast<UiNode>()
                 .ToList();
         }
@@ -131,5 +132,9 @@ namespace MyNodes.Nodes
                 .ToList();
         }
 
+        public void HideFromHomePage(UiNode node)
+        {
+            OnHideFromHomePage?.Invoke(node);
+        }
     }
 }

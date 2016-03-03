@@ -103,7 +103,10 @@ $(function () {
     };
 
 
-    $.connection.hub.start();
+    $.connection.hub.start(
+        function () {
+            clientsHub.server.join(this_panel_id);
+        });
 
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.reconnecting) {

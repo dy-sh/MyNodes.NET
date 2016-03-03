@@ -1,5 +1,5 @@
 ﻿@{
-    if (ViewBag.panelId == null)
+    if (ViewBag.panelId == "Home")
     {
         ViewBag.Title = "Dashboard";
     }
@@ -11,14 +11,23 @@
 
 
 <div class="ui container">
-    <a asp-controller="NodeEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId" class="ui button right floated">Editor</a>
+
+    @if (ViewBag.panelId == "Home")
+    {
+        <a asp-controller="NodeEditor" asp-action="Index" class="ui button right floated">Editor</a>
+
+    }
+    else
+    {
+        <a asp-controller="NodeEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId" class="ui button right floated">Editor</a>
+    }
 
 
 
 
     <h2>@ViewBag.Title</h2>
     <p>
-        @if (ViewBag.panelId == null)
+        @if (ViewBag.panelId == "Home")
         {
             <a asp-action="List">Panels</a>
         }
@@ -33,19 +42,17 @@
     </p>
     <div class="ui divider"></div>
 
-    <div class="ui message" id="empty-message" style="display:none">
+    <div class="ui message" id="empty-message" style="display: none">
         <p>
-            @if (ViewBag.panelId == null)
+            @if (ViewBag.panelId == "Home")
             {
                 @: Dashboard is empty. To create controls, go to the
-                <a asp-controller="NodeEditor" asp-action="Index">Node Editor</a>
-                @:.
+                <a asp-controller="NodeEditor" asp-action="Index">Node Editor</a>@:.
             }
             else
             {
                 @: Panel is empty. To create controls, go to the
-                <a asp-controller="NodeEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId">Node Editor</a>
-                @:.
+                <a asp-controller="NodeEditor" asp-action="Panel" asp-route-id="@ViewBag.panelId">Node Editor</a>@:.
             }
         </p>
     </div>

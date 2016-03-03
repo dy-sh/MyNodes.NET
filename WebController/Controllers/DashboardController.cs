@@ -20,12 +20,15 @@ namespace MyNodes.WebController.Controllers
     public class DashboardController : Controller
     {
         const string MAIN_PANEL_ID = "Main";
+        const string HOME_PANEL_ID = "Home";
 
         private UiNodesEngine engine = SystemController.uiNodesEngine;
 
 
         public IActionResult Index()
         {
+            ViewBag.panelId = HOME_PANEL_ID;
+
             return View();
         }
 

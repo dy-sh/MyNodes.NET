@@ -13,9 +13,12 @@ namespace MyNodes.WebController.Code
 {
     public static class DashboardSignalRServer
     {
+        private static string MAIN_PAGE_ID = "Home";
+
         private static IHubContext hub;
         private static NodesEngine nodesEngine;
         private static UiNodesEngine uiNodesEngine;
+
 
         public static void Start(IConnectionManager connectionManager)
         {
@@ -31,7 +34,7 @@ namespace MyNodes.WebController.Code
         {
             nodesEngine = SystemController.nodesEngine;
             uiNodesEngine = SystemController.uiNodesEngine;
-             
+
             if (nodesEngine != null)
             {
                 nodesEngine.OnRemoveAllNodesAndLinks += OnRemoveAllNodesAndLinks;
@@ -43,31 +46,42 @@ namespace MyNodes.WebController.Code
                 uiNodesEngine.OnNewUiNode += OnNewUiNode;
                 uiNodesEngine.OnRemoveUiNode += OnRemoveUiNode;
                 uiNodesEngine.OnPanelNodeUpdated += OnPanelNodeUpdated;
+                uiNodesEngine.OnHideFromHomePage += OnHideFromHomePage;
             }
         }
 
+        private static void OnHideFromHomePage(UiNode uinode)
+        {
+            hub.Clients.Group(MAIN_PAGE_ID).OnHideFromHomePage(uinode);
+        }
 
 
         private static void OnRemoveUiNode(UiNode uinode)
         {
-            hub.Clients.All.OnRemoveUiNode(uinode);
+            hub.Clients.Group(uinode.PanelId).OnRemoveUiNode(uinode);
+            if (uinode.Settings["ShowOnHomePage"].Value == "true")
+                hub.Clients.Group(MAIN_PAGE_ID).OnRemoveUiNode(uinode);
         }
 
         private static void OnNewUiNode(UiNode uinode)
         {
-            hub.Clients.All.OnNewUiNode(uinode);
+            hub.Clients.Group(uinode.PanelId).OnNewUiNode(uinode);
+            if (uinode.Settings["ShowOnHomePage"].Value == "true")
+                hub.Clients.Group(MAIN_PAGE_ID).OnNewUiNode(uinode);
         }
 
         private static void OnUiNodeUpdated(UiNode uinode)
         {
-            hub.Clients.All.OnUiNodeUpdated(uinode);
+            hub.Clients.Group(uinode.PanelId).OnUiNodeUpdated(uinode);
+            if (uinode.Settings["ShowOnHomePage"].Value == "true")
+                hub.Clients.Group(MAIN_PAGE_ID).OnUiNodeUpdated(uinode);
         }
 
         private static void OnRemoveAllNodesAndLinks()
         {
             hub.Clients.All.OnRemoveAllNodesAndLinks();
         }
-        
+
         private static void OnPanelNodeUpdated(Node node)
         {
             NodeEditorAPIController nodeEditorApi = new NodeEditorAPIController();

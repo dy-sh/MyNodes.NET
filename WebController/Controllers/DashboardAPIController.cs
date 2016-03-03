@@ -36,14 +36,14 @@ namespace MyNodes.WebController.Controllers
             });
         }
 
-        public async Task<List<UiNode>> GetUINodesForMainPage()
+        public async Task<List<UiNode>> GetUINodesForHomePage()
         {
             return await Task.Run(() =>
             {
                 if (engine == null)
                     return null;
 
-                return engine.GetUINodesForMainPage();
+                return engine.GetUINodesForHomePage();
             });
         }
 

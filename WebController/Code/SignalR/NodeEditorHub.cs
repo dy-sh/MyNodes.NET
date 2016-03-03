@@ -12,7 +12,10 @@ namespace MyNodes.WebController.Code
 {
     public class NodeEditorHub : Hub
     {
-
+        public void Join(string panelId)
+        {
+            this.Groups.Add(this.Context.ConnectionId, panelId);
+        }
     }
 
 }

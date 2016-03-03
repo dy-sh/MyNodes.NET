@@ -19,7 +19,7 @@ namespace MyNodes.Nodes
             DefaultName = type;
             Settings.Add("Name", new NodeSetting(NodeSettingType.Text, "Name", ""));
             Settings.Add("PanelIndex", new NodeSetting(NodeSettingType.Number, "Index on panel", "0"));
-            Settings.Add("ShowOnMainPage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Main Page", "true"));
+            Settings.Add("ShowOnHomePage", new NodeSetting(NodeSettingType.Checkbox, "Show on Dashboard Home Page", "true"));
         }
 
         public virtual bool SetValues(Dictionary<string, string> values)
@@ -39,6 +39,9 @@ namespace MyNodes.Nodes
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
+            if (data["ShowOnHomePage"]=="false" && Settings["ShowOnHomePage"].Value=="true")
+                uiEngine.HideFromHomePage(this);
+
             bool result = base.SetSettings(data);
             UpdateMeOnDashboard();
             return result;
