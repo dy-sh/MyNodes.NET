@@ -10,7 +10,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace MyNodes.WebController.Code
 {
-    public class NodesEngineHub : Hub
+    public class DashboardHub : Hub
     {
 
     }

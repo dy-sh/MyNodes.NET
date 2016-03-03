@@ -15,6 +15,7 @@ namespace MyNodes.Nodes
         public event UiNodeEventHandler OnNewUiNode;
         public event UiNodeEventHandler OnRemoveUiNode;
         public event UiNodeEventHandler OnUiNodeUpdated;
+        public event NodeEventHandler OnPanelNodeUpdated;
 
         private static NodesEngine engine;
         
@@ -40,6 +41,9 @@ namespace MyNodes.Nodes
         {
             if (node is UiNode)
                 OnUiNodeUpdated?.Invoke((UiNode)node);
+
+            if (node is PanelNode)
+                OnPanelNodeUpdated?.Invoke(node);
         }
 
         private void OnRemoveNode(Node node)

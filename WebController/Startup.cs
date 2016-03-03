@@ -177,8 +177,10 @@ namespace MyNodes.WebController
                 });
 
 
-                NodesEngineSignalRServer.Start(connectionManager);
+                DashboardSignalRServer.Start(connectionManager);
+                NodeEditorSignalRServer.Start(connectionManager);
                 MySensorsSignalRServer.Start(connectionManager);
+                LogsSignalRServer.Start(connectionManager);
             }
 
             SystemController.Start(Configuration, serviceProvider);

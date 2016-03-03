@@ -29,18 +29,18 @@ var signalRServerConnected;
 
 $(function () {
     //configure signalr
-    var clientsHub = $.connection.nodesEngineHub;
+    var clientsHub = $.connection.logsHub;
 
     //var logType set from ViewBag in View
 
     clientsHub.client.OnLogRecord = OnLogRecord;
 
 
-    clientsHub.client.OnConnected = function () {
+    clientsHub.client.OnGatewayConnected = function () {
         noty({ text: 'Gateway is connected.', type: 'alert', timeout: false });
     };
 
-    clientsHub.client.OnDisconnected = function () {
+    clientsHub.client.OnGatewayDisconnected = function () {
         noty({ text: 'Gateway is disconnected!', type: 'error', timeout: false });
     };
 
