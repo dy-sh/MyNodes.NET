@@ -15,6 +15,7 @@ using Microsoft.Data.Entity.Query.ExpressionTranslators.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Data.Entity.Infrastructure;
 using MyNodes.Repositories.EF.SQLite;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
