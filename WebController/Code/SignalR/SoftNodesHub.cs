@@ -28,7 +28,10 @@ namespace MyNodes.WebController.Code
                 if (engine == null)
                     return 2;
 
-                List<ConnectionRemoteReceiverNode> receivers = engine.GetNodes()
+                List<ConnectionRemoteReceiverNode> receivers;
+
+                lock (engine.nodesLock)
+                    receivers=engine.GetNodes()
                     .OfType<ConnectionRemoteReceiverNode>()
                     .Where(x => x.GetChannel().ToString() == channel)
                     .ToList();

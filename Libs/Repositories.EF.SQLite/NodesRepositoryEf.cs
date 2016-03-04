@@ -46,7 +46,7 @@ namespace MyNodes.Repositories.EF.SQLite
                 updateDbTimer.Start();
             }
         }
-        
+
         private void UpdateDbTimerEvent(object sender, object e)
         {
             updateDbTimer.Stop();
@@ -85,11 +85,11 @@ namespace MyNodes.Repositories.EF.SQLite
             updatedNodes.CopyTo(nodes);
             updatedNodes.Clear();
 
-            List<SerializedNode> serializedNodes=new List<SerializedNode>();
+            List<SerializedNode> serializedNodes = new List<SerializedNode>();
             foreach (var node in nodes)
             {
                 SerializedNode oldNode = db.SerializedNodes.FirstOrDefault(x => x.Id == node.Id);
-                if (oldNode ==null)
+                if (oldNode == null)
                     continue;
 
                 SerializedNode newNode = new SerializedNode(node);
@@ -137,7 +137,7 @@ namespace MyNodes.Repositories.EF.SQLite
             }
         }
 
-        
+
 
         public string AddNode(Node node)
         {
@@ -154,7 +154,7 @@ namespace MyNodes.Repositories.EF.SQLite
             if (writeInterval != 0)
             {
                 if (!updatedNodes.Contains(node))
-                updatedNodes.Add(node);
+                    updatedNodes.Add(node);
                 return;
             }
 
@@ -172,7 +172,7 @@ namespace MyNodes.Repositories.EF.SQLite
 
         public Node GetNode(string id)
         {
-            SerializedNode serializedNode = db.SerializedNodes.FirstOrDefault(x=>x.Id==id);
+            SerializedNode serializedNode = db.SerializedNodes.FirstOrDefault(x => x.Id == id);
             if (serializedNode != null)
             {
                 Node node = serializedNode.GetDeserializedNode();
@@ -208,9 +208,24 @@ namespace MyNodes.Repositories.EF.SQLite
                 updatedNodes.Remove(updNode);
 
             SerializedNode node = db.SerializedNodes.FirstOrDefault(x => x.Id == id);
-            if (node==null)
+            if (node == null)
                 return;
             db.SerializedNodes.Remove(node);
+            db.SaveChanges();
+        }
+
+        public void RemoveNodes(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                Node updNode = updatedNodes.FirstOrDefault(x => x.Id == node.Id);
+                if (updNode != null)
+                    updatedNodes.Remove(updNode);
+
+                SerializedNode snode = db.SerializedNodes.FirstOrDefault(x => x.Id == node.Id);
+                if (snode != null)
+                    db.SerializedNodes.Remove(snode);
+            }
             db.SaveChanges();
         }
 
@@ -224,7 +239,7 @@ namespace MyNodes.Repositories.EF.SQLite
 
 
 
-        
+
         public string AddLink(Link link)
         {
             db.Links.Add(link);
@@ -232,7 +247,7 @@ namespace MyNodes.Repositories.EF.SQLite
 
             return link.Id;
         }
-        
+
         public Link GetLink(string id)
         {
             return db.Links.FirstOrDefault(x => x.Id == id);
@@ -249,6 +264,12 @@ namespace MyNodes.Repositories.EF.SQLite
             if (link == null)
                 return;
             db.Links.Remove(link);
+            db.SaveChanges();
+        }
+
+        public void RemoveLinks(List<Link> links)
+        {
+            db.Links.RemoveRange(links);
             db.SaveChanges();
         }
 

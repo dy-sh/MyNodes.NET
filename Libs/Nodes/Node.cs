@@ -204,7 +204,7 @@ namespace MyNodes.Nodes
 
             var link = engine.GetLinkForInput(input);
             if (link != null)
-                engine.RemoveLink(link);
+                engine.RemoveLink(link,true);
 
             Inputs.Remove(input);
         }
@@ -218,8 +218,9 @@ namespace MyNodes.Nodes
             }
 
             var links = engine.GetLinksForOutput(output);
-            foreach (var link in links)
-                engine.RemoveLink(link);
+
+            engine.RemoveLinks(links,true);
+
 
             Outputs.Remove(output);
         }

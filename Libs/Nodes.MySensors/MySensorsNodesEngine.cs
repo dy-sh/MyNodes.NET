@@ -48,9 +48,9 @@ namespace MyNodes.Nodes
             if (!(node is MySensorsNode))
                 return;
 
-            MySensorsNode n = (MySensorsNode) node;
+            MySensorsNode n = (MySensorsNode)node;
 
-            if (gateway.GetNode(n.nodeId)!=null)
+            if (gateway.GetNode(n.nodeId) != null)
                 gateway.RemoveNode(n.nodeId);
         }
 
@@ -70,7 +70,11 @@ namespace MyNodes.Nodes
 
         private void OnGatewayRemoveAllNodes()
         {
-            List<MySensorsNode> nodes = engine.GetNodes().OfType<MySensorsNode>().ToList();
+            List<MySensorsNode> nodes;
+
+            lock (engine.nodesLock)
+                nodes = engine.GetNodes().OfType<MySensorsNode>().ToList();
+
             foreach (var node in nodes)
             {
                 engine.RemoveNode(node);
@@ -116,9 +120,10 @@ namespace MyNodes.Nodes
 
         public MySensorsNode GetMySensorsNode(int nodeId)
         {
-            return engine.GetNodes()
-                .OfType<MySensorsNode>()
-                .FirstOrDefault(node => node.nodeId == nodeId);
+            lock (engine.nodesLock)
+                return engine.GetNodes()
+                    .OfType<MySensorsNode>()
+                    .FirstOrDefault(node => node.nodeId == nodeId);
         }
 
         public MySensorsNodeOutput GetMySensorsNodeOutput(int nodeId, int sensorId)

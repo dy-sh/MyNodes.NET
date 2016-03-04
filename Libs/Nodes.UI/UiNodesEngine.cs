@@ -19,7 +19,7 @@ namespace MyNodes.Nodes
         public event NodeEventHandler OnPanelNodeUpdated;
 
         private static NodesEngine engine;
-        
+
 
 
         public UiNodesEngine(NodesEngine engine)
@@ -29,15 +29,18 @@ namespace MyNodes.Nodes
             engine.OnRemoveNode += OnRemoveNode;
             engine.OnNodeUpdatedOnDashboard += OnNodeUpdatedOnDashboard;
 
-            List<UiNode> nodes = engine.GetNodes()
-                .OfType<UiNode>()
-                .ToList();
+            List<UiNode> nodes;
+
+            lock (engine.nodesLock)
+                nodes = engine.GetNodes()
+                    .OfType<UiNode>()
+                    .ToList();
 
             foreach (var node in nodes)
                 node.OnAddToUiEngine(this);
         }
-        
-        
+
+
         private void OnNodeUpdatedOnDashboard(Node node)
         {
             if (node is UiNode)
@@ -60,7 +63,7 @@ namespace MyNodes.Nodes
             UiNode n = (UiNode)node;
 
             n.OnAddToUiEngine(this);
-            
+
             if (string.IsNullOrEmpty(n.Settings["Name"].Value))
                 n.Settings["Name"].Value = GenerateName(n);
 
@@ -87,6 +90,7 @@ namespace MyNodes.Nodes
 
         public List<PanelNode> GetPanels()
         {
+            lock (engine.nodesLock)
             return engine.GetNodes()
                 .Where(n => n is PanelNode)
                 .Cast<PanelNode>()
@@ -110,6 +114,7 @@ namespace MyNodes.Nodes
 
         public List<UiNode> GetUINodes()
         {
+            lock (engine.nodesLock)
             return engine.GetNodes()
                 .Where(n => n is UiNode)
                 .Cast<UiNode>()
@@ -118,14 +123,16 @@ namespace MyNodes.Nodes
 
         public List<UiNode> GetUINodesForHomePage()
         {
+            lock (engine.nodesLock)
             return engine.GetNodes()
-                .Where(n => n is UiNode && ((UiNode)n).Settings["ShowOnHomePage"].Value=="true")
+                .Where(n => n is UiNode && ((UiNode)n).Settings["ShowOnHomePage"].Value == "true")
                 .Cast<UiNode>()
                 .ToList();
         }
 
         public List<UiNode> GetUINodesForPanel(string panelId)
         {
+            lock (engine.nodesLock)
             return engine.GetNodes()
                 .Where(n => n is UiNode && n.PanelId == panelId)
                 .Cast<UiNode>()

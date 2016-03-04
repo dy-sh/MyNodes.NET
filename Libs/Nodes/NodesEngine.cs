@@ -30,8 +30,8 @@ namespace MyNodes.Nodes
         private List<Node> nodes = new List<Node>();
         private List<Link> links = new List<Link>();
 
-        Object nodesLock = new object();
-        Object linksLock = new object();
+        public Object nodesLock = new object();
+        public Object linksLock = new object();
 
         private bool started = false;
 
@@ -285,14 +285,12 @@ namespace MyNodes.Nodes
 
         public List<Node> GetNodes()
         {
-            lock (nodesLock)
-                return nodes;
+            return nodes;
         }
 
         public List<Link> GetLinks()
         {
-            lock (linksLock)
-                return links;
+            return links;
         }
 
 
@@ -353,18 +351,44 @@ namespace MyNodes.Nodes
                     return;
                 }
 
+            List<Node> nodesToRemove = new List<Node>();
+            nodesToRemove.Add(node);
+
+            List<Link> linksToRemove = new List<Link>();
             List<Link> links = GetLinksForNode(node);
+            linksToRemove.AddRange(links);
+
             foreach (var link in links)
             {
-                RemoveLink(link);
+                RemoveLink(link, false);
             }
 
             node.OnRemove();
 
+            if (node is PanelNode)
+            {
+                var nodesOnPanel = GetNodesForPanel(node.Id, true);
+                nodesToRemove.AddRange(nodesOnPanel);
+
+                foreach (var n in nodesOnPanel)
+                {
+                    List<Link> li = GetLinksForNode(n);
+                    linksToRemove.AddRange(li);
+                    foreach (var link in li)
+                    {
+                        RemoveLink(link, false);
+                    }
+
+                    lock (nodesLock)
+                        nodes.Remove(n);
+                }
+            }
+
             lock (nodesLock)
                 nodes.Remove(node);
 
-            nodesDb?.RemoveNode(node.Id);
+            nodesDb?.RemoveNodes(nodesToRemove);
+            nodesDb?.RemoveLinks(linksToRemove);
 
             LogEngineInfo($"Remove node [{node.GetType().Name}]");
             OnRemoveNode?.Invoke(node);
@@ -554,7 +578,7 @@ namespace MyNodes.Nodes
             //prevent two links to one input
             Link oldLink = GetLinkForInput(input);
             if (oldLink != null)
-                RemoveLink(oldLink);
+                RemoveLink(oldLink, true);
 
             LogEngineInfo($"New link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
@@ -575,7 +599,7 @@ namespace MyNodes.Nodes
 
 
 
-        public void RemoveLink(Output output, Input input)
+        public void RemoveLink(Output output, Input input, bool writeInDb)
         {
             Link link = GetLink(output, input);
 
@@ -588,29 +612,43 @@ namespace MyNodes.Nodes
             lock (linksLock)
                 links.Remove(link);
 
+            if (writeInDb)
+                nodesDb?.RemoveLink(link.Id);
+
             Node inputNode = GetInputOwner(input);
             Node outputNode = GetOutputOwner(output);
-
-            nodesDb?.RemoveLink(link.Id);
-            LogEngineInfo($"Remove link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
+            if (inputNode != null && outputNode != null)
+                LogEngineInfo($"Remove link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
+            else
+                LogEngineInfo($"Remove link.");
 
             input.Value = null;
             OnRemoveLink?.Invoke(link);
 
         }
 
-        public void RemoveLink(Link link)
+        public void RemoveLink(Link link, bool writeInDb)
         {
             Output output = GetOutput(link.OutputId);
             Input input = GetInput(link.InputId);
 
             if (output == null || input == null)
             {
-                LogEngineError($"Can`t create link from [{link.OutputId}] to [{link.InputId}]. Does not exist.");
+                LogEngineError($"Can`t remove link from [{link.OutputId}] to [{link.InputId}]. Does not exist.");
                 return;
             }
 
-            RemoveLink(output, input);
+            RemoveLink(output, input, writeInDb);
+        }
+
+        public void RemoveLinks(List<Link> links, bool writeInDb)
+        {
+            foreach (var link in links)
+            {
+                RemoveLink(link, false);
+            }
+
+            nodesDb?.RemoveLinks(links);
         }
 
         public Link GetLink(Output output, Input input)
@@ -709,12 +747,14 @@ namespace MyNodes.Nodes
 
         public Node GetInputOwner(string inputId)
         {
-            return (from node in nodes from input in node.Inputs where input.Id == inputId select node).FirstOrDefault();
+            lock (nodesLock)
+                return (from node in nodes from input in node.Inputs where input.Id == inputId select node).FirstOrDefault();
         }
 
         public Node GetOutputOwner(string outputId)
         {
-            return (from node in nodes from output in node.Outputs where output.Id == outputId select node).FirstOrDefault();
+            lock (nodesLock)
+                return (from node in nodes from output in node.Outputs where output.Id == outputId select node).FirstOrDefault();
         }
 
 

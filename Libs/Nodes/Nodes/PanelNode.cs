@@ -109,14 +109,7 @@ namespace MyNodes.Nodes
         }
 
 
-        public override void OnRemove()
-        {
-            var nodesList = engine.GetNodesForPanel(Id, false);
-            foreach (var n in nodesList)
-            {
-                engine.RemoveNode(n);
-            }
-        }
+
 
         private string GenerateNewInputName()
         {

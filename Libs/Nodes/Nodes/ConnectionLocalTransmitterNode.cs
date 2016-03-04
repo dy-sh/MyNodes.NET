@@ -3,6 +3,7 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyNodes.Nodes
@@ -18,10 +19,13 @@ namespace MyNodes.Nodes
 
         public override void OnInputChange(Input input)
         {
-            var receivers = engine.GetNodes()
-                .OfType<ConnectionLocalReceiverNode>()
-                .Where(x => x.Settings["Channel"].Value == Settings["Channel"].Value)
-                .ToList();
+            List<ConnectionLocalReceiverNode> receivers;
+
+            lock (engine.nodesLock)
+                receivers = engine.GetNodes()
+                    .OfType<ConnectionLocalReceiverNode>()
+                    .Where(x => x.Settings["Channel"].Value == Settings["Channel"].Value)
+                    .ToList();
 
             foreach (var receiver in receivers)
             {

@@ -47,14 +47,18 @@ namespace MyNodes.WebController.Controllers
                 if (panelId == null)
                     panelId = MAIN_PANEL_ID;
 
-                List<Nodes.Node> nodes = engine.GetNodes();
-                if (nodes == null || !nodes.Any())
-                    return null;
 
-                return (
-                    from node in nodes
-                    where node.PanelId == panelId
-                    select ConvertNodeToLiteGraphNode(node)).ToList();
+                lock (engine.nodesLock)
+                {
+                    List<Nodes.Node> nodes = engine.GetNodes();
+                    if (nodes == null || !nodes.Any())
+                        return null;
+
+                    return (
+                        from node in nodes
+                        where node.PanelId == panelId
+                        select ConvertNodeToLiteGraphNode(node)).ToList();
+                }
             });
         }
 
@@ -153,8 +157,8 @@ namespace MyNodes.WebController.Controllers
                 return null;
             LiteGraph.Link liteGraphLink = new LiteGraph.Link
             {
-                origin_id = engine.GetOutputOwner(link.OutputId).Id,
-                target_id = engine.GetInputOwner(link.InputId).Id,
+                origin_id = engine.GetOutputOwner(link.OutputId)?.Id,
+                target_id = engine.GetInputOwner(link.InputId)?.Id,
                 origin_slot = GetOutputSlot(link.OutputId),
                 target_slot = GetInputSlot(link.InputId),
                 id = link.Id,
@@ -188,28 +192,34 @@ namespace MyNodes.WebController.Controllers
 
         private int GetInputSlot(string inputId)
         {
-            foreach (Nodes.Node node in engine.GetNodes())
+            lock (engine.nodesLock)
             {
-                for (int i = 0; i < node.Inputs.Count; i++)
+                foreach (Nodes.Node node in engine.GetNodes())
                 {
-                    if (node.Inputs[i].Id == inputId)
-                        return i;
+                    for (int i = 0; i < node.Inputs.Count; i++)
+                    {
+                        if (node.Inputs[i].Id == inputId)
+                            return i;
+                    }
                 }
+                return -1;
             }
-            return -1;
         }
 
         private int GetOutputSlot(string outputId)
         {
-            foreach (Nodes.Node node in engine.GetNodes())
+            lock (engine.nodesLock)
             {
-                for (int i = 0; i < node.Outputs.Count; i++)
+                foreach (Nodes.Node node in engine.GetNodes())
                 {
-                    if (node.Outputs[i].Id == outputId)
-                        return i;
+                    for (int i = 0; i < node.Outputs.Count; i++)
+                    {
+                        if (node.Outputs[i].Id == outputId)
+                            return i;
+                    }
                 }
+                return -1;
             }
-            return -1;
         }
 
 
@@ -244,7 +254,7 @@ namespace MyNodes.WebController.Controllers
                     }
                 }
 
-                engine.RemoveLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot]);
+                engine.RemoveLink(outNode.Outputs[link.origin_slot], inNode.Inputs[link.target_slot], true);
 
                 return true;
             });
@@ -617,21 +627,24 @@ namespace MyNodes.WebController.Controllers
                 if (engine == null)
                     return null;
 
-                NodesEngineInfo info = new NodesEngineInfo();
-                info.Started = engine.IsStarted();
-                info.LinksCount = engine.GetLinks().Count;
-                info.AllNodesCount = engine.GetNodes().Count;
-                info.PanelsNodesCount = engine.GetNodes().OfType<PanelNode>().Count();
-                info.HardwareNodesCount = engine.GetNodes().OfType<MySensorsNode>().Count();
-                info.InputsOutputsNodesCount = engine.GetNodes().Count(x => x is PanelInputNode || x is PanelOutputNode);
-                info.UiNodesCount = engine.GetNodes().OfType<UiNode>().Count();
-                info.OtherNodesCount = info.AllNodesCount
-                                       - info.PanelsNodesCount
-                                       - info.HardwareNodesCount
-                                       - info.InputsOutputsNodesCount
-                                       - info.UiNodesCount;
+                lock (engine.nodesLock)
+                {
+                    NodesEngineInfo info = new NodesEngineInfo();
+                    info.Started = engine.IsStarted();
+                    info.LinksCount = engine.GetLinks().Count;
+                    info.AllNodesCount = engine.GetNodes().Count;
+                    info.PanelsNodesCount = engine.GetNodes().OfType<PanelNode>().Count();
+                    info.HardwareNodesCount = engine.GetNodes().OfType<MySensorsNode>().Count();
+                    info.InputsOutputsNodesCount = engine.GetNodes().Count(x => x is PanelInputNode || x is PanelOutputNode);
+                    info.UiNodesCount = engine.GetNodes().OfType<UiNode>().Count();
+                    info.OtherNodesCount = info.AllNodesCount
+                                           - info.PanelsNodesCount
+                                           - info.HardwareNodesCount
+                                           - info.InputsOutputsNodesCount
+                                           - info.UiNodesCount;
 
-                return info;
+                    return info;
+                }
             });
         }
 
@@ -669,12 +682,15 @@ namespace MyNodes.WebController.Controllers
                 if (engine == null)
                     return 2;
 
-                List<ConnectionRemoteReceiverNode> receivers = engine.GetNodes()
-                    .OfType<ConnectionRemoteReceiverNode>()
-                    .Where(x => x.GetChannel().ToString() == channel)
-                    .ToList();
+                List<ConnectionRemoteReceiverNode> receivers=null;
 
-                if (!receivers.Any())
+                lock (engine.nodesLock)
+                    engine.GetNodes()
+                        .OfType<ConnectionRemoteReceiverNode>()
+                        .Where(x => x.GetChannel().ToString() == channel)
+                        .ToList();
+
+                if (receivers==null || !receivers.Any())
                 {
                     engine.LogNodesError(
                         $"Received a value for Remote Receiver, but no receivers with channel [{channel}]");

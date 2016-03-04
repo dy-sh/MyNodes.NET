@@ -19,12 +19,14 @@ namespace MyNodes.Nodes
         Node GetNode(string id);
         List<Node> GetAllNodes();
         void RemoveNode(string id);
+        void RemoveNodes(List<Node> nodes);
         void RemoveAllNodes();
 
         string AddLink(Link link);
         Link GetLink(string id);
         List<Link> GetAllLinks();
         void RemoveLink(string id);
+        void RemoveLinks(List<Link> links);
         void RemoveAllLinks();
     }
 }

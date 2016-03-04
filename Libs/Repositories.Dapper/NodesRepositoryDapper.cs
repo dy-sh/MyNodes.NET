@@ -277,7 +277,29 @@ namespace MyNodes.Repositories.Dapper
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();
-                db.Query($"DELETE FROM Nodes WHERE Id='{id}'");
+                db.Query($"DELETE FROM Nodes WHERE Id=@id",new {id});
+            }
+        }
+
+        public void RemoveNodes(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                Node updNode = updatedNodes.FirstOrDefault(x => x.Id == node.Id);
+                if (updNode != null)
+                    updatedNodes.Remove(updNode);
+            }
+            
+            List<string> listOfIds = nodes.Select(node => node.Id).ToList();
+
+            string listOfIdsJoined = "('" + String.Join("', '", listOfIds.ToArray()) + "')";
+
+            using (var db = new SqlConnection(connectionString))
+            {
+                string q = "DELETE FROM Nodes WHERE Id in " + listOfIdsJoined;
+
+                db.Open();
+                db.Execute(q);
             }
         }
 
@@ -342,6 +364,15 @@ namespace MyNodes.Repositories.Dapper
             {
                 db.Open();
                 db.Query($"DELETE FROM Links WHERE Id='{id}'");
+            }
+        }
+
+        public void RemoveLinks(List<Link> links)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+                db.Execute($"DELETE FROM Links WHERE Id=@Id", links);
             }
         }
 
