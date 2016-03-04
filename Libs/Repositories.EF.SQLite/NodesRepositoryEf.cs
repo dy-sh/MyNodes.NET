@@ -143,9 +143,7 @@ namespace MyNodes.Repositories.EF.SQLite
         {
 
             SerializedNode serializedNode = new SerializedNode(node);
-
-            if (!db.SerializedNodes.Contains(serializedNode))
-                db.SerializedNodes.Add(serializedNode);
+            db.SerializedNodes.Add(serializedNode);
 
             db.SaveChanges();
 
@@ -245,7 +243,7 @@ namespace MyNodes.Repositories.EF.SQLite
 
         public string AddLink(Link link)
         {
-            if (!db.Links.Contains(link))
+            if (!db.Links.Any(x => x.Id == link.Id))
                 db.Links.Add(link);
 
             db.SaveChanges();
@@ -276,8 +274,8 @@ namespace MyNodes.Repositories.EF.SQLite
         {
             foreach (var link in links)
             {
-                if (db.Links.Contains(link))
-                    db.Remove(link);
+                if (db.Links.Any(x => x.Id == link.Id))
+                    db.Links.Remove(link);
             }
             //db.Links.RemoveRange(links);
             db.SaveChanges();
