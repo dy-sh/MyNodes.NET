@@ -4,6 +4,7 @@
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MyNodes.Gateways.MySensors;
@@ -12,15 +13,24 @@ namespace MyNodes.WebController.Code
 {
     public delegate void LogMessageEventHandler(LogRecord record);
     public delegate void LogMySensorsMessageEventHandler(Message record);
+
     public class Logs
     {
-        public List<LogRecord> gatewayLog = new List<LogRecord>();
-        public List<LogRecord> gatewayMessagesLog = new List<LogRecord>();
-        public List<Message> gatewayDecodedMessagesLog = new List<Message>();
-        public List<LogRecord> dataBaseLog = new List<LogRecord>();
-        public List<LogRecord> nodesEngineLog = new List<LogRecord>();
-        public List<LogRecord> nodesLog = new List<LogRecord>();
-        public List<LogRecord> systemLog = new List<LogRecord>();
+        private List<LogRecord> gatewayLog = new List<LogRecord>();
+        private List<LogRecord> gatewayMessagesLog = new List<LogRecord>();
+        private List<Message> gatewayDecodedMessagesLog = new List<Message>();
+        private List<LogRecord> dataBaseLog = new List<LogRecord>();
+        private List<LogRecord> nodesEngineLog = new List<LogRecord>();
+        private List<LogRecord> nodesLog = new List<LogRecord>();
+        private List<LogRecord> systemLog = new List<LogRecord>();
+
+        Object gatewayLogLock = new object();
+        Object gatewayMessagesLogLock = new object();
+        Object gatewayDecodedMessagesLogLock = new object();
+        Object dataBaseLogLock = new object();
+        Object nodesEngineLogLock = new object();
+        Object nodesLogLock = new object();
+        Object systemLogLock = new object();
 
         public event LogMessageEventHandler OnGatewayLogInfo;
         public event LogMessageEventHandler OnGatewayLogError;
@@ -39,7 +49,6 @@ namespace MyNodes.WebController.Code
 
 
 
-
         public void AddGatewayInfo(string message)
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.Gateway, LogRecordType.Info, message);
@@ -51,9 +60,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreGatewayState)
             {
-                gatewayLog.Add(logRecord);
-                if (gatewayLog.Count > config.MaxGatewayState)
-                    gatewayLog.RemoveAt(0);
+                lock (gatewayLogLock)
+                {
+                    gatewayLog.Add(logRecord);
+                    if (gatewayLog.Count > config.MaxGatewayState)
+                        gatewayLog.RemoveAt(0);
+                }
             }
         }
 
@@ -68,9 +80,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreGatewayState)
             {
-                gatewayLog.Add(logRecord);
-                if (gatewayLog.Count > config.MaxGatewayState)
-                    gatewayLog.RemoveAt(0);
+                lock (gatewayLogLock)
+                {
+                    gatewayLog.Add(logRecord);
+                    if (gatewayLog.Count > config.MaxGatewayState)
+                        gatewayLog.RemoveAt(0);
+                }
             }
         }
 
@@ -85,9 +100,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreGatewayDecodedMessages)
             {
-                gatewayDecodedMessagesLog.Add(message);
-                if (gatewayDecodedMessagesLog.Count > config.MaxGatewayDecodedMessages)
-                    gatewayDecodedMessagesLog.RemoveAt(0);
+                lock (gatewayDecodedMessagesLogLock)
+                {
+                    gatewayDecodedMessagesLog.Add(message);
+                    if (gatewayDecodedMessagesLog.Count > config.MaxGatewayDecodedMessages)
+                        gatewayDecodedMessagesLog.RemoveAt(0);
+                }
             }
         }
 
@@ -102,9 +120,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreGatewayMessages)
             {
-                gatewayMessagesLog.Add(logRecord);
-                if (gatewayMessagesLog.Count > config.MaxGatewayMessages)
-                    gatewayMessagesLog.RemoveAt(0);
+                lock (gatewayMessagesLogLock)
+                {
+                    gatewayMessagesLog.Add(logRecord);
+                    if (gatewayMessagesLog.Count > config.MaxGatewayMessages)
+                        gatewayMessagesLog.RemoveAt(0);
+                }
             }
         }
 
@@ -119,9 +140,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreDataBaseState)
             {
-                dataBaseLog.Add(logRecord);
-                if (dataBaseLog.Count > config.MaxDataBaseState)
-                    dataBaseLog.RemoveAt(0);
+                lock (dataBaseLogLock)
+                {
+                    dataBaseLog.Add(logRecord);
+                    if (dataBaseLog.Count > config.MaxDataBaseState)
+                        dataBaseLog.RemoveAt(0);
+                }
             }
         }
 
@@ -136,9 +160,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreDataBaseState)
             {
-                dataBaseLog.Add(logRecord);
-                if (dataBaseLog.Count > config.MaxDataBaseState)
-                    dataBaseLog.RemoveAt(0);
+                lock (dataBaseLogLock)
+                {
+                    dataBaseLog.Add(logRecord);
+                    if (dataBaseLog.Count > config.MaxDataBaseState)
+                        dataBaseLog.RemoveAt(0);
+                }
             }
         }
 
@@ -153,9 +180,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreNodesEngineState)
             {
-                nodesEngineLog.Add(logRecord);
-                if (nodesEngineLog.Count > config.MaxNodesEngineState)
-                    nodesEngineLog.RemoveAt(0);
+                lock (nodesEngineLogLock)
+                {
+                    nodesEngineLog.Add(logRecord);
+                    if (nodesEngineLog.Count > config.MaxNodesEngineState)
+                        nodesEngineLog.RemoveAt(0);
+                }
             }
         }
 
@@ -170,9 +200,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreNodesEngineState)
             {
-                nodesEngineLog.Add(logRecord);
-                if (nodesEngineLog.Count > config.MaxNodesEngineState)
-                    nodesEngineLog.RemoveAt(0);
+                lock (nodesEngineLogLock)
+                {
+                    nodesEngineLog.Add(logRecord);
+                    if (nodesEngineLog.Count > config.MaxNodesEngineState)
+                        nodesEngineLog.RemoveAt(0);
+                }
             }
         }
 
@@ -187,9 +220,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreNodesEngineNodes)
             {
-                nodesLog.Add(logRecord);
-                if (nodesLog.Count > config.MaxNodesEngineNodes)
-                    nodesLog.RemoveAt(0);
+                lock (nodesLogLock)
+                {
+                    nodesLog.Add(logRecord);
+                    if (nodesLog.Count > config.MaxNodesEngineNodes)
+                        nodesLog.RemoveAt(0);
+                }
             }
         }
         public void AddNodeError(string message)
@@ -203,9 +239,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreNodesEngineNodes)
             {
-                nodesLog.Add(logRecord);
-                if (nodesLog.Count > config.MaxNodesEngineNodes)
-                    nodesLog.RemoveAt(0);
+                lock (nodesLogLock)
+                {
+                    nodesLog.Add(logRecord);
+                    if (nodesLog.Count > config.MaxNodesEngineNodes)
+                        nodesLog.RemoveAt(0);
+                }
             }
         }
 
@@ -221,9 +260,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreSystemState)
             {
-                systemLog.Add(logRecord);
-                if (systemLog.Count > config.MaxSystemState)
-                    systemLog.RemoveAt(0);
+                lock (systemLogLock)
+                {
+                    systemLog.Add(logRecord);
+                    if (systemLog.Count > config.MaxSystemState)
+                        systemLog.RemoveAt(0);
+                }
             }
         }
 
@@ -238,9 +280,12 @@ namespace MyNodes.WebController.Code
 
             if (config.StoreSystemState)
             {
-                systemLog.Add(logRecord);
-                if (systemLog.Count > config.MaxSystemState)
-                    systemLog.RemoveAt(0);
+                lock (systemLogLock)
+                {
+                    systemLog.Add(logRecord);
+                    if (systemLog.Count > config.MaxSystemState)
+                        systemLog.RemoveAt(0);
+                }
             }
         }
 
@@ -262,11 +307,18 @@ namespace MyNodes.WebController.Code
         public List<LogRecord> GetErrorsLogs()
         {
             List<LogRecord> list = new List<LogRecord>();
-            list.AddRange(gatewayLog.ToArray().Where(x=>x.Type==LogRecordType.Error));
-            list.AddRange(nodesEngineLog.ToArray().Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(nodesLog.ToArray().Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(dataBaseLog.ToArray().Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(systemLog.ToArray().Where(x => x.Type == LogRecordType.Error));
+
+            lock (gatewayLogLock)
+                list.AddRange(gatewayLog.Where(x => x.Type == LogRecordType.Error));
+            lock (nodesEngineLogLock)
+                list.AddRange(nodesEngineLog.Where(x => x.Type == LogRecordType.Error));
+            lock (nodesLogLock)
+                list.AddRange(nodesLog.Where(x => x.Type == LogRecordType.Error));
+            lock (dataBaseLogLock)
+                list.AddRange(dataBaseLog.Where(x => x.Type == LogRecordType.Error));
+            lock (systemLogLock)
+                list.AddRange(systemLog.Where(x => x.Type == LogRecordType.Error));
+
             return list.OrderBy(x => x.Date).ToList();
         }
 
@@ -298,38 +350,52 @@ namespace MyNodes.WebController.Code
             switch (logRecordSource)
             {
                 case LogRecordSource.Gateway:
-                    gatewayLog.Clear();
+                    lock (gatewayLogLock)
+                            gatewayLog.Clear();
                     break;
                 case LogRecordSource.GatewayMessages:
-                    gatewayMessagesLog.Clear();
+                    lock (gatewayMessagesLogLock)
+                            gatewayMessagesLog.Clear();
                     break;
                 case LogRecordSource.GatewayDecodedMessages:
-                    gatewayDecodedMessagesLog.Clear();
+                    lock (gatewayDecodedMessagesLogLock)
+                            gatewayDecodedMessagesLog.Clear();
                     break;
                 case LogRecordSource.DataBase:
-                    dataBaseLog.Clear();
+                    lock (dataBaseLogLock)
+                            dataBaseLog.Clear();
                     break;
                 case LogRecordSource.NodesEngine:
-                    nodesEngineLog.Clear();
+                    lock (nodesEngineLogLock)
+                            nodesEngineLog.Clear();
                     break;
                 case LogRecordSource.Nodes:
-                    nodesLog.Clear();
+                    lock (nodesLogLock)
+                            nodesLog.Clear();
                     break;
                 case LogRecordSource.System:
-                    systemLog.Clear();
+                    lock (systemLogLock)
+                            systemLog.Clear();
                     break;
             }
         }
 
         public void ClearAllLogs()
         {
-            gatewayLog.Clear();
-            gatewayMessagesLog.Clear();
-            gatewayDecodedMessagesLog.Clear();
-            nodesEngineLog.Clear();
-            nodesLog.Clear();
-            dataBaseLog.Clear();
-            systemLog.Clear();
+            lock (gatewayLogLock)
+                gatewayLog.Clear();
+            lock (gatewayMessagesLogLock)
+                gatewayMessagesLog.Clear();
+            lock (gatewayDecodedMessagesLogLock)
+                gatewayDecodedMessagesLog.Clear();
+            lock (nodesEngineLogLock)
+                nodesEngineLog.Clear();
+            lock (nodesLogLock)
+                nodesLog.Clear();
+            lock (dataBaseLogLock)
+                dataBaseLog.Clear();
+            lock (systemLogLock)
+                systemLog.Clear();
         }
 
 
