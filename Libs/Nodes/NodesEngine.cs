@@ -30,6 +30,9 @@ namespace MyNodes.Nodes
         private List<Node> nodes = new List<Node>();
         private List<Link> links = new List<Link>();
 
+        Object nodesLock = new object();
+        Object linksLock = new object();
+
         private bool started = false;
 
         public static NodesEngine nodesEngine;
@@ -135,21 +138,20 @@ namespace MyNodes.Nodes
 
         public void GetNodesFromRepository()
         {
-            if (nodesDb != null)
-                nodes = nodesDb.GetAllNodes();
-
-            //to prevent changing of collection while writing to db is not yet finished
-            Node[] nodesArray = new Node[nodes.Count];
-            nodes.CopyTo(nodesArray);
-
-            foreach (var node in nodesArray)
+            lock (nodesLock)
             {
-                bool checkNodeCanBeAdded = node.OnAddToEngine(this);
-                if (!checkNodeCanBeAdded)
+                if (nodesDb != null)
+                    nodes = nodesDb.GetAllNodes();
+
+                foreach (var node in nodes.ToArray())
                 {
-                    LogEngineError($"Can`t create node [{node.GetType().Name}]. Aborted by node.");
-                    nodes.Remove(node);
-                    continue;
+                    bool checkNodeCanBeAdded = node.OnAddToEngine(this);
+                    if (!checkNodeCanBeAdded)
+                    {
+                        LogEngineError($"Can`t create node [{node.GetType().Name}]. Aborted by node.");
+                        nodes.Remove(node);
+                        continue;
+                    }
                 }
             }
         }
@@ -158,18 +160,19 @@ namespace MyNodes.Nodes
 
         private void GetLinksFromRepository()
         {
-            if (nodesDb != null)
-                links = nodesDb.GetAllLinks();
-
-            //remove link if node is not exist
-            Link[] oldLinks = links.ToArray();
-            foreach (var link in oldLinks)
+            lock (linksLock)
             {
-                if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
-                {
-                    nodesDb?.RemoveLink(link.Id);
+                if (nodesDb != null)
+                    links = nodesDb.GetAllLinks();
 
-                    links.Remove(link);
+                foreach (var link in links.ToArray())
+                {
+                    if (GetInput(link.InputId) == null || GetOutput(link.OutputId) == null)
+                    {
+                        nodesDb?.RemoveLink(link.Id);
+
+                        links.Remove(link);
+                    }
                 }
             }
         }
@@ -243,7 +246,7 @@ namespace MyNodes.Nodes
 
         private void UpdateNodesLoop()
         {
-            Task.Run((() =>
+            Task.Run(() =>
             {
                 while (true)
                 {
@@ -252,56 +255,45 @@ namespace MyNodes.Nodes
 
                     lastUpdateTime = DateTime.Now;
 
-                    if (nodes == null || !nodes.Any())
-                        continue;
-
-                    try
+                    lock (nodesLock)
                     {
-                         //to prevent changing of collection while writing to db is not yet finished
-                         Node[] nodesTemp = new Node[nodes.Count];
-                        nodes.CopyTo(nodesTemp);
+                        if (nodes == null || !nodes.Any())
+                            continue;
 
-                        foreach (var node in nodesTemp)
+                        try
                         {
-                            node.Loop();
-                            if (!started)
-                                break;
+                            foreach (var node in nodes)
+                            {
+                                node.Loop();
+                                if (!started)
+                                    break;
+                            }
+
+                            if (started)
+                                OnUpdateLoop?.Invoke();
                         }
-
-                        OnUpdateLoop?.Invoke();
+                        catch
+                        {
+                        }
                     }
-                    catch
-                    {
-                    }
-
                 }
-            }));
+            });
         }
 
 
 
-
-        private void LogNodeInfo(string message)
-        {
-            OnLogNodeInfo?.Invoke(message);
-        }
-
-        private void LogNodeError(string message)
-        {
-            OnLogNodeError?.Invoke(message);
-        }
 
         public List<Node> GetNodes()
         {
-            return nodes;
+            lock (nodesLock)
+                return nodes;
         }
 
         public List<Link> GetLinks()
         {
-            return links;
+            lock (linksLock)
+                return links;
         }
-
-
 
 
 
@@ -318,7 +310,8 @@ namespace MyNodes.Nodes
 
         public Node GetNode(string id)
         {
-            return nodes.FirstOrDefault(x => x.Id == id);
+            lock (nodesLock)
+                return nodes.FirstOrDefault(x => x.Id == id);
         }
 
 
@@ -337,7 +330,8 @@ namespace MyNodes.Nodes
                 return;
             }
 
-            nodes.Add(node);
+            lock (nodesLock)
+                nodes.Add(node);
 
             nodesDb?.AddNode(node);
 
@@ -352,11 +346,12 @@ namespace MyNodes.Nodes
 
         public void RemoveNode(Node node)
         {
-            if (!nodes.Contains(node))
-            {
-                LogEngineError($"Can`t remove node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
-                return;
-            }
+            lock (nodesLock)
+                if (!nodes.Contains(node))
+                {
+                    LogEngineError($"Can`t remove node [{node.GetType().Name}]. Node [{node.Id}] does not exist.");
+                    return;
+                }
 
             List<Link> links = GetLinksForNode(node);
             foreach (var link in links)
@@ -365,7 +360,10 @@ namespace MyNodes.Nodes
             }
 
             node.OnRemove();
-            nodes.Remove(node);
+
+            lock (nodesLock)
+                nodes.Remove(node);
+
             nodesDb?.RemoveNode(node.Id);
 
             LogEngineInfo($"Remove node [{node.GetType().Name}]");
@@ -376,14 +374,21 @@ namespace MyNodes.Nodes
 
         public List<Node> GetNodesForPanel(string panelId, bool includeSubPanels)
         {
+
             if (!includeSubPanels)
             {
-                return nodes.Where(n => n.PanelId == panelId).ToList();
+                lock (nodesLock)
+                    return nodes.Where(n => n.PanelId == panelId).ToList();
             }
             else
             {
-                List<Node> nodesList = nodes.Where(n => n.PanelId == panelId).ToList();
+                List<Node> nodesList;
+
+                lock (nodesLock)
+                    nodesList = nodes.Where(n => n.PanelId == panelId).ToList();
+
                 List<PanelNode> panels = nodesList.OfType<PanelNode>().ToList();
+
                 foreach (PanelNode panel in panels)
                 {
                     nodesList.AddRange(GetNodesForPanel(panel.Id, true));
@@ -394,17 +399,25 @@ namespace MyNodes.Nodes
 
         public List<Link> GetLinksForPanel(string panelId, bool includeSubPanels)
         {
+
             if (!includeSubPanels)
             {
-                return links.Where(n => n.PanelId == panelId).ToList();
+                lock (linksLock)
+                    return links.Where(n => n.PanelId == panelId).ToList();
             }
             else
             {
-                List<Link> linksList = links.Where(n => n.PanelId == panelId).ToList();
+                List<Link> linksList;
+
+                lock (linksLock)
+                    linksList = links.Where(n => n.PanelId == panelId).ToList();
+
                 List<PanelNode> panels = GetNodesForPanel(panelId, true).OfType<PanelNode>().ToList();
-                foreach (PanelNode panel in panels)
+
+                lock (linksLock)
                 {
-                    linksList.AddRange(links.Where(n => n.PanelId == panel.Id).ToList());
+                    foreach (PanelNode panel in panels)
+                        linksList.AddRange(links.Where(n => n.PanelId == panel.Id).ToList());
                 }
                 return linksList;
             }
@@ -413,7 +426,8 @@ namespace MyNodes.Nodes
 
         public List<PanelNode> GetPanelNodes()
         {
-            return nodes.Where(n => n is PanelNode).Cast<PanelNode>().ToList();
+            lock (nodesLock)
+                return nodes.Where(n => n is PanelNode).Cast<PanelNode>().ToList();
         }
 
 
@@ -449,7 +463,8 @@ namespace MyNodes.Nodes
 
         public PanelNode GetPanelNode(string panelId)
         {
-            return (PanelNode)nodes.FirstOrDefault(n => n is PanelNode && n.Id == panelId);
+            lock (nodesLock)
+                return (PanelNode)nodes.FirstOrDefault(n => n is PanelNode && n.Id == panelId);
         }
 
 
@@ -534,6 +549,7 @@ namespace MyNodes.Nodes
             }
 
 
+            Link link = new Link(output.Id, input.Id, inputNode.PanelId);
 
             //prevent two links to one input
             Link oldLink = GetLinkForInput(input);
@@ -542,8 +558,9 @@ namespace MyNodes.Nodes
 
             LogEngineInfo($"New link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
-            Link link = new Link(output.Id, input.Id, inputNode.PanelId);
-            links.Add(link);
+            lock (linksLock)
+                links.Add(link);
+
 
             nodesDb?.AddLink(link);
 
@@ -568,10 +585,12 @@ namespace MyNodes.Nodes
                 return;
             }
 
+            lock (linksLock)
+                links.Remove(link);
+
             Node inputNode = GetInputOwner(input);
             Node outputNode = GetOutputOwner(output);
 
-            links.Remove(link);
             nodesDb?.RemoveLink(link.Id);
             LogEngineInfo($"Remove link from [{outputNode.GetType().Name}] to [{inputNode.GetType().Name}]");
 
@@ -596,17 +615,20 @@ namespace MyNodes.Nodes
 
         public Link GetLink(Output output, Input input)
         {
-            return links.FirstOrDefault(x => x.InputId == input.Id && x.OutputId == output.Id);
+            lock (linksLock)
+                return links.FirstOrDefault(x => x.InputId == input.Id && x.OutputId == output.Id);
         }
 
         public Link GetLinkForInput(Input input)
         {
-            return links.FirstOrDefault(x => x.InputId == input.Id);
+            lock (linksLock)
+                return links.FirstOrDefault(x => x.InputId == input.Id);
         }
 
         public List<Link> GetLinksForOutput(Output output)
         {
-            return links.Where(x => x.OutputId == output.Id).ToList();
+            lock (linksLock)
+                return links.Where(x => x.OutputId == output.Id).ToList();
         }
 
         public List<Link> GetLinksForNode(Node node)
@@ -662,23 +684,27 @@ namespace MyNodes.Nodes
 
         public Input GetInput(string id)
         {
-            return nodes.SelectMany(node => node.Inputs).FirstOrDefault(input => input.Id == id);
+            lock (nodesLock)
+                return nodes.SelectMany(node => node.Inputs).FirstOrDefault(input => input.Id == id);
         }
 
         public Output GetOutput(string id)
         {
-            return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
+            lock (nodesLock)
+                return nodes.SelectMany(node => node.Outputs).FirstOrDefault(output => output.Id == id);
         }
 
 
         public Node GetInputOwner(Input input)
         {
-            return nodes.FirstOrDefault(node => node.Inputs.Contains(input));
+            lock (nodesLock)
+                return nodes.FirstOrDefault(node => node.Inputs.Contains(input));
         }
 
         public Node GetOutputOwner(Output output)
         {
-            return nodes.FirstOrDefault(node => node.Outputs.Contains(output));
+            lock (nodesLock)
+                return nodes.FirstOrDefault(node => node.Outputs.Contains(output));
         }
 
         public Node GetInputOwner(string inputId)
@@ -696,9 +722,11 @@ namespace MyNodes.Nodes
 
         public void RemoveAllNodesAndLinks()
         {
+            lock (linksLock)
+                links = new List<Link>();
 
-            links = new List<Link>();
-            nodes = new List<Node>();
+            lock (nodesLock)
+                nodes = new List<Node>();
 
             LogEngineInfo("All nodes and links have been removed.");
 
