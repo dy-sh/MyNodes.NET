@@ -1,8 +1,8 @@
 ﻿@using MyNodes.WebController.Code
-@model MyNodes.WebController.Code.ConsoleConfig
+@model MyNodes.WebController.Code.LogsConfig
 
 @{
-    ViewBag.Title = "Web Server Console";
+    ViewBag.Title = "Web Server Logs";
 }
 
 <br />
@@ -23,80 +23,112 @@
                     <h4>@ViewBag.Title</h4>
                 </div>
 
-                <form asp-action="Console" asp-anti-forgery="true" class="ui form">
+                <form asp-action="Logs" asp-anti-forgery="true" class="ui form">
                     <div class="ui basic segment">
-                        Select which log messages to show in the console:
+                        Select which log messages to store for session:
                     </div>
 
                     <div class="ui basic segment">
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowAllErrors"/>
-                                <label>All Errors</label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui toggle checkbox">
-                                <input asp-for="ShowSystemState"/>
+                                <input asp-for="StoreSystemState" />
                                 <label>System</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowGatewayState"/>
+                                <input asp-for="StoreGatewayState" />
                                 <label>Gateway State</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowGatewayMessages"/>
+                                <input asp-for="StoreGatewayMessages" />
                                 <label>Gateway Messages</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowGatewayDecodedMessages"/>
+                                <input asp-for="StoreGatewayDecodedMessages" />
                                 <label>Gateway Decoded Messages</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowDataBaseState"/>
+                                <input asp-for="StoreDataBaseState" />
                                 <label>DataBase</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowNodesEngineState"/>
+                                <input asp-for="StoreNodesEngineState" />
                                 <label>Nodes Engine</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui toggle checkbox">
-                                <input asp-for="ShowNodesEngineNodes"/>
+                                <input asp-for="StoreNodesEngineNodes"/>
                                 <label>Nodes</label>
                             </div>
                         </div>
+
                         <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
                     </div>
 
                     <div class="ui basic segment">
-                        If you have many nodes and they send a lot of messages,
-                        then disable "Nodes" setting to increase system performance.
+                        Specify the maximum number of messages:
+                    </div>
+
+                    <div class="ui basic segment">
+
+                        <div class="field">
+                            System
+                            <input asp-for="MaxSystemState"/>
+                        </div>
+
+                        <div class="field">
+                            Gateway State
+                            <input asp-for="MaxGatewayState"/>
+                        </div>
+
+                        <div class="field">
+                            Gateway Messages
+                            <input asp-for="MaxGatewayMessages"/>
+                        </div>
+
+                        <div class="field">
+                            Gateway Decoded Messages
+                            <input asp-for="MaxGatewayDecodedMessages" />
+                        </div>
+
+                        <div class="field">
+                            DataBase
+                            <input asp-for="MaxDataBaseState" />
+                        </div>
+
+                        <div class="field">
+                            Nodes Engine
+                            <input asp-for="MaxNodesEngineState" />
+                        </div>
+
+                        <div class="field">
+                            Nodes
+                            <input asp-for="MaxNodesEngineNodes" />
+                        </div>
+
                     </div>
 
                     <div class="ui center aligned attached segment">
                         <div class="ui buttons">
                             <a asp-action="Index" class="ui button">Cancel</a>
-                            <input type="submit" value="Save" class="ui button primary"/>
+                            <input type="submit" value="Save" class="ui button primary" />
                         </div>
                     </div>
                 </form>
@@ -108,12 +140,9 @@
 </div>
 
 
-
-
 <br />
 <br />
-<br />
-
+<br/>
 
 
 
