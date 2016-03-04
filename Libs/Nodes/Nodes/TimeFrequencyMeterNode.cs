@@ -45,7 +45,6 @@ namespace MyNodes.Nodes
             countWas = count;
             count = 0;
             Outputs[0].Value = countWas.ToString();
-            countWas = 0;
         }
 
         public override string GetNodeDescription()
