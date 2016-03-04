@@ -13,8 +13,9 @@ namespace MyNodes.Nodes
 
         public TimeDelayMeterNode() : base("Time", "Delay Meter")
         {
-            AddInput();
-            AddOutput("Delay (ms)",DataType.Number);
+            AddInput("Value");
+            AddInput("Reset", DataType.Logical);
+            AddOutput("Delay (ms)", DataType.Number);
 
             lasTime = DateTime.Now;
         }
@@ -22,16 +23,27 @@ namespace MyNodes.Nodes
 
         public override void OnInputChange(Input input)
         {
-            var delay = (DateTime.Now - lasTime).TotalMilliseconds;
-            lasTime = DateTime.Now;
+            if (input == Inputs[0])
+            {
+                if (input.Value == null)
+                    return;
 
-            Outputs[0].Value = delay.ToString();
+                var delay = (DateTime.Now - lasTime).TotalMilliseconds;
+                lasTime = DateTime.Now;
+
+                Outputs[0].Value = delay.ToString();
+            }
+            if (input == Inputs[1] && input.Value == "1")
+            {
+                lasTime = DateTime.Now;
+                ResetOutputs();
+            }
         }
 
         public override string GetNodeDescription()
         {
             return "This node measures the delay between the incoming events. <br/>" +
-                   "Any value sent to the input (including null) will be accepted.";
+                   "Any value sent to the input (excluding null) will be accepted.";
         }
     }
 }
