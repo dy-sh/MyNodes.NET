@@ -10,8 +10,8 @@ namespace MyNodes.WebController.Code
     public enum LogRecordSource
     {
         Gateway,
-        GatewayMessage,
-        GatewayDecodedMessage,
+        GatewayMessages,
+        GatewayDecodedMessages,
         DataBase,
         NodesEngine,
         Nodes,
@@ -52,9 +52,9 @@ namespace MyNodes.WebController.Code
             {
                 case LogRecordSource.Gateway:
                     return $"{Date}: GATEWAY: {Message}";
-                case LogRecordSource.GatewayMessage:
+                case LogRecordSource.GatewayMessages:
                     return $"{Date}: GATEWAY: {Message}";
-                case LogRecordSource.GatewayDecodedMessage:
+                case LogRecordSource.GatewayDecodedMessages:
                     return $"{Date}: GATEWAY: {Message}";
                 case LogRecordSource.DataBase:
                     return $"{Date}: DATABASE: {Message}";

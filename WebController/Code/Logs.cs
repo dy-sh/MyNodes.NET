@@ -76,7 +76,7 @@ namespace MyNodes.WebController.Code
 
         public void AddGatewayDecodedMessage(Message message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayDecodedMessage, LogRecordType.Info, message.ToString());
+            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayDecodedMessages, LogRecordType.Info, message.ToString());
 
             if (config.ShowGatewayDecodedMessages)
                 Show(logRecord);
@@ -93,7 +93,7 @@ namespace MyNodes.WebController.Code
 
         public void AddGatewayMessage(string message)
         {
-            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayMessage, LogRecordType.Info, message);
+            LogRecord logRecord = new LogRecord(LogRecordSource.GatewayMessages, LogRecordType.Info, message);
 
             if (config.ShowGatewayMessages)
                 Show(logRecord);
@@ -262,12 +262,63 @@ namespace MyNodes.WebController.Code
         public List<LogRecord> GetErrorsLogs()
         {
             List<LogRecord> list = new List<LogRecord>();
-            list.AddRange(gatewayLog.Where(x=>x.Type==LogRecordType.Error));
-            list.AddRange(nodesEngineLog.Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(nodesLog.Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(dataBaseLog.Where(x => x.Type == LogRecordType.Error));
-            list.AddRange(systemLog.Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(gatewayLog.ToArray().Where(x=>x.Type==LogRecordType.Error));
+            list.AddRange(nodesEngineLog.ToArray().Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(nodesLog.ToArray().Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(dataBaseLog.ToArray().Where(x => x.Type == LogRecordType.Error));
+            list.AddRange(systemLog.ToArray().Where(x => x.Type == LogRecordType.Error));
             return list.OrderBy(x => x.Date).ToList();
+        }
+
+
+        public List<LogRecord> GetLogsOfSource(LogRecordSource logRecordSource)
+        {
+            switch (logRecordSource)
+            {
+                case LogRecordSource.Gateway:
+                    return gatewayLog;
+                case LogRecordSource.GatewayMessages:
+                    return gatewayMessagesLog;
+                case LogRecordSource.GatewayDecodedMessages:
+                    return gatewayDecodedMessagesLog.Select(log => new LogRecord(LogRecordSource.GatewayDecodedMessages, LogRecordType.Info, log.ToString())).ToList(); ;
+                case LogRecordSource.DataBase:
+                    return dataBaseLog;
+                case LogRecordSource.NodesEngine:
+                    return nodesEngineLog;
+                case LogRecordSource.Nodes:
+                    return nodesLog;
+                case LogRecordSource.System:
+                    return systemLog;
+            }
+            return null;
+        }
+
+        public void ClearLogsOfSource(LogRecordSource logRecordSource)
+        {
+            switch (logRecordSource)
+            {
+                case LogRecordSource.Gateway:
+                    gatewayLog.Clear();
+                    break;
+                case LogRecordSource.GatewayMessages:
+                    gatewayMessagesLog.Clear();
+                    break;
+                case LogRecordSource.GatewayDecodedMessages:
+                    gatewayDecodedMessagesLog.Clear();
+                    break;
+                case LogRecordSource.DataBase:
+                    dataBaseLog.Clear();
+                    break;
+                case LogRecordSource.NodesEngine:
+                    nodesEngineLog.Clear();
+                    break;
+                case LogRecordSource.Nodes:
+                    nodesLog.Clear();
+                    break;
+                case LogRecordSource.System:
+                    systemLog.Clear();
+                    break;
+            }
         }
 
         public void ClearAllLogs()
@@ -293,10 +344,10 @@ namespace MyNodes.WebController.Code
                     case LogRecordSource.Gateway:
                         Console.ForegroundColor = ConsoleColor.Green;
                         break;
-                    case LogRecordSource.GatewayMessage:
+                    case LogRecordSource.GatewayMessages:
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         break;
-                    case LogRecordSource.GatewayDecodedMessage:
+                    case LogRecordSource.GatewayDecodedMessages:
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         break;
                     case LogRecordSource.DataBase:

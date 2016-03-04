@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Logs";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="Errors">Errors</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="System">System</a> | 
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="Gateway">Gateway</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="GatewayMessages">Gateway Messages</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="GatewayDecodedMessages">Gateway Decoded Messages</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="DataBase">DataBase</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="NodesEngine">Nodes Engine</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="Nodes">Nodes</a> |
+        <a asp-controller="Logs" asp-action="Show" asp-route-id="All">All</a> 
+    </div>
+    <div class="ui divider"></div>
+
+    <div class="ui raised segments">
+        <div class="ui secondary clearing segment">
+            <b>@ViewBag.PageName</b>
+            @if (ViewBag.LogType != "Errors")
+            {
+                <button type="button" class="ui right floated small button" id="clear-log">Clear Log</button>
+            }
+        </div>
+        <div class="ui segment" style="overflow-y: scroll;" id="log">
+        </div>
+
+    </div>
+    </div>
+
+    @section scripts
+{
+        <script src="~/js/mysensors.js"></script>
+        <script>
+            var logType = "@ViewBag.LogType";
+        </script>
+        <script src="~/js/logs-page.js"></script>
+    }
+
+

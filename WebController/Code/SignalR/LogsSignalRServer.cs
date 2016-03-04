@@ -13,7 +13,7 @@ namespace MyNodes.WebController.Code
     public static class LogsSignalRServer
     {
         private static IHubContext hub;
-        
+
         public static void Start(IConnectionManager connectionManager)
         {
             hub = connectionManager.GetHubContext<LogsHub>();
@@ -40,12 +40,21 @@ namespace MyNodes.WebController.Code
 
         private static void OnLogRecord(LogRecord record)
         {
-            hub.Clients.All.OnLogRecord(record);
+            hub.Clients.Group(record.Source.ToString()).OnLogRecord(record);
+
+            if (record.Type == LogRecordType.Error)
+                hub.Clients.Group("Errors").OnLogRecord(record);
+
+            hub.Clients.Group("All").OnLogRecord(record);
         }
 
         private static void OnLogRecord(Message message)
         {
-            hub.Clients.All.OnLogRecord(new LogRecord(LogRecordSource.GatewayDecodedMessage,LogRecordType.Info,  message.ToString()));
+            hub.Clients.Group(LogRecordSource.GatewayDecodedMessages.ToString())
+                .OnLogRecord(new LogRecord(
+                    LogRecordSource.GatewayDecodedMessages, 
+                    LogRecordType.Info, 
+                    message.ToString()));
         }
 
 

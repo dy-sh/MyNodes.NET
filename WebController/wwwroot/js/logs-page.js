@@ -7,8 +7,8 @@ var LogRecord = {
     LogRecordSource:
     {
         Gateway:0,
-        GatewayMessage:1,
-        GatewayDecodedMessage:2,
+        GatewayMessages:1,
+        GatewayDecodedMessages:2,
         DataBase:3,
         NodesEngine:4,
         Nodes:5,
@@ -44,7 +44,10 @@ $(function () {
         noty({ text: 'Gateway is disconnected!', type: 'error', timeout: false });
     };
 
-    $.connection.hub.start();
+    $.connection.hub.start(
+    function () {
+        clientsHub.server.join(logType);
+    });
 
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.reconnecting) {
@@ -134,30 +137,12 @@ function OnLogRecord(logRecord) {
 
 
 function addRecord(logRecord) {
-    if (logType == "Errors" && logRecord.Type != LogRecord.LogRecordType.Error)
-        return;
-    if (logType == "System" && logRecord.Source != LogRecord.LogRecordSource.System)
-        return;
-    if (logType == "Gateway" && logRecord.Source != LogRecord.LogRecordSource.Gateway)
-        return;
-    if (logType == "Gateway Messages" && logRecord.Source != LogRecord.LogRecordSource.GatewayMessage)
-        return;
-    if (logType == "Gateway Decoded Messages" && logRecord.Source != LogRecord.LogRecordSource.GatewayDecodedMessage)
-        return;
-    if (logType == "Nodes" && logRecord.Source != LogRecord.LogRecordSource.Nodes)
-        return;
-    if (logType == "Nodes Engine" && logRecord.Source != LogRecord.LogRecordSource.NodesEngine)
-        return;
-    if (logType == "DataBase" && logRecord.Source != LogRecord.LogRecordSource.DataBase)
-        return;
-
     if (logType == "All")
         addSource(logRecord);
 
     addDate(logRecord);
 
-
-
+    
     if (logRecord.Type == LogRecord.LogRecordType.Error) {
         $('#log').append("<span class='error-log-message'>" + logRecord.Message + "</span><br/>");
     } else {
@@ -171,10 +156,10 @@ function addSource(logRecord) {
         case LogRecord.LogRecordSource.Gateway:
             logRecord.Message= "GATEWAY: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordSource.GatewayMessage:
+        case LogRecord.LogRecordSource.GatewayMessages:
             logRecord.Message = "GATEWAY: " + logRecord.Message;
             break;
-        case LogRecord.LogRecordSource.GatewayDecodedMessage:
+        case LogRecord.LogRecordSource.GatewayDecodedMessages:
             logRecord.Message = "GATEWAY: " + logRecord.Message;
             break;
         case LogRecord.LogRecordSource.DataBase:

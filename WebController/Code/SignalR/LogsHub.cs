@@ -12,7 +12,10 @@ namespace MyNodes.WebController.Code
 {
     public class LogsHub : Hub
     {
-
+        public void Join(string logSource)
+        {
+            this.Groups.Add(this.Context.ConnectionId, logSource);
+        }
     }
 
 }
