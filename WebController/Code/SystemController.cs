@@ -123,86 +123,15 @@ namespace MyNodes.WebController.Code
         {
             try
             {
-                SerialGatewayConfig serialGatewayConfig = new SerialGatewayConfig
-                {
-                    Enable = Boolean.Parse(configuration["Gateway:SerialGateway:Enable"]),
-                    SerialPortName = configuration["Gateway:SerialGateway:SerialPortName"],
-                    Boudrate = Int32.Parse(configuration["Gateway:SerialGateway:Boudrate"])
-                };
-
-                EthernetGatewayConfig ethernetGatewayConfig = new EthernetGatewayConfig
-                {
-                    Enable = Boolean.Parse(configuration["Gateway:EthernetGateway:Enable"]),
-                    GatewayIP = configuration["Gateway:EthernetGateway:GatewayIP"],
-                    GatewayPort = Int32.Parse(configuration["Gateway:EthernetGateway:GatewayPort"])
-                };
-
-                gatewayConfig = new GatewayConfig
-                {
-                    SerialGatewayConfig = serialGatewayConfig,
-                    EthernetGatewayConfig = ethernetGatewayConfig,
-                    EnableAutoAssignId = Boolean.Parse(configuration["Gateway:EnableAutoAssignId"]),
-                };
-
-                logs.config = new LogsConfig
-                {
-                    ShowAllErrors = Boolean.Parse(configuration["Logs:ShowAllErrors"]),
-                    ShowGatewayState = Boolean.Parse(configuration["Logs:ShowGatewayState"]),
-                    ShowGatewayMessages = Boolean.Parse(configuration["Logs:ShowGatewayMessages"]),
-                    ShowGatewayDecodedMessages = Boolean.Parse(configuration["Logs:ShowGatewayDecodedMessages"]),
-                    ShowDataBaseState = Boolean.Parse(configuration["Logs:ShowDataBaseState"]),
-                    ShowNodesEngineState = Boolean.Parse(configuration["Logs:ShowNodesEngineState"]),
-                    ShowNodesEngineNodes = Boolean.Parse(configuration["Logs:ShowNodesEngineNodes"]),
-                    ShowSystemState = Boolean.Parse(configuration["Logs:ShowSystemState"]),
-
-                    StoreGatewayState = Boolean.Parse(configuration["Logs:StoreGatewayState"]),
-                    StoreGatewayMessages = Boolean.Parse(configuration["Logs:StoreGatewayMessages"]),
-                    StoreGatewayDecodedMessages = Boolean.Parse(configuration["Logs:StoreGatewayDecodedMessages"]),
-                    StoreDataBaseState = Boolean.Parse(configuration["Logs:StoreDataBaseState"]),
-                    StoreNodesEngineState = Boolean.Parse(configuration["Logs:StoreNodesEngineState"]),
-                    StoreNodesEngineNodes = Boolean.Parse(configuration["Logs:StoreNodesEngineNodes"]),
-                    StoreSystemState = Boolean.Parse(configuration["Logs:StoreSystemState"]),
-
-                    MaxGatewayState = Int32.Parse(configuration["Logs:MaxGatewayState"]),
-                    MaxGatewayMessages = Int32.Parse(configuration["Logs:MaxGatewayMessages"]),
-                    MaxGatewayDecodedMessages = Int32.Parse(configuration["Logs:MaxGatewayDecodedMessages"]),
-                    MaxDataBaseState = Int32.Parse(configuration["Logs:MaxDataBaseState"]),
-                    MaxNodesEngineState = Int32.Parse(configuration["Logs:MaxNodesEngineState"]),
-                    MaxNodesEngineNodes = Int32.Parse(configuration["Logs:MaxNodesEngineNodes"]),
-                    MaxSystemState = Int32.Parse(configuration["Logs:MaxSystemState"]),
-                };
-
-
-                nodesEngineConfig = new NodesEngineConfig
-                {
-                    Enable = Boolean.Parse(configuration["NodesEngine:Enable"]),
-                    UpdateInterval = Int32.Parse(configuration["NodesEngine:UpdateInterval"])
-                };
-
-                nodeEditorConfig = new NodeEditorConfig
-                {
-                    Theme = int.Parse(configuration["NodeEditor:Theme"])
-                };
-
-                dataBaseConfig = new DataBaseConfig
-                {
-                    Enable = Boolean.Parse(configuration["DataBase:Enable"]),
-                    UseInternalDb = Boolean.Parse(configuration["DataBase:UseInternalDb"]),
-                    WriteInterval = Int32.Parse(configuration["DataBase:WriteInterval"]),
-                    ExternalDbConnectionString = configuration["DataBase:ExternalDbConnectionString"]
-                };
-
-                webServerRules = new WebServerRules
-                {
-                    AllowFullAccessWithoutAuthorization = Boolean.Parse(configuration["WebServer:Rules:AllowFullAccessWithoutAuthorization"]),
-                    AllowRegistrationOfNewUsers = Boolean.Parse(configuration["WebServer:Rules:AllowRegistrationOfNewUsers"])
-                };
-
-                webServerConfig = new WebServerConfig
-                {
-                    Address = configuration["WebServer:Address"]
-                };
-
+                gatewayConfig = configuration.Get<GatewayConfig>("Gateway");
+                gatewayConfig.SerialGatewayConfig = configuration.Get<SerialGatewayConfig>("Gateway:SerialGateway");
+                gatewayConfig.EthernetGatewayConfig = configuration.Get<EthernetGatewayConfig>("Gateway:EthernetGateway");
+                logs.config = configuration.Get<LogsConfig>("Logs");
+                nodesEngineConfig = configuration.Get<NodesEngineConfig>("NodesEngine");
+                nodeEditorConfig = configuration.Get<NodeEditorConfig>("NodeEditor");
+                dataBaseConfig = configuration.Get<DataBaseConfig>("DataBase");
+                webServerRules = configuration.Get<WebServerRules>("WebServer");
+                webServerConfig = configuration.Get<WebServerConfig>("WebServer");
             }
             catch
             {

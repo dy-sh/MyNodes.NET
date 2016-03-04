@@ -15,11 +15,11 @@ namespace MyNodes.WebController.Code
         public bool ShowAllErrors { get; set; } = true;
 
         public bool ShowGatewayState { get; set; } = true;
-        public bool ShowGatewayMessages { get; set; } = true;
-        public bool ShowGatewayDecodedMessages { get; set; } = true;
+        public bool ShowGatewayMessages { get; set; } = false;
+        public bool ShowGatewayDecodedMessages { get; set; } = false;
         public bool ShowDataBaseState { get; set; } = true;
         public bool ShowNodesEngineState { get; set; } = true;
-        public bool ShowNodesEngineNodes { get; set; } = true;
+        public bool ShowNodesEngineNodes { get; set; } = false;
         public bool ShowSystemState { get; set; } = true;
 
         public bool StoreGatewayState { get; set; } = true;
