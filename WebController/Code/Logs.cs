@@ -73,7 +73,7 @@ namespace MyNodes.WebController.Code
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.Gateway, LogRecordType.Error, message);
 
-            if (config.ShowGatewayState)
+            if (config.ShowGatewayState || config.ShowAllErrors)
                 Show(logRecord);
 
             OnGatewayLogError?.Invoke(logRecord);
@@ -153,7 +153,7 @@ namespace MyNodes.WebController.Code
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.DataBase, LogRecordType.Error, message);
 
-            if (config.ShowDataBaseState)
+            if (config.ShowDataBaseState || config.ShowAllErrors)
                 Show(logRecord);
 
             OnDataBaseLogError?.Invoke(logRecord);
@@ -193,7 +193,7 @@ namespace MyNodes.WebController.Code
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.NodesEngine, LogRecordType.Error, message);
 
-            if (config.ShowNodesEngineState)
+            if (config.ShowNodesEngineState || config.ShowAllErrors)
                 Show(logRecord);
 
             OnNodesEngineLogError?.Invoke(logRecord);
@@ -232,7 +232,7 @@ namespace MyNodes.WebController.Code
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.Nodes, LogRecordType.Error, message);
 
-            if (config.ShowNodesEngineNodes)
+            if (config.ShowNodesEngineNodes || config.ShowAllErrors)
                 Show(logRecord);
 
             OnNodeLogError?.Invoke(logRecord);
@@ -273,7 +273,7 @@ namespace MyNodes.WebController.Code
         {
             LogRecord logRecord = new LogRecord(LogRecordSource.System, LogRecordType.Error, message);
 
-            if (config.ShowSystemState)
+            if (config.ShowSystemState || config.ShowAllErrors)
                 Show(logRecord);
 
             OnSystemLogError?.Invoke(logRecord);

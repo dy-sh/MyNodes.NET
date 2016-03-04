@@ -12,6 +12,8 @@ namespace MyNodes.WebController.Code
 {
     public class LogsConfig
     {
+        public bool ShowAllErrors { get; set; } = true;
+
         public bool ShowGatewayState { get; set; } = true;
         public bool ShowGatewayMessages { get; set; } = true;
         public bool ShowGatewayDecodedMessages { get; set; } = true;

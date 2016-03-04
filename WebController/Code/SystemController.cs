@@ -146,6 +146,7 @@ namespace MyNodes.WebController.Code
 
                 logs.config = new LogsConfig
                 {
+                    ShowAllErrors = Boolean.Parse(configuration["Logs:ShowAllErrors"]),
                     ShowGatewayState = Boolean.Parse(configuration["Logs:ShowGatewayState"]),
                     ShowGatewayMessages = Boolean.Parse(configuration["Logs:ShowGatewayMessages"]),
                     ShowGatewayDecodedMessages = Boolean.Parse(configuration["Logs:ShowGatewayDecodedMessages"]),
