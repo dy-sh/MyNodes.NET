@@ -1,0 +1,57 @@
+﻿@model MyNodes.WebController.Code.NodesEngineConfig
+
+@{
+    ViewBag.Title = "Nodes Engine";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="NodesEngine" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+
+                    <div class="ui basic segment">
+
+                        <div class="field">
+                            <label>Update Interval</label>
+                            <input type="text" asp-for="UpdateInterval"/>
+                            <span asp-validation-for="UpdateInterval" />
+                        </div>
+                    </div>
+
+
+                    <div class="ui basic segment">
+                        Increase Update Interval to reduce CPU load and make the web interface more responsive.
+                        Decrease the value to increase the number of iterations of nodes per second. 
+                        Can be set to 0 to have maximum nodes performance.
+                    </div>
+       
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Index" class="ui button">Cancel</a>
+                            <input type="submit" value="Save" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

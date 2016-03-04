@@ -309,6 +309,35 @@ namespace MyNodes.WebController.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult NodesEngine()
+        {
+            return View(SystemController.nodesEngineConfig);
+        }
+
+
+        [Authorize(UserClaims.ConfigEditor)]
+
+        [HttpPost]
+        public IActionResult NodesEngine(NodesEngineConfig model)
+        {
+            model.Enable = SystemController.nodesEngine.IsStarted();
+
+            if (model.UpdateInterval < 0)
+                model.UpdateInterval = 0;
+
+            dynamic json = ReadConfig();
+            json.NodesEngine = JObject.FromObject(model);
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.nodesEngineConfig = model;
+            SystemController.nodesEngine.SetUpdateInterval(model.UpdateInterval);
+
+            return RedirectToAction("Index");
+        }
     }
 
 }

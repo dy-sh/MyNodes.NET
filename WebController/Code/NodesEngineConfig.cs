@@ -13,6 +13,6 @@ namespace MyNodes.WebController.Code
     public class NodesEngineConfig
     {
         public bool Enable { get; set; }
-        public int UpdateInterval { get; set; }
+        public double UpdateInterval { get; set; }
     }
 }

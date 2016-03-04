@@ -21,7 +21,7 @@ namespace MyNodes.Nodes
 
         //If you have tons of nodes, and system perfomance decreased, increase this value,
         //and you will get less nodes updating frequency 
-        private int UPDATE_NODES_INTEVAL = 1;
+        private double updateInterval = 1;
 
         private INodesRepository nodesDb;
         public INodesDataRepository dataDb;
@@ -250,7 +250,7 @@ namespace MyNodes.Nodes
             {
                 while (true)
                 {
-                    if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < UPDATE_NODES_INTEVAL)
+                    if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < updateInterval)
                         continue;
 
                     lastUpdateTime = DateTime.Now;
@@ -295,14 +295,14 @@ namespace MyNodes.Nodes
 
 
 
-        public void SetUpdateInterval(int ms)
+        public void SetUpdateInterval(double ms)
         {
-            UPDATE_NODES_INTEVAL = ms;
+            updateInterval = ms;
         }
 
-        public int GetUpdateInterval()
+        public double GetUpdateInterval()
         {
-            return UPDATE_NODES_INTEVAL;
+            return updateInterval;
         }
 
 
