@@ -127,6 +127,7 @@ namespace MyNodes.WebController.Code
                 gatewayConfig.SerialGatewayConfig = configuration.Get<SerialGatewayConfig>("Gateway:SerialGateway");
                 gatewayConfig.EthernetGatewayConfig = configuration.Get<EthernetGatewayConfig>("Gateway:EthernetGateway");
                 logs.config = configuration.Get<LogsConfig>("Logs");
+                logs.consoleConfig = configuration.Get<ConsoleConfig>("Console");
                 nodesEngineConfig = configuration.Get<NodesEngineConfig>("NodesEngine");
                 nodeEditorConfig = configuration.Get<NodeEditorConfig>("NodeEditor");
                 dataBaseConfig = configuration.Get<DataBaseConfig>("DataBase");

@@ -338,6 +338,54 @@ namespace MyNodes.WebController.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult Console()
+        {
+            return View(SystemController.logs.consoleConfig);
+        }
+
+
+        [Authorize(UserClaims.ConfigEditor)]
+
+        [HttpPost]
+        public IActionResult Console(ConsoleConfig model)
+        {
+
+            dynamic json = ReadConfig();
+            json.Console = JObject.FromObject(model);
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.logs.consoleConfig = model;
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        public IActionResult Logs()
+        {
+            return View(SystemController.logs.config);
+        }
+
+
+        [Authorize(UserClaims.ConfigEditor)]
+
+        [HttpPost]
+        public IActionResult Logs(LogsConfig model)
+        {
+
+            dynamic json = ReadConfig();
+            json.Logs = JObject.FromObject(model);
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.logs.config = model;
+
+            return RedirectToAction("Index");
+        }
     }
 
 }
