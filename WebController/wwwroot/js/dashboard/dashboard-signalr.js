@@ -37,7 +37,10 @@ $(function () {
   
 
     clientsHub.client.OnNewUiNode = function (node) {
-        createNode(node);
+        if ($('#node-' + node.Id))
+            updateNode(node);
+        else
+            createNode(node);
     };
 
     clientsHub.client.OnUiNodeUpdated = function (node) {
