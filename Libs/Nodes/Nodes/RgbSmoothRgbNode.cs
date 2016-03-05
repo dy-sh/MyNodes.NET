@@ -45,7 +45,7 @@ namespace MyNodes.Nodes
             Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output update interval", "30"));
             Settings.Add("PreventDuplication", new NodeSetting(NodeSettingType.Checkbox, "Prevent duplication", "true"));
             Settings.Add("StopWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Stop when input color is null", "false"));
-            Settings.Add("ResetWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Send null when input color is null", "false"));
+            Settings.Add("ResetWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Reset and send null when input color is null", "false"));
         }
 
         public override void Loop()
@@ -190,15 +190,18 @@ namespace MyNodes.Nodes
         public override string GetNodeDescription()
         {
             return "This node makes a smooth transition of the RGB color. <br/>" +
-                   "It avoids abrupt changes of the color on the output. <br/>" +
+                   "It avoids abrupt changes of the color on the output. <br/><br/>" +
+
                    "The input named \"Interval\" specifies the time " +
                    "for which the color should change completely. <br/><br/>" +
 
                    "The output is named \"Enabled\" sends \"1\" " +
                    "when the node is in the active state (makes the transition). <br/><br/>" +
+
                    "In the settings of the node you can increase the refresh rate " +
                    "to make the transition more smoother. " +
                    "Or, reduce the refresh rate to reduce CPU load.<br/><br/>" +
+
                    "Also, you can specify in the settings, " +
                    "what should be done when the input color is null.";
         }

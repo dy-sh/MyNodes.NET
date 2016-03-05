@@ -20,7 +20,7 @@ namespace MyNodes.Nodes
 
         private double interval;
 
-        private double? currentValue;
+        private double currentValue;
         private double endValue;
         private double startValue;
 
@@ -33,10 +33,13 @@ namespace MyNodes.Nodes
             AddInput("Interval", DataType.Number, true);
 
             AddOutput("Value");
+            AddOutput("Enabled", DataType.Logical);
 
             interval = DEFAULT_INTERVAL;
 
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output Update Interval", "50"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output update interval", "50"));
+            Settings.Add("StopWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Stop when input value is null", "false"));
+            Settings.Add("ResetWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Reset and send null when input value is null", "false"));
         }
 
         public override void Loop()
@@ -54,15 +57,15 @@ namespace MyNodes.Nodes
 
             double elapsed = (DateTime.Now - startTime).TotalMilliseconds;
             double percent = elapsed / interval * 100;
-            if (percent >= 100 || currentValue== endValue)
-            {
+            if (percent >= 100 || currentValue == endValue)
                 currentValue = endValue;
-                enabled = false;
-            }
             else
                 currentValue = Remap(percent, 0, 100, startValue, endValue);
 
             Outputs[0].Value = currentValue.ToString();
+
+            if (currentValue == endValue)
+                Stop();
         }
 
 
@@ -72,23 +75,18 @@ namespace MyNodes.Nodes
             {
                 if (input.Value == null)
                 {
-                    enabled = false;
-                    currentValue = null;
-                    ResetOutputs();
+                    if (Settings["StopWhenDisconnected"].Value == "true")
+                        Stop();
+
+                    if (Settings["ResetWhenDisconnected"].Value == "true")
+                        Reset();
                 }
                 else
                 {
-                    double val= double.Parse(input.Value);
-                    if (val==endValue && val == currentValue)
-                        return;
+                    startValue = currentValue;
+                    endValue = double.Parse(input.Value);
 
-                    if (currentValue == null)
-                        currentValue = val;
-
-                    endValue = val;
-                    startValue = currentValue.Value;
-                    startTime = DateTime.Now;
-                    enabled = true;
+                    Start();
                 }
             }
 
@@ -107,6 +105,32 @@ namespace MyNodes.Nodes
             }
         }
 
+
+        private void Stop()
+        {
+            if (enabled)
+            {
+                enabled = false;
+                Outputs[1].Value = "0";
+            }
+        }
+
+        private void Reset()
+        {
+            Outputs[0].Value = null;
+            currentValue = 0;
+        }
+
+        private void Start()
+        {
+            startTime = DateTime.Now;
+            lastUpdateTime = startTime;
+
+            Outputs[1].Value = "1";
+            enabled = true;
+        }
+
+
         private double Remap(double value, double inMin, double inMax, double outMin, double outMax)
         {
             return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
@@ -115,7 +139,8 @@ namespace MyNodes.Nodes
         public override string GetNodeDescription()
         {
             return "This node makes a smooth transition of values. <br/>" +
-                   "It avoids abrupt changes of the value on the output. <br/>" +
+                   "It avoids abrupt changes of the value on the output. <br/><br/>" +
+
                    "The input named \"Interval\" specifies the time " +
                    "for which the output should change completely. <br/><br/>" +
 
@@ -128,7 +153,10 @@ namespace MyNodes.Nodes
 
                    "In the settings of the node you can increase the refresh rate " +
                    "to make the transition more smoother. " +
-                   "Or, reduce the refresh rate to reduce CPU load.";
+                   "Or, reduce the refresh rate to reduce CPU load.<br/><br/>" +
+
+                   "Also, you can specify in the settings, " +
+                   "what should be done when the input color is null.";
         }
     }
 }
