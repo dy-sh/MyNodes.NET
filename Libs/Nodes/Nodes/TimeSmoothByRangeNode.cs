@@ -20,7 +20,7 @@ namespace MyNodes.Nodes
 
         private double range;
 
-        private double? currentValue;
+        private double currentValue;
         private double endValue;
 
         private DateTime lastUpdateTime;
@@ -31,10 +31,13 @@ namespace MyNodes.Nodes
             AddInput("Max/s", DataType.Number, true);
 
             AddOutput("Value");
+            AddOutput("Enabled", DataType.Logical);
 
             range = DEFAULT_RANGE;
 
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output Update Interval", "50"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output update interval", "50"));
+            Settings.Add("StopWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Stop when input value is null", "false"));
+            Settings.Add("ResetWhenDisconnected", new NodeSetting(NodeSettingType.Checkbox, "Send null when input value is null", "false"));
         }
 
         public override void Loop()
@@ -56,25 +59,20 @@ namespace MyNodes.Nodes
                 currentValue += Remap(elapsed, 0, 1000, 0, range);
 
                 if (currentValue >= endValue)
-                {
                     currentValue = endValue;
-                    enabled = false;
-                }
             }
             else
-            if (endValue < currentValue)
             {
                 currentValue -= Remap(elapsed, 0, 1000, 0, range);
 
                 if (currentValue <= endValue)
-                {
                     currentValue = endValue;
-                    enabled = false;
-                }
             }
 
             Outputs[0].Value = currentValue.ToString();
 
+            if (currentValue == endValue)
+                Stop();
         }
 
 
@@ -84,28 +82,17 @@ namespace MyNodes.Nodes
             {
                 if (input.Value == null)
                 {
-                    enabled = false;
-                    currentValue = null;
-                    ResetOutputs();
+                    if (Settings["StopWhenDisconnected"].Value == "true")
+                        Stop();
+
+                    if (Settings["ResetWhenDisconnected"].Value == "true")
+                        Reset();
                 }
                 else
                 {
-                    double val= double.Parse(input.Value);
-                    if (val==endValue && val == currentValue)
-                        return;
+                    endValue = double.Parse(input.Value);
 
-                    if (currentValue == null)
-                        currentValue = val;
-
-                    endValue = val;
-
-                    double updateInterval;
-                    double.TryParse(Settings["UpdateInterval"].Value, out updateInterval);
-
-                    if ((DateTime.Now- lastUpdateTime).TotalMilliseconds>= updateInterval)
-                        lastUpdateTime = DateTime.Now;
-
-                    enabled = true;
+                    Start();
                 }
             }
 
@@ -124,6 +111,34 @@ namespace MyNodes.Nodes
             }
         }
 
+
+        private void Stop()
+        {
+            if (enabled)
+            {
+                enabled = false;
+                Outputs[1].Value = "0";
+            }
+        }
+
+        private void Reset()
+        {
+            Outputs[0].Value = null;
+            currentValue = 0;
+        }
+
+        private void Start()
+        {
+            double updateInterval;
+            double.TryParse(Settings["UpdateInterval"].Value, out updateInterval);
+            if ((DateTime.Now - lastUpdateTime).TotalMilliseconds >= updateInterval)
+                lastUpdateTime = DateTime.Now;
+
+            Outputs[1].Value = "1";
+            enabled = true;
+        }
+
+
         private double Remap(double value, double inMin, double inMax, double outMin, double outMax)
         {
             return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
@@ -132,7 +147,8 @@ namespace MyNodes.Nodes
         public override string GetNodeDescription()
         {
             return "This node makes a smooth transition of values. <br/>" +
-                   "It avoids abrupt changes of the value on the output. <br/>" +
+                   "It avoids abrupt changes of the value on the output. <br/><br/>" +
+
                    "The input named \"Max/s\" sets the limit range at which " +
                    "the output can change in 1 second. <br/><br/>" +
 
@@ -144,7 +160,10 @@ namespace MyNodes.Nodes
 
                    "In the settings of the node you can increase the refresh rate " +
                    "to make the transition more smoother. " +
-                   "Or, reduce the refresh rate to reduce CPU load.";
+                   "Or, reduce the refresh rate to reduce CPU load.<br/><br/>" +
+
+                   "Also, you can specify in the settings, " +
+                   "what should be done when the input color is null.";
         }
     }
 }
