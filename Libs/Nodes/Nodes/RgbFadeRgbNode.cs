@@ -43,8 +43,8 @@ namespace MyNodes.Nodes
 
             interval = DEFAULT_INTERVAL;
 
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output Update Interval", "30"));
-            Settings.Add("PreventDuplication", new NodeSetting(NodeSettingType.Checkbox, "Prevent Duplication", "true"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output update interval", "30"));
+            Settings.Add("PreventDuplication", new NodeSetting(NodeSettingType.Checkbox, "Prevent duplication", "true"));
         }
 
         public override void Loop()

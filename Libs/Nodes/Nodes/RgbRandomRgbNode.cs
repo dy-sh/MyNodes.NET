@@ -5,18 +5,18 @@ using System.Globalization;
 
 namespace MyNodes.Nodes
 {
-    public class RgbRandomRgbwNode : Node
+    public class RgbRandomRgbNode : Node
     {
-        private readonly string DEFAULT_MIN = "00000000";
-        private readonly string DEFAULT_MAX = "FFFFFFFF";
+        private readonly string DEFAULT_MIN = "000000";
+        private readonly string DEFAULT_MAX = "FFFFFF";
 
 
-        public RgbRandomRgbwNode() : base("RGB", "Random RGBW")
+        public RgbRandomRgbNode() : base("RGB", "Random RGB")
         {
             AddInput("Trigger", DataType.Logical);
-            AddInput("Min RGBW", DataType.Text, true);
-            AddInput("Max RGBW", DataType.Text, true);
-            AddOutput("RGBW");
+            AddInput("Min RGB", DataType.Text, true);
+            AddInput("Max RGB", DataType.Text, true);
+            AddOutput("RGB");
 
             options.ResetOutputsIfAnyInputIsNull = true;
         }
@@ -42,7 +42,7 @@ namespace MyNodes.Nodes
 
                     var rand = new Random(DateTime.Now.Millisecond);
 
-                    for (var i = 0; i < 4; i++)
+                    for (var i = 0; i < 3; i++)
                     {
                         int min = int.Parse(inMinRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
                         int max = int.Parse(inMaxRGB.Substring(i * 2, 2), NumberStyles.HexNumber);
@@ -72,7 +72,7 @@ namespace MyNodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node generates random RGBW color. <br/>" +
+            return "This node generates random RGB color. <br/>" +
                    "To generate color, send \"1\" to \"Trigger\" input. <br/>" +
                    "You can set the minimum and maximum color.";
         }

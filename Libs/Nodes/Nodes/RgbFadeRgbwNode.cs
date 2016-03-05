@@ -31,20 +31,20 @@ namespace MyNodes.Nodes
 
         public RgbFadeRgbwNode() : base("RGB", "Fade RGBW")
         {
-            AddInput("From RGB", DataType.Text);
-            AddInput("To RGB", DataType.Text);
+            AddInput("From RGBW", DataType.Text);
+            AddInput("To RGBW", DataType.Text);
             AddInput("Interval", DataType.Number, true);
             AddInput("Start/Stop", DataType.Logical, true);
 
-            AddOutput("RGB");
+            AddOutput("RGBW");
             AddOutput("Enabled", DataType.Logical);
 
             Outputs[1].Value = "0";
 
             interval = DEFAULT_INTERVAL;
 
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output Update Interval", "30"));
-            Settings.Add("PreventDuplication", new NodeSetting(NodeSettingType.Checkbox, "Prevent Duplication", "true"));
+            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Output update interval", "30"));
+            Settings.Add("PreventDuplication", new NodeSetting(NodeSettingType.Checkbox, "Prevent duplication", "true"));
         }
 
         public override void Loop()

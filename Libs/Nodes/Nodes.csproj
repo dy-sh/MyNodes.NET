@@ -70,11 +70,12 @@
     <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
     <Compile Include="Nodes\RgbCrossfadeRgbNode.cs" />
+    <Compile Include="Nodes\RgbCrossfadeRgbwNode.cs" />
     <Compile Include="Nodes\RgbFadeRgbNode.cs" />
     <Compile Include="Nodes\RgbSmoothRgbwNode.cs" />
     <Compile Include="Nodes\RgbSmoothRgbNode.cs" />
-    <Compile Include="Nodes\RgbRandomRgbwNode.cs" />
     <Compile Include="Nodes\RgbRandomRgbNode.cs" />
+    <Compile Include="Nodes\RgbRandomRgbwNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
     <Compile Include="Nodes\OperationQueueNode.cs" />
     <Compile Include="Nodes\OperationLinearShaperNode.cs" />
