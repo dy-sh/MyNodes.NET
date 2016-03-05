@@ -102,7 +102,6 @@ namespace MyNodes.WebController
             bool webServerEnable = false;
             try
             {
-                logging = Configuration.GetSection("WebServer:Logging");
                 webServerDebug = Boolean.Parse(Configuration["WebServer:Debug"]);
                 webServerEnable = Boolean.Parse(Configuration["WebServer:Enable"]);
             }
@@ -113,9 +112,9 @@ namespace MyNodes.WebController
             }
 
             if (webServerDebug)
-                loggerFactory.AddConsole(logging);
+                loggerFactory.AddConsole(LogLevel.Debug);
             else
-                loggerFactory.AddConsole(LogLevel.Warning);
+                loggerFactory.AddConsole(LogLevel.Error);
 
             loggerFactory.AddDebug();
 

@@ -26,22 +26,22 @@ namespace MyNodes.Nodes
         public override void OnInputChange(Input input)
         {
 
-            double position = double.Parse(Inputs[0].Value);//20
+            double position = double.Parse(Inputs[0].Value);
 
             position = Clamp(position, 0, 100);
 
-            int pointsCount = Inputs.Count - 1; //5
+            int pointsCount = Inputs.Count - 1; 
 
-            double stepSize = 100D / (pointsCount - 1);//25
+            double stepSize = 100D / (pointsCount - 1);
 
-            double stepIndex = (position / stepSize) + 1;//1,8
+            double stepIndex = (position / stepSize) + 1;
 
 
-            double positionInStep = stepIndex - ((int)stepIndex);//0.8
+            double positionInStep = stepIndex - ((int)stepIndex);
 
             double startValue = ((int)stepIndex-1)* stepSize;
             if (Inputs[(int)stepIndex].Value != null)
-                startValue = double.Parse(Inputs[(int)stepIndex].Value);//0
+                startValue = double.Parse(Inputs[(int)stepIndex].Value);
 
             if (position>=100)
             {
