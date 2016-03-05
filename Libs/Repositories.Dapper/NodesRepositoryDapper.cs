@@ -124,6 +124,7 @@ namespace MyNodes.Repositories.Dapper
 
 
 
+
         public void CreateDb()
         {
             using (var db = new SqlConnection(connectionString + ";Database= master"))
@@ -191,7 +192,7 @@ namespace MyNodes.Repositories.Dapper
 
 
 
-        public string AddNode(Node node)
+        public void AddNode(Node node)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -203,8 +204,28 @@ namespace MyNodes.Repositories.Dapper
                 SerializedNode serializedNode = new SerializedNode(node);
                 db.Execute(sqlQuery, serializedNode);
             }
-            return node.Id;
         }
+
+
+
+        public void AddNodes(List<Node> nodes)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                var sqlQuery = "INSERT INTO Nodes (Id, JsonData) "
+                               + "VALUES(@Id, @JsonData)";
+
+                List<SerializedNode> snodes= nodes
+                    .Select(node => new SerializedNode(node))
+                    .ToList();
+
+
+                db.Execute(sqlQuery, snodes);
+            }
+        }
+
 
         public void UpdateNode(Node node)
         {
@@ -316,9 +337,7 @@ namespace MyNodes.Repositories.Dapper
 
 
 
-
-
-        public string AddLink(Link link)
+        public void AddLink(Link link)
         {
             using (var db = new SqlConnection(connectionString))
             {
@@ -329,7 +348,20 @@ namespace MyNodes.Repositories.Dapper
 
                 db.Execute(sqlQuery, link);
             }
-            return link.Id;
+        }
+
+
+        public void AddLinks(List<Link> links)
+        {
+            using (var db = new SqlConnection(connectionString))
+            {
+                db.Open();
+
+                var sqlQuery = "INSERT INTO Links (Id, InputId, OutputId, PanelId) "
+                               + "VALUES(@Id, @InputId, @OutputId, @PanelId)";
+
+                db.Execute(sqlQuery, links);
+            }
         }
 
 

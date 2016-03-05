@@ -14,7 +14,8 @@ namespace MyNodes.Nodes
         void SetWriteInterval(int ms);
 
 
-        string AddNode(Node node);
+        void AddNode(Node node);
+        void AddNodes(List<Node> nodes);
         void UpdateNode(Node node);
         Node GetNode(string id);
         List<Node> GetAllNodes();
@@ -22,7 +23,8 @@ namespace MyNodes.Nodes
         void RemoveNodes(List<Node> nodes);
         void RemoveAllNodes();
 
-        string AddLink(Link link);
+        void AddLink(Link link);
+        void AddLinks(List<Link> links);
         Link GetLink(string id);
         List<Link> GetAllLinks();
         void RemoveLink(string id);

@@ -139,15 +139,24 @@ namespace MyNodes.Repositories.EF.SQLite
 
 
 
-        public string AddNode(Node node)
+        public void AddNode(Node node)
         {
 
             SerializedNode serializedNode = new SerializedNode(node);
             db.SerializedNodes.Add(serializedNode);
 
             db.SaveChanges();
+        }
 
-            return serializedNode.Id;
+        public void AddNodes(List<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                SerializedNode serializedNode = new SerializedNode(node);
+                db.SerializedNodes.Add(serializedNode);
+            }
+
+            db.SaveChanges();
         }
 
         public void UpdateNode(Node node)
@@ -241,14 +250,22 @@ namespace MyNodes.Repositories.EF.SQLite
 
 
 
-        public string AddLink(Link link)
+        public void AddLink(Link link)
         {
-            if (!db.Links.Any(x => x.Id == link.Id))
-                db.Links.Add(link);
+            //if (!db.Links.Any(x => x.Id == link.Id))
+            db.Links.Add(link);
 
             db.SaveChanges();
+        }
 
-            return link.Id;
+        public void AddLinks(List<Link> links)
+        {
+            foreach (var link in links)
+            {
+                db.Links.Add(link);
+            }
+
+            db.SaveChanges();
         }
 
         public Link GetLink(string id)
