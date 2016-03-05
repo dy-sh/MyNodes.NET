@@ -402,8 +402,8 @@ namespace MyNodes.Nodes
                         RemoveLink(link, false);
                     }
 
-                    LogEngineInfo($"Remove node [{node.GetType().Name}]");
-                    OnRemoveNode?.Invoke(node);
+                    LogEngineInfo($"Remove node [{n.GetType().Name}]");
+                    OnRemoveNode?.Invoke(n);
 
                     lock (nodesLock)
                         nodes.Remove(n);
