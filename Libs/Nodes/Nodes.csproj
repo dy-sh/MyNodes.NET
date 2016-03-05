@@ -70,6 +70,7 @@
     <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
     <Compile Include="Nodes\RgbFadeRgbNode.cs" />
+    <Compile Include="Nodes\RgbSmoothRgbNode.cs" />
     <Compile Include="Nodes\RgbRandomRgbwNode.cs" />
     <Compile Include="Nodes\RgbRandomRgbNode.cs" />
     <Compile Include="Nodes\OperationStackNode.cs" />
