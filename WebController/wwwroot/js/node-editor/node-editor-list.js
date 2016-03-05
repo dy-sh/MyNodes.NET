@@ -867,6 +867,18 @@
 
             
 
+            //RgbSmoothRgbwNode
+            function RgbSmoothRgbwNode () {
+                this.properties = {
+                    'ObjectType': 'MyNodes.Nodes.RgbSmoothRgbwNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbSmoothRgbwNode.title = 'Smooth RGBW';
+            LiteGraph.registerNodeType('RGB/Smooth RGBW', RgbSmoothRgbwNode);
+
+            
+
             //SystemFileNode
             function SystemFileNode () {
                 this.properties = {

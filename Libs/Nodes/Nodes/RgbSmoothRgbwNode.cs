@@ -13,7 +13,7 @@ using Timer = System.Timers.Timer;
 
 namespace MyNodes.Nodes
 {
-    public class RgbSmoothRgbNode : Node
+    public class RgbSmoothRgbwNode : Node
     {
 
         private readonly int DEFAULT_INTERVAL = 1000;
@@ -22,23 +22,23 @@ namespace MyNodes.Nodes
 
         private double interval;
 
-        private int[] currentValue = { 0, 0, 0 };
+        private int[] currentValue = { 0, 0, 0, 0 };
         private int[] startValue;
         private int[] endValue;
 
         private DateTime lastUpdateTime;
         private DateTime startTime;
 
-        public RgbSmoothRgbNode() : base("RGB", "Smooth RGB")
+        public RgbSmoothRgbwNode() : base("RGB", "Smooth RGBW")
         {
-            AddInput("RGB", DataType.Text);
+            AddInput("RGBW", DataType.Text);
             AddInput("Interval", DataType.Number, true);
 
-            AddOutput("RGB");
+            AddOutput("RGBW");
             AddOutput("Enabled", DataType.Logical);
 
             Outputs[1].Value = "0";
-            Outputs[0].Value = "000000";
+            Outputs[0].Value = "00000000";
 
             interval = DEFAULT_INTERVAL;
 
@@ -114,7 +114,7 @@ namespace MyNodes.Nodes
                         startValue = (int[])currentValue.Clone();
                         endValue = ConvertHexStringToIntArray(Inputs[0].Value);
 
-                        if (endValue.Length != 3)
+                        if (endValue.Length != 4)
                             throw new Exception("Incorrect value in input.");
 
                         Start();
@@ -148,7 +148,7 @@ namespace MyNodes.Nodes
         private void Reset()
         {
             Outputs[0].Value = null;
-            currentValue = new int[] { 0, 0, 0 };
+            currentValue = new int[] { 0, 0, 0, 0 };
         }
 
         private void Start()
@@ -189,7 +189,7 @@ namespace MyNodes.Nodes
 
         public override string GetNodeDescription()
         {
-            return "This node makes a smooth transition of the RGB color. <br/>" +
+            return "This node makes a smooth transition of the RGBW color. <br/>" +
                    "It avoids abrupt changes of the color on the output. <br/>" +
                    "The input named \"Interval\" specifies the time " +
                    "for which the color should change completely. <br/><br/>" +
