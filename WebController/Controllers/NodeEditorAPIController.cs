@@ -600,13 +600,11 @@ namespace MyNodes.WebController.Controllers
 
                     engine.GenerateNewIds(ref nodes, ref links);
 
-                    foreach (var node in nodes)
-                        engine.AddNode(node);
+                   
+                    int adddedNodes = engine.AddNodes(nodes);
+                    int adddedLinks = engine.AddLinks(links);
 
-                    foreach (var link in links)
-                        engine.AddLink(link.OutputId, link.InputId);
-
-                    return true;
+                    return (adddedNodes == nodes.Count && adddedLinks == links.Count);
                 }
                 catch
                 {
