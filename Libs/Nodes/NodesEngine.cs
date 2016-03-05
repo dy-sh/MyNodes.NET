@@ -313,31 +313,54 @@ namespace MyNodes.Nodes
         }
 
 
-        public void AddNode(Node node)
+        public bool AddNode(Node node, bool writeInDb = true)
         {
             if (node.PanelId != MAIN_PANEL_ID && GetPanelNode(node.PanelId) == null)
             {
                 LogEngineError($"Can`t create node [{node.GetType().Name}]. Panel [{node.PanelId}] does not exist.");
-                return;
+                return false;
             }
 
             bool checkNodeCanBeAdded = node.OnAddToEngine(this);
             if (!checkNodeCanBeAdded)
             {
                 LogEngineError($"Can`t create node [{node.GetType().Name}]. Aborted by node.");
-                return;
+                return false;
             }
 
             lock (nodesLock)
                 nodes.Add(node);
 
-            nodesDb?.AddNode(node);
+            if (writeInDb)
+                nodesDb?.AddNode(node);
 
             LogEngineInfo($"New node [{node.GetType().Name}]");
 
             OnNewNode?.Invoke(node);
+
+            return true;
         }
 
+
+
+        public int AddNodes(List<Node> nodes)
+        {
+            int count = 0;
+
+            List<Node> addedNodes = new List<Node>();
+            foreach (var node in nodes)
+            {
+                bool added = AddNode(node, false);
+                if (added)
+                {
+                    addedNodes.Add(node);
+                    count++;
+                }
+            }
+
+            nodesDb?.AddNodes(addedNodes);
+            return count;
+        }
 
 
 
@@ -378,6 +401,9 @@ namespace MyNodes.Nodes
                     {
                         RemoveLink(link, false);
                     }
+
+                    LogEngineInfo($"Remove node [{node.GetType().Name}]");
+                    OnRemoveNode?.Invoke(node);
 
                     lock (nodesLock)
                         nodes.Remove(n);
@@ -535,7 +561,7 @@ namespace MyNodes.Nodes
             input.Value = value;
         }
 
-        public void AddLink(string outputId, string inputId)
+        public Link AddLink(string outputId, string inputId, bool writeInDb = true)
         {
             Input input = GetInput(inputId);
             Output output = GetOutput(outputId);
@@ -543,13 +569,13 @@ namespace MyNodes.Nodes
             if (input == null || output == null)
             {
                 LogEngineError($"Can`t create link from [{outputId}] to [{inputId}]. Does not exist.");
-                return;
+                return null;
             }
 
-            AddLink(output, input);
+            return AddLink(output, input, writeInDb);
         }
 
-        public void AddLink(Output output, Input input)
+        public Link AddLink(Output output, Input input, bool writeInDb = true)
         {
             Node inputNode = GetInputOwner(input);
             Node outputNode = GetOutputOwner(output);
@@ -557,19 +583,19 @@ namespace MyNodes.Nodes
             if (inputNode == null || outputNode == null)
             {
                 LogEngineError($"Can`t create link from [{output.Id}] to [{input.Id}]. Does not exist.");
-                return;
+                return null;
             }
 
             if (inputNode == outputNode)
             {
                 LogEngineError($"Can`t create link from [{output.Id}] to [{input.Id}]. Input and output belong to the same node.");
-                return;
+                return null;
             }
 
             if (inputNode.PanelId != outputNode.PanelId)
             {
                 LogEngineError($"Can`t create link from {outputNode.GetType().Name} to {inputNode.GetType().Name}. Nodes are on different panels.");
-                return;
+                return null;
             }
 
 
@@ -586,16 +612,34 @@ namespace MyNodes.Nodes
                 links.Add(link);
 
 
-            nodesDb?.AddLink(link);
+            if (writeInDb)
+                nodesDb?.AddLink(link);
 
             OnNewLink?.Invoke(link);
 
-            if (!started)
-                return;
+            if (started)
+                input.Value = output.Value;
 
-            input.Value = output.Value;
-
+            return link;
         }
+
+
+        public int AddLinks(List<Link> links)
+        {
+            List<Link> addedLinks = new List<Link>();
+
+            foreach (var link in links)
+            {
+                Link newLink = AddLink(link.OutputId, link.InputId, false);
+                if (newLink != null)
+                    addedLinks.Add(newLink);
+            }
+
+            nodesDb?.AddLinks(addedLinks);
+
+            return addedLinks.Count;
+        }
+
 
 
 
@@ -818,11 +862,8 @@ namespace MyNodes.Nodes
 
                 GenerateNewIds(ref newNodes, ref newLinks);
 
-                foreach (var node in newNodes)
-                    AddNode(node);
-
-                foreach (var link in newLinks)
-                    AddLink(link.OutputId, link.InputId);
+                AddNodes(newNodes);
+                AddLinks(newLinks);
 
                 newNodes[0].ResetInputs();
             }
@@ -834,7 +875,7 @@ namespace MyNodes.Nodes
                 GenerateNewIds(newNode);
 
                 newNode.Position = new Position { X = oldNode.Position.X + 5, Y = oldNode.Position.Y + 20 };
-                AddNode(newNode);
+                AddNode(newNode, true);
                 newNode.ResetInputs();
             }
 
