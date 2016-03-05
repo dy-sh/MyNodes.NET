@@ -69,6 +69,7 @@
     <Compile Include="Nodes\MathMaxNode.cs" />
     <Compile Include="Nodes\MathMinNode.cs" />
     <Compile Include="Nodes\OperationEventCounterNode.cs" />
+    <Compile Include="Nodes\RgbCrossfadeRgbNode.cs" />
     <Compile Include="Nodes\RgbFadeRgbNode.cs" />
     <Compile Include="Nodes\RgbSmoothRgbwNode.cs" />
     <Compile Include="Nodes\RgbSmoothRgbNode.cs" />

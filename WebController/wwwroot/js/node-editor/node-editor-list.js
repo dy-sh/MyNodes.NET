@@ -735,6 +735,18 @@
 
             
 
+            //RgbCrossfadeRgbNode
+            function RgbCrossfadeRgbNode () {
+                this.properties = {
+                    'ObjectType': 'MyNodes.Nodes.RgbCrossfadeRgbNode',
+                    'Assembly': 'Nodes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+                };
+            }
+            RgbCrossfadeRgbNode.title = 'Crossfade RGB';
+            LiteGraph.registerNodeType('RGB/Crossfade RGB', RgbCrossfadeRgbNode);
+
+            
+
             //RgbFadeRgbNode
             function RgbFadeRgbNode () {
                 this.properties = {
