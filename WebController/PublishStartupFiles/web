@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd approot/src/WebController
+exec dnx web --configuration Release
