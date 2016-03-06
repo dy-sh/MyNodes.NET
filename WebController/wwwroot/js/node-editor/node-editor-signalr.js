@@ -298,7 +298,7 @@ function getGraph() {
 function getNodes() {
 
     $.ajax({
-        url: "/NodeEditorAPI/GetNodes",
+        url: "/NodeEditorAPI/GetNodesForPanel",
         type: "POST",
         data: { 'panelId': window.this_panel_id },
         success: function (nodes) {

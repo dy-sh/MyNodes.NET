@@ -24,7 +24,7 @@ namespace MyNodes.WebController.Controllers
 
         [Authorize(UserClaims.HardwareObserver)]
 
-        public List<Node> GetNodes()
+        public List<Node> GetAllNodes()
         {
             return gateway?.GetNodes();
         }

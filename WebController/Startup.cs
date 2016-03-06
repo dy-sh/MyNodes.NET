@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Data.Entity.Infrastructure;
+using Microsoft.Extensions.PlatformAbstractions;
 using MyNodes.Repositories.EF.SQLite;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
@@ -24,12 +26,18 @@ namespace MyNodes.WebController
 {
     public class Startup
     {
+        private const string SETTINGS_FILE_NAME = "appsettings.json";
+        private string dbPath = "Databases";
+        private string applicationPath;
+
         public IConfigurationRoot Configuration { get; set; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
+            applicationPath = appEnv.ApplicationBasePath;
+
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(SETTINGS_FILE_NAME)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
@@ -46,15 +54,15 @@ namespace MyNodes.WebController
             services.AddEntityFramework()
                 .AddSqlite()
                 .AddDbContext<NodesDbContext>(options =>
-                    options.UseSqlite("Data Source=Nodes.sqlite"))
+                    options.UseSqlite("Data Source=" + Path.Combine(applicationPath, dbPath, "Nodes.sqlite")))
                 .AddDbContext<NodesDataDbContext>(options =>
-                    options.UseSqlite("Data Source=NodesData.sqlite"))
+                    options.UseSqlite("Data Source=" + Path.Combine(applicationPath, dbPath, "NodesData.sqlite")))
                 .AddDbContext<MySensorsNodesDbContext>(options =>
-                    options.UseSqlite("Data Source=MySensorsNodes.sqlite"))
+                    options.UseSqlite("Data Source=" + Path.Combine(applicationPath, dbPath, "MySensorsNodes.sqlite")))
                 .AddDbContext<MySensorsMessagesDbContext>(options =>
-                    options.UseSqlite("Data Source=MySensorsMessages.sqlite"))
+                    options.UseSqlite("Data Source=" + Path.Combine(applicationPath, dbPath, "MySensorsMessages.sqlite")))
                 .AddDbContext<UsersDbContext>(options =>
-                    options.UseSqlite("Data Source=Users.sqlite"));
+                    options.UseSqlite("Data Source=" + Path.Combine(applicationPath, dbPath, "Users.sqlite")));
 
             services.AddMvc();
 
@@ -98,7 +106,6 @@ namespace MyNodes.WebController
 
             //debug settings
             bool webServerDebug = false;
-            IConfigurationSection logging = null;
             bool webServerEnable = false;
             try
             {

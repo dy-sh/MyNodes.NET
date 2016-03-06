@@ -1,0 +1,1 @@
+This directory contains databases. You can delete it to reset the program state.

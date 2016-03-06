@@ -12,6 +12,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.PlatformAbstractions;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
 using MyNodes.WebController.ViewModels.Config;
@@ -25,21 +26,26 @@ namespace MyNodes.WebController.Controllers
     {
 
         private const string SETTINGS_FILE_NAME = "appsettings.json";
+        private string settings_file;
+        private string project_file;
         private IConfigurationRoot configuration;
 
-        public ConfigController(IConfigurationRoot configuration)
+        public ConfigController(IConfigurationRoot configuration, IApplicationEnvironment appEnv)
         {
             this.configuration = configuration;
+            string applicationPath = appEnv.ApplicationBasePath;
+            settings_file = Path.Combine(applicationPath, SETTINGS_FILE_NAME);
+            project_file = Path.Combine(applicationPath, "project.json");
         }
 
         private dynamic ReadConfig()
         {
-            return JObject.Parse(System.IO.File.ReadAllText(SETTINGS_FILE_NAME));
+            return JObject.Parse(System.IO.File.ReadAllText(settings_file));
         }
 
         private void WriteConfig(dynamic config)
         {
-            System.IO.File.WriteAllText(SETTINGS_FILE_NAME, config.ToString());
+            System.IO.File.WriteAllText(settings_file, config.ToString());
         }
 
         public IActionResult Index()
@@ -277,9 +283,9 @@ namespace MyNodes.WebController.Controllers
                 json.WebServer.Address = model.Address;
                 WriteConfig(json);
 
-                json= JObject.Parse(System.IO.File.ReadAllText("project.json"));
+                json= JObject.Parse(System.IO.File.ReadAllText(project_file));
                 json.commands.web = $"Microsoft.AspNet.Server.Kestrel --server.urls {model.Address}";
-                System.IO.File.WriteAllText("project.json", json.ToString());
+                System.IO.File.WriteAllText(project_file, json.ToString());
 
                 configuration.Reload();
             }

@@ -100,7 +100,7 @@ function getGatewayInfo() {
 
 function getNodes() {
     $.ajax({
-        url: "/GatewayAPI/GetNodes/",
+        url: "/GatewayAPI/GetAllNodes/",
         type: "POST",
         success: function (nodes) {
             onReturnNodes(nodes);

@@ -37,7 +37,7 @@ namespace MyNodes.WebController.Controllers
 
 
         [Authorize(UserClaims.EditorObserver)]
-        public async Task<List<LiteGraph.Node>> GetNodes(string panelId)
+        public async Task<List<LiteGraph.Node>> GetNodesForPanel(string panelId)
         {
             return await Task.Run(() =>
             {
