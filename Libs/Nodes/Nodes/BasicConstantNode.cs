@@ -16,20 +16,12 @@ namespace MyNodes.Nodes
         }
 
 
-        public void SetValue(string value)
-        {
-            Settings["Value"].Value = value;
 
-            Outputs[0].Value = value;
-
-            UpdateMeOnDashboard();
-            UpdateMeInDb();
-        }
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            SetValue(data["Value"]);
-            return true;
+            Outputs[0].Value = data["Value"];
+            return base.SetSettings(data);
         }
 
         public override string GetNodeDescription()
