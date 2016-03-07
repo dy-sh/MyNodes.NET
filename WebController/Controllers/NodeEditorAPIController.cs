@@ -683,7 +683,7 @@ namespace MyNodes.WebController.Controllers
                 List<ConnectionRemoteReceiverNode> receivers=null;
 
                 lock (engine.nodesLock)
-                    engine.GetNodes()
+                    receivers=engine.GetNodes()
                         .OfType<ConnectionRemoteReceiverNode>()
                         .Where(x => x.GetChannel().ToString() == channel)
                         .ToList();
