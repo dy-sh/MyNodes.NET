@@ -93,6 +93,7 @@ namespace MyNodes.WebController.Controllers
             ViewBag.style = style;
             ViewBag.start = start ?? "0";
             ViewBag.end = end ?? "0";
+            ViewBag.panelId = node.PanelId;
 
             return View(node);
         }

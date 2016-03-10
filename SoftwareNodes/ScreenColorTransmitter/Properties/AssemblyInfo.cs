@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MyNodes")]
 [assembly: AssemblyProduct("MyNodes.ScreenColorTransmitter")]
-[assembly: AssemblyCopyright("Derwish. Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © Derwish 2015-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
