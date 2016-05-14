@@ -66,6 +66,9 @@ function createNode(node) {
         case "Audio":
             createAudio(node);
             break;
+        case "StateSwitch":
+            createStateSwitch(node);
+            break;
         default:
     }
 
@@ -131,6 +134,9 @@ function updateNode(node) {
             break;
         case "Audio":
             updateAudio(node);
+            break;
+        case "StateSwitch":
+            updateStateSwitch(node);
             break;
         default:
     }

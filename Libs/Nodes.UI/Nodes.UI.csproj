@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartData.cs" />
+    <Compile Include="Custom\UiStateSwitchNode.cs" />
     <Compile Include="Nodes\UiAudioNode.cs" />
     <Compile Include="Nodes\UiTimerNode.cs" />
     <Compile Include="Nodes\UiVoiceGoogleNode.cs" />
@@ -75,9 +76,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Custom\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
