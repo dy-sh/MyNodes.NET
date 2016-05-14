@@ -251,7 +251,19 @@
     </div>
 </script>
 
-
+@*html template for state switch UI node*@
+<script id="stateSwitchTemplate" type="text/x-handlebars-template">
+    <div class="ui attached clearing segment" id="node-{{Id}}">
+        <span id="stateSwitchName-{{Id}}"></span>
+        <div class="ui right floated basic  button nonbutton">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" id="stateSwitch-{{Id}}">
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label>
+        </div>
+    </div>
+</script>
 
 @section styles{
     <link href="~/lib/vis/dist/vis.min.css" rel="stylesheet" />
