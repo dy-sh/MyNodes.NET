@@ -250,6 +250,7 @@ namespace MyNodes.Nodes
             {
                 while (true)
                 {
+                    System.Threading.Thread.Sleep(10);
                     if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < updateInterval)
                         continue;
 
