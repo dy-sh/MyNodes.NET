@@ -11,9 +11,7 @@ namespace MyNodes.Gateways.MySensors
 {
     public class Node
     {
-
         public int Id { get; set; }
-
 
         public DateTime registered { get; set; }
         public DateTime lastSeen { get; set; }
@@ -22,27 +20,20 @@ namespace MyNodes.Gateways.MySensors
         public string version { get; set; }
         public int? batteryLevel { get; set; }
 
-        public List<Sensor> sensors { get; set; }
-
-
-
-
-        public Node()
-        {
-            sensors = new List<Sensor>();
-        }
+        private List<Sensor> sensors = new List<Sensor>();
+        public int SensorCount => sensors.Count;
+        public IEnumerable<Sensor> Sensors => sensors.AsEnumerable();
 
         public Node(int id)
         {
-            this.Id = id;
+            Id = id;
             registered = DateTime.Now;
             lastSeen = DateTime.Now;
-            sensors=new List<Sensor>();
         }
 
-        public void UpdateLastSeenNow()
+        public void UpdateLastSeen(DateTime lastSeen)
         {
-            lastSeen = DateTime.Now;
+            this.lastSeen = lastSeen;
         }
 
         public override string ToString()
@@ -69,7 +60,7 @@ namespace MyNodes.Gateways.MySensors
             if (batteryLevel != null)
                 s += $"Battery: {batteryLevel.Value} %\r\n";
 
-            if (sensors!=null && sensors.Any())
+            if (sensors.Any())
             {
                 foreach (Sensor sensor in sensors)
                 {
@@ -82,20 +73,21 @@ namespace MyNodes.Gateways.MySensors
         }
 
 
-        public Sensor GetSensor(int sensorId)
-        {
-            Sensor sensor = sensors.FirstOrDefault(x => x.sensorId == sensorId);
-            return sensor;
-        }
+        public Sensor GetSensor(int sensorId) => sensors.FirstOrDefault(x => x.sensorId == sensorId);
 
         public Sensor AddSensor(int sensorId)
         {
-            Sensor sensor = GetSensor(sensorId);
-            if (sensor != null) return sensor;
+            if (sensors.Exists(x=>x.Id == sensorId))
+                return sensors.First(x => x.sensorId == sensorId);
 
-            sensor = new Sensor(sensorId, this);
+            var sensor = new Sensor(sensorId, this);
             sensors.Add(sensor);
             return sensor;
+        }
+
+        public void AddSensor(Sensor sensor)
+        {
+            sensors.Add(sensor);
         }
 
         public string GetSimpleName1()

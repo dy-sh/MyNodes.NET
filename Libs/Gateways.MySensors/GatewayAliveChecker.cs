@@ -35,7 +35,7 @@ namespace MyNodes.Gateways.MySensors
 
         private void CheckGatewayAlive(object sender, ElapsedEventArgs e)
         {
-            if (!gateway.IsConnected())
+            if (!gateway.IsConnected)
                 return;
 
             double lastResponseAgo = (DateTime.Now - checkGatewayLastResponseTime).TotalMilliseconds;

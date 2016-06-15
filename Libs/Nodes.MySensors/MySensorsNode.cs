@@ -69,7 +69,7 @@ namespace MyNodes.Nodes
 
         private void CreateInputsOutputs(Gateways.MySensors.Node node)
         {
-            foreach (var sensor in node.sensors)
+            foreach (var sensor in node.Sensors)
             {
                 AddInputAndOutput(sensor);
             }

@@ -59,19 +59,19 @@ namespace MyNodes.Gateways.MySensors
         private GatewayState gatewayState = GatewayState.Disconnected;
 
         private IMySensorsRepository db;
-        private IMySensorsMessagesRepository hisotryDb;
+        private IMySensorsMessagesRepository historyDb;
 
-        public Gateway(IGatewayConnectionPort connectionPort, IMySensorsRepository db = null, IMySensorsMessagesRepository hisotryDb = null)
+        public Gateway(IGatewayConnectionPort connectionPort, IMySensorsRepository db = null, IMySensorsMessagesRepository historyDb = null)
         {
             this.db = db;
-            this.hisotryDb = hisotryDb;
+            this.historyDb = historyDb;
 
             nodes = db?.GetNodes() ?? new List<Node>();
 
             gatewayAliveChecker = new GatewayAliveChecker(this);
 
             this.connectionPort = connectionPort;
-            this.connectionPort.OnDataReceived += RecieveMessage;
+            this.connectionPort.OnDataReceived += ReceiveMessage;
             this.connectionPort.OnDisconnected += OnConnectionPortDisconnected;
             this.connectionPort.OnConnected += TryToCommunicateWithGateway;
             this.connectionPort.OnLogError += LogError;
@@ -96,38 +96,38 @@ namespace MyNodes.Gateways.MySensors
             OnLogMessage?.Invoke(message);
         }
 
-
-        public GatewayState GetGatewayState()
-        {
-            return gatewayState;
-        }
-
-        private void SetGatewayState(GatewayState newState)
-        {
-
-            switch (newState)
-            {
-                case GatewayState.Disconnected:
-                    LogInfo("Disconnected.");
-                    break;
-                case GatewayState.ConnectingToPort:
-                    LogInfo("Trying to connect...");
-                    break;
-                case GatewayState.ConnectingToGateway:
-                    LogInfo("Trying to communicate...");
-                    break;
-                case GatewayState.Connected:
-                    LogInfo("Gateway connected.");
-                    break;
+        public GatewayState GatewayState {
+            get {
+                return gatewayState;
             }
 
-            if (gatewayState == GatewayState.Connected && newState != GatewayState.Connected)
-                OnDisconnected?.Invoke();
-            else if (gatewayState != GatewayState.Connected && newState == GatewayState.Connected)
-                OnConnected?.Invoke();
+            private set {
+                if (value == gatewayState) return;
 
-            gatewayState = newState;
-            OnGatewayStateChanged?.Invoke(gatewayState);
+                switch (value)
+                {
+                    case GatewayState.Disconnected:
+                        LogInfo("Disconnected.");
+                        break;
+                    case GatewayState.ConnectingToPort:
+                        LogInfo("Trying to connect...");
+                        break;
+                    case GatewayState.ConnectingToGateway:
+                        LogInfo("Trying to communicate...");
+                        break;
+                    case GatewayState.Connected:
+                        LogInfo("Gateway connected.");
+                        if (value == GatewayState.Connected)
+                            OnConnected?.Invoke();
+                        break;
+                }
+
+                if (gatewayState == GatewayState.Connected && value != GatewayState.Connected)
+                    OnDisconnected?.Invoke();
+
+                gatewayState = value;
+                OnGatewayStateChanged?.Invoke(gatewayState);
+            }
         }
 
         public async Task Connect()
@@ -135,7 +135,7 @@ namespace MyNodes.Gateways.MySensors
             if (gatewayState != GatewayState.Disconnected)
                 Disconnect();
 
-            SetGatewayState(GatewayState.ConnectingToPort);
+            GatewayState = GatewayState.ConnectingToPort;
 
             if (endlessConnectionAttempts)
             {
@@ -157,10 +157,10 @@ namespace MyNodes.Gateways.MySensors
 
         public void Disconnect()
         {
-            SetGatewayState(GatewayState.Disconnected);
-
             if (connectionPort.IsConnected())
                 connectionPort.Disconnect();
+
+            GatewayState = GatewayState.Disconnected;
         }
 
         internal void OnConnectionPortDisconnected()
@@ -169,7 +169,7 @@ namespace MyNodes.Gateways.MySensors
             {
                 LogError("Port unexpectedly disconnected.");
 
-                SetGatewayState(GatewayState.Disconnected);
+                GatewayState = GatewayState.Disconnected;
 
                 if (connectionPort.IsConnected())
                     connectionPort.Disconnect();
@@ -180,15 +180,11 @@ namespace MyNodes.Gateways.MySensors
             }
         }
 
-        public bool IsConnected()
-        {
-            return gatewayState == GatewayState.Connected;
-        }
-
+        public bool IsConnected => gatewayState == GatewayState.Connected;
 
         private async void TryToCommunicateWithGateway()
         {
-            SetGatewayState(GatewayState.ConnectingToGateway);
+            GatewayState = GatewayState.ConnectingToGateway;
 
             if (endlessConnectionAttempts)
             {
@@ -217,8 +213,6 @@ namespace MyNodes.Gateways.MySensors
                 }
                 LogError("Gateway is not responding.");
             }
-
-
         }
 
 
@@ -257,7 +251,7 @@ namespace MyNodes.Gateways.MySensors
         }
 
 
-        public void RecieveMessage(string data)
+        public void ReceiveMessage(string data)
         {
             //string[] messages = data.Split(new char[] { '\r', '\n' },
             //    StringSplitOptions.None);
@@ -277,7 +271,7 @@ namespace MyNodes.Gateways.MySensors
                 }
 
                 if (mes != null)
-                    RecieveMessage(mes);
+                    ReceiveMessage(mes);
             }
         }
 
@@ -304,7 +298,7 @@ namespace MyNodes.Gateways.MySensors
         }
 
 
-        public void RecieveMessage(Message message)
+        public void ReceiveMessage(Message message)
         {
             message.incoming = true;
 
@@ -346,7 +340,7 @@ namespace MyNodes.Gateways.MySensors
                 && message.subType == (int)InternalDataType.I_VERSION)
             {
                 if (gatewayState != GatewayState.Connected)
-                    SetGatewayState(GatewayState.Connected);
+                    GatewayState = GatewayState.Connected;
             }
 
             //request to node
@@ -399,7 +393,7 @@ namespace MyNodes.Gateways.MySensors
                 LogInfo($"Node[{node.Id}] registered.");
             }
 
-            node.UpdateLastSeenNow();
+            node.UpdateLastSeen(DateTime.Now);
 
             if (mes.sensorId == 255)
             {
@@ -505,20 +499,12 @@ namespace MyNodes.Gateways.MySensors
         }
 
 
-        public Node GetNode(int nodeId)
-        {
-            Node node = nodes.FirstOrDefault(x => x.Id == nodeId);
-            return node;
-        }
+        public Node GetNode(int nodeId) => nodes.FirstOrDefault(x => x.Id == nodeId);
 
 
-        public List<Node> GetNodes()
-        {
-            return nodes;
-        }
-
-
-
+        public IEnumerable<Node> Nodes => nodes.AsEnumerable();
+        public int NodeCount => nodes.Count;
+        public int SensorCount => nodes.Sum(x => x.SensorCount);
 
         public void SendSensorState(int nodeId, int sensorId, string state)
         {

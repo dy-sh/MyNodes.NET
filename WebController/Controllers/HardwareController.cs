@@ -68,7 +68,7 @@ namespace MyNodes.WebController.Controllers
             if (nodename == "")
                 nodename = null;
             node.name = nodename;
-            foreach (var sensor in node.sensors)
+            foreach (var sensor in node.Sensors)
             {
 
                 string sensordescription = Request.Form["sensordescription-" + sensor.sensorId];
