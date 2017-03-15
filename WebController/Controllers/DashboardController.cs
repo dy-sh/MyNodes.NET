@@ -3,16 +3,13 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Configuration;
 using MyNodes.Nodes;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MyNodes.WebController.Controllers
 {
@@ -37,7 +34,7 @@ namespace MyNodes.WebController.Controllers
         public IActionResult Panel(string id)
         {
             if (engine == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             if (id == null || id == MAIN_PANEL_ID)
             {
@@ -48,7 +45,7 @@ namespace MyNodes.WebController.Controllers
             {
                 PanelNode panel = engine.GetPanel(id);
                 if (panel == null)
-                    return HttpNotFound();
+                    return NotFound();
                 ViewBag.panelName = panel.Settings["Name"].Value;
             }
 
@@ -59,7 +56,7 @@ namespace MyNodes.WebController.Controllers
         public IActionResult List()
         {
             if (engine == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             ViewBag.showMainPanel = engine.GetUINodesForPanel(MAIN_PANEL_ID).Any();
 
@@ -79,11 +76,11 @@ namespace MyNodes.WebController.Controllers
         public IActionResult Chart(string id, string autoscroll, string style, string start, string end)
         {
             if (engine == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             UiChartNode node = engine.GetUINode(id) as UiChartNode;
             if (node == null)
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
 
             ViewBag.autoscroll = autoscroll;
 

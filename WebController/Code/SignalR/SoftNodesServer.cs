@@ -3,14 +3,6 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using MyNodes.Nodes;
-using MyNodes.WebController.Controllers;
 
 
 namespace MyNodes.WebController.Code

@@ -4,8 +4,8 @@
 */
 
 using System;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNodes.Gateways.MySensors;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
@@ -51,7 +51,7 @@ namespace MyNodes.WebController.Controllers
 
             Node node = mySensorsDb.GetNode(id.Value);
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             return View(node);
         }
@@ -94,7 +94,7 @@ namespace MyNodes.WebController.Controllers
         {
             Node node = mySensorsDb.GetNode(id);
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
 
             GatewayAPIController gatewayApi = new GatewayAPIController();

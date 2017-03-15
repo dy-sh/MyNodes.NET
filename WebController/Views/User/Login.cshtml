@@ -25,7 +25,7 @@
 
                 <form asp-action="Login" asp-anti-forgery="true" class="ui form">
                     <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="@ViewBag.ReturnUrl">
-                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly"/>
+                    <div class="validation" asp-validation-summary="ModelOnly"/>
 
                     <div class="ui attached segment">
                         <div class="field">
@@ -44,7 +44,7 @@
                             </div>
                             <span asp-validation-for="Password" />
                         </div>
-                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                        <div class="validation" asp-validation-summary="All"></div>
 
                     </div>
 

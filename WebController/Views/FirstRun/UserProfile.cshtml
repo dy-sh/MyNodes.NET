@@ -47,8 +47,8 @@
                     <h2 class="ui header">Admin profile</h2>
                 </div>
 
-                <form asp-action="User" asp-anti-forgery="true" class="ui form">
-                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+                <form asp-action="UserProfile" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ModelOnly" />
 
                     <div class="ui basic segment">
                         <div class="field">
@@ -73,7 +73,7 @@
                                 <span asp-validation-for="Password" />
                             </div>
                         </div>
-                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                        <div class="validation" asp-validation-summary="All"></div>
 
                     </div>
 

@@ -4,38 +4,32 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.PlatformAbstractions;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
 using MyNodes.WebController.ViewModels.Config;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MyNodes.WebController.Controllers
 {
     [Authorize(UserClaims.ConfigObserver)]
     public class ConfigController : Controller
     {
-
-        private const string SETTINGS_FILE_NAME = "appsettings.json";
         private string settings_file;
-        private string project_file;
+        private string hosting_file;
         private IConfigurationRoot configuration;
 
-        public ConfigController(IConfigurationRoot configuration, IApplicationEnvironment appEnv)
+        public ConfigController(IConfigurationRoot configuration, IHostingEnvironment env)
         {
             this.configuration = configuration;
-            string applicationPath = appEnv.ApplicationBasePath;
-            settings_file = Path.Combine(applicationPath, SETTINGS_FILE_NAME);
-            project_file = Path.Combine(applicationPath, "project.json");
+            string applicationPath = env.ContentRootPath;
+            settings_file = Startup.SettingsFilePath;
+            hosting_file = Path.Combine(applicationPath, Constants.HOSTING_CONFIG_FILE_NAME);
         }
 
         private dynamic ReadConfig()
@@ -53,8 +47,6 @@ namespace MyNodes.WebController.Controllers
             return View();
         }
 
-
-
         [HttpGet]
         public IActionResult SerialGateway()
         {
@@ -62,11 +54,10 @@ namespace MyNodes.WebController.Controllers
 
             return View(new SerialGatewayViewModel
             {
-                PortName = SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName,
-                Boudrate = SystemController.gatewayConfig.SerialGatewayConfig.Boudrate
+                PortName = SystemController.gatewayConfig.SerialGateway.SerialPortName,
+                Boudrate = SystemController.gatewayConfig.SerialGateway.Boudrate
             });
         }
-
 
         [Authorize(UserClaims.ConfigEditor)]
 
@@ -83,8 +74,8 @@ namespace MyNodes.WebController.Controllers
             configuration.Reload();
 
             SystemController.DisconnectGateway();
-            SystemController.gatewayConfig.SerialGatewayConfig.SerialPortName = model.PortName;
-            SystemController.gatewayConfig.SerialGatewayConfig.Boudrate = model.Boudrate;
+            SystemController.gatewayConfig.SerialGateway.SerialPortName = model.PortName;
+            SystemController.gatewayConfig.SerialGateway.Boudrate = model.Boudrate;
 
             return RedirectToAction("Index");
         }
@@ -95,8 +86,8 @@ namespace MyNodes.WebController.Controllers
         {
             EthernetGatewayViewModel model = new EthernetGatewayViewModel
             {
-                Ip = SystemController.gatewayConfig.EthernetGatewayConfig.GatewayIP,
-                Port = SystemController.gatewayConfig.EthernetGatewayConfig.GatewayPort
+                Ip = SystemController.gatewayConfig.EthernetGateway.GatewayIP,
+                Port = SystemController.gatewayConfig.EthernetGateway.GatewayPort
             };
 
             return View(model);
@@ -115,8 +106,8 @@ namespace MyNodes.WebController.Controllers
             configuration.Reload();
 
             SystemController.DisconnectGateway();
-            SystemController.gatewayConfig.EthernetGatewayConfig.GatewayIP = model.Ip;
-            SystemController.gatewayConfig.EthernetGatewayConfig.GatewayPort = model.Port;
+            SystemController.gatewayConfig.EthernetGateway.GatewayIP = model.Ip;
+            SystemController.gatewayConfig.EthernetGateway.GatewayPort = model.Port;
 
             return RedirectToAction("Index");
         }
@@ -134,8 +125,8 @@ namespace MyNodes.WebController.Controllers
             WriteConfig(json);
             configuration.Reload();
 
-            SystemController.gatewayConfig.SerialGatewayConfig.Enable = true;
-            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
+            SystemController.gatewayConfig.SerialGateway.Enable = true;
+            SystemController.gatewayConfig.EthernetGateway.Enable = false;
 
             await Task.Run((() =>
             {
@@ -159,8 +150,8 @@ namespace MyNodes.WebController.Controllers
             WriteConfig(json);
             configuration.Reload();
 
-            SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
-            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = true;
+            SystemController.gatewayConfig.SerialGateway.Enable = false;
+            SystemController.gatewayConfig.EthernetGateway.Enable = true;
 
             await Task.Run((() =>
             {
@@ -181,8 +172,8 @@ namespace MyNodes.WebController.Controllers
             WriteConfig(json);
             configuration.Reload();
 
-            SystemController.gatewayConfig.SerialGatewayConfig.Enable = false;
-            SystemController.gatewayConfig.EthernetGatewayConfig.Enable = false;
+            SystemController.gatewayConfig.SerialGateway.Enable = false;
+            SystemController.gatewayConfig.EthernetGateway.Enable = false;
 
             SystemController.DisconnectGateway();
 
@@ -283,9 +274,9 @@ namespace MyNodes.WebController.Controllers
                 json.WebServer.Address = model.Address;
                 WriteConfig(json);
 
-                json= JObject.Parse(System.IO.File.ReadAllText(project_file));
-                json.commands.web = $"Microsoft.AspNet.Server.Kestrel --server.urls {model.Address}";
-                System.IO.File.WriteAllText(project_file, json.ToString());
+                json= JObject.Parse(System.IO.File.ReadAllText(hosting_file));
+                json.urls = model.Address;
+                System.IO.File.WriteAllText(hosting_file, json.ToString());
 
                 configuration.Reload();
             }

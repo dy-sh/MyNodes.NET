@@ -6,20 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using MyNodes.Gateways;
-using LiteGraph;
-using Microsoft.AspNet.Authorization;
-using Microsoft.Extensions.Configuration;
-using MyNodes.Repositories.EF.SQLite;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNodes.Nodes;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
 using MyNodes.WebController.ViewModels.NodeEditor;
-using Newtonsoft.Json;
-using Node = MyNodes.Nodes.Node;
 
 
 namespace MyNodes.WebController.Controllers
@@ -59,7 +51,7 @@ namespace MyNodes.WebController.Controllers
             PanelNode panel = engine.GetPanelNode(id);
 
             if (panel == null)
-                return HttpNotFound();
+                return NotFound();
 
             ViewBag.panelId = panel.Id;
             ViewBag.ownerPanelId = panel.PanelId;

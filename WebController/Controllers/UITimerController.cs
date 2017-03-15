@@ -6,8 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNodes.Nodes;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
@@ -36,7 +36,7 @@ namespace MyNodes.WebController.Controllers
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
 
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             ViewBag.NodeId = node.Id;
             ViewBag.Name = node.Settings["Name"].Value;
@@ -57,7 +57,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             ViewBag.NodeId = node.Id;
             ViewBag.Name = node.Settings["Name"].Value;
@@ -84,7 +84,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.AddTask(task);
 
@@ -102,11 +102,11 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             UITimerTask task = node.GetTask(id2);
             if (task == null)
-                return HttpNotFound();
+                return NotFound();
 
             ViewBag.Name = node.Settings["Name"].Value;
 
@@ -125,7 +125,7 @@ namespace MyNodes.WebController.Controllers
             task.Id = TaskId; //pasing id dont work!
             UiTimerNode node = engine.GetNode(task.NodeId) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.UpdateTask(task);
 
@@ -142,7 +142,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.RemoveTask(id2);
 
@@ -161,11 +161,11 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             UITimerTask task = node.GetTask(id2);
             if (task == null)
-                return HttpNotFound();
+                return NotFound();
 
             task.Enabled = true;
 
@@ -185,11 +185,11 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             UITimerTask task = node.GetTask(id2);
             if (task == null)
-                return HttpNotFound();
+                return NotFound();
 
             task.Enabled = false;
 
@@ -210,7 +210,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.ExecuteNowTask(id2);
 
@@ -229,7 +229,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.RemoveAllTasks();
 
@@ -249,7 +249,7 @@ namespace MyNodes.WebController.Controllers
 
             UiTimerNode node = engine.GetNode(id) as UiTimerNode;
             if (node == null)
-                return HttpNotFound();
+                return NotFound();
 
             node.RemoveCompletedTasks();
 

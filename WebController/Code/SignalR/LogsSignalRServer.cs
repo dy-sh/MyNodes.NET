@@ -3,8 +3,8 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
 using MyNodes.Gateways.MySensors;
 
 

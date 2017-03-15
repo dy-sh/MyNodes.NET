@@ -4,17 +4,11 @@
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Hosting.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
-using MyNodes.Gateways;
-using MyNodes.WebController.ViewModels.Config;
-using Newtonsoft.Json;
-using Node = MyNodes.Nodes.Node;
 using System.Linq;
 using MyNodes.Gateways.MySensors;
 using MyNodes.Nodes;
@@ -123,16 +117,16 @@ namespace MyNodes.WebController.Code
         {
             try
             {
-                gatewayConfig = configuration.Get<GatewayConfig>("Gateway");
-                gatewayConfig.SerialGatewayConfig = configuration.Get<SerialGatewayConfig>("Gateway:SerialGateway");
-                gatewayConfig.EthernetGatewayConfig = configuration.Get<EthernetGatewayConfig>("Gateway:EthernetGateway");
-                logs.config = configuration.Get<LogsConfig>("Logs");
-                logs.consoleConfig = configuration.Get<ConsoleConfig>("Console");
-                nodesEngineConfig = configuration.Get<NodesEngineConfig>("NodesEngine");
-                nodeEditorConfig = configuration.Get<NodeEditorConfig>("NodeEditor");
-                dataBaseConfig = configuration.Get<DataBaseConfig>("DataBase");
-                webServerRules = configuration.Get<WebServerRules>("WebServer");
-                webServerConfig = configuration.Get<WebServerConfig>("WebServer");
+                gatewayConfig = configuration.GetSection("Gateway").Get<GatewayConfig>();
+                //gatewayConfig.SerialGatewayConfig = configuration.GetValue<SerialGatewayConfig>("Gateway:SerialGateway");
+                //gatewayConfig.EthernetGatewayConfig = configuration.GetValue<EthernetGatewayConfig>("Gateway:EthernetGateway");
+                logs.config = configuration.GetSection("Logs").Get<LogsConfig>();
+                logs.consoleConfig = configuration.GetSection("Console").Get<ConsoleConfig>();
+                nodesEngineConfig = configuration.GetSection("NodesEngine").Get<NodesEngineConfig>();
+                nodeEditorConfig = configuration.GetSection("NodeEditor").Get<NodeEditorConfig>();
+                dataBaseConfig = configuration.GetSection("DataBase").Get<DataBaseConfig>();
+                webServerRules = configuration.GetSection("WebServer").Get<WebServerRules>();
+                webServerConfig = configuration.GetSection("WebServer").Get<WebServerConfig>();
             }
             catch
             {
@@ -140,18 +134,6 @@ namespace MyNodes.WebController.Code
                 throw new Exception("Bad configuration in appsettings.json file.");
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
         public static void ConnectToDB()
         {
@@ -290,17 +272,17 @@ namespace MyNodes.WebController.Code
         {
             mySensorsNodesEngine = null;
 
-            if (gatewayConfig.SerialGatewayConfig.Enable)
+            if (gatewayConfig.SerialGateway.Enable)
             {
                 gatewayConnectionPort = new SerialConnectionPort(
-                    gatewayConfig.SerialGatewayConfig.SerialPortName,
-                    gatewayConfig.SerialGatewayConfig.Boudrate);
+                    gatewayConfig.SerialGateway.SerialPortName,
+                    gatewayConfig.SerialGateway.Boudrate);
             }
-            else if (gatewayConfig.EthernetGatewayConfig.Enable)
+            else if (gatewayConfig.EthernetGateway.Enable)
             {
                 gatewayConnectionPort = new EthernetConnectionPort(
-                    gatewayConfig.EthernetGatewayConfig.GatewayIP,
-                    gatewayConfig.EthernetGatewayConfig.GatewayPort);
+                    gatewayConfig.EthernetGateway.GatewayIP,
+                    gatewayConfig.EthernetGateway.GatewayPort);
             }
             else return;
 

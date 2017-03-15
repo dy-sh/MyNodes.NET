@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using MyNodes.Gateways.MySensors;
 
 namespace MyNodes.Repositories.EF.SQLite
@@ -7,5 +7,8 @@ namespace MyNodes.Repositories.EF.SQLite
     {
         public DbSet<Message> Messages { get; set; }
 
+        public MySensorsMessagesDbContext(DbContextOptions<MySensorsMessagesDbContext> options): base(options)
+        {
+        }
     }
 }

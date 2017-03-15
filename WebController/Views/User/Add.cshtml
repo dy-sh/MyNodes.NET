@@ -25,7 +25,7 @@
                 </div>
 
                 <form asp-action="Add" asp-anti-forgery="true" class="ui form">
-                    <div class="validation" asp-validation-summary="ValidationSummary.ModelOnly" />
+                    <div class="validation" asp-validation-summary="ModelOnly" />
 
                     <div class="ui attached segment">
                         <div class="field">
@@ -44,7 +44,7 @@
                             <input type="password" asp-for="Password" />
                             <span asp-validation-for="Password" />
                         </div>
-                        <div class="validation" asp-validation-summary="ValidationSummary.All"></div>
+                        <div class="validation" asp-validation-summary="All"></div>
                     </div>
 
                     <div class="ui center aligned attached segment">
