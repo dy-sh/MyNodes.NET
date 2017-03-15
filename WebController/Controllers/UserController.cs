@@ -8,12 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Data.Entity;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
 using MyNodes.WebController.ViewModels.User;
@@ -195,7 +191,7 @@ namespace MyNodes.WebController.Controllers
             User user = db.GetUser(id);
 
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             db.RemoveUser(id);
 
@@ -217,7 +213,7 @@ namespace MyNodes.WebController.Controllers
             User user = users.FirstOrDefault(x => x.Name == name);
 
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             users.Remove(user);
 
@@ -278,7 +274,7 @@ namespace MyNodes.WebController.Controllers
 
             User user = db.GetUser(id);
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             return View(user);
         }
@@ -295,7 +291,7 @@ namespace MyNodes.WebController.Controllers
 
             User user = db.GetUser(model.Name);
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             user.Email = model.Email;
             db.UpdateUser(user);
@@ -315,7 +311,7 @@ namespace MyNodes.WebController.Controllers
 
             User user = db.GetUser(id);
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             ViewBag.UserId = user.Id;
             ViewBag.UserName = user.Name;
@@ -335,7 +331,7 @@ namespace MyNodes.WebController.Controllers
 
             User user = db.GetUser(userId);
             if (user == null)
-                return HttpBadRequest();
+                return BadRequest();
 
             user.SetClaims(model);
             db.UpdateUser(user);

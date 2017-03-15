@@ -3,10 +3,8 @@
     License: http://www.gnu.org/licenses/gpl-3.0.txt  
 */
 
-using System.Threading.Tasks;
 
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MyNodes.WebController.Code
 {

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using MyNodes.Gateways;
 using MyNodes.Nodes;
 
@@ -50,7 +50,7 @@ namespace MyNodes.Repositories.EF.SQLite
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using MyNodes.Gateways;
 using MyNodes.Gateways.MySensors;
 
 namespace MyNodes.WebController.Code

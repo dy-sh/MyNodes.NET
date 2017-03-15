@@ -5,24 +5,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using MyNodes.Gateways;
-using LiteGraph;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Features;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyNodes.Nodes;
 using MyNodes.Users;
 using MyNodes.WebController.Code;
 using Newtonsoft.Json;
-using Link = MyNodes.Nodes.Link;
-using Node = MyNodes.Nodes.Node;
 
 namespace MyNodes.WebController.Controllers
 {
