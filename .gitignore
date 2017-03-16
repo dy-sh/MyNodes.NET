@@ -189,6 +189,8 @@ UpgradeLog*.htm
 *.mdf
 *.ldf
 *.sqlite
+# But don't exclude the directory
+!Repositories.EF.SQLite/
 
 # Business Intelligence projects
 *.rdl.data
