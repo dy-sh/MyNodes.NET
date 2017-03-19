@@ -5,19 +5,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Timers;
-using Timer = System.Timers.Timer;
 
 namespace MyNodes.Nodes
 {
     public class TimeClockNode : Node
     {
+        private const string YearMonthDaySettingKey = "YearMonthDay";
+        private const string UpdateIntervalSettingKey = "UpdateInterval";
 
-        private readonly int DEFAULT_INTERVAL = 1000;
-
-        private double interval;
+        private const int DEFAULT_INTERVAL = 50;
 
         private DateTime lastUpdateTime;
 
@@ -28,10 +24,8 @@ namespace MyNodes.Nodes
             AddOutput("Minute", DataType.Number);
             AddOutput("Hour", DataType.Number);
 
-            interval = DEFAULT_INTERVAL;
-
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "50"));
-            Settings.Add("YearMonthDay", new NodeSetting(NodeSettingType.Checkbox, "Day, Month, Year  Outputs", "false"));
+            Settings.Add(UpdateIntervalSettingKey, new NodeSetting(NodeSettingType.Number, "Update Interval", DEFAULT_INTERVAL.ToString()));
+            Settings.Add(YearMonthDaySettingKey, new NodeSetting(NodeSettingType.Checkbox, "Day, Month, Year  Outputs", "false"));
 
             options.LogOutputChanges = false;
         }
@@ -39,10 +33,15 @@ namespace MyNodes.Nodes
         public override void Loop()
         {
             double updateInterval;
-            double.TryParse(Settings["UpdateInterval"].Value, out updateInterval);
+            if (!double.TryParse(Settings[UpdateIntervalSettingKey].Value, out updateInterval))
+            {
+                return;
+            }
 
             if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < updateInterval)
+            {
                 return;
+            }
 
             lastUpdateTime = DateTime.Now;
 
@@ -61,20 +60,27 @@ namespace MyNodes.Nodes
                 string d = DateTime.Now.Day.ToString();
                 string mo = DateTime.Now.Month.ToString();
                 string y = DateTime.Now.Year.ToString();
+                string dw = ((int)DateTime.Now.DayOfWeek).ToString();
 
                 if (Outputs[4].Value != d) Outputs[4].Value = d;
                 if (Outputs[5].Value != mo) Outputs[5].Value = mo;
                 if (Outputs[6].Value != y) Outputs[6].Value = y;
+
+                // If the node data is from an older version there wasn't the DayOfWeek column
+                if (Outputs.Count == 8 && Outputs[7].Value != dw) Outputs[7].Value = dw;
             }
         }
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            if (data["YearMonthDay"]=="true" && Settings["YearMonthDay"].Value=="false")
+            if (data[YearMonthDaySettingKey] == "true" && Settings[YearMonthDaySettingKey].Value == "false")
+            {
                 AddAdditionOutputs();
-
-            else if (data["YearMonthDay"] == "false" && Settings["YearMonthDay"].Value == "true")
+            }
+            else if (data[YearMonthDaySettingKey] == "false" && Settings[YearMonthDaySettingKey].Value == "true")
+            {
                 RemoveAdditionOutputs();
+            }
 
             return base.SetSettings(data);
         }
@@ -90,10 +96,11 @@ namespace MyNodes.Nodes
             if (GetOutput("Year") == null)
                 AddOutput("Year", DataType.Number);
 
-            LogInfo($"Added additional outputs");
+            if (GetOutput("DayOfWeek") == null)
+                AddOutput("DayOfWeek", DataType.Number);
 
-            UpdateMeInEditor();
-            UpdateMeInDb();
+            LogInfo($"Added additional outputs");
+            UpdateMe();
         }
 
         public void RemoveAdditionOutputs()
@@ -107,10 +114,11 @@ namespace MyNodes.Nodes
             if (GetOutput("Year") != null)
                 RemoveOutput("Year");
 
-            LogInfo($"Removed additional outputs");
+            if (GetOutput("DayOfWeek") != null)
+                RemoveOutput("DayOfWeek");
 
-            UpdateMeInEditor();
-            UpdateMeInDb();
+            LogInfo($"Removed additional outputs");
+            UpdateMe();
         }
 
         public override string GetNodeDescription()
@@ -118,6 +126,12 @@ namespace MyNodes.Nodes
             return "This is the system clock. <br/>" +
                    "In the settings you can enable additional outputs " +
                    "and configure the refresh rate of the outputs.";
+        }
+
+        private void UpdateMe()
+        {
+            UpdateMeInEditor();
+            UpdateMeInDb();
         }
     }
 }
