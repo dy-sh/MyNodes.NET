@@ -272,6 +272,19 @@ namespace MyNodes.Nodes
                     output.Value = null;
         }
 
+        /// <summary>
+        /// Sets the value of the output with the specified name, if its current value is different.
+        /// </summary>
+        public void SetOutputValue<T>(string outputName, T value)
+        {
+            var valueAsString = value.ToString();
+            var output = GetOutput(outputName);
+            if (output != null && output.Value != valueAsString)
+            {
+                output.Value = valueAsString;
+            }
+        }
+
         public virtual void CheckInputDataTypeIsCorrect(Input input)
         {
             if (input.Value == null)
