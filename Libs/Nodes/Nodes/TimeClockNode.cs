@@ -5,33 +5,41 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Timers;
-using Timer = System.Timers.Timer;
 
 namespace MyNodes.Nodes
 {
     public class TimeClockNode : Node
     {
+        private class OutputNames
+        {
+            public const string Millisecond = "Millisecond";
+            public const string Second = "Second";
+            public const string Minute = "Minute";
+            public const string Hour = "Hour";
+            public const string Day = "Day";
+            public const string Month = "Month";
+            public const string Year = "Year";
+            public const string DayOfWeek = "DayOfWeek";
+        }
 
-        private readonly int DEFAULT_INTERVAL = 1000;
+        private const string YearMonthDaySettingKey = "YearMonthDay";
+        private const string DayOfWeekSettingKey = "DayOfWeek";
+        private const string UpdateIntervalSettingKey = "UpdateInterval";
 
-        private double interval;
+        private const int DEFAULT_INTERVAL = 50;
 
         private DateTime lastUpdateTime;
 
         public TimeClockNode() : base("Time", "Clock")
         {
-            AddOutput("Millisecond", DataType.Number);
-            AddOutput("Second", DataType.Number);
-            AddOutput("Minute", DataType.Number);
-            AddOutput("Hour", DataType.Number);
+            AddOutput(OutputNames.Millisecond, DataType.Number);
+            AddOutput(OutputNames.Second, DataType.Number);
+            AddOutput(OutputNames.Minute, DataType.Number);
+            AddOutput(OutputNames.Hour, DataType.Number);
 
-            interval = DEFAULT_INTERVAL;
-
-            Settings.Add("UpdateInterval", new NodeSetting(NodeSettingType.Number, "Update Interval", "50"));
-            Settings.Add("YearMonthDay", new NodeSetting(NodeSettingType.Checkbox, "Day, Month, Year  Outputs", "false"));
+            Settings.Add(UpdateIntervalSettingKey, new NodeSetting(NodeSettingType.Number, "Update interval", DEFAULT_INTERVAL.ToString()));
+            Settings.Add(DayOfWeekSettingKey, new NodeSetting(NodeSettingType.Checkbox, "Day of week output", "false"));
+            Settings.Add(YearMonthDaySettingKey, new NodeSetting(NodeSettingType.Checkbox, "Day, Month, Year outputs", "false"));
 
             options.LogOutputChanges = false;
         }
@@ -39,78 +47,109 @@ namespace MyNodes.Nodes
         public override void Loop()
         {
             double updateInterval;
-            double.TryParse(Settings["UpdateInterval"].Value, out updateInterval);
-
-            if ((DateTime.Now - lastUpdateTime).TotalMilliseconds < updateInterval)
+            if (!double.TryParse(Settings[UpdateIntervalSettingKey].Value, out updateInterval))
+            {
                 return;
+            }
 
-            lastUpdateTime = DateTime.Now;
+            DateTime now = DateTime.Now;
 
-            string ms = DateTime.Now.Millisecond.ToString();
-            string s = DateTime.Now.Second.ToString();
-            string mi = DateTime.Now.Minute.ToString();
-            string h = DateTime.Now.Hour.ToString();
+            if ((now - lastUpdateTime).TotalMilliseconds < updateInterval)
+            {
+                return;
+            }
 
-            if (Outputs[0].Value != ms) Outputs[0].Value = ms;
-            if (Outputs[1].Value != s) Outputs[1].Value = s;
-            if (Outputs[2].Value != mi) Outputs[2].Value = mi;
-            if (Outputs[3].Value != h) Outputs[3].Value = h;
+            lastUpdateTime = now;
+
+            SetOutputValue(OutputNames.Millisecond, now.Millisecond, true);
+            SetOutputValue(OutputNames.Second, now.Second, true);
+            SetOutputValue(OutputNames.Minute, now.Minute, true);
+            SetOutputValue(OutputNames.Hour, now.Hour, true);
 
             if (Outputs.Count > 4)
             {
-                string d = DateTime.Now.Day.ToString();
-                string mo = DateTime.Now.Month.ToString();
-                string y = DateTime.Now.Year.ToString();
-
-                if (Outputs[4].Value != d) Outputs[4].Value = d;
-                if (Outputs[5].Value != mo) Outputs[5].Value = mo;
-                if (Outputs[6].Value != y) Outputs[6].Value = y;
+                SetOutputValue(OutputNames.Day, now.Day, true);
+                SetOutputValue(OutputNames.Month, now.Month, true);
+                SetOutputValue(OutputNames.Year, now.Year, true);
+                SetOutputValue(OutputNames.DayOfWeek, (int)now.DayOfWeek, true);
             }
         }
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            if (data["YearMonthDay"]=="true" && Settings["YearMonthDay"].Value=="false")
-                AddAdditionOutputs();
+            if (data[YearMonthDaySettingKey] != Settings[YearMonthDaySettingKey].Value)
+            {
+                if (data[YearMonthDaySettingKey] == "true")
+                {
+                    AddYearMonthDayOutputs();
+                }
+                else
+                {
+                    RemoveYearMonthDayOutputs();
+                }
+            }
 
-            else if (data["YearMonthDay"] == "false" && Settings["YearMonthDay"].Value == "true")
-                RemoveAdditionOutputs();
+            if (data[DayOfWeekSettingKey] != Settings[DayOfWeekSettingKey].Value)
+            {
+                if (data[DayOfWeekSettingKey] == "true")
+                {
+                    AddDayOfWeekOutput();
+                }
+                else
+                {
+                    RemoveDayOfWeekOutput();
+                }
+            }
 
             return base.SetSettings(data);
         }
 
-        public void AddAdditionOutputs()
+        public void AddYearMonthDayOutputs()
         {
-            if (GetOutput("Day") == null)
-                AddOutput("Day", DataType.Number);
+            if (GetOutput(OutputNames.Day) == null)
+                AddOutput(OutputNames.Day, DataType.Number);
 
-            if (GetOutput("Month") == null)
-                AddOutput("Month", DataType.Number);
+            if (GetOutput(OutputNames.Month) == null)
+                AddOutput(OutputNames.Month, DataType.Number);
 
-            if (GetOutput("Year") == null)
-                AddOutput("Year", DataType.Number);
+            if (GetOutput(OutputNames.Year) == null)
+                AddOutput(OutputNames.Year, DataType.Number);
 
-            LogInfo($"Added additional outputs");
-
-            UpdateMeInEditor();
-            UpdateMeInDb();
+            LogInfo($"Added YearMonthDay outputs");
+            UpdateMe();
         }
 
-        public void RemoveAdditionOutputs()
+        public void RemoveYearMonthDayOutputs()
         {
-            if (GetOutput("Day") != null)
-                RemoveOutput("Day");
+            if (GetOutput(OutputNames.Day) != null)
+                RemoveOutput(OutputNames.Day);
 
-            if (GetOutput("Month") != null)
-                RemoveOutput("Month");
+            if (GetOutput(OutputNames.Month) != null)
+                RemoveOutput(OutputNames.Month);
 
-            if (GetOutput("Year") != null)
-                RemoveOutput("Year");
+            if (GetOutput(OutputNames.Year) != null)
+                RemoveOutput(OutputNames.Year);
 
-            LogInfo($"Removed additional outputs");
+            LogInfo($"Removed YearMonthDay outputs");
+            UpdateMe();
+        }
 
-            UpdateMeInEditor();
-            UpdateMeInDb();
+        public void AddDayOfWeekOutput()
+        {
+            if (GetOutput(OutputNames.DayOfWeek) == null)
+                AddOutput(OutputNames.DayOfWeek, DataType.Number);
+
+            LogInfo($"Added DayOfWeek output");
+            UpdateMe();
+        }
+
+        public void RemoveDayOfWeekOutput()
+        {
+            if (GetOutput(OutputNames.DayOfWeek) != null)
+                RemoveOutput(OutputNames.DayOfWeek);
+
+            LogInfo($"Removed DayOfWeek output");
+            UpdateMe();
         }
 
         public override string GetNodeDescription()
@@ -118,6 +157,12 @@ namespace MyNodes.Nodes
             return "This is the system clock. <br/>" +
                    "In the settings you can enable additional outputs " +
                    "and configure the refresh rate of the outputs.";
+        }
+
+        private void UpdateMe()
+        {
+            UpdateMeInEditor();
+            UpdateMeInDb();
         }
     }
 }

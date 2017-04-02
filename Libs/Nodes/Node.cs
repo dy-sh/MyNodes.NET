@@ -272,6 +272,25 @@ namespace MyNodes.Nodes
                     output.Value = null;
         }
 
+        /// <summary>
+        /// Sets the value of the output with the specified name.
+        /// </summary>
+        /// <param name="skipIfEqual">Don't set output value if the current value is the same.</param>
+        public void SetOutputValue<T>(string outputName, T value, bool skipIfEqual = false)
+        {
+            var valueAsString = value.ToString();
+            var output = GetOutput(outputName);
+            if (output == null)
+            {
+                return;
+            }
+            if (skipIfEqual && output.Value == valueAsString)
+            {
+                return;
+            }
+            output.Value = valueAsString;
+        }
+
         public virtual void CheckInputDataTypeIsCorrect(Input input)
         {
             if (input.Value == null)
