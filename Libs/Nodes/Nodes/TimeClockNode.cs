@@ -61,17 +61,17 @@ namespace MyNodes.Nodes
 
             lastUpdateTime = now;
 
-            SetOutputValue(OutputNames.Millisecond, now.Millisecond);
-            SetOutputValue(OutputNames.Second, now.Second);
-            SetOutputValue(OutputNames.Minute, now.Minute);
-            SetOutputValue(OutputNames.Hour, now.Hour);
+            SetOutputValue(OutputNames.Millisecond, now.Millisecond, true);
+            SetOutputValue(OutputNames.Second, now.Second, true);
+            SetOutputValue(OutputNames.Minute, now.Minute, true);
+            SetOutputValue(OutputNames.Hour, now.Hour, true);
 
             if (Outputs.Count > 4)
             {
-                SetOutputValue(OutputNames.Day, now.Day);
-                SetOutputValue(OutputNames.Month, now.Month);
-                SetOutputValue(OutputNames.Year, now.Year);
-                SetOutputValue(OutputNames.DayOfWeek, (int)now.DayOfWeek);
+                SetOutputValue(OutputNames.Day, now.Day, true);
+                SetOutputValue(OutputNames.Month, now.Month, true);
+                SetOutputValue(OutputNames.Year, now.Year, true);
+                SetOutputValue(OutputNames.DayOfWeek, (int)now.DayOfWeek, true);
             }
         }
 
