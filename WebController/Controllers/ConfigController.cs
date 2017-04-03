@@ -48,6 +48,29 @@ namespace MyNodes.WebController.Controllers
         }
 
         [HttpGet]
+        public IActionResult Unit()
+        {
+            return View(new UnitConfigViewModel
+            {
+                IsMetric = SystemController.gatewayConfig.IsMetric
+            });
+        }
+
+        [Authorize(UserClaims.ConfigEditor)]
+        [HttpPost]
+        public IActionResult Unit(UnitConfigViewModel model)
+        {
+            dynamic json = ReadConfig();
+            json.Gateway.IsMetric = model.IsMetric;
+            WriteConfig(json);
+            configuration.Reload();
+
+            SystemController.gatewayConfig.IsMetric = model.IsMetric;
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public IActionResult SerialGateway()
         {
             ViewBag.ports = SerialConnectionPort.GetAvailablePorts();

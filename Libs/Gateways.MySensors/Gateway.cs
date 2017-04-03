@@ -33,6 +33,8 @@ namespace MyNodes.Gateways.MySensors
         public bool reconnectIfDisconnected = true;
         public int ATTEMPTS_TO_COMMUNICATE = 5;
 
+        public Func<bool> IsMetricUnit { get; set; } = () => true;
+
         public event MessageEventHandler OnMessageRecieved;
         public event MessageEventHandler OnMessageSend;
         public event NodeEventHandler OnRemoveNode;
@@ -332,9 +334,9 @@ namespace MyNodes.Gateways.MySensors
                 return;
             }
 
-            //Metric system request
+            //Config request
             if (message.messageType == MessageType.C_INTERNAL && message.subType == (int)InternalDataType.I_CONFIG)
-                SendMetricResponse(message.nodeId);
+                SendConfigResponse(message.nodeId);
 
             //Sensor request
             if (message.messageType == MessageType.C_REQ)
@@ -585,7 +587,7 @@ namespace MyNodes.Gateways.MySensors
             SendMessage(mess);
         }
 
-        private void SendMetricResponse(int nodeId)
+        private void SendConfigResponse(int nodeId)
         {
             Message mess = new Message
             {
@@ -594,7 +596,7 @@ namespace MyNodes.Gateways.MySensors
                 messageType = MessageType.C_INTERNAL,
                 ack = false,
                 subType = (int)InternalDataType.I_CONFIG,
-                payload = "M"
+                payload = IsMetricUnit() ? "M" : "I"
             };
             SendMessage(mess);
         }
