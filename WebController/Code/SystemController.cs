@@ -118,8 +118,6 @@ namespace MyNodes.WebController.Code
             try
             {
                 gatewayConfig = configuration.GetSection("Gateway").Get<GatewayConfig>();
-                //gatewayConfig.SerialGatewayConfig = configuration.GetValue<SerialGatewayConfig>("Gateway:SerialGateway");
-                //gatewayConfig.EthernetGatewayConfig = configuration.GetValue<EthernetGatewayConfig>("Gateway:EthernetGateway");
                 logs.config = configuration.GetSection("Logs").Get<LogsConfig>();
                 logs.consoleConfig = configuration.GetSection("Console").Get<ConsoleConfig>();
                 nodesEngineConfig = configuration.GetSection("NodesEngine").Get<NodesEngineConfig>();
@@ -292,6 +290,7 @@ namespace MyNodes.WebController.Code
             gateway = new Gateway(gatewayConnectionPort, mySensorsDb, mySensorsMessagesDb);
 
             gateway.enableAutoAssignId = gatewayConfig.EnableAutoAssignId;
+            gateway.IsMetricUnit = () => gatewayConfig.IsMetric;
 
             gateway.OnLogDecodedMessage += logs.AddGatewayDecodedMessage;
             gateway.OnLogMessage += logs.AddGatewayMessage;

@@ -1,0 +1,73 @@
+﻿@model MyNodes.WebController.ViewModels.Config.UnitConfigViewModel
+
+@{
+    ViewBag.Title = "Unit";
+}
+
+<br />
+<div class="ui container">
+
+    <h2>@ViewBag.Title</h2>
+
+    <div>
+        < <a asp-controller="Config" asp-action="Index">Config</a>
+    </div>
+    <div class="ui divider"></div>
+
+
+    <div class="ui two column stackable centered grid">
+
+        <div class="column">
+            <div class="ui raised segments">
+                <div class="ui secondary attached segment">
+                    <h4>@ViewBag.Title</h4>
+                </div>
+
+                <form asp-action="Unit" asp-anti-forgery="true" class="ui form">
+                    <div class="validation" asp-validation-summary="ModelOnly" />
+
+                    <div class="ui basic segment">
+
+                        <div class="field">
+                            <label>Unit of measure</label>
+                            <div class="ui selection button dropdown">
+                                <input type="hidden" name="IsMetric" value="@Model.IsMetric">
+                                <i class="dropdown icon"></i>
+                                <div class="text">@(Model.IsMetric ? "Metric" : "Imperial")</div>
+                                <div class="menu">
+                                    <div class="item" data-value="@true">Metric</div>
+                                    <div class="item" data-value="@false">Imperial</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui basic segment">
+
+                        Configure the unit of measure to be used by all connected sensors. <br />
+                        For example, temperature sensors can check this setting to send temperature in celsius or fahrenheit.
+                        <br />
+                        <br/>
+                        <b>After changing this setting, you may need to restart all connected sensors
+                        so that they'll fetch the setting from controller again.
+                        </b>
+                    </div>
+       
+
+                    <div class="ui center aligned attached segment">
+                        <div class="ui buttons">
+                            <a asp-action="Index" class="ui button">Cancel</a>
+                            <input type="submit" value="Save" class="ui button primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
