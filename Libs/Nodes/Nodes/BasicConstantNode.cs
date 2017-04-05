@@ -9,18 +9,19 @@ namespace MyNodes.Nodes
 {
     public class BasicConstantNode : Node
     {
+        private const string ValueSettingKey = "Value";
+
         public BasicConstantNode() : base("Basic", "Constant")
         {
             AddOutput();
-            Settings.Add("Value", new NodeSetting(NodeSettingType.Text, "Constant Value", ""));
+            Settings.Add(ValueSettingKey, new NodeSetting(NodeSettingType.Text, "Constant Value", ""));
         }
-
-
-
 
         public override bool SetSettings(Dictionary<string, string> data)
         {
-            Outputs[0].Value = data["Value"];
+            string value = data[ValueSettingKey];
+            Outputs[0].Value = value;
+            Outputs[0].Name = $"{DefaultOutputName} ({value})";
             return base.SetSettings(data);
         }
 
