@@ -21,17 +21,17 @@ namespace MyNodes.WebController.Controllers
 
         [Authorize(UserClaims.HardwareObserver)]
 
-        public List<Node> GetAllNodes()
-        {
-            return gateway?.GetNodes();
-        }
+        //public List<Node> GetAllNodes()
+        //{
+        //    return gateway?.GetNodes();
+        //}
 
         public bool IsConnected()
         {
             if (gateway == null)
                 return false;
 
-            return gateway.IsConnected();
+            return gateway.IsConnected;
         }
 
         //public string GetMessages()
@@ -57,7 +57,7 @@ namespace MyNodes.WebController.Controllers
 
         public bool SendMessage(int nodeId, int sensorId, string state)
         {
-            if (gateway==null || !gateway.IsConnected())
+            if (gateway==null || !gateway.IsConnected)
                 return false;
 
             gateway.SendSensorState(nodeId, sensorId, state);
@@ -77,9 +77,9 @@ namespace MyNodes.WebController.Controllers
 
             if (gateway != null)
             {
-                info.state = gateway.GetGatewayState();
-                info.gatewayNodesRegistered = gateway.GetNodes().Count;
-                info.gatewaySensorsRegistered = gateway.GetNodes().Sum(node => node.sensors.Count);
+                info.state = gateway.GatewayState;
+                info.gatewayNodesRegistered = gateway.NodeCount;
+                info.gatewaySensorsRegistered = gateway.SensorCount;
 
                 if (gateway.connectionPort is EthernetConnectionPort)
                     info.type = GatewayType.Ethernet;

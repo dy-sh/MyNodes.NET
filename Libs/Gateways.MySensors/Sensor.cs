@@ -9,27 +9,21 @@ namespace MyNodes.Gateways.MySensors
 {
     public class Sensor
     {
+        private Node ownerNode;
 
         public int Id { get; set; }
 
-
-        public int nodeId { get; set; }
-        public int sensorId { get; set; }
+        public int nodeId => ownerNode.Id;
+        public int sensorId { get; private set; }
         public string description { get; set; }
         public SensorType? type { get; set; }
         public SensorDataType? dataType { get; set; }
         public string state { get; set; }
 
-
-        public Sensor()
-        {
-
-        }
-
         public Sensor(int sensorId, Node ownerNode)
         {
             this.sensorId = sensorId;
-            this.nodeId = ownerNode.Id;
+            this.ownerNode = ownerNode;
         }
 
         public override string ToString()

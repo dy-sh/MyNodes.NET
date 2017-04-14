@@ -91,7 +91,7 @@ namespace MyNodes.Repositories.EF.SQLite
 
         public List<Node> GetNodes()
         {
-            return db.Nodes.Include(x => x.sensors).ToList();
+            return db.Nodes.Include(x => x.Sensors).ToList();
         }
 
 
@@ -103,7 +103,7 @@ namespace MyNodes.Repositories.EF.SQLite
             db.Nodes.Add(node);
             db.SaveChanges();
 
-            foreach (var sensor in node.sensors)
+            foreach (var sensor in node.Sensors)
             {
                 AddSensor(sensor);
             }

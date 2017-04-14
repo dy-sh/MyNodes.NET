@@ -305,7 +305,7 @@ namespace MyNodes.WebController.Code
             if (gateway != null && nodesEngine != null)
                 mySensorsNodesEngine = new MySensorsNodesEngine(gateway, nodesEngine);
 
-            if (gateway != null && gateway.IsConnected())
+            if (gateway != null && gateway.IsConnected)
             {
                 logs.AddSystemInfo("Gateway connected.");
             }
@@ -330,7 +330,7 @@ namespace MyNodes.WebController.Code
             if (gateway == null)
                 return;
 
-            if (gateway.GetGatewayState() != GatewayState.Disconnected)
+            if (gateway.GatewayState != GatewayState.Disconnected)
                 gateway.Disconnect();
 
             gateway = null;

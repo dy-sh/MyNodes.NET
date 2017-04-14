@@ -140,10 +140,7 @@ namespace MyNodes.Repositories.Dapper
             {
                 AddChildAction = (node, sensor) =>
                 {
-                    if (node.sensors == null)
-                        node.sensors = new List<Sensor>();
-
-                    node.sensors.Add(sensor);
+                    node.AddSensor(sensor);
                 },
                 ParentKey = (node) => node.Id
             };
@@ -318,10 +315,7 @@ namespace MyNodes.Repositories.Dapper
             {
                 AddChildAction = (node, sensor) =>
                 {
-                    if (node.sensors == null)
-                        node.sensors = new List<Sensor>();
-
-                    node.sensors.Add(sensor);
+                    node.AddSensor(sensor);
                 },
                 ParentKey = (node) => node.Id
             };

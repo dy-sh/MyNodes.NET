@@ -56,7 +56,7 @@ namespace MyNodes.Nodes
 
         private void OnEngineRemoveAllNodesAndLinks()
         {
-            if (gateway.GetNodes().Any())
+            if (gateway.NodeCount > 0)
                 gateway.RemoveAllNodes();
         }
 
@@ -166,7 +166,7 @@ namespace MyNodes.Nodes
         {
             var list = new List<MySensorsNode>();
 
-            foreach (var node in gateway.GetNodes())
+            foreach (var node in gateway.Nodes)
             {
                 if (GetMySensorsNode(node.Id) != null)
                     continue;
