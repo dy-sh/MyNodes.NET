@@ -21,6 +21,9 @@ namespace MyNodes.Nodes
 
     public abstract class Node
     {
+        public const string DefaultInputName = "In";
+        public const string DefaultOutputName = "Out";
+
         public string Id { get; set; }
         public string PanelId { get; set; }
         public string Category { get; set; }
@@ -37,13 +40,14 @@ namespace MyNodes.Nodes
 
         public Dictionary<string, NodeSetting> Settings { get; set; }
 
-
         public string PanelName
         {
             get
             {
                 if (PanelId == engine?.MAIN_PANEL_ID)
+                {
                     return "Main Panel";
+                }
 
                 return engine?.GetPanelNode(PanelId)?.Settings["Name"].Value;
             }
@@ -60,11 +64,8 @@ namespace MyNodes.Nodes
             Inputs = new List<Input>();
             Settings = new Dictionary<string, NodeSetting>();
 
-
             PanelId = "Main";
         }
-
-
 
         public void LogInfo(string message)
         {
@@ -87,7 +88,9 @@ namespace MyNodes.Nodes
         public virtual void OnOutputChange(Output output)
         {
             if (options.LogOutputChanges)
+            {
                 LogInfo($"{output.Name}: [{output.Value ?? "NULL"}]");
+            }
 
             //send state to linked nodes
             List<Link> list = engine?.GetLinksForOutput(output);
@@ -104,10 +107,14 @@ namespace MyNodes.Nodes
         public virtual void OnRemove()
         {
             foreach (var input in Inputs)
+            {
                 input.OnInputChange -= engine.OnInputChange;
+            }
 
             foreach (var output in Outputs)
+            {
                 output.OnOutputChange -= engine.OnOutputChange;
+            }
 
             engine = null;
         }
@@ -117,10 +124,14 @@ namespace MyNodes.Nodes
             this.engine = engine;
 
             foreach (var input in Inputs)
+            {
                 input.OnInputChange += engine.OnInputChange;
+            }
 
             foreach (var output in Outputs)
+            {
                 output.OnOutputChange += engine.OnOutputChange;
+            }
 
             return true;
         }
@@ -143,31 +154,34 @@ namespace MyNodes.Nodes
 
         public void AddInput(Input input)
         {
-            Inputs.Add(input);
+            AddWithOrder(Inputs, input, p => p.SlotIndex);
 
             if (engine != null)
+            {
                 input.OnInputChange += engine.OnInputChange;
+            }
         }
 
         public void AddOutput(Output output)
         {
-            Outputs.Add(output);
+            AddWithOrder(Outputs, output, p => p.SlotIndex);
 
             if (engine != null)
+            {
                 output.OnOutputChange += engine.OnOutputChange;
+            }
         }
 
         public void AddInput(string name, DataType type = DataType.Text, bool isOptional = false)
         {
             if (name == null)
             {
-                name = !Inputs.Any() ? "In" : "In " + (Inputs.Count + 1);
-                if (Inputs.Count == 1 && Inputs[0].Name == "In")
-                    Inputs[0].Name = "In 1";
+                name = !Inputs.Any() ? DefaultInputName : $"{DefaultInputName} {(Inputs.Count + 1)}";
+                if (Inputs.Count == 1 && Inputs[0].Name == DefaultInputName)
+                {
+                    Inputs[0].Name = $"{DefaultInputName} 1";
+                }
             }
-
-
-
             AddInput(new Input(name, type, isOptional));
         }
 
@@ -175,11 +189,12 @@ namespace MyNodes.Nodes
         {
             if (name == null)
             {
-                name = !Outputs.Any() ? "Out" : "Out " + (Outputs.Count + 1);
-                if (Outputs.Count == 1 && Outputs[0].Name == "Out")
-                    Outputs[0].Name = "Out 1";
+                name = !Outputs.Any() ? DefaultOutputName : $"{DefaultOutputName} {(Outputs.Count + 1)}";
+                if (Outputs.Count == 1 && Outputs[0].Name == DefaultOutputName)
+                {
+                    Outputs[0].Name = $"{DefaultOutputName} 1";
+                }
             }
-
             AddOutput(new Output(name, type));
         }
 
@@ -193,7 +208,6 @@ namespace MyNodes.Nodes
             AddOutput(null, type);
         }
 
-
         public void RemoveInput(Input input)
         {
             if (input == null || !Inputs.Contains(input))
@@ -204,7 +218,9 @@ namespace MyNodes.Nodes
 
             var link = engine.GetLinkForInput(input);
             if (link != null)
-                engine.RemoveLink(link,true);
+            {
+                engine.RemoveLink(link, true);
+            }
 
             Inputs.Remove(input);
         }
@@ -225,13 +241,11 @@ namespace MyNodes.Nodes
             Outputs.Remove(output);
         }
 
-
         public void RemoveOutput(string name)
         {
             Output output = Outputs.FirstOrDefault(x => x.Name == name);
             RemoveOutput(output);
         }
-
 
         public void RemoveInput(string name)
         {
@@ -239,20 +253,17 @@ namespace MyNodes.Nodes
             RemoveInput(input);
         }
 
-
         public Output GetOutput(string name)
         {
             Output output = Outputs.FirstOrDefault(x => x.Name == name);
             return output;
         }
 
-
         public Input GetInput(string name)
         {
             Input input = Inputs.FirstOrDefault(x => x.Name == name);
             return input;
         }
-
 
         public void ShowActivity()
         {
@@ -262,14 +273,20 @@ namespace MyNodes.Nodes
         public void ResetInputs()
         {
             foreach (var input in Inputs)
+            {
                 input.Value = null;
+            }
         }
 
         public void ResetOutputs()
         {
             foreach (var output in Outputs)
+            {
                 if (output.Value != null)
+                {
                     output.Value = null;
+                }
+            }
         }
 
         /// <summary>
@@ -294,10 +311,14 @@ namespace MyNodes.Nodes
         public virtual void CheckInputDataTypeIsCorrect(Input input)
         {
             if (input.Value == null)
+            {
                 return;
+            }
 
             if (input.Type == DataType.Text)
+            {
                 return;
+            }
 
             if (input.Type == DataType.Logical)
             {
@@ -367,8 +388,6 @@ namespace MyNodes.Nodes
             return options;
         }
 
-
-
         public void AddNodeData(string data, int? maxDbRecords = null)
         {
             engine?.dataDb?.AddNodeData(new NodeData(Id, data), maxDbRecords);
@@ -391,7 +410,6 @@ namespace MyNodes.Nodes
         {
             engine?.dataDb?.UpdateNodeDataImmediately(nodeData);
         }
-
 
         public List<NodeData> GetAllNodeData()
         {
@@ -416,10 +434,22 @@ namespace MyNodes.Nodes
         {
             engine?.dataDb?.RemoveNodeData(id);
         }
+
+        /// <summary>
+        /// Adds an item to the specified <see cref="List{T}"/> and maintain the order by
+        /// comparing the key returned by the <paramref name="key"/> (insertion sort).
+        /// </summary>
+        private static void AddWithOrder<T>(List<T> list, T item, Func<T, IComparable> key)
+        {
+            var index = list.FindIndex(p => key(p).CompareTo(key(item)) > 0);
+            if (index >= 0)
+            {
+                list.Insert(index, item);
+            }
+            else
+            {
+                list.Add(item);
+            }
+        }
     }
-
-
-
-
-
 }

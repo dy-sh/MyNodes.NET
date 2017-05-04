@@ -79,8 +79,7 @@ namespace MyNodes.WebController.Controllers
 
             if (node.Inputs != null)
             {
-                List<Nodes.Input> orderedInputs = node.Inputs.OrderBy(x => x.SlotIndex).ToList();
-                foreach (var input in orderedInputs)
+                foreach (var input in node.Inputs)
                 {
                     litegraphNode.inputs.Add(new LiteGraph.Input
                     {
@@ -94,8 +93,7 @@ namespace MyNodes.WebController.Controllers
 
             if (node.Outputs != null)
             {
-                List<Nodes.Output> orderedOutputs = node.Outputs.OrderBy(x => x.SlotIndex).ToList();
-                foreach (var output in orderedOutputs)
+                foreach (var output in node.Outputs)
                 {
                     List<Nodes.Link> links = engine.GetLinksForOutput(output);
                     if (links != null)
