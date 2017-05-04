@@ -6,15 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace MyNodes.Nodes
 {
     public static class NodesEngineSerializer
     {
-
         private static string SerializeNodesAndLinks(List<Node> nodesList, List<Link> linksList)
         {
             List<Object> list = new List<Object>();
@@ -38,7 +35,6 @@ namespace MyNodes.Nodes
             nodesList = objects.OfType<Node>().ToList();
             linksList = objects.OfType<Link>().ToList();
         }
-
 
         public static string SerializePanel(string panelId, NodesEngine engine)
         {
@@ -73,12 +69,16 @@ namespace MyNodes.Nodes
 
         public static Node DeserializeNode(string json)
         {
-
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.All;
             settings.ObjectCreationHandling = ObjectCreationHandling.Replace;
 
-            return JsonConvert.DeserializeObject<Node>(json, settings);
+            var node = JsonConvert.DeserializeObject<Node>(json, settings);
+
+            // For backward compatibility, we'll sort the inputs and outputs from the database
+            node.Inputs.Sort((a, b) => a.SlotIndex.CompareTo(b.SlotIndex));
+            node.Outputs.Sort((a, b) => a.SlotIndex.CompareTo(b.SlotIndex));
+            return node;
         }
     }
 }
