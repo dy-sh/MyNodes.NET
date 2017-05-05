@@ -388,7 +388,7 @@ function NodeSettings(node) {
                 body.append(numberSettingTemplate(settings[key]));
                 break;
             case 2:
-                body.append( checkboxSettingTemplate(settings[key]));
+                body.append(checkboxSettingTemplate(settings[key]));
                 if (settings[key].Value == "true")
                     $('#node-setting-' + key).prop('checked', true);
                 break;

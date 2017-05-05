@@ -3142,6 +3142,11 @@ LGraphCanvas.prototype.processNodeDblClicked = function (n) {
     this.setDirty(true);
 }
 
+LGraphCanvas.prototype.onShowNodePanel = function (node) {
+    // Show node setting on double click
+    NodeSettings(node);
+}
+
 LGraphCanvas.prototype.selectNode = function (node) {
     this.deselectAllNodes();
 
