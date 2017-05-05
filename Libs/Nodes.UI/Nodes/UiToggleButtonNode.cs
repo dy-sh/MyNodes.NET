@@ -9,24 +9,36 @@ namespace MyNodes.Nodes
 {
     public class UiToggleButtonNode : UiNode
     {
-        public string Value { get; set; }
+        private string _value;
+
+        public string Value {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                Outputs[0].Value = _value;
+
+                UpdateMeOnDashboard();
+                UpdateMeInDb();
+            }
+        }
 
         public UiToggleButtonNode() : base("UI", "Toggle")
         {
+            AddInput();
             AddOutput();
             Value = "0";
             Outputs[0].Value = Value;
         }
 
+        public override void OnInputChange(Input input)
+        {
+            Value = input.Value;
+        }
 
         public override bool SetValues(Dictionary<string, string> values)
         {
             Value = Value == "0" ? "1" : "0";
-            Outputs[0].Value = Value;
-
-            UpdateMeOnDashboard();
-            UpdateMeInDb();
-
             return true;
         }
 
