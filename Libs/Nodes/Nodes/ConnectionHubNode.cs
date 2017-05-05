@@ -22,11 +22,12 @@ namespace MyNodes.Nodes
             Settings.Add("outputs", new NodeSetting(NodeSettingType.Number, "Outputs count", Outputs.Count.ToString()));
         }
 
-
         public override void OnInputChange(Input input)
         {
             foreach (var output in Outputs)
+            {
                 output.Value = input.Value;
+            }
         }
 
         public override bool SetSettings(Dictionary<string, string> data)
@@ -35,14 +36,22 @@ namespace MyNodes.Nodes
             int outs = int.Parse(data["outputs"]);
 
             if (ins < 1)
+            {
                 ins = 1;
+            }
             else if (ins > 1000)
+            {
                 ins = 1000;
+            }
 
             if (outs < 1)
+            {
                 outs = 1;
+            }
             else if (outs > 1000)
+            {
                 outs = 1000;
+            }
 
             data["inputs"] = ins.ToString();
             data["outputs"] = outs.ToString();
@@ -52,7 +61,6 @@ namespace MyNodes.Nodes
 
             UpdateMeInEditor();
             UpdateMeInDb();
-
 
             return base.SetSettings(data);
         }
@@ -64,7 +72,9 @@ namespace MyNodes.Nodes
                 int addCount = count - Outputs.Count;
 
                 for (int i = 0; i < addCount; i++)
+                {
                     AddOutput();
+                }
 
                 LogInfo($"Added {addCount} new outputs");
             }
@@ -73,11 +83,12 @@ namespace MyNodes.Nodes
                 int remCount = Outputs.Count - count;
 
                 for (int i = 0; i < remCount; i++)
+                {
                     RemoveOutput(Outputs.Last());
+                }
 
                 LogInfo($"Removed {remCount} outputs");
             }
-
         }
 
         public void ChangeInputsCount(int count)
@@ -87,7 +98,9 @@ namespace MyNodes.Nodes
                 int addCount = count - Inputs.Count;
 
                 for (int i = 0; i < addCount; i++)
-                    AddInput("In " + Inputs.Count, DataType.Text, true);
+                {
+                    AddInput($"In {Inputs.Count + 1}", DataType.Text, true);
+                }
 
                 LogInfo($"Added {addCount} new inputs");
             }
@@ -96,7 +109,9 @@ namespace MyNodes.Nodes
                 int remCount = Inputs.Count - count;
 
                 for (int i = 0; i < remCount; i++)
+                {
                     RemoveInput(Inputs.Last());
+                }
 
                 LogInfo($"Removed {remCount} inputs");
             }
