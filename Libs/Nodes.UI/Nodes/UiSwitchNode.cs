@@ -16,11 +16,15 @@ namespace MyNodes.Nodes
             get { return _value; }
             set
             {
-                _value = value;
-                Outputs[0].Value = _value;
+                // Don't set output unless the value is different
+                if (_value != value)
+                {
+                    _value = value;
+                    Outputs[0].Value = _value;
 
-                UpdateMeOnDashboard();
-                UpdateMeInDb();
+                    UpdateMeOnDashboard();
+                    UpdateMeInDb();
+                }
             }
         }
 
