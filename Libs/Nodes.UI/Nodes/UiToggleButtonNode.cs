@@ -16,9 +16,10 @@ namespace MyNodes.Nodes
             set
             {
                 // Don't set output unless the value is different
-                if (_value != value)
+                var valueToSet = (value == null || value == "0") ? "0" : "1";
+                if (_value != valueToSet)
                 {
-                    _value = value;
+                    _value = valueToSet;
                     Outputs[0].Value = _value;
 
                     UpdateMeOnDashboard();
