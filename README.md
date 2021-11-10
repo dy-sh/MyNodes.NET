@@ -43,7 +43,6 @@ You need to build two devices. One connects to the computer and maintains the ne
 
 Accessories for this device (Arduino Pro Mini + NRF24L01+) should cost about $3.
 
-Assembly is very simple, see the  <a href="http://www.mynodes.net"> instructions </a>.
 
 
 ## How it works?
@@ -63,7 +62,7 @@ or, for example, Raspberry Pi as the easiest and cheapest option.
 
 This program is open source, you can download and use it absolutely for free.
 
-Read more on <a href="http://www.mynodes.net"> www.mynodes.net </a>
+Find out more on the <a href="https://www.youtube.com/channel/UCZtlGnAmCMFgmkRptiKAT-g/videos"> YouTube channel</a>.
 
-Mail to info@mynodes.net
+
 
