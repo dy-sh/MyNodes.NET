@@ -10,11 +10,11 @@ All devices are connected over the wireless network. No wires!
 This program provides you a handy editor, which is accessible from browser.
 In the editor you can add virtual devices that perform different functions and connect them to your real devices.
 
-<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/editor_theme_full.png" >
+<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/images/editor_theme_full.png" >
 
 You can create dashboard from various user interface elements to which you have access from any device that has web browser.
 
-<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/dashboard.jpg" >
+<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/images/dashboard.jpg" >
 
 All this can be part of your smart home, with lots of automated systems:
 lighting, windows, doors, climate control, various sensors, etc...
@@ -26,7 +26,7 @@ or just the control panel of your device on Arduino.
 
 ## Cross-platform
 
-<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/multiplatform.png" >
+<img src="https://raw.githubusercontent.com/derwish-pro/MyNodes.NET/master/WebController/wwwroot/images/multiplatform.png" >
 
 This program can run on Windows or Linux. You can also use Raspberry Pi.
 
