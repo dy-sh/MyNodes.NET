@@ -20,7 +20,7 @@ All this can be part of your smart home, with lots of automated systems:
 lighting, windows, doors, climate control, various sensors, etc...
 or just the control panel of your device on Arduino.
 
-
+Find out more on the [YouTube channel](https://www.youtube.com/channel/UCZtlGnAmCMFgmkRptiKAT-g/videos)
 
 
 
@@ -41,7 +41,7 @@ To assemble device that can be connected to the system, you need the Arduino and
 
 You need to build two devices. One connects to the computer and maintains the network (called gateway), from the second you can make your device.
 
-Accessories for this device (Arduino Pro Mini + NRF24L01+) should cost about $3.
+
 
 
 
@@ -62,7 +62,7 @@ or, for example, Raspberry Pi as the easiest and cheapest option.
 
 This program is open source, you can download and use it absolutely for free.
 
-Find out more on the [YouTube channel](https://www.youtube.com/channel/UCZtlGnAmCMFgmkRptiKAT-g/videos)
+
 
 
 
